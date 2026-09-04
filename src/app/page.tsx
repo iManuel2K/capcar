@@ -1,5 +1,5 @@
-import { FoundationHero } from "@/components/marketing/foundation-hero";
+import { MarketingLanding } from "@/components/marketing/marketing-landing";
 
 export default function Home() {
-  return <FoundationHero />;
+  return <MarketingLanding />;
 }

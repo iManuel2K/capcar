@@ -1,0 +1,195 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Bell, House, Layers3, Plus, ShoppingBag, Wrench } from "lucide-react";
+
+import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
+
+export function GarageShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const vehicleMatch = pathname.match(/^\/garage\/([^/]+)/);
+  const vehicleId =
+    vehicleMatch?.[1] && vehicleMatch[1] !== "new"
+      ? vehicleMatch[1]
+      : undefined;
+  const maintenanceHref = vehicleId
+    ? `/garage/${vehicleId}/maintenance`
+    : undefined;
+  const buildsHref = vehicleId ? `/garage/${vehicleId}/builds` : undefined;
+  const partsHref = vehicleId ? `/garage/${vehicleId}/parts` : undefined;
+
+  return (
+    <div className="min-h-dvh bg-[#0b0e0c] text-[#f4f5f2]">
+      <header className="sticky top-0 z-40 border-b border-white/8 bg-[#0b0e0c]/90 backdrop-blur-xl">
+        <div className="mx-auto flex h-18 max-w-[1500px] items-center justify-between px-4 sm:px-7">
+          <Link
+            href="/"
+            className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#74a7ff]"
+          >
+            <CapcarWordmark />
+          </Link>
+          <nav
+            aria-label="Garage navigation"
+            className="hidden items-center gap-1 sm:flex"
+          >
+            <NavLink
+              href="/garage"
+              active={pathname === "/garage"}
+              icon={House}
+            >
+              Garage
+            </NavLink>
+            {maintenanceHref ? (
+              <NavLink
+                href={maintenanceHref}
+                active={pathname.endsWith("/maintenance")}
+                icon={Wrench}
+              >
+                Maintenance
+              </NavLink>
+            ) : (
+              <DisabledNav>Maintenance</DisabledNav>
+            )}
+            {buildsHref ? (
+              <NavLink
+                href={buildsHref}
+                active={pathname.startsWith(buildsHref)}
+                icon={Layers3}
+              >
+                Builds
+              </NavLink>
+            ) : (
+              <DisabledNav>Builds</DisabledNav>
+            )}
+            {partsHref ? (
+              <NavLink
+                href={partsHref}
+                active={pathname.startsWith(partsHref)}
+                icon={ShoppingBag}
+              >
+                Parts
+              </NavLink>
+            ) : (
+              <DisabledNav>Parts</DisabledNav>
+            )}
+          </nav>
+          <div className="flex items-center gap-2">
+            <span className="hidden rounded-full border border-[#74a7ff]/20 bg-[#74a7ff]/8 px-3 py-1.5 text-xs text-[#a9c7ff] md:inline-flex">
+              Local prototype
+            </span>
+            <button
+              aria-label="Notifications"
+              className="grid size-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60"
+              disabled
+              type="button"
+            >
+              <Bell className="size-4" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-[1500px] px-4 py-8 sm:px-7 sm:py-12">
+        {children}
+      </main>
+
+      <nav
+        aria-label="Mobile garage navigation"
+        className="fixed right-4 bottom-4 left-4 z-40 flex items-center justify-between rounded-2xl border border-white/10 bg-[#151916]/95 p-2 shadow-2xl backdrop-blur-xl sm:hidden"
+      >
+        <MobileLink href="/garage" active={pathname === "/garage"} icon={House}>
+          Garage
+        </MobileLink>
+        {vehicleId && maintenanceHref && buildsHref && partsHref ? (
+          <>
+            <MobileLink
+              href={maintenanceHref}
+              active={pathname.endsWith("/maintenance")}
+              icon={Wrench}
+            >
+              Service
+            </MobileLink>
+            <MobileLink
+              href={buildsHref}
+              active={pathname.startsWith(buildsHref)}
+              icon={Layers3}
+            >
+              Builds
+            </MobileLink>
+            <MobileLink
+              href={partsHref}
+              active={pathname.startsWith(partsHref)}
+              icon={ShoppingBag}
+            >
+              Parts
+            </MobileLink>
+          </>
+        ) : (
+          <>
+            <Link
+              className="mx-2 grid size-12 place-items-center rounded-xl bg-[#74a7ff] text-[#07101d]"
+              href="/garage/new"
+              aria-label="Add vehicle"
+            >
+              <Plus className="size-5" />
+            </Link>
+            <span className="flex min-h-12 flex-1 flex-col items-center justify-center gap-1 rounded-xl text-[11px] text-white/30">
+              <Layers3 className="size-4" /> Builds
+            </span>
+          </>
+        )}
+      </nav>
+    </div>
+  );
+}
+
+function NavLink({
+  href,
+  active,
+  icon: Icon,
+  children,
+}: {
+  href: string;
+  active: boolean;
+  icon: typeof House;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm transition-colors ${active ? "bg-white/8 text-white" : "text-white/55 hover:text-white"}`}
+    >
+      <Icon className="size-4" />
+      {children}
+    </Link>
+  );
+}
+function DisabledNav({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="cursor-not-allowed rounded-xl px-4 py-2 text-sm text-white/35">
+      {children}
+    </span>
+  );
+}
+function MobileLink({
+  href,
+  active,
+  icon: Icon,
+  children,
+}: {
+  href: string;
+  active: boolean;
+  icon: typeof House;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`flex min-h-12 flex-1 flex-col items-center justify-center gap-1 rounded-xl text-[10px] ${active ? "bg-white/7 text-white" : "text-white/45"}`}
+    >
+      <Icon className="size-4" />
+      {children}
+    </Link>
+  );
+}
