@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-registration";
+import { NotificationBootstrap } from "@/components/notifications/notification-bootstrap";
 
 import "./globals.css";
 
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="en" data-scroll-behavior="smooth">
       <body className="min-h-dvh font-sans antialiased">
         {children}
+        <NotificationBootstrap />
         <ServiceWorkerRegistration />
       </body>
     </html>

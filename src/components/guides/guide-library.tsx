@@ -16,6 +16,7 @@ import { useSyncExternalStore } from "react";
 
 import { installationGuides } from "@/features/guides/guide-catalog";
 import { evaluateGuideGovernance } from "@/features/guides/guide-governance";
+import { useGuideReviews } from "@/features/guides/use-guide-reviews";
 import { evaluateFitment } from "@/features/parts/fitment";
 import { findCatalogPart } from "@/features/parts/part-catalog";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
@@ -27,6 +28,7 @@ export function GuideLibrary({ vehicleId }: { vehicleId: string }) {
     () => false,
   );
   const { vehicles } = useVehicles();
+  const reviews = useGuideReviews();
   const vehicle = vehicles.find((candidate) => candidate.id === vehicleId);
 
   if (!hydrated)
@@ -62,7 +64,7 @@ export function GuideLibrary({ vehicleId }: { vehicleId: string }) {
 
       <section className="mt-5 grid gap-5 xl:grid-cols-3">
         {installationGuides.map((guide) => {
-          const governance = evaluateGuideGovernance(guide);
+          const governance = evaluateGuideGovernance(guide, reviews);
           const part = findCatalogPart(guide.partId);
           const fitment = part ? evaluateFitment(part, vehicle) : undefined;
           return (

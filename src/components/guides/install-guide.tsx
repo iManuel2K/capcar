@@ -25,6 +25,7 @@ import {
   type GuideProgress,
 } from "@/features/guides/guide-progress";
 import { useGuideProgress } from "@/features/guides/use-guide-progress";
+import { useGuideReviews } from "@/features/guides/use-guide-reviews";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 
 export function InstallGuide({
@@ -41,6 +42,7 @@ export function InstallGuide({
   );
   const { vehicles } = useVehicles();
   const allProgress = useGuideProgress();
+  const reviews = useGuideReviews();
   const [stepIndex, setStepIndex] = useState(0);
   const vehicle = vehicles.find((candidate) => candidate.id === vehicleId);
   const guide = findGuideBySlug(guideSlug);
@@ -74,7 +76,7 @@ export function InstallGuide({
   const completion = Math.round(
     (current.completedSteps.length / resolvedGuide.steps.length) * 100,
   );
-  const governance = evaluateGuideGovernance(resolvedGuide);
+  const governance = evaluateGuideGovernance(resolvedGuide, reviews);
 
   function persist(changes: Partial<GuideProgress>) {
     saveGuideProgress(
@@ -160,6 +162,12 @@ export function InstallGuide({
             Updated {resolvedGuide.updatedAt}. This guide cannot receive a
             verified label while its source requirements remain open.
           </p>
+          <Link
+            href={`/garage/${vehicleId}/guides/${guideSlug}/review`}
+            className="mt-5 inline-flex min-h-11 items-center rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"
+          >
+            Open review workspace
+          </Link>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           {resolvedGuide.sources.map((source) => (

@@ -2,6 +2,7 @@ import type {
   GuideReviewStatus,
   InstallationGuide,
 } from "@/features/guides/guide-catalog";
+import type { GuideReviewRecord } from "@/features/guides/guide-review-schema";
 
 export type GuideGovernance = {
   status: GuideReviewStatus;
@@ -9,10 +10,12 @@ export type GuideGovernance = {
   canVerify: boolean;
   authoritativeSources: number;
   blockers: string[];
+  trustedApprovals: number;
 };
 
 export function evaluateGuideGovernance(
   guide: InstallationGuide,
+  reviews: GuideReviewRecord[] = [],
 ): GuideGovernance {
   const authoritativeSources = guide.sources.filter(
     (source) =>
@@ -30,6 +33,22 @@ export function evaluateGuideGovernance(
   if (guide.applicability.length === 0)
     blockers.push("Vehicle applicability is not defined.");
 
+  const currentApprovals = reviews.filter(
+    (review) =>
+      review.guideSlug === guide.slug &&
+      review.guideRevision === guide.revision &&
+      review.outcome === "approved" &&
+      review.sourceChecked &&
+      review.applicabilityChecked &&
+      review.safetyChecked &&
+      review.evidenceState === "authenticated",
+  );
+  const trustedApprovals = currentApprovals.length;
+  if (!currentApprovals.some((review) => review.reviewerRole === "mechanic"))
+    blockers.push("An authenticated mechanic approval for this revision is missing.");
+  if (!currentApprovals.some((review) => review.reviewerRole === "publisher"))
+    blockers.push("An authenticated publisher approval for this revision is missing.");
+
   const canVerify = blockers.length === 0;
   const effectiveStatus =
     guide.reviewStatus === "verified" && !canVerify
@@ -45,6 +64,7 @@ export function evaluateGuideGovernance(
           : "Draft demo · review pending",
     canVerify,
     authoritativeSources,
+    trustedApprovals,
     blockers,
   };
 }

@@ -4,6 +4,7 @@ import { CheckCircle2, CircleDashed, ShieldCheck } from "lucide-react";
 import { getAuthStatus } from "@/features/auth/auth-config";
 import { getCopilotStatus } from "@/features/copilot/copilot-provider";
 import { getProviderStatuses } from "@/features/providers/provider-config";
+import { getDeploymentReadiness } from "@/features/deployment/deployment-readiness";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,13 @@ export default function SystemPage() {
   const auth = getAuthStatus();
   const copilot = getCopilotStatus();
   const providers = getProviderStatuses();
+  const deployment = getDeploymentReadiness();
   const checks = [
+    {
+      label: "Production launch configuration",
+      ready: deployment.ready,
+      detail: `Launch state: ${deployment.state}`,
+    },
     {
       label: "Production build and strict TypeScript",
       ready: true,
@@ -89,6 +96,7 @@ export default function SystemPage() {
           This page never exposes API keys. It reports only activation state and
           provider names.
         </aside>
+        <Link href="/launch" className="mt-5 inline-flex min-h-12 items-center rounded-xl bg-[#74a7ff] px-5 text-sm font-semibold text-[#07101d]">Open production launch checklist</Link>
       </div>
     </main>
   );

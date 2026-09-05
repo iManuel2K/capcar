@@ -11,7 +11,7 @@ describe("guide governance", () => {
     expect(governance.blockers.length).toBeGreaterThan(0);
   });
 
-  it("allows verification only with dated sources and applicability", () => {
+  it("allows verification only with dated sources and authenticated approvals", () => {
     const guide = {
       ...installationGuides[0],
       reviewStatus: "verified" as const,
@@ -24,8 +24,58 @@ describe("guide governance", () => {
         },
       ],
     };
-    const governance = evaluateGuideGovernance(guide);
+    const reviews = [
+      {
+        id: "review-1",
+        guideSlug: guide.slug,
+        guideRevision: guide.revision,
+        reviewerName: "Workshop Reviewer",
+        reviewerRole: "mechanic" as const,
+        outcome: "approved" as const,
+        sourceChecked: true,
+        applicabilityChecked: true,
+        safetyChecked: true,
+        notes: "Checked",
+        evidenceState: "authenticated" as const,
+        createdAt: "2026-09-05T10:00:00.000Z",
+      },
+      {
+        id: "review-2",
+        guideSlug: guide.slug,
+        guideRevision: guide.revision,
+        reviewerName: "Publisher Reviewer",
+        reviewerRole: "publisher" as const,
+        outcome: "approved" as const,
+        sourceChecked: true,
+        applicabilityChecked: true,
+        safetyChecked: true,
+        notes: "Ready",
+        evidenceState: "authenticated" as const,
+        createdAt: "2026-09-05T11:00:00.000Z",
+      },
+    ];
+    const governance = evaluateGuideGovernance(guide, reviews);
     expect(governance.canVerify).toBe(true);
     expect(governance.status).toBe("verified");
+  });
+
+  it("does not count a local self-attestation as trusted approval", () => {
+    const guide = installationGuides[0];
+    const governance = evaluateGuideGovernance(guide, [{
+      id: "local-review",
+      guideSlug: guide.slug,
+      guideRevision: guide.revision,
+      reviewerName: "Local tester",
+      reviewerRole: "mechanic",
+      outcome: "approved",
+      sourceChecked: true,
+      applicabilityChecked: true,
+      safetyChecked: true,
+      notes: "Demo only",
+      evidenceState: "local-demo",
+      createdAt: "2026-09-05T10:00:00.000Z",
+    }]);
+    expect(governance.trustedApprovals).toBe(0);
+    expect(governance.canVerify).toBe(false);
   });
 });

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Clock3,
+  Bell,
   House,
   Layers3,
   Plus,
@@ -13,9 +14,12 @@ import {
 } from "lucide-react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
+import { useNotifications } from "@/features/notifications/use-notifications";
 
 export function GarageShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const notifications = useNotifications();
+  const unread = notifications.filter((item) => !item.readAt).length;
   const vehicleMatch = pathname.match(/^\/garage\/([^/]+)/);
   const vehicleId =
     vehicleMatch?.[1] && vehicleMatch[1] !== "new"
@@ -98,6 +102,10 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             <span className="hidden rounded-full border border-[#74a7ff]/20 bg-[#74a7ff]/8 px-3 py-1.5 text-xs text-[#a9c7ff] md:inline-flex">
               Local prototype
             </span>
+            <Link aria-label={`${unread} unread notifications`} className="relative grid size-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60" href="/notifications">
+              <Bell className="size-4" />
+              {unread > 0 && <span className="absolute -top-1 -right-1 grid min-w-5 place-items-center rounded-full bg-[#74a7ff] px-1 text-[10px] font-bold text-[#07101d]">{Math.min(unread, 9)}{unread > 9 ? "+" : ""}</span>}
+            </Link>
             <Link
               aria-label="Account and sync"
               className="grid size-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60"
