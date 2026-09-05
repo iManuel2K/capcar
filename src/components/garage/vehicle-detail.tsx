@@ -4,10 +4,14 @@ import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
+  BookOpenCheck,
+  Bot,
   CalendarClock,
   CheckCircle2,
   CircleGauge,
   ClipboardList,
+  DatabaseZap,
+  GraduationCap,
   MapPin,
   Plus,
   Wrench,
@@ -118,8 +122,8 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
             </span>
           </div>
           <p className="mt-5 max-w-2xl leading-7 text-white/45">
-            Epic 05 will turn your mileage and service history into oil, fluid,
-            filter, brake and inspection tasks.
+            Review upcoming oil, fluid, filter, brake and inspection tasks for
+            this exact garage profile.
           </p>
           <div className="mt-7 grid gap-3 sm:grid-cols-3">
             <ComingSoon icon={CircleGauge} label="Oil & fluids" />
@@ -136,21 +140,48 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
             Shape what comes next.
           </h2>
           <p className="mt-4 leading-7 text-white/45">
-            Build planning, real parts and stage budgets arrive in Epic 06.
+            Plan modifications in stages, search compatible demo parts and
+            connect delivered-price offers to the roadmap.
           </p>
-          <button
-            disabled
-            className="mt-8 inline-flex min-h-12 cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white/35 lg:mt-auto"
+          <Link
+            href={`/garage/${vehicleId}/builds`}
+            className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white/60 hover:border-white/20 hover:text-white lg:mt-auto"
           >
-            <Plus className="size-4" /> Create a build · coming soon
-          </button>
+            <Plus className="size-4" /> Open project builds
+          </Link>
         </div>
       </section>
 
       <section className="mt-5 rounded-[1.75rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
-        <div className="flex items-center gap-3">
-          <MapPin className="size-4 text-[#8ab7ff]" />
-          <h2 className="font-medium">Vehicle identity</h2>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <MapPin className="size-4 text-[#8ab7ff]" />
+            <h2 className="font-medium">Vehicle identity</h2>
+          </div>
+          <Link
+            href={`/garage/${vehicleId}/tuning`}
+            className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs text-white/50 hover:text-white"
+          >
+            <GraduationCap className="size-3.5" /> Tuning academy
+          </Link>
+          <Link
+            href={`/garage/${vehicleId}/copilot`}
+            className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs text-white/50 hover:text-white"
+          >
+            <Bot className="size-3.5" /> Copilot
+          </Link>
+          <Link
+            href={`/garage/${vehicleId}/guides`}
+            className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs text-white/50 hover:text-white"
+          >
+            <BookOpenCheck className="size-3.5" /> Guides
+          </Link>
+          <Link
+            href={`/garage/${vehicleId}/data-sources`}
+            className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs text-white/50 hover:text-white"
+          >
+            <DatabaseZap className="size-3.5" /> Data sources
+          </Link>
         </div>
         <dl className="mt-6 grid gap-px overflow-hidden rounded-2xl bg-white/8 sm:grid-cols-2 lg:grid-cols-4">
           <IdentityItem label="Body" value={vehicle.bodyStyle} />

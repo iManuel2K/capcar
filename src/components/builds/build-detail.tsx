@@ -219,6 +219,29 @@ export function BuildDetail({
         />
       </section>
 
+      <section className="mt-5 grid gap-4 sm:grid-cols-2">
+        <Link
+          href={`/garage/${vehicleId}/builds/${buildId}/visualize`}
+          className="group rounded-[2rem] border border-white/10 bg-[#111512] p-6 transition hover:border-[#74a7ff]/35"
+        >
+          <Eye className="size-5 text-[#8ab7ff]" />
+          <h2 className="mt-5 text-xl font-medium">Visualize this build</h2>
+          <p className="mt-2 text-sm leading-6 text-white/40">
+            Compare the current baseline with a saved stylized concept.
+          </p>
+        </Link>
+        <Link
+          href={`/garage/${vehicleId}/builds/${buildId}/compatibility`}
+          className="group rounded-[2rem] border border-white/10 bg-[#111512] p-6 transition hover:border-[#74a7ff]/35"
+        >
+          <ShieldCheck className="size-5 text-[#8ab7ff]" />
+          <h2 className="mt-5 text-xl font-medium">Check compatibility</h2>
+          <p className="mt-2 text-sm leading-6 text-white/40">
+            Surface fitment gaps, dependencies and part interactions.
+          </p>
+        </Link>
+      </section>
+
       <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111512] p-5 sm:p-7">
         <div className="flex items-center justify-between gap-5">
           <div>

@@ -2,7 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, House, Layers3, Plus, ShoppingBag, Wrench } from "lucide-react";
+import {
+  Clock3,
+  House,
+  Layers3,
+  Plus,
+  ShoppingBag,
+  UserCircle,
+  Wrench,
+} from "lucide-react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 
@@ -18,6 +26,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
     : undefined;
   const buildsHref = vehicleId ? `/garage/${vehicleId}/builds` : undefined;
   const partsHref = vehicleId ? `/garage/${vehicleId}/parts` : undefined;
+  const timelineHref = vehicleId ? `/garage/${vehicleId}/timeline` : undefined;
 
   return (
     <div className="min-h-dvh bg-[#0b0e0c] text-[#f4f5f2]">
@@ -73,19 +82,29 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             ) : (
               <DisabledNav>Parts</DisabledNav>
             )}
+            {timelineHref ? (
+              <NavLink
+                href={timelineHref}
+                active={pathname.startsWith(timelineHref)}
+                icon={Clock3}
+              >
+                Timeline
+              </NavLink>
+            ) : (
+              <DisabledNav>Timeline</DisabledNav>
+            )}
           </nav>
           <div className="flex items-center gap-2">
             <span className="hidden rounded-full border border-[#74a7ff]/20 bg-[#74a7ff]/8 px-3 py-1.5 text-xs text-[#a9c7ff] md:inline-flex">
               Local prototype
             </span>
-            <button
-              aria-label="Notifications"
+            <Link
+              aria-label="Account and sync"
               className="grid size-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60"
-              disabled
-              type="button"
+              href="/account"
             >
-              <Bell className="size-4" />
-            </button>
+              <UserCircle className="size-4" />
+            </Link>
           </div>
         </div>
       </header>
@@ -101,7 +120,11 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
         <MobileLink href="/garage" active={pathname === "/garage"} icon={House}>
           Garage
         </MobileLink>
-        {vehicleId && maintenanceHref && buildsHref && partsHref ? (
+        {vehicleId &&
+        maintenanceHref &&
+        buildsHref &&
+        partsHref &&
+        timelineHref ? (
           <>
             <MobileLink
               href={maintenanceHref}
@@ -123,6 +146,13 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
               icon={ShoppingBag}
             >
               Parts
+            </MobileLink>
+            <MobileLink
+              href={timelineHref}
+              active={pathname.startsWith(timelineHref)}
+              icon={Clock3}
+            >
+              History
             </MobileLink>
           </>
         ) : (

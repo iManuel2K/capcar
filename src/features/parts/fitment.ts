@@ -20,7 +20,12 @@ export type FitmentResult = {
   conditions: string[];
 };
 
-function checkRule(rule: PartFitmentRule, vehicle: Vehicle) {
+export type FitmentVehicle = Pick<
+  Vehicle,
+  "platform" | "productionYear" | "bodyStyle" | "engineCode"
+>;
+
+function checkRule(rule: PartFitmentRule, vehicle: FitmentVehicle) {
   const checks: FitmentCheck[] = [
     {
       label: "Platform",
@@ -60,7 +65,7 @@ function checkRule(rule: PartFitmentRule, vehicle: Vehicle) {
 
 export function evaluateFitment(
   part: CatalogPart,
-  vehicle: Vehicle,
+  vehicle: FitmentVehicle,
 ): FitmentResult {
   if (part.fitmentRules.length === 0)
     return {

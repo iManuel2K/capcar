@@ -13,15 +13,18 @@ import {
   SlidersHorizontal,
   Wrench,
 } from "lucide-react";
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 
-import { evaluateFitment, type FitmentStatus } from "@/features/parts/fitment";
+import type { FitmentStatus } from "@/features/parts/fitment";
 import {
-  partCatalog,
   partCategories,
   type CatalogPart,
   type PartCategory,
 } from "@/features/parts/part-catalog";
+import type {
+  PartSearchResponse,
+  ProviderPartResult,
+} from "@/features/providers/provider-contracts";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 
 const fitmentContent: Record<
@@ -61,22 +64,72 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<"All" | PartCategory>("All");
   const [fitment, setFitment] = useState<"all" | FitmentStatus>("all");
+  const [providerResults, setProviderResults] = useState<ProviderPartResult[]>(
+    [],
+  );
+  const [providerName, setProviderName] = useState("Capcar catalogue demo");
+  const [source, setSource] = useState<"demo" | "external">("demo");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!vehicle) return;
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await fetch("/api/catalog/search", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            vehicle: {
+              vin: vehicle.vin,
+              make: vehicle.make,
+              model: vehicle.model,
+              productionYear: vehicle.productionYear,
+              platform: vehicle.platform,
+              bodyStyle: vehicle.bodyStyle,
+              engineCode: vehicle.engineCode,
+              transmission: vehicle.transmission,
+            },
+            query,
+            category,
+          }),
+          signal: controller.signal,
+        });
+        const body = (await response.json()) as
+          PartSearchResponse | { error?: string };
+        if (!response.ok || !("results" in body))
+          throw new Error(
+            "error" in body && body.error
+              ? body.error
+              : "Catalogue search failed.",
+          );
+        setProviderResults(body.results);
+        setProviderName(body.provider);
+        setSource(body.source);
+      } catch (caught) {
+        if (controller.signal.aborted) return;
+        setProviderResults([]);
+        setError(
+          caught instanceof Error ? caught.message : "Catalogue search failed.",
+        );
+      } finally {
+        if (!controller.signal.aborted) setLoading(false);
+      }
+    }, 220);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [category, query, vehicle]);
 
   const results = useMemo(() => {
-    if (!vehicle) return [];
-    const normalizedQuery = query.trim().toLowerCase();
-    return partCatalog
-      .map((part) => ({ part, fitment: evaluateFitment(part, vehicle) }))
-      .filter(({ part, fitment: result }) => {
-        const searchText =
-          `${part.name} ${part.brand} ${part.partNumber} ${part.category}`.toLowerCase();
-        return (
-          (!normalizedQuery || searchText.includes(normalizedQuery)) &&
-          (category === "All" || part.category === category) &&
-          (fitment === "all" || result.status === fitment)
-        );
-      });
-  }, [category, fitment, query, vehicle]);
+    return providerResults.filter(
+      ({ fitment: result }) => fitment === "all" || result.status === fitment,
+    );
+  }, [fitment, providerResults]);
 
   if (!hydrated)
     return (
@@ -109,7 +162,7 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_20%,rgba(116,167,255,0.16),transparent_28%)]" />
         <div className="relative">
           <p className="text-xs font-semibold tracking-[0.16em] text-[#8ab7ff] uppercase">
-            Parts catalogue · demo data
+            Parts catalogue · {source} source
           </p>
           <h1 className="mt-4 max-w-4xl text-4xl font-medium tracking-[-0.05em] text-balance sm:text-6xl">
             Search with the vehicle already in context.
@@ -169,7 +222,10 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
       </section>
 
       <div className="mt-6 flex items-center justify-between">
-        <p className="text-sm text-white/40">{results.length} demo products</p>
+        <p className="text-sm text-white/40">
+          {loading ? "Searching provider…" : `${results.length} products`} ·{" "}
+          {providerName}
+        </p>
         <p className="hidden text-xs text-white/30 sm:block">
           Vehicle: {vehicle.platform} · {vehicle.engineCode} ·{" "}
           {vehicle.bodyStyle}
@@ -188,7 +244,13 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
         ))}
       </section>
 
-      {results.length === 0 && (
+      {error && (
+        <div className="mt-5 flex items-start gap-3 rounded-2xl border border-red-300/15 bg-red-300/6 p-5 text-sm text-red-100/70">
+          <AlertTriangle className="mt-0.5 size-4 shrink-0" /> {error}
+        </div>
+      )}
+
+      {!loading && !error && results.length === 0 && (
         <div className="mt-5 rounded-[2rem] border border-dashed border-white/12 py-20 text-center">
           <PackageSearch className="mx-auto size-7 text-white/30" />
           <h2 className="mt-5 text-xl font-medium">No catalogue results</h2>
@@ -212,9 +274,12 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
       <aside className="mt-6 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6 text-white/45">
         <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-200" />
         <p>
-          Prototype catalogue only. A demo match is not purchase advice,
-          guaranteed fitment or road approval. Confirm OE numbers, option codes,
-          dimensions and documentation before buying.
+          {source === "demo"
+            ? "Prototype catalogue only. "
+            : "External provider result. "}
+          A match is not purchase advice, guaranteed fitment or road approval.
+          Confirm OE numbers, option codes, dimensions and documentation before
+          buying.
         </p>
       </aside>
     </div>

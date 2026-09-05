@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { PartDetail } from "@/components/parts/part-detail";
+import { PartNextActions } from "@/components/parts/part-next-actions";
 
 export const metadata: Metadata = { title: "Part details" };
 
@@ -10,5 +11,10 @@ export default async function PartPage({
   params: Promise<{ vehicleId: string; partId: string }>;
 }) {
   const { vehicleId, partId } = await params;
-  return <PartDetail vehicleId={vehicleId} partId={partId} />;
+  return (
+    <>
+      <PartDetail vehicleId={vehicleId} partId={partId} />
+      <PartNextActions vehicleId={vehicleId} partId={partId} />
+    </>
+  );
 }

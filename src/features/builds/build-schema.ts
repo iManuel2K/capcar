@@ -49,6 +49,11 @@ export const buildItemInputSchema = z.object({
   priority: z.enum(buildPriorities),
   estimatedCost: z.coerce.number().int().min(0).max(1_000_000),
   status: z.enum(buildItemStatuses).default("planned"),
+  selectedOfferId: z.string().min(1).optional(),
+  merchantName: z.string().min(1).optional(),
+  deliveredPrice: z.number().min(0).max(1_000_000).optional(),
+  offerSelectedAt: z.string().datetime().optional(),
+  updatedAt: z.string().datetime().optional(),
 });
 
 export const buildItemSchema = buildItemInputSchema.extend({

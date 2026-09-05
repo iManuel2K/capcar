@@ -1,0 +1,247 @@
+"use client";
+
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Cloud,
+  CloudDownload,
+  CloudUpload,
+  KeyRound,
+  LoaderCircle,
+  LogOut,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+
+import type { AuthStatus } from "@/features/auth/auth-config";
+import {
+  applyLocalSnapshot,
+  collectLocalSnapshot,
+  type LocalSnapshot,
+} from "@/features/sync/local-snapshot";
+import { createClient } from "@/lib/supabase/client";
+
+export function AccountWorkspace({ status }: { status: AuthStatus }) {
+  const [email, setEmail] = useState("");
+  const [userEmail, setUserEmail] = useState<string>();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!status.configured) return;
+    void createClient()
+      .auth.getUser()
+      .then(({ data }) => setUserEmail(data.user?.email));
+  }, [status.configured]);
+
+  async function sendMagicLink() {
+    setLoading(true);
+    setError("");
+    setMessage("");
+    try {
+      const { error: authError } = await createClient().auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      });
+      if (authError) throw authError;
+      setMessage("Check your email for the secure sign-in link.");
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Sign-in failed.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function uploadSnapshot() {
+    setLoading(true);
+    setError("");
+    try {
+      const client = createClient();
+      const { data } = await client.auth.getUser();
+      if (!data.user) throw new Error("Sign in before syncing.");
+      const snapshot = collectLocalSnapshot(window.localStorage);
+      const { error: syncError } = await client
+        .from("garage_snapshots")
+        .upsert({
+          user_id: data.user.id,
+          payload: snapshot,
+          updated_at: new Date().toISOString(),
+        });
+      if (syncError) throw syncError;
+      setMessage("Local Capcar data was backed up to your account.");
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Upload failed.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function restoreSnapshot() {
+    if (
+      !window.confirm(
+        "Restore the cloud snapshot over matching local Capcar records?",
+      )
+    )
+      return;
+    setLoading(true);
+    setError("");
+    try {
+      const client = createClient();
+      const { data: auth } = await client.auth.getUser();
+      if (!auth.user) throw new Error("Sign in before syncing.");
+      const { data, error: syncError } = await client
+        .from("garage_snapshots")
+        .select("payload")
+        .eq("user_id", auth.user.id)
+        .maybeSingle();
+      if (syncError) throw syncError;
+      if (!data) throw new Error("No cloud snapshot exists yet.");
+      applyLocalSnapshot(data.payload as LocalSnapshot, window.localStorage);
+      window.location.reload();
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Restore failed.");
+      setLoading(false);
+    }
+  }
+
+  async function signOut() {
+    await createClient().auth.signOut();
+    setUserEmail(undefined);
+    setMessage("Signed out. Local browser data remains available.");
+  }
+
+  return (
+    <div className="mx-auto max-w-5xl py-10 sm:py-16">
+      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(116,167,255,0.2),transparent_30%),#111512] p-6 sm:p-10">
+        <p className="text-xs font-semibold tracking-[0.15em] text-[#8ab7ff] uppercase">
+          Epic 03 · Account and sync
+        </p>
+        <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
+          Your garage stays yours.
+        </h1>
+        <p className="mt-5 max-w-2xl leading-7 text-white/45">
+          Capcar continues working locally. Once Supabase is configured, sign-in
+          and an RLS-protected garage snapshot become available without changing
+          the local-first product flow.
+        </p>
+      </header>
+
+      <section className="mt-5 grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
+        <aside className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+          <div className="flex items-center justify-between gap-3">
+            <Cloud className="size-5 text-[#8ab7ff]" />
+            <span
+              className={`rounded-full border px-3 py-1.5 text-[10px] uppercase ${status.configured ? "border-emerald-300/20 bg-emerald-300/8 text-emerald-200" : "border-amber-300/20 bg-amber-300/8 text-amber-100/70"}`}
+            >
+              {status.mode}
+            </span>
+          </div>
+          <h2 className="mt-7 text-2xl font-medium">
+            {status.configured ? "Cloud mode ready" : "Local mode active"}
+          </h2>
+          <p className="mt-3 text-sm leading-6 text-white/40">
+            {status.message}
+          </p>
+          {!status.configured && (
+            <div className="mt-6 flex gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-4 text-xs leading-5 text-white/45">
+              <KeyRound className="mt-0.5 size-4 shrink-0 text-amber-200" />
+              Add the two public Supabase variables and apply the included
+              database migration when you are ready.
+            </div>
+          )}
+        </aside>
+
+        <article className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+          {!status.configured ? (
+            <div className="flex min-h-72 flex-col items-center justify-center text-center">
+              <Cloud className="size-10 text-white/20" />
+              <h2 className="mt-5 text-2xl font-medium">
+                Nothing to configure today
+              </h2>
+              <p className="mt-3 max-w-md text-sm leading-6 text-white/40">
+                Your current vehicles, builds, guides, visual concepts and
+                tuning plans remain stored in this browser.
+              </p>
+            </div>
+          ) : userEmail ? (
+            <>
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs text-white/30">Signed in as</p>
+                  <p className="mt-1 font-medium">{userEmail}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => void signOut()}
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-sm text-white/50"
+                >
+                  <LogOut className="size-4" /> Sign out
+                </button>
+              </div>
+              <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => void uploadSnapshot()}
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-4 text-sm font-semibold text-[#07101d] disabled:opacity-40"
+                >
+                  <CloudUpload className="size-4" /> Back up local data
+                </button>
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => void restoreSnapshot()}
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60 disabled:opacity-40"
+                >
+                  <CloudDownload className="size-4" /> Restore cloud data
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="text-2xl font-medium">Sign in by email</h2>
+              <p className="mt-3 text-sm leading-6 text-white/40">
+                Capcar sends a secure magic link. No password is stored by this
+                application.
+              </p>
+              <label className="mt-7 block text-xs text-white/35">
+                Email
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d110f] px-4 text-sm text-white outline-none"
+                />
+              </label>
+              <button
+                type="button"
+                disabled={loading || !email.includes("@")}
+                onClick={() => void sendMagicLink()}
+                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-4 text-sm font-semibold text-[#07101d] disabled:opacity-40"
+              >
+                {loading ? (
+                  <LoaderCircle className="size-4 animate-spin" />
+                ) : (
+                  <KeyRound className="size-4" />
+                )}{" "}
+                Send magic link
+              </button>
+            </>
+          )}
+          {message && (
+            <p className="mt-5 flex gap-2 rounded-xl border border-emerald-300/15 bg-emerald-300/6 p-4 text-sm text-emerald-100/70">
+              <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
+              {message}
+            </p>
+          )}
+          {error && (
+            <p className="mt-5 flex gap-2 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-sm text-red-100/70">
+              <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+              {error}
+            </p>
+          )}
+        </article>
+      </section>
+    </div>
+  );
+}
