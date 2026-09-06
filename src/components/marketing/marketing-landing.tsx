@@ -202,7 +202,7 @@ function CinematicHero() {
     <section className="relative min-h-[100svh] overflow-hidden bg-[#070a09] text-white">
       <Image
         src="/capcar-hero-sedan.png"
-        alt="Graphite project sedan in a dark studio"
+        alt="Graphite BMW E90 project car in a dark workshop"
         fill
         priority
         sizes="100vw"
