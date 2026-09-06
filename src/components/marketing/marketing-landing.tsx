@@ -25,10 +25,10 @@ export function MarketingLanding() {
 
         <section className="border-y border-[#151713]/10 bg-white/35">
           <div className="mx-auto grid max-w-[1500px] divide-y divide-[#151713]/10 px-5 sm:px-8 md:grid-cols-4 md:divide-x md:divide-y-0">
-            <Signal number="01" label="One exact vehicle" />
-            <Signal number="02" label="One coherent build" />
-            <Signal number="03" label="Visible fitment evidence" />
-            <Signal number="04" label="A permanent history" />
+            <Signal number="01" label="Vehicle-specific" />
+            <Signal number="02" label="Structured builds" />
+            <Signal number="03" label="Verified fitment" />
+            <Signal number="04" label="Complete records" />
           </div>
         </section>
 
@@ -37,41 +37,41 @@ export function MarketingLanding() {
           className="mx-auto w-full max-w-[1500px] px-5 py-24 sm:px-8 sm:py-32"
         >
           <SectionHeading
-            eyebrow="The product"
-            title="The car stays at the center."
-            description="Capcar connects the emotional project with the practical work required to make it real."
+            eyebrow="Built around your car"
+            title="One platform. Every stage."
+            description="From maintenance to modification."
           />
           <div className="mt-14 grid gap-5 lg:grid-cols-12">
             <FeatureCard
               className="lg:col-span-7"
               icon={CircleGauge}
               eyebrow="Garage"
-              title="Know the car you are building."
-              description="Engine, chassis, mileage and project identity become the context for every later decision."
+              title="Your car, fully documented."
+              description="Specifications, mileage and history."
               visual={<GarageVisual />}
             />
             <FeatureCard
               className="lg:col-span-5"
               icon={Wrench}
               eyebrow="Maintenance"
-              title="Build from a reliable baseline."
-              description="Unknown history remains honest. Completed work creates the next date and mileage target."
+              title="Stay ahead of service."
+              description="Clear schedules and records."
               visual={<MaintenanceVisual />}
             />
             <FeatureCard
               className="lg:col-span-5"
               icon={Layers3}
               eyebrow="Build studio"
-              title="Turn taste into a roadmap."
-              description="Foundation, handling, appearance and performance stay in the correct order."
+              title="Plan before you buy."
+              description="Stages, priorities and budgets."
               visual={<BuildVisual />}
             />
             <FeatureCard
               className="lg:col-span-7"
               icon={ScanSearch}
               eyebrow="Parts"
-              title="See why a part appears relevant."
-              description="Platform, year, body and engine checks are visible before price enters the conversation."
+              title="Choose with confidence."
+              description="Fitment, pricing and documentation."
               visual={<PartsVisual />}
             />
           </div>
@@ -84,18 +84,16 @@ export function MarketingLanding() {
                 The difference
               </p>
               <h2 className="mt-5 text-4xl leading-[0.98] font-medium tracking-[-0.055em] text-balance sm:text-6xl">
-                Confidence before checkout.
+                Fitment, made clear.
               </h2>
               <p className="mt-6 max-w-xl text-base leading-7 text-white/48">
-                “Fits your BMW” is not enough. Capcar is designed to show the
-                evidence, the unresolved conditions and the complete build
-                context before recommending a purchase.
+                Review compatibility and requirements before purchase.
               </p>
               <Link
                 href="/garage"
                 className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#74a7ff] px-5 text-sm font-semibold text-[#07101d]"
               >
-                Explore your garage <ArrowRight className="size-4" />
+                Check compatible parts <ArrowRight className="size-4" />
               </Link>
             </div>
             <EvidencePanel />
@@ -107,37 +105,17 @@ export function MarketingLanding() {
           className="mx-auto w-full max-w-[1500px] px-5 py-24 sm:px-8 sm:py-32"
         >
           <SectionHeading
-            eyebrow="One ownership journey"
-            title="From idea to installed."
-            description="Each step creates useful context for the next, instead of disappearing into another app or spreadsheet."
+            eyebrow="The process"
+            title="A clear path from plan to road."
+            description="Five steps. One record."
           />
           <ol className="mt-14 grid gap-px overflow-hidden rounded-[2rem] border border-[#151713]/10 bg-[#151713]/10 md:grid-cols-5">
             {[
-              [
-                "01",
-                "Add the car",
-                "Start from the real chassis, engine and mileage.",
-              ],
-              [
-                "02",
-                "Set the baseline",
-                "Record maintenance before modification.",
-              ],
-              [
-                "03",
-                "Shape the build",
-                "Create stages, priorities and a budget.",
-              ],
-              [
-                "04",
-                "Prove the part",
-                "Inspect fitment evidence and conditions.",
-              ],
-              [
-                "05",
-                "Install and record",
-                "Preserve the work as vehicle history.",
-              ],
+              ["01", "Add your car", "Capture the exact specification."],
+              ["02", "Review its condition", "Set the maintenance baseline."],
+              ["03", "Plan the build", "Define stages and budget."],
+              ["04", "Select parts", "Confirm compatibility."],
+              ["05", "Complete the work", "Record every change."],
             ].map(([number, title, description]) => (
               <li
                 key={number}
@@ -163,17 +141,17 @@ export function MarketingLanding() {
               <Sparkles className="size-7" />
               <div>
                 <h2 className="text-5xl leading-[0.92] font-medium tracking-[-0.06em] text-balance sm:text-7xl lg:text-8xl">
-                  The build starts before the first part.
+                  Plan the next version.
                 </h2>
                 <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="/garage"
                     className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-white px-6 text-sm font-semibold text-[#245da9]"
                   >
-                    Open Capcar <ArrowRight className="size-4" />
+                    Start your build <ArrowRight className="size-4" />
                   </Link>
                   <span className="inline-flex min-h-13 items-center justify-center rounded-xl border border-white/25 px-6 text-sm text-white/72">
-                    Free local preview
+                    Private beta
                   </span>
                 </div>
               </div>
@@ -185,9 +163,8 @@ export function MarketingLanding() {
       <footer className="mx-auto flex max-w-[1500px] flex-col justify-between gap-7 px-5 py-12 sm:flex-row sm:items-center sm:px-8">
         <CapcarWordmark />
         <p className="max-w-xl text-xs leading-5 text-[#151713]/38">
-          Prototype data is for product testing only. Always verify fitment,
-          safety specifications and legal documentation before purchasing or
-          installing automotive parts.
+          Vehicle and build planning in one place. Confirm fitment, safety
+          requirements and legal approval before installation.
         </p>
         <Link href="/garage" className="text-sm font-medium">
           Garage →
@@ -201,15 +178,23 @@ function CinematicHero() {
   return (
     <section className="relative min-h-[100svh] overflow-hidden bg-[#070a09] text-white">
       <Image
-        src="/capcar-hero-sedan.png"
-        alt="Graphite BMW E90 project car in a dark workshop"
+        src="/capcar-hero-bmw-garage.png"
+        alt="Black BMW E90 project car inside a private garage"
         fill
         priority
         sizes="100vw"
-        className="object-cover object-[62%_center] sm:object-center"
+        className="hidden object-cover object-center sm:block"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,7,0.98)_0%,rgba(5,8,7,0.88)_31%,rgba(5,8,7,0.28)_63%,rgba(5,8,7,0.08)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,8,7,0.96)_0%,transparent_38%,rgba(5,8,7,0.35)_100%)]" />
+      <Image
+        src="/capcar-hero-bmw-garage-mobile.png"
+        alt="Black BMW E90 project car inside a private garage"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center sm:hidden"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,7,0.88)_0%,rgba(5,8,7,0.62)_34%,rgba(5,8,7,0.18)_68%,rgba(5,8,7,0.05)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,8,7,0.96)_0%,transparent_42%,rgba(5,8,7,0.42)_100%)]" />
 
       <header className="relative z-20 mx-auto flex h-20 w-full max-w-[1500px] items-center justify-between px-5 sm:px-8">
         <Link
@@ -224,13 +209,13 @@ function CinematicHero() {
           className="hidden items-center gap-8 text-sm text-white/55 md:flex"
         >
           <a className="transition hover:text-white" href="#product">
-            Product
+            Explore
           </a>
           <a className="transition hover:text-white" href="#difference">
             Why Capcar
           </a>
           <a className="transition hover:text-white" href="#journey">
-            How it works
+            The process
           </a>
         </nav>
         <Link
@@ -244,29 +229,28 @@ function CinematicHero() {
       <div className="relative z-10 mx-auto flex min-h-[calc(100svh-5rem)] w-full max-w-[1500px] flex-col justify-center px-5 pt-16 pb-64 sm:px-8 sm:pb-40">
         <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-black/20 px-3 py-1.5 text-xs text-white/55 backdrop-blur-xl">
           <span className="size-1.5 rounded-full bg-[#74a7ff] shadow-[0_0_14px_#74a7ff]" />
-          BMW-first private beta
+          Plan. Source. Build.
         </div>
         <h1 className="mt-7 max-w-[950px] text-[clamp(3.5rem,9vw,9.4rem)] leading-[0.82] font-medium tracking-[-0.078em] text-balance">
-          See the build.
+          Build with clarity.
           <br />
-          <span className="text-white/42">Then make it real.</span>
+          <span className="text-white/42">Drive with confidence.</span>
         </h1>
         <p className="mt-8 max-w-lg text-base leading-7 text-white/55 sm:text-lg">
-          Visualize your car, source compatible parts, compare the real cost and
-          follow the installation—inside one living garage.
+          Manage your car, parts and projects in one place.
         </p>
         <div className="mt-9 flex flex-col gap-3 sm:flex-row">
           <Link
             href="/garage"
             className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-[#74a7ff] px-6 text-sm font-semibold text-[#07101d] shadow-[0_18px_50px_rgba(116,167,255,0.24)] transition hover:-translate-y-0.5 hover:bg-[#8ab7ff]"
           >
-            Build your car <ArrowRight className="size-4" />
+            Open Capcar <ArrowRight className="size-4" />
           </Link>
           <a
             href="#product"
             className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-white/16 bg-black/20 px-6 text-sm text-white/72 backdrop-blur-xl transition hover:bg-white/10"
           >
-            Explore Capcar <ArrowDown className="size-4" />
+            Explore the platform <ArrowDown className="size-4" />
           </a>
         </div>
       </div>
@@ -275,17 +259,13 @@ function CinematicHero() {
         <HeroMetric
           icon={CircleGauge}
           label="Maintain"
-          value="Know what comes next"
+          value="Service on schedule"
         />
-        <HeroMetric
-          icon={Layers3}
-          label="Visualize"
-          value="Exterior and interior"
-        />
+        <HeroMetric icon={Layers3} label="Plan" value="Define every stage" />
         <HeroMetric
           icon={ShoppingBag}
-          label="Build"
-          value="Real parts, one roadmap"
+          label="Source"
+          value="Compare compatible parts"
         />
       </div>
     </section>
@@ -505,7 +485,7 @@ function EvidencePanel() {
         ))}
       </div>
       <div className="grid gap-px bg-white/8 sm:grid-cols-3">
-        <PanelStat icon={Euro} label="Price" value="Next epic" />
+        <PanelStat icon={Euro} label="Price" value="Compare offers" />
         <PanelStat icon={Wrench} label="Install" value="Moderate" />
         <PanelStat icon={ShieldCheck} label="Approval" value="Unverified" />
       </div>

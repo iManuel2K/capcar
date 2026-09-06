@@ -14,7 +14,10 @@ export const metadata: Metadata = {
     "Visualize your project car, find compatible parts and install them with confidence.",
   applicationName: "Capcar",
   manifest: "/manifest.webmanifest",
-  icons: { icon: "/icon.svg" },
+  icons: {
+    icon: [{ url: "/capcar-mark-192.png", type: "image/png" }],
+    apple: [{ url: "/capcar-mark-192.png", type: "image/png" }],
+  },
 };
 
 export default function RootLayout({

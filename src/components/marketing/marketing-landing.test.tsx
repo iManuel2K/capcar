@@ -7,9 +7,9 @@ describe("MarketingLanding", () => {
   it("states the product direction", () => {
     render(<MarketingLanding />);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      /see the build/i,
+      /build with clarity/i,
     );
-    expect(screen.getByText("Confidence before checkout.")).toBeInTheDocument();
+    expect(screen.getByText("Fitment, made clear.")).toBeInTheDocument();
   });
 
   it("provides direct routes into the garage", () => {
