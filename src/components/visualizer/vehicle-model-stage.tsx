@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import { accessoryGeometry, type Surface } from "@/features/visualizer/accessory-geometry";
 import type { BuildVisual } from "@/features/visualizer/build-visual-schema";
 import {
   projectVector,
@@ -289,7 +290,7 @@ function Control({ label, onClick }: { label: string; onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="hidden min-h-9 rounded-lg px-3 text-xs text-white/45 hover:bg-white/8 hover:text-white sm:block"
+      className="min-h-9 rounded-lg px-3 text-xs text-white/45 hover:bg-white/8 hover:text-white sm:block"
     >
       {label}
     </button>
@@ -349,109 +350,27 @@ function drawVehicle(
   const centeredVertices = model.vertices.map(
     ([x, y, z]) => [x, y - model.dimensions.height / 2 - drop, z] as Vector3,
   );
-  const projected = centeredVertices.map((vertex) =>
-    projectVector(vertex, camera, viewport, model.dimensions.length),
-  );
-
-  drawWheels(context, model, visual, camera, viewport);
-
-  const faces = model.faces
-    .map((face) => ({
-      face,
-      depth:
-        face.indices.reduce(
-          (total, index) =>
-            total + rotateVector(centeredVertices[index], camera)[2],
-          0,
-        ) / face.indices.length,
-    }))
-    .sort((a, b) => a.depth - b.depth);
-
-  for (const { face } of faces) {
-    const points = face.indices.map((index) => projected[index]);
-    if (points.some((point) => !point)) continue;
+  const surfaces: Surface[] = [
+    ...model.faces.map(face => ({ points: face.indices.map(index => centeredVertices[index]), color: materialColor(face.material, visual), group: "body" })),
+    ...accessoryGeometry(model, visual),
+  ];
+  const sorted = surfaces.map(surface => ({
+    ...surface,
+    depth: surface.points.reduce((total, point) => total + rotateVector(point, camera)[2], 0) / surface.points.length,
+  })).sort((a,b) => a.depth - b.depth);
+  for (const surface of sorted) {
+    const points = surface.points.map(point => projectVector(point, camera, viewport, model.dimensions.length));
     context.beginPath();
     context.moveTo(points[0].x, points[0].y);
     for (const point of points.slice(1)) context.lineTo(point.x, point.y);
     context.closePath();
-    context.fillStyle = materialColor(face.material, visual);
+    context.fillStyle = surface.color;
     context.fill();
-    context.strokeStyle = "rgba(255,255,255,.11)";
-    context.lineWidth = 1;
-    context.stroke();
-  }
-
-  if (visual.aero === "sport") {
-    const y = -model.dimensions.height * 0.28 - drop;
-    const front = projectVector(
-      [-model.dimensions.width * 0.42, y, -model.dimensions.length * 0.49],
-      camera,
-      viewport,
-      model.dimensions.length,
-    );
-    const other = projectVector(
-      [model.dimensions.width * 0.42, y, -model.dimensions.length * 0.49],
-      camera,
-      viewport,
-      model.dimensions.length,
-    );
-    context.beginPath();
-    context.moveTo(front.x, front.y);
-    context.lineTo(other.x, other.y);
-    context.strokeStyle = "#050707";
-    context.lineWidth = 8;
+    context.strokeStyle = "rgba(255,255,255,.07)";
+    context.lineWidth = .7;
     context.stroke();
   }
   context.restore();
-}
-
-function drawWheels(
-  context: CanvasRenderingContext2D,
-  model: VehicleModel,
-  visual: BuildVisual,
-  camera: OrbitCamera,
-  viewport: { width: number; height: number },
-) {
-  const radius =
-    (model.dimensions.referenceWheelDiameter / 2) *
-    (visual.wheels === "factory"
-      ? 1
-      : visual.wheels === "graphite"
-        ? 1.07
-        : 1.1);
-  const frontZ = -model.dimensions.wheelbase / 2;
-  const rearZ = model.dimensions.wheelbase / 2;
-  const centers = [
-    [-model.dimensions.trackFront / 2, frontZ],
-    [model.dimensions.trackFront / 2, frontZ],
-    [-model.dimensions.trackRear / 2, rearZ],
-    [model.dimensions.trackRear / 2, rearZ],
-  ] as const;
-  for (const [x, z] of centers) {
-    const points = Array.from({ length: 20 }, (_, index) => {
-      const angle = (Math.PI * 2 * index) / 20;
-      return projectVector(
-        [
-          x,
-          -model.dimensions.height / 2 + radius + Math.sin(angle) * radius,
-          z + Math.cos(angle) * radius,
-        ],
-        camera,
-        viewport,
-        model.dimensions.length,
-      );
-    });
-    context.beginPath();
-    context.moveTo(points[0].x, points[0].y);
-    for (const point of points.slice(1)) context.lineTo(point.x, point.y);
-    context.closePath();
-    context.fillStyle = "#070909";
-    context.fill();
-    context.strokeStyle =
-      visual.wheels === "silver-mesh" ? "#c7cbca" : "#3d4649";
-    context.lineWidth = visual.wheels === "factory" ? 4 : 7;
-    context.stroke();
-  }
 }
 
 function materialColor(

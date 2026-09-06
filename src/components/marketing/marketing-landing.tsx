@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowDown,
@@ -7,7 +8,6 @@ import {
   CircleGauge,
   Euro,
   Layers3,
-  Menu,
   ScanSearch,
   ShieldCheck,
   ShoppingBag,
@@ -20,92 +20,8 @@ import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 export function MarketingLanding() {
   return (
     <div className="min-h-dvh overflow-hidden bg-[#f4f1e9] text-[#151713]">
-      <header className="relative z-50 mx-auto flex h-20 w-full max-w-[1500px] items-center justify-between px-5 sm:px-8">
-        <Link
-          href="/"
-          aria-label="Capcar home"
-          className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#3978d9]"
-        >
-          <CapcarWordmark />
-        </Link>
-        <nav
-          aria-label="Main navigation"
-          className="hidden items-center gap-8 text-sm text-[#151713]/55 md:flex"
-        >
-          <a className="transition hover:text-[#151713]" href="#product">
-            Product
-          </a>
-          <a className="transition hover:text-[#151713]" href="#difference">
-            Why Capcar
-          </a>
-          <a className="transition hover:text-[#151713]" href="#journey">
-            How it works
-          </a>
-        </nav>
-        <Link
-          href="/garage"
-          className="hidden min-h-11 items-center gap-2 rounded-xl bg-[#151713] px-4 text-sm font-medium text-white transition hover:-translate-y-0.5 sm:inline-flex"
-        >
-          Open garage <ArrowRight className="size-4" />
-        </Link>
-        <Link
-          href="/garage"
-          aria-label="Open garage"
-          className="grid size-11 place-items-center rounded-xl bg-[#151713] text-white sm:hidden"
-        >
-          <Menu className="size-4" />
-        </Link>
-      </header>
-
       <main>
-        <section className="relative mx-auto grid min-h-[calc(100dvh-5rem)] w-full max-w-[1500px] items-center gap-12 px-5 pt-12 pb-20 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:pt-10">
-          <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#151713]/10 bg-white/45 px-3 py-1.5 text-xs text-[#151713]/55 backdrop-blur">
-              <span className="size-1.5 rounded-full bg-[#3978d9]" />
-              Local product preview
-            </div>
-            <h1 className="mt-7 max-w-3xl text-[clamp(3.5rem,7vw,7.4rem)] leading-[0.86] font-medium tracking-[-0.072em] text-balance">
-              Your car.
-              <br />
-              <span className="text-[#151713]/28">Before it becomes</span>
-              <br />
-              your project.
-            </h1>
-            <p className="mt-8 max-w-xl text-base leading-7 text-[#151713]/58 sm:text-lg">
-              See the direction, organize every modification, understand what
-              fits and build with a plan instead of scattered tabs and
-              guesswork.
-            </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/garage"
-                className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-[#3978d9] px-6 text-sm font-semibold text-white shadow-[0_16px_40px_rgba(57,120,217,0.22)] transition hover:-translate-y-0.5 hover:bg-[#2f6fc9]"
-              >
-                Start with your car <ArrowRight className="size-4" />
-              </Link>
-              <a
-                href="#product"
-                className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl border border-[#151713]/12 bg-white/35 px-6 text-sm font-medium transition hover:bg-white/65"
-              >
-                Explore the product <ArrowDown className="size-4" />
-              </a>
-            </div>
-            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-xs text-[#151713]/42">
-              <span className="flex items-center gap-2">
-                <Check className="size-3.5 text-[#3978d9]" /> No account needed
-              </span>
-              <span className="flex items-center gap-2">
-                <Check className="size-3.5 text-[#3978d9]" /> BMW-first
-                prototype
-              </span>
-              <span className="flex items-center gap-2">
-                <Check className="size-3.5 text-[#3978d9]" /> Free preview
-              </span>
-            </div>
-          </div>
-
-          <HeroStage />
-        </section>
+        <CinematicHero />
 
         <section className="border-y border-[#151713]/10 bg-white/35">
           <div className="mx-auto grid max-w-[1500px] divide-y divide-[#151713]/10 px-5 sm:px-8 md:grid-cols-4 md:divide-x md:divide-y-0">
@@ -281,132 +197,102 @@ export function MarketingLanding() {
   );
 }
 
-function HeroStage() {
+function CinematicHero() {
   return (
-    <div className="relative min-h-[600px] overflow-hidden rounded-[2.4rem] border border-white/8 bg-[#0b0e0c] text-white shadow-[0_40px_110px_rgba(25,29,26,0.28)] sm:min-h-[720px]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_62%_42%,rgba(92,145,235,0.28),transparent_32%)]" />
-      <div className="absolute inset-x-[8%] bottom-[22%] h-28 rounded-full bg-[#74a7ff]/14 blur-3xl" />
-      <div className="absolute top-6 right-6 left-6 flex items-center justify-between sm:top-8 sm:right-8 sm:left-8">
-        <div>
-          <p className="text-[11px] tracking-[0.16em] text-white/35 uppercase">
-            Current garage
-          </p>
-          <p className="mt-2 text-sm font-medium">2011 BMW 318i</p>
+    <section className="relative min-h-[100svh] overflow-hidden bg-[#070a09] text-white">
+      <Image
+        src="/capcar-hero-sedan.png"
+        alt="Graphite project sedan in a dark studio"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-[62%_center] sm:object-center"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,7,0.98)_0%,rgba(5,8,7,0.88)_31%,rgba(5,8,7,0.28)_63%,rgba(5,8,7,0.08)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,8,7,0.96)_0%,transparent_38%,rgba(5,8,7,0.35)_100%)]" />
+
+      <header className="relative z-20 mx-auto flex h-20 w-full max-w-[1500px] items-center justify-between px-5 sm:px-8">
+        <Link
+          href="/"
+          aria-label="Capcar home"
+          className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#74a7ff]"
+        >
+          <CapcarWordmark />
+        </Link>
+        <nav
+          aria-label="Main navigation"
+          className="hidden items-center gap-8 text-sm text-white/55 md:flex"
+        >
+          <a className="transition hover:text-white" href="#product">
+            Product
+          </a>
+          <a className="transition hover:text-white" href="#difference">
+            Why Capcar
+          </a>
+          <a className="transition hover:text-white" href="#journey">
+            How it works
+          </a>
+        </nav>
+        <Link
+          href="/garage"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/18 bg-black/20 px-4 text-sm font-medium text-white backdrop-blur-xl transition hover:border-white/35 hover:bg-white/10"
+        >
+          Open garage <ArrowRight className="size-4" />
+        </Link>
+      </header>
+
+      <div className="relative z-10 mx-auto flex min-h-[calc(100svh-5rem)] w-full max-w-[1500px] flex-col justify-center px-5 pt-16 pb-64 sm:px-8 sm:pb-40">
+        <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-black/20 px-3 py-1.5 text-xs text-white/55 backdrop-blur-xl">
+          <span className="size-1.5 rounded-full bg-[#74a7ff] shadow-[0_0_14px_#74a7ff]" />
+          BMW-first private beta
         </div>
-        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/45">
-          E90 · N43B20
-        </span>
-      </div>
-
-      <MarketingCar />
-
-      <div className="absolute right-5 bottom-5 left-5 grid gap-3 sm:right-8 sm:bottom-8 sm:left-8 sm:grid-cols-3">
-        <StageCard
-          icon={CircleGauge}
-          label="Maintenance"
-          value="Baseline ready"
-        />
-        <StageCard icon={Layers3} label="Active build" value="Stealth Rear" />
-        <StageCard
-          icon={ShoppingBag}
-          label="Part evidence"
-          value="4 conditions"
-        />
-      </div>
-      <div className="absolute top-[18%] left-5 rounded-2xl border border-white/10 bg-black/25 p-4 backdrop-blur-xl sm:left-8">
-        <p className="text-[10px] tracking-[0.13em] text-white/35 uppercase">
-          Build budget
+        <h1 className="mt-7 max-w-[950px] text-[clamp(3.5rem,9vw,9.4rem)] leading-[0.82] font-medium tracking-[-0.078em] text-balance">
+          See the build.
+          <br />
+          <span className="text-white/42">Then make it real.</span>
+        </h1>
+        <p className="mt-8 max-w-lg text-base leading-7 text-white/55 sm:text-lg">
+          Visualize your car, source compatible parts, compare the real cost and
+          follow the installation—inside one living garage.
         </p>
-        <p className="mt-2 text-xl font-medium">€1,200</p>
-        <div className="mt-3 h-1.5 w-28 overflow-hidden rounded-full bg-white/10">
-          <div className="h-full w-[67%] rounded-full bg-[#74a7ff]" />
+        <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <Link
+            href="/garage"
+            className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-[#74a7ff] px-6 text-sm font-semibold text-[#07101d] shadow-[0_18px_50px_rgba(116,167,255,0.24)] transition hover:-translate-y-0.5 hover:bg-[#8ab7ff]"
+          >
+            Build your car <ArrowRight className="size-4" />
+          </Link>
+          <a
+            href="#product"
+            className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-white/16 bg-black/20 px-6 text-sm text-white/72 backdrop-blur-xl transition hover:bg-white/10"
+          >
+            Explore Capcar <ArrowDown className="size-4" />
+          </a>
         </div>
       </div>
-    </div>
+
+      <div className="absolute right-5 bottom-5 left-5 z-10 mx-auto grid max-w-[1436px] overflow-hidden rounded-2xl border border-white/10 bg-black/35 backdrop-blur-2xl sm:right-8 sm:bottom-8 sm:left-8 sm:grid-cols-3">
+        <HeroMetric
+          icon={CircleGauge}
+          label="Maintain"
+          value="Know what comes next"
+        />
+        <HeroMetric
+          icon={Layers3}
+          label="Visualize"
+          value="Exterior and interior"
+        />
+        <HeroMetric
+          icon={ShoppingBag}
+          label="Build"
+          value="Real parts, one roadmap"
+        />
+      </div>
+    </section>
   );
 }
 
-function MarketingCar() {
-  return (
-    <svg
-      aria-label="Stylized project car"
-      className="absolute top-[43%] left-1/2 w-[112%] max-w-[950px] -translate-x-1/2 -translate-y-1/2"
-      role="img"
-      viewBox="0 0 1000 430"
-    >
-      <defs>
-        <linearGradient id="landing-body" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0" stopColor="#919b95" />
-          <stop offset="0.34" stopColor="#303733" />
-          <stop offset="0.72" stopColor="#121613" />
-          <stop offset="1" stopColor="#050706" />
-        </linearGradient>
-        <linearGradient id="landing-glass" x1="0" x2="1">
-          <stop offset="0" stopColor="#8ba5ad" />
-          <stop offset="1" stopColor="#14201d" />
-        </linearGradient>
-      </defs>
-      <ellipse cx="505" cy="340" rx="405" ry="46" fill="#000" opacity=".58" />
-      <path
-        d="M78 288c27-54 75-91 145-111l133-33c52-76 112-108 206-108h97c74 0 126 33 187 108l73 23c28 9 46 31 52 65l8 65H55l23-9Z"
-        fill="url(#landing-body)"
-        stroke="rgba(255,255,255,.2)"
-        strokeWidth="3"
-      />
-      <path
-        d="M382 142c49-61 99-83 178-83h93c51 0 92 24 143 83H382Z"
-        fill="url(#landing-glass)"
-        opacity=".86"
-      />
-      <path
-        d="M579 61v80M365 148h448"
-        stroke="rgba(255,255,255,.18)"
-        strokeWidth="3"
-      />
-      <path
-        d="M78 245h112M817 222h122"
-        stroke="#a8c6ff"
-        strokeLinecap="round"
-        strokeWidth="11"
-        opacity=".72"
-      />
-      <circle
-        cx="252"
-        cy="294"
-        r="77"
-        fill="#070908"
-        stroke="#333a35"
-        strokeWidth="13"
-      />
-      <circle
-        cx="252"
-        cy="294"
-        r="39"
-        fill="#7e8780"
-        stroke="#161b18"
-        strokeWidth="12"
-      />
-      <circle
-        cx="757"
-        cy="294"
-        r="77"
-        fill="#070908"
-        stroke="#333a35"
-        strokeWidth="13"
-      />
-      <circle
-        cx="757"
-        cy="294"
-        r="39"
-        fill="#7e8780"
-        stroke="#161b18"
-        strokeWidth="12"
-      />
-    </svg>
-  );
-}
-
-function StageCard({
+function HeroMetric({
   icon: Icon,
   label,
   value,
@@ -416,11 +302,16 @@ function StageCard({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/25 p-4 backdrop-blur-xl">
-      <div className="flex items-center gap-2 text-[10px] tracking-[0.12em] text-white/35 uppercase">
-        <Icon className="size-3" /> {label}
+    <div className="flex items-center gap-4 border-white/10 p-4 sm:border-l sm:p-5 sm:first:border-l-0">
+      <span className="grid size-10 shrink-0 place-items-center rounded-full border border-[#74a7ff]/25 bg-[#74a7ff]/10 text-[#9bc0ff]">
+        <Icon className="size-4" />
+      </span>
+      <div>
+        <p className="text-[10px] tracking-[0.14em] text-white/35 uppercase">
+          {label}
+        </p>
+        <p className="mt-1 text-sm font-medium text-white/76">{value}</p>
       </div>
-      <p className="mt-2 text-sm font-medium text-white/82">{value}</p>
     </div>
   );
 }

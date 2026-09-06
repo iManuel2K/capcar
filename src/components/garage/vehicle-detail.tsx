@@ -8,6 +8,7 @@ import {
   Bot,
   CalendarClock,
   CheckCircle2,
+  CircleAlert,
   CircleGauge,
   ClipboardList,
   DatabaseZap,
@@ -137,11 +138,11 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
             Project build
           </p>
           <h2 className="mt-2 text-2xl font-medium tracking-[-0.025em]">
-            Shape what comes next.
+            Shape it inside and out.
           </h2>
           <p className="mt-4 leading-7 text-white/45">
-            Plan modifications in stages, search compatible demo parts and
-            connect delivered-price offers to the roadmap.
+            Plan modifications in stages, preview exterior and interior
+            concepts, and connect parts and offers to the roadmap.
           </p>
           <Link
             href={`/garage/${vehicleId}/builds`}
@@ -158,6 +159,12 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
             <MapPin className="size-4 text-[#8ab7ff]" />
             <h2 className="font-medium">Vehicle identity</h2>
           </div>
+          <Link
+            href={`/garage/${vehicleId}/known-problems`}
+            className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs text-white/50 hover:text-white"
+          >
+            <CircleAlert className="size-3.5" /> Known problems
+          </Link>
           <Link
             href={`/garage/${vehicleId}/tuning`}
             className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs text-white/50 hover:text-white"
