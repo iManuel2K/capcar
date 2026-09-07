@@ -4,6 +4,7 @@ export const copilotRequestSchema = z.object({
   message: z.string().trim().min(2).max(1000),
   vehicle: z.object({
     id: z.string(),
+    make: z.string().optional(),
     model: z.string(),
     productionYear: z.number().int(),
     platform: z.string(),

@@ -72,7 +72,7 @@ export function InteriorStage({
         ))}
       </div>
       <div className="absolute bottom-4 left-4 hidden items-center gap-2 text-xs text-white/35 sm:flex">
-        <BadgeInfo className="size-3.5" /> Concept preview, not an exact BMW
+        <BadgeInfo className="size-3.5" /> Concept preview, not an exact vehicle
         interior
       </div>
     </div>

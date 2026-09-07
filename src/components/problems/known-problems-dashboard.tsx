@@ -202,18 +202,19 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
         <aside className="space-y-4">
           <div className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6">
             <ShieldCheck className="size-5 text-emerald-200" />
-            <h2 className="mt-4 text-lg font-medium">Check official recalls</h2>
+            <h2 className="mt-4 text-lg font-medium">Check safety recalls</h2>
             <p className="mt-3 text-sm leading-6 text-white/45">
-              Recall status is VIN-specific. Capcar does not guess it from the
-              model year.
+              Search official recall records by make and model. Confirm whether
+              your exact vehicle is affected with the manufacturer or an
+              authorized workshop.
             </p>
             <a
-              href="https://vehiclerecall.bmwgroup.com/index.html?brand=bmw&language=de&market=de"
+              href="https://www.kba-online.de/rrdb/buerger/"
               target="_blank"
               rel="noreferrer"
               className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-white text-sm font-semibold text-black"
             >
-              BMW recall lookup
+              Open official recall search
               <ArrowUpRight className="size-3.5" />
             </a>
           </div>

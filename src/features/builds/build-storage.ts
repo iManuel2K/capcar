@@ -127,7 +127,7 @@ export function createStealthRearBuild(
       name: "Stealth Rear",
       goal: "Appearance",
       description:
-        "A darker, cleaner rear treatment that remains coherent with the original BMW design.",
+        "A darker, cleaner rear treatment that remains coherent with the original vehicle design.",
       budget: 1_200,
       status: "planning",
     },

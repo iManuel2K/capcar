@@ -115,7 +115,7 @@ export function DataSourcesDashboard({
 
       <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_12%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10">
         <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
-          Epic 21 · BMW identity foundation
+          Vehicle data foundation
         </p>
         <h1 className="mt-4 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
           Know the exact car behind the badge.
@@ -164,7 +164,7 @@ export function DataSourcesDashboard({
           <div className="flex items-start justify-between gap-5">
             <div>
               <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
-                BMW / VIN identity
+                Vehicle / VIN identity
               </p>
               <h2 className="mt-2 text-2xl font-medium">
                 Resolve the current profile
@@ -174,8 +174,9 @@ export function DataSourcesDashboard({
           </div>
           <p className="mt-4 text-sm leading-6 text-white/45">
             Demo resolution normalizes what you entered. A licensed adapter can
-            later return build date, BMW type code, market, drivetrain details,
-            paint and factory option codes without changing this screen.
+            later return build date, manufacturer type code, market, drivetrain
+            details, paint and factory option codes without changing this
+            screen.
           </p>
           <button
             type="button"
@@ -199,8 +200,8 @@ export function DataSourcesDashboard({
             <div className="mt-7 rounded-2xl border border-white/8 bg-black/10 p-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <p className="font-medium">
-                  {resolution.identity.productionYear} BMW{" "}
-                  {resolution.identity.model}
+                  {resolution.identity.productionYear}{" "}
+                  {resolution.identity.make} {resolution.identity.model}
                 </p>
                 <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] text-white/40 uppercase">
                   {resolution.confidence}
@@ -223,7 +224,7 @@ export function DataSourcesDashboard({
                   }
                 />
                 <IdentityField
-                  label="BMW type code"
+                  label="Manufacturer type code"
                   value={resolution.bmwIdentity.typeCode ?? "Not resolved"}
                 />
                 <IdentityField

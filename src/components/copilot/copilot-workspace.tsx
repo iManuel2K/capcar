@@ -67,6 +67,7 @@ export function CopilotWorkspace({ vehicleId }: { vehicleId: string }) {
           message: question,
           vehicle: {
             id: vehicle.id,
+            make: vehicle.make,
             model: vehicle.model,
             productionYear: vehicle.productionYear,
             platform: vehicle.platform,

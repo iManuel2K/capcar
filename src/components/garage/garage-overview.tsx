@@ -72,13 +72,13 @@ export function GarageOverview() {
         </div>
 
         <section className="grid overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] lg:grid-cols-[1.12fr_0.88fr]">
-          <VehicleArt label="your future BMW" />
+          <VehicleArt label="your future project car" />
           <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12">
             <span className="grid size-11 place-items-center rounded-2xl bg-[#e72d45] text-[#07101d]">
               <CarFront className="size-5" />
             </span>
             <h2 className="mt-7 text-2xl font-medium tracking-[-0.025em]">
-              Add your first BMW
+              Add your first car
             </h2>
             <p className="mt-3 leading-7 text-white/50">
               It takes about one minute. VIN is optional for this prototype, and
@@ -89,7 +89,7 @@ export function GarageOverview() {
                 href="/garage/new"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d] transition hover:-translate-y-0.5 hover:bg-[#ff667a]"
               >
-                Add your BMW <ArrowRight className="size-4" />
+                Add your car <ArrowRight className="size-4" />
               </Link>
               <button
                 onClick={loadDemo}

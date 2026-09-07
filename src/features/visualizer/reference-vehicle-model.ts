@@ -116,7 +116,7 @@ export function createReferenceVehicleModel(
     source: "demo",
     accuracy: "concept",
     assetId: `reference-${platform.toLowerCase()}-${vehicle.bodyStyle.toLowerCase()}`,
-    vehicleKey: `${vehicle.productionYear}-BMW-${vehicle.model}-${platform}`,
+    vehicleKey: `${vehicle.productionYear}-${vehicle.make}-${vehicle.model}-${platform}`,
     revision: "2026.09",
     coordinateUnit: "mm",
     dimensions: modelDimensions,

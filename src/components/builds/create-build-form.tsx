@@ -124,7 +124,7 @@ export function CreateBuildForm({ vehicleId }: { vehicleId: string }) {
               <Field label="Describe the direction" error={errors.description}>
                 <textarea
                   className={`${inputClass} min-h-32 py-3`}
-                  placeholder="Darker, cleaner and still close to the original BMW design..."
+                  placeholder="Darker, cleaner and still coherent with the original design..."
                   value={form.description}
                   onChange={(event) =>
                     update("description", event.target.value)

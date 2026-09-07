@@ -17,6 +17,7 @@ import {
 } from "@/features/vehicles/vehicle-storage";
 
 type FormState = {
+  make: string;
   model: string;
   productionYear: string;
   platform: string;
@@ -30,6 +31,7 @@ type FormState = {
 };
 
 const initialForm: FormState = {
+  make: "BMW",
   model: "",
   productionYear: "",
   platform: "",
@@ -65,7 +67,7 @@ export function AddVehicleForm() {
     event.preventDefault();
     setSubmitting(true);
 
-    const result = vehicleInputSchema.safeParse({ make: "BMW", ...form });
+    const result = vehicleInputSchema.safeParse(form);
     if (!result.success) {
       const nextErrors: Record<string, string> = {};
       for (const issue of result.error.issues) {
@@ -85,7 +87,7 @@ export function AddVehicleForm() {
     router.push(`/garage/${vehicle.id}`);
   }
 
-  const previewLabel = `${form.productionYear || "Your"} BMW ${form.model || "project"}`;
+  const previewLabel = `${form.productionYear || "Your"} ${form.make || "vehicle"} ${form.model || "project"}`;
 
   return (
     <div className="pb-24 sm:pb-0">
@@ -108,7 +110,7 @@ export function AddVehicleForm() {
                 Vehicle profile
               </p>
               <h1 className="text-3xl font-medium tracking-[-0.035em] sm:text-5xl">
-                Add your BMW.
+                Add your car.
               </h1>
               <p className="mt-4 max-w-xl leading-7 text-white/50">
                 Use the information on your registration document or what you
@@ -126,8 +128,15 @@ export function AddVehicleForm() {
             description="The vehicle users recognize."
           >
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Make" hint="BMW-only in v0.1">
-                <input className={inputClass} disabled value="BMW" />
+              <Field label="Make" error={errors.make} htmlFor="make">
+                <input
+                  id="make"
+                  className={inputClass}
+                  placeholder="BMW"
+                  value={form.make}
+                  onChange={(event) => update("make", event.target.value)}
+                  aria-invalid={Boolean(errors.make)}
+                />
               </Field>
               <Field label="Model" error={errors.model} htmlFor="model">
                 <input
@@ -320,7 +329,7 @@ export function AddVehicleForm() {
           <div className="mt-4 grid gap-3 sm:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-3">
             <PreviewStat
               label="Vehicle"
-              value={form.model ? `BMW ${form.model}` : "Not set"}
+              value={form.model ? `${form.make} ${form.model}` : "Not set"}
             />
             <PreviewStat
               label="Platform"

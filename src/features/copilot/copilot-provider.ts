@@ -76,7 +76,7 @@ function deterministicResponse(request: CopilotRequest): CopilotResponse {
     source: "deterministic",
     answer,
     evidence: [
-      `${request.vehicle.productionYear} BMW ${request.vehicle.model} · ${request.vehicle.platform} · ${request.vehicle.engineCode}`,
+      `${request.vehicle.productionYear} ${request.vehicle.make ?? "Vehicle"} ${request.vehicle.model} · ${request.vehicle.platform} · ${request.vehicle.engineCode}`,
       `${request.buildItems.length} build items were provided as context.`,
       "Response generated from conservative Capcar workflow rules, not external technical data.",
     ],

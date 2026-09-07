@@ -314,9 +314,10 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
       <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/45">
         <Info className="mt-0.5 size-4 shrink-0 text-[#ff667a]" />
         <p>
-          These intervals are Capcar planning defaults, not verified BMW service
-          specifications. Always check the exact owner documentation and trusted
-          technical data for your vehicle before servicing it.
+          These intervals are Capcar planning defaults, not verified
+          manufacturer service specifications. Always check the exact owner
+          documentation and trusted technical data for your vehicle before
+          servicing it.
         </p>
       </aside>
     </div>
