@@ -9,6 +9,10 @@ import { TUNING_STORAGE_KEY } from "@/features/tuning/tuning-storage";
 import { VEHICLE_RESOLUTION_KEY } from "@/features/vehicle-data/vehicle-resolution-storage";
 import { VEHICLE_STORAGE_KEY } from "@/features/vehicles/vehicle-storage";
 import { BUILD_VISUAL_STORAGE_KEY } from "@/features/visualizer/build-visual-storage";
+import { COST_STORAGE_KEY } from "@/features/costs/cost-storage";
+import { DIAGNOSTIC_STORAGE_KEY } from "@/features/diagnostics/diagnostic-storage";
+import { INSTALL_STAMP_STORAGE_KEY } from "@/features/specialists/install-stamp-storage";
+import { WISHLIST_STORAGE_KEY } from "@/features/wishlist/wishlist-storage";
 
 export const snapshotKeys = [
   VEHICLE_STORAGE_KEY,
@@ -21,6 +25,10 @@ export const snapshotKeys = [
   TUNING_STORAGE_KEY,
   NOTIFICATION_INBOX_KEY,
   NOTIFICATION_PREFERENCES_KEY,
+  COST_STORAGE_KEY,
+  DIAGNOSTIC_STORAGE_KEY,
+  WISHLIST_STORAGE_KEY,
+  INSTALL_STAMP_STORAGE_KEY,
 ] as const;
 
 const snapshotSchema = z.object({

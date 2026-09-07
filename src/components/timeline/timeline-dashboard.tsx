@@ -9,6 +9,7 @@ import {
   Layers3,
   ShoppingBag,
   Wrench,
+  ScanLine,
   type LucideIcon,
 } from "lucide-react";
 import { useState, useSyncExternalStore } from "react";
@@ -36,6 +37,11 @@ const categoryContent: Record<
     label: "Installation",
     icon: CheckCircle2,
     color: "text-cyan-200",
+  },
+  diagnostic: {
+    label: "Diagnostic",
+    icon: ScanLine,
+    color: "text-red-200",
   },
 };
 

@@ -14,6 +14,7 @@ import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { FitmentLookup } from "@/components/marketing/fitment-lookup";
 import { MarketingHero } from "@/components/marketing/marketing-hero";
 import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
+import { VisionRoadmapSection } from "@/components/marketing/vision-roadmap-section";
 
 export function MarketingLanding() {
   return (
@@ -21,6 +22,7 @@ export function MarketingLanding() {
       <main>
         <MarketingHero />
         <ProductDashboardPreview />
+        <VisionRoadmapSection />
 
         <section
           id="platform"

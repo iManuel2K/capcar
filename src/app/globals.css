@@ -145,3 +145,42 @@
     background: color-mix(in oklab, var(--capcar-red) 42%, transparent);
   }
 }
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+  }
+
+  .no-print,
+  body > div > header,
+  body > div > nav {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .passport-print {
+    padding: 0 !important;
+  }
+
+  .print-surface,
+  .passport-print section {
+    break-inside: avoid;
+    border-color: rgb(0 0 0 / 18%) !important;
+    background: #ffffff !important;
+    color: #111111 !important;
+    box-shadow: none !important;
+  }
+
+  .passport-print p,
+  .passport-print span {
+    color: #333333 !important;
+  }
+}

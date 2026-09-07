@@ -11,6 +11,8 @@ describe("MarketingLanding", () => {
     );
     expect(screen.getByText("Buy the right part.")).toBeInTheDocument();
     expect(screen.getByText("€804 spent")).toBeInTheDocument();
+    expect(screen.getByText("From Plan to Road. No Guesswork.")).toBeInTheDocument();
+    expect(screen.getByText("Beta · Current")).toBeInTheDocument();
   });
 
   it("provides direct routes into the garage", () => {

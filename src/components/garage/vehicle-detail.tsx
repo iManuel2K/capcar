@@ -20,6 +20,11 @@ import {
   Settings2,
   SquareActivity,
   Wrench,
+  BadgeEuro,
+  ContactRound,
+  FileBadge2,
+  Heart,
+  ScanLine,
 } from "lucide-react";
 
 import { VehicleArt } from "@/components/garage/vehicle-art";
@@ -236,6 +241,13 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
             icon={DatabaseZap}
             label="Data sources"
           />
+        </div>
+        <div className="relative mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+          <ProfileLink href={`/garage/${vehicleId}/passport`} icon={FileBadge2} label="Vehicle Passport" />
+          <ProfileLink href={`/garage/${vehicleId}/costs`} icon={BadgeEuro} label="Cost analytics" />
+          <ProfileLink href={`/garage/${vehicleId}/wishlist`} icon={Heart} label="Part wishlist" />
+          <ProfileLink href={`/garage/${vehicleId}/diagnostics`} icon={ScanLine} label="Diagnostic log" />
+          <ProfileLink href={`/garage/${vehicleId}/specialists`} icon={ContactRound} label="Specialists" />
         </div>
       </section>
     </div>

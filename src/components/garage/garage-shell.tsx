@@ -11,6 +11,7 @@ import {
   ShoppingBag,
   UserCircle,
   Wrench,
+  Menu,
 } from "lucide-react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
@@ -100,7 +101,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
           </nav>
           <div className="flex items-center gap-2">
             <span className="hidden rounded-full border border-[#e72d45]/20 bg-[#e72d45]/8 px-3 py-1.5 text-xs text-[#a9c7ff] md:inline-flex">
-              Local prototype
+              Capcar Beta
             </span>
             <Link aria-label={`${unread} unread notifications`} className="relative grid size-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60" href="/notifications">
               <Bell className="size-4" />
@@ -113,6 +114,20 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             >
               <UserCircle className="size-4" />
             </Link>
+            {vehicleId && (
+              <details className="relative hidden md:block">
+                <summary aria-label="More vehicle tools" className="grid size-10 cursor-pointer list-none place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60 marker:hidden">
+                  <Menu className="size-4" />
+                </summary>
+                <div className="absolute top-12 right-0 z-50 grid w-52 gap-1 rounded-2xl border border-white/10 bg-[#151515] p-2 shadow-2xl">
+                  <MoreLink href={`/garage/${vehicleId}/passport`}>Vehicle Passport</MoreLink>
+                  <MoreLink href={`/garage/${vehicleId}/costs`}>Cost analytics</MoreLink>
+                  <MoreLink href={`/garage/${vehicleId}/wishlist`}>Part wishlist</MoreLink>
+                  <MoreLink href={`/garage/${vehicleId}/diagnostics`}>Diagnostic log</MoreLink>
+                  <MoreLink href={`/garage/${vehicleId}/specialists`}>Specialists</MoreLink>
+                </div>
+              </details>
+            )}
           </div>
         </div>
       </header>
@@ -180,6 +195,10 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
       </nav>
     </div>
   );
+}
+
+function MoreLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return <Link href={href} className="rounded-xl px-3 py-2.5 text-sm text-white/55 transition hover:bg-white/6 hover:text-white">{children}</Link>;
 }
 
 function NavLink({

@@ -8,6 +8,8 @@ import { findVehicle } from "@/features/vehicles/vehicle-storage";
 import { readVehicleResolutions } from "@/features/vehicle-data/vehicle-resolution-storage";
 import { readBuildVisuals } from "@/features/visualizer/build-visual-storage";
 import { readTuningPlans } from "@/features/tuning/tuning-storage";
+import { readDiagnostics } from "@/features/diagnostics/diagnostic-storage";
+import { readInstallStamps } from "@/features/specialists/install-stamp-storage";
 
 export const timelineCategories = [
   "vehicle",
@@ -15,6 +17,7 @@ export const timelineCategories = [
   "build",
   "offer",
   "installation",
+  "diagnostic",
 ] as const;
 
 export type TimelineCategory = (typeof timelineCategories)[number];
@@ -85,6 +88,32 @@ export function buildVehicleTimeline(
       detail: "Service completion recorded in the local maintenance history.",
       occurredAt: record.updatedAt,
       value: `${record.lastCompletedMileage.toLocaleString("de-DE")} km`,
+    });
+  }
+
+  for (const record of readDiagnostics(storage).filter(
+    (candidate) => candidate.vehicleId === vehicleId,
+  )) {
+    events.push({
+      id: `diagnostic-${record.id}`,
+      category: "diagnostic",
+      title: `${record.code} · ${record.title}`,
+      detail: `${record.severity} severity · ${record.status}${record.resolution ? ` · ${record.resolution}` : ""}`,
+      occurredAt: record.updatedAt,
+      value: `${record.mileage.toLocaleString("de-DE")} km`,
+    });
+  }
+
+  for (const stamp of readInstallStamps(storage).filter(
+    (candidate) => candidate.vehicleId === vehicleId,
+  )) {
+    events.push({
+      id: `install-stamp-${stamp.id}`,
+      category: "installation",
+      title: `Beta shop stamp · ${stamp.work}`,
+      detail: `${stamp.specialistName} · Partner verification workflow preview`,
+      occurredAt: stamp.createdAt,
+      value: stamp.installedAt,
     });
   }
 

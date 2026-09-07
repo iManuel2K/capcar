@@ -29,12 +29,12 @@ export default function LaunchPage() {
         <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <h2 className="flex items-center gap-2 text-xl font-medium"><Rocket className="size-5 text-[#ff667a]" /> Activation sequence</h2>
           <ol className="mt-6 grid gap-3 text-sm leading-6 text-white/50 sm:grid-cols-2">
-            <li className="rounded-xl border border-white/8 p-4">1. Create the Supabase project and run the included migrations.</li>
+            <li className="rounded-xl border border-white/8 p-4">1. Run all included Supabase migrations: snapshots, public passports and anonymous affiliate click capture.</li>
             <li className="rounded-xl border border-white/8 p-4">2. Push the repository to GitHub and connect it to Netlify.</li>
             <li className="rounded-xl border border-white/8 p-4">3. Add the three production environment variables in Netlify.</li>
             <li className="rounded-xl border border-white/8 p-4">4. Add the production callback URL in Supabase Auth.</li>
-            <li className="rounded-xl border border-white/8 p-4">5. Run the production build and smoke-test the golden path.</li>
-            <li className="rounded-xl border border-white/8 p-4">6. Keep demo providers visibly labelled until licensed feeds are active.</li>
+            <li className="rounded-xl border border-white/8 p-4">5. Smoke-test account creation, garage sync, exports and a public passport in a private browser window.</li>
+            <li className="rounded-xl border border-white/8 p-4">6. Keep directory listings, shop stamps and provider results visibly labelled beta/demo until verified partners are active.</li>
           </ol>
         </section>
         <aside className="mt-5 flex gap-3 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/45"><ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#9ec2ff]" />This screen and the readiness API expose only boolean activation state—never credentials.</aside>

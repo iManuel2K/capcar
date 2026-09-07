@@ -9,6 +9,8 @@ import {
   KeyRound,
   LoaderCircle,
   LogOut,
+  FileJson,
+  Sheet,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -22,6 +24,7 @@ import {
 } from "@/features/sync/local-snapshot";
 import { ACTIVE_GARAGE_USER_KEY } from "@/components/account/garage-account-boundary";
 import { createClient } from "@/lib/supabase/client";
+import { csvCell, downloadTextFile } from "@/features/export/download";
 
 export function AccountWorkspace({ status }: { status: AuthStatus }) {
   const router = useRouter();
@@ -136,6 +139,29 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
     window.localStorage.removeItem(ACTIVE_GARAGE_USER_KEY);
     router.replace("/login");
     router.refresh();
+  }
+
+  function exportGarageJson() {
+    const snapshot = collectLocalSnapshot(window.localStorage);
+    downloadTextFile(
+      `capcar-garage-${snapshot.capturedAt.slice(0, 10)}.json`,
+      JSON.stringify(snapshot, null, 2),
+    );
+    setMessage("Complete garage JSON downloaded to this device.");
+  }
+
+  function exportGarageCsv() {
+    const snapshot = collectLocalSnapshot(window.localStorage);
+    const rows = [
+      ["storage_key", "json_value"],
+      ...Object.entries(snapshot.data),
+    ];
+    downloadTextFile(
+      `capcar-garage-${snapshot.capturedAt.slice(0, 10)}.csv`,
+      rows.map((row) => row.map(csvCell).join(",")).join("\n"),
+      "text/csv",
+    );
+    setMessage("Complete garage CSV downloaded to this device.");
   }
 
   return (
@@ -271,6 +297,20 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
             </p>
           )}
         </article>
+      </section>
+
+      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs tracking-[0.14em] text-white/30 uppercase">Data ownership</p>
+            <h2 className="mt-2 text-2xl font-medium">Take the complete garage with you.</h2>
+            <p className="mt-3 max-w-xl text-sm leading-6 text-white/40">Export every local Capcar record—including the wishlist, diagnostics, costs and install stamps—without closing your account.</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={exportGarageJson} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"><FileJson className="size-4" /> Export JSON</button>
+            <button type="button" onClick={exportGarageCsv} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"><Sheet className="size-4" /> Export CSV</button>
+          </div>
+        </div>
       </section>
     </div>
   );
