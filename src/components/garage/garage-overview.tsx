@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import {
   ArrowRight,
   CarFront,
@@ -16,16 +15,11 @@ import { useVehicles } from "@/features/vehicles/use-vehicles";
 import {
   announceVehicleChange,
   saveVehicle,
-  seedShowcaseGarage,
 } from "@/features/vehicles/vehicle-storage";
 
 export function GarageOverview() {
   const { vehicles, isReady } = useVehicles();
   const router = useRouter();
-
-  useEffect(() => {
-    if (seedShowcaseGarage(window.localStorage)) announceVehicleChange();
-  }, []);
 
   function loadDemo() {
     const existingDemo = vehicles.find((vehicle) => vehicle.model === "318i");
@@ -82,7 +76,7 @@ export function GarageOverview() {
             </h2>
             <p className="mt-3 leading-7 text-white/50">
               It takes about one minute. VIN is optional for this prototype, and
-              everything stays in this browser.
+              your garage is saved to your private Capcar account.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -101,10 +95,10 @@ export function GarageOverview() {
             </div>
             <div className="mt-9 grid gap-3 text-xs text-white/45 sm:grid-cols-2">
               <span className="flex items-center gap-2">
-                <Database className="size-3.5" /> Browser-local storage
+                <Database className="size-3.5" /> Private garage sync
               </span>
               <span className="flex items-center gap-2">
-                <ShieldCheck className="size-3.5" /> No account required
+                <ShieldCheck className="size-3.5" /> Protected by your account
               </span>
             </div>
           </div>

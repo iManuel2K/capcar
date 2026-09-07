@@ -13,14 +13,33 @@ export async function proxy(request: NextRequest) {
       setAll(cookies) {
         cookies.forEach(({ name, value }) => request.cookies.set(name, value));
         response = NextResponse.next({ request });
-        cookies.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
+        cookies.forEach(({ name, value, options }) =>
+          response.cookies.set(name, value, options),
+        );
       },
     },
   });
-  await supabase.auth.getUser();
+  const { data } = await supabase.auth.getUser();
+  const protectedRoute =
+    request.nextUrl.pathname === "/account" ||
+    request.nextUrl.pathname === "/garage" ||
+    request.nextUrl.pathname.startsWith("/garage/") ||
+    request.nextUrl.pathname === "/notifications";
+  if (protectedRoute && !data.user) {
+    const signIn = request.nextUrl.clone();
+    signIn.pathname = "/login";
+    signIn.search = "";
+    signIn.searchParams.set(
+      "next",
+      `${request.nextUrl.pathname}${request.nextUrl.search}`,
+    );
+    return NextResponse.redirect(signIn);
+  }
   return response;
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|icon.svg|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|icon.svg|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 };

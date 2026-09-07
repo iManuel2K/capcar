@@ -32,6 +32,7 @@ const snapshotSchema = z.object({
 export type LocalSnapshot = z.infer<typeof snapshotSchema>;
 type ReadableStorage = Pick<Storage, "getItem">;
 type WritableStorage = Pick<Storage, "setItem">;
+type ClearableStorage = Pick<Storage, "removeItem">;
 
 export function collectLocalSnapshot(
   storage: ReadableStorage,
@@ -59,4 +60,8 @@ export function applyLocalSnapshot(
     if (value !== undefined) storage.setItem(key, value);
   }
   return snapshot;
+}
+
+export function clearLocalSnapshot(storage: ClearableStorage) {
+  for (const key of snapshotKeys) storage.removeItem(key);
 }

@@ -10,17 +10,21 @@ import {
   LoaderCircle,
   LogOut,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import type { AuthStatus } from "@/features/auth/auth-config";
 import {
+  clearLocalSnapshot,
   applyLocalSnapshot,
   collectLocalSnapshot,
   type LocalSnapshot,
 } from "@/features/sync/local-snapshot";
+import { ACTIVE_GARAGE_USER_KEY } from "@/components/account/garage-account-boundary";
 import { createClient } from "@/lib/supabase/client";
 
 export function AccountWorkspace({ status }: { status: AuthStatus }) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [userEmail, setUserEmail] = useState<string>();
   const [loading, setLoading] = useState(false);
@@ -39,9 +43,21 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
     setError("");
     setMessage("");
     try {
+      const requestedNext = new URLSearchParams(window.location.search).get(
+        "next",
+      );
+      const next =
+        requestedNext?.startsWith("/") && !requestedNext.startsWith("//")
+          ? requestedNext
+          : "/garage";
+      const callback = new URL("/auth/callback", window.location.origin);
+      callback.searchParams.set("next", next);
       const { error: authError } = await createClient().auth.signInWithOtp({
         email,
-        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+        options: {
+          emailRedirectTo: callback.toString(),
+          shouldCreateUser: true,
+        },
       });
       if (authError) throw authError;
       setMessage("Check your email for the secure sign-in link.");
@@ -105,24 +121,35 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
   }
 
   async function signOut() {
-    await createClient().auth.signOut();
-    setUserEmail(undefined);
-    setMessage("Signed out. Local browser data remains available.");
+    const client = createClient();
+    const { data } = await client.auth.getUser();
+    if (data.user) {
+      const snapshot = collectLocalSnapshot(window.localStorage);
+      await client.from("garage_snapshots").upsert({
+        user_id: data.user.id,
+        payload: snapshot,
+        updated_at: new Date().toISOString(),
+      });
+    }
+    await client.auth.signOut();
+    clearLocalSnapshot(window.localStorage);
+    window.localStorage.removeItem(ACTIVE_GARAGE_USER_KEY);
+    router.replace("/login");
+    router.refresh();
   }
 
   return (
     <div className="mx-auto max-w-5xl py-10 sm:py-16">
       <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10">
         <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
-          Epic 03 · Account and sync
+          Capcar account
         </p>
         <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
           Your garage stays yours.
         </h1>
         <p className="mt-5 max-w-2xl leading-7 text-white/45">
-          Capcar continues working locally. Once Supabase is configured, sign-in
-          and an RLS-protected garage snapshot become available without changing
-          the local-first product flow.
+          Create an account or sign in to keep vehicles, maintenance and build
+          plans private and available across your devices.
         </p>
       </header>
 
@@ -199,10 +226,13 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
             </>
           ) : (
             <>
-              <h2 className="text-2xl font-medium">Sign in by email</h2>
+              <h2 className="text-2xl font-medium">
+                Create account or sign in
+              </h2>
               <p className="mt-3 text-sm leading-6 text-white/40">
-                Capcar sends a secure magic link. No password is stored by this
-                application.
+                Enter your email and Capcar will send a secure one-time link. A
+                new account is created automatically when needed—no password to
+                remember.
               </p>
               <label className="mt-7 block text-xs text-white/35">
                 Email
@@ -224,7 +254,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
                 ) : (
                   <KeyRound className="size-4" />
                 )}{" "}
-                Send magic link
+                Continue with email
               </button>
             </>
           )}
