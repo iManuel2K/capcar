@@ -146,7 +146,7 @@ export function MarketingHero() {
               Visualize upgrades, verify fitment, compare total cost and keep
               every install in one garage.
             </p>
-            <div className="pointer-events-auto mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="pointer-events-auto absolute right-5 bottom-6 left-5 flex flex-col gap-3 sm:static sm:mt-7 sm:flex-row sm:items-center">
               <Link
                 href="/register"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#6d0101] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#830705]"

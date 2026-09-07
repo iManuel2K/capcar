@@ -22,7 +22,6 @@ export function MarketingLanding() {
       <main>
         <MarketingHero />
         <ProductDashboardPreview />
-        <VisionRoadmapSection />
 
         <section id="platform" className="bg-[#050306] text-[#e8e6d7]">
           <div className="mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-32">
@@ -68,6 +67,8 @@ export function MarketingLanding() {
             </div>
           </div>
         </section>
+
+        <FitmentSection />
 
         <section className="border-y border-[#0e2d30]/8 bg-[#88988d] py-5">
           <div className="mx-auto flex max-w-[1500px] snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-1 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-8">
@@ -147,31 +148,7 @@ export function MarketingLanding() {
           </div>
         </section>
 
-        <section
-          id="fitment"
-          className="border-y border-[#0e2d30]/15 bg-[#88988d] text-[#050306]"
-        >
-          <div className="mx-auto grid max-w-[1500px] gap-10 px-5 py-16 sm:px-8 sm:py-32 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
-            <div>
-              <p className="text-xs font-semibold tracking-[0.2em] text-[#0e2d30]/68 uppercase">
-                Fitment
-              </p>
-              <h2 className="mt-4 text-4xl leading-[0.92] font-medium tracking-[-0.055em] sm:mt-5 sm:text-7xl">
-                Buy the right part.
-              </h2>
-              <p className="mt-6 max-w-md text-base leading-7 text-[#0e2d30]/72">
-                Compatibility and requirements before checkout.
-              </p>
-              <Link
-                href="/register"
-                className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#6d0101] px-5 text-sm font-semibold text-[#e8e6d7] transition hover:-translate-y-0.5 hover:bg-[#050306]"
-              >
-                Start with your car <ArrowRight className="size-4" />
-              </Link>
-            </div>
-            <FitmentLookup />
-          </div>
-        </section>
+        <VisionRoadmapSection />
 
         <section className="bg-[#88988d] px-5 py-5 sm:px-8 sm:py-8">
           <div className="relative mx-auto min-h-[330px] max-w-[1500px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0e2d30] px-6 py-10 text-[#e8e6d7] shadow-[0_30px_90px_rgba(20,34,28,0.18)] sm:min-h-[430px] sm:rounded-[2.5rem] sm:px-12 sm:py-14 lg:px-20">
@@ -216,6 +193,36 @@ export function MarketingLanding() {
         </Link>
       </footer>
     </div>
+  );
+}
+
+function FitmentSection() {
+  return (
+    <section
+      id="fitment"
+      className="border-y border-[#0e2d30]/15 bg-[#88988d] text-[#050306]"
+    >
+      <div className="mx-auto grid max-w-[1500px] gap-10 px-5 py-16 sm:px-8 sm:py-32 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+        <div>
+          <p className="text-xs font-semibold tracking-[0.2em] text-[#0e2d30]/68 uppercase">
+            Fitment
+          </p>
+          <h2 className="mt-4 text-4xl leading-[0.92] font-medium tracking-[-0.055em] sm:mt-5 sm:text-7xl">
+            Buy the right part.
+          </h2>
+          <p className="mt-6 max-w-md text-base leading-7 text-[#0e2d30]/72">
+            Compatibility and requirements before checkout.
+          </p>
+          <Link
+            href="/register"
+            className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#6d0101] px-5 text-sm font-semibold text-[#e8e6d7] transition hover:-translate-y-0.5 hover:bg-[#050306]"
+          >
+            Start with your car <ArrowRight className="size-4" />
+          </Link>
+        </div>
+        <FitmentLookup />
+      </div>
+    </section>
   );
 }
 
@@ -360,7 +367,7 @@ function PhotoDetail({
         className="object-cover transition duration-700 ease-out group-hover:scale-[1.035]"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-transparent to-transparent" />
-      <figcaption className="absolute right-5 bottom-5 left-5 text-sm font-medium">
+      <figcaption className="absolute right-5 bottom-5 left-5 text-sm font-medium text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
         {label}
       </figcaption>
     </figure>
