@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { VehicleArt } from "@/components/garage/vehicle-art";
+import { isProject318Vehicle } from "@/components/garage/vehicle-photo-gallery";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 import {
   announceVehicleChange,
@@ -138,11 +139,11 @@ export function GarageOverview() {
             <VehicleArt
               label={`${vehicle.productionYear} ${vehicle.make} ${vehicle.model}`}
               compact
+              badge={isProject318Vehicle(vehicle) ? "Current vehicle" : undefined}
               imageUrl={
-                vehicle.imageUrl ??
-                (vehicle.make === "BMW" && vehicle.model === "318i"
-                  ? "/capcar-hero-bmw-garage.png"
-                  : undefined)
+                isProject318Vehicle(vehicle)
+                  ? "/capcar-bmw-current-side.webp"
+                  : vehicle.imageUrl
               }
             />
             <div className="flex items-end justify-between gap-5 p-6 sm:p-7">

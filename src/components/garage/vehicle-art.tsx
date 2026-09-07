@@ -5,14 +5,16 @@ export function VehicleArt({
   label,
   compact = false,
   imageUrl,
+  badge,
 }: {
   label: string;
   compact?: boolean;
   imageUrl?: string;
+  badge?: string;
 }) {
   return (
     <div
-      aria-label={`Concept silhouette for ${label}`}
+      aria-label={`Vehicle visual for ${label}`}
       className={`relative isolate overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#101512] ${compact ? "min-h-52" : "min-h-[360px] lg:min-h-[470px]"}`}
       role="img"
     >
@@ -107,7 +109,7 @@ export function VehicleArt({
       )}
       <div className="absolute top-5 left-5 flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[11px] tracking-[0.12em] text-white/55 uppercase backdrop-blur">
         <Zap className="size-3 text-[#ff667a]" />{" "}
-        {imageUrl ? "Showcase project" : "Concept stage"}
+        {badge ?? (imageUrl ? "Showcase project" : "Concept stage")}
       </div>
       {!compact && !imageUrl && (
         <div className="absolute right-5 bottom-5 flex items-center gap-2 rounded-xl border border-white/10 bg-black/25 px-3 py-2 text-xs text-white/55 backdrop-blur">

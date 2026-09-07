@@ -31,7 +31,7 @@ const showcaseVehicles: Array<{
       mileage: 148200,
       color: "Black Sapphire",
       nickname: "Project 318",
-      imageUrl: "/capcar-hero-bmw-garage.png",
+      imageUrl: "/capcar-bmw-current-side.webp",
       demoProject: true,
     },
   },

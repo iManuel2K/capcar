@@ -28,6 +28,10 @@ import {
 } from "lucide-react";
 
 import { VehicleArt } from "@/components/garage/vehicle-art";
+import {
+  isProject318Vehicle,
+  VehiclePhotoGallery,
+} from "@/components/garage/vehicle-photo-gallery";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 
 export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
@@ -111,15 +115,11 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
             </div>
           </div>
           <div className="p-3 sm:p-5">
-            <VehicleArt
-              imageUrl={
-                vehicle.imageUrl ??
-                (vehicle.make === "BMW" && vehicle.model === "318i"
-                  ? "/capcar-hero-bmw-garage.png"
-                  : undefined)
-              }
-              label={title}
-            />
+            {isProject318Vehicle(vehicle) ? (
+              <VehiclePhotoGallery label={title} />
+            ) : (
+              <VehicleArt imageUrl={vehicle.imageUrl} label={title} />
+            )}
           </div>
         </div>
       </section>
