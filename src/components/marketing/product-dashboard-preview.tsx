@@ -47,13 +47,13 @@ export function ProductDashboardPreview() {
     <section
       id="live-demo"
       aria-labelledby="live-demo-title"
-      className="relative border-b border-white/8 bg-[#0b0b0b] px-5 py-14 sm:px-8 sm:py-24"
+      className="relative border-b border-[#0e2d30]/8 bg-[#e8e6d7] px-5 py-20 text-[#0e2d30] sm:px-8 sm:py-32"
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-56 max-w-4xl bg-[radial-gradient(ellipse_at_top,rgba(231,45,69,0.12),transparent_68%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-64 max-w-5xl bg-[radial-gradient(ellipse_at_top,rgba(231,45,69,0.1),transparent_68%)]" />
       <div className="relative mx-auto max-w-[1500px]">
         <div className="grid gap-6 lg:grid-cols-[0.72fr_1fr] lg:items-end">
           <div>
-            <p className="text-xs font-semibold tracking-[0.2em] text-[#ff667a] uppercase">
+            <p className="text-xs font-semibold tracking-[0.2em] text-[#bf8269] uppercase">
               Live product preview
             </p>
             <h2
@@ -63,16 +63,16 @@ export function ProductDashboardPreview() {
               The complete build, at a glance.
             </h2>
           </div>
-          <p className="max-w-lg text-base leading-7 text-white/44 lg:justify-self-end">
+          <p className="max-w-lg text-base leading-7 text-[#0e2d30]/56 lg:justify-self-end">
             Budget, mileage, fitment and maintenance stay connected to the car
             they belong to.
           </p>
         </div>
 
-        <div className="mt-10 overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#101010] shadow-[0_32px_100px_rgba(0,0,0,0.38)] sm:mt-14 sm:rounded-[2.25rem]">
+        <div className="mt-10 overflow-hidden rounded-[1.6rem] border border-black/10 bg-[#050306] text-[#e8e6d7] shadow-[0_32px_100px_rgba(14,45,48,0.2)] sm:mt-14 sm:rounded-[2.25rem]">
           <div className="flex flex-col gap-4 border-b border-white/8 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div className="flex items-center gap-3">
-              <span className="grid size-9 place-items-center rounded-full bg-[#e72d45]/14 text-[#ff667a]">
+              <span className="grid size-9 place-items-center rounded-full bg-[#6d0101]/14 text-[#bf8269]">
                 <CarFront className="size-4" />
               </span>
               <div>
@@ -131,7 +131,7 @@ export function ProductDashboardPreview() {
                   <p className="text-sm text-white/38">€1,200 total</p>
                 </div>
                 <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/8">
-                  <div className="h-full w-[67%] origin-left rounded-full bg-gradient-to-r from-[#a91f33] to-[#ff4e65] motion-safe:animate-[capcar-budget-fill_1.1s_ease-out_both]" />
+                  <div className="h-full w-[67%] origin-left rounded-full bg-gradient-to-r from-[#6d0101] to-[#92644d] motion-safe:animate-[capcar-budget-fill_1.1s_ease-out_both]" />
                 </div>
                 <div className="mt-4 flex justify-between text-xs text-white/32">
                   <span>67% allocated</span>
@@ -158,7 +158,7 @@ export function ProductDashboardPreview() {
                   </p>
                   <h3 className="mt-2 text-xl font-medium">Service overview</h3>
                 </div>
-                <CalendarClock className="size-5 text-[#ff667a]" />
+                <CalendarClock className="size-5 text-[#bf8269]" />
               </div>
               <div className="mt-6 space-y-2">
                 <ServiceRow label="Brake fluid" value="Due now" tone="red" />
@@ -171,7 +171,7 @@ export function ProductDashboardPreview() {
               </div>
               <div className="mt-6 rounded-2xl border border-white/8 bg-[#141414] p-5">
                 <div className="flex items-center gap-2 text-[10px] font-semibold tracking-[0.13em] text-white/28 uppercase">
-                  <CircleGauge className="size-3.5 text-[#ff667a]" /> Fitment
+                  <CircleGauge className="size-3.5 text-[#bf8269]" /> Fitment
                   status
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -202,7 +202,7 @@ function MiniMetric({
 }) {
   return (
     <div className="rounded-xl border border-white/8 bg-black/18 p-4">
-      <Icon className="size-4 text-[#ff667a]" />
+      <Icon className="size-4 text-[#bf8269]" />
       <p className="mt-5 text-[10px] tracking-[0.1em] text-white/28 uppercase">
         {label}
       </p>
@@ -221,7 +221,7 @@ function ServiceRow({
   tone: "red" | "amber" | "green";
 }) {
   const colors = {
-    red: "text-[#ff667a] bg-[#e72d45]",
+    red: "text-[#bf8269] bg-[#6d0101]",
     amber: "text-amber-200 bg-amber-300",
     green: "text-emerald-200 bg-emerald-300",
   };

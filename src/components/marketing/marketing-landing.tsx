@@ -18,58 +18,58 @@ import { VisionRoadmapSection } from "@/components/marketing/vision-roadmap-sect
 
 export function MarketingLanding() {
   return (
-    <div className="min-h-dvh overflow-hidden bg-[#080808] text-[#f3f1ec]">
+    <div className="min-h-dvh overflow-hidden bg-[#e8e6d7] text-[#0e2d30]">
       <main>
         <MarketingHero />
         <ProductDashboardPreview />
         <VisionRoadmapSection />
 
-        <section
-          id="platform"
-          className="mx-auto w-full max-w-[1500px] px-5 py-16 sm:px-8 sm:py-32"
-        >
-          <SectionHeading
-            eyebrow="The platform"
-            title="One car. One system."
-            description="Maintain it. Plan it. Build it."
-          />
+        <section id="platform" className="bg-[#050306] text-[#e8e6d7]">
+          <div className="mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-32">
+            <SectionHeading
+              eyebrow="The platform"
+              title="One car. One system."
+              description="Maintain it. Plan it. Build it."
+              tone="dark"
+            />
 
-          <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 lg:grid-cols-12">
-            <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#e72d45]/40 sm:rounded-[2rem] sm:p-8 lg:col-span-7">
-              <CardLabel icon={CircleGauge}>Garage</CardLabel>
-              <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
-                Your car, fully documented.
-              </h3>
-              <GaragePreview />
-            </article>
+            <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 lg:grid-cols-12">
+              <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-7">
+                <CardLabel icon={CircleGauge}>Garage</CardLabel>
+                <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
+                  Your car, fully documented.
+                </h3>
+                <GaragePreview />
+              </article>
 
-            <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#e72d45]/40 sm:rounded-[2rem] sm:p-8 lg:col-span-5">
-              <CardLabel icon={Wrench}>Maintenance</CardLabel>
-              <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
-                Stay ahead of service.
-              </h3>
-              <MaintenancePreview />
-            </article>
+              <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-5">
+                <CardLabel icon={Wrench}>Maintenance</CardLabel>
+                <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
+                  Stay ahead of service.
+                </h3>
+                <MaintenancePreview />
+              </article>
 
-            <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#e72d45]/40 sm:rounded-[2rem] sm:p-8 lg:col-span-5">
-              <CardLabel icon={Layers3}>Build</CardLabel>
-              <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
-                Plan before you buy.
-              </h3>
-              <BuildPreview />
-            </article>
+              <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-5">
+                <CardLabel icon={Layers3}>Build</CardLabel>
+                <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
+                  Plan before you buy.
+                </h3>
+                <BuildPreview />
+              </article>
 
-            <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#e72d45]/40 sm:rounded-[2rem] sm:p-8 lg:col-span-7">
-              <CardLabel icon={ShoppingBag}>Parts</CardLabel>
-              <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
-                Choose with confidence.
-              </h3>
-              <PartsPreview />
-            </article>
+              <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-7">
+                <CardLabel icon={ShoppingBag}>Parts</CardLabel>
+                <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
+                  Choose with confidence.
+                </h3>
+                <PartsPreview />
+              </article>
+            </div>
           </div>
         </section>
 
-        <section className="border-y border-white/8 bg-[#0d0d0d] py-5">
+        <section className="border-y border-[#0e2d30]/8 bg-[#88988d] py-5">
           <div className="mx-auto flex max-w-[1500px] snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-1 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-8">
             <PhotoDetail
               src="/capcar-hero-bmw-e90.jpeg"
@@ -91,7 +91,7 @@ export function MarketingLanding() {
 
         <section
           id="projects"
-          className="mx-auto w-full max-w-[1500px] px-5 py-16 sm:px-8 sm:py-32"
+          className="mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-36"
         >
           <SectionHeading
             eyebrow="Community builds"
@@ -102,7 +102,7 @@ export function MarketingLanding() {
           <div className="-mx-5 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 sm:mx-0 sm:mt-14 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0">
             <ProjectCard
               image="/capcar-hero-bmw-vision.png"
-              name="Project 318"
+              name="Project Street Terrorist"
               vehicle="2011 BMW 318i · E90"
               direction="Street OEM+"
               status="In progress"
@@ -113,7 +113,7 @@ export function MarketingLanding() {
             />
             <ProjectCard
               image="/capcar-project-f150.png"
-              name="Night Shift"
+              name="Project Night Shift"
               vehicle="Ford F-150"
               direction="Street overland"
               status="Concept"
@@ -124,7 +124,7 @@ export function MarketingLanding() {
             />
             <ProjectCard
               image="/capcar-project-eclass.png"
-              name="Executive Black"
+              name="Project Blackline"
               vehicle="Mercedes-Benz E-Class · W213"
               direction="Executive OEM+"
               status="Concept"
@@ -135,7 +135,7 @@ export function MarketingLanding() {
             />
             <ProjectCard
               image="/capcar-project-gti-tcr.png"
-              name="Circuit Daily"
+              name="Project Redline"
               vehicle="Volkswagen Golf GTI TCR"
               direction="Fast road"
               status="Concept"
@@ -147,21 +147,24 @@ export function MarketingLanding() {
           </div>
         </section>
 
-        <section id="fitment" className="bg-[#e72d45] text-white">
+        <section
+          id="fitment"
+          className="border-y border-[#0e2d30]/15 bg-[#88988d] text-[#050306]"
+        >
           <div className="mx-auto grid max-w-[1500px] gap-10 px-5 py-16 sm:px-8 sm:py-32 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div>
-              <p className="text-xs font-semibold tracking-[0.2em] text-white/62 uppercase">
+              <p className="text-xs font-semibold tracking-[0.2em] text-[#0e2d30]/68 uppercase">
                 Fitment
               </p>
               <h2 className="mt-4 text-4xl leading-[0.92] font-medium tracking-[-0.055em] sm:mt-5 sm:text-7xl">
                 Buy the right part.
               </h2>
-              <p className="mt-6 max-w-md text-base leading-7 text-white/70">
+              <p className="mt-6 max-w-md text-base leading-7 text-[#0e2d30]/72">
                 Compatibility and requirements before checkout.
               </p>
               <Link
                 href="/register"
-                className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-[#151515] transition hover:-translate-y-0.5"
+                className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#6d0101] px-5 text-sm font-semibold text-[#e8e6d7] transition hover:-translate-y-0.5 hover:bg-[#050306]"
               >
                 Start with your car <ArrowRight className="size-4" />
               </Link>
@@ -170,66 +173,11 @@ export function MarketingLanding() {
           </div>
         </section>
 
-        <section
-          id="process"
-          className="mx-auto w-full max-w-[1500px] px-5 py-16 sm:px-8 sm:py-32"
-        >
-          <SectionHeading
-            eyebrow="The process"
-            title="From plan to road."
-            description="Three steps. One record."
-          />
-          <ol className="mt-10 grid overflow-hidden rounded-[1.5rem] border border-white/10 sm:mt-14 sm:rounded-[2rem] md:grid-cols-3">
-            {[
-              [
-                "01",
-                "Add your car",
-                "Capture its exact specification.",
-                "30 sec",
-              ],
-              [
-                "02",
-                "Plan the build",
-                "Set stages, budget and priorities.",
-                "2 min",
-              ],
-              [
-                "03",
-                "Complete the work",
-                "Install, verify and record.",
-                "As you build",
-              ],
-            ].map(([number, title, description, time]) => (
-              <li
-                key={number}
-                className="group flex min-h-48 flex-col border-t border-white/10 bg-[#111111] p-6 transition duration-300 first:border-t-0 hover:bg-[#171111] sm:min-h-64 sm:p-7 md:border-t-0 md:border-l md:first:border-l-0"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-xs font-semibold tracking-[0.14em] text-[#ff667a]">
-                    {number}
-                  </span>
-                  <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] text-white/35">
-                    {time}
-                  </span>
-                </div>
-                <div className="mt-auto">
-                  <h3 className="text-2xl font-medium tracking-[-0.035em]">
-                    {title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-6 text-white/42">
-                    {description}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section className="px-5 pb-5 sm:px-8 sm:pb-8">
-          <div className="relative mx-auto min-h-[330px] max-w-[1500px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#121212] px-6 py-10 sm:min-h-[430px] sm:rounded-[2.5rem] sm:px-12 sm:py-14 lg:px-20">
+        <section className="bg-[#88988d] px-5 py-5 sm:px-8 sm:py-8">
+          <div className="relative mx-auto min-h-[330px] max-w-[1500px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0e2d30] px-6 py-10 text-[#e8e6d7] shadow-[0_30px_90px_rgba(20,34,28,0.18)] sm:min-h-[430px] sm:rounded-[2.5rem] sm:px-12 sm:py-14 lg:px-20">
             <div className="absolute top-0 right-0 h-full w-1/2 bg-[radial-gradient(circle_at_center,rgba(231,45,69,0.22),transparent_65%)]" />
             <div className="relative z-10 flex min-h-[250px] max-w-4xl flex-col justify-between sm:min-h-[320px]">
-              <span className="h-1 w-16 rounded-full bg-[#e72d45]" />
+              <span className="h-1 w-16 rounded-full bg-[#6d0101]" />
               <div>
                 <h2 className="text-4xl leading-[0.94] font-medium tracking-[-0.055em] sm:text-7xl sm:tracking-[-0.06em] lg:text-8xl">
                   Your garage starts here.
@@ -237,34 +185,34 @@ export function MarketingLanding() {
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="/register"
-                    className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-[#e72d45] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#f43f57]"
+                    className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-[#6d0101] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#830705]"
                   >
-                    Start your garage — free <ArrowRight className="size-4" />
+                    Open your garage <ArrowRight className="size-4" />
                   </Link>
                   <a
                     href="#live-demo"
                     className="inline-flex min-h-13 items-center justify-center rounded-full border border-white/12 px-6 text-sm font-medium text-white/65 transition hover:border-white/25 hover:text-white"
                   >
-                    Try live demo
+                    Live demo
                   </a>
                 </div>
-                <p className="mt-3 text-xs text-white/32">
-                  Set up in 30 seconds · No credit card required
-                </p>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="mx-auto flex max-w-[1500px] flex-col justify-between gap-7 px-5 py-12 sm:flex-row sm:items-center sm:px-8">
-        <CapcarWordmark />
-        <p className="max-w-xl text-xs leading-5 text-white/32">
+      <footer className="mx-auto flex max-w-[1500px] flex-col justify-between gap-7 px-5 py-12 text-[#0e2d30] sm:flex-row sm:items-center sm:px-8">
+        <CapcarWordmark glow={false} />
+        <p className="max-w-xl text-xs leading-5 text-[#0e2d30]/48">
           Confirm fitment, safety requirements and legal approval before
           installation.
         </p>
-        <Link href="/register" className="text-sm font-medium text-white/70">
-          Start free →
+        <Link
+          href="/register"
+          className="text-sm font-medium text-[#0e2d30]/75"
+        >
+          Open garage →
         </Link>
       </footer>
     </div>
@@ -275,22 +223,28 @@ function SectionHeading({
   eyebrow,
   title,
   description,
+  tone = "light",
 }: {
   eyebrow: string;
   title: string;
   description: string;
+  tone?: "light" | "dark";
 }) {
   return (
     <div className="grid gap-7 lg:grid-cols-[1fr_0.55fr] lg:items-end">
       <div>
-        <p className="text-xs font-semibold tracking-[0.2em] text-[#ff667a] uppercase">
+        <p
+          className={`text-xs font-semibold tracking-[0.2em] uppercase ${tone === "dark" ? "text-[#bf8269]" : "text-[#6d0101]"}`}
+        >
           {eyebrow}
         </p>
         <h2 className="mt-4 max-w-4xl text-4xl leading-[0.94] font-medium tracking-[-0.055em] sm:mt-5 sm:text-7xl sm:leading-[0.92] sm:tracking-[-0.06em]">
           {title}
         </h2>
       </div>
-      <p className="text-base leading-7 text-white/42 lg:justify-self-end">
+      <p
+        className={`text-base leading-7 lg:justify-self-end ${tone === "dark" ? "text-white/42" : "text-[#0e2d30]/55"}`}
+      >
         {description}
       </p>
     </div>
@@ -305,7 +259,7 @@ function CardLabel({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+    <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.16em] text-[#bf8269] uppercase">
       <Icon className="size-4" /> {children}
     </div>
   );
@@ -313,13 +267,13 @@ function CardLabel({
 
 function GaragePreview() {
   return (
-    <div className="mt-9 rounded-2xl border border-white/8 bg-[#090909] p-5">
+    <div className="mt-9 rounded-2xl border border-white/8 bg-[#050306] p-5">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs text-white/34">PROJECT 318</p>
           <p className="mt-2 text-xl font-medium">2011 BMW 318i</p>
         </div>
-        <span className="rounded-full border border-[#e72d45]/30 bg-[#e72d45]/10 px-3 py-1.5 text-xs text-[#ff7a8c]">
+        <span className="rounded-full border border-[#6d0101]/30 bg-[#6d0101]/10 px-3 py-1.5 text-xs text-[#bf8269]">
           Active
         </span>
       </div>
@@ -336,13 +290,13 @@ function MaintenancePreview() {
   return (
     <div className="mt-9 space-y-2">
       {[
-        ["Brake fluid", "Due now", "text-[#ff667a]"],
+        ["Brake fluid", "Due now", "text-[#bf8269]"],
         ["Engine oil", "1,800 km", "text-amber-300"],
         ["Cabin filter", "Complete", "text-emerald-300"],
       ].map(([name, state, color]) => (
         <div
           key={name}
-          className="flex items-center justify-between rounded-xl border border-white/8 bg-[#090909] p-4"
+          className="flex items-center justify-between rounded-xl border border-white/8 bg-[#050306] p-4"
         >
           <span className="text-sm font-medium">{name}</span>
           <span className={`text-xs ${color}`}>{state}</span>
@@ -354,13 +308,13 @@ function MaintenancePreview() {
 
 function BuildPreview() {
   return (
-    <div className="mt-9 rounded-2xl border border-white/8 bg-[#090909] p-5">
+    <div className="mt-9 rounded-2xl border border-white/8 bg-[#050306] p-5">
       <div className="flex items-center justify-between">
         <span className="font-medium">Stealth Rear</span>
         <span className="text-xs text-white/36">Planning</span>
       </div>
       <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/8">
-        <div className="h-full w-2/3 rounded-full bg-[#e72d45]" />
+        <div className="h-full w-2/3 rounded-full bg-[#6d0101]" />
       </div>
       <div className="mt-7 grid grid-cols-2 gap-2">
         <PreviewStat label="Budget" value="€1,200" />
@@ -373,13 +327,13 @@ function BuildPreview() {
 function PartsPreview() {
   return (
     <div className="mt-9 grid gap-3 sm:grid-cols-2">
-      <div className="rounded-2xl border border-white/8 bg-[#090909] p-5">
+      <div className="rounded-2xl border border-white/8 bg-[#050306] p-5">
         <BadgeCheck className="size-5 text-emerald-300" />
         <p className="mt-8 text-xs text-white/34">Vehicle match</p>
         <p className="mt-2 font-medium">E90 · 2011 · Sedan</p>
       </div>
-      <div className="rounded-2xl border border-white/8 bg-[#090909] p-5">
-        <Euro className="size-5 text-[#ff667a]" />
+      <div className="rounded-2xl border border-white/8 bg-[#050306] p-5">
+        <Euro className="size-5 text-[#bf8269]" />
         <p className="mt-8 text-xs text-white/34">Delivered from</p>
         <p className="mt-2 font-medium">€248</p>
       </div>
@@ -397,7 +351,7 @@ function PhotoDetail({
   label: string;
 }) {
   return (
-    <figure className="group relative h-64 w-[78vw] shrink-0 snap-center overflow-hidden rounded-2xl bg-[#111111] sm:h-96 sm:w-auto">
+    <figure className="group relative h-64 w-[78vw] shrink-0 snap-center overflow-hidden rounded-2xl bg-[#050306] sm:h-96 sm:w-auto">
       <Image
         src={src}
         alt={alt}
@@ -435,7 +389,7 @@ function ProjectCard({
   cost: string;
 }) {
   return (
-    <article className="group relative min-h-[400px] w-[86vw] max-w-[620px] shrink-0 snap-center overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#111111] sm:min-h-[510px] sm:w-auto sm:max-w-none sm:rounded-[2rem]">
+    <article className="group relative min-h-[400px] w-[86vw] max-w-[620px] shrink-0 snap-center overflow-hidden rounded-[1.6rem] border border-[#0e2d30]/12 bg-[#050306] text-white sm:min-h-[510px] sm:w-auto sm:max-w-none sm:rounded-[2rem]">
       <Image
         src={image}
         alt={`${vehicle}, ${name} project`}
@@ -452,7 +406,7 @@ function ProjectCard({
         <span
           className={`rounded-full border px-3 py-1.5 text-xs font-medium backdrop-blur-xl ${
             status === "In progress"
-              ? "border-[#e72d45]/35 bg-[#e72d45]/18 text-[#ff8a9a]"
+              ? "border-[#bf8269]/35 bg-[#6d0101]/45 text-[#e8e6d7]"
               : "border-white/14 bg-black/45 text-white/58"
           }`}
         >

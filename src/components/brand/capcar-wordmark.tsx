@@ -2,12 +2,18 @@ import Image from "next/image";
 
 type CapcarWordmarkProps = {
   compact?: boolean;
+  glow?: boolean;
 };
 
-export function CapcarWordmark({ compact = false }: CapcarWordmarkProps) {
+export function CapcarWordmark({
+  compact = false,
+  glow = true,
+}: CapcarWordmarkProps) {
   return (
     <div className="inline-flex items-center gap-1.5" aria-label="Capcar">
-      <span className="relative block h-10 w-14 shrink-0 drop-shadow-[0_4px_12px_rgba(255,79,139,0.2)]">
+      <span
+        className={`relative block h-10 w-14 shrink-0 ${glow ? "drop-shadow-[0_4px_12px_rgba(255,79,139,0.2)]" : ""}`}
+      >
         <Image
           src="/capcar-mark.png"
           alt=""
