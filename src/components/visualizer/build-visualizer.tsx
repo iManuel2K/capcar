@@ -127,16 +127,16 @@ export function BuildVisualizer({
       >
         <ArrowLeft className="size-4" /> Build roadmap
       </Link>
-      <header className="rounded-[2rem] border border-white/10 bg-[#111512] p-5">
+      <header className="rounded-[2rem] border border-white/10 bg-[#111111] p-5">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-[#74a7ff]/25 bg-[#74a7ff]/10 px-3 py-1.5 text-[10px] text-[#a9c7ff] uppercase">
+          <span className="rounded-full border border-[#e72d45]/25 bg-[#e72d45]/10 px-3 py-1.5 text-[10px] text-[#a9c7ff] uppercase">
             Build Studio · Visual parts & sound
           </span>
           <span className="rounded-full border border-amber-300/20 bg-amber-300/8 px-3 py-1.5 text-[10px] text-amber-100/65 uppercase">
             Not fitment proof
           </span>
         </div>
-        <p className="mt-3 text-sm font-semibold text-[#8ab7ff]">
+        <p className="mt-3 text-sm font-semibold text-[#ff667a]">
           {vehicle.productionYear} BMW {vehicle.model} · {build.name}
         </p>
         <h1 className="mt-2 text-3xl font-medium tracking-tight">
@@ -146,7 +146,7 @@ export function BuildVisualizer({
 
       <section className="mt-5">
         <div className="mb-3 flex flex-wrap gap-3">
-          <div className="inline-flex rounded-xl border border-white/10 bg-[#111512] p-1">
+          <div className="inline-flex rounded-xl border border-white/10 bg-[#111111] p-1">
             {viewOptions.map((candidate) => (
               <button
                 key={candidate}
@@ -167,13 +167,13 @@ export function BuildVisualizer({
             ))}
           </div>
           {activeView !== "reference" && (
-            <div className="inline-flex rounded-xl border border-white/10 bg-[#111512] p-1">
+            <div className="inline-flex rounded-xl border border-white/10 bg-[#111111] p-1">
               {(["current", "concept"] as const).map((mode) => (
                 <button
                   key={mode}
                   type="button"
                   onClick={() => setPreviewMode(mode)}
-                  className={`rounded-lg px-4 py-2 text-xs capitalize ${previewMode === mode ? "bg-[#74a7ff] font-semibold text-[#07101d]" : "text-white/40"}`}
+                  className={`rounded-lg px-4 py-2 text-xs capitalize ${previewMode === mode ? "bg-[#e72d45] font-semibold text-[#07101d]" : "text-white/40"}`}
                 >
                   {mode === "current" ? "Current baseline" : "Dream concept"}
                 </button>
@@ -204,7 +204,7 @@ export function BuildVisualizer({
       </section>
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
-        <article className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
@@ -222,7 +222,7 @@ export function BuildVisualizer({
           </div>
           <div className="mt-7 space-y-7">
             {activeView === "reference" ? (
-              <div className="rounded-2xl border border-[#74a7ff]/15 bg-[#74a7ff]/6 p-5 text-sm leading-6 text-white/55">
+              <div className="rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/55">
                 The embedded E90 loads immediately from Sketchfab. Use it to
                 inspect the base body and cabin; switch to Exterior or Interior
                 to save Capcar concept choices.
@@ -235,7 +235,7 @@ export function BuildVisualizer({
                   of road approval.
                 </p>
                 {previewMode === "current" && (
-                  <p className="text-sm text-[#8ab7ff]">
+                  <p className="text-sm text-[#ff667a]">
                     Showing the factory-style reference. Switch to Dream concept
                     to see your selections; this baseline is not a scan of your
                     actual car.
@@ -418,7 +418,7 @@ export function BuildVisualizer({
           </div>
         </article>
 
-        <aside className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <aside className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
             Connected roadmap
           </p>
@@ -447,7 +447,7 @@ export function BuildVisualizer({
           </ul>
           <Link
             href={`/garage/${vehicleId}/builds/${buildId}/compatibility`}
-            className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#74a7ff] px-4 text-sm font-semibold text-[#07101d]"
+            className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d]"
           >
             Check build compatibility
           </Link>
@@ -482,7 +482,7 @@ function OptionGroup<T extends string>({
   return (
     <fieldset>
       <legend className="flex items-center gap-2 text-sm text-white/55">
-        <Icon className="size-4 text-[#8ab7ff]" /> {label}
+        <Icon className="size-4 text-[#ff667a]" /> {label}
       </legend>
       <div className="mt-3 flex flex-wrap gap-2">
         {options.map((option) => (
@@ -491,7 +491,7 @@ function OptionGroup<T extends string>({
             type="button"
             aria-pressed={value === option}
             onClick={() => onChange(option)}
-            className={`rounded-xl border px-3.5 py-2 text-sm ${value === option ? "border-[#74a7ff]/45 bg-[#74a7ff]/12 text-[#bad1ff]" : "border-white/10 text-white/60"}`}
+            className={`rounded-xl border px-3.5 py-2 text-sm ${value === option ? "border-[#e72d45]/45 bg-[#e72d45]/12 text-[#bad1ff]" : "border-white/10 text-white/60"}`}
           >
             {optionLabels[option] ?? option}
           </button>

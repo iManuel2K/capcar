@@ -48,8 +48,8 @@ export function GuideLibrary({ vehicleId }: { vehicleId: string }) {
       >
         <ArrowLeft className="size-4" /> Vehicle overview
       </Link>
-      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_16%,rgba(116,167,255,0.18),transparent_30%),#111512] p-6 sm:p-10">
-        <p className="text-xs font-semibold tracking-[0.15em] text-[#8ab7ff] uppercase">
+      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_16%,rgba(231,45,69,0.18),transparent_30%),#111111] p-6 sm:p-10">
+        <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
           Epic 14 · Guide trust system
         </p>
         <h1 className="mt-4 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
@@ -71,10 +71,10 @@ export function GuideLibrary({ vehicleId }: { vehicleId: string }) {
             <Link
               key={guide.slug}
               href={`/garage/${vehicleId}/guides/${guide.slug}`}
-              className="group flex flex-col rounded-[2rem] border border-white/10 bg-[#111512] p-6 transition hover:-translate-y-1 hover:border-white/20"
+              className="group flex flex-col rounded-[2rem] border border-white/10 bg-[#111111] p-6 transition hover:-translate-y-1 hover:border-white/20"
             >
               <div className="flex items-center justify-between gap-3">
-                <span className="grid size-11 place-items-center rounded-xl bg-[#74a7ff]/10 text-[#8ab7ff]">
+                <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/10 text-[#ff667a]">
                   <BookOpenCheck className="size-5" />
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/20 bg-amber-300/8 px-2.5 py-1 text-[10px] text-amber-100/70 uppercase">

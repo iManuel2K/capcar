@@ -7,11 +7,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Capcar — Plan it. Price it. Build it.",
+    default: "Capcar — Build with clarity.",
     template: "%s · Capcar",
   },
   description:
-    "Visualize your project car, find compatible parts and install them with confidence.",
+    "Maintain your car, plan modifications and compare compatible parts in one place.",
   applicationName: "Capcar",
   manifest: "/manifest.webmanifest",
   icons: {

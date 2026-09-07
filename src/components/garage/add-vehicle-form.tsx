@@ -100,11 +100,11 @@ export function AddVehicleForm() {
         <form
           onSubmit={handleSubmit}
           noValidate
-          className="rounded-[2rem] border border-white/10 bg-[#111512] p-5 sm:p-8 lg:p-10"
+          className="rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8 lg:p-10"
         >
           <div className="flex items-start justify-between gap-5 border-b border-white/8 pb-8">
             <div>
-              <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#8ab7ff] uppercase">
+              <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
                 Vehicle profile
               </p>
               <h1 className="text-3xl font-medium tracking-[-0.035em] sm:text-5xl">
@@ -307,7 +307,7 @@ export function AddVehicleForm() {
             <button
               disabled={submitting}
               type="submit"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-6 text-sm font-semibold text-[#07101d] transition hover:-translate-y-0.5 hover:bg-[#8ab7ff] disabled:opacity-60"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-6 text-sm font-semibold text-[#07101d] transition hover:-translate-y-0.5 hover:bg-[#ff667a] disabled:opacity-60"
             >
               {submitting ? "Saving…" : "Create vehicle"}{" "}
               <ArrowRight className="size-4" />
@@ -346,7 +346,7 @@ export function AddVehicleForm() {
 }
 
 const inputClass =
-  "mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-white/[0.045] px-4 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-[#74a7ff]/70 focus:ring-3 focus:ring-[#74a7ff]/10 disabled:cursor-not-allowed disabled:text-white/35 aria-[invalid=true]:border-red-400/70";
+  "mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-white/[0.045] px-4 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-[#e72d45]/70 focus:ring-3 focus:ring-[#e72d45]/10 disabled:cursor-not-allowed disabled:text-white/35 aria-[invalid=true]:border-red-400/70";
 
 function FormSection({
   number,
@@ -362,7 +362,7 @@ function FormSection({
   return (
     <section className="grid gap-6 border-b border-white/8 py-8 lg:grid-cols-[150px_1fr]">
       <div>
-        <span className="text-xs text-[#8ab7ff]">{number}</span>
+        <span className="text-xs text-[#ff667a]">{number}</span>
         <h2 className="mt-2 font-medium">{title}</h2>
         <p className="mt-1 text-xs leading-5 text-white/35">{description}</p>
       </div>

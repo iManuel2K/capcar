@@ -24,7 +24,7 @@ export function BuildVisualizerArt({
   const gradientId = `paint-${instanceId}`;
 
   return (
-    <div className="relative min-h-[330px] overflow-hidden rounded-[1.5rem] bg-[radial-gradient(circle_at_50%_72%,rgba(116,167,255,0.18),transparent_34%),linear-gradient(180deg,#151b19,#090c0b)]">
+    <div className="relative min-h-[330px] overflow-hidden rounded-[1.5rem] bg-[radial-gradient(circle_at_50%_72%,rgba(231,45,69,0.18),transparent_34%),linear-gradient(180deg,#151212,#090909)]">
       <div className="absolute top-5 left-5 z-10 rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[10px] tracking-[0.12em] text-white/40 uppercase">
         {label}
       </div>

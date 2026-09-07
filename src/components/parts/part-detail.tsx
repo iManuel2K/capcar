@@ -84,7 +84,7 @@ export function PartDetail({
         <p className="text-white/45">Part or vehicle not found.</p>
         <Link
           href={`/garage/${vehicleId}/parts`}
-          className="mt-5 inline-flex rounded-xl bg-[#74a7ff] px-5 py-3 text-sm font-semibold text-[#07101d]"
+          className="mt-5 inline-flex rounded-xl bg-[#e72d45] px-5 py-3 text-sm font-semibold text-[#07101d]"
         >
           Return to parts
         </Link>
@@ -120,8 +120,8 @@ export function PartDetail({
         <ArrowLeft className="size-4" /> All parts
       </Link>
 
-      <section className="grid overflow-hidden rounded-[2rem] border border-white/10 bg-[#111512] lg:grid-cols-[0.92fr_1.08fr]">
-        <div className="relative min-h-[420px] overflow-hidden bg-[radial-gradient(circle_at_50%_48%,rgba(116,167,255,0.25),transparent_30%),#0d110f] p-7">
+      <section className="grid overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] lg:grid-cols-[0.92fr_1.08fr]">
+        <div className="relative min-h-[420px] overflow-hidden bg-[radial-gradient(circle_at_50%_48%,rgba(231,45,69,0.25),transparent_30%),#0d0d0d] p-7">
           <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[11px] tracking-[0.12em] text-white/45 uppercase">
             Demo product
           </span>
@@ -139,7 +139,7 @@ export function PartDetail({
           </div>
         </div>
         <div className="flex flex-col p-6 sm:p-10 lg:p-12">
-          <p className="text-xs font-semibold tracking-[0.16em] text-[#8ab7ff] uppercase">
+          <p className="text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
             {part.brand}
           </p>
           <h1 className="mt-4 text-4xl font-medium tracking-[-0.045em] text-balance sm:text-6xl">
@@ -165,7 +165,7 @@ export function PartDetail({
       </section>
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
             Fitment evidence
           </p>
@@ -214,7 +214,7 @@ export function PartDetail({
           )}
         </div>
 
-        <aside className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <aside className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
             Add to roadmap
           </p>
@@ -231,7 +231,7 @@ export function PartDetail({
                   setSelectedBuildId(event.target.value);
                   setMessage("");
                 }}
-                className="mt-6 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d110f] px-4 text-sm text-white/70 outline-none"
+                className="mt-6 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-4 text-sm text-white/70 outline-none"
               >
                 <option value="">Select a build</option>
                 {vehicleBuilds.map((build) => (
@@ -248,7 +248,7 @@ export function PartDetail({
                   alreadyAdded
                 }
                 onClick={addToBuild}
-                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-4 text-sm font-semibold text-[#07101d] disabled:cursor-not-allowed disabled:opacity-35"
+                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d] disabled:cursor-not-allowed disabled:opacity-35"
               >
                 <Plus className="size-4" />{" "}
                 {alreadyAdded ? "Already in this build" : "Add as planned"}
@@ -263,7 +263,7 @@ export function PartDetail({
           ) : (
             <Link
               href={`/garage/${vehicleId}/builds/new`}
-              className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-4 text-sm font-semibold text-[#07101d]"
+              className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d]"
             >
               <Layers3 className="size-4" /> Create a build first
             </Link>
@@ -308,7 +308,7 @@ function Spec({
 }) {
   return (
     <div className="rounded-2xl border border-white/8 bg-white/[0.025] p-4">
-      <Icon className="size-4 text-[#8ab7ff]" />
+      <Icon className="size-4 text-[#ff667a]" />
       <p className="mt-5 text-[11px] tracking-[0.12em] text-white/30 uppercase">
         {label}
       </p>
@@ -326,9 +326,9 @@ function InfoCard({
   items: string[];
 }) {
   return (
-    <article className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+    <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
       <div className="flex items-center gap-3">
-        <Icon className="size-4 text-[#8ab7ff]" />
+        <Icon className="size-4 text-[#ff667a]" />
         <h2 className="font-medium">{title}</h2>
       </div>
       <ul className="mt-6 space-y-3">

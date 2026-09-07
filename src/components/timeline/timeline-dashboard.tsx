@@ -76,8 +76,8 @@ export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
 
   return (
     <div className="pb-24 sm:pb-0">
-      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_82%_18%,rgba(116,167,255,0.18),transparent_28%),#111512] p-6 sm:p-10">
-        <p className="text-xs font-semibold tracking-[0.15em] text-[#8ab7ff] uppercase">
+      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_82%_18%,rgba(231,45,69,0.18),transparent_28%),#111111] p-6 sm:p-10">
+        <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
           {vehicle.productionYear} BMW {vehicle.model} · {vehicle.platform}
         </p>
         <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-7xl">
@@ -107,7 +107,7 @@ export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
         />
       </section>
 
-      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111512] p-5 sm:p-8">
+      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
         <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
           <div>
             <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
@@ -147,7 +147,7 @@ export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
                   {index < visible.length - 1 && (
                     <div className="absolute top-11 bottom-0 left-[21px] w-px bg-white/8" />
                   )}
-                  <div className="relative z-10 grid size-11 place-items-center rounded-xl border border-white/10 bg-[#0d110f]">
+                  <div className="relative z-10 grid size-11 place-items-center rounded-xl border border-white/10 bg-[#0d0d0d]">
                     <Icon className={`size-4 ${content.color}`} />
                   </div>
                   <div className="rounded-2xl border border-white/8 bg-white/[0.022] p-5">
@@ -203,8 +203,8 @@ function SummaryCard({
   value: string;
 }) {
   return (
-    <article className="rounded-2xl border border-white/10 bg-[#111512] p-5">
-      <Icon className="size-4 text-[#8ab7ff]" />
+    <article className="rounded-2xl border border-white/10 bg-[#111111] p-5">
+      <Icon className="size-4 text-[#ff667a]" />
       <p className="mt-5 text-2xl font-medium">{value}</p>
       <p className="mt-1 text-xs text-white/35">{label}</p>
     </article>
@@ -224,7 +224,7 @@ function FilterButton({
     <button
       type="button"
       onClick={onClick}
-      className={`shrink-0 rounded-full border px-3.5 py-2 text-xs ${active ? "border-[#74a7ff]/40 bg-[#74a7ff]/12 text-[#bad1ff]" : "border-white/10 text-white/35"}`}
+      className={`shrink-0 rounded-full border px-3.5 py-2 text-xs ${active ? "border-[#e72d45]/40 bg-[#e72d45]/12 text-[#bad1ff]" : "border-white/10 text-white/35"}`}
     >
       {children}
     </button>

@@ -265,7 +265,7 @@ export function VehicleModelStage({
             {model.accuracy === "dimensionally-verified" ? (
               <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-200" />
             ) : (
-              <Box className="mt-0.5 size-4 shrink-0 text-[#8ab7ff]" />
+              <Box className="mt-0.5 size-4 shrink-0 text-[#ff667a]" />
             )}
             <div>
               <p className="text-sm text-white/65">{model.provider}</p>

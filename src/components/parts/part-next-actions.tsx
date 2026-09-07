@@ -33,7 +33,7 @@ export function PartNextActions({
           description="Prepare tools, pass the safety gate and complete one clear step at a time."
         />
       ) : (
-        <div className="rounded-[2rem] border border-white/8 bg-[#111512] p-7 opacity-50">
+        <div className="rounded-[2rem] border border-white/8 bg-[#111111] p-7 opacity-50">
           <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
             Installation guide
           </p>
@@ -63,15 +63,15 @@ function ActionCard({
   return (
     <Link
       href={href}
-      className="group rounded-[2rem] border border-white/10 bg-[#111512] p-7 transition-colors hover:border-[#74a7ff]/35"
+      className="group rounded-[2rem] border border-white/10 bg-[#111111] p-7 transition-colors hover:border-[#e72d45]/35"
     >
       <div className="flex items-center justify-between">
-        <span className="grid size-11 place-items-center rounded-xl bg-[#74a7ff]/10 text-[#8ab7ff]">
+        <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/10 text-[#ff667a]">
           <Icon className="size-5" />
         </span>
         <ArrowRight className="size-5 text-white/25 transition-transform group-hover:translate-x-1 group-hover:text-white" />
       </div>
-      <p className="mt-8 text-xs tracking-[0.14em] text-[#8ab7ff] uppercase">
+      <p className="mt-8 text-xs tracking-[0.14em] text-[#ff667a] uppercase">
         {eyebrow}
       </p>
       <h2 className="mt-2 text-2xl font-medium">{title}</h2>

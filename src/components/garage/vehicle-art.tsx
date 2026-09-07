@@ -13,7 +13,7 @@ export function VehicleArt({
       className={`relative isolate overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#101512] ${compact ? "min-h-52" : "min-h-[360px] lg:min-h-[470px]"}`}
       role="img"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_58%_44%,rgba(116,167,255,0.26),transparent_34%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_58%_44%,rgba(231,45,69,0.26),transparent_34%)]" />
       <div className="absolute inset-x-[10%] bottom-[16%] h-[12%] rounded-full bg-black/80 blur-2xl" />
       <svg
         aria-hidden="true"
@@ -88,7 +88,7 @@ export function VehicleArt({
         />
       </svg>
       <div className="absolute top-5 left-5 flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[11px] tracking-[0.12em] text-white/55 uppercase backdrop-blur">
-        <Zap className="size-3 text-[#74a7ff]" /> Concept stage
+        <Zap className="size-3 text-[#e72d45]" /> Concept stage
       </div>
       {!compact && (
         <div className="absolute right-5 bottom-5 flex items-center gap-2 rounded-xl border border-white/10 bg-black/25 px-3 py-2 text-xs text-white/55 backdrop-blur">

@@ -62,9 +62,9 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
         {vehicle.model}
       </Link>
 
-      <header className="grid gap-8 rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-9 lg:grid-cols-[1fr_auto] lg:items-end">
+      <header className="grid gap-8 rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-9 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
-          <p className="text-xs font-semibold tracking-[0.16em] text-[#8ab7ff] uppercase">
+          <p className="text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
             Build studio
           </p>
           <h1 className="mt-4 max-w-3xl text-4xl font-medium tracking-[-0.05em] text-balance sm:text-6xl">
@@ -77,19 +77,19 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
         </div>
         <Link
           href={`/garage/${vehicleId}/builds/new`}
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-5 text-sm font-semibold text-[#07101d]"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]"
         >
           <Plus className="size-4" /> New build
         </Link>
       </header>
 
       {vehicleBuilds.length === 0 ? (
-        <section className="mt-5 grid overflow-hidden rounded-[2rem] border border-white/10 bg-[#111512] lg:grid-cols-[1.15fr_0.85fr]">
+        <section className="mt-5 grid overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] lg:grid-cols-[1.15fr_0.85fr]">
           <VehicleArt
             label={`${vehicle.productionYear} BMW ${vehicle.model}`}
           />
           <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12">
-            <span className="grid size-11 place-items-center rounded-2xl bg-[#74a7ff] text-[#07101d]">
+            <span className="grid size-11 place-items-center rounded-2xl bg-[#e72d45] text-[#07101d]">
               <Layers3 className="size-5" />
             </span>
             <h2 className="mt-7 text-2xl font-medium">
@@ -102,7 +102,7 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href={`/garage/${vehicleId}/builds/new`}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-5 text-sm font-semibold text-[#07101d]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]"
               >
                 Create a build <ArrowRight className="size-4" />
               </Link>
@@ -111,7 +111,7 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
                 onClick={loadSample}
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-5 text-sm text-white/65"
               >
-                <Sparkles className="size-4 text-[#8ab7ff]" /> Load Stealth Rear
+                <Sparkles className="size-4 text-[#ff667a]" /> Load Stealth Rear
               </button>
             </div>
           </div>
@@ -127,13 +127,13 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
               <Link
                 key={build.id}
                 href={`/garage/${vehicleId}/builds/${build.id}`}
-                className="group overflow-hidden rounded-[2rem] border border-white/10 bg-[#111512] transition hover:-translate-y-1 hover:border-white/20"
+                className="group overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] transition hover:-translate-y-1 hover:border-white/20"
               >
-                <div className="relative min-h-60 overflow-hidden bg-[radial-gradient(circle_at_68%_45%,rgba(116,167,255,0.24),transparent_30%),#0d110f] p-7">
+                <div className="relative min-h-60 overflow-hidden bg-[radial-gradient(circle_at_68%_45%,rgba(231,45,69,0.24),transparent_30%),#0d0d0d] p-7">
                   <div className="absolute top-7 right-7 rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white/50">
                     {build.goal}
                   </div>
-                  <div className="absolute right-[10%] bottom-[22%] left-[10%] h-20 rounded-[50%] bg-[#74a7ff]/10 blur-3xl" />
+                  <div className="absolute right-[10%] bottom-[22%] left-[10%] h-20 rounded-[50%] bg-[#e72d45]/10 blur-3xl" />
                   <div className="absolute right-7 bottom-7 left-7">
                     <p className="text-xs tracking-[0.14em] text-white/35 uppercase">
                       {build.status.replace("_", " ")}
@@ -161,9 +161,9 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
           <button
             type="button"
             onClick={loadSample}
-            className="min-h-40 rounded-[2rem] border border-dashed border-white/12 p-8 text-left text-white/45 transition hover:border-[#74a7ff]/35 hover:text-white/70"
+            className="min-h-40 rounded-[2rem] border border-dashed border-white/12 p-8 text-left text-white/45 transition hover:border-[#e72d45]/35 hover:text-white/70"
           >
-            <Sparkles className="size-5 text-[#8ab7ff]" />
+            <Sparkles className="size-5 text-[#ff667a]" />
             <span className="mt-5 block font-medium">
               Open sample Stealth Rear build
             </span>
@@ -175,7 +175,7 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
       )}
 
       <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-white/8 bg-white/[0.025] p-5 text-sm leading-6 text-white/40">
-        <WalletCards className="mt-0.5 size-4 shrink-0 text-[#8ab7ff]" />
+        <WalletCards className="mt-0.5 size-4 shrink-0 text-[#ff667a]" />
         <p>
           All modifications are concepts until Epic 07 verifies exact part
           fitment. Costs are your planning estimates, not live merchant offers.
@@ -187,7 +187,7 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
 
 function BuildStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-[#111512] p-5">
+    <div className="bg-[#111111] p-5">
       <p className="text-[11px] tracking-[0.12em] text-white/30 uppercase">
         {label}
       </p>
@@ -202,7 +202,7 @@ function MissingVehicle() {
       <p className="text-white/45">Vehicle not found.</p>
       <Link
         href="/garage"
-        className="mt-5 inline-flex rounded-xl bg-[#74a7ff] px-5 py-3 text-sm font-semibold text-[#07101d]"
+        className="mt-5 inline-flex rounded-xl bg-[#e72d45] px-5 py-3 text-sm font-semibold text-[#07101d]"
       >
         Return to garage
       </Link>

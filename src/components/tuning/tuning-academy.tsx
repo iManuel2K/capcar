@@ -73,8 +73,8 @@ export function TuningAcademy({ vehicleId }: { vehicleId: string }) {
       >
         <ArrowLeft className="size-4" /> Vehicle overview
       </Link>
-      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(116,167,255,0.2),transparent_30%),#111512] p-6 sm:p-10">
-        <p className="text-xs font-semibold tracking-[0.15em] text-[#8ab7ff] uppercase">
+      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10">
+        <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
           Epic 17 · Beginner tuning academy
         </p>
         <h1 className="mt-4 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
@@ -88,9 +88,9 @@ export function TuningAcademy({ vehicleId }: { vehicleId: string }) {
       </header>
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
-        <aside className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <aside className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <div className="flex items-center gap-3">
-            <GraduationCap className="size-5 text-[#8ab7ff]" />
+            <GraduationCap className="size-5 text-[#ff667a]" />
             <h2 className="text-xl font-medium">Your direction</h2>
           </div>
           <fieldset className="mt-7">
@@ -103,7 +103,7 @@ export function TuningAcademy({ vehicleId }: { vehicleId: string }) {
                   key={goal}
                   type="button"
                   onClick={() => setInput({ ...input, goal })}
-                  className={`rounded-xl border px-4 py-3 text-left text-sm ${input.goal === goal ? "border-[#74a7ff]/45 bg-[#74a7ff]/10 text-[#bad1ff]" : "border-white/10 text-white/45"}`}
+                  className={`rounded-xl border px-4 py-3 text-left text-sm ${input.goal === goal ? "border-[#e72d45]/45 bg-[#e72d45]/10 text-[#bad1ff]" : "border-white/10 text-white/45"}`}
                 >
                   {goalLabels[goal]}
                 </button>
@@ -120,7 +120,7 @@ export function TuningAcademy({ vehicleId }: { vehicleId: string }) {
                   key={experience}
                   type="button"
                   onClick={() => setInput({ ...input, experience })}
-                  className={`rounded-xl border px-4 py-2.5 text-sm capitalize ${input.experience === experience ? "border-[#74a7ff]/45 bg-[#74a7ff]/10 text-[#bad1ff]" : "border-white/10 text-white/45"}`}
+                  className={`rounded-xl border px-4 py-2.5 text-sm capitalize ${input.experience === experience ? "border-[#e72d45]/45 bg-[#e72d45]/10 text-[#bad1ff]" : "border-white/10 text-white/45"}`}
                 >
                   {experience}
                 </button>
@@ -137,20 +137,20 @@ export function TuningAcademy({ vehicleId }: { vehicleId: string }) {
               onChange={(event) =>
                 setInput({ ...input, budget: Number(event.target.value) })
               }
-              className="mt-3 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d110f] px-4 text-base text-white/70 outline-none"
+              className="mt-3 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-4 text-base text-white/70 outline-none"
             />
           </label>
           <button
             type="button"
             onClick={generate}
-            className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-4 text-sm font-semibold text-[#07101d]"
+            className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d]"
           >
             <Sparkles className="size-4" />{" "}
             {plan ? "Regenerate roadmap" : "Create roadmap"}
           </button>
         </aside>
 
-        <article className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           {plan ? (
             <>
               <div className="flex flex-wrap items-center justify-between gap-4">
@@ -173,7 +173,7 @@ export function TuningAcademy({ vehicleId }: { vehicleId: string }) {
                     className="rounded-2xl border border-white/8 bg-black/10 p-5"
                   >
                     <div className="flex items-start gap-4">
-                      <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#74a7ff]/10 text-xs text-[#9ec2ff]">
+                      <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#e72d45]/10 text-xs text-[#9ec2ff]">
                         {String(stage.order).padStart(2, "0")}
                       </span>
                       <div className="flex-1">

@@ -31,10 +31,10 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
         <ArrowLeft className="size-4" /> Vehicle overview
       </Link>
 
-      <header className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#111512]">
+      <header className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]">
         <div className="grid gap-7 p-6 sm:p-9 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
-            <p className="text-xs tracking-[0.14em] text-[#8ab7ff] uppercase">Model watchlist · sourced</p>
+            <p className="text-xs tracking-[0.14em] text-[#ff667a] uppercase">Model watchlist · sourced</p>
             <h1 className="mt-3 text-4xl font-medium tracking-[-0.045em] sm:text-5xl">Know what to watch.</h1>
             <p className="mt-4 max-w-2xl text-base leading-7 text-white/50">
               Evidence matched to your {vehicle.productionYear} BMW {vehicle.model}, {vehicle.platform} and confirmed engine details. This is inspection guidance—not a diagnosis or a prediction that your car will fail.
@@ -58,11 +58,11 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
           {problems.length > 0 ? <>
             <div className="mb-4 flex flex-wrap gap-2" aria-label="Filter by system">
               {systems.map((candidate) => <button key={candidate} type="button" onClick={() => setSystem(candidate)} aria-pressed={system === candidate}
-                className={`rounded-xl border px-3.5 py-2 text-sm ${system === candidate ? "border-[#74a7ff]/45 bg-[#74a7ff]/12 text-[#bad1ff]" : "border-white/10 text-white/50"}`}>{candidate}</button>)}
+                className={`rounded-xl border px-3.5 py-2 text-sm ${system === candidate ? "border-[#e72d45]/45 bg-[#e72d45]/12 text-[#bad1ff]" : "border-white/10 text-white/50"}`}>{candidate}</button>)}
             </div>
             <div className="space-y-4">
               {visible.map((problem) => (
-                <article key={problem.id} className="rounded-[1.75rem] border border-white/10 bg-[#111512] p-6 sm:p-7">
+                <article key={problem.id} className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6 sm:p-7">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <div className="flex flex-wrap gap-2 text-xs">
@@ -72,28 +72,28 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                       <h2 className="mt-4 text-2xl font-medium tracking-tight">{problem.title}</h2>
                       <p className="mt-2 text-sm text-white/35">Applies to: {problem.applicability}</p>
                     </div>
-                    <span className={`rounded-full px-3 py-1.5 text-xs ${problem.severity === "service-soon" ? "bg-amber-300/10 text-amber-100/70" : "bg-[#74a7ff]/10 text-[#a9c7ff]"}`}>{problem.severity === "service-soon" ? "Inspect if symptoms appear" : "Monitor"}</span>
+                    <span className={`rounded-full px-3 py-1.5 text-xs ${problem.severity === "service-soon" ? "bg-amber-300/10 text-amber-100/70" : "bg-[#e72d45]/10 text-[#a9c7ff]"}`}>{problem.severity === "service-soon" ? "Inspect if symptoms appear" : "Monitor"}</span>
                   </div>
                   <div className="mt-6 grid gap-5 sm:grid-cols-2">
                     <div><p className="text-xs tracking-wider text-white/30 uppercase">Possible symptoms</p><ul className="mt-3 space-y-2 text-sm leading-6 text-white/55">{problem.symptoms.map((symptom) => <li key={symptom} className="flex gap-2"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-white/25" />{symptom}</li>)}</ul></div>
                     <div><p className="text-xs tracking-wider text-white/30 uppercase">Next check</p><p className="mt-3 text-sm leading-6 text-white/55">{problem.nextCheck}</p></div>
                   </div>
-                  <a href={problem.sourceUrl} target="_blank" rel="noreferrer" className="mt-6 inline-flex items-center gap-2 text-sm text-[#8ab7ff] hover:text-[#bdd3ff]">{problem.sourceLabel}<ArrowUpRight className="size-3.5" /></a>
+                  <a href={problem.sourceUrl} target="_blank" rel="noreferrer" className="mt-6 inline-flex items-center gap-2 text-sm text-[#ff667a] hover:text-[#bdd3ff]">{problem.sourceLabel}<ArrowUpRight className="size-3.5" /></a>
                 </article>
               ))}
             </div>
-          </> : <div className="rounded-[2rem] border border-white/10 bg-[#111512] p-8 text-center">
+          </> : <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-8 text-center">
             <Database className="mx-auto size-6 text-white/30" /><h2 className="mt-4 text-2xl font-medium">Coverage is being verified.</h2><p className="mx-auto mt-3 max-w-lg leading-7 text-white/45">No source-reviewed records match this exact platform yet. That does not mean the vehicle has no known issues.</p>
           </div>}
         </div>
 
         <aside className="space-y-4">
-          <div className="rounded-[1.75rem] border border-white/10 bg-[#111512] p-6">
+          <div className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6">
             <ShieldCheck className="size-5 text-emerald-200" /><h2 className="mt-4 text-lg font-medium">Check official recalls</h2><p className="mt-3 text-sm leading-6 text-white/45">Recall status is VIN-specific. Capcar does not guess it from the model year.</p>
             <a href="https://vehiclerecall.bmwgroup.com/index.html?brand=bmw&language=de&market=de" target="_blank" rel="noreferrer" className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-white text-sm font-semibold text-black">BMW recall lookup<ArrowUpRight className="size-3.5" /></a>
           </div>
-          <div className="rounded-[1.75rem] border border-white/10 bg-[#111512] p-6">
-            <Wrench className="size-5 text-[#8ab7ff]" /><h2 className="mt-4 text-lg font-medium">Act on evidence</h2><div className="mt-4 grid gap-2">
+          <div className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6">
+            <Wrench className="size-5 text-[#ff667a]" /><h2 className="mt-4 text-lg font-medium">Act on evidence</h2><div className="mt-4 grid gap-2">
               <Link href={`/garage/${vehicleId}/maintenance`} className="rounded-xl border border-white/10 px-4 py-3 text-sm text-white/55 hover:text-white">Open maintenance</Link>
               <Link href={`/garage/${vehicleId}/parts`} className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm text-white/55 hover:text-white"><Search className="size-3.5" /> Research parts after diagnosis</Link>
             </div>

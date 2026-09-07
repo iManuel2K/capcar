@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { MarketingLanding } from "@/components/marketing/marketing-landing";
@@ -9,7 +9,7 @@ describe("MarketingLanding", () => {
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
       /build with clarity/i,
     );
-    expect(screen.getByText("Fitment, made clear.")).toBeInTheDocument();
+    expect(screen.getByText("Buy the right part.")).toBeInTheDocument();
   });
 
   it("provides direct routes into the garage", () => {
@@ -20,5 +20,16 @@ describe("MarketingLanding", () => {
     expect(
       garageLinks.some((link) => link.getAttribute("href") === "/garage"),
     ).toBe(true);
+  });
+
+  it("switches between the current car and planned vision", () => {
+    render(<MarketingLanding />);
+    const current = screen.getByRole("button", { name: "current" });
+    const vision = screen.getByRole("button", { name: "vision" });
+
+    expect(current).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(vision);
+    expect(vision).toHaveAttribute("aria-pressed", "true");
+    expect(current).toHaveAttribute("aria-pressed", "false");
   });
 });

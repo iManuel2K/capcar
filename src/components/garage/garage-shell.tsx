@@ -38,7 +38,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto flex h-18 max-w-[1500px] items-center justify-between px-4 sm:px-7">
           <Link
             href="/"
-            className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#74a7ff]"
+            className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e72d45]"
           >
             <CapcarWordmark />
           </Link>
@@ -99,12 +99,12 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             )}
           </nav>
           <div className="flex items-center gap-2">
-            <span className="hidden rounded-full border border-[#74a7ff]/20 bg-[#74a7ff]/8 px-3 py-1.5 text-xs text-[#a9c7ff] md:inline-flex">
+            <span className="hidden rounded-full border border-[#e72d45]/20 bg-[#e72d45]/8 px-3 py-1.5 text-xs text-[#a9c7ff] md:inline-flex">
               Local prototype
             </span>
             <Link aria-label={`${unread} unread notifications`} className="relative grid size-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60" href="/notifications">
               <Bell className="size-4" />
-              {unread > 0 && <span className="absolute -top-1 -right-1 grid min-w-5 place-items-center rounded-full bg-[#74a7ff] px-1 text-[10px] font-bold text-[#07101d]">{Math.min(unread, 9)}{unread > 9 ? "+" : ""}</span>}
+              {unread > 0 && <span className="absolute -top-1 -right-1 grid min-w-5 place-items-center rounded-full bg-[#e72d45] px-1 text-[10px] font-bold text-[#07101d]">{Math.min(unread, 9)}{unread > 9 ? "+" : ""}</span>}
             </Link>
             <Link
               aria-label="Account and sync"
@@ -166,7 +166,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
         ) : (
           <>
             <Link
-              className="mx-2 grid size-12 place-items-center rounded-xl bg-[#74a7ff] text-[#07101d]"
+              className="mx-2 grid size-12 place-items-center rounded-xl bg-[#e72d45] text-[#07101d]"
               href="/garage/new"
               aria-label="Add vehicle"
             >

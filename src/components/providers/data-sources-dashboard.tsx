@@ -113,8 +113,8 @@ export function DataSourcesDashboard({
         <ArrowLeft className="size-4" /> Vehicle overview
       </Link>
 
-      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_12%,rgba(116,167,255,0.2),transparent_30%),#111512] p-6 sm:p-10">
-        <p className="text-xs font-semibold tracking-[0.15em] text-[#8ab7ff] uppercase">
+      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_12%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10">
+        <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
           Epic 21 · BMW identity foundation
         </p>
         <h1 className="mt-4 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
@@ -133,10 +133,10 @@ export function DataSourcesDashboard({
           return (
             <article
               key={status.domain}
-              className="rounded-[2rem] border border-white/10 bg-[#111512] p-6"
+              className="rounded-[2rem] border border-white/10 bg-[#111111] p-6"
             >
               <div className="flex items-center justify-between">
-                <span className="grid size-11 place-items-center rounded-xl bg-[#74a7ff]/10 text-[#8ab7ff]">
+                <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/10 text-[#ff667a]">
                   <Icon className="size-5" />
                 </span>
                 <span
@@ -160,7 +160,7 @@ export function DataSourcesDashboard({
       </section>
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
-        <article className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <div className="flex items-start justify-between gap-5">
             <div>
               <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
@@ -181,7 +181,7 @@ export function DataSourcesDashboard({
             type="button"
             disabled={resolving}
             onClick={resolveVehicle}
-            className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#74a7ff] px-5 text-sm font-semibold text-[#07101d] disabled:opacity-50"
+            className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d] disabled:opacity-50"
           >
             {resolving ? (
               <LoaderCircle className="size-4 animate-spin" />
@@ -258,9 +258,9 @@ export function DataSourcesDashboard({
           )}
         </article>
 
-        <aside className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <aside className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <div className="flex items-center gap-3">
-            <ServerCog className="size-5 text-[#8ab7ff]" />
+            <ServerCog className="size-5 text-[#ff667a]" />
             <h2 className="text-xl font-medium">Activate later</h2>
           </div>
           <p className="mt-4 text-sm leading-6 text-white/45">

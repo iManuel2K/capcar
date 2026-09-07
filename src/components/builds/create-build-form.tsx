@@ -79,10 +79,10 @@ export function CreateBuildForm({ vehicleId }: { vehicleId: string }) {
       <form
         onSubmit={submit}
         noValidate
-        className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#111512]"
+        className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]"
       >
         <header className="border-b border-white/8 p-6 sm:p-10">
-          <p className="text-xs font-semibold tracking-[0.16em] text-[#8ab7ff] uppercase">
+          <p className="text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
             New build
           </p>
           <h1 className="mt-4 text-4xl font-medium tracking-[-0.045em] sm:text-6xl">
@@ -161,7 +161,7 @@ export function CreateBuildForm({ vehicleId }: { vehicleId: string }) {
           </p>
           <button
             type="submit"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-6 text-sm font-semibold text-[#07101d]"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-6 text-sm font-semibold text-[#07101d]"
           >
             Create build <ArrowRight className="size-4" />
           </button>
@@ -172,7 +172,7 @@ export function CreateBuildForm({ vehicleId }: { vehicleId: string }) {
 }
 
 const inputClass =
-  "mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-white/[0.045] px-4 text-sm text-white outline-none placeholder:text-white/25 focus:border-[#74a7ff]/70 focus:ring-3 focus:ring-[#74a7ff]/10";
+  "mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-white/[0.045] px-4 text-sm text-white outline-none placeholder:text-white/25 focus:border-[#e72d45]/70 focus:ring-3 focus:ring-[#e72d45]/10";
 
 function Field({
   label,
@@ -208,7 +208,7 @@ function SectionIntro({
 }) {
   return (
     <div>
-      <Icon className="size-4 text-[#8ab7ff]" />
+      <Icon className="size-4 text-[#ff667a]" />
       <h2 className="mt-3 font-medium">{title}</h2>
       <p className="mt-1 text-xs leading-5 text-white/35">{text}</p>
     </div>

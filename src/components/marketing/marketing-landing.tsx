@@ -1,159 +1,164 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowDown,
   ArrowRight,
   BadgeCheck,
   Check,
   CircleGauge,
   Euro,
   Layers3,
-  ScanSearch,
   ShieldCheck,
   ShoppingBag,
-  Sparkles,
   Wrench,
 } from "lucide-react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
+import { MarketingHero } from "@/components/marketing/marketing-hero";
 
 export function MarketingLanding() {
   return (
-    <div className="min-h-dvh overflow-hidden bg-[#f4f1e9] text-[#151713]">
+    <div className="min-h-dvh overflow-hidden bg-[#080808] text-[#f3f1ec]">
       <main>
-        <CinematicHero />
-
-        <section className="border-y border-[#151713]/10 bg-white/35">
-          <div className="mx-auto grid max-w-[1500px] divide-y divide-[#151713]/10 px-5 sm:px-8 md:grid-cols-4 md:divide-x md:divide-y-0">
-            <Signal number="01" label="Vehicle-specific" />
-            <Signal number="02" label="Structured builds" />
-            <Signal number="03" label="Verified fitment" />
-            <Signal number="04" label="Complete records" />
-          </div>
-        </section>
+        <MarketingHero />
 
         <section
-          id="product"
-          className="mx-auto w-full max-w-[1500px] px-5 py-24 sm:px-8 sm:py-32"
+          id="platform"
+          className="mx-auto w-full max-w-[1500px] px-5 py-16 sm:px-8 sm:py-32"
         >
           <SectionHeading
-            eyebrow="Built around your car"
-            title="One platform. Every stage."
-            description="From maintenance to modification."
+            eyebrow="The platform"
+            title="One car. One system."
+            description="Maintain it. Plan it. Build it."
           />
-          <div className="mt-14 grid gap-5 lg:grid-cols-12">
-            <FeatureCard
-              className="lg:col-span-7"
-              icon={CircleGauge}
-              eyebrow="Garage"
-              title="Your car, fully documented."
-              description="Specifications, mileage and history."
-              visual={<GarageVisual />}
+
+          <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 lg:grid-cols-12">
+            <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#e72d45]/40 sm:rounded-[2rem] sm:p-8 lg:col-span-7">
+              <CardLabel icon={CircleGauge}>Garage</CardLabel>
+              <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
+                Your car, fully documented.
+              </h3>
+              <GaragePreview />
+            </article>
+
+            <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#e72d45]/40 sm:rounded-[2rem] sm:p-8 lg:col-span-5">
+              <CardLabel icon={Wrench}>Maintenance</CardLabel>
+              <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
+                Stay ahead of service.
+              </h3>
+              <MaintenancePreview />
+            </article>
+
+            <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#e72d45]/40 sm:rounded-[2rem] sm:p-8 lg:col-span-5">
+              <CardLabel icon={Layers3}>Build</CardLabel>
+              <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
+                Plan before you buy.
+              </h3>
+              <BuildPreview />
+            </article>
+
+            <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#e72d45]/40 sm:rounded-[2rem] sm:p-8 lg:col-span-7">
+              <CardLabel icon={ShoppingBag}>Parts</CardLabel>
+              <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
+                Choose with confidence.
+              </h3>
+              <PartsPreview />
+            </article>
+          </div>
+        </section>
+
+        <section className="border-y border-white/8 bg-[#0d0d0d] py-5">
+          <div className="mx-auto flex max-w-[1500px] snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-1 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-8">
+            <PhotoDetail
+              src="/capcar-hero-bmw-e90.jpeg"
+              alt="Black BMW E90 side profile"
+              label="The car"
             />
-            <FeatureCard
-              className="lg:col-span-5"
-              icon={Wrench}
-              eyebrow="Maintenance"
-              title="Stay ahead of service."
-              description="Clear schedules and records."
-              visual={<MaintenanceVisual />}
+            <PhotoDetail
+              src="/capcar-detail-rain.jpeg"
+              alt="Rain on the black BMW E90"
+              label="The details"
             />
-            <FeatureCard
-              className="lg:col-span-5"
-              icon={Layers3}
-              eyebrow="Build studio"
-              title="Plan before you buy."
-              description="Stages, priorities and budgets."
-              visual={<BuildVisual />}
-            />
-            <FeatureCard
-              className="lg:col-span-7"
-              icon={ScanSearch}
-              eyebrow="Parts"
-              title="Choose with confidence."
-              description="Fitment, pricing and documentation."
-              visual={<PartsVisual />}
+            <PhotoDetail
+              src="/capcar-detail-distance.jpeg"
+              alt="Black BMW E90 photographed through foliage"
+              label="The history"
             />
           </div>
         </section>
 
-        <section id="difference" className="bg-[#0b0e0c] text-white">
-          <div className="mx-auto grid max-w-[1500px] gap-14 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+        <section id="fitment" className="bg-[#e72d45] text-white">
+          <div className="mx-auto grid max-w-[1500px] gap-10 px-5 py-16 sm:px-8 sm:py-32 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div>
-              <p className="text-xs font-semibold tracking-[0.18em] text-[#8ab7ff] uppercase">
-                The difference
+              <p className="text-xs font-semibold tracking-[0.2em] text-white/62 uppercase">
+                Fitment
               </p>
-              <h2 className="mt-5 text-4xl leading-[0.98] font-medium tracking-[-0.055em] text-balance sm:text-6xl">
-                Fitment, made clear.
+              <h2 className="mt-4 text-4xl leading-[0.92] font-medium tracking-[-0.055em] sm:mt-5 sm:text-7xl">
+                Buy the right part.
               </h2>
-              <p className="mt-6 max-w-xl text-base leading-7 text-white/48">
-                Review compatibility and requirements before purchase.
+              <p className="mt-6 max-w-md text-base leading-7 text-white/70">
+                Compatibility and requirements before checkout.
               </p>
               <Link
                 href="/garage"
-                className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#74a7ff] px-5 text-sm font-semibold text-[#07101d]"
+                className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-[#151515] transition hover:-translate-y-0.5"
               >
-                Check compatible parts <ArrowRight className="size-4" />
+                Search parts <ArrowRight className="size-4" />
               </Link>
             </div>
-            <EvidencePanel />
+            <FitmentPreview />
           </div>
         </section>
 
         <section
-          id="journey"
-          className="mx-auto w-full max-w-[1500px] px-5 py-24 sm:px-8 sm:py-32"
+          id="process"
+          className="mx-auto w-full max-w-[1500px] px-5 py-16 sm:px-8 sm:py-32"
         >
           <SectionHeading
             eyebrow="The process"
-            title="A clear path from plan to road."
-            description="Five steps. One record."
+            title="From plan to road."
+            description="Three steps. One record."
           />
-          <ol className="mt-14 grid gap-px overflow-hidden rounded-[2rem] border border-[#151713]/10 bg-[#151713]/10 md:grid-cols-5">
+          <ol className="mt-10 grid overflow-hidden rounded-[1.5rem] border border-white/10 sm:mt-14 sm:rounded-[2rem] md:grid-cols-3">
             {[
-              ["01", "Add your car", "Capture the exact specification."],
-              ["02", "Review its condition", "Set the maintenance baseline."],
-              ["03", "Plan the build", "Define stages and budget."],
-              ["04", "Select parts", "Confirm compatibility."],
-              ["05", "Complete the work", "Record every change."],
+              ["01", "Add your car", "Capture its exact specification."],
+              ["02", "Plan the build", "Set stages, budget and priorities."],
+              ["03", "Complete the work", "Install, verify and record."],
             ].map(([number, title, description]) => (
               <li
                 key={number}
-                className="flex min-h-72 flex-col bg-[#f4f1e9] p-6 sm:p-7"
+                className="group flex min-h-48 flex-col border-t border-white/10 bg-[#111111] p-6 transition duration-300 first:border-t-0 hover:bg-[#171111] sm:min-h-64 sm:p-7 md:border-t-0 md:border-l md:first:border-l-0"
               >
-                <span className="text-xs text-[#3978d9]">{number}</span>
-                <h3 className="mt-auto text-xl font-medium tracking-[-0.025em]">
-                  {title}
-                </h3>
-                <p className="mt-3 text-sm leading-6 text-[#151713]/45">
-                  {description}
-                </p>
+                <span className="text-xs font-semibold tracking-[0.14em] text-[#ff667a]">
+                  {number}
+                </span>
+                <div className="mt-auto">
+                  <h3 className="text-2xl font-medium tracking-[-0.035em]">
+                    {title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-6 text-white/42">
+                    {description}
+                  </p>
+                </div>
               </li>
             ))}
           </ol>
         </section>
 
         <section className="px-5 pb-5 sm:px-8 sm:pb-8">
-          <div className="relative mx-auto min-h-[560px] max-w-[1500px] overflow-hidden rounded-[2.5rem] bg-[#3978d9] px-6 py-16 text-white sm:px-12 sm:py-20 lg:px-20">
-            <div className="absolute -top-48 -right-36 size-[520px] rounded-full border border-white/20" />
-            <div className="absolute -right-16 -bottom-72 size-[620px] rounded-full border border-white/15" />
-            <div className="relative z-10 flex min-h-[400px] max-w-4xl flex-col justify-between">
-              <Sparkles className="size-7" />
+          <div className="relative mx-auto min-h-[330px] max-w-[1500px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#121212] px-6 py-10 sm:min-h-[430px] sm:rounded-[2.5rem] sm:px-12 sm:py-14 lg:px-20">
+            <div className="absolute top-0 right-0 h-full w-1/2 bg-[radial-gradient(circle_at_center,rgba(231,45,69,0.22),transparent_65%)]" />
+            <div className="relative z-10 flex min-h-[250px] max-w-4xl flex-col justify-between sm:min-h-[320px]">
+              <span className="h-1 w-16 rounded-full bg-[#e72d45]" />
               <div>
-                <h2 className="text-5xl leading-[0.92] font-medium tracking-[-0.06em] text-balance sm:text-7xl lg:text-8xl">
+                <h2 className="text-4xl leading-[0.94] font-medium tracking-[-0.055em] sm:text-7xl sm:tracking-[-0.06em] lg:text-8xl">
                   Plan the next version.
                 </h2>
-                <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                  <Link
-                    href="/garage"
-                    className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-white px-6 text-sm font-semibold text-[#245da9]"
-                  >
-                    Start your build <ArrowRight className="size-4" />
-                  </Link>
-                  <span className="inline-flex min-h-13 items-center justify-center rounded-xl border border-white/25 px-6 text-sm text-white/72">
-                    Private beta
-                  </span>
-                </div>
+                <Link
+                  href="/garage"
+                  className="mt-8 inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-[#e72d45] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#f43f57]"
+                >
+                  Open Capcar <ArrowRight className="size-4" />
+                </Link>
               </div>
             </div>
           </div>
@@ -162,145 +167,14 @@ export function MarketingLanding() {
 
       <footer className="mx-auto flex max-w-[1500px] flex-col justify-between gap-7 px-5 py-12 sm:flex-row sm:items-center sm:px-8">
         <CapcarWordmark />
-        <p className="max-w-xl text-xs leading-5 text-[#151713]/38">
-          Vehicle and build planning in one place. Confirm fitment, safety
-          requirements and legal approval before installation.
+        <p className="max-w-xl text-xs leading-5 text-white/32">
+          Confirm fitment, safety requirements and legal approval before
+          installation.
         </p>
-        <Link href="/garage" className="text-sm font-medium">
+        <Link href="/garage" className="text-sm font-medium text-white/70">
           Garage →
         </Link>
       </footer>
-    </div>
-  );
-}
-
-function CinematicHero() {
-  return (
-    <section className="relative min-h-[100svh] overflow-hidden bg-[#070a09] text-white">
-      <Image
-        src="/capcar-hero-bmw-garage.png"
-        alt="Black BMW E90 project car inside a private garage"
-        fill
-        priority
-        sizes="100vw"
-        className="hidden object-cover object-center sm:block"
-      />
-      <Image
-        src="/capcar-hero-bmw-garage-mobile.png"
-        alt="Black BMW E90 project car inside a private garage"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center sm:hidden"
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,7,0.88)_0%,rgba(5,8,7,0.62)_34%,rgba(5,8,7,0.18)_68%,rgba(5,8,7,0.05)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,8,7,0.96)_0%,transparent_42%,rgba(5,8,7,0.42)_100%)]" />
-
-      <header className="relative z-20 mx-auto flex h-20 w-full max-w-[1500px] items-center justify-between px-5 sm:px-8">
-        <Link
-          href="/"
-          aria-label="Capcar home"
-          className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#74a7ff]"
-        >
-          <CapcarWordmark />
-        </Link>
-        <nav
-          aria-label="Main navigation"
-          className="hidden items-center gap-8 text-sm text-white/55 md:flex"
-        >
-          <a className="transition hover:text-white" href="#product">
-            Explore
-          </a>
-          <a className="transition hover:text-white" href="#difference">
-            Why Capcar
-          </a>
-          <a className="transition hover:text-white" href="#journey">
-            The process
-          </a>
-        </nav>
-        <Link
-          href="/garage"
-          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/18 bg-black/20 px-4 text-sm font-medium text-white backdrop-blur-xl transition hover:border-white/35 hover:bg-white/10"
-        >
-          Open garage <ArrowRight className="size-4" />
-        </Link>
-      </header>
-
-      <div className="relative z-10 mx-auto flex min-h-[calc(100svh-5rem)] w-full max-w-[1500px] flex-col justify-center px-5 pt-16 pb-64 sm:px-8 sm:pb-40">
-        <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-black/20 px-3 py-1.5 text-xs text-white/55 backdrop-blur-xl">
-          <span className="size-1.5 rounded-full bg-[#74a7ff] shadow-[0_0_14px_#74a7ff]" />
-          Plan. Source. Build.
-        </div>
-        <h1 className="mt-7 max-w-[950px] text-[clamp(3.5rem,9vw,9.4rem)] leading-[0.82] font-medium tracking-[-0.078em] text-balance">
-          Build with clarity.
-          <br />
-          <span className="text-white/42">Drive with confidence.</span>
-        </h1>
-        <p className="mt-8 max-w-lg text-base leading-7 text-white/55 sm:text-lg">
-          Manage your car, parts and projects in one place.
-        </p>
-        <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-          <Link
-            href="/garage"
-            className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-[#74a7ff] px-6 text-sm font-semibold text-[#07101d] shadow-[0_18px_50px_rgba(116,167,255,0.24)] transition hover:-translate-y-0.5 hover:bg-[#8ab7ff]"
-          >
-            Open Capcar <ArrowRight className="size-4" />
-          </Link>
-          <a
-            href="#product"
-            className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-white/16 bg-black/20 px-6 text-sm text-white/72 backdrop-blur-xl transition hover:bg-white/10"
-          >
-            Explore the platform <ArrowDown className="size-4" />
-          </a>
-        </div>
-      </div>
-
-      <div className="absolute right-5 bottom-5 left-5 z-10 mx-auto grid max-w-[1436px] overflow-hidden rounded-2xl border border-white/10 bg-black/35 backdrop-blur-2xl sm:right-8 sm:bottom-8 sm:left-8 sm:grid-cols-3">
-        <HeroMetric
-          icon={CircleGauge}
-          label="Maintain"
-          value="Service on schedule"
-        />
-        <HeroMetric icon={Layers3} label="Plan" value="Define every stage" />
-        <HeroMetric
-          icon={ShoppingBag}
-          label="Source"
-          value="Compare compatible parts"
-        />
-      </div>
-    </section>
-  );
-}
-
-function HeroMetric({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: typeof CircleGauge;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="flex items-center gap-4 border-white/10 p-4 sm:border-l sm:p-5 sm:first:border-l-0">
-      <span className="grid size-10 shrink-0 place-items-center rounded-full border border-[#74a7ff]/25 bg-[#74a7ff]/10 text-[#9bc0ff]">
-        <Icon className="size-4" />
-      </span>
-      <div>
-        <p className="text-[10px] tracking-[0.14em] text-white/35 uppercase">
-          {label}
-        </p>
-        <p className="mt-1 text-sm font-medium text-white/76">{value}</p>
-      </div>
-    </div>
-  );
-}
-
-function Signal({ number, label }: { number: string; label: string }) {
-  return (
-    <div className="flex items-center gap-4 py-5 md:px-6 first:md:pl-0">
-      <span className="text-xs text-[#3978d9]">{number}</span>
-      <span className="text-sm text-[#151713]/52">{label}</span>
     </div>
   );
 }
@@ -315,85 +189,68 @@ function SectionHeading({
   description: string;
 }) {
   return (
-    <div className="grid gap-7 lg:grid-cols-[1fr_0.7fr] lg:items-end">
+    <div className="grid gap-7 lg:grid-cols-[1fr_0.55fr] lg:items-end">
       <div>
-        <p className="text-xs font-semibold tracking-[0.18em] text-[#3978d9] uppercase">
+        <p className="text-xs font-semibold tracking-[0.2em] text-[#ff667a] uppercase">
           {eyebrow}
         </p>
-        <h2 className="mt-5 max-w-4xl text-4xl leading-[0.98] font-medium tracking-[-0.055em] text-balance sm:text-6xl">
+        <h2 className="mt-4 max-w-4xl text-4xl leading-[0.94] font-medium tracking-[-0.055em] sm:mt-5 sm:text-7xl sm:leading-[0.92] sm:tracking-[-0.06em]">
           {title}
         </h2>
       </div>
-      <p className="max-w-xl text-base leading-7 text-[#151713]/48 lg:justify-self-end">
+      <p className="text-base leading-7 text-white/42 lg:justify-self-end">
         {description}
       </p>
     </div>
   );
 }
 
-function FeatureCard({
-  className,
+function CardLabel({
   icon: Icon,
-  eyebrow,
-  title,
-  description,
-  visual,
+  children,
 }: {
-  className: string;
   icon: typeof CircleGauge;
-  eyebrow: string;
-  title: string;
-  description: string;
-  visual: React.ReactNode;
+  children: React.ReactNode;
 }) {
   return (
-    <article
-      className={`overflow-hidden rounded-[2rem] border border-[#151713]/10 bg-white/42 ${className}`}
-    >
-      <div className="p-6 sm:p-8">
-        <div className="flex items-center gap-2 text-xs tracking-[0.14em] text-[#3978d9] uppercase">
-          <Icon className="size-4" /> {eyebrow}
-        </div>
-        <h3 className="mt-8 max-w-xl text-2xl font-medium tracking-[-0.035em] sm:text-3xl">
-          {title}
-        </h3>
-        <p className="mt-4 max-w-xl text-sm leading-6 text-[#151713]/45">
-          {description}
-        </p>
-      </div>
-      <div className="px-4 pb-4 sm:px-6 sm:pb-6">{visual}</div>
-    </article>
+    <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+      <Icon className="size-4" /> {children}
+    </div>
   );
 }
 
-function GarageVisual() {
+function GaragePreview() {
   return (
-    <div className="relative min-h-64 overflow-hidden rounded-2xl bg-[#0b0e0c] p-5 text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_45%,rgba(116,167,255,0.25),transparent_32%)]" />
-      <p className="relative text-xs text-white/35">PROJECT 318</p>
-      <div className="absolute right-[10%] bottom-[22%] left-[10%] h-20 rounded-[50%] bg-[#74a7ff]/14 blur-3xl" />
-      <div className="absolute right-5 bottom-5 left-5 flex items-end justify-between">
+    <div className="mt-9 rounded-2xl border border-white/8 bg-[#090909] p-5">
+      <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs text-white/35">2011 BMW</p>
-          <p className="mt-1 text-xl font-medium">318i · E90</p>
+          <p className="text-xs text-white/34">PROJECT 318</p>
+          <p className="mt-2 text-xl font-medium">2011 BMW 318i</p>
         </div>
-        <p className="text-sm text-white/45">148,200 km</p>
+        <span className="rounded-full border border-[#e72d45]/30 bg-[#e72d45]/10 px-3 py-1.5 text-xs text-[#ff7a8c]">
+          Active
+        </span>
+      </div>
+      <div className="mt-8 grid grid-cols-3 divide-x divide-white/8">
+        <PreviewStat label="Platform" value="E90" />
+        <PreviewStat label="Mileage" value="148,200" />
+        <PreviewStat label="Builds" value="1 active" />
       </div>
     </div>
   );
 }
 
-function MaintenanceVisual() {
+function MaintenancePreview() {
   return (
-    <div className="space-y-2 rounded-2xl bg-[#ebe7dd] p-4">
+    <div className="mt-9 space-y-2">
       {[
-        ["Brake fluid", "Due now", "text-red-600"],
-        ["Engine oil", "Due soon", "text-amber-600"],
-        ["Cabin filter", "Up to date", "text-emerald-700"],
+        ["Brake fluid", "Due now", "text-[#ff667a]"],
+        ["Engine oil", "1,800 km", "text-amber-300"],
+        ["Cabin filter", "Complete", "text-emerald-300"],
       ].map(([name, state, color]) => (
         <div
           key={name}
-          className="flex items-center justify-between rounded-xl bg-[#f8f6f0] p-4"
+          className="flex items-center justify-between rounded-xl border border-white/8 bg-[#090909] p-4"
         >
           <span className="text-sm font-medium">{name}</span>
           <span className={`text-xs ${color}`}>{state}</span>
@@ -403,61 +260,76 @@ function MaintenanceVisual() {
   );
 }
 
-function BuildVisual() {
+function BuildPreview() {
   return (
-    <div className="rounded-2xl bg-[#ebe7dd] p-4">
+    <div className="mt-9 rounded-2xl border border-white/8 bg-[#090909] p-5">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">Stealth Rear</span>
-        <span className="text-xs text-[#151713]/35">67%</span>
+        <span className="font-medium">Stealth Rear</span>
+        <span className="text-xs text-white/36">Planning</span>
       </div>
-      <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#151713]/8">
-        <div className="h-full w-2/3 rounded-full bg-[#3978d9]" />
+      <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/8">
+        <div className="h-full w-2/3 rounded-full bg-[#e72d45]" />
       </div>
-      <div className="mt-5 grid grid-cols-2 gap-2">
-        <MiniStat label="Budget" value="€1,200" />
-        <MiniStat label="Planned" value="€804" />
-      </div>
-    </div>
-  );
-}
-
-function PartsVisual() {
-  return (
-    <div className="grid gap-2 rounded-2xl bg-[#ebe7dd] p-4 sm:grid-cols-2">
-      <div className="rounded-xl bg-[#f8f6f0] p-4">
-        <BadgeCheck className="size-4 text-emerald-700" />
-        <p className="mt-8 text-xs text-[#151713]/40">Platform</p>
-        <p className="mt-1 text-sm font-medium">E90 matches</p>
-      </div>
-      <div className="rounded-xl bg-[#f8f6f0] p-4">
-        <ShieldCheck className="size-4 text-amber-600" />
-        <p className="mt-8 text-xs text-[#151713]/40">Still verify</p>
-        <p className="mt-1 text-sm font-medium">Connector + approval</p>
+      <div className="mt-7 grid grid-cols-2 gap-2">
+        <PreviewStat label="Budget" value="€1,200" />
+        <PreviewStat label="Planned" value="€804" />
       </div>
     </div>
   );
 }
 
-function MiniStat({ label, value }: { label: string; value: string }) {
+function PartsPreview() {
   return (
-    <div className="rounded-xl bg-[#f8f6f0] p-3">
-      <p className="text-[10px] tracking-[0.1em] text-[#151713]/35 uppercase">
+    <div className="mt-9 grid gap-3 sm:grid-cols-2">
+      <div className="rounded-2xl border border-white/8 bg-[#090909] p-5">
+        <BadgeCheck className="size-5 text-emerald-300" />
+        <p className="mt-8 text-xs text-white/34">Vehicle match</p>
+        <p className="mt-2 font-medium">E90 · 2011 · Sedan</p>
+      </div>
+      <div className="rounded-2xl border border-white/8 bg-[#090909] p-5">
+        <Euro className="size-5 text-[#ff667a]" />
+        <p className="mt-8 text-xs text-white/34">Delivered from</p>
+        <p className="mt-2 font-medium">€248</p>
+      </div>
+    </div>
+  );
+}
+
+function PhotoDetail({
+  src,
+  alt,
+  label,
+}: {
+  src: string;
+  alt: string;
+  label: string;
+}) {
+  return (
+    <figure className="group relative h-64 w-[78vw] shrink-0 snap-center overflow-hidden rounded-2xl bg-[#111111] sm:h-96 sm:w-auto">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(min-width: 640px) 33vw, 100vw"
+        className="object-cover transition duration-700 ease-out group-hover:scale-[1.035]"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-transparent to-transparent" />
+      <figcaption className="absolute right-5 bottom-5 left-5 text-sm font-medium">
         {label}
-      </p>
-      <p className="mt-1 text-sm font-medium">{value}</p>
-    </div>
+      </figcaption>
+    </figure>
   );
 }
 
-function EvidencePanel() {
+function FitmentPreview() {
   return (
-    <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#121713]">
+    <div className="overflow-hidden rounded-[2rem] border border-black/15 bg-[#111111] text-white shadow-[0_30px_100px_rgba(40,0,7,0.25)]">
       <div className="flex items-center justify-between border-b border-white/8 p-6">
         <div>
-          <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
-            Fitment evidence
+          <p className="text-xs tracking-[0.14em] text-white/34 uppercase">
+            Dark-red rear lamps
           </p>
-          <p className="mt-2 font-medium">Dark-red rear lamp set</p>
+          <p className="mt-2 font-medium">Fitment evidence</p>
         </div>
         <span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1.5 text-xs text-amber-200">
           Conditional
@@ -468,14 +340,14 @@ function EvidencePanel() {
           ["Platform", "E90", true],
           ["Year", "2011", true],
           ["Body", "Sedan", true],
-          ["Connector", "Needs confirmation", false],
+          ["Connector", "Confirm", false],
         ].map(([label, value, matched]) => (
           <div
             key={String(label)}
-            className="grid grid-cols-[110px_1fr_auto] items-center gap-4 p-5"
+            className="grid grid-cols-[100px_1fr_auto] items-center gap-4 p-5"
           >
-            <span className="text-xs text-white/30">{label}</span>
-            <span className="text-sm text-white/65">{value}</span>
+            <span className="text-xs text-white/32">{label}</span>
+            <span className="text-sm text-white/68">{value}</span>
             {matched ? (
               <Check className="size-4 text-emerald-300" />
             ) : (
@@ -484,31 +356,17 @@ function EvidencePanel() {
           </div>
         ))}
       </div>
-      <div className="grid gap-px bg-white/8 sm:grid-cols-3">
-        <PanelStat icon={Euro} label="Price" value="Compare offers" />
-        <PanelStat icon={Wrench} label="Install" value="Moderate" />
-        <PanelStat icon={ShieldCheck} label="Approval" value="Unverified" />
-      </div>
     </div>
   );
 }
 
-function PanelStat({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: typeof Euro;
-  label: string;
-  value: string;
-}) {
+function PreviewStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-[#121713] p-5">
-      <Icon className="size-4 text-[#8ab7ff]" />
-      <p className="mt-5 text-[10px] tracking-[0.12em] text-white/28 uppercase">
+    <div className="px-4 first:pl-0 last:pr-0">
+      <p className="text-[10px] tracking-[0.11em] text-white/30 uppercase">
         {label}
       </p>
-      <p className="mt-1 text-sm text-white/65">{value}</p>
+      <p className="mt-2 text-sm font-medium">{value}</p>
     </div>
   );
 }

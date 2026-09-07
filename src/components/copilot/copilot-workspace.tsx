@@ -108,16 +108,16 @@ export function CopilotWorkspace({ vehicleId }: { vehicleId: string }) {
       >
         <ArrowLeft className="size-4" /> Vehicle overview
       </Link>
-      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(116,167,255,0.22),transparent_30%),#111512] p-6 sm:p-10">
+      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(231,45,69,0.22),transparent_30%),#111111] p-6 sm:p-10">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#74a7ff]/25 bg-[#74a7ff]/10 px-3 py-1.5 text-[10px] text-[#bad1ff] uppercase">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#e72d45]/25 bg-[#e72d45]/10 px-3 py-1.5 text-[10px] text-[#bad1ff] uppercase">
             <Bot className="size-3" /> Capcar rules copilot
           </span>
           <span className="rounded-full border border-amber-300/20 bg-amber-300/8 px-3 py-1.5 text-[10px] text-amber-100/65 uppercase">
             No external AI active
           </span>
         </div>
-        <p className="mt-7 text-xs font-semibold tracking-[0.14em] text-[#8ab7ff] uppercase">
+        <p className="mt-7 text-xs font-semibold tracking-[0.14em] text-[#ff667a] uppercase">
           Epic 18 · Project-car copilot
         </p>
         <h1 className="mt-3 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
@@ -130,7 +130,7 @@ export function CopilotWorkspace({ vehicleId }: { vehicleId: string }) {
       </header>
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[0.75fr_1.25fr]">
-        <aside className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <aside className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
             Ask Capcar
           </p>
@@ -139,13 +139,13 @@ export function CopilotWorkspace({ vehicleId }: { vehicleId: string }) {
             onChange={(event) => setMessage(event.target.value)}
             rows={6}
             placeholder="I want better handling but still use the car every day…"
-            className="mt-4 w-full resize-none rounded-2xl border border-white/10 bg-[#0d110f] p-4 text-sm leading-6 text-white/70 outline-none placeholder:text-white/25 focus:border-[#74a7ff]/50"
+            className="mt-4 w-full resize-none rounded-2xl border border-white/10 bg-[#0d0d0d] p-4 text-sm leading-6 text-white/70 outline-none placeholder:text-white/25 focus:border-[#e72d45]/50"
           />
           <button
             type="button"
             disabled={loading || message.trim().length < 2}
             onClick={() => submit()}
-            className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-4 text-sm font-semibold text-[#07101d] disabled:opacity-40"
+            className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d] disabled:opacity-40"
           >
             {loading ? (
               <LoaderCircle className="size-4 animate-spin" />
@@ -172,7 +172,7 @@ export function CopilotWorkspace({ vehicleId }: { vehicleId: string }) {
           </div>
         </aside>
 
-        <article className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           {response ? (
             <>
               <div className="flex items-center justify-between gap-4">

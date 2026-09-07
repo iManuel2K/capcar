@@ -106,7 +106,7 @@ export function BuildDetail({
         <p className="text-white/45">Build not found.</p>
         <Link
           href={`/garage/${vehicleId}/builds`}
-          className="mt-5 inline-flex rounded-xl bg-[#74a7ff] px-5 py-3 text-sm font-semibold text-[#07101d]"
+          className="mt-5 inline-flex rounded-xl bg-[#e72d45] px-5 py-3 text-sm font-semibold text-[#07101d]"
         >
           Return to builds
         </Link>
@@ -161,11 +161,11 @@ export function BuildDetail({
         <ArrowLeft className="size-4" /> All builds
       </Link>
 
-      <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-9 lg:p-12">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_25%,rgba(116,167,255,0.18),transparent_30%)]" />
+      <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-9 lg:p-12">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_25%,rgba(231,45,69,0.18),transparent_30%)]" />
         <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
-            <p className="text-xs font-semibold tracking-[0.16em] text-[#8ab7ff] uppercase">
+            <p className="text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
               {build.goal} · {vehicle.productionYear} BMW {vehicle.model}
             </p>
             <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-7xl">
@@ -185,7 +185,7 @@ export function BuildDetail({
                   key={status}
                   type="button"
                   onClick={() => changeBuildStatus(status)}
-                  className={`rounded-full border px-3.5 py-2 text-xs capitalize ${build.status === status ? "border-[#74a7ff]/50 bg-[#74a7ff]/12 text-[#bad1ff]" : "border-white/10 text-white/40"}`}
+                  className={`rounded-full border px-3.5 py-2 text-xs capitalize ${build.status === status ? "border-[#e72d45]/50 bg-[#e72d45]/12 text-[#bad1ff]" : "border-white/10 text-white/40"}`}
                 >
                   {status.replace("_", " ")}
                 </button>
@@ -222,9 +222,9 @@ export function BuildDetail({
       <section className="mt-5 grid gap-4 sm:grid-cols-2">
         <Link
           href={`/garage/${vehicleId}/builds/${buildId}/visualize`}
-          className="group rounded-[2rem] border border-white/10 bg-[#111512] p-6 transition hover:border-[#74a7ff]/35"
+          className="group rounded-[2rem] border border-white/10 bg-[#111111] p-6 transition hover:border-[#e72d45]/35"
         >
-          <Eye className="size-5 text-[#8ab7ff]" />
+          <Eye className="size-5 text-[#ff667a]" />
           <h2 className="mt-5 text-xl font-medium">Visualize this build</h2>
           <p className="mt-2 text-sm leading-6 text-white/40">
             Compare the current baseline with a saved stylized concept.
@@ -232,9 +232,9 @@ export function BuildDetail({
         </Link>
         <Link
           href={`/garage/${vehicleId}/builds/${buildId}/compatibility`}
-          className="group rounded-[2rem] border border-white/10 bg-[#111512] p-6 transition hover:border-[#74a7ff]/35"
+          className="group rounded-[2rem] border border-white/10 bg-[#111111] p-6 transition hover:border-[#e72d45]/35"
         >
-          <ShieldCheck className="size-5 text-[#8ab7ff]" />
+          <ShieldCheck className="size-5 text-[#ff667a]" />
           <h2 className="mt-5 text-xl font-medium">Check compatibility</h2>
           <p className="mt-2 text-sm leading-6 text-white/40">
             Surface fitment gaps, dependencies and part interactions.
@@ -242,7 +242,7 @@ export function BuildDetail({
         </Link>
       </section>
 
-      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111512] p-5 sm:p-7">
+      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-7">
         <div className="flex items-center justify-between gap-5">
           <div>
             <p className="text-xs tracking-[0.12em] text-white/30 uppercase">
@@ -259,7 +259,7 @@ export function BuildDetail({
         </div>
         <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/8">
           <div
-            className="h-full rounded-full bg-[#74a7ff] transition-all"
+            className="h-full rounded-full bg-[#e72d45] transition-all"
             style={{ width: `${metrics.progress}%` }}
           />
         </div>
@@ -267,7 +267,7 @@ export function BuildDetail({
 
       <div className="mt-5 flex items-center justify-between gap-5">
         <div>
-          <p className="text-xs tracking-[0.14em] text-[#8ab7ff] uppercase">
+          <p className="text-xs tracking-[0.14em] text-[#ff667a] uppercase">
             Roadmap
           </p>
           <h2 className="mt-2 text-2xl font-medium tracking-[-0.025em]">
@@ -277,7 +277,7 @@ export function BuildDetail({
         <button
           type="button"
           onClick={() => setAdding(true)}
-          className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl bg-[#74a7ff] px-4 text-sm font-semibold text-[#07101d]"
+          className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d]"
         >
           <Plus className="size-4" /> Add modification
         </button>
@@ -286,7 +286,7 @@ export function BuildDetail({
       {adding && (
         <form
           onSubmit={submitItem}
-          className="mt-5 rounded-[2rem] border border-[#74a7ff]/25 bg-[#121813] p-5 sm:p-7"
+          className="mt-5 rounded-[2rem] border border-[#e72d45]/25 bg-[#121813] p-5 sm:p-7"
         >
           <div className="flex items-center justify-between">
             <div>
@@ -371,7 +371,7 @@ export function BuildDetail({
           <div className="mt-5 flex justify-end">
             <button
               type="submit"
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#74a7ff] px-5 text-sm font-semibold text-[#07101d]"
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]"
             >
               <Check className="size-4" /> Add to roadmap
             </button>
@@ -387,11 +387,11 @@ export function BuildDetail({
           return (
             <article
               key={stage}
-              className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#111512]"
+              className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]"
             >
               <header className="flex items-start justify-between gap-4 border-b border-white/8 p-5 sm:p-7">
                 <div>
-                  <p className="text-xs text-[#8ab7ff]">{content.number}</p>
+                  <p className="text-xs text-[#ff667a]">{content.number}</p>
                   <h3 className="mt-2 text-xl font-medium">{content.title}</h3>
                   <p className="mt-1 text-sm text-white/35">
                     {content.description}
@@ -432,7 +432,7 @@ export function BuildDetail({
                             event.target.value as BuildItemStatus,
                           )
                         }
-                        className="min-h-10 rounded-xl border border-white/10 bg-[#0d110f] px-3 text-xs text-white/65 capitalize outline-none"
+                        className="min-h-10 rounded-xl border border-white/10 bg-[#0d0d0d] px-3 text-xs text-white/65 capitalize outline-none"
                       >
                         {buildItemStatuses.map((status) => (
                           <option key={status}>{status}</option>
@@ -452,8 +452,8 @@ export function BuildDetail({
         })}
       </section>
 
-      <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-[#74a7ff]/15 bg-[#74a7ff]/6 p-5 text-sm leading-6 text-white/40">
-        <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#8ab7ff]" />
+      <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/40">
+        <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#ff667a]" />
         <p>
           This is a planning roadmap. “Planned” does not mean compatible,
           road-legal or safe. Epic 07 will introduce structured part and fitment
@@ -465,7 +465,7 @@ export function BuildDetail({
 }
 
 const inputClass =
-  "mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-[#0d110f] px-3 text-sm text-white outline-none placeholder:text-white/25 focus:border-[#74a7ff]/60";
+  "mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-3 text-sm text-white outline-none placeholder:text-white/25 focus:border-[#e72d45]/60";
 
 function Field({
   label,
@@ -499,11 +499,11 @@ function MetricCard({
   warning?: boolean;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#111512] p-5">
+    <div className="rounded-2xl border border-white/10 bg-[#111111] p-5">
       <div className="flex items-center justify-between">
         <p className="text-sm text-white/40">{label}</p>
         <Icon
-          className={`size-4 ${warning ? "text-red-200" : "text-[#8ab7ff]"}`}
+          className={`size-4 ${warning ? "text-red-200" : "text-[#ff667a]"}`}
         />
       </div>
       <p

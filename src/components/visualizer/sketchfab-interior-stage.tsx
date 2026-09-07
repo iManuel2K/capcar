@@ -92,9 +92,6 @@ export function SketchfabInteriorStage({
 
   useEffect(() => {
     let cancelled = false;
-    setPresets(
-      loadInteriorCameraPresets(reference.modelUid, window.localStorage),
-    );
 
     void loadViewerScript()
       .then(() => {
@@ -104,7 +101,7 @@ export function SketchfabInteriorStage({
           autostart: 1,
           preload: 1,
           ui_theme: "dark",
-          ui_color: "74A7FF",
+          ui_color: "E72D45",
           ui_infos: 0,
           transparent: 0,
           success(api: ViewerApi) {
@@ -202,13 +199,13 @@ export function SketchfabInteriorStage({
   }
 
   return (
-    <section className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#090c0d] shadow-[0_24px_80px_rgba(0,0,0,0.34)]">
-      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-white/8 bg-[#090c0d] px-4 py-3 sm:px-5">
+    <section className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#090909] shadow-[0_24px_80px_rgba(0,0,0,0.34)]">
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-white/8 bg-[#090909] px-4 py-3 sm:px-5">
         <div className="flex items-center gap-2 text-sm text-white/65">
-          <Armchair className="size-4 text-[#8ab7ff]" />
+          <Armchair className="size-4 text-[#ff667a]" />
           <span>{reference.title} · interactive cabin</span>
         </div>
-        <span className="rounded-full border border-[#74a7ff]/20 bg-[#74a7ff]/10 px-3 py-1 text-xs text-[#b6ceff]">
+        <span className="rounded-full border border-[#e72d45]/20 bg-[#e72d45]/10 px-3 py-1 text-xs text-[#ff8a9a]">
           Real model interior
         </span>
       </header>
@@ -222,7 +219,7 @@ export function SketchfabInteriorStage({
           className="absolute inset-0 h-full w-full border-0"
         />
         {status !== "ready" && (
-          <div className="pointer-events-none absolute inset-0 grid place-items-center bg-[#090c0d]/85 text-sm text-white/45">
+          <div className="pointer-events-none absolute inset-0 grid place-items-center bg-[#090909]/85 text-sm text-white/45">
             {status === "loading"
               ? "Loading interactive cabin…"
               : "Cabin unavailable"}
@@ -230,7 +227,7 @@ export function SketchfabInteriorStage({
         )}
       </div>
 
-      <div className="border-t border-white/8 bg-[#090c0d] p-4 sm:p-5">
+      <div className="border-t border-white/8 bg-[#090909] p-4 sm:p-5">
         <div className="flex flex-wrap gap-2">
           {interiorCameraNames.map((name) => (
             <button
@@ -238,7 +235,7 @@ export function SketchfabInteriorStage({
               type="button"
               disabled={status !== "ready"}
               onClick={() => recallPreset(name)}
-              className={`inline-flex min-h-10 items-center gap-2 rounded-xl border px-3.5 text-sm disabled:opacity-40 ${activePreset === name ? "border-[#74a7ff]/45 bg-[#74a7ff]/12 text-[#bad1ff]" : "border-white/10 text-white/55"}`}
+              className={`inline-flex min-h-10 items-center gap-2 rounded-xl border px-3.5 text-sm disabled:opacity-40 ${activePreset === name ? "border-[#e72d45]/45 bg-[#e72d45]/12 text-[#bad1ff]" : "border-white/10 text-white/55"}`}
             >
               <Camera className="size-3.5" />
               {labels[name]}
@@ -256,7 +253,7 @@ export function SketchfabInteriorStage({
             type="button"
             disabled={status !== "ready"}
             onClick={saveCurrentCamera}
-            className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#74a7ff] px-4 text-sm font-semibold text-[#07101d] disabled:opacity-40"
+            className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d] disabled:opacity-40"
           >
             <Save className="size-4" /> Save as {labels[activePreset]}
           </button>
@@ -277,7 +274,7 @@ export function SketchfabInteriorStage({
           aria-live="polite"
           className="mt-3 flex items-start gap-2 text-xs leading-5 text-white/40"
         >
-          <BadgeInfo className="mt-0.5 size-3.5 shrink-0 text-[#8ab7ff]" />{" "}
+          <BadgeInfo className="mt-0.5 size-3.5 shrink-0 text-[#ff667a]" />{" "}
           {message}
         </p>
       </div>

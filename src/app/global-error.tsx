@@ -22,7 +22,7 @@ export default function GlobalError({
           <button
             type="button"
             onClick={reset}
-            className="mt-7 rounded-xl bg-[#74a7ff] px-5 py-3 text-sm font-semibold text-[#07101d]"
+            className="mt-7 rounded-xl bg-[#e72d45] px-5 py-3 text-sm font-semibold text-[#07101d]"
           >
             Try again
           </button>

@@ -45,7 +45,7 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
         </p>
         <Link
           href="/garage"
-          className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#74a7ff] px-5 text-sm font-semibold text-[#07101d]"
+          className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]"
         >
           Return to garage <ArrowRight className="size-4" />
         </Link>
@@ -64,11 +64,11 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
         <ArrowLeft className="size-4" /> All vehicles
       </Link>
 
-      <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#111512]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_35%,rgba(116,167,255,0.12),transparent_32%)]" />
+      <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_35%,rgba(231,45,69,0.12),transparent_32%)]" />
         <div className="relative grid lg:grid-cols-[0.72fr_1.28fr]">
           <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12">
-            <div className="flex items-center gap-2 text-xs tracking-[0.14em] text-[#8ab7ff] uppercase">
+            <div className="flex items-center gap-2 text-xs tracking-[0.14em] text-[#ff667a] uppercase">
               <CheckCircle2 className="size-3.5" /> Vehicle profile ready
             </div>
             <p className="mt-10 text-sm text-white/35">
@@ -108,7 +108,7 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
       </section>
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-[1.75rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <div className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs tracking-[0.14em] text-white/35 uppercase">
@@ -133,7 +133,7 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
           </div>
         </div>
 
-        <div className="flex flex-col rounded-[1.75rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <div className="flex flex-col rounded-[1.75rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <p className="text-xs tracking-[0.14em] text-white/35 uppercase">
             Project build
           </p>
@@ -153,10 +153,10 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
         </div>
       </section>
 
-      <section className="mt-5 rounded-[1.75rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+      <section className="mt-5 rounded-[1.75rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <MapPin className="size-4 text-[#8ab7ff]" />
+            <MapPin className="size-4 text-[#ff667a]" />
             <h2 className="font-medium">Vehicle identity</h2>
           </div>
           <Link
@@ -222,7 +222,7 @@ function ComingSoon({
 
 function IdentityItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-[#111512] p-4">
+    <div className="bg-[#111111] p-4">
       <dt className="text-[11px] tracking-[0.12em] text-white/30 uppercase">
         {label}
       </dt>

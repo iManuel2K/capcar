@@ -134,11 +134,11 @@ export function OfferComparison({
         <ArrowLeft className="size-4" /> Part details
       </Link>
 
-      <header className="overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(116,167,255,0.2),transparent_28%),#111512] p-6 sm:p-10">
+      <header className="overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(231,45,69,0.2),transparent_28%),#111111] p-6 sm:p-10">
         <span className="rounded-full border border-amber-300/20 bg-amber-300/8 px-3 py-1.5 text-[11px] tracking-[0.12em] text-amber-100/70 uppercase">
           {source === "demo" ? "Fictional offers" : "External offers"}
         </span>
-        <p className="mt-8 text-xs font-semibold tracking-[0.15em] text-[#8ab7ff] uppercase">
+        <p className="mt-8 text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
           {vehicle.productionYear} BMW {vehicle.model}
         </p>
         <h1 className="mt-3 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
@@ -151,7 +151,7 @@ export function OfferComparison({
         <p className="mt-3 text-xs text-white/30">Provider: {providerName}</p>
       </header>
 
-      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111512] p-5 sm:p-7">
+      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-7">
         <div className="grid gap-4 lg:grid-cols-[1fr_auto_auto] lg:items-end">
           <label className="text-sm text-white/60">
             Add the selected offer to a build
@@ -161,7 +161,7 @@ export function OfferComparison({
                 setSelectedBuildId(event.target.value);
                 setMessage("");
               }}
-              className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d110f] px-4 text-white/70 outline-none md:min-w-80"
+              className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-4 text-white/70 outline-none md:min-w-80"
             >
               <option value="">Select a build</option>
               {builds.map((build) => (
@@ -174,7 +174,7 @@ export function OfferComparison({
           {builds.length === 0 && (
             <Link
               href={`/garage/${vehicleId}/builds/new`}
-              className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#74a7ff] px-5 text-sm font-semibold text-[#07101d]"
+              className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]"
             >
               Create a build
             </Link>
@@ -186,7 +186,7 @@ export function OfferComparison({
               onChange={(event) =>
                 setSortMode(event.target.value as typeof sortMode)
               }
-              className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d110f] px-4 text-white/70 outline-none"
+              className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-4 text-white/70 outline-none"
             >
               <option value="best">Best value</option>
               <option value="price">Lowest total</option>
@@ -214,10 +214,10 @@ export function OfferComparison({
         {sortedOffers.map((offer) => (
           <article
             key={offer.id}
-            className={`relative overflow-hidden rounded-[2rem] border bg-[#111512] p-6 ${offer.isBestValue ? "border-[#74a7ff]/45" : "border-white/10"}`}
+            className={`relative overflow-hidden rounded-[2rem] border bg-[#111111] p-6 ${offer.isBestValue ? "border-[#e72d45]/45" : "border-white/10"}`}
           >
             {offer.isBestValue && (
-              <span className="absolute top-0 right-0 rounded-bl-2xl bg-[#74a7ff] px-4 py-2 text-[11px] font-semibold text-[#07101d]">
+              <span className="absolute top-0 right-0 rounded-bl-2xl bg-[#e72d45] px-4 py-2 text-[11px] font-semibold text-[#07101d]">
                 BEST VALUE
               </span>
             )}
@@ -285,7 +285,7 @@ export function OfferComparison({
               type="button"
               disabled={!selectedBuildId}
               onClick={() => chooseOffer(offer.id)}
-              className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-4 text-sm font-semibold text-[#07101d] disabled:cursor-not-allowed disabled:opacity-35"
+              className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d] disabled:cursor-not-allowed disabled:opacity-35"
             >
               <Check className="size-4" /> Choose this offer
             </button>

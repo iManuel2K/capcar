@@ -117,7 +117,7 @@ export function InstallGuide({
         <ArrowLeft className="size-4" /> Part details
       </Link>
 
-      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(116,167,255,0.18),transparent_28%),#111512] p-6 sm:p-10">
+      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(231,45,69,0.18),transparent_28%),#111111] p-6 sm:p-10">
         <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/20 bg-amber-300/8 px-3 py-1.5 text-[11px] text-amber-100/70 uppercase">
             <FileWarning className="size-3" /> {governance.label}
@@ -128,7 +128,7 @@ export function InstallGuide({
             </span>
           )}
         </div>
-        <p className="mt-7 text-xs font-semibold tracking-[0.14em] text-[#8ab7ff] uppercase">
+        <p className="mt-7 text-xs font-semibold tracking-[0.14em] text-[#ff667a] uppercase">
           {vehicle.productionYear} BMW {vehicle.model}
         </p>
         <h1 className="mt-3 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
@@ -150,7 +150,7 @@ export function InstallGuide({
         </div>
       </header>
 
-      <section className="mt-5 grid gap-5 rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:grid-cols-[0.7fr_1.3fr] sm:p-8">
+      <section className="mt-5 grid gap-5 rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:grid-cols-[0.7fr_1.3fr] sm:p-8">
         <div>
           <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
             Trust record
@@ -189,9 +189,9 @@ export function InstallGuide({
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[0.7fr_1.3fr]">
         <aside className="space-y-5">
-          <div className="rounded-[2rem] border border-white/10 bg-[#111512] p-6">
+          <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-6">
             <h2 className="flex items-center gap-2 font-medium">
-              <Wrench className="size-4 text-[#8ab7ff]" /> Tools and preparation
+              <Wrench className="size-4 text-[#ff667a]" /> Tools and preparation
             </h2>
             <ul className="mt-5 space-y-3">
               {guide.tools.map((tool) => (
@@ -220,7 +220,7 @@ export function InstallGuide({
                 onChange={(event) =>
                   persist({ safetyAccepted: event.target.checked })
                 }
-                className="mt-1 size-4 accent-[#74a7ff]"
+                className="mt-1 size-4 accent-[#e72d45]"
               />
               I have read these demo gates and will verify the authoritative
               procedure for my exact vehicle.
@@ -228,7 +228,7 @@ export function InstallGuide({
           </div>
         </aside>
 
-        <article className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-9">
+        <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-9">
           <div className="flex items-center justify-between gap-5">
             <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
               Step {stepIndex + 1} of {guide.steps.length}
@@ -248,7 +248,7 @@ export function InstallGuide({
           </div>
           <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/8">
             <div
-              className="h-full rounded-full bg-[#74a7ff] transition-all"
+              className="h-full rounded-full bg-[#e72d45] transition-all"
               style={{
                 width: `${((stepIndex + 1) / guide.steps.length) * 100}%`,
               }}
@@ -261,7 +261,7 @@ export function InstallGuide({
             {step.instruction}
           </p>
           {current.mode === "beginner" && (
-            <div className="mt-6 rounded-2xl border border-[#74a7ff]/15 bg-[#74a7ff]/7 p-5">
+            <div className="mt-6 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/7 p-5">
               <p className="text-xs font-semibold tracking-[0.12em] text-[#9ec2ff] uppercase">
                 Beginner detail
               </p>
@@ -295,7 +295,7 @@ export function InstallGuide({
               <button
                 type="button"
                 onClick={() => setStepIndex((index) => index + 1)}
-                className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#74a7ff] px-5 text-sm font-semibold text-[#07101d]"
+                className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]"
               >
                 Next step <ArrowRight className="size-4" />
               </button>
@@ -304,7 +304,7 @@ export function InstallGuide({
                 type="button"
                 disabled={!current.safetyAccepted || completed}
                 onClick={completeStep}
-                className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#74a7ff] px-5 text-sm font-semibold text-[#07101d] disabled:cursor-not-allowed disabled:opacity-35"
+                className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d] disabled:cursor-not-allowed disabled:opacity-35"
               >
                 <Check className="size-4" />
                 {stepIndex === guide.steps.length - 1

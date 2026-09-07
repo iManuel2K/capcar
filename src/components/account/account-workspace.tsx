@@ -112,8 +112,8 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
 
   return (
     <div className="mx-auto max-w-5xl py-10 sm:py-16">
-      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(116,167,255,0.2),transparent_30%),#111512] p-6 sm:p-10">
-        <p className="text-xs font-semibold tracking-[0.15em] text-[#8ab7ff] uppercase">
+      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10">
+        <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
           Epic 03 · Account and sync
         </p>
         <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
@@ -127,9 +127,9 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
       </header>
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
-        <aside className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <aside className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <div className="flex items-center justify-between gap-3">
-            <Cloud className="size-5 text-[#8ab7ff]" />
+            <Cloud className="size-5 text-[#ff667a]" />
             <span
               className={`rounded-full border px-3 py-1.5 text-[10px] uppercase ${status.configured ? "border-emerald-300/20 bg-emerald-300/8 text-emerald-200" : "border-amber-300/20 bg-amber-300/8 text-amber-100/70"}`}
             >
@@ -151,7 +151,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
           )}
         </aside>
 
-        <article className="rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+        <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           {!status.configured ? (
             <div className="flex min-h-72 flex-col items-center justify-center text-center">
               <Cloud className="size-10 text-white/20" />
@@ -183,7 +183,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
                   type="button"
                   disabled={loading}
                   onClick={() => void uploadSnapshot()}
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-4 text-sm font-semibold text-[#07101d] disabled:opacity-40"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d] disabled:opacity-40"
                 >
                   <CloudUpload className="size-4" /> Back up local data
                 </button>
@@ -210,14 +210,14 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d110f] px-4 text-sm text-white outline-none"
+                  className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-4 text-sm text-white outline-none"
                 />
               </label>
               <button
                 type="button"
                 disabled={loading || !email.includes("@")}
                 onClick={() => void sendMagicLink()}
-                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#74a7ff] px-4 text-sm font-semibold text-[#07101d] disabled:opacity-40"
+                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d] disabled:opacity-40"
               >
                 {loading ? (
                   <LoaderCircle className="size-4 animate-spin" />

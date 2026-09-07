@@ -16,7 +16,7 @@ export function ExhaustSoundStudio({ vehicle }: { vehicle: Vehicle }) {
   useEffect(() => () => { if (local) URL.revokeObjectURL(local.url); }, [local]);
   useEffect(() => { if (audioRef.current) audioRef.current.volume = .25; }, [src]);
   function stop() { audioRef.current?.pause(); setLocal(undefined); setError(""); }
-  return <section aria-labelledby="exhaust-sound-heading" className="mt-5 rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-8">
+  return <section aria-labelledby="exhaust-sound-heading" className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
     <h2 id="exhaust-sound-heading" className="text-2xl font-medium">Exhaust sound studio</h2>
     <p className="mt-3 max-w-3xl text-sm leading-6 text-white/60">{vehicle.productionYear} BMW {vehicle.model} · {vehicle.engineCode}. Sound belongs to a complete recorded setup, not the shape or number of exhaust tips. Start at low volume; recordings cannot predict real volume or cabin drone.</p>
     <div className="mt-5 grid gap-4 sm:grid-cols-3">

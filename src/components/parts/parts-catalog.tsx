@@ -141,7 +141,7 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
         <p className="text-white/45">Vehicle not found.</p>
         <Link
           href="/garage"
-          className="mt-5 inline-flex rounded-xl bg-[#74a7ff] px-5 py-3 text-sm font-semibold text-[#07101d]"
+          className="mt-5 inline-flex rounded-xl bg-[#e72d45] px-5 py-3 text-sm font-semibold text-[#07101d]"
         >
           Return to garage
         </Link>
@@ -150,6 +150,7 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
 
   return (
     <div className="pb-24 sm:pb-0">
+      <Link href="/international-parts" className="mb-5 inline-flex rounded-xl border border-[#e72d45]/40 px-4 py-3 text-sm text-[#ff667a]">Search Germany & international offers ↗</Link>
       <Link
         href={`/garage/${vehicleId}`}
         className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
@@ -158,10 +159,10 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
         {vehicle.model}
       </Link>
 
-      <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#111512] p-6 sm:p-9 lg:p-12">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_20%,rgba(116,167,255,0.16),transparent_28%)]" />
+      <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-9 lg:p-12">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_20%,rgba(231,45,69,0.16),transparent_28%)]" />
         <div className="relative">
-          <p className="text-xs font-semibold tracking-[0.16em] text-[#8ab7ff] uppercase">
+          <p className="text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
             Parts catalogue · {source} source
           </p>
           <h1 className="mt-4 max-w-4xl text-4xl font-medium tracking-[-0.05em] text-balance sm:text-6xl">
@@ -174,7 +175,7 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
         </div>
       </header>
 
-      <section className="sticky top-20 z-30 mt-5 rounded-2xl border border-white/10 bg-[#111512]/95 p-4 shadow-xl backdrop-blur-xl sm:p-5">
+      <section className="sticky top-20 z-30 mt-5 rounded-2xl border border-white/10 bg-[#111111]/95 p-4 shadow-xl backdrop-blur-xl sm:p-5">
         <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto]">
           <label className="relative">
             <span className="sr-only">Search parts</span>
@@ -183,7 +184,7 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search lights, brakes, part number…"
-              className="min-h-12 w-full rounded-xl border border-white/10 bg-[#0d110f] pr-4 pl-11 text-sm text-white outline-none placeholder:text-white/25 focus:border-[#74a7ff]/60"
+              className="min-h-12 w-full rounded-xl border border-white/10 bg-[#0d0d0d] pr-4 pl-11 text-sm text-white outline-none placeholder:text-white/25 focus:border-[#e72d45]/60"
             />
           </label>
           <label className="relative">
@@ -194,7 +195,7 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
               onChange={(event) =>
                 setCategory(event.target.value as "All" | PartCategory)
               }
-              className="min-h-12 min-w-48 rounded-xl border border-white/10 bg-[#0d110f] pr-9 pl-11 text-sm text-white/70 outline-none"
+              className="min-h-12 min-w-48 rounded-xl border border-white/10 bg-[#0d0d0d] pr-9 pl-11 text-sm text-white/70 outline-none"
             >
               <option>All</option>
               {partCategories.map((item) => (
@@ -210,7 +211,7 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
               onChange={(event) =>
                 setFitment(event.target.value as "all" | FitmentStatus)
               }
-              className="min-h-12 min-w-52 rounded-xl border border-white/10 bg-[#0d110f] pr-9 pl-11 text-sm text-white/70 outline-none"
+              className="min-h-12 min-w-52 rounded-xl border border-white/10 bg-[#0d0d0d] pr-9 pl-11 text-sm text-white/70 outline-none"
             >
               <option value="all">All evidence states</option>
               <option value="match">Structured match</option>
@@ -302,9 +303,9 @@ function PartCard({
   return (
     <Link
       href={`/garage/${vehicleId}/parts/${part.id}`}
-      className="group overflow-hidden rounded-[2rem] border border-white/10 bg-[#111512] transition hover:-translate-y-1 hover:border-white/20"
+      className="group overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] transition hover:-translate-y-1 hover:border-white/20"
     >
-      <div className="relative min-h-52 overflow-hidden bg-[radial-gradient(circle_at_65%_45%,rgba(116,167,255,0.2),transparent_32%),#0d110f] p-6">
+      <div className="relative min-h-52 overflow-hidden bg-[radial-gradient(circle_at_65%_45%,rgba(231,45,69,0.2),transparent_32%),#0d0d0d] p-6">
         <span className="absolute top-5 left-5 rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[11px] tracking-[0.12em] text-white/40 uppercase">
           {part.category}
         </span>

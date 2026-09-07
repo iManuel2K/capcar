@@ -32,7 +32,7 @@ function LegalPage({
   return (
     <main className="min-h-dvh bg-[#0b0e0c] px-5 py-16 text-[#f4f5f2]">
       <article className="mx-auto max-w-3xl">
-        <Link href="/" className="text-sm text-[#8ab7ff]">
+        <Link href="/" className="text-sm text-[#ff667a]">
           ← Capcar
         </Link>
         <p className="mt-16 text-xs tracking-[0.14em] text-white/30 uppercase">
