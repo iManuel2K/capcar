@@ -128,26 +128,42 @@ export function MarketingHero() {
           </a>
         </nav>
         <Link
-          href="/garage"
+          href="/register"
           className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/16 bg-black/30 px-4 text-sm font-medium text-white backdrop-blur-xl transition hover:border-[#e72d45]/60 hover:bg-[#e72d45]"
         >
-          Open Capcar <ArrowRight className="size-4" />
+          Start free <ArrowRight className="size-4" />
         </Link>
       </header>
 
       <div className="pointer-events-none relative z-10 mx-auto flex min-h-[calc(100svh-5rem)] w-full max-w-[1500px] flex-col justify-start px-5 pt-10 pb-12 sm:justify-center sm:px-8 sm:pt-12 sm:pb-20">
         <div className="max-w-[790px]">
           <p className="text-xs font-semibold tracking-[0.2em] text-[#ff667a] uppercase">
-            Plan. Source. Build.
+            Your project-car workspace
           </p>
           <h1 className="mt-5 text-[clamp(3rem,14vw,8.5rem)] leading-[0.86] font-medium tracking-[-0.072em] text-balance sm:mt-6 sm:text-[clamp(3.7rem,8.2vw,8.5rem)] sm:leading-[0.84]">
-            Build with clarity.
-            <span className="mt-2 block text-white/44">
-              Drive with confidence.
-            </span>
+            Build the car
+            <span className="mt-2 block text-white/44">you planned.</span>
           </h1>
-          <p className="mt-5 max-w-md text-base leading-6 text-white/58 sm:mt-7 sm:text-lg sm:leading-7">
-            Your car, parts and projects. One place.
+          <p className="mt-5 max-w-xl text-base leading-6 text-white/60 sm:mt-7 sm:text-lg sm:leading-7">
+            Visualize upgrades, verify fitment, compare total cost and keep
+            every install in one garage.
+          </p>
+          <div className="pointer-events-auto mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link
+              href="/register"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#e72d45] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#f43f57]"
+            >
+              Start your garage — free <ArrowRight className="size-4" />
+            </Link>
+            <a
+              href="#live-demo"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/16 bg-black/28 px-6 text-sm font-medium text-white/78 backdrop-blur-xl transition hover:border-white/30 hover:text-white"
+            >
+              Try live demo
+            </a>
+          </div>
+          <p className="mt-3 text-xs text-white/38">
+            Set up in 30 seconds · No credit card required
           </p>
         </div>
       </div>

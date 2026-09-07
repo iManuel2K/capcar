@@ -7,19 +7,31 @@ describe("MarketingLanding", () => {
   it("states the product direction", () => {
     render(<MarketingLanding />);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      /build with clarity/i,
+      /build the car.*you planned/i,
     );
     expect(screen.getByText("Buy the right part.")).toBeInTheDocument();
+    expect(screen.getByText("€804 spent")).toBeInTheDocument();
   });
 
   it("provides direct routes into the garage", () => {
     render(<MarketingLanding />);
     const garageLinks = screen.getAllByRole("link", {
-      name: /garage|start with your car|open capcar/i,
+      name: /start your garage|start free|start with your car/i,
     });
     expect(
-      garageLinks.some((link) => link.getAttribute("href") === "/garage"),
+      garageLinks.some((link) => link.getAttribute("href") === "/register"),
     ).toBe(true);
+  });
+
+  it("shows interactive fitment outcomes", () => {
+    render(<MarketingLanding />);
+    expect(screen.getByText("Direct Bolt-On")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /m-style rear wing/i }));
+    expect(screen.getByText("Modification Required")).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole("button", { name: /f30 front brake kit/i }),
+    );
+    expect(screen.getByText("Incompatible")).toBeInTheDocument();
   });
 
   it("slides between the current car and planned vision", () => {

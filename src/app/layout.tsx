@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: "%s · Capcar",
   },
   description:
-    "Maintain your car, plan modifications and compare compatible parts in one place.",
+    "Visualize upgrades, verify fitment, compare total cost and keep every install in one private garage.",
   applicationName: "Capcar",
   manifest: "/manifest.webmanifest",
   icons: {

@@ -3,23 +3,24 @@ import Link from "next/link";
 import {
   ArrowRight,
   BadgeCheck,
-  Check,
   CircleGauge,
   Euro,
   Layers3,
-  ShieldCheck,
   ShoppingBag,
   Wrench,
 } from "lucide-react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
+import { FitmentLookup } from "@/components/marketing/fitment-lookup";
 import { MarketingHero } from "@/components/marketing/marketing-hero";
+import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
 
 export function MarketingLanding() {
   return (
     <div className="min-h-dvh overflow-hidden bg-[#080808] text-[#f3f1ec]">
       <main>
         <MarketingHero />
+        <ProductDashboardPreview />
 
         <section
           id="platform"
@@ -91,9 +92,9 @@ export function MarketingLanding() {
           className="mx-auto w-full max-w-[1500px] px-5 py-16 sm:px-8 sm:py-32"
         >
           <SectionHeading
-            eyebrow="Project garage"
-            title="Built with intent."
-            description="Four distinct directions, planned in one place."
+            eyebrow="Community builds"
+            title="Real plans. Measurable progress."
+            description="Builds with mileage, parts and total cost kept visible."
           />
 
           <div className="-mx-5 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 sm:mx-0 sm:mt-14 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0">
@@ -104,6 +105,9 @@ export function MarketingLanding() {
               direction="Street OEM+"
               status="In progress"
               stage="Stage 2 of 4"
+              kilometres="148,200 km"
+              parts="8 parts"
+              cost="€3,480"
             />
             <ProjectCard
               image="/capcar-project-f150.png"
@@ -112,6 +116,9 @@ export function MarketingLanding() {
               direction="Street overland"
               status="Concept"
               stage="Stage 1 of 4"
+              kilometres="63,400 km"
+              parts="14 parts"
+              cost="€8,920"
             />
             <ProjectCard
               image="/capcar-project-eclass.png"
@@ -120,6 +127,9 @@ export function MarketingLanding() {
               direction="Executive OEM+"
               status="Concept"
               stage="Stage 1 of 3"
+              kilometres="78,900 km"
+              parts="6 parts"
+              cost="€4,760"
             />
             <ProjectCard
               image="/capcar-project-gti-tcr.png"
@@ -128,6 +138,9 @@ export function MarketingLanding() {
               direction="Fast road"
               status="Concept"
               stage="Stage 2 of 5"
+              kilometres="54,800 km"
+              parts="11 parts"
+              cost="€6,340"
             />
           </div>
         </section>
@@ -145,13 +158,13 @@ export function MarketingLanding() {
                 Compatibility and requirements before checkout.
               </p>
               <Link
-                href="/garage"
+                href="/register"
                 className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-[#151515] transition hover:-translate-y-0.5"
               >
-                Search parts <ArrowRight className="size-4" />
+                Start with your car <ArrowRight className="size-4" />
               </Link>
             </div>
-            <FitmentPreview />
+            <FitmentLookup />
           </div>
         </section>
 
@@ -166,17 +179,37 @@ export function MarketingLanding() {
           />
           <ol className="mt-10 grid overflow-hidden rounded-[1.5rem] border border-white/10 sm:mt-14 sm:rounded-[2rem] md:grid-cols-3">
             {[
-              ["01", "Add your car", "Capture its exact specification."],
-              ["02", "Plan the build", "Set stages, budget and priorities."],
-              ["03", "Complete the work", "Install, verify and record."],
-            ].map(([number, title, description]) => (
+              [
+                "01",
+                "Add your car",
+                "Capture its exact specification.",
+                "30 sec",
+              ],
+              [
+                "02",
+                "Plan the build",
+                "Set stages, budget and priorities.",
+                "2 min",
+              ],
+              [
+                "03",
+                "Complete the work",
+                "Install, verify and record.",
+                "As you build",
+              ],
+            ].map(([number, title, description, time]) => (
               <li
                 key={number}
                 className="group flex min-h-48 flex-col border-t border-white/10 bg-[#111111] p-6 transition duration-300 first:border-t-0 hover:bg-[#171111] sm:min-h-64 sm:p-7 md:border-t-0 md:border-l md:first:border-l-0"
               >
-                <span className="text-xs font-semibold tracking-[0.14em] text-[#ff667a]">
-                  {number}
-                </span>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-xs font-semibold tracking-[0.14em] text-[#ff667a]">
+                    {number}
+                  </span>
+                  <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] text-white/35">
+                    {time}
+                  </span>
+                </div>
                 <div className="mt-auto">
                   <h3 className="text-2xl font-medium tracking-[-0.035em]">
                     {title}
@@ -197,14 +230,25 @@ export function MarketingLanding() {
               <span className="h-1 w-16 rounded-full bg-[#e72d45]" />
               <div>
                 <h2 className="text-4xl leading-[0.94] font-medium tracking-[-0.055em] sm:text-7xl sm:tracking-[-0.06em] lg:text-8xl">
-                  Plan the next version.
+                  Your garage starts here.
                 </h2>
-                <Link
-                  href="/garage"
-                  className="mt-8 inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-[#e72d45] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#f43f57]"
-                >
-                  Open Capcar <ArrowRight className="size-4" />
-                </Link>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <Link
+                    href="/register"
+                    className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-[#e72d45] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#f43f57]"
+                  >
+                    Start your garage — free <ArrowRight className="size-4" />
+                  </Link>
+                  <a
+                    href="#live-demo"
+                    className="inline-flex min-h-13 items-center justify-center rounded-full border border-white/12 px-6 text-sm font-medium text-white/65 transition hover:border-white/25 hover:text-white"
+                  >
+                    Try live demo
+                  </a>
+                </div>
+                <p className="mt-3 text-xs text-white/32">
+                  Set up in 30 seconds · No credit card required
+                </p>
               </div>
             </div>
           </div>
@@ -217,8 +261,8 @@ export function MarketingLanding() {
           Confirm fitment, safety requirements and legal approval before
           installation.
         </p>
-        <Link href="/garage" className="text-sm font-medium text-white/70">
-          Garage →
+        <Link href="/register" className="text-sm font-medium text-white/70">
+          Start free →
         </Link>
       </footer>
     </div>
@@ -374,6 +418,9 @@ function ProjectCard({
   direction,
   status,
   stage,
+  kilometres,
+  parts,
+  cost,
 }: {
   image: string;
   name: string;
@@ -381,6 +428,9 @@ function ProjectCard({
   direction: string;
   status: string;
   stage: string;
+  kilometres: string;
+  parts: string;
+  cost: string;
 }) {
   return (
     <article className="group relative min-h-[400px] w-[86vw] max-w-[620px] shrink-0 snap-center overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#111111] sm:min-h-[510px] sm:w-auto sm:max-w-none sm:rounded-[2rem]">
@@ -413,50 +463,29 @@ function ProjectCard({
         <h3 className="mt-2 text-3xl font-medium tracking-[-0.045em] sm:text-4xl">
           {name}
         </h3>
-        <div className="mt-6 flex items-center justify-between border-t border-white/12 pt-4 text-xs text-white/45">
+        <div className="mt-5 grid grid-cols-3 gap-2 border-t border-white/12 pt-4">
+          <ProjectMetric label="Logged" value={kilometres} />
+          <ProjectMetric label="Parts" value={parts} />
+          <ProjectMetric label="Build cost" value={cost} />
+        </div>
+        <div className="mt-4 flex items-center justify-between text-[11px] text-white/42">
           <span>{stage}</span>
-          <span>Capcar build</span>
+          <span className="inline-flex items-center gap-1.5 text-emerald-200/75">
+            <BadgeCheck className="size-3.5" /> Verified builder
+          </span>
         </div>
       </div>
     </article>
   );
 }
 
-function FitmentPreview() {
+function ProjectMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="overflow-hidden rounded-[2rem] border border-black/15 bg-[#111111] text-white shadow-[0_30px_100px_rgba(40,0,7,0.25)]">
-      <div className="flex items-center justify-between border-b border-white/8 p-6">
-        <div>
-          <p className="text-xs tracking-[0.14em] text-white/34 uppercase">
-            Dark-red rear lamps
-          </p>
-          <p className="mt-2 font-medium">Fitment evidence</p>
-        </div>
-        <span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1.5 text-xs text-amber-200">
-          Conditional
-        </span>
-      </div>
-      <div className="divide-y divide-white/8">
-        {[
-          ["Platform", "E90", true],
-          ["Year", "2011", true],
-          ["Body", "Sedan", true],
-          ["Connector", "Confirm", false],
-        ].map(([label, value, matched]) => (
-          <div
-            key={String(label)}
-            className="grid grid-cols-[100px_1fr_auto] items-center gap-4 p-5"
-          >
-            <span className="text-xs text-white/32">{label}</span>
-            <span className="text-sm text-white/68">{value}</span>
-            {matched ? (
-              <Check className="size-4 text-emerald-300" />
-            ) : (
-              <ShieldCheck className="size-4 text-amber-200" />
-            )}
-          </div>
-        ))}
-      </div>
+    <div>
+      <p className="text-[9px] tracking-[0.1em] text-white/28 uppercase">
+        {label}
+      </p>
+      <p className="mt-1 text-xs font-medium text-white/72">{value}</p>
     </div>
   );
 }
