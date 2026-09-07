@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import {
   ArrowRight,
   CarFront,
@@ -15,11 +16,16 @@ import { useVehicles } from "@/features/vehicles/use-vehicles";
 import {
   announceVehicleChange,
   saveVehicle,
+  seedShowcaseGarage,
 } from "@/features/vehicles/vehicle-storage";
 
 export function GarageOverview() {
   const { vehicles, isReady } = useVehicles();
   const router = useRouter();
+
+  useEffect(() => {
+    if (seedShowcaseGarage(window.localStorage)) announceVehicleChange();
+  }, []);
 
   function loadDemo() {
     const existingDemo = vehicles.find((vehicle) => vehicle.model === "318i");
@@ -136,8 +142,14 @@ export function GarageOverview() {
             className="group overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] transition hover:-translate-y-1 hover:border-white/20"
           >
             <VehicleArt
-              label={`${vehicle.productionYear} BMW ${vehicle.model}`}
+              label={`${vehicle.productionYear} ${vehicle.make} ${vehicle.model}`}
               compact
+              imageUrl={
+                vehicle.imageUrl ??
+                (vehicle.make === "BMW" && vehicle.model === "318i"
+                  ? "/capcar-hero-bmw-garage.png"
+                  : undefined)
+              }
             />
             <div className="flex items-end justify-between gap-5 p-6 sm:p-7">
               <div>
@@ -146,12 +158,17 @@ export function GarageOverview() {
                     `${vehicle.platform} ${vehicle.bodyStyle}`}
                 </p>
                 <h2 className="text-2xl font-medium tracking-[-0.025em]">
-                  {vehicle.productionYear} BMW {vehicle.model}
+                  {vehicle.productionYear} {vehicle.make} {vehicle.model}
                 </h2>
                 <p className="mt-2 text-sm text-white/45">
                   {vehicle.engineCode} · {vehicle.transmission} ·{" "}
                   {vehicle.mileage.toLocaleString("en-US")} km
                 </p>
+                {vehicle.demoProject && (
+                  <span className="mt-4 inline-flex rounded-full border border-[#e72d45]/25 bg-[#e72d45]/10 px-2.5 py-1 text-[10px] font-semibold tracking-[0.12em] text-[#ff8796] uppercase">
+                    Demo project
+                  </span>
+                )}
               </div>
               <span className="grid size-11 shrink-0 place-items-center rounded-full border border-white/10 text-white/60 transition group-hover:bg-[#e72d45] group-hover:text-[#07101d]">
                 <ArrowRight className="size-4" />

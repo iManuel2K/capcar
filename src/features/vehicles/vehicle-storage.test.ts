@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { readVehicles, saveVehicle } from "@/features/vehicles/vehicle-storage";
+import {
+  readVehicles,
+  saveVehicle,
+  seedShowcaseGarage,
+} from "@/features/vehicles/vehicle-storage";
 
 function memoryStorage() {
   const values = new Map<string, string>();
@@ -45,5 +49,16 @@ describe("vehicle storage", () => {
     storage.setItem("capcar.vehicles.v1", "not-json");
 
     expect(readVehicles(storage)).toEqual([]);
+  });
+
+  it("adds the showcase projects only once", () => {
+    const storage = memoryStorage();
+
+    expect(seedShowcaseGarage(storage)).toBe(true);
+    expect(seedShowcaseGarage(storage)).toBe(false);
+    expect(readVehicles(storage)).toHaveLength(4);
+    expect(readVehicles(storage).map((vehicle) => vehicle.make)).toEqual(
+      expect.arrayContaining(["BMW", "Ford", "Mercedes-Benz", "Volkswagen"]),
+    );
   });
 });

@@ -129,7 +129,7 @@ export function InstallGuide({
           )}
         </div>
         <p className="mt-7 text-xs font-semibold tracking-[0.14em] text-[#ff667a] uppercase">
-          {vehicle.productionYear} BMW {vehicle.model}
+          {vehicle.productionYear} {vehicle.make} {vehicle.model}
         </p>
         <h1 className="mt-3 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
           {guide.title}

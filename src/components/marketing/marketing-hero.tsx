@@ -2,12 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { ArrowRight } from "lucide-react";
+import { useState, type KeyboardEvent, type PointerEvent } from "react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
-
-type PreviewMode = "current" | "vision";
 
 const heroImages = {
   current: {
@@ -21,49 +19,88 @@ const heroImages = {
 } as const;
 
 export function MarketingHero() {
-  const [mode, setMode] = useState<PreviewMode>("current");
+  const [reveal, setReveal] = useState(52);
+
+  function updateFromPointer(event: PointerEvent<HTMLDivElement>) {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const nextReveal = ((event.clientX - bounds.left) / bounds.width) * 100;
+    setReveal(Math.min(100, Math.max(0, nextReveal)));
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      setReveal((current) => Math.max(0, current - 2));
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      setReveal((current) => Math.min(100, current + 2));
+    }
+    if (event.key === "Home") {
+      event.preventDefault();
+      setReveal(0);
+    }
+    if (event.key === "End") {
+      event.preventDefault();
+      setReveal(100);
+    }
+  }
 
   return (
     <section className="relative min-h-[100svh] overflow-hidden bg-[#080808] text-[#f3f1ec]">
-      {(Object.keys(heroImages) as PreviewMode[]).map((imageMode) => {
-        const active = mode === imageMode;
+      <HeroPicture mode="current" priority />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 will-change-[clip-path]"
+        style={{ clipPath: `inset(0 0 0 ${reveal}%)` }}
+      >
+        <HeroPicture mode="vision" />
+      </div>
 
-        return (
-          <div
-            key={imageMode}
-            aria-hidden={!active}
-            className={`absolute inset-0 transition-opacity duration-700 ease-out ${
-              active ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <Image
-              src={heroImages[imageMode].desktop}
-              alt=""
-              fill
-              priority={imageMode === "current"}
-              sizes="100vw"
-              className="hidden scale-[1.015] object-cover object-center motion-safe:animate-[capcar-hero-drift_16s_ease-in-out_infinite_alternate] sm:block"
-            />
-            <Image
-              src={heroImages[imageMode].mobile}
-              alt=""
-              fill
-              priority={imageMode === "current"}
-              sizes="100vw"
-              className="scale-[1.015] object-cover object-center motion-safe:animate-[capcar-hero-drift_16s_ease-in-out_infinite_alternate] sm:hidden"
-            />
-          </div>
-        );
-      })}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,0.94)_0%,rgba(5,5,5,0.72)_34%,rgba(5,5,5,0.12)_67%,rgba(5,5,5,0.03)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(0deg,rgba(5,5,5,0.9)_0%,transparent_48%,rgba(5,5,5,0.42)_100%)]" />
 
-      <p className="sr-only" aria-live="polite">
-        {mode === "current"
-          ? "Current black BMW E90 in a private garage."
-          : "Planned BMW E90 build with lowered suspension, subtle body trim and red brake calipers."}
-      </p>
-
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,0.94)_0%,rgba(5,5,5,0.72)_34%,rgba(5,5,5,0.12)_67%,rgba(5,5,5,0.03)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,5,5,0.9)_0%,transparent_48%,rgba(5,5,5,0.42)_100%)]" />
+      <div
+        role="slider"
+        tabIndex={0}
+        aria-label="Compare current car with vision"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(reveal)}
+        aria-valuetext={`${Math.round(reveal)} percent current, ${Math.round(100 - reveal)} percent vision`}
+        onPointerDown={(event) => {
+          event.currentTarget.setPointerCapture(event.pointerId);
+          updateFromPointer(event);
+        }}
+        onPointerMove={(event) => {
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            updateFromPointer(event);
+          }
+        }}
+        onPointerUp={(event) => {
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          }
+        }}
+        onKeyDown={handleKeyDown}
+        className="absolute inset-x-0 top-20 bottom-0 z-[7] cursor-ew-resize touch-none focus-visible:outline-none"
+      >
+        <span className="pointer-events-none absolute top-4 left-5 rounded-full border border-white/12 bg-black/38 px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-white/60 uppercase backdrop-blur-xl sm:left-8">
+          Current
+        </span>
+        <span className="pointer-events-none absolute top-4 right-5 rounded-full border border-[#e72d45]/25 bg-black/38 px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-[#ff667a] uppercase backdrop-blur-xl sm:right-8">
+          Vision
+        </span>
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 w-px bg-[#e72d45]/80 shadow-[0_0_24px_rgba(231,45,69,0.75)]"
+          style={{ left: `${reveal}%` }}
+        >
+          <span className="absolute top-[58%] left-1/2 grid size-9 -translate-x-1/2 place-items-center rounded-full border border-white/35 bg-[#e72d45] shadow-[0_8px_30px_rgba(231,45,69,0.4)] sm:size-10">
+            <span className="h-3.5 w-px bg-white/75 shadow-[4px_0_0_rgba(255,255,255,0.75),-4px_0_0_rgba(255,255,255,0.75)]" />
+          </span>
+        </span>
+      </div>
 
       <header className="relative z-20 mx-auto flex h-20 w-full max-w-[1500px] items-center justify-between px-5 sm:px-8">
         <Link
@@ -80,6 +117,9 @@ export function MarketingHero() {
           <a className="transition hover:text-white" href="#platform">
             Platform
           </a>
+          <a className="transition hover:text-white" href="#projects">
+            Projects
+          </a>
           <a className="transition hover:text-white" href="#fitment">
             Fitment
           </a>
@@ -91,11 +131,11 @@ export function MarketingHero() {
           href="/garage"
           className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/16 bg-black/30 px-4 text-sm font-medium text-white backdrop-blur-xl transition hover:border-[#e72d45]/60 hover:bg-[#e72d45]"
         >
-          Open garage <ArrowRight className="size-4" />
+          Open Capcar <ArrowRight className="size-4" />
         </Link>
       </header>
 
-      <div className="relative z-10 mx-auto flex min-h-[calc(100svh-5rem)] w-full max-w-[1500px] flex-col justify-start px-5 pt-10 pb-12 sm:justify-center sm:px-8 sm:pt-12 sm:pb-20">
+      <div className="pointer-events-none relative z-10 mx-auto flex min-h-[calc(100svh-5rem)] w-full max-w-[1500px] flex-col justify-start px-5 pt-10 pb-12 sm:justify-center sm:px-8 sm:pt-12 sm:pb-20">
         <div className="max-w-[790px]">
           <p className="text-xs font-semibold tracking-[0.2em] text-[#ff667a] uppercase">
             Plan. Source. Build.
@@ -109,41 +149,37 @@ export function MarketingHero() {
           <p className="mt-5 max-w-md text-base leading-6 text-white/58 sm:mt-7 sm:text-lg sm:leading-7">
             Your car, parts and projects. One place.
           </p>
-
-          <div className="mt-6 flex flex-row gap-2 sm:mt-8 sm:gap-3">
-            <Link
-              href="/garage"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#e72d45] px-5 text-sm font-semibold text-white shadow-[0_18px_55px_rgba(231,45,69,0.24)] transition hover:-translate-y-0.5 hover:bg-[#f43f57] sm:min-h-13 sm:px-6"
-            >
-              Open Capcar <ArrowRight className="size-4" />
-            </Link>
-            <a
-              href="#platform"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/16 bg-black/25 px-5 text-sm text-white/72 backdrop-blur-xl transition hover:bg-white/10 sm:min-h-13 sm:px-6"
-            >
-              Explore <ArrowDown className="size-4" />
-            </a>
-          </div>
-
-          <div className="mt-5 inline-flex items-center gap-1 rounded-full border border-white/12 bg-black/38 p-1 backdrop-blur-xl sm:mt-8">
-            {(["current", "vision"] as const).map((option) => (
-              <button
-                key={option}
-                type="button"
-                aria-pressed={mode === option}
-                onClick={() => setMode(option)}
-                className={`min-h-9 rounded-full px-4 text-xs font-semibold tracking-[0.11em] uppercase transition sm:min-h-10 sm:px-5 ${
-                  mode === option
-                    ? "bg-[#e72d45] text-white shadow-[0_8px_24px_rgba(231,45,69,0.25)]"
-                    : "text-white/48 hover:text-white"
-                }`}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function HeroPicture({
+  mode,
+  priority = false,
+}: {
+  mode: keyof typeof heroImages;
+  priority?: boolean;
+}) {
+  return (
+    <div className="absolute inset-0">
+      <Image
+        src={heroImages[mode].desktop}
+        alt=""
+        fill
+        priority={priority}
+        sizes="100vw"
+        className="hidden scale-[1.015] object-cover object-center motion-safe:animate-[capcar-hero-drift_16s_ease-in-out_infinite_alternate] sm:block"
+      />
+      <Image
+        src={heroImages[mode].mobile}
+        alt=""
+        fill
+        priority={priority}
+        sizes="100vw"
+        className="scale-[1.015] object-cover object-center motion-safe:animate-[capcar-hero-drift_16s_ease-in-out_infinite_alternate] sm:hidden"
+      />
+    </div>
   );
 }

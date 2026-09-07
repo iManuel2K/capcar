@@ -4,7 +4,7 @@ import { bodyStyles, transmissions } from "@/features/vehicles/vehicle-schema";
 
 export const vehicleDataRequestSchema = z.object({
   vin: z.string().trim().length(17).optional(),
-  make: z.literal("BMW"),
+  make: z.string().trim().min(2).max(40),
   model: z.string().trim().min(1).max(60),
   productionYear: z.number().int().min(2008).max(2030),
   platform: z.string().trim().min(1).max(20),

@@ -6,6 +6,7 @@ export const bodyStyles = [
   "Coupe",
   "Convertible",
   "Hatchback",
+  "Pickup",
   "SUV",
 ] as const;
 
@@ -25,12 +26,12 @@ const optionalVin = z.preprocess(
 );
 
 export const vehicleInputSchema = z.object({
-  make: z.literal("BMW"),
-  model: z.string().trim().min(2, "Enter the BMW model").max(40),
+  make: z.string().trim().min(2, "Enter the vehicle make").max(40),
+  model: z.string().trim().min(2, "Enter the vehicle model").max(40),
   productionYear: z.coerce
     .number()
     .int()
-    .min(2008, "Capcar currently supports BMWs from 2008")
+    .min(2000, "Capcar currently supports vehicles from 2000")
     .max(2027, "Check the production year"),
   platform: z
     .string()
@@ -53,6 +54,8 @@ export const vehicleInputSchema = z.object({
     .max(2_000_000, "Check the mileage"),
   color: z.string().trim().max(40).optional(),
   nickname: z.string().trim().max(40).optional(),
+  imageUrl: z.string().trim().startsWith("/").optional(),
+  demoProject: z.boolean().optional(),
   vin: optionalVin,
 });
 

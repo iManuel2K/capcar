@@ -78,7 +78,8 @@ export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
     <div className="pb-24 sm:pb-0">
       <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_82%_18%,rgba(231,45,69,0.18),transparent_28%),#111111] p-6 sm:p-10">
         <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
-          {vehicle.productionYear} BMW {vehicle.model} · {vehicle.platform}
+          {vehicle.productionYear} {vehicle.make} {vehicle.model} ·{" "}
+          {vehicle.platform}
         </p>
         <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-7xl">
           One history for the car.

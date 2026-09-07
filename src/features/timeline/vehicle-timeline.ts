@@ -40,7 +40,7 @@ export function buildVehicleTimeline(
       id: `vehicle-${vehicle.id}`,
       category: "vehicle",
       title: "Vehicle added to Capcar",
-      detail: `${vehicle.productionYear} BMW ${vehicle.model} · ${vehicle.platform}`,
+      detail: `${vehicle.productionYear} ${vehicle.make} ${vehicle.model} · ${vehicle.platform}`,
       occurredAt: vehicle.createdAt,
       value: `${vehicle.mileage.toLocaleString("de-DE")} km`,
     });

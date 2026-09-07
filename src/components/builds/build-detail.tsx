@@ -166,7 +166,8 @@ export function BuildDetail({
         <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
             <p className="text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
-              {build.goal} · {vehicle.productionYear} BMW {vehicle.model}
+              {build.goal} · {vehicle.productionYear} {vehicle.make}{" "}
+              {vehicle.model}
             </p>
             <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-7xl">
               {build.name}

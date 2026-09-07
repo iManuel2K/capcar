@@ -132,8 +132,8 @@ export function CompatibilityReport({
           Check the combination, not only each part.
         </h1>
         <p className="mt-5 max-w-2xl leading-7 text-white/45">
-          {build.name} · {vehicle.productionYear} BMW {vehicle.model}. The
-          report joins fitment rules, missing data, dependencies and
+          {build.name} · {vehicle.productionYear} {vehicle.make} {vehicle.model}
+          . The report joins fitment rules, missing data, dependencies and
           part-to-part interactions.
         </p>
       </header>

@@ -137,7 +137,7 @@ export function BuildVisualizer({
           </span>
         </div>
         <p className="mt-3 text-sm font-semibold text-[#ff667a]">
-          {vehicle.productionYear} BMW {vehicle.model} · {build.name}
+          {vehicle.productionYear} {vehicle.make} {vehicle.model} · {build.name}
         </p>
         <h1 className="mt-2 text-3xl font-medium tracking-tight">
           Explore your build.

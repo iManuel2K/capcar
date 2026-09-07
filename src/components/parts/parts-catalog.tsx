@@ -7,9 +7,17 @@ import {
   ArrowRight,
   CheckCircle2,
   CircleHelp,
+  Clock3,
+  Disc3,
+  Droplets,
+  FileCheck2,
   Filter,
+  Gauge,
+  Lightbulb,
   PackageSearch,
   Search,
+  ShoppingBag,
+  Sparkles,
   SlidersHorizontal,
   Wrench,
 } from "lucide-react";
@@ -51,6 +59,19 @@ const fitmentContent: Record<
     className: "border-red-300/20 bg-red-300/10 text-red-200",
     icon: AlertTriangle,
   },
+};
+
+const categoryVisual: Record<
+  PartCategory,
+  { icon: typeof Wrench; accent: string }
+> = {
+  Service: { icon: Droplets, accent: "text-sky-300" },
+  Brakes: { icon: Disc3, accent: "text-red-300" },
+  Suspension: { icon: Gauge, accent: "text-violet-300" },
+  Wheels: { icon: Disc3, accent: "text-zinc-200" },
+  Exterior: { icon: Sparkles, accent: "text-rose-300" },
+  Lighting: { icon: Lightbulb, accent: "text-amber-200" },
+  Performance: { icon: Wrench, accent: "text-[#ff667a]" },
 };
 
 export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
@@ -150,12 +171,17 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
 
   return (
     <div className="pb-24 sm:pb-0">
-      <Link href="/international-parts" className="mb-5 inline-flex rounded-xl border border-[#e72d45]/40 px-4 py-3 text-sm text-[#ff667a]">Search Germany & international offers ↗</Link>
+      <Link
+        href="/international-parts"
+        className="mb-5 inline-flex rounded-xl border border-[#e72d45]/40 px-4 py-3 text-sm text-[#ff667a]"
+      >
+        Search Germany & international offers ↗
+      </Link>
       <Link
         href={`/garage/${vehicleId}`}
         className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
       >
-        <ArrowLeft className="size-4" /> {vehicle.productionYear} BMW{" "}
+        <ArrowLeft className="size-4" /> {vehicle.productionYear} {vehicle.make}{" "}
         {vehicle.model}
       </Link>
 
@@ -174,6 +200,27 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
           </p>
         </div>
       </header>
+
+      <section className="mt-5 grid gap-3 sm:grid-cols-3">
+        <ReadinessStat
+          icon={CheckCircle2}
+          label="Vehicle context"
+          value={`${vehicle.platform} · ${vehicle.engineCode}`}
+          tone="green"
+        />
+        <ReadinessStat
+          icon={PackageSearch}
+          label="Demo catalogue"
+          value={`${providerResults.length || 16} prepared products`}
+          tone="red"
+        />
+        <ReadinessStat
+          icon={ShoppingBag}
+          label="Comparison depth"
+          value="3 offers per product"
+          tone="amber"
+        />
+      </section>
 
       <section className="sticky top-20 z-30 mt-5 rounded-2xl border border-white/10 bg-[#111111]/95 p-4 shadow-xl backdrop-blur-xl sm:p-5">
         <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto]">
@@ -240,6 +287,7 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
             part={part}
             status={result.status}
             conditions={result.conditions.length}
+            source={source}
             vehicleId={vehicleId}
           />
         ))}
@@ -291,28 +339,35 @@ function PartCard({
   part,
   status,
   conditions,
+  source,
   vehicleId,
 }: {
   part: CatalogPart;
   status: FitmentStatus;
   conditions: number;
+  source: "demo" | "external";
   vehicleId: string;
 }) {
   const content = fitmentContent[status];
   const StatusIcon = content.icon;
+  const visual = categoryVisual[part.category];
+  const CategoryIcon = visual.icon;
   return (
     <Link
       href={`/garage/${vehicleId}/parts/${part.id}`}
       className="group overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] transition hover:-translate-y-1 hover:border-white/20"
     >
-      <div className="relative min-h-52 overflow-hidden bg-[radial-gradient(circle_at_65%_45%,rgba(231,45,69,0.2),transparent_32%),#0d0d0d] p-6">
-        <span className="absolute top-5 left-5 rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[11px] tracking-[0.12em] text-white/40 uppercase">
+      <div className="relative min-h-48 overflow-hidden bg-[radial-gradient(circle_at_72%_42%,rgba(231,45,69,0.22),transparent_34%),#0d0d0d] p-6">
+        <span className="absolute top-5 left-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-white/60 uppercase">
+          <CategoryIcon className={`size-3.5 ${visual.accent}`} />{" "}
           {part.category}
         </span>
         <span className="absolute top-5 right-5 text-xs text-white/30">
           {part.partNumber}
         </span>
-        <Wrench className="absolute right-[12%] bottom-[15%] size-24 rotate-[-18deg] text-white/[0.06]" />
+        <CategoryIcon
+          className={`absolute right-[10%] bottom-[10%] size-28 rotate-[-12deg] opacity-[0.08] ${visual.accent}`}
+        />
         <div className="absolute right-6 bottom-6 left-6">
           <p className="text-sm text-white/35">
             {part.brand} · {part.quality}
@@ -324,6 +379,14 @@ function PartCard({
       </div>
       <div className="p-6">
         <p className="text-sm leading-6 text-white/40">{part.summary}</p>
+        <div className="mt-5 grid grid-cols-3 gap-2">
+          <MiniSpec
+            icon={ShoppingBag}
+            label={source === "demo" ? "3 demo offers" : "Offers ready"}
+          />
+          <MiniSpec icon={Clock3} label={`${part.installationMinutes} min`} />
+          <MiniSpec icon={FileCheck2} label={`${part.documents.length} docs`} />
+        </div>
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
           <span
             className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs ${content.className}`}
@@ -332,14 +395,68 @@ function PartCard({
             {conditions > 0 && ` · ${conditions}`}
           </span>
           <div className="flex items-center gap-4">
-            <span className="font-medium">
-              {formatEuro(part.estimatedPrice)}
+            <span className="text-right">
+              <span className="block text-[10px] tracking-[0.1em] text-white/30 uppercase">
+                from
+              </span>
+              <span className="font-medium">
+                {formatEuro(part.estimatedPrice)}
+              </span>
             </span>
             <ArrowRight className="size-4 text-white/35 transition group-hover:translate-x-1 group-hover:text-white" />
           </div>
         </div>
       </div>
     </Link>
+  );
+}
+
+function MiniSpec({
+  icon: Icon,
+  label,
+}: {
+  icon: typeof Wrench;
+  label: string;
+}) {
+  return (
+    <span className="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-white/8 bg-white/[0.025] px-2 text-center text-[11px] text-white/50">
+      <Icon className="size-3.5 shrink-0 text-[#ff667a]" /> {label}
+    </span>
+  );
+}
+
+function ReadinessStat({
+  icon: Icon,
+  label,
+  value,
+  tone,
+}: {
+  icon: typeof Wrench;
+  label: string;
+  value: string;
+  tone: "green" | "red" | "amber";
+}) {
+  const toneClass = {
+    green: "bg-emerald-300/10 text-emerald-200",
+    red: "bg-[#e72d45]/12 text-[#ff667a]",
+    amber: "bg-amber-300/10 text-amber-200",
+  }[tone];
+  return (
+    <div className="flex items-center gap-3 rounded-2xl border border-white/8 bg-[#111111] p-4">
+      <span
+        className={`grid size-10 shrink-0 place-items-center rounded-xl ${toneClass}`}
+      >
+        <Icon className="size-4" />
+      </span>
+      <div className="min-w-0">
+        <p className="text-[10px] font-semibold tracking-[0.12em] text-white/35 uppercase">
+          {label}
+        </p>
+        <p className="mt-1 truncate text-sm font-medium text-white/80">
+          {value}
+        </p>
+      </div>
+    </div>
   );
 }
 

@@ -58,7 +58,7 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
         href={`/garage/${vehicleId}`}
         className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 transition hover:text-white"
       >
-        <ArrowLeft className="size-4" /> {vehicle.productionYear} BMW{" "}
+        <ArrowLeft className="size-4" /> {vehicle.productionYear} {vehicle.make}{" "}
         {vehicle.model}
       </Link>
 
@@ -86,7 +86,7 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
       {vehicleBuilds.length === 0 ? (
         <section className="mt-5 grid overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] lg:grid-cols-[1.15fr_0.85fr]">
           <VehicleArt
-            label={`${vehicle.productionYear} BMW ${vehicle.model}`}
+            label={`${vehicle.productionYear} ${vehicle.make} ${vehicle.model}`}
           />
           <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12">
             <span className="grid size-11 place-items-center rounded-2xl bg-[#e72d45] text-[#07101d]">

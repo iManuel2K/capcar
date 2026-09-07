@@ -22,14 +22,14 @@ describe("MarketingLanding", () => {
     ).toBe(true);
   });
 
-  it("switches between the current car and planned vision", () => {
+  it("slides between the current car and planned vision", () => {
     render(<MarketingLanding />);
-    const current = screen.getByRole("button", { name: "current" });
-    const vision = screen.getByRole("button", { name: "vision" });
+    const slider = screen.getByRole("slider", {
+      name: /compare current car with vision/i,
+    });
 
-    expect(current).toHaveAttribute("aria-pressed", "true");
-    fireEvent.click(vision);
-    expect(vision).toHaveAttribute("aria-pressed", "true");
-    expect(current).toHaveAttribute("aria-pressed", "false");
+    expect(slider).toHaveAttribute("aria-valuenow", "52");
+    fireEvent.keyDown(slider, { key: "ArrowRight" });
+    expect(slider).toHaveAttribute("aria-valuenow", "54");
   });
 });

@@ -17,4 +17,15 @@ describe("demo part catalogue", () => {
       "Lighting",
     );
   });
+
+  it("provides a ready-looking E9x catalogue across core categories", () => {
+    const e9xParts = partCatalog.filter((part) =>
+      part.fitmentRules.some((rule) => rule.platforms.includes("E90")),
+    );
+
+    expect(e9xParts.length).toBeGreaterThanOrEqual(14);
+    expect(
+      new Set(e9xParts.map((part) => part.category)).size,
+    ).toBeGreaterThanOrEqual(6);
+  });
 });

@@ -50,7 +50,7 @@ class DemoVehicleDataProvider implements VehicleDataProvider {
           : "No VIN was supplied; the result relies on manually entered attributes.",
       ],
       warnings: [
-        "This result is not a BMW VIN decode or authoritative fitment record.",
+        `This result is not a ${request.make} VIN decode or authoritative fitment record.`,
         "Confirm production date, option codes and market before ordering parts.",
       ],
     };

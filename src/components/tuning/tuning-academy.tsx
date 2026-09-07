@@ -82,8 +82,8 @@ export function TuningAcademy({ vehicleId }: { vehicleId: string }) {
         </h1>
         <p className="mt-5 max-w-2xl leading-7 text-white/45">
           Capcar creates a conservative roadmap for your{" "}
-          {vehicle.productionYear} BMW {vehicle.model} without inventing gains,
-          fitment or legal approval.
+          {vehicle.productionYear} {vehicle.make} {vehicle.model} without
+          inventing gains, fitment or legal approval.
         </p>
       </header>
 

@@ -86,6 +86,52 @@ export function MarketingLanding() {
           </div>
         </section>
 
+        <section
+          id="projects"
+          className="mx-auto w-full max-w-[1500px] px-5 py-16 sm:px-8 sm:py-32"
+        >
+          <SectionHeading
+            eyebrow="Project garage"
+            title="Built with intent."
+            description="Four distinct directions, planned in one place."
+          />
+
+          <div className="-mx-5 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 sm:mx-0 sm:mt-14 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0">
+            <ProjectCard
+              image="/capcar-hero-bmw-vision.png"
+              name="Project 318"
+              vehicle="2011 BMW 318i · E90"
+              direction="Street OEM+"
+              status="In progress"
+              stage="Stage 2 of 4"
+            />
+            <ProjectCard
+              image="/capcar-project-f150.png"
+              name="Night Shift"
+              vehicle="Ford F-150"
+              direction="Street overland"
+              status="Concept"
+              stage="Stage 1 of 4"
+            />
+            <ProjectCard
+              image="/capcar-project-eclass.png"
+              name="Executive Black"
+              vehicle="Mercedes-Benz E-Class · W213"
+              direction="Executive OEM+"
+              status="Concept"
+              stage="Stage 1 of 3"
+            />
+            <ProjectCard
+              image="/capcar-project-gti-tcr.png"
+              name="Circuit Daily"
+              vehicle="Volkswagen Golf GTI TCR"
+              direction="Fast road"
+              status="Concept"
+              stage="Stage 2 of 5"
+            />
+          </div>
+        </section>
+
         <section id="fitment" className="bg-[#e72d45] text-white">
           <div className="mx-auto grid max-w-[1500px] gap-10 px-5 py-16 sm:px-8 sm:py-32 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div>
@@ -318,6 +364,61 @@ function PhotoDetail({
         {label}
       </figcaption>
     </figure>
+  );
+}
+
+function ProjectCard({
+  image,
+  name,
+  vehicle,
+  direction,
+  status,
+  stage,
+}: {
+  image: string;
+  name: string;
+  vehicle: string;
+  direction: string;
+  status: string;
+  stage: string;
+}) {
+  return (
+    <article className="group relative min-h-[400px] w-[86vw] max-w-[620px] shrink-0 snap-center overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#111111] sm:min-h-[510px] sm:w-auto sm:max-w-none sm:rounded-[2rem]">
+      <Image
+        src={image}
+        alt={`${vehicle}, ${name} project`}
+        fill
+        sizes="(min-width: 640px) 50vw, 86vw"
+        className="object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.12)_28%,rgba(5,5,5,0.9)_100%)]" />
+
+      <div className="absolute inset-x-0 top-0 flex items-center justify-between p-5 sm:p-7">
+        <span className="rounded-full border border-white/14 bg-black/45 px-3 py-1.5 text-xs font-medium text-white/72 backdrop-blur-xl">
+          {direction}
+        </span>
+        <span
+          className={`rounded-full border px-3 py-1.5 text-xs font-medium backdrop-blur-xl ${
+            status === "In progress"
+              ? "border-[#e72d45]/35 bg-[#e72d45]/18 text-[#ff8a9a]"
+              : "border-white/14 bg-black/45 text-white/58"
+          }`}
+        >
+          {status}
+        </span>
+      </div>
+
+      <div className="absolute right-0 bottom-0 left-0 p-6 sm:p-8">
+        <p className="text-sm text-white/52">{vehicle}</p>
+        <h3 className="mt-2 text-3xl font-medium tracking-[-0.045em] sm:text-4xl">
+          {name}
+        </h3>
+        <div className="mt-6 flex items-center justify-between border-t border-white/12 pt-4 text-xs text-white/45">
+          <span>{stage}</span>
+          <span>Capcar build</span>
+        </div>
+      </div>
+    </article>
   );
 }
 

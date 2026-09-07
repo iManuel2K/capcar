@@ -17,30 +17,34 @@ export function createMaintenanceNotifications(
     if (urgency === "soon") {
       const dateIsWithinLead = Boolean(
         task.record?.nextDueDate &&
-          task.record.nextDueDate <= addDaysToDate(today, daysBeforeDue),
+        task.record.nextDueDate <= addDaysToDate(today, daysBeforeDue),
       );
       const mileageIsWithinLead = Boolean(
         task.record?.nextDueMileage &&
-          task.record.nextDueMileage <= vehicle.mileage + 1_500,
+        task.record.nextDueMileage <= vehicle.mileage + 1_500,
       );
       if (!dateIsWithinLead && !mileageIsWithinLead) return [];
     }
     const targets = [
       task.record?.nextDueDate ? `date ${task.record.nextDueDate}` : undefined,
-      task.record?.nextDueMileage ? `${task.record.nextDueMileage.toLocaleString("en-US")} km` : undefined,
+      task.record?.nextDueMileage
+        ? `${task.record.nextDueMileage.toLocaleString("en-US")} km`
+        : undefined,
     ].filter(Boolean);
     const target = targets.join(" or ") || "the current planning interval";
-    return [{
-      id: `${vehicle.id}:${task.key}:${urgency}:${task.record?.nextDueDate ?? "none"}:${task.record?.nextDueMileage ?? "none"}`,
-      vehicleId: vehicle.id,
-      vehicleLabel: `${vehicle.productionYear} BMW ${vehicle.model}`,
-      taskKey: task.key,
-      title: `${task.title} ${urgency === "overdue" ? "is due" : "is coming up"}`,
-      urgency,
-      detail: `Planning target: ${target}.`,
-      href: `/garage/${vehicle.id}/maintenance`,
-      createdAt: now.toISOString(),
-    } satisfies NotificationItem];
+    return [
+      {
+        id: `${vehicle.id}:${task.key}:${urgency}:${task.record?.nextDueDate ?? "none"}:${task.record?.nextDueMileage ?? "none"}`,
+        vehicleId: vehicle.id,
+        vehicleLabel: `${vehicle.productionYear} ${vehicle.make} ${vehicle.model}`,
+        taskKey: task.key,
+        title: `${task.title} ${urgency === "overdue" ? "is due" : "is coming up"}`,
+        urgency,
+        detail: `Planning target: ${target}.`,
+        href: `/garage/${vehicle.id}/maintenance`,
+        createdAt: now.toISOString(),
+      } satisfies NotificationItem,
+    ];
   });
 }
 

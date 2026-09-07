@@ -139,7 +139,7 @@ export function OfferComparison({
           {source === "demo" ? "Fictional offers" : "External offers"}
         </span>
         <p className="mt-8 text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
-          {vehicle.productionYear} BMW {vehicle.model}
+          {vehicle.productionYear} {vehicle.make} {vehicle.model}
         </p>
         <h1 className="mt-3 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
           Compare the delivered price.

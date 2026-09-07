@@ -198,7 +198,7 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
         href={`/garage/${vehicleId}`}
         className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 transition hover:text-white"
       >
-        <ArrowLeft className="size-4" /> {vehicle.productionYear} BMW{" "}
+        <ArrowLeft className="size-4" /> {vehicle.productionYear} {vehicle.make}{" "}
         {vehicle.model}
       </Link>
 
