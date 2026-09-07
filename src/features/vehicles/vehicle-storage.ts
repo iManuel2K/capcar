@@ -125,6 +125,38 @@ export function saveVehicle(
   return vehicle;
 }
 
+export function updateVehicle(
+  vehicleId: string,
+  input: NormalizedVehicleInput,
+  storage: WritableStorage,
+): Vehicle {
+  const current = readVehicles(storage);
+  const existing = current.find((vehicle) => vehicle.id === vehicleId);
+  if (!existing) throw new Error("Vehicle not found");
+
+  const updated = vehicleSchema.parse({
+    ...vehicleInputSchema.parse(input),
+    id: existing.id,
+    createdAt: existing.createdAt,
+  });
+  storage.setItem(
+    VEHICLE_STORAGE_KEY,
+    JSON.stringify(
+      current.map((vehicle) => (vehicle.id === vehicleId ? updated : vehicle)),
+    ),
+  );
+  return updated;
+}
+
+export function removeVehicle(vehicleId: string, storage: WritableStorage) {
+  const current = readVehicles(storage);
+  const next = current.filter((vehicle) => vehicle.id !== vehicleId);
+  if (next.length === current.length) return false;
+
+  storage.setItem(VEHICLE_STORAGE_KEY, JSON.stringify(next));
+  return true;
+}
+
 export function seedShowcaseGarage(storage: WritableStorage) {
   if (storage.getItem(SHOWCASE_GARAGE_KEY)) return false;
 

@@ -9,11 +9,13 @@ import { VehicleArt } from "@/components/garage/vehicle-art";
 import {
   bodyStyles,
   transmissions,
+  type Vehicle,
   vehicleInputSchema,
 } from "@/features/vehicles/vehicle-schema";
 import {
   announceVehicleChange,
   saveVehicle,
+  updateVehicle,
 } from "@/features/vehicles/vehicle-storage";
 
 type FormState = {
@@ -44,9 +46,26 @@ const initialForm: FormState = {
   vin: "",
 };
 
-export function AddVehicleForm() {
+function formFromVehicle(vehicle?: Vehicle): FormState {
+  if (!vehicle) return initialForm;
+  return {
+    make: vehicle.make,
+    model: vehicle.model,
+    productionYear: String(vehicle.productionYear),
+    platform: vehicle.platform,
+    bodyStyle: vehicle.bodyStyle,
+    engineCode: vehicle.engineCode,
+    transmission: vehicle.transmission,
+    mileage: String(vehicle.mileage),
+    color: vehicle.color ?? "",
+    nickname: vehicle.nickname ?? "",
+    vin: vehicle.vin ?? "",
+  };
+}
+
+export function AddVehicleForm({ vehicle }: { vehicle?: Vehicle }) {
   const router = useRouter();
-  const [form, setForm] = useState(initialForm);
+  const [form, setForm] = useState(() => formFromVehicle(vehicle));
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -82,9 +101,11 @@ export function AddVehicleForm() {
       return;
     }
 
-    const vehicle = saveVehicle(result.data, window.localStorage);
+    const savedVehicle = vehicle
+      ? updateVehicle(vehicle.id, result.data, window.localStorage)
+      : saveVehicle(result.data, window.localStorage);
     announceVehicleChange();
-    router.push(`/garage/${vehicle.id}`);
+    router.push(`/garage/${savedVehicle.id}`);
   }
 
   const previewLabel = `${form.productionYear || "Your"} ${form.make || "vehicle"} ${form.model || "project"}`;
@@ -110,11 +131,11 @@ export function AddVehicleForm() {
                 Vehicle profile
               </p>
               <h1 className="text-3xl font-medium tracking-[-0.035em] sm:text-5xl">
-                Add your car.
+                {vehicle ? "Edit your car." : "Add your car."}
               </h1>
               <p className="mt-4 max-w-xl leading-7 text-white/50">
                 Use the information on your registration document or what you
-                already know. You can improve it later.
+                already know. You can change these details at any time.
               </p>
             </div>
             <span className="hidden rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/40 sm:inline-flex">
@@ -311,21 +332,25 @@ export function AddVehicleForm() {
 
           <div className="mt-9 flex flex-col-reverse items-stretch justify-between gap-4 border-t border-white/8 pt-7 sm:flex-row sm:items-center">
             <p className="flex items-center gap-2 text-xs text-white/35">
-              <LockKeyhole className="size-3.5" /> Stored only in this browser
+              <LockKeyhole className="size-3.5" /> Saved to your private garage
             </p>
             <button
               disabled={submitting}
               type="submit"
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-6 text-sm font-semibold text-[#07101d] transition hover:-translate-y-0.5 hover:bg-[#ff667a] disabled:opacity-60"
             >
-              {submitting ? "Saving…" : "Create vehicle"}{" "}
+              {submitting
+                ? "Saving…"
+                : vehicle
+                  ? "Save changes"
+                  : "Create vehicle"}{" "}
               <ArrowRight className="size-4" />
             </button>
           </div>
         </form>
 
         <aside className="xl:sticky xl:top-26">
-          <VehicleArt label={previewLabel} />
+          <VehicleArt label={previewLabel} imageUrl={vehicle?.imageUrl} />
           <div className="mt-4 grid gap-3 sm:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-3">
             <PreviewStat
               label="Vehicle"

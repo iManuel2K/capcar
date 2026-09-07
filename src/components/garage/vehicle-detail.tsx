@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -17,6 +19,7 @@ import {
   GraduationCap,
   MapPin,
   Plus,
+  Pencil,
   Settings2,
   SquareActivity,
   Wrench,
@@ -25,6 +28,8 @@ import {
   FileBadge2,
   Heart,
   ScanLine,
+  Trash2,
+  X,
 } from "lucide-react";
 
 import { VehicleArt } from "@/components/garage/vehicle-art";
@@ -33,8 +38,14 @@ import {
   VehiclePhotoGallery,
 } from "@/components/garage/vehicle-photo-gallery";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
+import {
+  announceVehicleChange,
+  removeVehicle,
+} from "@/features/vehicles/vehicle-storage";
 
 export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
+  const router = useRouter();
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const { vehicles, isReady } = useVehicles();
   const vehicle = vehicles.find((candidate) => candidate.id === vehicleId);
 
@@ -68,14 +79,37 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
 
   const title = `${vehicle.productionYear} ${vehicle.make} ${vehicle.model}`;
 
+  function handleDelete() {
+    removeVehicle(vehicleId, window.localStorage);
+    announceVehicleChange();
+    router.replace("/garage");
+  }
+
   return (
     <div className="pb-24 sm:pb-0">
-      <Link
-        href="/garage"
-        className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 transition hover:text-white"
-      >
-        <ArrowLeft className="size-4" /> All vehicles
-      </Link>
+      <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
+        <Link
+          href="/garage"
+          className="inline-flex items-center gap-2 text-sm text-white/45 transition hover:text-white"
+        >
+          <ArrowLeft className="size-4" /> All vehicles
+        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/garage/${vehicleId}/edit`}
+            className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white/70 transition hover:border-white/20 hover:text-white"
+          >
+            <Pencil className="size-3.5" /> Edit vehicle
+          </Link>
+          <button
+            type="button"
+            onClick={() => setDeleteOpen(true)}
+            className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-red-400/20 bg-red-400/[0.06] px-4 text-sm text-red-200 transition hover:border-red-400/40 hover:bg-red-400/10"
+          >
+            <Trash2 className="size-3.5" /> Delete
+          </button>
+        </div>
+      </div>
 
       <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_35%,rgba(231,45,69,0.12),transparent_32%)]" />
@@ -123,6 +157,57 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
           </div>
         </div>
       </section>
+
+      {deleteOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-vehicle-title"
+          className="fixed inset-0 z-50 grid place-items-center bg-black/75 p-4 backdrop-blur-sm"
+        >
+          <div className="w-full max-w-md rounded-[1.75rem] border border-white/12 bg-[#111111] p-6 shadow-2xl sm:p-8">
+            <div className="flex items-start justify-between gap-4">
+              <span className="grid size-11 place-items-center rounded-2xl bg-red-400/10 text-red-300">
+                <Trash2 className="size-5" />
+              </span>
+              <button
+                type="button"
+                onClick={() => setDeleteOpen(false)}
+                aria-label="Close delete confirmation"
+                className="grid size-9 place-items-center rounded-full text-white/40 transition hover:bg-white/5 hover:text-white"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+            <h2
+              id="delete-vehicle-title"
+              className="mt-6 text-2xl font-medium tracking-[-0.025em]"
+            >
+              Delete {vehicle.nickname || title}?
+            </h2>
+            <p className="mt-3 leading-7 text-white/50">
+              This removes the vehicle from your garage. This action cannot be
+              undone.
+            </p>
+            <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setDeleteOpen(false)}
+                className="min-h-11 rounded-xl border border-white/10 px-5 text-sm text-white/70 hover:bg-white/5"
+              >
+                Keep vehicle
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="min-h-11 rounded-xl bg-red-500 px-5 text-sm font-semibold text-white hover:bg-red-400"
+              >
+                Delete vehicle
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
@@ -243,11 +328,31 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
           />
         </div>
         <div className="relative mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
-          <ProfileLink href={`/garage/${vehicleId}/passport`} icon={FileBadge2} label="Vehicle Passport" />
-          <ProfileLink href={`/garage/${vehicleId}/costs`} icon={BadgeEuro} label="Cost analytics" />
-          <ProfileLink href={`/garage/${vehicleId}/wishlist`} icon={Heart} label="Part wishlist" />
-          <ProfileLink href={`/garage/${vehicleId}/diagnostics`} icon={ScanLine} label="Diagnostic log" />
-          <ProfileLink href={`/garage/${vehicleId}/specialists`} icon={ContactRound} label="Specialists" />
+          <ProfileLink
+            href={`/garage/${vehicleId}/passport`}
+            icon={FileBadge2}
+            label="Vehicle Passport"
+          />
+          <ProfileLink
+            href={`/garage/${vehicleId}/costs`}
+            icon={BadgeEuro}
+            label="Cost analytics"
+          />
+          <ProfileLink
+            href={`/garage/${vehicleId}/wishlist`}
+            icon={Heart}
+            label="Part wishlist"
+          />
+          <ProfileLink
+            href={`/garage/${vehicleId}/diagnostics`}
+            icon={ScanLine}
+            label="Diagnostic log"
+          />
+          <ProfileLink
+            href={`/garage/${vehicleId}/specialists`}
+            icon={ContactRound}
+            label="Specialists"
+          />
         </div>
       </section>
     </div>
