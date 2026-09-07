@@ -116,6 +116,22 @@
     @apply bg-background text-foreground;
   }
 
+  input,
+  select,
+  textarea {
+    color-scheme: dark;
+  }
+
+  select option {
+    background-color: #181818;
+    color: #f3f1ec;
+  }
+
+  select option:checked {
+    background-color: #4a1720;
+    color: #ffffff;
+  }
+
   ::selection {
     background: color-mix(in oklab, var(--capcar-red) 42%, transparent);
   }

@@ -355,7 +355,7 @@ export function AddVehicleForm() {
 }
 
 const inputClass =
-  "mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-white/[0.045] px-4 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-[#e72d45]/70 focus:ring-3 focus:ring-[#e72d45]/10 disabled:cursor-not-allowed disabled:text-white/35 aria-[invalid=true]:border-red-400/70";
+  "mt-2 min-h-12 w-full rounded-xl border border-white/16 bg-[#181818] px-4 text-sm font-medium text-white outline-none transition placeholder:font-normal placeholder:text-white/48 hover:border-white/25 focus:border-[#ff667a] focus:bg-[#1b1718] focus:ring-3 focus:ring-[#e72d45]/15 disabled:cursor-not-allowed disabled:text-white/50 aria-[invalid=true]:border-red-400/80";
 
 function FormSection({
   number,
@@ -373,7 +373,7 @@ function FormSection({
       <div>
         <span className="text-xs text-[#ff667a]">{number}</span>
         <h2 className="mt-2 font-medium">{title}</h2>
-        <p className="mt-1 text-xs leading-5 text-white/35">{description}</p>
+        <p className="mt-1 text-xs leading-5 text-white/50">{description}</p>
       </div>
       <div>{children}</div>
     </section>
@@ -394,9 +394,14 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label htmlFor={htmlFor} className="block text-sm text-white/75">
+    <label
+      htmlFor={htmlFor}
+      className="block text-sm font-medium text-white/90"
+    >
       <span>{label}</span>
-      {hint && <span className="ml-2 text-xs text-white/30">{hint}</span>}
+      {hint && (
+        <span className="ml-2 text-xs font-normal text-white/50">{hint}</span>
+      )}
       {children}
       {error && (
         <span className="mt-1.5 block text-xs text-red-300">{error}</span>
