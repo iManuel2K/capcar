@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "**/.capcar-backups/**",
+    "**/capcar-backups/**",
+    "**/installer-backups/**",
+    "**/_backups/**",
   ]),
 ]);
 

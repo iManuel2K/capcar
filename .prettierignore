@@ -2,4 +2,7 @@
 coverage
 node_modules
 pnpm-lock.yaml
-
+.capcar-backups
+capcar-backups
+installer-backups
+_backups

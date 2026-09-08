@@ -11,6 +11,8 @@ import {
   LogOut,
   FileJson,
   Sheet,
+  ShieldAlert,
+  Trash2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -20,8 +22,10 @@ import {
   clearLocalSnapshot,
   applyLocalSnapshot,
   collectLocalSnapshot,
+  localSnapshotSchema,
   type LocalSnapshot,
 } from "@/features/sync/local-snapshot";
+import { GARAGE_SYNC_META_KEY } from "@/features/sync/sync-metadata";
 import { ACTIVE_GARAGE_USER_KEY } from "@/components/account/garage-account-boundary";
 import { createClient } from "@/lib/supabase/client";
 import { csvCell, downloadTextFile } from "@/features/export/download";
@@ -33,6 +37,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [deleteConfirmation, setDeleteConfirmation] = useState("");
 
   useEffect(() => {
     if (!status.configured) return;
@@ -115,7 +120,9 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
         .maybeSingle();
       if (syncError) throw syncError;
       if (!data) throw new Error("No cloud snapshot exists yet.");
-      applyLocalSnapshot(data.payload as LocalSnapshot, window.localStorage);
+      const snapshot = localSnapshotSchema.parse(data.payload) as LocalSnapshot;
+      clearLocalSnapshot(window.localStorage);
+      applyLocalSnapshot(snapshot, window.localStorage);
       window.location.reload();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Restore failed.");
@@ -124,21 +131,88 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
   }
 
   async function signOut() {
-    const client = createClient();
-    const { data } = await client.auth.getUser();
-    if (data.user) {
-      const snapshot = collectLocalSnapshot(window.localStorage);
-      await client.from("garage_snapshots").upsert({
-        user_id: data.user.id,
-        payload: snapshot,
-        updated_at: new Date().toISOString(),
-      });
+    setLoading(true);
+    setError("");
+    try {
+      const client = createClient();
+      const { data, error: userError } = await client.auth.getUser();
+      if (userError) throw userError;
+      if (data.user) {
+        const snapshot = collectLocalSnapshot(window.localStorage);
+        const { error: syncError } = await client
+          .from("garage_snapshots")
+          .upsert({
+            user_id: data.user.id,
+            payload: snapshot,
+            updated_at: new Date().toISOString(),
+          });
+        if (syncError) {
+          throw new Error(
+            "Capcar could not save your latest changes. Your device data was kept and you remain signed in.",
+          );
+        }
+      }
+      const { error: signOutError } = await client.auth.signOut();
+      if (signOutError) throw signOutError;
+      clearDeviceAccountData();
+      router.replace("/login");
+      router.refresh();
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Sign-out failed.");
+      setLoading(false);
     }
-    await client.auth.signOut();
+  }
+
+  function clearDeviceAccountData() {
     clearLocalSnapshot(window.localStorage);
     window.localStorage.removeItem(ACTIVE_GARAGE_USER_KEY);
-    router.replace("/login");
-    router.refresh();
+    window.localStorage.removeItem(GARAGE_SYNC_META_KEY);
+  }
+
+  async function deleteCloudGarage() {
+    if (
+      !window.confirm(
+        "Delete the cloud garage, shared passports and account activity? Your account will stay active.",
+      )
+    )
+      return;
+    setLoading(true);
+    setError("");
+    try {
+      const { error: deleteError } = await createClient().rpc(
+        "delete_current_user_data",
+      );
+      if (deleteError) throw deleteError;
+      clearDeviceAccountData();
+      setMessage("Cloud and device garage data deleted.");
+      router.replace("/garage");
+      router.refresh();
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Garage deletion failed.",
+      );
+      setLoading(false);
+    }
+  }
+
+  async function deleteAccount() {
+    if (deleteConfirmation !== "DELETE") return;
+    setLoading(true);
+    setError("");
+    try {
+      const client = createClient();
+      const { error: deleteError } = await client.rpc("delete_current_user");
+      if (deleteError) throw deleteError;
+      clearDeviceAccountData();
+      await client.auth.signOut({ scope: "local" });
+      router.replace("/");
+      router.refresh();
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Account deletion failed.",
+      );
+      setLoading(false);
+    }
   }
 
   function exportGarageJson() {
@@ -302,16 +376,99 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
       <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs tracking-[0.14em] text-white/30 uppercase">Data ownership</p>
-            <h2 className="mt-2 text-2xl font-medium">Take the complete garage with you.</h2>
-            <p className="mt-3 max-w-xl text-sm leading-6 text-white/40">Export every local Capcar record—including the wishlist, diagnostics, costs and install stamps—without closing your account.</p>
+            <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+              Data ownership
+            </p>
+            <h2 className="mt-2 text-2xl font-medium">
+              Take the complete garage with you.
+            </h2>
+            <p className="mt-3 max-w-xl text-sm leading-6 text-white/40">
+              Export every local Capcar record—including the wishlist,
+              diagnostics, costs and install stamps—without closing your
+              account.
+            </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={exportGarageJson} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"><FileJson className="size-4" /> Export JSON</button>
-            <button type="button" onClick={exportGarageCsv} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"><Sheet className="size-4" /> Export CSV</button>
+            <button
+              type="button"
+              onClick={exportGarageJson}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"
+            >
+              <FileJson className="size-4" /> Export JSON
+            </button>
+            <button
+              type="button"
+              onClick={exportGarageCsv}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"
+            >
+              <Sheet className="size-4" /> Export CSV
+            </button>
           </div>
         </div>
       </section>
+
+      {status.configured && userEmail && (
+        <section className="mt-5 rounded-[2rem] border border-red-300/12 bg-[#140e0e] p-6 sm:p-8">
+          <div className="flex items-start gap-3">
+            <ShieldAlert className="mt-1 size-5 shrink-0 text-red-200/70" />
+            <div className="min-w-0 flex-1">
+              <p className="text-xs tracking-[0.14em] text-red-100/45 uppercase">
+                Account controls
+              </p>
+              <h2 className="mt-2 text-2xl font-medium">
+                Delete what Capcar stores.
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/40">
+                Download an export first if you need a copy. Cloud-garage
+                deletion keeps the login; account deletion removes the login and
+                all account-owned records.
+              </p>
+              <div className="mt-6 grid gap-5 lg:grid-cols-2">
+                <div className="rounded-2xl border border-white/8 p-4">
+                  <h3 className="font-medium text-white/75">
+                    Garage data only
+                  </h3>
+                  <p className="mt-2 text-xs leading-5 text-white/35">
+                    Deletes the cloud snapshot, shared passports, rate-limit
+                    history and recorded affiliate clicks.
+                  </p>
+                  <button
+                    type="button"
+                    disabled={loading}
+                    onClick={() => void deleteCloudGarage()}
+                    className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl border border-red-200/15 px-4 text-sm text-red-100/65 disabled:opacity-40"
+                  >
+                    <Trash2 className="size-4" /> Delete garage data
+                  </button>
+                </div>
+                <div className="rounded-2xl border border-red-300/12 p-4">
+                  <h3 className="font-medium text-white/75">Entire account</h3>
+                  <p className="mt-2 text-xs leading-5 text-white/35">
+                    Type DELETE to confirm. This cannot be undone.
+                  </p>
+                  <input
+                    aria-label="Type DELETE to confirm account deletion"
+                    value={deleteConfirmation}
+                    onChange={(event) =>
+                      setDeleteConfirmation(event.target.value)
+                    }
+                    placeholder="DELETE"
+                    className="mt-4 min-h-11 w-full rounded-xl border border-white/10 bg-black/20 px-3 text-sm outline-none focus:border-red-200/30"
+                  />
+                  <button
+                    type="button"
+                    disabled={loading || deleteConfirmation !== "DELETE"}
+                    onClick={() => void deleteAccount()}
+                    className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-xl bg-red-800/60 px-4 text-sm font-semibold text-red-50 disabled:opacity-35"
+                  >
+                    <Trash2 className="size-4" /> Delete account
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

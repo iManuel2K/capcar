@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import { readBuildState } from "@/features/builds/build-storage";
 import { readDiagnostics } from "@/features/diagnostics/diagnostic-storage";
 import { maintenanceCatalog } from "@/features/maintenance/maintenance-catalog";
@@ -9,25 +11,57 @@ import { evaluateFitment } from "@/features/parts/fitment";
 
 type ReadableStorage = Pick<Storage, "getItem">;
 
-export type VehiclePassportPayload = {
-  version: 1;
-  generatedAt: string;
-  vehicle: {
-    id: string;
-    make: string;
-    model: string;
-    productionYear: number;
-    platform: string;
-    engineCode: string;
-    transmission: string;
-    mileage: number;
-    vinLastFive?: string;
-  };
-  maintenance: Array<{ title: string; completedDate: string; mileage: number }>;
-  modifications: Array<{ title: string; status: string; cost: number; selectedMerchant?: string; fitment: string; verification: string }>;
-  diagnostics: Array<{ code: string; title: string; status: string; mileage: number; resolution?: string }>;
-  installStamps: Array<{ work: string; specialist: string; installedAt: string; verification: string }>;
-};
+export const vehiclePassportSchema = z.object({
+  version: z.literal(1),
+  generatedAt: z.string().datetime(),
+  vehicle: z.object({
+    id: z.string().min(1),
+    make: z.string().min(1),
+    model: z.string().min(1),
+    productionYear: z.number().int(),
+    platform: z.string().min(1),
+    engineCode: z.string().min(1),
+    transmission: z.string().min(1),
+    mileage: z.number().nonnegative(),
+    vinLastFive: z.string().max(5).optional(),
+  }),
+  maintenance: z.array(
+    z.object({
+      title: z.string().min(1),
+      completedDate: z.string().min(1),
+      mileage: z.number().nonnegative(),
+    }),
+  ),
+  modifications: z.array(
+    z.object({
+      title: z.string().min(1),
+      status: z.string().min(1),
+      cost: z.number().nonnegative(),
+      selectedMerchant: z.string().min(1).optional(),
+      fitment: z.string().min(1),
+      verification: z.string().min(1),
+    }),
+  ),
+  diagnostics: z.array(
+    z.object({
+      code: z.string().min(1),
+      title: z.string().min(1),
+      status: z.string().min(1),
+      mileage: z.number().nonnegative(),
+      resolution: z.string().min(1).optional(),
+    }),
+  ),
+  installStamps: z.array(
+    z.object({
+      work: z.string().min(1),
+      specialist: z.string().min(1),
+      installedAt: z.string().min(1),
+      verification: z.string().min(1),
+    }),
+  ),
+});
+
+export type VehiclePassportPayload = z.infer<typeof vehiclePassportSchema>;
 
 export function buildVehiclePassport(
   vehicleId: string,
@@ -39,12 +73,18 @@ export function buildVehiclePassport(
   const maintenance = readMaintenanceRecords(storage)
     .filter((item) => item.vehicleId === vehicleId)
     .map((item) => ({
-      title: maintenanceCatalog.find((template) => template.key === item.taskKey)?.title ?? item.taskKey,
+      title:
+        maintenanceCatalog.find((template) => template.key === item.taskKey)
+          ?.title ?? item.taskKey,
       completedDate: item.lastCompletedDate,
       mileage: item.lastCompletedMileage,
     }));
   const buildState = readBuildState(storage);
-  const buildIds = new Set(buildState.builds.filter((item) => item.vehicleId === vehicleId).map((item) => item.id));
+  const buildIds = new Set(
+    buildState.builds
+      .filter((item) => item.vehicleId === vehicleId)
+      .map((item) => item.id),
+  );
   return {
     version: 1,
     generatedAt: now,
@@ -60,28 +100,97 @@ export function buildVehiclePassport(
       vinLastFive: vehicle.vin?.slice(-5),
     },
     maintenance,
-    modifications: buildState.items.filter((item) => buildIds.has(item.buildId)).map((item) => {
-      const catalogPart = item.catalogPartId ? findCatalogPart(item.catalogPartId) : undefined;
-      const fitment = catalogPart ? evaluateFitment(catalogPart, vehicle).label : "No structured fitment record";
-      return {
+    modifications: buildState.items
+      .filter((item) => buildIds.has(item.buildId))
+      .map((item) => {
+        const catalogPart = item.catalogPartId
+          ? findCatalogPart(item.catalogPartId)
+          : undefined;
+        const fitment = catalogPart
+          ? evaluateFitment(catalogPart, vehicle).label
+          : "No structured fitment record";
+        return {
+          title: item.title,
+          status: item.status,
+          cost: item.deliveredPrice ?? item.estimatedCost,
+          selectedMerchant: item.merchantName,
+          fitment,
+          verification:
+            item.status === "installed"
+              ? "Owner-recorded installation"
+              : "Planning record",
+        };
+      }),
+    diagnostics: readDiagnostics(storage)
+      .filter((item) => item.vehicleId === vehicleId)
+      .map((item) => ({
+        code: item.code,
         title: item.title,
         status: item.status,
-        cost: item.deliveredPrice ?? item.estimatedCost,
-        selectedMerchant: item.merchantName,
-        fitment,
-        verification: item.status === "installed" ? "Owner-recorded installation" : "Planning record",
-      };
-    }),
-    diagnostics: readDiagnostics(storage).filter((item) => item.vehicleId === vehicleId).map((item) => ({ code: item.code, title: item.title, status: item.status, mileage: item.mileage, resolution: item.resolution })),
-    installStamps: readInstallStamps(storage).filter((item) => item.vehicleId === vehicleId).map((item) => ({ work: item.work, specialist: item.specialistName, installedAt: item.installedAt, verification: item.verification })),
+        mileage: item.mileage,
+        resolution: item.resolution,
+      })),
+    installStamps: readInstallStamps(storage)
+      .filter((item) => item.vehicleId === vehicleId)
+      .map((item) => ({
+        work: item.work,
+        specialist: item.specialistName,
+        installedAt: item.installedAt,
+        verification: item.verification,
+      })),
   };
 }
 
 export function passportToCsv(passport: VehiclePassportPayload) {
-  const rows: string[][] = [["record_type", "date_or_status", "title", "mileage", "cost_or_source", "detail"]];
-  for (const item of passport.maintenance) rows.push(["maintenance", item.completedDate, item.title, String(item.mileage), "", ""]);
-  for (const item of passport.modifications) rows.push(["modification", item.status, item.title, "", String(item.cost), `${item.fitment} · ${item.verification}${item.selectedMerchant ? ` · ${item.selectedMerchant}` : ""}`]);
-  for (const item of passport.diagnostics) rows.push(["diagnostic", item.status, `${item.code} · ${item.title}`, String(item.mileage), "", item.resolution ?? ""]);
-  for (const item of passport.installStamps) rows.push(["install_stamp", item.installedAt, item.work, "", item.specialist, item.verification]);
-  return rows.map((row) => row.map((cell) => `"${cell.replaceAll('"', '""')}"`).join(",")).join("\n");
+  const rows: string[][] = [
+    [
+      "record_type",
+      "date_or_status",
+      "title",
+      "mileage",
+      "cost_or_source",
+      "detail",
+    ],
+  ];
+  for (const item of passport.maintenance)
+    rows.push([
+      "maintenance",
+      item.completedDate,
+      item.title,
+      String(item.mileage),
+      "",
+      "",
+    ]);
+  for (const item of passport.modifications)
+    rows.push([
+      "modification",
+      item.status,
+      item.title,
+      "",
+      String(item.cost),
+      `${item.fitment} · ${item.verification}${item.selectedMerchant ? ` · ${item.selectedMerchant}` : ""}`,
+    ]);
+  for (const item of passport.diagnostics)
+    rows.push([
+      "diagnostic",
+      item.status,
+      `${item.code} · ${item.title}`,
+      String(item.mileage),
+      "",
+      item.resolution ?? "",
+    ]);
+  for (const item of passport.installStamps)
+    rows.push([
+      "install_stamp",
+      item.installedAt,
+      item.work,
+      "",
+      item.specialist,
+      item.verification,
+    ]);
+  return rows
+    .map((row) =>
+      row.map((cell) => `"${cell.replaceAll('"', '""')}"`).join(","),
+    )
+    .join("\n");
 }

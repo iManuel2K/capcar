@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const isDevelopment = process.env.NODE_ENV === "development";
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
@@ -7,6 +9,24 @@ const nextConfig: NextConfig = {
     root: process.cwd(),
   },
   async headers() {
+    const contentSecurityPolicy = [
+      "default-src 'self'",
+      "base-uri 'self'",
+      "object-src 'none'",
+      "frame-ancestors 'none'",
+      "form-action 'self'",
+      `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://static.sketchfab.com`,
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https://*.sketchfab.com",
+      "font-src 'self' data:",
+      "connect-src 'self' https://*.supabase.co https://*.sketchfab.com",
+      "frame-src https://sketchfab.com https://*.sketchfab.com",
+      "media-src 'self' blob: https://*.sketchfab.com",
+      "worker-src 'self' blob:",
+      "manifest-src 'self'",
+      ...(isDevelopment ? [] : ["upgrade-insecure-requests"]),
+    ].join("; ");
+
     return [
       {
         source: "/:path*",
@@ -14,9 +34,28 @@ const nextConfig: NextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "X-Frame-Options", value: "DENY" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Content-Security-Policy", value: contentSecurityPolicy },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains",
+          },
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
+          },
+        ],
+      },
+      {
+        source: "/sw.js",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "application/javascript; charset=utf-8",
+          },
+          {
+            key: "Cache-Control",
+            value: "no-cache, no-store, must-revalidate",
           },
         ],
       },

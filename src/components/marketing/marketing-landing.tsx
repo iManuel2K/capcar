@@ -191,6 +191,8 @@ export function MarketingLanding() {
         <div className="flex items-center gap-5 text-sm font-medium text-[#0e2d30]/75">
           <Link href="/roadmap">Roadmap</Link>
           <Link href="/#faq">FAQ</Link>
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/imprint">Imprint</Link>
           <Link href="/register">Open garage →</Link>
         </div>
       </footer>

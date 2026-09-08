@@ -2,15 +2,22 @@ import { NextResponse } from "next/server";
 
 import { createOffersProvider } from "@/features/providers/offers-provider";
 import { offerSearchRequestSchema } from "@/features/providers/provider-request-schema";
+import {
+  guardProductApi,
+  productApiError,
+  readJsonRequest,
+} from "@/lib/api/guard";
 
 export async function POST(request: Request) {
+  const guard = await guardProductApi("offers-search");
+  if (!guard.ok) return guard.response;
   try {
-    const input = offerSearchRequestSchema.parse(await request.json());
+    const input = await readJsonRequest(request, offerSearchRequestSchema);
     const result = await createOffersProvider().search(input);
-    return NextResponse.json(result);
+    return NextResponse.json(result, {
+      headers: { "Cache-Control": "no-store" },
+    });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Offer search failed.";
-    return NextResponse.json({ error: message }, { status: 400 });
+    return productApiError(error, "Offer search failed.");
   }
 }

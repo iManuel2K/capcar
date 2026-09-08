@@ -1,3 +1,5 @@
+import { getLegalConfiguration } from "@/features/legal/legal-config";
+
 export type DeploymentReadinessState = "local" | "configured" | "ready";
 
 export type DeploymentCheck = {
@@ -16,6 +18,7 @@ export type DeploymentReadiness = {
 export function getDeploymentReadiness(
   environment: Record<string, string | undefined> = process.env,
 ): DeploymentReadiness {
+  const legal = getLegalConfiguration(environment);
   const siteUrl = environment.NEXT_PUBLIC_SITE_URL?.trim();
   const supabaseUrl = environment.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const publishableKey =
@@ -59,9 +62,17 @@ export function getDeploymentReadiness(
         ? "The application is running in the production environment."
         : "Local and preview environments remain in launch-preview mode. Netlify uses CONTEXT=production.",
     },
+    {
+      key: "legal-identity",
+      label: "Public operator and privacy contact",
+      ready: legal.complete,
+      detail: legal.complete
+        ? "Operator, address and privacy contact are configured."
+        : "Set the operator, address and privacy contact variables before public launch.",
+    },
   ];
   const configured = siteIsHttps && supabaseIsHttps && Boolean(publishableKey);
-  const ready = configured && production;
+  const ready = configured && production && legal.complete;
 
   return {
     state: ready ? "ready" : configured ? "configured" : "local",

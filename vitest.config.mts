@@ -12,6 +12,12 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
-    exclude: [...configDefaults.exclude, "**/.capcar-backups/**"],
+    exclude: [
+      ...configDefaults.exclude,
+      "**/.capcar-backups/**",
+      "**/capcar-backups/**",
+      "**/installer-backups/**",
+      "**/_backups/**",
+    ],
   },
 });

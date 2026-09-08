@@ -25,6 +25,9 @@ describe("deployment readiness", () => {
       NEXT_PUBLIC_SITE_URL: "https://capcar.example",
       NEXT_PUBLIC_SUPABASE_URL: "https://project.supabase.co",
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test",
+      NEXT_PUBLIC_LEGAL_OPERATOR: "Capcar Beta",
+      NEXT_PUBLIC_LEGAL_ADDRESS: "Example address",
+      NEXT_PUBLIC_PRIVACY_CONTACT: "privacy@example.test",
       VERCEL_ENV: "production",
     });
     expect(result.state).toBe("ready");
@@ -36,6 +39,9 @@ describe("deployment readiness", () => {
       NEXT_PUBLIC_SITE_URL: "https://capcar-im.netlify.app",
       NEXT_PUBLIC_SUPABASE_URL: "https://project.supabase.co",
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test",
+      NEXT_PUBLIC_LEGAL_OPERATOR: "Capcar Beta",
+      NEXT_PUBLIC_LEGAL_ADDRESS: "Example address",
+      NEXT_PUBLIC_PRIVACY_CONTACT: "privacy@example.test",
       CONTEXT: "production",
     });
     expect(result.state).toBe("ready");
