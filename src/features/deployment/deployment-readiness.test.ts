@@ -47,4 +47,18 @@ describe("deployment readiness", () => {
     expect(result.state).toBe("ready");
     expect(result.ready).toBe(true);
   });
+
+  it("supports an explicit production marker when the host omits build context", () => {
+    const result = getDeploymentReadiness({
+      NEXT_PUBLIC_SITE_URL: "https://capcar-im.netlify.app",
+      NEXT_PUBLIC_SUPABASE_URL: "https://project.supabase.co",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test",
+      NEXT_PUBLIC_LEGAL_OPERATOR: "Capcar Beta",
+      NEXT_PUBLIC_LEGAL_ADDRESS: "Example address",
+      NEXT_PUBLIC_PRIVACY_CONTACT: "privacy@example.test",
+      NEXT_PUBLIC_DEPLOYMENT_ENV: "production",
+    });
+    expect(result.state).toBe("ready");
+    expect(result.ready).toBe(true);
+  });
 });

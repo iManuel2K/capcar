@@ -23,7 +23,9 @@ export function getDeploymentReadiness(
   const supabaseUrl = environment.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const publishableKey =
     environment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim();
+  const deploymentEnvironment = environment.NEXT_PUBLIC_DEPLOYMENT_ENV?.trim();
   const production =
+    deploymentEnvironment === "production" ||
     environment.VERCEL_ENV === "production" ||
     environment.CONTEXT === "production";
   const siteIsHttps = Boolean(siteUrl?.startsWith("https://"));
@@ -60,7 +62,7 @@ export function getDeploymentReadiness(
       ready: production,
       detail: production
         ? "The application is running in the production environment."
-        : "Local and preview environments remain in launch-preview mode. Netlify uses CONTEXT=production.",
+        : "Set NEXT_PUBLIC_DEPLOYMENT_ENV=production on the live Netlify context.",
     },
     {
       key: "legal-identity",

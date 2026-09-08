@@ -40,6 +40,7 @@ Set these Production environment variables:
 ```text
 NEXT_PUBLIC_APP_URL=https://capcar-im.netlify.app
 NEXT_PUBLIC_SITE_URL=https://capcar-im.netlify.app
+NEXT_PUBLIC_DEPLOYMENT_ENV=production
 NEXT_PUBLIC_SUPABASE_URL=<public Supabase project URL>
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<browser-safe publishable key>
 NEXT_PUBLIC_LEGAL_OPERATOR=<legal operator name>
