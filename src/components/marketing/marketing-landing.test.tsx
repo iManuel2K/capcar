@@ -19,10 +19,14 @@ describe("MarketingLanding", () => {
     expect(screen.getByText("Interactive Vehicle Models")).toBeInTheDocument();
     expect(screen.getByText("Nearby & Destination Events")).toBeInTheDocument();
     expect(screen.getByText("Motorcycle Garages")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Roadmap" })).toHaveAttribute(
-      "href",
-      "#roadmap",
-    );
+    expect(
+      screen
+        .getAllByRole("link", { name: "Roadmap" })
+        .some((link) => link.getAttribute("href") === "/roadmap"),
+    ).toBe(true);
+    expect(
+      screen.getByText("What is Capcar trying to solve?"),
+    ).toBeInTheDocument();
   });
 
   it("provides direct routes into the garage", () => {
@@ -44,6 +48,18 @@ describe("MarketingLanding", () => {
       screen.getByRole("button", { name: /f30 front brake kit/i }),
     );
     expect(screen.getByText("Incompatible")).toBeInTheDocument();
+  });
+
+  it("opens mobile navigation", () => {
+    render(<MarketingLanding />);
+    fireEvent.click(screen.getByRole("button", { name: "Open navigation" }));
+    expect(
+      screen.getByRole("dialog", { name: "Mobile navigation" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Sign in" })).toHaveAttribute(
+      "href",
+      "/login",
+    );
   });
 
   it("slides between the current car and planned vision", () => {

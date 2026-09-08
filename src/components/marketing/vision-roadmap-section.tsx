@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import {
+  ArrowRight,
   Bike,
   CalendarDays,
   CarFront,
@@ -227,9 +229,17 @@ export function VisionRoadmapSection() {
               The garage keeps expanding.
             </h2>
           </div>
-          <p className="hidden max-w-sm text-sm leading-6 text-white/42 lg:block">
-            Public direction, shaped by what drivers want to build next.
-          </p>
+          <div className="hidden max-w-sm lg:block">
+            <p className="text-sm leading-6 text-white/42">
+              Public direction, shaped by what drivers want to build next.
+            </p>
+            <Link
+              href="/roadmap"
+              className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[#e8e6d7] transition hover:text-[#bf8269]"
+            >
+              Explore the full roadmap <ArrowRight className="size-4" />
+            </Link>
+          </div>
         </div>
 
         <div className="mt-10 grid overflow-hidden rounded-[1.75rem] border border-white/12 sm:rounded-[2.25rem] lg:grid-cols-6">
@@ -283,6 +293,13 @@ export function VisionRoadmapSection() {
             </article>
           ))}
         </div>
+
+        <Link
+          href="/roadmap"
+          className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-white/12 text-sm font-medium text-white/72 lg:hidden"
+        >
+          Explore the full roadmap <ArrowRight className="size-4" />
+        </Link>
 
         <div className="mt-5 grid gap-3 rounded-[1.5rem] border border-white/10 bg-white/[0.025] p-5 text-sm text-white/45 sm:grid-cols-3 sm:p-6">
           <span className="flex items-center gap-3">

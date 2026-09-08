@@ -12,6 +12,7 @@ import {
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { FitmentLookup } from "@/components/marketing/fitment-lookup";
+import { MarketingFaq } from "@/components/marketing/marketing-faq";
 import { MarketingHero } from "@/components/marketing/marketing-hero";
 import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
 import { VisionRoadmapSection } from "@/components/marketing/vision-roadmap-section";
@@ -150,6 +151,8 @@ export function MarketingLanding() {
 
         <VisionRoadmapSection />
 
+        <MarketingFaq />
+
         <section className="bg-[#88988d] px-5 py-5 sm:px-8 sm:py-8">
           <div className="relative mx-auto min-h-[330px] max-w-[1500px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0e2d30] px-6 py-10 text-[#e8e6d7] shadow-[0_30px_90px_rgba(20,34,28,0.18)] sm:min-h-[430px] sm:rounded-[2.5rem] sm:px-12 sm:py-14 lg:px-20">
             <div className="absolute top-0 right-0 h-full w-1/2 bg-[radial-gradient(circle_at_center,rgba(231,45,69,0.22),transparent_65%)]" />
@@ -185,12 +188,11 @@ export function MarketingLanding() {
           Confirm fitment, safety requirements and legal approval before
           installation.
         </p>
-        <Link
-          href="/register"
-          className="text-sm font-medium text-[#0e2d30]/75"
-        >
-          Open garage →
-        </Link>
+        <div className="flex items-center gap-5 text-sm font-medium text-[#0e2d30]/75">
+          <Link href="/roadmap">Roadmap</Link>
+          <Link href="/#faq">FAQ</Link>
+          <Link href="/register">Open garage →</Link>
+        </div>
       </footer>
     </div>
   );

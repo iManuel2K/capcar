@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useState, type KeyboardEvent, type PointerEvent } from "react";
 
-import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
+import { MarketingHeader } from "@/components/marketing/marketing-header";
 
 const heroImages = {
   current: {
@@ -48,38 +48,7 @@ export function MarketingHero() {
 
   return (
     <section className="bg-[#e8e6d7] pb-2 sm:pb-4 lg:pb-6">
-      <header className="mx-auto flex h-18 w-full max-w-[1500px] items-center justify-between px-5 text-[#0e2d30] sm:h-20 sm:px-8">
-        <Link
-          href="/"
-          aria-label="Capcar home"
-          className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6d0101]"
-        >
-          <CapcarWordmark glow={false} />
-        </Link>
-        <nav
-          aria-label="Main navigation"
-          className="hidden items-center gap-8 text-sm text-[#0e2d30]/62 md:flex"
-        >
-          <a className="transition hover:text-[#6d0101]" href="#platform">
-            Platform
-          </a>
-          <a className="transition hover:text-[#6d0101]" href="#projects">
-            Projects
-          </a>
-          <a className="transition hover:text-[#6d0101]" href="#fitment">
-            Fitment
-          </a>
-          <a className="transition hover:text-[#6d0101]" href="#roadmap">
-            Roadmap
-          </a>
-        </nav>
-        <Link
-          href="/register"
-          className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0e2d30] px-4 text-sm font-medium text-[#e8e6d7] transition hover:-translate-y-0.5 hover:bg-[#6d0101]"
-        >
-          Build your car <ArrowRight className="size-4" />
-        </Link>
-      </header>
+      <MarketingHeader />
 
       <div className="relative mx-2 min-h-[calc(100svh-5.5rem)] overflow-hidden rounded-[1.75rem] bg-[#050306] text-[#e8e6d7] shadow-[0_24px_80px_rgba(5,3,6,0.22)] sm:mx-4 sm:min-h-[calc(100svh-6rem)] sm:rounded-[2.5rem] lg:mx-6">
         <HeroPicture mode="current" priority />
