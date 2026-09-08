@@ -6,6 +6,7 @@ import {
   Camera,
   Rotate3D,
   Save,
+  RefreshCw,
   Undo2,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -67,8 +68,10 @@ function loadViewerScript() {
     script.src = "https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js";
     script.async = true;
     script.onload = () => resolve();
-    script.onerror = () =>
+    script.onerror = () => {
+      viewerScriptPromise = undefined;
       reject(new Error("Sketchfab Viewer API could not load."));
+    };
     document.head.appendChild(script);
   });
   return viewerScriptPromise;
@@ -89,9 +92,18 @@ export function SketchfabInteriorStage({
     useState<InteriorCameraName>("driver");
   const [presets, setPresets] = useState<InteriorCameraPresets>({});
   const [message, setMessage] = useState("Loading the E90 cabin…");
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
+    const timeout = window.setTimeout(() => {
+      if (!cancelled) {
+        setStatus("error");
+        setMessage(
+          "Sketchfab did not respond. Retry here or open the model directly.",
+        );
+      }
+    }, 15_000);
 
     void loadViewerScript()
       .then(() => {
@@ -109,6 +121,7 @@ export function SketchfabInteriorStage({
             api.start();
             api.addEventListener("viewerready", () => {
               if (cancelled) return;
+              window.clearTimeout(timeout);
               api.getCameraLookAt((error, camera) => {
                 if (!error) defaultCameraRef.current = camera;
               });
@@ -137,24 +150,37 @@ export function SketchfabInteriorStage({
           },
           error() {
             if (!cancelled) {
+              window.clearTimeout(timeout);
               setStatus("error");
-              setMessage("The interactive cabin could not load.");
+              setMessage(
+                "Sketchfab could not initialize. Retry here or open the model directly.",
+              );
             }
           },
         });
       })
       .catch(() => {
         if (!cancelled) {
+          window.clearTimeout(timeout);
           setStatus("error");
-          setMessage("The interactive cabin could not load.");
+          setMessage(
+            "The Sketchfab viewer script was blocked. Check content blockers and retry.",
+          );
         }
       });
 
     return () => {
       cancelled = true;
+      window.clearTimeout(timeout);
       apiRef.current = null;
     };
-  }, [reference.modelUid]);
+  }, [reference.modelUid, retryKey]);
+
+  function retryViewer() {
+    setStatus("loading");
+    setMessage("Loading the E90 cabin…");
+    setRetryKey((current) => current + 1);
+  }
 
   function recallPreset(name: InteriorCameraName) {
     setActivePreset(name);
@@ -212,6 +238,7 @@ export function SketchfabInteriorStage({
 
       <div className="relative aspect-[16/10] min-h-[430px] w-full bg-[#1c1f20] sm:min-h-[560px]">
         <iframe
+          key={retryKey}
           ref={iframeRef}
           title={`${reference.title} interactive interior`}
           allow="autoplay; fullscreen; xr-spatial-tracking"
@@ -219,10 +246,31 @@ export function SketchfabInteriorStage({
           className="absolute inset-0 h-full w-full border-0"
         />
         {status !== "ready" && (
-          <div className="pointer-events-none absolute inset-0 grid place-items-center bg-[#090909]/85 text-sm text-white/45">
-            {status === "loading"
-              ? "Loading interactive cabin…"
-              : "Cabin unavailable"}
+          <div className="absolute inset-0 grid place-items-center bg-[#090909]/90 p-6 text-center text-sm text-white/45">
+            {status === "loading" ? (
+              "Loading interactive cabin…"
+            ) : (
+              <div>
+                <p>Interactive cabin unavailable</p>
+                <div className="mt-4 flex flex-col justify-center gap-2 sm:flex-row">
+                  <button
+                    type="button"
+                    onClick={retryViewer}
+                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 font-semibold text-[#07101d]"
+                  >
+                    <RefreshCw className="size-4" /> Retry viewer
+                  </button>
+                  <a
+                    href={reference.sourceUrl}
+                    target="_blank"
+                    rel="noreferrer nofollow"
+                    className="inline-flex min-h-10 items-center justify-center rounded-xl border border-white/10 px-4 text-white/65"
+                  >
+                    Open on Sketchfab
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

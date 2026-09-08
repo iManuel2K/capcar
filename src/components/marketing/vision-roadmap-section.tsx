@@ -1,6 +1,17 @@
 "use client";
 
-import { Check, Circle, Sparkles } from "lucide-react";
+import {
+  Bike,
+  CalendarDays,
+  CarFront,
+  Check,
+  Circle,
+  Gauge,
+  ScanLine,
+  Sparkles,
+  Waves,
+  WandSparkles,
+} from "lucide-react";
 import { useState } from "react";
 
 const tools = [
@@ -40,12 +51,18 @@ const phases = [
   {
     phase: "Phase 1",
     state: "Alpha",
+    label: "Foundation",
+    description: "The essential structure for a dependable digital garage.",
     items: ["Core Garage", "Fitment Engine v1", "Budget Tracker"],
     current: false,
+    next: false,
+    icon: Gauge,
   },
   {
     phase: "Phase 2",
     state: "Beta",
+    label: "Current release",
+    description: "A complete record for ownership, maintenance and builds.",
     items: [
       "Vehicle Passport",
       "Wishlist Manager",
@@ -54,17 +71,60 @@ const phases = [
       "Specialist Directory",
     ],
     current: true,
+    next: false,
+    icon: ScanLine,
   },
   {
     phase: "Phase 3",
     state: "v1.0 Public",
+    label: "The visual release",
+    description:
+      "A more cinematic garage with interactive vehicles, sound and recognizable demo builds.",
     items: [
+      "Interactive Vehicle Models",
+      "Iconic Movie Car Demos",
+      "Engine & Exhaust Sound Studio",
+      "3D Homepage Visualizer",
+      "OBD-II Scanning",
       "Verified Shop Stamps",
       "Direct Merchant Checkout",
       "Community Marketplace",
-      "OBD-II Scanning",
     ],
     current: false,
+    next: true,
+    icon: CarFront,
+  },
+  {
+    phase: "Phase 4",
+    state: "Intelligent Garage",
+    label: "Discovery & AI",
+    description:
+      "Move from managing a build to discovering where it can go next.",
+    items: [
+      "Nearby & Destination Events",
+      "AI Build Ideas",
+      "AI Visual Concepts",
+      "Personalized Upgrade Paths",
+    ],
+    current: false,
+    next: false,
+    icon: WandSparkles,
+  },
+  {
+    phase: "Phase 5",
+    state: "Capcar v3",
+    label: "The universal garage",
+    description:
+      "One place for every machine, board and project you care about.",
+    items: [
+      "Motorcycle Garages",
+      "Bicycle Garages",
+      "Surfboard Quivers",
+      "Cross-Project Collections",
+    ],
+    current: false,
+    next: false,
+    icon: Bike,
   },
 ] as const;
 
@@ -72,7 +132,10 @@ export function VisionRoadmapSection() {
   const [selected, setSelected] = useState<(typeof tools)[number]>(tools[4]);
 
   return (
-    <section className="border-y border-white/8 bg-[#0e2d30] text-[#e8e6d7]">
+    <section
+      id="roadmap"
+      className="scroll-mt-20 border-y border-white/8 bg-[#0e2d30] text-[#e8e6d7]"
+    >
       <div className="mx-auto max-w-[1500px] px-5 py-20 sm:px-8 sm:py-32">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
@@ -155,33 +218,61 @@ export function VisionRoadmapSection() {
           </div>
         </div>
 
-        <div className="mt-5 grid overflow-hidden rounded-[1.75rem] border border-white/12 sm:rounded-[2.25rem] lg:grid-cols-3">
+        <div className="mt-20 flex items-end justify-between gap-8 sm:mt-28">
+          <div>
+            <p className="text-xs font-semibold tracking-[0.22em] text-[#bf8269] uppercase">
+              Product roadmap
+            </p>
+            <h2 className="mt-4 max-w-3xl text-4xl leading-[0.94] font-medium tracking-[-0.055em] sm:text-6xl">
+              The garage keeps expanding.
+            </h2>
+          </div>
+          <p className="hidden max-w-sm text-sm leading-6 text-white/42 lg:block">
+            Public direction, shaped by what drivers want to build next.
+          </p>
+        </div>
+
+        <div className="mt-10 grid overflow-hidden rounded-[1.75rem] border border-white/12 sm:rounded-[2.25rem] lg:grid-cols-6">
           {phases.map((phase) => (
             <article
               key={phase.phase}
-              className={`relative min-h-72 border-t border-white/8 p-6 first:border-t-0 sm:p-8 lg:border-t-0 lg:border-l lg:first:border-l-0 ${phase.current ? "bg-[radial-gradient(circle_at_80%_0%,rgba(231,45,69,0.24),transparent_35%),#24090a]" : "bg-[#153b3e]"}`}
+              className={`group relative min-h-80 border-t border-white/8 p-6 first:border-t-0 sm:p-8 lg:col-span-2 lg:border-t-0 lg:border-l lg:first:border-l-0 ${phase.phase === "Phase 4" ? "lg:col-span-3 lg:border-t" : ""} ${phase.phase === "Phase 5" ? "lg:col-span-3 lg:border-t" : ""} ${phase.current ? "bg-[radial-gradient(circle_at_80%_0%,rgba(231,45,69,0.24),transparent_35%),#24090a]" : phase.next ? "bg-[radial-gradient(circle_at_82%_4%,rgba(191,130,105,0.22),transparent_30%),#183f42]" : "bg-[#153b3e]"}`}
             >
               <div className="flex items-center justify-between gap-4">
                 <p className="text-[11px] font-semibold tracking-[0.16em] text-white/30 uppercase">
                   {phase.phase}
                 </p>
-                {phase.current && (
+                {phase.current ? (
                   <span className="rounded-full border border-[#bf8269]/35 bg-[#6d0101]/55 px-3 py-1 text-[10px] font-semibold tracking-[0.1em] text-[#e8e6d7] uppercase">
                     Current
                   </span>
+                ) : phase.next ? (
+                  <span className="rounded-full border border-[#bf8269]/35 bg-[#bf8269]/12 px-3 py-1 text-[10px] font-semibold tracking-[0.1em] text-[#e8e6d7] uppercase">
+                    Coming next
+                  </span>
+                ) : (
+                  <phase.icon className="size-4 text-white/25 transition group-hover:text-[#bf8269]" />
                 )}
               </div>
               <h3 className="mt-6 text-2xl font-medium tracking-[-0.035em]">
                 {phase.state}
               </h3>
-              <ul className="mt-8 space-y-3">
+              <p className="mt-2 text-[11px] font-semibold tracking-[0.13em] text-[#bf8269] uppercase">
+                {phase.label}
+              </p>
+              <p className="mt-4 max-w-md text-sm leading-6 text-white/42">
+                {phase.description}
+              </p>
+              <ul
+                className={`mt-7 grid gap-3 ${phase.next ? "sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2" : ""}`}
+              >
                 {phase.items.map((item) => (
                   <li
                     key={item}
                     className="flex items-center gap-3 text-sm text-white/50"
                   >
                     <span
-                      className={`grid size-5 place-items-center rounded-full ${phase.current ? "bg-[#6d0101]/15 text-[#bf8269]" : "bg-white/5 text-white/30"}`}
+                      className={`grid size-5 place-items-center rounded-full ${phase.current || phase.next ? "bg-[#6d0101]/15 text-[#bf8269]" : "bg-white/5 text-white/30"}`}
                     >
                       <Check className="size-3" />
                     </span>
@@ -191,6 +282,20 @@ export function VisionRoadmapSection() {
               </ul>
             </article>
           ))}
+        </div>
+
+        <div className="mt-5 grid gap-3 rounded-[1.5rem] border border-white/10 bg-white/[0.025] p-5 text-sm text-white/45 sm:grid-cols-3 sm:p-6">
+          <span className="flex items-center gap-3">
+            <CalendarDays className="size-4 text-[#bf8269]" /> Events connect
+            the community.
+          </span>
+          <span className="flex items-center gap-3">
+            <Sparkles className="size-4 text-[#bf8269]" /> AI makes new ideas
+            visible.
+          </span>
+          <span className="flex items-center gap-3">
+            <Waves className="size-4 text-[#bf8269]" /> One garage, beyond cars.
+          </span>
         </div>
       </div>
     </section>

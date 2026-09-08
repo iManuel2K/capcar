@@ -16,6 +16,13 @@ describe("MarketingLanding", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Beta" })).toBeInTheDocument();
     expect(screen.getByText("OBD-II Scanning")).toBeInTheDocument();
+    expect(screen.getByText("Interactive Vehicle Models")).toBeInTheDocument();
+    expect(screen.getByText("Nearby & Destination Events")).toBeInTheDocument();
+    expect(screen.getByText("Motorcycle Garages")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Roadmap" })).toHaveAttribute(
+      "href",
+      "#roadmap",
+    );
   });
 
   it("provides direct routes into the garage", () => {

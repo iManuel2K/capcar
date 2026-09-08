@@ -69,6 +69,9 @@ export function MarketingHero() {
           <a className="transition hover:text-[#6d0101]" href="#fitment">
             Fitment
           </a>
+          <a className="transition hover:text-[#6d0101]" href="#roadmap">
+            Roadmap
+          </a>
         </nav>
         <Link
           href="/register"
