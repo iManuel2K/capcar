@@ -1,0 +1,14 @@
+package.json
+pnpm-lock.yaml
+src/app/sitemap.ts
+src/app/studio/page.tsx
+src/components/marketing/marketing-landing.tsx
+src/components/visualizer/concept-renderer.ts
+src/components/visualizer/concept-studio.tsx
+src/components/visualizer/concept-studio.test.tsx
+src/features/visualizer/concept-studio.ts
+src/features/visualizer/concept-studio.test.ts
+public/models/concepts/sedan-sports.glb
+public/models/concepts/hatchback-sports.glb
+public/models/concepts/Textures/colormap.png
+public/models/concepts/LICENSE.txt

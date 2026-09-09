@@ -1,0 +1,98 @@
+[
+  {
+    "path": "package.json",
+    "sha256": "aabe8f43a3b1676127c96e1166529e99ebb6be28adf209084a972bcec67e65e9",
+    "required": true,
+    "baseHashes": [
+      "0acc19d98b074efcabac4e4534c3577a7827266a77909fcad0923b57c03c3bb5",
+      "b7e78a95d86b09bc969997068e5959563f1d2d712145d4d666daa08b7bde2d78"
+    ]
+  },
+  {
+    "path": "pnpm-lock.yaml",
+    "sha256": "ce5d02954f9f0f5c8c90724d9f63ce5daefbdcdbf87370137a405f315b919f80",
+    "required": true,
+    "baseHashes": [
+      "368e48de6c17a356c808ed9ec000494c4038eef24a387006e4abe300f0d4047e"
+    ]
+  },
+  {
+    "path": "src/app/sitemap.ts",
+    "sha256": "1675ab1228c10234525ec7c70a032c28c61129dd5adaba7a58700f0b8f1b4366",
+    "required": true,
+    "baseHashes": [
+      "83efecd405ff89cc2dddee6b50d6b8fde685d56d4f160d71cf920334de213b97",
+      "a4ac17b1585c75732e59c7f7ac2087d2778f70d106e006aee9bd8146b95bfc77"
+    ]
+  },
+  {
+    "path": "src/app/studio/page.tsx",
+    "sha256": "4ec1767e119e51e159e3d266db456ba5138992b15026612ddb70e25129038765",
+    "required": false,
+    "baseHashes": []
+  },
+  {
+    "path": "src/components/marketing/marketing-landing.tsx",
+    "sha256": "8d94dbc4c99b5ed814a72af794bbbcc895af890812fcb940c6b00a3fc3e7d78e",
+    "required": true,
+    "baseHashes": [
+      "c8d4ab2e50ce67b1ac0e9ef800db98c081755aa3787e30d9cccda0c456df1c98",
+      "fda8619277aaee02110ae4e7a42915ffe358620f946e763001da1131353a613d",
+      "748525c1bd83bfeedd55cb69a1f450ddd073b65041b802532ae17e1dcee963ac"
+    ]
+  },
+  {
+    "path": "src/components/visualizer/concept-renderer.ts",
+    "sha256": "06bf9b7d4026e6041f2f153e7b3d13ce46a7ad478ce659756476331864028fe6",
+    "required": false,
+    "baseHashes": []
+  },
+  {
+    "path": "src/components/visualizer/concept-studio.tsx",
+    "sha256": "cb59da9e2c11973fa49a099c3b3323cdbc4dd0401f8250db503a1a15e31ce733",
+    "required": false,
+    "baseHashes": []
+  },
+  {
+    "path": "src/components/visualizer/concept-studio.test.tsx",
+    "sha256": "c78715c0eace4df070286dd936df65bae75bbd8badb0e84da6023e43bbd857fb",
+    "required": false,
+    "baseHashes": []
+  },
+  {
+    "path": "src/features/visualizer/concept-studio.ts",
+    "sha256": "a1c44bfa1a8d912e045d6eaaf719d5027d9b4136afead1dfefc8e7ee54569192",
+    "required": false,
+    "baseHashes": []
+  },
+  {
+    "path": "src/features/visualizer/concept-studio.test.ts",
+    "sha256": "163dbdfc01151c45e77a48f346e82e6f11a1ce6f4cb14cb5ddc94698c150ae8f",
+    "required": false,
+    "baseHashes": []
+  },
+  {
+    "path": "public/models/concepts/sedan-sports.glb",
+    "sha256": "2889c428ca1dd9c975c3ff760eb8757883490410555ab60b818f712f583826d6",
+    "required": false,
+    "baseHashes": []
+  },
+  {
+    "path": "public/models/concepts/hatchback-sports.glb",
+    "sha256": "bd5c9d4c3b4bdd254a66b8426563a68b1487ae7a5076df3a2488e6ffed7be64f",
+    "required": false,
+    "baseHashes": []
+  },
+  {
+    "path": "public/models/concepts/Textures/colormap.png",
+    "sha256": "f3622a03a20c6696065cae9cbe391351be873508af190c2ebd1d420c055787a5",
+    "required": false,
+    "baseHashes": []
+  },
+  {
+    "path": "public/models/concepts/LICENSE.txt",
+    "sha256": "c33b7f6453d134deae7b1b8493717d9ccfa754c25ab97f6de89b88f8fda19b00",
+    "required": false,
+    "baseHashes": []
+  }
+]
