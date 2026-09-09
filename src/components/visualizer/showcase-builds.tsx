@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { conceptPresets } from "@/features/visualizer/concept-studio";
 import { ConceptStudio } from "./concept-studio";
+import { IconicGallery } from "./iconic-gallery";
 
 const stories = [
   {
@@ -47,6 +48,7 @@ export function ShowcaseBuilds() {
   const story = stories[selected];
   return (
     <section aria-label="Showcase builds" className="my-10">
+      <IconicGallery />
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs tracking-widest uppercase">

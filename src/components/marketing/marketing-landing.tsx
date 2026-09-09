@@ -17,6 +17,7 @@ import { MarketingHero } from "@/components/marketing/marketing-hero";
 import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
 import { VisionRoadmapSection } from "@/components/marketing/vision-roadmap-section";
 import { ConceptStudio } from "@/components/visualizer/concept-studio";
+import { IconicGallery } from "@/components/visualizer/iconic-gallery";
 
 export function MarketingLanding() {
   return (
@@ -41,10 +42,16 @@ export function MarketingLanding() {
             Explore a different direction.
           </h2>
           <p className="mb-8 max-w-xl text-base leading-7">
-            Try our stylized concept lab. Your real car and saved builds stay
-            untouched.
+            Explore real-world car shapes in 3D. Your real car and saved builds
+            stay untouched.
           </p>
-          <ConceptStudio />
+          <IconicGallery />
+          <details className="mt-6">
+            <summary className="cursor-pointer py-4">
+              Optional stylized sketch lab
+            </summary>
+            <ConceptStudio />
+          </details>
           <Link
             href="/studio"
             className="mt-6 inline-flex min-h-11 items-center underline"
