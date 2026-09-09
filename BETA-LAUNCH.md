@@ -46,9 +46,21 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<browser-safe publishable key>
 NEXT_PUBLIC_LEGAL_OPERATOR=<legal operator name>
 NEXT_PUBLIC_LEGAL_ADDRESS=<service/postal address>
 NEXT_PUBLIC_PRIVACY_CONTACT=<privacy email address>
+CAPCAR_EBAY_MODE=live
+CAPCAR_EBAY_CLIENT_ID=<eBay App ID>
+CAPCAR_EBAY_CLIENT_SECRET=<eBay Cert ID>
+CAPCAR_EBAY_CAMPAIGN_ID=<optional numeric campaign ID>
 ```
 
 Add provider variables only for integrations you activate. Never add a Supabase secret or service-role key to a `NEXT_PUBLIC_` variable or commit it to the repository.
+
+Before deploying, run the environment-only production gate in a shell where the Netlify values are available:
+
+```powershell
+pnpm.cmd preflight:production
+```
+
+The gate validates required legal and Supabase configuration, HTTPS URLs, live eBay credentials, numeric campaign IDs and accidental `NEXT_PUBLIC_` secret names. It reports variable names only, never their values.
 
 ## 4. Validate before deployment
 
@@ -86,6 +98,13 @@ Use two accounts and a private browser window:
 8. With a disposable account, test **Delete cloud garage data**, then test **Delete account**.
 9. Confirm account A cannot query account B's snapshot or private Passport through the Supabase client.
 10. Test the landing page, navigation and primary flows at 390 px and desktop width using keyboard-only navigation.
+11. Upload noisy ELM327 text, CSV, JSON and BimmerLink samples; confirm the Inspector extracts only valid DTCs and nothing is stored before approval.
+12. Search for a part without signing in, then verify the live result label, destination, shipping uncertainty and outbound affiliate disclosure.
+13. Block Sketchfab with a privacy extension and confirm the static preview, explanation and retry action remain usable.
+14. Print a public Passport to A4/PDF and confirm the photo, QR code, identity, inspection and insurance blocks do not clip or expose hidden Garage data.
+15. Navigate the active vehicle tools and collection reel at 390 px using touch, keyboard and reduced-motion mode.
+
+Record every acceptance result as **pass**, **blocked by configuration**, or **product defect**. Configuration blockers must not be disguised with demo results on a feature labelled live.
 
 ## Release strategy
 

@@ -1,7 +1,16 @@
 export default function Loading() {
   return (
-    <div className="min-h-dvh animate-pulse bg-[#0b0e0c] p-8">
-      <div className="mx-auto h-[70vh] max-w-6xl rounded-[2rem] bg-white/[0.04]" />
-    </div>
+    <main
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      className="min-h-dvh bg-[#0b0e0c] px-5 py-8 text-white sm:p-8"
+    >
+      <span className="sr-only">Loading Capcar</span>
+      <div className="mx-auto max-w-6xl animate-pulse motion-reduce:animate-none">
+        <div className="h-12 w-40 rounded-full bg-white/[0.055]" />
+        <div className="mt-12 h-[62vh] min-h-96 rounded-[2rem] border border-white/[0.045] bg-white/[0.035]" />
+      </div>
+    </main>
   );
 }

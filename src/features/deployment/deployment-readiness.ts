@@ -1,4 +1,5 @@
 import { getLegalConfiguration } from "@/features/legal/legal-config";
+import { getProviderStatuses } from "@/features/providers/provider-config";
 
 export type DeploymentReadinessState = "local" | "configured" | "ready";
 
@@ -24,12 +25,26 @@ export function getDeploymentReadiness(
   const publishableKey =
     environment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim();
   const deploymentEnvironment = environment.NEXT_PUBLIC_DEPLOYMENT_ENV?.trim();
+  const ebayMode = environment.CAPCAR_EBAY_MODE?.trim().toLowerCase() || "demo";
+  const ebayModeValid = ebayMode === "demo" || ebayMode === "live";
+  const campaignId = environment.CAPCAR_EBAY_CAMPAIGN_ID?.trim();
+  const ebayReady =
+    ebayModeValid &&
+    (!campaignId || /^\d+$/.test(campaignId)) &&
+    (ebayMode !== "live" ||
+      Boolean(
+        environment.CAPCAR_EBAY_CLIENT_ID?.trim() &&
+        environment.CAPCAR_EBAY_CLIENT_SECRET?.trim(),
+      ));
+  const productProvidersReady = getProviderStatuses(environment).every(
+    (provider) => provider.configured,
+  );
   const production =
     deploymentEnvironment === "production" ||
     environment.VERCEL_ENV === "production" ||
     environment.CONTEXT === "production";
-  const siteIsHttps = Boolean(siteUrl?.startsWith("https://"));
-  const supabaseIsHttps = Boolean(supabaseUrl?.startsWith("https://"));
+  const siteIsHttps = isHttpsUrl(siteUrl);
+  const supabaseIsHttps = isHttpsUrl(supabaseUrl);
 
   const checks: DeploymentCheck[] = [
     {
@@ -72,13 +87,40 @@ export function getDeploymentReadiness(
         ? "Operator, address and privacy contact are configured."
         : "Set the operator, address and privacy contact variables before public launch.",
     },
+    {
+      key: "product-providers",
+      label: "Product data providers",
+      ready: productProvidersReady,
+      detail: productProvidersReady
+        ? "Every selected product provider has its required server configuration."
+        : "A selected external provider is missing its endpoint or server API key.",
+    },
+    {
+      key: "ebay-search",
+      label: "International parts search",
+      ready: ebayReady,
+      detail: ebayReady
+        ? ebayMode === "live"
+          ? "Live eBay search has server-only credentials."
+          : "Clearly labelled demo search is active."
+        : "eBay mode, server credentials or the optional campaign ID are invalid.",
+    },
   ];
   const configured = siteIsHttps && supabaseIsHttps && Boolean(publishableKey);
-  const ready = configured && production && legal.complete;
+  const ready = checks.every((check) => check.ready);
 
   return {
     state: ready ? "ready" : configured ? "configured" : "local",
     ready,
     checks,
   };
+}
+
+function isHttpsUrl(value: string | undefined) {
+  if (!value) return false;
+  try {
+    return new URL(value).protocol === "https:";
+  } catch {
+    return false;
+  }
 }

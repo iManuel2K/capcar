@@ -81,6 +81,48 @@ try {
 }
 
 try {
+  const response = await request("/api/readiness");
+  const body = await response.json();
+  const serialized = JSON.stringify(body);
+  if (/client.secret|service.role|private.key/i.test(serialized)) {
+    fail("deployment readiness", "response exposes a secret-shaped field");
+  } else if (response.ok && body.ready === true && body.state === "ready") {
+    pass("deployment readiness");
+  } else {
+    const blocked = Array.isArray(body.checks)
+      ? body.checks
+          .filter((check) => !check.ready)
+          .map((check) => check.label)
+          .join(", ")
+      : "unknown checks";
+    fail(
+      "deployment readiness",
+      `HTTP ${response.status}; blocked: ${blocked}`,
+    );
+  }
+} catch (error) {
+  fail(
+    "deployment readiness",
+    error instanceof Error ? error.message : "invalid JSON",
+  );
+}
+
+for (const [path, contentType] of [
+  ["/robots.txt", "text/plain"],
+  ["/sitemap.xml", "xml"],
+  ["/manifest.webmanifest", "json"],
+]) {
+  try {
+    const response = await request(path);
+    const actualType = response.headers.get("content-type") ?? "";
+    if (response.ok && actualType.includes(contentType)) pass(path);
+    else fail(path, `HTTP ${response.status}; content-type ${actualType}`);
+  } catch (error) {
+    fail(path, error instanceof Error ? error.message : "request failed");
+  }
+}
+
+try {
   const response = await request("/api/providers/status");
   const body = await response.text();
   if (/service.role|api.key|secret/i.test(body)) {
