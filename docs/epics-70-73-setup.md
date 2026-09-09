@@ -61,6 +61,8 @@ CAPCAR_EBAY_CLIENT_SECRET=<production application secret>
 CAPCAR_EBAY_CAMPAIGN_ID=<optional approved affiliate campaign ID>
 ```
 
+In the eBay developer portal, the **App ID (Client ID)** belongs in `CAPCAR_EBAY_CLIENT_ID` and the **Cert ID (Client Secret)** belongs in `CAPCAR_EBAY_CLIENT_SECRET`. Add these only to server-side Netlify environment variables; none use a `NEXT_PUBLIC_` prefix.
+
 The adapter requests an application token using the client-credentials grant. Alternatively `CAPCAR_EBAY_ACCESS_TOKEN` can supply a valid application token; that option requires operator-managed renewal. Without either credential method, the UI reports that retail search is not connected. Failed requests never fall back to demo prices. The current client-credentials implementation requests a token per search; monitor application token quotas during beta and add shared token caching before scaling traffic.
 
 Only eBay is connected by this new adapter. Other retailer adapters still require their own agreements and credentials. All checkout is outbound to the retailer. Affiliate disclosures appear only when the configured campaign produces a validated affiliate URL. Shipping not supplied in the item's currency remains unknown. The displayed timestamp is when Capcar received the response, not a promise of price validity. No photographs or seller reviews are scraped.
