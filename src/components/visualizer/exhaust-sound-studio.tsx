@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { AudioComparison } from "./audio-comparison";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 import {
   recordingsForVehicle,
@@ -127,6 +128,10 @@ export function ExhaustSoundStudio({ vehicle }: { vehicle: Vehicle }) {
             </p>
             <p>{recording.recordingNotes}</p>
             <p>Rights: {recording.rights}</p>
+            <p>
+              Rights holder: {recording.permission.rightsHolder} · Distribution
+              permission reviewed {recording.permission.reviewedAt.slice(0, 10)}
+            </p>
             <a
               className="underline"
               href={recording.source}
@@ -198,6 +203,9 @@ export function ExhaustSoundStudio({ vehicle }: { vehicle: Vehicle }) {
           {error}
         </p>
       )}
+      <div className="mt-6">
+        <AudioComparison />
+      </div>
     </section>
   );
 }

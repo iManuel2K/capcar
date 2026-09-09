@@ -41,7 +41,17 @@ async function expectPage(path) {
 
 console.log(`Capcar smoke test: ${baseUrl}`);
 
-for (const path of ["/", "/roadmap", "/privacy", "/terms", "/imprint"]) {
+for (const path of [
+  "/",
+  "/roadmap",
+  "/privacy",
+  "/terms",
+  "/imprint",
+  "/sound-studio",
+  "/marketplace",
+  "/connected-parts",
+  "/verified-work",
+]) {
   await expectPage(path);
 }
 

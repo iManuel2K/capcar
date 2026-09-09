@@ -19,6 +19,9 @@ const PRIVATE_PREFIXES = [
   "/register",
   "/reset-password",
   "/system",
+  "/marketplace",
+  "/verified-work",
+  "/connected-parts",
 ];
 
 function isPrivate(url) {

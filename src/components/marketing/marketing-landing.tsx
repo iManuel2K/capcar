@@ -228,8 +228,10 @@ export function MarketingLanding() {
           Confirm fitment, safety requirements and legal approval before
           installation.
         </p>
-        <div className="flex items-center gap-5 text-sm font-medium text-[#0e2d30]/75">
+        <div className="flex flex-wrap items-center gap-5 text-sm font-medium text-[#0e2d30]/75">
           <Link href="/roadmap">Roadmap</Link>
+          <Link href="/sound-studio">Sound</Link>
+          <Link href="/marketplace">Marketplace</Link>
           <Link href="/#faq">FAQ</Link>
           <Link href="/privacy">Privacy</Link>
           <Link href="/imprint">Imprint</Link>
