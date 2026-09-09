@@ -5,6 +5,7 @@ import { ArrowRight, ChevronRight, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
+import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 
 const navigation = [
   { label: "Platform", href: "/#platform" },
@@ -45,7 +46,7 @@ export function MarketingHeader() {
 
         <nav
           aria-label="Main navigation"
-          className="hidden items-center gap-7 text-sm text-[#0e2d30]/62 md:flex"
+          className="hidden items-center gap-5 text-sm text-[#0e2d30]/62 md:flex"
         >
           {navigation.map((item) => (
             <Link
@@ -57,6 +58,10 @@ export function MarketingHeader() {
             </Link>
           ))}
         </nav>
+
+        <div className="hidden lg:block">
+          <GlobalPartsSearch />
+        </div>
 
         <Link
           href="/register"
@@ -117,6 +122,13 @@ export function MarketingHeader() {
                 </Link>
               ))}
             </nav>
+
+            <div className="mt-6">
+              <p className="mb-2 text-xs font-semibold tracking-[0.12em] text-[#0e2d30]/50 uppercase">
+                Global parts search
+              </p>
+              <GlobalPartsSearch expanded />
+            </div>
 
             <div className="mt-auto border-t border-[#0e2d30]/10 pt-5">
               <Link

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { FileDropzone } from "@/components/ui/file-dropzone";
 import { AudioComparison } from "./audio-comparison";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 import {
@@ -160,30 +161,30 @@ export function ExhaustSoundStudio({ vehicle }: { vehicle: Vehicle }) {
         />
       )}
       <div className="mt-6 rounded-xl border border-white/10 p-4">
-        <label className="block text-sm">
+        <p className="text-sm font-medium">
           Audition your own recording locally
-          <input
-            type="file"
-            accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4"
-            onChange={(event) => {
-              const file = event.target.files?.[0];
-              if (!file) return;
+        </p>
+        <div className="mt-3">
+          <FileDropzone
+            compact
+            accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4,.mp3,.wav,.ogg,.m4a"
+            label="Load personal sound clip"
+            inputLabel="Audition your own recording locally"
+            description="Drag and drop or choose audio · stays in this tab"
+            onFile={(file) => {
               if (
                 !file.type.startsWith("audio/") ||
                 file.size > 30 * 1024 * 1024
               ) {
                 setError("Choose an audio file no larger than 30 MB.");
-                event.target.value = "";
                 return;
               }
               audioRef.current?.pause();
               setError("");
               setLocal({ url: URL.createObjectURL(file), name: file.name });
-              event.target.value = "";
             }}
-            className="mt-3 block w-full text-sm"
           />
-        </label>
+        </div>
         <p className="mt-3 text-sm text-white/50">
           Nothing is uploaded or saved. Choose recordings you have permission to
           use.

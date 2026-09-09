@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { FileDropzone } from "@/components/ui/file-dropzone";
 
 type Clip = { url: string; name: string };
 export function AudioComparison() {
@@ -41,42 +42,47 @@ export function AudioComparison() {
             key={side}
             className="min-w-0 rounded-xl border border-current/20 p-4"
           >
-            <label className="block font-medium">
-              {side === "stock" ? "Stock recording" : "Modified recording"}
-              <input
-                className="mt-4 block w-full text-sm"
-                type="file"
-                accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4"
-                onChange={(event) => {
-                  const file = event.target.files?.[0];
-                  event.target.value = "";
-                  if (!file) return;
-                  if (
-                    ![
-                      "audio/mpeg",
-                      "audio/wav",
-                      "audio/x-wav",
-                      "audio/ogg",
-                      "audio/mp4",
-                    ].includes(file.type) ||
-                    file.size > 30 * 1024 * 1024
-                  ) {
-                    setMessage(
-                      "Choose MP3, WAV, Ogg or M4A audio up to 30 MB.",
-                    );
-                    return;
+            <div>
+              <p className="font-medium">
+                {side === "stock" ? "Stock recording" : "Modified recording"}
+              </p>
+              <div className="mt-4">
+                <FileDropzone
+                  compact
+                  accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4,.mp3,.wav,.ogg,.m4a"
+                  label={`Choose ${side} audio`}
+                  inputLabel={
+                    side === "stock" ? "Stock recording" : "Modified recording"
                   }
-                  clear(side);
-                  const url = URL.createObjectURL(file);
-                  urls.current.add(url);
-                  setClips((current) => ({
-                    ...current,
-                    [side]: { url, name: file.name },
-                  }));
-                  setMessage("");
-                }}
-              />
-            </label>
+                  description="Drop MP3, WAV, Ogg or M4A · up to 30 MB"
+                  onFile={(file) => {
+                    if (
+                      ![
+                        "audio/mpeg",
+                        "audio/wav",
+                        "audio/x-wav",
+                        "audio/ogg",
+                        "audio/mp4",
+                      ].includes(file.type) ||
+                      file.size > 30 * 1024 * 1024
+                    ) {
+                      setMessage(
+                        "Choose MP3, WAV, Ogg or M4A audio up to 30 MB.",
+                      );
+                      return;
+                    }
+                    clear(side);
+                    const url = URL.createObjectURL(file);
+                    urls.current.add(url);
+                    setClips((current) => ({
+                      ...current,
+                      [side]: { url, name: file.name },
+                    }));
+                    setMessage("");
+                  }}
+                />
+              </div>
+            </div>
             {clips[side] && (
               <>
                 <p className="mt-3 truncate text-sm">

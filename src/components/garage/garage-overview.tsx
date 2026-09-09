@@ -5,10 +5,13 @@ import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   CarFront,
+  ChevronLeft,
+  ChevronRight,
   Database,
   Plus,
   ShieldCheck,
 } from "lucide-react";
+import { useRef } from "react";
 
 import { VehicleArt } from "@/components/garage/vehicle-art";
 import { isProject318Vehicle } from "@/components/garage/vehicle-photo-gallery";
@@ -21,6 +24,7 @@ import {
 export function GarageOverview() {
   const { vehicles, isReady } = useVehicles();
   const router = useRouter();
+  const reelRef = useRef<HTMLDivElement>(null);
 
   function loadDemo() {
     const existingDemo = vehicles.find((vehicle) => vehicle.model === "318i");
@@ -41,6 +45,7 @@ export function GarageOverview() {
         mileage: 148200,
         color: "Space Grey",
         nickname: "Project 318",
+        imageUrl: "/capcar-bmw-current-side.webp",
       },
       window.localStorage,
     );
@@ -127,19 +132,49 @@ export function GarageOverview() {
         >
           <Plus className="size-4" /> Add vehicle
         </Link>
+        {vehicles.length > 1 && (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              aria-label="Previous vehicle"
+              onClick={() =>
+                reelRef.current?.scrollBy({ left: -520, behavior: "smooth" })
+              }
+              className="grid size-11 place-items-center rounded-full border border-white/10 text-white/55 transition hover:border-white/25 hover:text-white"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+            <button
+              type="button"
+              aria-label="Next vehicle"
+              onClick={() =>
+                reelRef.current?.scrollBy({ left: 520, behavior: "smooth" })
+              }
+              className="grid size-11 place-items-center rounded-full border border-white/10 text-white/55 transition hover:border-white/25 hover:text-white"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+          </div>
+        )}
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-2">
+      <div
+        ref={reelRef}
+        aria-label="Vehicle collection"
+        className="flex snap-x snap-mandatory [scrollbar-color:rgba(255,255,255,0.18)_transparent] gap-5 overflow-x-auto pb-4"
+      >
         {vehicles.map((vehicle) => (
           <Link
             key={vehicle.id}
             href={`/garage/${vehicle.id}`}
-            className="group overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] transition hover:-translate-y-1 hover:border-white/20"
+            className="group min-w-[88%] snap-start overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] transition duration-300 hover:-translate-y-1 hover:border-white/20 sm:min-w-[430px] xl:min-w-[540px]"
           >
             <VehicleArt
               label={`${vehicle.productionYear} ${vehicle.make} ${vehicle.model}`}
               compact
-              badge={isProject318Vehicle(vehicle) ? "Current vehicle" : undefined}
+              badge={
+                isProject318Vehicle(vehicle) ? "Current vehicle" : undefined
+              }
               imageUrl={
                 isProject318Vehicle(vehicle)
                   ? "/capcar-bmw-current-side.webp"

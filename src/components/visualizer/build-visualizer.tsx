@@ -144,8 +144,14 @@ export function BuildVisualizer({
         </h1>
       </header>
 
-      <section className="mt-5">
-        <div className="mb-3 flex flex-wrap gap-3">
+      <section className="relative mt-5">
+        <div
+          className={`z-20 flex flex-wrap gap-3 ${
+            activeView === "reference"
+              ? "absolute top-16 left-4 rounded-2xl bg-[#090909]/88 p-2 shadow-xl backdrop-blur-xl"
+              : "mb-3"
+          }`}
+        >
           <div className="inline-flex rounded-xl border border-white/10 bg-[#111111] p-1">
             {viewOptions.map((candidate) => (
               <button

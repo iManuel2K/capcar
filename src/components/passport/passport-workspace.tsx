@@ -12,18 +12,16 @@ import {
   Share2,
   Trash2,
 } from "lucide-react";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  useSyncExternalStore,
-} from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 
 import { downloadTextFile } from "@/features/export/download";
+import { PassportIdentityDocument } from "@/components/passport/passport-identity-document";
 import {
   buildVehiclePassport,
   passportToCsv,
+  readPassportProfile,
+  savePassportProfile,
+  type PassportProfile,
 } from "@/features/passport/vehicle-passport";
 import { proFeatureLabels } from "@/features/pro/pro-features";
 import { collectLocalSnapshot } from "@/features/sync/local-snapshot";
@@ -46,13 +44,14 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
   const [error, setError] = useState("");
   const [links, setLinks] = useState<PassportLink[]>([]);
   const [linksLoading, setLinksLoading] = useState(true);
-  const passport = useMemo(
-    () =>
-      hydrated
-        ? buildVehiclePassport(vehicleId, window.localStorage)
-        : undefined,
-    [hydrated, vehicleId],
-  );
+  const [, setProfileRevision] = useState(0);
+  const [profileMessage, setProfileMessage] = useState("");
+  const profile = hydrated
+    ? readPassportProfile(vehicleId, window.localStorage)
+    : undefined;
+  const passport = hydrated
+    ? buildVehiclePassport(vehicleId, window.localStorage)
+    : undefined;
 
   const loadLinks = useCallback(async () => {
     const client = createClient();
@@ -158,7 +157,7 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
 
   return (
     <div className="passport-print pb-24 sm:pb-0">
-      <header className="print-surface rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_8%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10">
+      <header className="no-print rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_8%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10">
         <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
@@ -246,6 +245,22 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
           ready.
         </p>
       )}
+      <PassportProfileEditor
+        vehicleId={vehicleId}
+        initial={profile}
+        message={profileMessage}
+        onMessage={setProfileMessage}
+        onSaved={() => setProfileRevision((value) => value + 1)}
+      />
+      <PassportIdentityDocument
+        passport={passport}
+        liveUrl={
+          shareUrl ||
+          (links.find((link) => link.is_public)
+            ? `${window.location.origin}/passport/${links.find((link) => link.is_public)?.share_id}`
+            : undefined)
+        }
+      />
       <section className="no-print mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
@@ -472,4 +487,198 @@ function formatEuro(value: number) {
     style: "currency",
     currency: "EUR",
   }).format(value);
+}
+
+function PassportProfileEditor({
+  vehicleId,
+  initial,
+  message,
+  onMessage,
+  onSaved,
+}: {
+  vehicleId: string;
+  initial?: PassportProfile;
+  message: string;
+  onMessage: (value: string) => void;
+  onSaved: () => void;
+}) {
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const publishOwnerDetails = form.get("publishOwnerDetails") === "on";
+    const value = (name: string) =>
+      String(form.get(name) ?? "").trim() || undefined;
+    const ownerName = value("ownerName");
+    const ownerAddress = value("ownerAddress");
+    const ownerPhone = value("ownerPhone");
+    if (publishOwnerDetails && (!ownerName || !ownerAddress || !ownerPhone)) {
+      onMessage(
+        "Name, address and phone are required before owner details can be published.",
+      );
+      return;
+    }
+    try {
+      savePassportProfile(
+        {
+          vehicleId,
+          ownerName,
+          ownerAddress,
+          ownerPhone,
+          nextInspectionDate: value("nextInspectionDate"),
+          insuranceCompany: value("insuranceCompany"),
+          insurancePolicyNumber: value("insurancePolicyNumber"),
+          publishOwnerDetails,
+          includeFullVin: form.get("includeFullVin") === "on",
+        },
+        window.localStorage,
+      );
+      onMessage(
+        "Passport details saved locally. New public links will use this preview.",
+      );
+      onSaved();
+    } catch (caught) {
+      onMessage(
+        caught instanceof Error
+          ? caught.message
+          : "Passport details could not be saved.",
+      );
+    }
+  }
+
+  return (
+    <section className="no-print mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
+      <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+        <div>
+          <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+            Document identity
+          </p>
+          <h2 className="mt-2 text-2xl font-medium">
+            Officer check or show-card detail
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-white/42">
+            These details stay in your garage until you create a public
+            Passport. Owner identity appears only when the explicit publish
+            switch is enabled.
+          </p>
+        </div>
+        <span className="rounded-full border border-amber-300/15 bg-amber-300/6 px-3 py-1.5 text-[10px] text-amber-100/65 uppercase">
+          Preview before sharing
+        </span>
+      </div>
+      <form onSubmit={submit} className="mt-6 grid gap-4 sm:grid-cols-2">
+        <PassportField
+          name="ownerName"
+          label="Owner name"
+          defaultValue={initial?.ownerName}
+          placeholder="Full legal or display name"
+        />
+        <PassportField
+          name="ownerPhone"
+          label="Owner phone"
+          defaultValue={initial?.ownerPhone}
+          placeholder="+49 …"
+          type="tel"
+        />
+        <label className="text-xs text-white/45 sm:col-span-2">
+          Owner address
+          <textarea
+            name="ownerAddress"
+            defaultValue={initial?.ownerAddress}
+            placeholder="Street, postcode and city"
+            className="mt-2 min-h-24 w-full rounded-xl border border-white/12 bg-[#0b0b0b] p-4 text-sm text-white placeholder:text-white/20 focus:border-[#e72d45] focus:outline-none"
+          />
+        </label>
+        <PassportField
+          name="nextInspectionDate"
+          label="Next TÜV / inspection"
+          defaultValue={initial?.nextInspectionDate}
+          placeholder=""
+          type="date"
+        />
+        <PassportField
+          name="insuranceCompany"
+          label="Insurance company"
+          defaultValue={initial?.insuranceCompany}
+          placeholder="Provider name"
+        />
+        <PassportField
+          name="insurancePolicyNumber"
+          label="Policy number"
+          defaultValue={initial?.insurancePolicyNumber}
+          placeholder="Policy reference"
+        />
+        <div className="grid gap-3 rounded-2xl border border-white/8 p-4 text-sm text-white/58 sm:col-span-2 sm:grid-cols-2">
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              name="publishOwnerDetails"
+              defaultChecked={initial?.publishOwnerDetails}
+              className="mt-1 size-4 accent-[#e72d45]"
+            />
+            <span>
+              <strong className="block text-white/80">
+                Publish owner details
+              </strong>
+              <small className="mt-1 block leading-5 text-white/38">
+                Name, address and phone will be visible to anyone with a live
+                Passport link.
+              </small>
+            </span>
+          </label>
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              name="includeFullVin"
+              defaultChecked={initial?.includeFullVin}
+              className="mt-1 size-4 accent-[#e72d45]"
+            />
+            <span>
+              <strong className="block text-white/80">Include full VIN</strong>
+              <small className="mt-1 block leading-5 text-white/38">
+                Otherwise only the final five characters are displayed.
+              </small>
+            </span>
+          </label>
+        </div>
+        <div className="flex flex-col-reverse gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
+          <p role="status" className="text-xs text-white/50">
+            {message}
+          </p>
+          <button
+            type="submit"
+            className="min-h-11 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-white"
+          >
+            Save & refresh preview
+          </button>
+        </div>
+      </form>
+    </section>
+  );
+}
+
+function PassportField({
+  name,
+  label,
+  defaultValue,
+  placeholder,
+  type = "text",
+}: {
+  name: string;
+  label: string;
+  defaultValue?: string;
+  placeholder: string;
+  type?: string;
+}) {
+  return (
+    <label className="text-xs text-white/45">
+      {label}
+      <input
+        name={name}
+        type={type}
+        defaultValue={defaultValue}
+        placeholder={placeholder}
+        className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-[#0b0b0b] px-4 text-sm text-white placeholder:text-white/20 focus:border-[#e72d45] focus:outline-none"
+      />
+    </label>
+  );
 }

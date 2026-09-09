@@ -1,15 +1,18 @@
 import Link from "next/link";
-import { BadgeCheck, CarFront, ShieldCheck } from "lucide-react";
+import { BadgeCheck, ShieldCheck } from "lucide-react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
+import { PassportIdentityDocument } from "@/components/passport/passport-identity-document";
 import type { VehiclePassportPayload } from "@/features/passport/vehicle-passport";
 
 export function PublicPassport({
   passport,
   publishedAt,
+  liveUrl,
 }: {
   passport: VehiclePassportPayload;
   publishedAt: string;
+  liveUrl: string;
 }) {
   const title = `${passport.vehicle.productionYear} ${passport.vehicle.make} ${passport.vehicle.model}`;
 
@@ -25,42 +28,11 @@ export function PublicPassport({
           </span>
         </header>
 
-        <section className="mt-8 overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] sm:mt-12 sm:rounded-[2.5rem]">
-          <div className="grid gap-8 p-6 sm:p-10 lg:grid-cols-[1fr_0.55fr] lg:items-end lg:p-14">
-            <div>
-              <p className="text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
-                Capcar Vehicle Passport
-              </p>
-              <h1 className="mt-5 text-4xl font-medium tracking-[-0.055em] sm:text-7xl">
-                {title}
-              </h1>
-              <p className="mt-5 text-sm leading-7 text-white/48 sm:text-base">
-                {passport.vehicle.platform} · {passport.vehicle.engineCode} ·{" "}
-                {passport.vehicle.transmission} ·{" "}
-                {passport.vehicle.mileage.toLocaleString("en-US")} km
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/8 bg-black/10 p-5">
-              <CarFront className="size-5 text-[#ff667a]" />
-              <p className="mt-5 text-xs text-white/30">Published</p>
-              <p className="mt-1 text-sm text-white/65">
-                {new Date(publishedAt).toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </p>
-              {passport.vehicle.vinLastFive && (
-                <>
-                  <p className="mt-4 text-xs text-white/30">VIN ending</p>
-                  <p className="mt-1 font-mono text-sm text-white/65">
-                    •••••••••••{passport.vehicle.vinLastFive}
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
-        </section>
+        <h1 className="sr-only">{title} Vehicle Passport</h1>
+        <PassportIdentityDocument passport={passport} liveUrl={liveUrl} />
+        <p className="mt-3 text-right text-xs text-white/32">
+          Published {new Date(publishedAt).toLocaleDateString("en-GB")}
+        </p>
 
         <section className="mt-5 grid gap-3 sm:grid-cols-4">
           <Metric label="Maintenance" value={passport.maintenance.length} />

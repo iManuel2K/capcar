@@ -11,6 +11,22 @@ import { evaluateFitment } from "@/features/parts/fitment";
 
 type ReadableStorage = Pick<Storage, "getItem">;
 
+export const PASSPORT_PROFILE_STORAGE_KEY = "capcar.passport-profiles.v1";
+
+export const passportProfileSchema = z.object({
+  vehicleId: z.string().min(1),
+  ownerName: z.string().trim().max(120).optional(),
+  ownerAddress: z.string().trim().max(300).optional(),
+  ownerPhone: z.string().trim().max(40).optional(),
+  nextInspectionDate: z.string().date().optional(),
+  insuranceCompany: z.string().trim().max(120).optional(),
+  insurancePolicyNumber: z.string().trim().max(120).optional(),
+  publishOwnerDetails: z.boolean().default(false),
+  includeFullVin: z.boolean().default(false),
+});
+
+export type PassportProfile = z.infer<typeof passportProfileSchema>;
+
 export const vehiclePassportSchema = z.object({
   version: z.literal(1),
   generatedAt: z.string().datetime(),
@@ -23,8 +39,24 @@ export const vehiclePassportSchema = z.object({
     engineCode: z.string().min(1),
     transmission: z.string().min(1),
     mileage: z.number().nonnegative(),
+    vin: z.string().length(17).optional(),
     vinLastFive: z.string().max(5).optional(),
+    imageUrl: z.string().startsWith("/").optional(),
   }),
+  owner: z
+    .object({
+      name: z.string().min(1).max(120),
+      address: z.string().min(1).max(300),
+      phone: z.string().min(1).max(40),
+    })
+    .optional(),
+  official: z
+    .object({
+      nextInspectionDate: z.string().date().optional(),
+      insuranceCompany: z.string().min(1).max(120).optional(),
+      insurancePolicyNumber: z.string().min(1).max(120).optional(),
+    })
+    .optional(),
   maintenance: z.array(
     z.object({
       title: z.string().min(1),
@@ -63,6 +95,50 @@ export const vehiclePassportSchema = z.object({
 
 export type VehiclePassportPayload = z.infer<typeof vehiclePassportSchema>;
 
+export function readPassportProfile(
+  vehicleId: string,
+  storage: ReadableStorage,
+): PassportProfile | undefined {
+  const raw = storage.getItem(PASSPORT_PROFILE_STORAGE_KEY);
+  if (!raw) return undefined;
+  let value: unknown;
+  try {
+    value = JSON.parse(raw);
+  } catch {
+    return undefined;
+  }
+  const parsed = passportProfileSchema.array().safeParse(value);
+  return parsed.success
+    ? parsed.data.find((profile) => profile.vehicleId === vehicleId)
+    : undefined;
+}
+
+export function savePassportProfile(
+  input: PassportProfile,
+  storage: Pick<Storage, "getItem" | "setItem">,
+) {
+  const profile = passportProfileSchema.parse(input);
+  const raw = storage.getItem(PASSPORT_PROFILE_STORAGE_KEY);
+  let value: unknown;
+  try {
+    value = raw ? JSON.parse(raw) : undefined;
+  } catch {
+    value = undefined;
+  }
+  const parsed = value
+    ? passportProfileSchema.array().safeParse(value)
+    : undefined;
+  const profiles = parsed?.success ? parsed.data : [];
+  storage.setItem(
+    PASSPORT_PROFILE_STORAGE_KEY,
+    JSON.stringify([
+      profile,
+      ...profiles.filter((item) => item.vehicleId !== profile.vehicleId),
+    ]),
+  );
+  return profile;
+}
+
 export function buildVehiclePassport(
   vehicleId: string,
   storage: ReadableStorage,
@@ -70,6 +146,7 @@ export function buildVehiclePassport(
 ): VehiclePassportPayload | undefined {
   const vehicle = findVehicle(vehicleId, storage);
   if (!vehicle) return undefined;
+  const profile = readPassportProfile(vehicleId, storage);
   const maintenance = readMaintenanceRecords(storage)
     .filter((item) => item.vehicleId === vehicleId)
     .map((item) => ({
@@ -97,8 +174,28 @@ export function buildVehiclePassport(
       engineCode: vehicle.engineCode,
       transmission: vehicle.transmission,
       mileage: vehicle.mileage,
+      vin: profile?.includeFullVin ? vehicle.vin : undefined,
       vinLastFive: vehicle.vin?.slice(-5),
+      imageUrl: vehicle.imageUrl,
     },
+    owner:
+      profile?.publishOwnerDetails &&
+      profile.ownerName &&
+      profile.ownerAddress &&
+      profile.ownerPhone
+        ? {
+            name: profile.ownerName,
+            address: profile.ownerAddress,
+            phone: profile.ownerPhone,
+          }
+        : undefined,
+    official: profile
+      ? {
+          nextInspectionDate: profile.nextInspectionDate,
+          insuranceCompany: profile.insuranceCompany,
+          insurancePolicyNumber: profile.insurancePolicyNumber,
+        }
+      : undefined,
     maintenance,
     modifications: buildState.items
       .filter((item) => buildIds.has(item.buildId))

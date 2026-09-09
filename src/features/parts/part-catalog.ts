@@ -455,3 +455,39 @@ export const partCatalog: CatalogPart[] = [
 export function findCatalogPart(partId: string) {
   return partCatalog.find((part) => part.id === partId);
 }
+
+export function searchCatalogParts(query: string) {
+  const terms = query
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 8);
+  if (!terms.length) return partCatalog.slice(0, 8);
+  return partCatalog
+    .map((part) => {
+      const primary =
+        `${part.name} ${part.brand} ${part.partNumber}`.toLowerCase();
+      const fitment = part.fitmentRules
+        .flatMap((rule) => [
+          ...rule.platforms,
+          ...(rule.engineCodes ?? []),
+          ...(rule.bodyStyles ?? []),
+        ])
+        .join(" ")
+        .toLowerCase();
+      const secondary =
+        `${part.category} ${part.summary} ${fitment}`.toLowerCase();
+      const score = terms.reduce(
+        (total, term) =>
+          total +
+          (primary.includes(term) ? 3 : 0) +
+          (secondary.includes(term) ? 1 : 0),
+        0,
+      );
+      return { part, score };
+    })
+    .filter((result) => result.score > 0)
+    .sort((left, right) => right.score - left.score)
+    .map((result) => result.part);
+}

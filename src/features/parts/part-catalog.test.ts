@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { findCatalogPart, partCatalog } from "@/features/parts/part-catalog";
+import {
+  findCatalogPart,
+  partCatalog,
+  searchCatalogParts,
+} from "@/features/parts/part-catalog";
 
 describe("demo part catalogue", () => {
   it("uses unique identifiers and demo part numbers", () => {
@@ -16,6 +20,14 @@ describe("demo part catalogue", () => {
     expect(findCatalogPart("demo-dark-rear-lamps-e90")?.category).toBe(
       "Lighting",
     );
+  });
+
+  it("searches names, cross-reference numbers and fitment without a vehicle", () => {
+    expect(searchCatalogParts("DEMO-SVC-N43-14")[0]?.name).toContain(
+      "spark-plug",
+    );
+    expect(searchCatalogParts("E90 brake").length).toBeGreaterThan(0);
+    expect(searchCatalogParts("G20")[0]?.id).toBe("demo-g20-splitter");
   });
 
   it("provides a ready-looking E9x catalogue across core categories", () => {

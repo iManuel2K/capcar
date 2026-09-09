@@ -112,6 +112,31 @@
   }
 }
 
+@keyframes capcar-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.capcar-page-enter {
+  animation: capcar-page-enter 360ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .capcar-page-enter {
+    animation: none;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -151,6 +176,11 @@
 }
 
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
   body {
     background: #ffffff !important;
     color: #111111 !important;
@@ -168,6 +198,12 @@
 
   .passport-print {
     padding: 0 !important;
+  }
+
+  .passport-document {
+    margin: 0 !important;
+    break-after: page;
+    border-radius: 0 !important;
   }
 
   .print-surface,

@@ -39,6 +39,7 @@ export default async function SharedPassportPage({
     <PublicPassport
       passport={parsed.data}
       publishedAt={result.data.created_at}
+      liveUrl={`${process.env.NEXT_PUBLIC_SITE_URL ?? "https://capcar-im.netlify.app"}/passport/${shareId}`}
     />
   );
 }

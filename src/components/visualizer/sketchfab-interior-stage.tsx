@@ -6,10 +6,10 @@ import {
   Camera,
   Rotate3D,
   Save,
-  RefreshCw,
   Undo2,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { SketchfabFallback } from "@/components/visualizer/sketchfab-fallback";
 
 import {
   interiorCameraNames,
@@ -96,6 +96,21 @@ export function SketchfabInteriorStage({
 
   useEffect(() => {
     let cancelled = false;
+    const detectBlock = (event: ErrorEvent | PromiseRejectionEvent) => {
+      const value = "reason" in event ? event.reason : event.message;
+      const errorMessage =
+        value instanceof Error ? value.message : String(value ?? "");
+      if (
+        /ERR_BLOCKED_BY_CLIENT|extension (?:context )?disconnected|Sketchfab/i.test(
+          errorMessage,
+        )
+      ) {
+        setStatus("error");
+        setMessage("A browser privacy extension blocked the 3D viewer.");
+      }
+    };
+    window.addEventListener("error", detectBlock);
+    window.addEventListener("unhandledrejection", detectBlock);
     const timeout = window.setTimeout(() => {
       if (!cancelled) {
         setStatus("error");
@@ -172,6 +187,8 @@ export function SketchfabInteriorStage({
     return () => {
       cancelled = true;
       window.clearTimeout(timeout);
+      window.removeEventListener("error", detectBlock);
+      window.removeEventListener("unhandledrejection", detectBlock);
       apiRef.current = null;
     };
   }, [reference.modelUid, retryKey]);
@@ -245,33 +262,13 @@ export function SketchfabInteriorStage({
           allowFullScreen
           className="absolute inset-0 h-full w-full border-0"
         />
-        {status !== "ready" && (
+        {status === "loading" && (
           <div className="absolute inset-0 grid place-items-center bg-[#090909]/90 p-6 text-center text-sm text-white/45">
-            {status === "loading" ? (
-              "Loading interactive cabin…"
-            ) : (
-              <div>
-                <p>Interactive cabin unavailable</p>
-                <div className="mt-4 flex flex-col justify-center gap-2 sm:flex-row">
-                  <button
-                    type="button"
-                    onClick={retryViewer}
-                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 font-semibold text-[#07101d]"
-                  >
-                    <RefreshCw className="size-4" /> Retry viewer
-                  </button>
-                  <a
-                    href={reference.sourceUrl}
-                    target="_blank"
-                    rel="noreferrer nofollow"
-                    className="inline-flex min-h-10 items-center justify-center rounded-xl border border-white/10 px-4 text-white/65"
-                  >
-                    Open on Sketchfab
-                  </a>
-                </div>
-              </div>
-            )}
+            Loading interactive cabin…
           </div>
+        )}
+        {status === "error" && (
+          <SketchfabFallback reference={reference} onRetry={retryViewer} />
         )}
       </div>
 

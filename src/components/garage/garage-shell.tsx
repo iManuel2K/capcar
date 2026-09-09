@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
+import { GarageToolRail } from "@/components/garage/garage-tool-rail";
+import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 import { useNotifications } from "@/features/notifications/use-notifications";
 
 export function GarageShell({ children }: { children: React.ReactNode }) {
@@ -99,13 +101,25 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
               <DisabledNav>Timeline</DisabledNav>
             )}
           </nav>
+          <div className="hidden xl:block">
+            <GlobalPartsSearch theme="dark" />
+          </div>
           <div className="flex items-center gap-2">
             <span className="hidden rounded-full border border-[#e72d45]/20 bg-[#e72d45]/8 px-3 py-1.5 text-xs text-[#a9c7ff] md:inline-flex">
               Capcar Beta
             </span>
-            <Link aria-label={`${unread} unread notifications`} className="relative grid size-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60" href="/notifications">
+            <Link
+              aria-label={`${unread} unread notifications`}
+              className="relative grid size-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60"
+              href="/notifications"
+            >
               <Bell className="size-4" />
-              {unread > 0 && <span className="absolute -top-1 -right-1 grid min-w-5 place-items-center rounded-full bg-[#e72d45] px-1 text-[10px] font-bold text-[#07101d]">{Math.min(unread, 9)}{unread > 9 ? "+" : ""}</span>}
+              {unread > 0 && (
+                <span className="absolute -top-1 -right-1 grid min-w-5 place-items-center rounded-full bg-[#e72d45] px-1 text-[10px] font-bold text-[#07101d]">
+                  {Math.min(unread, 9)}
+                  {unread > 9 ? "+" : ""}
+                </span>
+              )}
             </Link>
             <Link
               aria-label="Account and sync"
@@ -116,15 +130,28 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             </Link>
             {vehicleId && (
               <details className="relative hidden md:block">
-                <summary aria-label="More vehicle tools" className="grid size-10 cursor-pointer list-none place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60 marker:hidden">
+                <summary
+                  aria-label="More vehicle tools"
+                  className="grid size-10 cursor-pointer list-none place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60 marker:hidden"
+                >
                   <Menu className="size-4" />
                 </summary>
                 <div className="absolute top-12 right-0 z-50 grid w-52 gap-1 rounded-2xl border border-white/10 bg-[#151515] p-2 shadow-2xl">
-                  <MoreLink href={`/garage/${vehicleId}/passport`}>Vehicle Passport</MoreLink>
-                  <MoreLink href={`/garage/${vehicleId}/costs`}>Cost analytics</MoreLink>
-                  <MoreLink href={`/garage/${vehicleId}/wishlist`}>Part wishlist</MoreLink>
-                  <MoreLink href={`/garage/${vehicleId}/diagnostics`}>Diagnostic log</MoreLink>
-                  <MoreLink href={`/garage/${vehicleId}/specialists`}>Specialists</MoreLink>
+                  <MoreLink href={`/garage/${vehicleId}/passport`}>
+                    Vehicle Passport
+                  </MoreLink>
+                  <MoreLink href={`/garage/${vehicleId}/costs`}>
+                    Cost analytics
+                  </MoreLink>
+                  <MoreLink href={`/garage/${vehicleId}/wishlist`}>
+                    Part wishlist
+                  </MoreLink>
+                  <MoreLink href={`/garage/${vehicleId}/diagnostics`}>
+                    Diagnostic log
+                  </MoreLink>
+                  <MoreLink href={`/garage/${vehicleId}/specialists`}>
+                    Specialists
+                  </MoreLink>
                 </div>
               </details>
             )}
@@ -133,7 +160,18 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
       </header>
 
       <main className="mx-auto max-w-[1500px] px-4 py-8 sm:px-7 sm:py-12">
-        {children}
+        <div
+          className={
+            vehicleId
+              ? "lg:grid lg:grid-cols-[190px_minmax(0,1fr)] lg:gap-6"
+              : ""
+          }
+        >
+          {vehicleId && (
+            <GarageToolRail vehicleId={vehicleId} pathname={pathname} />
+          )}
+          <div className="capcar-page-enter min-w-0">{children}</div>
+        </div>
       </main>
 
       <nav
@@ -197,8 +235,21 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function MoreLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return <Link href={href} className="rounded-xl px-3 py-2.5 text-sm text-white/55 transition hover:bg-white/6 hover:text-white">{children}</Link>;
+function MoreLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className="rounded-xl px-3 py-2.5 text-sm text-white/55 transition hover:bg-white/6 hover:text-white"
+    >
+      {children}
+    </Link>
+  );
 }
 
 function NavLink({

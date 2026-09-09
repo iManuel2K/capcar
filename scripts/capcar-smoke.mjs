@@ -47,6 +47,7 @@ for (const path of [
   "/privacy",
   "/terms",
   "/imprint",
+  "/parts-search?q=E90",
   "/sound-studio",
   "/marketplace",
   "/connected-parts",

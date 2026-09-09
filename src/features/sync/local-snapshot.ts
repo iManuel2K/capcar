@@ -33,6 +33,7 @@ import {
   INSTALL_STAMP_STORAGE_EVENT,
   INSTALL_STAMP_STORAGE_KEY,
 } from "@/features/specialists/install-stamp-storage";
+import { PASSPORT_PROFILE_STORAGE_KEY } from "@/features/passport/vehicle-passport";
 import {
   TUNING_STORAGE_EVENT,
   TUNING_STORAGE_KEY,
@@ -69,6 +70,7 @@ export const snapshotKeys = [
   DIAGNOSTIC_STORAGE_KEY,
   WISHLIST_STORAGE_KEY,
   INSTALL_STAMP_STORAGE_KEY,
+  PASSPORT_PROFILE_STORAGE_KEY,
 ] as const;
 
 export const garageStorageEvents = [
