@@ -16,13 +16,42 @@ import { MarketingFaq } from "@/components/marketing/marketing-faq";
 import { MarketingHero } from "@/components/marketing/marketing-hero";
 import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
 import { VisionRoadmapSection } from "@/components/marketing/vision-roadmap-section";
+import { ConceptStudio } from "@/components/visualizer/concept-studio";
 
 export function MarketingLanding() {
   return (
     <div className="min-h-dvh overflow-hidden bg-[#e8e6d7] text-[#0e2d30]">
-      <main>
+      <a
+        href="#main-content"
+        className="fixed top-3 left-3 z-[100] -translate-y-20 rounded-full bg-[#0e2d30] px-5 py-3 text-sm font-semibold text-white transition focus:translate-y-0"
+      >
+        Skip to content
+      </a>
+      <main id="main-content">
         <MarketingHero />
         <ProductDashboardPreview />
+        <section
+          className="mx-auto max-w-[1500px] px-5 py-16 sm:px-8 sm:py-24"
+          aria-labelledby="concept-heading"
+        >
+          <h2
+            id="concept-heading"
+            className="mb-4 text-4xl font-medium tracking-tight"
+          >
+            Explore a different direction.
+          </h2>
+          <p className="mb-8 max-w-xl text-base leading-7">
+            Try our stylized concept lab. Your real car and saved builds stay
+            untouched.
+          </p>
+          <ConceptStudio />
+          <Link
+            href="/studio"
+            className="mt-6 inline-flex min-h-11 items-center underline"
+          >
+            Open the concept studio →
+          </Link>
+        </section>
 
         <section id="platform" className="bg-[#050306] text-[#e8e6d7]">
           <div className="mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-32">
@@ -71,8 +100,15 @@ export function MarketingLanding() {
 
         <FitmentSection />
 
-        <section className="border-y border-[#0e2d30]/8 bg-[#88988d] py-5">
-          <div className="mx-auto flex max-w-[1500px] snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-1 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-8">
+        <section
+          aria-label="Vehicle details"
+          className="border-y border-[#0e2d30]/8 bg-[#88988d] py-5"
+        >
+          <div
+            tabIndex={0}
+            aria-label="Vehicle detail image carousel"
+            className="mx-auto flex max-w-[1500px] snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain rounded-2xl px-5 pb-1 focus-visible:ring-3 focus-visible:ring-[#0e2d30] focus-visible:outline-none sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-8"
+          >
             <PhotoDetail
               src="/capcar-hero-bmw-e90.jpeg"
               alt="Black BMW E90 side profile"
@@ -101,7 +137,11 @@ export function MarketingLanding() {
             description="Builds with mileage, parts and total cost kept visible."
           />
 
-          <div className="-mx-5 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 sm:mx-0 sm:mt-14 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0">
+          <div
+            tabIndex={0}
+            aria-label="Community build carousel"
+            className="-mx-5 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain rounded-2xl px-5 pb-2 focus-visible:ring-3 focus-visible:ring-[#6d0101] focus-visible:outline-none sm:mx-0 sm:mt-14 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0"
+          >
             <ProjectCard
               image="/capcar-hero-bmw-vision.png"
               name="Project Street Terrorist"
@@ -370,7 +410,7 @@ function PhotoDetail({
         sizes="(min-width: 640px) 33vw, 100vw"
         className="object-cover transition duration-700 ease-out group-hover:scale-[1.035]"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/8 to-transparent" />
       <figcaption className="absolute right-5 bottom-5 left-5 text-sm font-medium text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
         {label}
       </figcaption>
@@ -426,7 +466,7 @@ function ProjectCard({
       </div>
 
       <div className="absolute right-0 bottom-0 left-0 p-6 sm:p-8">
-        <p className="text-sm text-white/52">{vehicle}</p>
+        <p className="text-sm text-white/78">{vehicle}</p>
         <h3 className="mt-2 text-3xl font-medium tracking-[-0.045em] sm:text-4xl">
           {name}
         </h3>
@@ -435,9 +475,9 @@ function ProjectCard({
           <ProjectMetric label="Parts" value={parts} />
           <ProjectMetric label="Build cost" value={cost} />
         </div>
-        <div className="mt-4 flex items-center justify-between text-[11px] text-white/42">
+        <div className="mt-4 flex items-center justify-between text-[11px] text-white/68">
           <span>{stage}</span>
-          <span className="inline-flex items-center gap-1.5 text-emerald-200/75">
+          <span className="inline-flex items-center gap-1.5 text-emerald-100">
             <BadgeCheck className="size-3.5" /> Verified builder
           </span>
         </div>
@@ -449,10 +489,10 @@ function ProjectCard({
 function ProjectMetric({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-[9px] tracking-[0.1em] text-white/28 uppercase">
+      <p className="text-[9px] tracking-[0.1em] text-white/64 uppercase">
         {label}
       </p>
-      <p className="mt-1 text-xs font-medium text-white/72">{value}</p>
+      <p className="mt-1 text-xs font-medium text-white">{value}</p>
     </div>
   );
 }
