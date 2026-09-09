@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { isMissingPassportResponse } from "./capcar-smoke-contract.mjs";
+
 const baseUrl = (
   process.argv.find((argument) => argument.startsWith("http")) ??
   process.env.CAPCAR_SMOKE_URL ??
@@ -143,11 +145,19 @@ try {
   const response = await request(
     "/passport/00000000-0000-4000-8000-000000000000",
   );
-  if (response.status === 404) pass("missing public Passport");
-  else
+  const body = await response.text();
+  if (
+    isMissingPassportResponse({
+      status: response.status,
+      body,
+      robotsHeader: response.headers.get("x-robots-tag"),
+    })
+  ) {
+    pass("missing public Passport");
+  } else
     fail(
       "missing public Passport",
-      `expected 404, received ${response.status}`,
+      `expected a protected not-found response, received HTTP ${response.status}`,
     );
 } catch (error) {
   fail(
