@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AudioComparison } from "@/components/visualizer/audio-comparison";
+import { RecordingLibrary } from "@/components/visualizer/recording-library";
 export const metadata = { title: "Sound studio | Capcar" };
 export default function Page() {
   return (
@@ -11,7 +12,10 @@ export default function Page() {
         <h1 className="my-8 text-4xl font-medium tracking-tight sm:text-6xl">
           Listen to the difference.
         </h1>
-        <AudioComparison />
+        <RecordingLibrary />
+        <div className="rounded-2xl bg-[#0e2d30] text-[#e8e6d7]">
+          <AudioComparison />
+        </div>
       </div>
     </main>
   );

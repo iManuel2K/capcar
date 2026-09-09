@@ -71,6 +71,13 @@ export function GarageOverview() {
           </p>
         </div>
 
+        <Link
+          href="/studio"
+          className="mb-6 inline-flex min-h-11 items-center gap-3 text-sm underline"
+        >
+          Explore showcase builds{" "}
+          <ArrowRight className="size-4" aria-hidden="true" />
+        </Link>
         <section className="grid overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] lg:grid-cols-[1.12fr_0.88fr]">
           <VehicleArt label="your future project car" />
           <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12">
@@ -115,6 +122,13 @@ export function GarageOverview() {
 
   return (
     <div className="pb-24 sm:pb-0">
+      <Link
+        href="/studio"
+        className="mb-6 flex min-h-14 items-center justify-between rounded-2xl border border-white/15 px-5 text-sm text-white/80 hover:bg-white/5"
+      >
+        Explore the Capcar showcase collection{" "}
+        <ArrowRight className="size-4" aria-hidden="true" />
+      </Link>
       <div className="mb-8 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
         <div>
           <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">

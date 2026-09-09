@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ConceptStudio } from "@/components/visualizer/concept-studio";
+import { ShowcaseBuilds } from "@/components/visualizer/showcase-builds";
 
 export const metadata: Metadata = {
   title: "Concept studio | Capcar",
@@ -24,7 +24,7 @@ export default function StudioPage() {
           A small space for visual experimentation. Generic stylized cars, real
           interaction, and no changes to your garage.
         </p>
-        <ConceptStudio />
+        <ShowcaseBuilds />
       </div>
     </main>
   );
