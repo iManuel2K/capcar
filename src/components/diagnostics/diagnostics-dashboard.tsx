@@ -3,6 +3,7 @@
 import { CheckCircle2, Plus, ScanLine, ShieldAlert } from "lucide-react";
 import { useState } from "react";
 import { ScanImporter } from "./scan-importer";
+import { RepairPlan } from "./repair-plan";
 
 import {
   announceDiagnosticChange,
@@ -218,9 +219,26 @@ function DiagnosticCard({
   record: ReturnType<typeof useDiagnostics>[number];
 }) {
   const [resolution, setResolution] = useState(record.resolution ?? "");
+  const [saveError, setSaveError] = useState("");
   function setStatus(status: DiagnosticStatus) {
-    updateDiagnosticStatus(record.id, status, resolution, window.localStorage);
-    announceDiagnosticChange();
+    if (status === "resolved" && resolution.trim().length < 10) {
+      setSaveError(
+        "Describe the work and verification performed before resolving this fault (at least 10 characters).",
+      );
+      return;
+    }
+    try {
+      updateDiagnosticStatus(
+        record.id,
+        status,
+        resolution,
+        window.localStorage,
+      );
+      announceDiagnosticChange();
+      setSaveError("");
+    } catch {
+      setSaveError("Could not save. Check browser storage and retry.");
+    }
   }
   const severity = {
     info: "border-sky-300/20 bg-sky-300/8 text-sky-200",
@@ -264,6 +282,8 @@ function DiagnosticCard({
       </div>
       <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto]">
         <input
+          aria-label={`Repair evidence for ${record.code}`}
+          maxLength={800}
           value={resolution}
           onChange={(event) => setResolution(event.target.value)}
           placeholder="Resolution steps or workshop finding"
@@ -277,6 +297,12 @@ function DiagnosticCard({
           <CheckCircle2 className="size-4" /> Mark resolved
         </button>
       </div>
+      {saveError && (
+        <p role="alert" className="mt-3 text-sm text-red-200">
+          {saveError}
+        </p>
+      )}
+      <RepairPlan record={record} />
     </article>
   );
 }

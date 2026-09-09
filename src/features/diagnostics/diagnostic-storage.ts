@@ -69,3 +69,24 @@ export function updateDiagnosticStatus(
 export function announceDiagnosticChange() {
   window.dispatchEvent(new Event(DIAGNOSTIC_STORAGE_EVENT));
 }
+
+export function saveRepairPlan(
+  id: string,
+  checks: Array<{ label: string; done: boolean }>,
+  storage: WritableStorage,
+) {
+  const raw = storage.getItem(DIAGNOSTIC_STORAGE_KEY);
+  const records = diagnosticLogSchema.array().parse(JSON.parse(raw ?? "[]"));
+  const index = records.findIndex((record) => record.id === id);
+  if (index < 0) throw new Error("Diagnostic record no longer exists.");
+  const now = new Date().toISOString();
+  records[index] = diagnosticLogSchema.parse({
+    ...records[index],
+    updatedAt: now,
+    repairPlan: {
+      checks,
+      createdAt: records[index].repairPlan?.createdAt ?? now,
+    },
+  });
+  write(records, storage);
+}

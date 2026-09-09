@@ -23,6 +23,16 @@ export const diagnosticLogSchema = diagnosticInputSchema.extend({
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   resolvedAt: z.string().datetime().optional(),
+  repairPlan: z
+    .object({
+      checks: z
+        .array(
+          z.object({ label: z.string().min(1).max(500), done: z.boolean() }),
+        )
+        .max(30),
+      createdAt: z.string().datetime(),
+    })
+    .optional(),
 });
 
 export type DiagnosticInput = z.input<typeof diagnosticInputSchema>;

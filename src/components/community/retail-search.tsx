@@ -5,7 +5,14 @@ import type {
   RetailResponse,
 } from "@/features/retail/retail-contracts";
 import { actionClass, fieldClass } from "./community-shell";
+import Link from "next/link";
+import { useVehicles } from "@/features/vehicles/use-vehicles";
+import { saveRetailItem } from "@/features/retail/save-retail-item";
+import { announceWishlistChange } from "@/features/wishlist/wishlist-storage";
 export function RetailSearch() {
+  const { vehicles } = useVehicles();
+  const [vehicleId, setVehicleId] = useState("");
+  const [savedMessage, setSavedMessage] = useState("");
   const [result, setResult] = useState<RetailResponse>();
   const [input, setInput] = useState<RetailRequest>();
   const [error, setError] = useState("");
@@ -92,6 +99,40 @@ export function RetailSearch() {
         </button>
       </form>
       {error && <p role="alert">{error}</p>}
+      <section className="rounded-2xl border border-[#0e2d30]/20 p-5">
+        <label className="block">
+          Save results to a vehicle (optional)
+          <select
+            className={fieldClass}
+            value={vehicleId}
+            onChange={(event) => {
+              setVehicleId(event.target.value);
+              setSavedMessage("");
+            }}
+          >
+            <option value="">Choose vehicle</option>
+            {vehicles.map((vehicle) => (
+              <option key={vehicle.id} value={vehicle.id}>
+                {vehicle.make} {vehicle.model} ·{" "}
+                {vehicle.nickname || vehicle.productionYear}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p className="mt-3 text-sm">
+          Searching and merchant checkout do not require a vehicle. Saving does
+          not confirm fitment or place an order.
+        </p>
+        {vehicleId && (
+          <Link
+            className="inline-flex min-h-11 items-center underline"
+            href={`/garage/${vehicleId}/wishlist`}
+          >
+            Manage saved / ordered / delivered parts →
+          </Link>
+        )}
+        <p role="status">{savedMessage}</p>
+      </section>
       {result && (
         <>
           <p role="status">
@@ -138,6 +179,33 @@ export function RetailSearch() {
                 >
                   View at eBay ↗
                 </a>
+                <button
+                  type="button"
+                  className={actionClass}
+                  disabled={
+                    !vehicles.some((vehicle) => vehicle.id === vehicleId)
+                  }
+                  onClick={() => {
+                    try {
+                      saveRetailItem(
+                        item,
+                        vehicleId,
+                        result.checkedAt,
+                        localStorage,
+                      );
+                      announceWishlistChange();
+                      setSavedMessage(
+                        "Saved to this vehicle’s wishlist. Existing duplicates were kept unchanged.",
+                      );
+                    } catch {
+                      setSavedMessage(
+                        "Could not save this listing. Check your selected vehicle and browser storage.",
+                      );
+                    }
+                  }}
+                >
+                  Save to vehicle
+                </button>
               </article>
             ))}
           </div>

@@ -1,6 +1,14 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import {
+  DIAGNOSTIC_STORAGE_EVENT,
+  DIAGNOSTIC_STORAGE_KEY,
+} from "@/features/diagnostics/diagnostic-storage";
+import {
+  INSTALL_STAMP_STORAGE_EVENT,
+  INSTALL_STAMP_STORAGE_KEY,
+} from "@/features/specialists/install-stamp-storage";
 
 import {
   BUILD_STORAGE_EVENT,
@@ -36,6 +44,8 @@ import {
 } from "@/features/tuning/tuning-storage";
 
 const keys = [
+  DIAGNOSTIC_STORAGE_KEY,
+  INSTALL_STAMP_STORAGE_KEY,
   VEHICLE_STORAGE_KEY,
   MAINTENANCE_STORAGE_KEY,
   BUILD_STORAGE_KEY,
@@ -45,6 +55,8 @@ const keys = [
   TUNING_STORAGE_KEY,
 ];
 const customEvents = [
+  DIAGNOSTIC_STORAGE_EVENT,
+  INSTALL_STAMP_STORAGE_EVENT,
   VEHICLE_STORAGE_EVENT,
   MAINTENANCE_STORAGE_EVENT,
   BUILD_STORAGE_EVENT,

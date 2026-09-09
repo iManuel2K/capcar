@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { MaintenanceRepairPlans } from "@/components/diagnostics/repair-plan";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -194,6 +195,7 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
 
   return (
     <div className="pb-24 sm:pb-0">
+      <MaintenanceRepairPlans vehicleId={vehicleId} />
       <Link
         href={`/garage/${vehicleId}`}
         className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 transition hover:text-white"

@@ -8,6 +8,8 @@ export function useCommunity() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const generation = useRef(0);
+  const mutationLock = useRef(false);
+  const identityGeneration = useRef(0);
   const invalidateRequests = useCallback(() => {
     generation.current++;
   }, []);
@@ -45,11 +47,13 @@ export function useCommunity() {
     const client = createClient();
     const { data: subscription } = client.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_OUT") {
+        identityGeneration.current++;
         generation.current++;
         setData(undefined);
         setError("Sign in to view your community records.");
       }
       if (event === "SIGNED_IN") {
+        identityGeneration.current++;
         generation.current++;
         setData(undefined);
         void refresh();
@@ -65,6 +69,9 @@ export function useCommunity() {
     fields: unknown,
     id?: string,
   ) {
+    if (mutationLock.current) return false;
+    mutationLock.current = true;
+    const identity = identityGeneration.current;
     setBusy(true);
     setError("");
     try {
@@ -74,13 +81,16 @@ export function useCommunity() {
         body: JSON.stringify({ action, id, data: fields }),
       });
       const result = await response.json();
+      if (identity !== identityGeneration.current) return false;
       if (!response.ok) throw new Error(result.error || "Unable to save.");
       await refresh();
       return true;
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Connection failed.");
+      if (identity === identityGeneration.current)
+        setError(error instanceof Error ? error.message : "Connection failed.");
       return false;
     } finally {
+      mutationLock.current = false;
       setBusy(false);
     }
   }
