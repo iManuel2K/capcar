@@ -1,23 +1,33 @@
+"use client";
 import { Search } from "lucide-react";
+import { useEffect, useId, useState } from "react";
 
 export function GlobalPartsSearch({
   theme = "light",
   expanded = false,
+  initialQuery = "",
 }: {
   theme?: "light" | "dark";
   expanded?: boolean;
+  initialQuery?: string;
 }) {
   const dark = theme === "dark";
+  const id = useId();
+  const [pending, setPending] = useState(false);
+  useEffect(() => {
+    const reset = () => setPending(false);
+    window.addEventListener("pageshow", reset);
+    return () => window.removeEventListener("pageshow", reset);
+  }, []);
   return (
     <form
       action="/parts-search"
       role="search"
+      onSubmit={() => setPending(true)}
+      aria-busy={pending}
       className={expanded ? "w-full" : "w-52 xl:w-64"}
     >
-      <label
-        className="sr-only"
-        htmlFor={`global-parts-${theme}-${expanded ? "expanded" : "compact"}`}
-      >
+      <label className="sr-only" htmlFor={id}>
         Search parts, fitment and cross-references
       </label>
       <div
@@ -28,7 +38,8 @@ export function GlobalPartsSearch({
           aria-hidden="true"
         />
         <input
-          id={`global-parts-${theme}-${expanded ? "expanded" : "compact"}`}
+          id={id}
+          defaultValue={initialQuery}
           name="q"
           type="search"
           maxLength={80}
@@ -37,11 +48,15 @@ export function GlobalPartsSearch({
         />
         <button
           type="submit"
+          disabled={pending}
           className={`rounded-full px-2 py-1 text-[10px] font-semibold uppercase ${dark ? "text-[#ff667a]" : "text-[#6d0101]"}`}
         >
-          Find
+          {pending ? "Searching…" : "Find"}
         </button>
       </div>
+      <span className="sr-only" role="status">
+        {pending ? "Searching parts…" : ""}
+      </span>
     </form>
   );
 }

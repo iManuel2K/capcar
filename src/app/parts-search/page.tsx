@@ -37,7 +37,13 @@ export default async function PartsSearchPage({
           fitment for an unidentified vehicle.
         </p>
         <div className="mt-8 max-w-2xl">
-          <GlobalPartsSearch expanded />
+          <GlobalPartsSearch key={query} expanded initialQuery={query} />
+          <Link
+            href="/connected-parts"
+            className="mt-3 inline-flex min-h-11 items-center text-sm underline"
+          >
+            Search live retailer offers →
+          </Link>
         </div>
 
         <div className="mt-10 flex items-end justify-between gap-5 border-b border-[#0e2d30]/14 pb-4">
@@ -119,8 +125,8 @@ export default async function PartsSearchPage({
             <h2 className="mt-4 text-xl font-medium">No catalogue match yet</h2>
             <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-[#0e2d30]/55">
               Try a simpler term such as E90, N43, brake, wheel or a complete
-              part number. Live retailer results remain available inside a
-              signed-in garage.
+              part number. You can also search live retailer offers without an
+              account.
             </p>
           </section>
         )}

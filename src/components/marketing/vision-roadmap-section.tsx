@@ -78,18 +78,18 @@ const phases = [
   },
   {
     phase: "Phase 3",
-    state: "v1.0 Public",
+    state: "Beta expansion",
     label: "The visual release",
     description:
-      "A more cinematic garage with interactive vehicles, sound and recognizable demo builds.",
+      "3D references, recordings, scan imports and marketplace tools are in beta. Coverage is still growing.",
     items: [
       "Interactive Vehicle Models",
-      "Iconic Movie Car Demos",
+      "Movie Car Replicas — planned",
       "Engine & Exhaust Sound Studio",
       "3D Homepage Visualizer",
       "OBD-II Scanning",
       "Verified Shop Stamps",
-      "Direct Merchant Checkout",
+      "Direct Merchant Checkout — planned",
       "Community Marketplace",
     ],
     current: false,
@@ -258,7 +258,7 @@ export function VisionRoadmapSection() {
                   </span>
                 ) : phase.next ? (
                   <span className="rounded-full border border-[#bf8269]/35 bg-[#bf8269]/12 px-3 py-1 text-[10px] font-semibold tracking-[0.1em] text-[#e8e6d7] uppercase">
-                    Coming next
+                    In beta · expanding
                   </span>
                 ) : (
                   <phase.icon className="size-4 text-white/25 transition group-hover:text-[#bf8269]" />

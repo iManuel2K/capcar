@@ -42,6 +42,7 @@ describe("community database authorization", () => {
       "20260908140000_add_beta_api_rate_limits.sql",
       "20260908141000_add_account_data_lifecycle.sql",
       "20260909090000_community_and_verified_work.sql",
+      "20260910090000_public_discovery.sql",
     ])
       await db.exec(readFileSync(`supabase/migrations/${file}`, "utf8"));
     await db.query(
@@ -64,6 +65,76 @@ describe("community database authorization", () => {
   }, 30000);
   afterAll(async () => {
     await db?.close();
+  });
+  it("allows anonymous published projections but denies private tables and budget overrides", async () => {
+    await db.exec("reset role");
+    const ids = await db.query<{ id: string }>(
+      "insert into public.community_listings(seller_id,title,description,city,price_cents,condition,status) values($1,'Public test part','A complete public description','Berlin',1000,'used','published'),($1,'Pending test part','A complete pending description','Berlin',1000,'used','pending') returning id",
+      [buyer],
+    );
+    await db.exec("set role anon");
+    const publicRows = (
+      await db.query<{ id: string }>(
+        "select * from public.browse_published_listings()",
+      )
+    ).rows;
+    expect(publicRows.map((row) => row.id)).toContain(ids.rows[0].id);
+    expect(publicRows.map((row) => row.id)).not.toContain(ids.rows[1].id);
+    expect(Object.keys(publicRows[0]).sort()).toEqual(
+      ["id", "title", "description", "city", "price_cents", "condition"].sort(),
+    );
+    for (const table of [
+      "community_messages",
+      "community_reports",
+      "work_verifications",
+      "public_retail_budget",
+    ]) {
+      await expect(db.query(`select * from public.${table}`)).rejects.toThrow();
+    }
+    for (let i = 0; i < 30; i++)
+      expect(
+        (
+          await db.query<{ allowed: boolean }>(
+            "select public.consume_public_retail_budget() as allowed",
+          )
+        ).rows[0].allowed,
+      ).toBe(true);
+    expect(
+      (
+        await db.query<{ allowed: boolean }>(
+          "select public.consume_public_retail_budget() as allowed",
+        )
+      ).rows[0].allowed,
+    ).toBe(false);
+    await db.exec("reset role");
+    await db.exec(
+      "update public.public_retail_budget set minute_start = now() - interval '2 minutes', day_count = 1200",
+    );
+    await db.exec("set role anon");
+    expect(
+      (
+        await db.query<{ allowed: boolean }>(
+          "select public.consume_public_retail_budget() as allowed",
+        )
+      ).rows[0].allowed,
+    ).toBe(false);
+    await db.exec("reset role");
+    await db.query(
+      "insert into public.community_roles values($1,'suspended','Suspended user')",
+      [buyer],
+    );
+    await db.exec("set role anon");
+    expect(
+      (
+        await db.query<{ id: string }>(
+          "select * from public.browse_published_listings()",
+        )
+      ).rows.map((row) => row.id),
+    ).not.toContain(ids.rows[0].id);
+    await db.exec("reset role");
+    await db.query("delete from public.community_roles where user_id=$1", [
+      buyer,
+    ]);
   });
   it("requires moderation, prevents self-approval and reapplies review on edit", async () => {
     await as(seller);

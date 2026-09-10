@@ -33,34 +33,34 @@ const columns = [
     ],
   },
   {
-    label: "Coming next",
+    label: "In beta · still expanding",
     title: "Make it tangible",
     tone: "#92644d",
     items: [
       {
         title: "Interactive vehicle models",
         description:
-          "Explore selected cars in 3D and make the planned direction easier to see.",
+          "Selected 3D references are available. Vehicle-specific configurable models are still expanding.",
       },
       {
         title: "Iconic movie-car demos",
         description:
-          "Recognizable demo projects that show what a complete Capcar build can become.",
+          "Planned: licensed movie-car replicas. Current showcase references and original sketches are not movie replicas.",
       },
       {
         title: "Sound studio",
         description:
-          "Compare engine and exhaust character alongside the parts that create it.",
+          "Play credited recordings and upload your own. The library is growing; exact stock-versus-modified pairs remain limited.",
       },
       {
         title: "OBD-II and verified work",
         description:
-          "Bring scans, fault context and trusted shop stamps into the vehicle record.",
+          "Import scans and request specialist confirmation. Direct hardware connections and specialist coverage remain in development.",
       },
       {
         title: "Connected parts",
         description:
-          "Move toward merchant checkout and a useful community marketplace.",
+          "Retailer search and moderated listings are in beta. Availability depends on provider access; direct checkout is planned.",
       },
     ],
   },

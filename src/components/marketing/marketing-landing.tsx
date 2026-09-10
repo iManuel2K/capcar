@@ -61,7 +61,7 @@ export function MarketingLanding() {
         </section>
 
         <section id="platform" className="bg-[#050306] text-[#e8e6d7]">
-          <div className="mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-32">
+          <div className="mx-auto w-full max-w-[1500px] px-5 py-14 sm:px-8 sm:py-20">
             <SectionHeading
               eyebrow="The platform"
               title="One car. One system."
@@ -136,11 +136,11 @@ export function MarketingLanding() {
 
         <section
           id="projects"
-          className="mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-36"
+          className="mx-auto w-full max-w-[1500px] px-5 py-14 sm:px-8 sm:py-20"
         >
           <SectionHeading
             eyebrow="Community builds"
-            title="Real plans. Measurable progress."
+            title="Example plans. Measurable progress."
             description="Builds with mileage, parts and total cost kept visible."
           />
 
@@ -151,7 +151,7 @@ export function MarketingLanding() {
           >
             <ProjectCard
               image="/capcar-hero-bmw-vision.png"
-              name="Project Street Terrorist"
+              name="Project Streetline"
               vehicle="2011 BMW 318i · E90"
               direction="Street OEM+"
               status="In progress"
@@ -255,7 +255,7 @@ function FitmentSection() {
       id="fitment"
       className="border-y border-[#0e2d30]/15 bg-[#88988d] text-[#050306]"
     >
-      <div className="mx-auto grid max-w-[1500px] gap-10 px-5 py-16 sm:px-8 sm:py-32 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+      <div className="mx-auto grid max-w-[1500px] gap-10 px-5 py-12 sm:px-8 sm:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <div>
           <p className="text-xs font-semibold tracking-[0.2em] text-[#0e2d30]/68 uppercase">
             Fitment
@@ -487,7 +487,7 @@ function ProjectCard({
         <div className="mt-4 flex items-center justify-between text-[11px] text-white/68">
           <span>{stage}</span>
           <span className="inline-flex items-center gap-1.5 text-emerald-100">
-            <BadgeCheck className="size-3.5" /> Verified builder
+            <BadgeCheck className="size-3.5" /> Demo build · sample data
           </span>
         </div>
       </div>

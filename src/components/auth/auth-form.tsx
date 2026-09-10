@@ -87,12 +87,13 @@ export function AuthForm({
     void createClient()
       .auth.getUser()
       .then(({ data }) => {
-        if (data.user) router.replace("/garage");
+        if (data.user) router.replace(safeNext());
       });
   }, [configured, mode, router]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (loading) return;
     setError("");
     setMessage("");
 
@@ -221,7 +222,17 @@ export function AuthForm({
               {copy.description}
             </p>
 
-            <form className="mt-8 space-y-4" onSubmit={submit}>
+            <form
+              className="mt-8 space-y-4"
+              onSubmit={submit}
+              onInvalid={(event) => {
+                const field = event.target as HTMLInputElement;
+                setError(
+                  field.validationMessage ||
+                    "Check the highlighted field and try again.",
+                );
+              }}
+            >
               {mode === "register" && (
                 <Field label="Name" icon={<UserRound className="size-4" />}>
                   <input
@@ -356,7 +367,10 @@ export function AuthForm({
               </p>
             )}
             {error && (
-              <p className="mt-5 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-xs leading-5 text-red-100/75">
+              <p
+                role="alert"
+                className="mt-5 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-xs leading-5 text-red-100/75"
+              >
                 {error}
               </p>
             )}
