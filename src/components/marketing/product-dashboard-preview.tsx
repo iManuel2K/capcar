@@ -175,7 +175,7 @@ export function ProductDashboardPreview() {
                   status
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <StatusBadge tone="green">Direct bolt-on</StatusBadge>
+                  <StatusBadge tone="green">Bolt-on · demo fitment</StatusBadge>
                   <StatusBadge tone="amber">1 condition</StatusBadge>
                 </div>
                 <p className="mt-4 text-xs leading-5 text-white/36">

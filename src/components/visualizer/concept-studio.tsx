@@ -272,10 +272,11 @@ export function ConceptStudio({
           )}
           <p className="text-xs leading-6">
             {storageKey
-              ? "Save a direction on this browser. "
-              : "Session-only exploration. "}
-            Paint, body height and the sedan spoiler are supported. Wheels,
-            brakes, interiors and real-world fitment are not configurable here.
+              ? "Shape your next build and save the direction on this browser. "
+              : "Explore a new direction for your build. This preview stays open for your current visit. "}
+            Try paint, ride height and the sedan spoiler. Use the Garage to plan
+            wheels, brakes and interior upgrades, then check fitment against
+            your exact car.
           </p>
         </div>
       </div>

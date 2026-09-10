@@ -83,8 +83,8 @@ export function SketchfabReferenceStage({
       <footer className="flex flex-col gap-3 border-t border-white/8 bg-[#0e1211] px-4 py-4 text-xs leading-5 text-white/40 sm:flex-row sm:items-center sm:justify-between sm:px-5">
         <p className="flex max-w-xl items-start gap-2">
           <BadgeInfo className="mt-0.5 size-3.5 shrink-0 text-[#ff667a]" />
-          Reference model only. Year, facelift details, equipment and installed
-          parts may differ from your vehicle.
+          Explore the shape and details in 3D. This creator-made reference may
+          show a different model year, trim or equipment from your car.
         </p>
         <p className="shrink-0 rounded-full border border-white/8 bg-white/[0.025] px-3 py-1.5">
           <a

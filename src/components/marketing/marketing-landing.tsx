@@ -1,3 +1,4 @@
+import { SiteFooter } from "@/components/marketing/site-footer";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -10,7 +11,6 @@ import {
   Wrench,
 } from "lucide-react";
 
-import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { FitmentLookup } from "@/components/marketing/fitment-lookup";
 import { MarketingFaq } from "@/components/marketing/marketing-faq";
 import { MarketingHero } from "@/components/marketing/marketing-hero";
@@ -229,22 +229,7 @@ export function MarketingLanding() {
         </section>
       </main>
 
-      <footer className="mx-auto flex max-w-[1500px] flex-col justify-between gap-7 px-5 py-12 text-[#0e2d30] sm:flex-row sm:items-center sm:px-8">
-        <CapcarWordmark glow={false} />
-        <p className="max-w-xl text-xs leading-5 text-[#0e2d30]/48">
-          Confirm fitment, safety requirements and legal approval before
-          installation.
-        </p>
-        <div className="flex flex-wrap items-center gap-5 text-sm font-medium text-[#0e2d30]/75">
-          <Link href="/roadmap">Roadmap</Link>
-          <Link href="/sound-studio">Sound</Link>
-          <Link href="/marketplace">Marketplace</Link>
-          <Link href="/#faq">FAQ</Link>
-          <Link href="/privacy">Privacy</Link>
-          <Link href="/imprint">Imprint</Link>
-          <Link href="/register">Open garage →</Link>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

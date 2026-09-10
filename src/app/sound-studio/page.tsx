@@ -1,3 +1,4 @@
+import { SiteFooter } from "@/components/marketing/site-footer";
 import Link from "next/link";
 import { MarketingHeader } from "@/components/marketing/marketing-header";
 import { AudioComparison } from "@/components/visualizer/audio-comparison";
@@ -26,6 +27,7 @@ export default function Page() {
           </div>
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }

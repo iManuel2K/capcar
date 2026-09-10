@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useRef } from "react";
 
+import { VehicleOverviewSummary } from "./vehicle-overview-summary";
 import { VehicleArt } from "@/components/garage/vehicle-art";
 import { isProject318Vehicle } from "@/components/garage/vehicle-photo-gallery";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
@@ -195,29 +196,7 @@ export function GarageOverview() {
                   : vehicle.imageUrl
               }
             />
-            <div className="flex items-end justify-between gap-5 p-6 sm:p-7">
-              <div>
-                <p className="mb-2 text-xs tracking-[0.14em] text-white/40 uppercase">
-                  {vehicle.nickname ||
-                    `${vehicle.platform} ${vehicle.bodyStyle}`}
-                </p>
-                <h2 className="text-2xl font-medium tracking-[-0.025em]">
-                  {vehicle.productionYear} {vehicle.make} {vehicle.model}
-                </h2>
-                <p className="mt-2 text-sm text-white/45">
-                  {vehicle.engineCode} · {vehicle.transmission} ·{" "}
-                  {vehicle.mileage.toLocaleString("en-US")} km
-                </p>
-                {vehicle.demoProject && (
-                  <span className="mt-4 inline-flex rounded-full border border-[#e72d45]/25 bg-[#e72d45]/10 px-2.5 py-1 text-[10px] font-semibold tracking-[0.12em] text-[#ff8796] uppercase">
-                    Demo project
-                  </span>
-                )}
-              </div>
-              <span className="grid size-11 shrink-0 place-items-center rounded-full border border-white/10 text-white/60 transition group-hover:bg-[#e72d45] group-hover:text-[#07101d]">
-                <ArrowRight className="size-4" />
-              </span>
-            </div>
+            <VehicleOverviewSummary vehicle={vehicle} />
           </Link>
         ))}
       </div>

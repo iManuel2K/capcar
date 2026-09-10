@@ -24,6 +24,7 @@ import { useBuildState } from "@/features/builds/use-builds";
 import { addCatalogPartToBuild } from "@/features/parts/add-part-to-build";
 import { evaluateFitment, type FitmentStatus } from "@/features/parts/fitment";
 import { findCatalogPart } from "@/features/parts/part-catalog";
+import { FitmentCard } from "./fitment-card";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 
 const fitmentContent: Record<
@@ -166,10 +167,12 @@ export function PartDetail({
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
-          <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
-            Fitment evidence
-          </p>
-          <h2 className="mt-2 text-2xl font-medium">Why this result appears</h2>
+          <FitmentCard
+            state="unverified"
+            vehicle={`${vehicle.platform} · ${vehicle.engineCode}`}
+            explanation={`${fitment.label}. These demonstration rules help plan the build; manufacturer application data is still needed before ordering.`}
+            requirements={fitment.conditions}
+          />
           <div className="mt-6 divide-y divide-white/8 overflow-hidden rounded-2xl border border-white/8">
             {fitment.checks.map((check) => (
               <div

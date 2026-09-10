@@ -1,3 +1,4 @@
+import { SiteFooter } from "@/components/marketing/site-footer";
 import Link from "next/link";
 import { MarketingHeader } from "@/components/marketing/marketing-header";
 import type { Metadata } from "next";
@@ -33,6 +34,7 @@ export default function StudioPage() {
           <ShowcaseBuilds />
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }

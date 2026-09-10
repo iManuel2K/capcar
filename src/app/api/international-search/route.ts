@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
 import { requestSchema } from "@/features/international/search";
 import { searchInternational } from "@/features/international/ebay";
-import {
-  guardProductApi,
-  productApiError,
-  readJsonRequest,
-} from "@/lib/api/guard";
+import { productApiError, readJsonRequest } from "@/lib/api/guard";
+import { guardPublicRetail } from "@/lib/api/public-retail-guard";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
-  const guard = await guardProductApi("international-search", { limit: 20 });
-  if (!guard.ok) return guard.response;
+  if (request.headers.get("origin") !== new URL(request.url).origin) {
+    return NextResponse.json(
+      { error: "Same-origin request required." },
+      { status: 403, headers: { "Cache-Control": "no-store" } },
+    );
+  }
   let input;
   try {
     input = await readJsonRequest(request, requestSchema, 2_048);
@@ -20,6 +21,8 @@ export async function POST(request: Request) {
     );
   }
   try {
+    const blocked = await guardPublicRetail();
+    if (blocked) return blocked;
     return NextResponse.json(await searchInternational(input), {
       headers: { "Cache-Control": "no-store" },
     });
