@@ -79,3 +79,24 @@ it("times out a stalled request and enables an explicit retry", async () => {
   expect(screen.getByRole("alert")).toHaveTextContent("took too long");
   expect(screen.getByRole("button", { name: "Try again" })).toBeEnabled();
 });
+it("keeps a failed search actionable with a safe retailer continuation", async () => {
+  request.mockRejectedValue(
+    new (await import("@/features/retail/search-client")).SearchFailure(
+      "eBay authorization could not be reached. Try again shortly.",
+    ),
+  );
+  render(<ResilientPartSearch />);
+  fireEvent.change(screen.getByRole("searchbox"), {
+    target: { value: "2011 e90 rear lights" },
+  });
+  await act(() => vi.advanceTimersByTimeAsync(500));
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "eBay authorization could not be reached",
+  );
+  expect(
+    screen.getByRole("link", { name: /Continue this search on eBay/ }),
+  ).toHaveAttribute(
+    "href",
+    "https://www.ebay.de/sch/i.html?_nkw=2011+e90+rear+lights",
+  );
+});

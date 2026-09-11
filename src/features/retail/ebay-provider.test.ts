@@ -1,6 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 import { searchEbay } from "./ebay-provider";
-import { safeEbayUrl, retailRequestSchema } from "./retail-contracts";
+import {
+  ebaySearchUrl,
+  safeEbayUrl,
+  retailRequestSchema,
+} from "./retail-contracts";
 describe("live retailer adapter", () => {
   const input = retailRequestSchema.parse({
     query: "BMW 318i bumper",
@@ -44,11 +48,39 @@ describe("live retailer adapter", () => {
     expect(options.headers["X-EBAY-C-MARKETPLACE-ID"]).toBe("EBAY_DE");
     expect(options.redirect).toBe("error");
   });
+  it("prefers renewable application credentials over a stale static token", async () => {
+    const fetcher = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({ access_token: "fresh-token", expires_in: 7200 }),
+        ),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ itemSummaries: [] })),
+      );
+    await searchEbay(
+      input,
+      {
+        CAPCAR_EBAY_CLIENT_ID: "renewable-test-id",
+        CAPCAR_EBAY_CLIENT_SECRET: "renewable-test-secret",
+        CAPCAR_EBAY_ACCESS_TOKEN: "expired-static-token",
+      },
+      fetcher,
+    );
+    expect(String(fetcher.mock.calls[0][0])).toContain("oauth2/token");
+    expect(fetcher.mock.calls[1][1].headers.Authorization).toBe(
+      "Bearer fresh-token",
+    );
+  });
   it("validates quantities and never admits credential-bearing URLs", () => {
     expect(safeEbayUrl("https://user:pass@www.ebay.de/itm/1")).toBe(false);
     expect(safeEbayUrl("https://www.ebay.de.evil.example/")).toBe(false);
     expect(retailRequestSchema.safeParse({ ...input, page: -1 }).success).toBe(
       false,
+    );
+    expect(ebaySearchUrl(input)).toBe(
+      "https://www.ebay.de/sch/i.html?_nkw=BMW+318i+bumper",
     );
   });
   it("surfaces upstream errors", async () => {
@@ -58,6 +90,6 @@ describe("live retailer adapter", () => {
         { CAPCAR_EBAY_ACCESS_TOKEN: "test" },
         vi.fn().mockResolvedValue(new Response("", { status: 401 })),
       ),
-    ).rejects.toThrow("retailer");
+    ).rejects.toThrow("Browse API access");
   });
 });

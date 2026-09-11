@@ -6,6 +6,7 @@ import {
   type RetailResponse,
 } from "@/features/retail/retail-contracts";
 import { requestRetail, SearchFailure } from "@/features/retail/search-client";
+import { ebaySearchUrl } from "@/features/retail/retail-contracts";
 
 type ResultState = {
   key: string;
@@ -217,9 +218,19 @@ export function ResilientPartSearch({ children }: Props) {
         >
           <p>{current.error.message}</p>
           {current.error.retryable && (
-            <button type="button" onClick={retry} className={`${action} mt-3`}>
-              Try again
-            </button>
+            <div className="mt-3 flex flex-wrap gap-3">
+              <button type="button" onClick={retry} className={action}>
+                Try again
+              </button>
+              <a
+                href={ebaySearchUrl(input)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${action} inline-flex items-center`}
+              >
+                Continue this search on eBay ↗
+              </a>
+            </div>
           )}
         </div>
       )}

@@ -49,3 +49,17 @@ export function safeEbayUrl(value: string): boolean {
     return false;
   }
 }
+
+export function ebaySearchUrl(input: Pick<RetailRequest, "query" | "market">) {
+  const hosts: Record<RetailRequest["market"], string> = {
+    DE: "www.ebay.de",
+    GB: "www.ebay.co.uk",
+    FR: "www.ebay.fr",
+    IT: "www.ebay.it",
+    ES: "www.ebay.es",
+    US: "www.ebay.com",
+  };
+  const url = new URL(`https://${hosts[input.market]}/sch/i.html`);
+  url.searchParams.set("_nkw", input.query.trim());
+  return url.href;
+}

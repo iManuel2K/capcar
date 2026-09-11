@@ -14,9 +14,18 @@ it("stops exhausted budgets", async () => {
   rpc.mockResolvedValue({ data: false, error: null });
   expect((await guardPublicRetail())?.status).toBe(429);
 });
-it("fails closed without leaking database errors", async () => {
+it("uses a conservative process allowance without leaking database errors", async () => {
   rpc.mockResolvedValue({ data: null, error: { message: "secret" } });
-  const response = await guardPublicRetail();
-  expect(response?.status).toBe(503);
+  const fallback = vi.fn(() => true);
+  expect(await guardPublicRetail(fallback)).toBeNull();
+  expect(fallback).toHaveBeenCalledOnce();
+});
+it("stops when both database and fallback allowances are unavailable", async () => {
+  rpc.mockResolvedValue({
+    data: null,
+    error: { message: "secret database detail" },
+  });
+  const response = await guardPublicRetail(() => false);
+  expect(response?.status).toBe(429);
   expect(await response?.text()).not.toContain("secret");
 });

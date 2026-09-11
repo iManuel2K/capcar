@@ -49,6 +49,23 @@ it("rejects unsafe result links even in a successful response", async () => {
     requestRetail(input, new AbortController().signal),
   ).rejects.toThrow("could not be read");
 });
+it("shows a safe provider diagnosis returned by the server", async () => {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockResolvedValue(
+      Response.json(
+        {
+          code: "retailer_unavailable",
+          error: "eBay rejected Capcar's production App ID or Cert ID.",
+        },
+        { status: 503 },
+      ),
+    ),
+  );
+  await expect(
+    requestRetail(input, new AbortController().signal),
+  ).rejects.toThrow("production App ID or Cert ID");
+});
 it("preserves a valid empty result", async () => {
   vi.stubGlobal(
     "fetch",

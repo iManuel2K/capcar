@@ -18,7 +18,7 @@ export async function POST(request: Request) {
   } catch (error) {
     if (error instanceof RetailUnavailable)
       return NextResponse.json(
-        { error: error.message },
+        { error: error.message, code: "retailer_unavailable" },
         { status: 503, headers },
       );
     return productApiError(

@@ -39,6 +39,10 @@ export async function requestRetail(input: RetailRequest, signal: AbortSignal) {
     cache: "no-store",
   });
   if (!response.ok) {
+    const detail = (await response.json().catch(() => null)) as {
+      error?: unknown;
+      code?: unknown;
+    } | null;
     const messages: Record<number, string> = {
       400: "Check your search phrase and delivery country.",
       401: "Public search is unavailable right now. Please try again later.",
@@ -47,8 +51,16 @@ export async function requestRetail(input: RetailRequest, signal: AbortSignal) {
       503: "Live listings are temporarily unavailable. Your search is still here.",
       504: "The retailer took too long to respond. Try again in a moment.",
     };
+    const providerMessage =
+      response.status === 503 &&
+      detail?.code === "retailer_unavailable" &&
+      typeof detail.error === "string"
+        ? detail.error
+        : undefined;
     throw new SearchFailure(
-      messages[response.status] ?? "Search could not load. Please try again.",
+      providerMessage ??
+        messages[response.status] ??
+        "Search could not load. Please try again.",
       ![400, 401, 403, 429].includes(response.status),
     );
   }
