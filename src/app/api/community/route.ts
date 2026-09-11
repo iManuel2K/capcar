@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import {
   guardProductApi,
+  isSameOriginRequest,
   readJsonRequest,
   productApiError,
 } from "@/lib/api/guard";
@@ -74,7 +75,7 @@ export async function GET() {
   );
 }
 export async function POST(request: Request) {
-  if (request.headers.get("origin") !== new URL(request.url).origin)
+  if (!isSameOriginRequest(request))
     return NextResponse.json(
       { error: "Same-origin request required." },
       { status: 403, headers },

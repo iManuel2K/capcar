@@ -7,6 +7,42 @@ import { createClient } from "@/lib/supabase/server";
 type ApiGuardResult =
   { ok: true; userId?: string } | { ok: false; response: NextResponse };
 
+export function isSameOriginRequest(
+  request: Request,
+  environment: Record<string, string | undefined> = process.env,
+) {
+  const suppliedOrigin = request.headers.get("origin");
+  if (!suppliedOrigin) return false;
+
+  let normalizedOrigin: string;
+  try {
+    const parsed = new URL(suppliedOrigin);
+    if (
+      !["http:", "https:"].includes(parsed.protocol) ||
+      parsed.origin !== suppliedOrigin
+    )
+      return false;
+    normalizedOrigin = parsed.origin;
+  } catch {
+    return false;
+  }
+
+  return [
+    request.url,
+    environment.NEXT_PUBLIC_SITE_URL,
+    environment.URL,
+    environment.DEPLOY_PRIME_URL,
+    environment.DEPLOY_URL,
+  ].some((candidate) => {
+    if (!candidate) return false;
+    try {
+      return new URL(candidate).origin === normalizedOrigin;
+    } catch {
+      return false;
+    }
+  });
+}
+
 export async function guardProductApi(
   route: string,
   options: { limit?: number; windowSeconds?: number } = {},

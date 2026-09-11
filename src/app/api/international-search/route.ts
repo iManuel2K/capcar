@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { requestSchema } from "@/features/international/search";
 import { searchInternational } from "@/features/international/ebay";
-import { productApiError, readJsonRequest } from "@/lib/api/guard";
+import {
+  isSameOriginRequest,
+  productApiError,
+  readJsonRequest,
+} from "@/lib/api/guard";
 import { guardPublicRetail } from "@/lib/api/public-retail-guard";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
-  if (request.headers.get("origin") !== new URL(request.url).origin) {
+  if (!isSameOriginRequest(request)) {
     return NextResponse.json(
       { error: "Same-origin request required." },
       { status: 403, headers: { "Cache-Control": "no-store" } },
