@@ -83,6 +83,40 @@ describe("live retailer adapter", () => {
       "https://www.ebay.de/sch/i.html?_nkw=BMW+318i+bumper",
     );
   });
+  it("passes condition, price and sort refinements to eBay", async () => {
+    const filtered = retailRequestSchema.parse({
+      ...input,
+      condition: "used",
+      sort: "priceAsc",
+      minPrice: 50,
+      maxPrice: 250,
+    });
+    const fetcher = vi
+      .fn()
+      .mockResolvedValue(new Response(JSON.stringify({ itemSummaries: [] })));
+    await searchEbay(
+      filtered,
+      { CAPCAR_EBAY_ACCESS_TOKEN: "test-only" },
+      fetcher,
+    );
+    const url = new URL(String(fetcher.mock.calls[0][0]));
+    expect(url.searchParams.get("filter")).toBe(
+      "deliveryCountry:FR,buyingOptions:{FIXED_PRICE},conditionIds:{3000},price:[50..250],priceCurrency:EUR",
+    );
+    expect(url.searchParams.get("sort")).toBe("price");
+    expect(ebaySearchUrl(filtered)).toBe(
+      "https://www.ebay.de/sch/i.html?_nkw=BMW+318i+bumper&LH_ItemCondition=3000&_udlo=50&_udhi=250&_sop=15",
+    );
+  });
+  it("rejects an inverted price range before provider access", () => {
+    expect(
+      retailRequestSchema.safeParse({
+        ...input,
+        minPrice: 500,
+        maxPrice: 100,
+      }).success,
+    ).toBe(false);
+  });
   it("surfaces upstream errors", async () => {
     await expect(
       searchEbay(

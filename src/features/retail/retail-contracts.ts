@@ -4,9 +4,23 @@ export const retailRequestSchema = z
     query: z.string().trim().min(3).max(100),
     market: z.enum(["DE", "GB", "FR", "IT", "ES", "US"]),
     destination: z.enum(["DE", "AT", "FR", "IT", "ES", "NL", "BE", "GB", "US"]),
+    condition: z.enum(["all", "new", "used", "parts"]).default("all"),
+    sort: z
+      .enum(["bestMatch", "priceAsc", "priceDesc", "newest"])
+      .default("bestMatch"),
+    minPrice: z.number().finite().nonnegative().max(1_000_000).optional(),
+    maxPrice: z.number().finite().nonnegative().max(1_000_000).optional(),
     page: z.number().int().min(0).max(9).default(0),
   })
-  .strict();
+  .strict()
+  .refine(
+    ({ minPrice, maxPrice }) =>
+      minPrice === undefined || maxPrice === undefined || minPrice <= maxPrice,
+    {
+      message: "Minimum price cannot exceed maximum price.",
+      path: ["minPrice"],
+    },
+  );
 export type RetailRequest = z.infer<typeof retailRequestSchema>;
 export type RetailItem = {
   id: string;
@@ -50,7 +64,10 @@ export function safeEbayUrl(value: string): boolean {
   }
 }
 
-export function ebaySearchUrl(input: Pick<RetailRequest, "query" | "market">) {
+type EbaySearchLinkInput = Pick<RetailRequest, "query" | "market"> &
+  Partial<Pick<RetailRequest, "condition" | "sort" | "minPrice" | "maxPrice">>;
+
+export function ebaySearchUrl(input: EbaySearchLinkInput) {
   const hosts: Record<RetailRequest["market"], string> = {
     DE: "www.ebay.de",
     GB: "www.ebay.co.uk",
@@ -61,5 +78,15 @@ export function ebaySearchUrl(input: Pick<RetailRequest, "query" | "market">) {
   };
   const url = new URL(`https://${hosts[input.market]}/sch/i.html`);
   url.searchParams.set("_nkw", input.query.trim());
+  const conditionIds = { new: "1000", used: "3000", parts: "7000" };
+  if (input.condition && input.condition !== "all")
+    url.searchParams.set("LH_ItemCondition", conditionIds[input.condition]);
+  if (input.minPrice !== undefined)
+    url.searchParams.set("_udlo", String(input.minPrice));
+  if (input.maxPrice !== undefined)
+    url.searchParams.set("_udhi", String(input.maxPrice));
+  const sortCodes = { priceAsc: "15", priceDesc: "16", newest: "10" };
+  if (input.sort && input.sort !== "bestMatch")
+    url.searchParams.set("_sop", sortCodes[input.sort]);
   return url.href;
 }

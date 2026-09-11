@@ -42,6 +42,56 @@ it("debounces a typing burst and shows a useful empty state", async () => {
   expect(request.mock.calls[0][0].query).toBe("E90 brakes");
   expect(screen.getByText(/No listings for this search/)).toBeInTheDocument();
 });
+it("sends selected retailer filters and can clear them", async () => {
+  request.mockResolvedValue(empty);
+  render(<ResilientPartSearch />);
+  fireEvent.change(screen.getByLabelText("Condition"), {
+    target: { value: "used" },
+  });
+  fireEvent.change(screen.getByLabelText("Result order"), {
+    target: { value: "priceAsc" },
+  });
+  fireEvent.change(screen.getByLabelText("Minimum price"), {
+    target: { value: "50" },
+  });
+  fireEvent.change(screen.getByLabelText("Maximum price"), {
+    target: { value: "250" },
+  });
+  fireEvent.change(screen.getByRole("searchbox"), {
+    target: { value: "E90 headlights" },
+  });
+  await act(() => vi.advanceTimersByTimeAsync(500));
+  expect(request.mock.calls[0][0]).toMatchObject({
+    condition: "used",
+    sort: "priceAsc",
+    minPrice: 50,
+    maxPrice: 250,
+    page: 0,
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Clear filters" }));
+  expect(screen.getByLabelText("Condition")).toHaveValue("all");
+  expect(screen.getByLabelText("Result order")).toHaveValue("bestMatch");
+  expect(screen.getByLabelText("Minimum price")).toHaveValue(null);
+  expect(screen.getByLabelText("Maximum price")).toHaveValue(null);
+});
+it("explains an invalid price range without sending a request", async () => {
+  request.mockResolvedValue(empty);
+  render(<ResilientPartSearch />);
+  fireEvent.change(screen.getByRole("searchbox"), {
+    target: { value: "E90 wheels" },
+  });
+  fireEvent.change(screen.getByLabelText("Minimum price"), {
+    target: { value: "500" },
+  });
+  fireEvent.change(screen.getByLabelText("Maximum price"), {
+    target: { value: "100" },
+  });
+  await act(() => vi.advanceTimersByTimeAsync(600));
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "Minimum price cannot exceed maximum price",
+  );
+  expect(request).not.toHaveBeenCalled();
+});
 it("aborts superseded searches and ignores late results", async () => {
   let finish: (value: unknown) => void = () => undefined;
   request

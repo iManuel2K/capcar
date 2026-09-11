@@ -4,6 +4,8 @@ const input = {
   query: "E90",
   market: "DE",
   destination: "DE",
+  condition: "all",
+  sort: "bestMatch",
   page: 0,
 } as const;
 afterEach(() => vi.unstubAllGlobals());

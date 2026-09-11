@@ -105,10 +105,29 @@ export async function searchEbay(
   url.searchParams.set("q", input.query);
   url.searchParams.set("limit", "20");
   url.searchParams.set("offset", String(input.page * 20));
-  url.searchParams.set(
-    "filter",
-    `deliveryCountry:${input.destination},buyingOptions:{FIXED_PRICE}`,
-  );
+  const filters = [
+    `deliveryCountry:${input.destination}`,
+    "buyingOptions:{FIXED_PRICE}",
+  ];
+  const conditionIds = { new: "1000", used: "3000", parts: "7000" };
+  if (input.condition !== "all")
+    filters.push(`conditionIds:{${conditionIds[input.condition]}}`);
+  if (input.minPrice !== undefined || input.maxPrice !== undefined) {
+    const currency =
+      input.market === "GB" ? "GBP" : input.market === "US" ? "USD" : "EUR";
+    filters.push(
+      `price:[${input.minPrice ?? ""}..${input.maxPrice ?? ""}]`,
+      `priceCurrency:${currency}`,
+    );
+  }
+  url.searchParams.set("filter", filters.join(","));
+  const sorts = {
+    priceAsc: "price",
+    priceDesc: "-price",
+    newest: "newlyListed",
+  };
+  if (input.sort !== "bestMatch")
+    url.searchParams.set("sort", sorts[input.sort]);
   const campaign = env.CAPCAR_EBAY_CAMPAIGN_ID?.trim();
   if (campaign && !/^\d{1,30}$/.test(campaign))
     throw new RetailUnavailable("Affiliate configuration is invalid.");

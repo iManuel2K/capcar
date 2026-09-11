@@ -24,6 +24,11 @@ const field =
   "mt-2 min-h-12 w-full rounded-xl border border-[#0e2d30]/25 bg-white/50 px-3 text-[#0e2d30] outline-none focus-visible:ring-2 focus-visible:ring-[#6d0101]";
 const action =
   "min-h-11 rounded-xl border border-[#0e2d30]/30 px-4 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-4 disabled:opacity-50";
+function optionalPrice(value: string) {
+  if (!value) return undefined;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined;
+}
 
 export function ResilientPartSearch({ children }: Props) {
   const id = useId();
@@ -31,6 +36,8 @@ export function ResilientPartSearch({ children }: Props) {
     query: "",
     market: "DE",
     destination: "DE",
+    condition: "all",
+    sort: "bestMatch",
     page: 0,
   });
   const [attempt, setAttempt] = useState(0);
@@ -41,6 +48,15 @@ export function ResilientPartSearch({ children }: Props) {
   const cache = useRef(new Map<string, { at: number; data: RetailResponse }>());
   const parsed = retailRequestSchema.safeParse(input);
   const valid = parsed.success;
+  const priceRangeInvalid =
+    input.minPrice !== undefined &&
+    input.maxPrice !== undefined &&
+    input.minPrice > input.maxPrice;
+  const filtersActive =
+    input.condition !== "all" ||
+    input.sort !== "bestMatch" ||
+    input.minPrice !== undefined ||
+    input.maxPrice !== undefined;
   const requestKey = JSON.stringify({ ...input, query: input.query.trim() });
   const key = `${requestKey}:${attempt}`;
   const current = state.key === key ? state : undefined;
@@ -187,8 +203,119 @@ export function ResilientPartSearch({ children }: Props) {
             )}
           </select>
         </label>
+        <fieldset className="grid gap-4 border-t border-[#0e2d30]/15 pt-4 sm:col-span-2 sm:grid-cols-2 lg:grid-cols-4">
+          <legend className="px-1 text-sm font-medium tracking-[0.08em] uppercase">
+            Refine live results
+          </legend>
+          <label>
+            Condition
+            <select
+              value={input.condition}
+              onChange={(event) =>
+                change({
+                  ...input,
+                  condition: event.target.value as RetailRequest["condition"],
+                  page: 0,
+                })
+              }
+              className={field}
+            >
+              <option value="all">Any condition</option>
+              <option value="new">New</option>
+              <option value="used">Used</option>
+              <option value="parts">For parts / not working</option>
+            </select>
+          </label>
+          <label>
+            Result order
+            <select
+              value={input.sort}
+              onChange={(event) =>
+                change({
+                  ...input,
+                  sort: event.target.value as RetailRequest["sort"],
+                  page: 0,
+                })
+              }
+              className={field}
+            >
+              <option value="bestMatch">Best match</option>
+              <option value="priceAsc">Lowest price</option>
+              <option value="priceDesc">Highest price</option>
+              <option value="newest">Newly listed</option>
+            </select>
+          </label>
+          <label>
+            Minimum price
+            <input
+              type="number"
+              inputMode="decimal"
+              min="0"
+              max="1000000"
+              step="0.01"
+              value={input.minPrice ?? ""}
+              aria-invalid={priceRangeInvalid}
+              onChange={(event) =>
+                change({
+                  ...input,
+                  minPrice: optionalPrice(event.target.value),
+                  page: 0,
+                })
+              }
+              className={field}
+              placeholder="No minimum"
+            />
+          </label>
+          <label>
+            Maximum price
+            <input
+              type="number"
+              inputMode="decimal"
+              min="0"
+              max="1000000"
+              step="0.01"
+              value={input.maxPrice ?? ""}
+              aria-invalid={priceRangeInvalid}
+              onChange={(event) =>
+                change({
+                  ...input,
+                  maxPrice: optionalPrice(event.target.value),
+                  page: 0,
+                })
+              }
+              className={field}
+              placeholder="No maximum"
+            />
+          </label>
+          {priceRangeInvalid && (
+            <p
+              role="alert"
+              className="text-sm text-[#6d0101] sm:col-span-2 lg:col-span-3"
+            >
+              Minimum price cannot exceed maximum price.
+            </p>
+          )}
+          {filtersActive && (
+            <button
+              type="button"
+              className={`${action} justify-self-start`}
+              onClick={() =>
+                change({
+                  ...input,
+                  condition: "all",
+                  sort: "bestMatch",
+                  minPrice: undefined,
+                  maxPrice: undefined,
+                  page: 0,
+                })
+              }
+            >
+              Clear filters
+            </button>
+          )}
+        </fieldset>
         <button
-          className={action}
+          className={`${action} sm:col-span-2`}
           disabled={pending || composing || current?.error?.retryable === false}
         >
           {pending ? "Searching…" : "Search live listings"}

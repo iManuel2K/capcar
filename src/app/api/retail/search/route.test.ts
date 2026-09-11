@@ -46,7 +46,11 @@ it("accepts Capcar's public origin when Netlify supplies an internal request URL
   );
   expect(response.status).toBe(200);
   expect(mocks.guard).toHaveBeenCalledOnce();
-  expect(mocks.search).toHaveBeenCalledWith(payload);
+  expect(mocks.search).toHaveBeenCalledWith({
+    ...payload,
+    condition: "all",
+    sort: "bestMatch",
+  });
 });
 
 it("still rejects a cross-site request before quota or eBay access", async () => {
