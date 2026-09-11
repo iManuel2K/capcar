@@ -64,7 +64,7 @@ const phases = [
     phase: "Phase 2",
     state: "Beta",
     label: "Current release",
-    description: "A complete record for ownership, maintenance and builds.",
+    description: "Ownership, maintenance and build records in one garage.",
     items: [
       "Vehicle Passport",
       "Wishlist Manager",
@@ -87,7 +87,7 @@ const phases = [
       "Movie Car Replicas — planned",
       "Engine & Exhaust Sound Studio",
       "3D Homepage Visualizer",
-      "OBD-II Scanning",
+      "OBD-II Scan Imports",
       "Verified Shop Stamps",
       "Direct Merchant Checkout — planned",
       "Community Marketplace",
@@ -284,7 +284,14 @@ export function VisionRoadmapSection() {
                     <span
                       className={`grid size-5 place-items-center rounded-full ${phase.current || phase.next ? "bg-[#6d0101]/15 text-[#bf8269]" : "bg-white/5 text-white/30"}`}
                     >
-                      <Check className="size-3" />
+                      {item.includes("planned") ||
+                      (!phase.current &&
+                        !phase.next &&
+                        phase.phase !== "Phase 1") ? (
+                        <Circle aria-hidden="true" className="size-3" />
+                      ) : (
+                        <Check aria-hidden="true" className="size-3" />
+                      )}
                     </span>
                     {item}
                   </li>

@@ -3,19 +3,26 @@ import { useState } from "react";
 import { useCommunity } from "@/features/community/use-community";
 import type { Listing } from "@/features/community/contracts";
 import { actionClass, fieldClass } from "./community-shell";
-export function Marketplace() {
+export function Marketplace({
+  initialListingId = "",
+}: {
+  initialListingId?: string;
+}) {
   const { data, error, busy, refresh, mutate } = useCommunity();
   const [edit, setEdit] = useState<Listing>();
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState("");
   const [view, setView] = useState("published");
   const [condition, setCondition] = useState("all");
+  const [selectedListing, setSelectedListing] = useState(initialListingId);
+  const [listingFormOpen, setListingFormOpen] = useState(false);
   const moderator = data?.roles.some(
     (role) => role.user_id === data.userId && role.role === "moderator",
   );
   const visibleListings =
     data?.listings.filter(
       (item) =>
+        (!selectedListing || item.id === selectedListing) &&
         (view === "mine"
           ? item.seller_id === data.userId
           : view === "review"
@@ -49,115 +56,154 @@ export function Marketplace() {
       {!data && !error && <p role="status">Loading community…</p>}
       {data && (
         <>
-          <form
-            key={edit?.id ?? "new"}
-            className="space-y-4 rounded-2xl border border-[#0e2d30]/20 p-5"
-            onSubmit={async (event) => {
-              event.preventDefault();
-              const form = event.currentTarget;
-              const fields = new FormData(form);
-              const saved = await mutate(
-                edit ? "edit" : "create",
-                {
-                  title: fields.get("title"),
-                  description: fields.get("description"),
-                  city: fields.get("city"),
-                  price_cents: Math.round(Number(fields.get("price")) * 100),
-                  condition: fields.get("condition"),
-                },
-                edit?.id,
-              );
-              if (saved) {
-                setEdit(undefined);
-                form.reset();
-                setMessage(
-                  "Listing saved for moderation. It is not public yet.",
-                );
-              }
-            }}
-          >
-            <h2 className="text-2xl font-medium">
-              {edit ? "Edit listing · review required again" : "List a part"}
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label>
-                Title
-                <input
-                  name="title"
-                  required
-                  minLength={5}
-                  maxLength={120}
-                  defaultValue={edit?.title}
-                  className={fieldClass}
-                />
-              </label>
-              <label>
-                City only
-                <input
-                  name="city"
-                  required
-                  minLength={2}
-                  maxLength={100}
-                  defaultValue={edit?.city}
-                  className={fieldClass}
-                />
-              </label>
-              <label>
-                Price in EUR
-                <input
-                  name="price"
-                  type="number"
-                  min="1"
-                  max="100000"
-                  step="0.01"
-                  required
-                  defaultValue={edit ? edit.price_cents / 100 : undefined}
-                  className={fieldClass}
-                />
-              </label>
-              <label>
-                Condition
-                <select
-                  name="condition"
-                  defaultValue={edit?.condition ?? "used"}
-                  className={fieldClass}
-                >
-                  <option value="new">New</option>
-                  <option value="used">Used</option>
-                  <option value="for-parts">For parts / not working</option>
-                </select>
-              </label>
-            </div>
-            <label className="block">
-              Description, part number and known defects
-              <textarea
-                name="description"
-                required
-                minLength={20}
-                maxLength={3000}
-                defaultValue={edit?.description}
-                className={fieldClass}
-                rows={4}
-              />
-            </label>
-            <p className="text-sm">
-              No personal addresses, phone numbers, payment links or external
-              contact details. Use the private inbox. List only parts you own
-              and can legally sell.
-            </p>
-            <button className={actionClass} disabled={busy}>
-              Submit for review
-            </button>
-            {edit && (
+          {selectedListing && (
+            <div
+              role="status"
+              className="space-y-3 rounded-2xl border border-[#0e2d30]/25 p-5"
+            >
+              <p>
+                {data.listings.some(
+                  (item) =>
+                    item.id === selectedListing && item.status === "published",
+                )
+                  ? "Your selected listing is below. Contact the seller using its private message form."
+                  : "That listing is no longer available in the current published results. It may have sold or been removed."}
+              </p>
               <button
                 type="button"
-                className={`${actionClass} ml-3`}
-                onClick={() => setEdit(undefined)}
+                className={actionClass}
+                onClick={() => {
+                  setSelectedListing("");
+                  setQuery("");
+                  setCondition("all");
+                  setView("published");
+                }}
               >
-                Cancel edit
+                Browse all listings
               </button>
-            )}
-          </form>
+            </div>
+          )}
+          <details
+            open={listingFormOpen || Boolean(edit)}
+            onToggle={(event) => setListingFormOpen(event.currentTarget.open)}
+            className="rounded-2xl border border-[#0e2d30]/20 p-5"
+          >
+            <summary className="min-h-11 cursor-pointer py-2 font-medium">
+              {edit
+                ? "Edit your listing"
+                : "Have a part to sell? Create a listing"}
+            </summary>
+            <form
+              key={edit?.id ?? "new"}
+              className="space-y-4 rounded-2xl border border-[#0e2d30]/20 p-5"
+              onSubmit={async (event) => {
+                event.preventDefault();
+                const form = event.currentTarget;
+                const fields = new FormData(form);
+                const saved = await mutate(
+                  edit ? "edit" : "create",
+                  {
+                    title: fields.get("title"),
+                    description: fields.get("description"),
+                    city: fields.get("city"),
+                    price_cents: Math.round(Number(fields.get("price")) * 100),
+                    condition: fields.get("condition"),
+                  },
+                  edit?.id,
+                );
+                if (saved) {
+                  setEdit(undefined);
+                  setListingFormOpen(false);
+                  form.reset();
+                  setMessage(
+                    "Listing saved for moderation. It is not public yet.",
+                  );
+                }
+              }}
+            >
+              <h2 className="text-2xl font-medium">
+                {edit ? "Edit listing · review required again" : "List a part"}
+              </h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label>
+                  Title
+                  <input
+                    name="title"
+                    required
+                    minLength={5}
+                    maxLength={120}
+                    defaultValue={edit?.title}
+                    className={fieldClass}
+                  />
+                </label>
+                <label>
+                  City only
+                  <input
+                    name="city"
+                    required
+                    minLength={2}
+                    maxLength={100}
+                    defaultValue={edit?.city}
+                    className={fieldClass}
+                  />
+                </label>
+                <label>
+                  Price in EUR
+                  <input
+                    name="price"
+                    type="number"
+                    min="1"
+                    max="100000"
+                    step="0.01"
+                    required
+                    defaultValue={edit ? edit.price_cents / 100 : undefined}
+                    className={fieldClass}
+                  />
+                </label>
+                <label>
+                  Condition
+                  <select
+                    name="condition"
+                    defaultValue={edit?.condition ?? "used"}
+                    className={fieldClass}
+                  >
+                    <option value="new">New</option>
+                    <option value="used">Used</option>
+                    <option value="for-parts">For parts / not working</option>
+                  </select>
+                </label>
+              </div>
+              <label className="block">
+                Description, part number and known defects
+                <textarea
+                  name="description"
+                  required
+                  minLength={20}
+                  maxLength={3000}
+                  defaultValue={edit?.description}
+                  className={fieldClass}
+                  rows={4}
+                />
+              </label>
+              <p className="text-sm">
+                No personal addresses, phone numbers, payment links or external
+                contact details. Use the private inbox. List only parts you own
+                and can legally sell.
+              </p>
+              <button className={actionClass} disabled={busy}>
+                Submit for review
+              </button>
+              {edit && (
+                <button
+                  type="button"
+                  className={`${actionClass} ml-3`}
+                  onClick={() => setEdit(undefined)}
+                >
+                  Cancel edit
+                </button>
+              )}
+            </form>
+          </details>
           <p role="status">{message}</p>
           <div className="flex flex-wrap gap-3" aria-label="Listing views">
             {[
@@ -170,7 +216,10 @@ export function Marketplace() {
                 type="button"
                 className={actionClass}
                 aria-pressed={view === value}
-                onClick={() => setView(value)}
+                onClick={() => {
+                  setSelectedListing("");
+                  setView(value);
+                }}
               >
                 {label}
               </button>

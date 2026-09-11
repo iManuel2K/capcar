@@ -63,12 +63,88 @@ export function announceCostChange() {
   window.dispatchEvent(new Event(COST_STORAGE_EVENT));
 }
 
+export function updateCostEntry(
+  id: string,
+  input: CostEntryInput,
+  storage: WritableStorage,
+) {
+  const normalized = costEntryInputSchema.parse(input);
+  const state = readCostState(storage);
+  const existing = state.entries.find(
+    (entry) => entry.id === id && entry.vehicleId === normalized.vehicleId,
+  );
+  if (!existing)
+    throw new Error(
+      "This expense is no longer available. Refresh and try again.",
+    );
+  const updated = costEntrySchema.parse({ ...existing, ...normalized });
+  write(
+    {
+      ...state,
+      entries: state.entries.map((entry) =>
+        entry === existing ? updated : entry,
+      ),
+    },
+    storage,
+  );
+  return updated;
+}
+
+export function deleteCostEntry(
+  id: string,
+  vehicleId: string,
+  storage: WritableStorage,
+) {
+  const state = readCostState(storage);
+  write(
+    {
+      ...state,
+      entries: state.entries.filter(
+        (entry) => !(entry.id === id && entry.vehicleId === vehicleId),
+      ),
+    },
+    storage,
+  );
+}
+
+export function exportVehicleCostsCsv(vehicleId: string, state: CostState) {
+  // Quote every field and neutralize spreadsheet formulas in user-entered text.
+  const cell = (value: string | number) => {
+    const text = String(value);
+    const safe =
+      /^[\s]*[=+@-]/.test(text) || /^[\t\r\n]/.test(text) ? `'${text}` : text;
+    return `"${safe.replaceAll('"', '""')}"`;
+  };
+  return [
+    ["Date", "Expense", "Category", "Amount (EUR)", "Note"],
+    ...state.entries
+      .filter((entry) => entry.vehicleId === vehicleId)
+      .map((entry) => [
+        entry.occurredOn,
+        entry.label,
+        entry.category,
+        entry.amount.toFixed(2),
+        entry.note ?? "",
+      ]),
+  ]
+    .map((row) => row.map(cell).join(","))
+    .join("\r\n");
+}
+
 export function summarizeVehicleCosts(vehicleId: string, state: CostState) {
-  const entries = state.entries.filter((entry) => entry.vehicleId === vehicleId);
+  const entries = state.entries.filter(
+    (entry) => entry.vehicleId === vehicleId,
+  );
   const categories = {
-    parts: entries.filter((entry) => entry.category === "parts").reduce((sum, entry) => sum + entry.amount, 0),
-    labor: entries.filter((entry) => entry.category === "labor").reduce((sum, entry) => sum + entry.amount, 0),
-    maintenance: entries.filter((entry) => entry.category === "maintenance").reduce((sum, entry) => sum + entry.amount, 0),
+    parts: entries
+      .filter((entry) => entry.category === "parts")
+      .reduce((sum, entry) => sum + entry.amount, 0),
+    labor: entries
+      .filter((entry) => entry.category === "labor")
+      .reduce((sum, entry) => sum + entry.amount, 0),
+    maintenance: entries
+      .filter((entry) => entry.category === "maintenance")
+      .reduce((sum, entry) => sum + entry.amount, 0),
   };
   return {
     entries,

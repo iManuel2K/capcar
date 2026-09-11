@@ -6,11 +6,25 @@ export const metadata = {
   title: "Community marketplace | Capcar",
   robots: { index: false, follow: false },
 };
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ listing?: string }>;
+}) {
+  const params = await searchParams;
+  const selected =
+    typeof params.listing === "string" &&
+    /^[0-9a-f-]{36}$/i.test(params.listing)
+      ? params.listing
+      : "";
   const user = await currentUser();
   return (
     <CommunityShell title="Parts with a next chapter.">
-      {user ? <Marketplace /> : <PublicMarketplace />}
+      {user ? (
+        <Marketplace initialListingId={selected} />
+      ) : (
+        <PublicMarketplace />
+      )}
     </CommunityShell>
   );
 }

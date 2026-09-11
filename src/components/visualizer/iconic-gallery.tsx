@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const cars = [
   {
@@ -22,7 +22,17 @@ export function IconicGallery() {
   const [selected, setSelected] = useState(0);
   const [active, setActive] = useState(false);
   const [attempt, setAttempt] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+  const [unavailable, setUnavailable] = useState(false);
   const car = cars[selected];
+  useEffect(() => {
+    if (!active || loaded) return;
+    const timer = window.setTimeout(() => {
+      setActive(false);
+      setUnavailable(true);
+    }, 15000);
+    return () => window.clearTimeout(timer);
+  }, [active, loaded, attempt, selected]);
   return (
     <section
       aria-label="Realistic 3D car collection"
@@ -37,6 +47,8 @@ export function IconicGallery() {
             onClick={() => {
               setSelected(index);
               setActive(false);
+              setLoaded(false);
+              setUnavailable(false);
             }}
             className={`min-h-12 shrink-0 rounded-xl border px-5 text-sm ${selected === index ? "border-[#e8e6d7] bg-[#e8e6d7] text-[#0e2d30]" : "border-white/25"}`}
           >
@@ -52,6 +64,11 @@ export function IconicGallery() {
             src={`https://sketchfab.com/models/${car.id}/embed?autostart=1&ui_theme=dark`}
             allow="fullscreen; xr-spatial-tracking"
             allowFullScreen
+            onLoad={() => setLoaded(true)}
+            onError={() => {
+              setActive(false);
+              setUnavailable(true);
+            }}
             className="h-full w-full border-0"
           />
         ) : (
@@ -65,15 +82,34 @@ export function IconicGallery() {
             />
             <button
               type="button"
-              onClick={() => setActive(true)}
+              onClick={() => {
+                setActive(true);
+                setLoaded(false);
+                setUnavailable(false);
+              }}
               className="absolute bottom-6 left-1/2 min-h-12 -translate-x-1/2 rounded-xl bg-[#e8e6d7] px-6 font-semibold whitespace-nowrap text-[#0e2d30]"
             >
               Explore in 3D
             </button>
           </>
         )}
+        {active && !loaded && (
+          <p
+            role="status"
+            className="pointer-events-none absolute top-4 left-4 rounded-xl bg-[#101615] px-4 py-3 text-sm"
+          >
+            Opening the 3D reference…
+          </p>
+        )}
       </div>
       <div className="space-y-3 border-t border-white/15 p-5 text-sm leading-6">
+        {unavailable && (
+          <p role="status">
+            The 3D connection did not finish. Your preview is still available.
+            Try again, or allow Sketchfab in your browser’s privacy settings if
+            it is blocked.
+          </p>
+        )}
         <p>
           Drag to orbit. Pinch or scroll to zoom. Loading 3D connects to
           Sketchfab; no model loads until you choose it.
@@ -84,7 +120,10 @@ export function IconicGallery() {
             <button
               type="button"
               className="min-h-11 underline"
-              onClick={() => setAttempt((value) => value + 1)}
+              onClick={() => {
+                setLoaded(false);
+                setAttempt((value) => value + 1);
+              }}
             >
               Retry
             </button>

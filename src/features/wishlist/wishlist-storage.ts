@@ -58,6 +58,35 @@ export function updateWishlistStatus(
   write(items, storage);
 }
 
+export function updateWishlistItem(
+  id: string,
+  input: WishlistItemInput,
+  storage: WritableStorage,
+  now = new Date().toISOString(),
+) {
+  const normalized = wishlistItemInputSchema.parse(input);
+  const items = readWishlist(storage);
+  const existing = items.find(
+    (item) => item.id === id && item.vehicleId === normalized.vehicleId,
+  );
+  if (!existing)
+    throw new Error(
+      "This saved part is no longer available. Refresh and try again.",
+    );
+  // Price/link edits never reset a delivery state updated elsewhere.
+  const updated = wishlistItemSchema.parse({
+    ...existing,
+    ...normalized,
+    status: existing.status,
+    updatedAt: now,
+  });
+  write(
+    items.map((item) => (item === existing ? updated : item)),
+    storage,
+  );
+  return updated;
+}
+
 export function removeWishlistItem(id: string, storage: WritableStorage) {
   write(
     readWishlist(storage).filter((item) => item.id !== id),

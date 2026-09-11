@@ -12,10 +12,17 @@ import {
   Share2,
   Trash2,
 } from "lucide-react";
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 import { downloadTextFile } from "@/features/export/download";
 import { PassportIdentityDocument } from "@/components/passport/passport-identity-document";
+import { PassportPhotoUpload } from "@/components/passport/passport-photo-upload";
 import {
   buildVehiclePassport,
   passportToCsv,
@@ -24,7 +31,6 @@ import {
   type PassportProfile,
 } from "@/features/passport/vehicle-passport";
 import { proFeatureLabels } from "@/features/pro/pro-features";
-import { collectLocalSnapshot } from "@/features/sync/local-snapshot";
 import { createClient } from "@/lib/supabase/client";
 
 type PassportLink = {
@@ -34,6 +40,10 @@ type PassportLink = {
 };
 
 export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
+  return <VehiclePassportWorkspace key={vehicleId} vehicleId={vehicleId} />;
+}
+
+function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
   const hydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -46,6 +56,12 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
   const [linksLoading, setLinksLoading] = useState(true);
   const [, setProfileRevision] = useState(0);
   const [profileMessage, setProfileMessage] = useState("");
+  const [linkMessage, setLinkMessage] = useState("");
+  const requestGeneration = useRef(0);
+  const invalidateRequests = useCallback(() => {
+    requestGeneration.current++;
+  }, []);
+  const mutationLock = useRef(false);
   const profile = hydrated
     ? readPassportProfile(vehicleId, window.localStorage)
     : undefined;
@@ -54,28 +70,50 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
     : undefined;
 
   const loadLinks = useCallback(async () => {
-    const client = createClient();
-    const { data: auth } = await client.auth.getUser();
-    if (!auth.user) {
-      setLinksLoading(false);
-      return;
+    const request = ++requestGeneration.current;
+    setLinksLoading(true);
+    try {
+      const client = createClient();
+      const { data: auth, error: authError } = await client.auth.getUser();
+      if (authError || !auth.user)
+        throw new Error(
+          "Sign in to manage shared passport links. Your local passport is still available.",
+        );
+      const { data, error: linksError } = await client
+        .from("vehicle_passports")
+        .select("share_id, is_public, created_at")
+        .eq("user_id", auth.user.id)
+        .contains("payload", { vehicle: { id: vehicleId } })
+        .order("created_at", { ascending: false });
+      if (request !== requestGeneration.current) return;
+      if (linksError)
+        throw new Error(
+          "Shared links could not be loaded. Check your connection and try again.",
+        );
+      setLinks((data ?? []) as PassportLink[]);
+      setError("");
+    } catch (caught) {
+      if (request === requestGeneration.current) {
+        setLinks([]);
+        setError(
+          caught instanceof Error
+            ? caught.message
+            : "Shared links could not be loaded. Try again.",
+        );
+      }
+    } finally {
+      if (request === requestGeneration.current) setLinksLoading(false);
     }
-    const { data, error: linksError } = await client
-      .from("vehicle_passports")
-      .select("share_id, is_public, created_at")
-      .eq("user_id", auth.user.id)
-      .contains("payload", { vehicle: { id: vehicleId } })
-      .order("created_at", { ascending: false });
-    if (linksError) setError(linksError.message);
-    else setLinks((data ?? []) as PassportLink[]);
-    setLinksLoading(false);
   }, [vehicleId]);
 
   useEffect(() => {
     if (!hydrated) return;
     const timer = window.setTimeout(() => void loadLinks(), 0);
-    return () => window.clearTimeout(timer);
-  }, [hydrated, loadLinks]);
+    return () => {
+      invalidateRequests();
+      window.clearTimeout(timer);
+    };
+  }, [hydrated, loadLinks, invalidateRequests]);
 
   if (!hydrated)
     return (
@@ -88,6 +126,8 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
   const title = `${passport.vehicle.productionYear} ${passport.vehicle.make} ${passport.vehicle.model}`;
 
   async function publish() {
+    if (mutationLock.current) return;
+    mutationLock.current = true;
     setSharing(true);
     setError("");
     try {
@@ -115,44 +155,83 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
           : "Could not publish this passport.",
       );
     } finally {
+      mutationLock.current = false;
       setSharing(false);
     }
   }
 
   async function setLinkPublic(shareId: string, isPublic: boolean) {
+    if (mutationLock.current) return;
+    mutationLock.current = true;
+    setSharing(true);
     setError("");
-    const { error: updateError } = await createClient()
-      .from("vehicle_passports")
-      .update({ is_public: isPublic, updated_at: new Date().toISOString() })
-      .eq("share_id", shareId);
-    if (updateError) {
-      setError(updateError.message);
-      return;
+    try {
+      const { data, error: updateError } = await createClient()
+        .from("vehicle_passports")
+        .update({ is_public: isPublic, updated_at: new Date().toISOString() })
+        .eq("share_id", shareId)
+        .select("share_id")
+        .maybeSingle();
+      if (updateError || !data)
+        throw new Error(
+          "Could not change this link. Check your connection and sign-in, then try again.",
+        );
+      if (!isPublic && shareUrl.endsWith(shareId)) setShareUrl("");
+      await loadLinks();
+    } catch (caught) {
+      setError(
+        caught instanceof Error
+          ? caught.message
+          : "Could not change this link. Try again.",
+      );
+    } finally {
+      mutationLock.current = false;
+      setSharing(false);
     }
-    if (!isPublic && shareUrl.endsWith(shareId)) setShareUrl("");
-    await loadLinks();
   }
 
   async function deleteLink(shareId: string) {
+    if (mutationLock.current) return;
     if (!window.confirm("Delete this shared passport link permanently?"))
       return;
+    mutationLock.current = true;
+    setSharing(true);
     setError("");
-    const { error: deleteError } = await createClient()
-      .from("vehicle_passports")
-      .delete()
-      .eq("share_id", shareId);
-    if (deleteError) {
-      setError(deleteError.message);
-      return;
+    try {
+      const { data, error: deleteError } = await createClient()
+        .from("vehicle_passports")
+        .delete()
+        .eq("share_id", shareId)
+        .select("share_id")
+        .maybeSingle();
+      if (deleteError || !data)
+        throw new Error(
+          "Could not delete this link. Check your connection and sign-in, then try again.",
+        );
+      if (shareUrl.endsWith(shareId)) setShareUrl("");
+      await loadLinks();
+    } catch (caught) {
+      setError(
+        caught instanceof Error
+          ? caught.message
+          : "Could not delete this link. Try again.",
+      );
+    } finally {
+      mutationLock.current = false;
+      setSharing(false);
     }
-    if (shareUrl.endsWith(shareId)) setShareUrl("");
-    await loadLinks();
   }
 
   async function copyLink(shareId: string) {
-    await navigator.clipboard.writeText(
-      `${window.location.origin}/passport/${shareId}`,
-    );
+    const url = `${window.location.origin}/passport/${shareId}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setLinkMessage("Passport link copied.");
+    } catch {
+      setLinkMessage(
+        `Automatic copying is unavailable. Select and copy this link: ${url}`,
+      );
+    }
   }
 
   return (
@@ -183,7 +262,6 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
                   JSON.stringify(
                     {
                       passport,
-                      garageSnapshot: collectLocalSnapshot(window.localStorage),
                     },
                     null,
                     2,
@@ -241,8 +319,15 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
           role="alert"
           className="no-print mt-5 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-sm text-red-100/75"
         >
-          {error} Apply the included passport migration if the table is not
-          ready.
+          {error}
+        </p>
+      )}
+      {linkMessage && (
+        <p
+          role="status"
+          className="no-print mt-4 rounded-xl border border-white/15 p-4 text-sm break-all text-white/80"
+        >
+          {linkMessage}
         </p>
       )}
       <PassportProfileEditor
@@ -250,6 +335,11 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
         initial={profile}
         message={profileMessage}
         onMessage={setProfileMessage}
+        onSaved={() => setProfileRevision((value) => value + 1)}
+      />
+      <PassportPhotoUpload
+        vehicleId={vehicleId}
+        photo={profile?.photoDataUrl}
         onSaved={() => setProfileRevision((value) => value + 1)}
       />
       <PassportIdentityDocument
@@ -272,6 +362,11 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
               Revoke access immediately or remove a link permanently. A revoked
               link shows no vehicle data.
             </p>
+            <p className="mt-2 text-sm leading-6 text-white/60">
+              Each link is a snapshot. Create a new link after updating records
+              or privacy choices, and revoke older versions you no longer want
+              public.
+            </p>
           </div>
           <button
             type="button"
@@ -282,6 +377,14 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
             <Share2 className="size-4" /> New public link
           </button>
         </div>
+        <button
+          type="button"
+          disabled={linksLoading || sharing}
+          onClick={() => void loadLinks()}
+          className="mt-4 min-h-11 rounded-xl border border-white/20 px-4 text-sm disabled:opacity-40"
+        >
+          Refresh shared links
+        </button>
         {linksLoading ? (
           <div className="mt-6 flex items-center gap-2 text-sm text-white/35">
             <LoaderCircle className="size-4 animate-spin" /> Loading shared
@@ -321,6 +424,7 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
                       </button>
                       <button
                         type="button"
+                        disabled={sharing}
                         onClick={() => void setLinkPublic(link.share_id, false)}
                         className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 px-3 text-xs text-white/55"
                       >
@@ -330,6 +434,7 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
                   ) : (
                     <button
                       type="button"
+                      disabled={sharing}
                       onClick={() => void setLinkPublic(link.share_id, true)}
                       className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 px-3 text-xs text-white/55"
                     >
@@ -338,6 +443,7 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
                   )}
                   <button
                     type="button"
+                    disabled={sharing}
                     onClick={() => void deleteLink(link.share_id)}
                     aria-label="Delete passport link"
                     className="grid size-10 place-items-center rounded-xl border border-red-300/10 text-red-200/55"
@@ -364,7 +470,7 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
           value={passport.diagnostics.length}
         />
         <PassportMetric
-          label="Install stamps"
+          label="Local work notes"
           value={passport.installStamps.length}
         />
       </section>
@@ -394,11 +500,11 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
           }))}
         />
         <RecordSection
-          title="Specialist install stamps"
-          empty="No shop install stamps."
+          title="Local work notes · unverified"
+          empty="No local work notes."
           rows={passport.installStamps.map((item) => ({
             title: item.work,
-            meta: `${item.specialist} · ${item.installedAt} · Beta stamp`,
+            meta: `${item.specialist} · ${item.installedAt} · Unverified local entry`,
           }))}
         />
       </div>
@@ -520,6 +626,7 @@ function PassportProfileEditor({
     try {
       savePassportProfile(
         {
+          ...readPassportProfile(vehicleId, window.localStorage),
           vehicleId,
           ownerName,
           ownerAddress,
@@ -529,6 +636,8 @@ function PassportProfileEditor({
           insurancePolicyNumber: value("insurancePolicyNumber"),
           publishOwnerDetails,
           includeFullVin: form.get("includeFullVin") === "on",
+          publishPhoto: form.get("publishPhoto") === "on",
+          publishInsuranceDetails: form.get("publishInsuranceDetails") === "on",
         },
         window.localStorage,
       );
@@ -608,6 +717,27 @@ function PassportProfileEditor({
           placeholder="Policy reference"
         />
         <div className="grid gap-3 rounded-2xl border border-white/8 p-4 text-sm text-white/58 sm:col-span-2 sm:grid-cols-2">
+          <label className="flex min-h-11 items-center gap-3">
+            <input
+              key={initial?.photoDataUrl ?? "no-photo"}
+              name="publishPhoto"
+              type="checkbox"
+              disabled={!initial?.photoDataUrl}
+              defaultChecked={initial?.publishPhoto ?? false}
+              className="size-5"
+            />
+            Include my uploaded photo in exports and new public links
+          </label>
+          <label className="flex min-h-11 items-center gap-3">
+            <input
+              name="publishInsuranceDetails"
+              type="checkbox"
+              defaultChecked={initial?.publishInsuranceDetails ?? false}
+              className="size-5"
+            />
+            Include insurance company and policy number in exports and new
+            public links
+          </label>
           <label className="flex cursor-pointer items-start gap-3">
             <input
               type="checkbox"

@@ -76,7 +76,7 @@ export async function PublicMarketplace() {
               </p>
               <Link
                 className={`${actionClass} mt-4 inline-flex items-center`}
-                href="/login?next=%2Fmarketplace"
+                href={`/login?next=${encodeURIComponent(`/marketplace?listing=${item.id}`)}`}
               >
                 Sign in to contact seller
               </Link>

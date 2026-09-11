@@ -20,25 +20,61 @@ export function ScanImporter({
   vehicleId: string;
   mileage: number;
 }) {
+  return (
+    <VehicleScanImporter
+      key={vehicleId}
+      vehicleId={vehicleId}
+      mileage={mileage}
+    />
+  );
+}
+
+function VehicleScanImporter({
+  vehicleId,
+  mileage,
+}: {
+  vehicleId: string;
+  mileage: number;
+}) {
   const [scan, setScan] = useState<ScanImport>();
   const [message, setMessage] = useState("");
   const [inspectorOpen, setInspectorOpen] = useState(false);
+  const [pasted, setPasted] = useState("");
+  const [reading, setReading] = useState(false);
+  const generation = useRef(0);
+  useEffect(
+    () => () => {
+      generation.current++;
+    },
+    [vehicleId],
+  );
+
+  function inspectText(text: string) {
+    const result = parseScan(text);
+    setScan(result);
+    setInspectorOpen(true);
+  }
 
   async function inspectFile(file: File) {
+    const request = ++generation.current;
     setScan(undefined);
     setMessage("");
+    setReading(true);
     try {
       if (file.size > 1024 * 1024)
         throw new Error("Scan must be smaller than 1 MB.");
-      const result = parseScan(await file.text());
-      setScan(result);
-      setInspectorOpen(true);
+      const text = await file.text();
+      if (request !== generation.current) return;
+      inspectText(text);
     } catch (caught) {
+      if (request !== generation.current) return;
       setMessage(
         caught instanceof Error
           ? caught.message
           : "Capcar could not read this scan.",
       );
+    } finally {
+      if (request === generation.current) setReading(false);
     }
   }
 
@@ -74,6 +110,51 @@ export function ScanImporter({
           </p>
         </div>
       </div>
+      <details className="mt-4 rounded-xl border border-white/15 p-4">
+        <summary className="cursor-pointer py-2 text-sm text-white/80">
+          Or paste a scan report
+        </summary>
+        <form
+          className="mt-3 space-y-3"
+          onSubmit={(event) => {
+            event.preventDefault();
+            generation.current++;
+            setReading(false);
+            setScan(undefined);
+            setMessage("");
+            try {
+              inspectText(pasted);
+            } catch (caught) {
+              setMessage(
+                caught instanceof Error
+                  ? caught.message
+                  : "Could not read this scan.",
+              );
+            }
+          }}
+        >
+          <label className="block text-sm text-white/65">
+            Scan text
+            <textarea
+              value={pasted}
+              onChange={(event) => setPasted(event.target.value)}
+              maxLength={1048576}
+              required
+              rows={5}
+              spellCheck={false}
+              placeholder="Paste fault codes or the complete report from your scanner"
+              className="mt-2 w-full rounded-xl border border-white/20 bg-black/20 p-3 font-mono text-sm text-white focus-visible:outline-2 focus-visible:outline-[#8fbcb0]"
+            />
+          </label>
+          <button
+            type="submit"
+            disabled={!pasted.trim()}
+            className="min-h-11 rounded-xl bg-[#0e2d30] px-5 text-sm font-medium text-[#f6eadb] disabled:opacity-40"
+          >
+            Inspect scan
+          </button>
+        </form>
+      </details>
       <div className="mt-5">
         <FileDropzone
           accept=".txt,.log,.csv,.json,text/plain,text/csv,application/json"
@@ -89,8 +170,17 @@ export function ScanImporter({
         </a>
       </div>
       <p role="status" className="mt-3 text-sm text-white/65">
-        {message}
+        {reading ? "Reading scan…" : message}
       </p>
+      {scan && !inspectorOpen && (
+        <button
+          type="button"
+          onClick={() => setInspectorOpen(true)}
+          className="min-h-11 rounded-xl border border-white/20 px-4 text-sm"
+        >
+          Review {scan.codes.length} detected codes
+        </button>
+      )}
       {scan && inspectorOpen && (
         <DiagnosticInspectorDrawer
           scan={scan}
@@ -113,21 +203,23 @@ function DiagnosticInspectorDrawer({
 }) {
   const [selectedCode, setSelectedCode] = useState(scan.codes[0]);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const insight = diagnosticInsightFor(selectedCode);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
+    const trigger = document.activeElement;
     document.body.style.overflow = "hidden";
+    const dialog = dialogRef.current;
+    dialog?.showModal();
     closeRef.current?.focus();
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKeyDown);
     return () => {
+      dialog?.close();
       document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
+      if (trigger instanceof HTMLElement && trigger.isConnected)
+        trigger.focus();
     };
-  }, [onClose]);
+  }, []);
 
   const severityClasses = {
     info: "border-sky-300/20 bg-sky-300/8 text-sky-100",
@@ -136,23 +228,23 @@ function DiagnosticInspectorDrawer({
   }[insight.severity];
 
   return (
-    <div className="fixed inset-0 z-[80]">
-      <button
-        type="button"
-        aria-label="Close diagnostic Inspector"
-        onClick={onClose}
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-      />
-      <aside
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="diagnostic-inspector-title"
-        className="animate-in absolute top-0 right-0 flex h-full w-full max-w-2xl flex-col border-l border-white/10 bg-[#0b0e0c] shadow-[-30px_0_100px_rgba(0,0,0,0.5)] duration-300"
-      >
+    <dialog
+      ref={dialogRef}
+      aria-labelledby="diagnostic-inspector-title"
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+      className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none bg-transparent text-white backdrop:bg-black/70"
+    >
+      <aside className="absolute top-0 right-0 flex h-full w-full max-w-2xl flex-col border-l border-white/10 bg-[#0b0e0c] shadow-xl">
         <header className="flex items-start justify-between gap-5 border-b border-white/8 p-5 sm:p-7">
           <div>
             <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
-              Capcar Diagnostic AI / Inspector
+              Capcar Diagnostic Inspector
             </p>
             <h2
               id="diagnostic-inspector-title"
@@ -273,7 +365,7 @@ function DiagnosticInspectorDrawer({
           </button>
         </footer>
       </aside>
-    </div>
+    </dialog>
   );
 }
 

@@ -39,7 +39,7 @@ export function PublicPassport({
           <Metric label="Build items" value={passport.modifications.length} />
           <Metric label="Diagnostics" value={passport.diagnostics.length} />
           <Metric
-            label="Install stamps"
+            label="Local work notes"
             value={passport.installStamps.length}
           />
         </section>
@@ -70,11 +70,11 @@ export function PublicPassport({
             }))}
           />
           <RecordSection
-            title="Specialist install stamps"
-            empty="No install stamps shared."
+            title="Local work notes · unverified"
+            empty="No local work notes shared."
             rows={passport.installStamps.map((item) => ({
               title: item.work,
-              detail: `${item.specialist} · ${item.installedAt} · ${formatLabel(item.verification)}`,
+              detail: `${item.specialist} · ${item.installedAt} · Unverified local entry`,
             }))}
           />
         </div>

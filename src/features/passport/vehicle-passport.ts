@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { passportPhotoSchema } from "./passport-photo";
 
 import { readBuildState } from "@/features/builds/build-storage";
 import { readDiagnostics } from "@/features/diagnostics/diagnostic-storage";
@@ -12,6 +13,7 @@ import { evaluateFitment } from "@/features/parts/fitment";
 type ReadableStorage = Pick<Storage, "getItem">;
 
 export const PASSPORT_PROFILE_STORAGE_KEY = "capcar.passport-profiles.v1";
+export const PASSPORT_PROFILE_STORAGE_EVENT = "capcar:passport-profile-changed";
 
 export const passportProfileSchema = z.object({
   vehicleId: z.string().min(1),
@@ -23,6 +25,9 @@ export const passportProfileSchema = z.object({
   insurancePolicyNumber: z.string().trim().max(120).optional(),
   publishOwnerDetails: z.boolean().default(false),
   includeFullVin: z.boolean().default(false),
+  photoDataUrl: passportPhotoSchema.optional(),
+  publishPhoto: z.boolean().optional(),
+  publishInsuranceDetails: z.boolean().optional(),
 });
 
 export type PassportProfile = z.infer<typeof passportProfileSchema>;
@@ -41,7 +46,9 @@ export const vehiclePassportSchema = z.object({
     mileage: z.number().nonnegative(),
     vin: z.string().length(17).optional(),
     vinLastFive: z.string().max(5).optional(),
-    imageUrl: z.string().startsWith("/").optional(),
+    imageUrl: z
+      .union([z.string().regex(/^\/(?!\/)/), passportPhotoSchema])
+      .optional(),
   }),
   owner: z
     .object({
@@ -136,6 +143,8 @@ export function savePassportProfile(
       ...profiles.filter((item) => item.vehicleId !== profile.vehicleId),
     ]),
   );
+  if (typeof window !== "undefined")
+    window.dispatchEvent(new Event(PASSPORT_PROFILE_STORAGE_EVENT));
   return profile;
 }
 
@@ -176,7 +185,10 @@ export function buildVehiclePassport(
       mileage: vehicle.mileage,
       vin: profile?.includeFullVin ? vehicle.vin : undefined,
       vinLastFive: vehicle.vin?.slice(-5),
-      imageUrl: vehicle.imageUrl,
+      imageUrl:
+        profile?.publishPhoto && profile.photoDataUrl
+          ? profile.photoDataUrl
+          : vehicle.imageUrl,
     },
     owner:
       profile?.publishOwnerDetails &&
@@ -192,8 +204,12 @@ export function buildVehiclePassport(
     official: profile
       ? {
           nextInspectionDate: profile.nextInspectionDate,
-          insuranceCompany: profile.insuranceCompany,
-          insurancePolicyNumber: profile.insurancePolicyNumber,
+          insuranceCompany: profile.publishInsuranceDetails
+            ? profile.insuranceCompany
+            : undefined,
+          insurancePolicyNumber: profile.publishInsuranceDetails
+            ? profile.insurancePolicyNumber
+            : undefined,
         }
       : undefined,
     maintenance,

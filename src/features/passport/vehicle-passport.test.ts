@@ -9,6 +9,39 @@ import {
 import { saveVehicle } from "@/features/vehicles/vehicle-storage";
 
 describe("vehicle passport", () => {
+  it("includes a compressed owner photo and policy only after explicit consent", () => {
+    localStorage.clear();
+    saveVehicle(
+      {
+        make: "BMW",
+        model: "318i",
+        productionYear: 2011,
+        platform: "E90",
+        bodyStyle: "Sedan",
+        engineCode: "N43",
+        transmission: "Manual",
+        mileage: 10,
+      },
+      localStorage,
+      { id: "photo-car" },
+    );
+    savePassportProfile(
+      {
+        vehicleId: "photo-car",
+        publishOwnerDetails: false,
+        includeFullVin: false,
+        photoDataUrl: "data:image/jpeg;base64,/9j/AAAA",
+        publishPhoto: true,
+        insurancePolicyNumber: "POL-TEST",
+        publishInsuranceDetails: true,
+      },
+      localStorage,
+    );
+    const passport = buildVehiclePassport("photo-car", localStorage);
+    expect(passport?.vehicle.imageUrl).toBe("data:image/jpeg;base64,/9j/AAAA");
+    expect(passport?.official?.insurancePolicyNumber).toBe("POL-TEST");
+    expect(vehiclePassportSchema.safeParse(passport).success).toBe(true);
+  });
   it("rejects malformed public passport payloads", () => {
     expect(
       vehiclePassportSchema.safeParse({ version: 1, generatedAt: "invalid" })

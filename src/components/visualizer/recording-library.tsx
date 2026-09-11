@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { FileDropzone } from "@/components/ui/file-dropzone";
+import { downloadTextFile } from "@/features/export/download";
 import {
   recordingStore,
   type Recording,
@@ -20,6 +21,7 @@ export function RecordingLibrary() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [filter, setFilter] = useState("all");
+  const [comparison, setComparison] = useState<[string, string]>(["", ""]);
   const lock = useRef(false);
   useEffect(() => {
     let alive = true;
@@ -86,6 +88,7 @@ export function RecordingLibrary() {
     try {
       await recordingStore((store) => store.delete(id), true);
       setRecords((items) => items.filter((item) => item.id !== id));
+      setComparison(([a, b]) => [a === id ? "" : a, b === id ? "" : b]);
       setMessage("Local copy removed. Your original file is unchanged.");
     } catch {
       setMessage("Could not remove this recording. Try again.");
@@ -172,6 +175,59 @@ export function RecordingLibrary() {
         I confirm the source permission above. This does not grant public
         distribution rights.
       </label>
+      {records.length >= 2 && (
+        <section
+          aria-label="Compare saved recordings"
+          className="mt-6 rounded-2xl border border-white/25 p-4 sm:p-5"
+        >
+          <h3 className="text-xl font-medium">Compare your recordings</h3>
+          <p className="mt-2 text-sm leading-6">
+            Choose two saved takes. Only one plays at a time. Recording
+            position, microphone and volume affect the comparison; this is not a
+            loudness measurement.
+          </p>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            {([0, 1] as const).map((slot) => {
+              const selected = records.find(
+                (record) => record.id === comparison[slot],
+              );
+              return (
+                <div key={slot} className="min-w-0 space-y-3">
+                  <label className="grid gap-2 text-sm">
+                    Take {slot === 0 ? "A" : "B"}
+                    <select
+                      className={field}
+                      value={comparison[slot]}
+                      onChange={(event) =>
+                        setComparison((previous) =>
+                          slot === 0
+                            ? [event.target.value, previous[1]]
+                            : [previous[0], event.target.value],
+                        )
+                      }
+                    >
+                      <option value="">Choose a recording</option>
+                      {records
+                        .filter(
+                          (record) =>
+                            record.id !== comparison[slot === 0 ? 1 : 0],
+                        )
+                        .map((record) => (
+                          <option key={record.id} value={record.id}>
+                            {record.vehicle} · {record.setup} · {record.name}
+                          </option>
+                        ))}
+                    </select>
+                  </label>
+                  {selected && (
+                    <RecordingCard key={selected.id} item={selected} />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
       <FileDropzone
         accept=".mp3,.wav,.ogg,.m4a"
         label="Add to sound library"
@@ -221,10 +277,11 @@ function RecordingCard({
   onRemove,
 }: {
   item: Recording;
-  onRemove: () => void;
+  onRemove?: () => void;
 }) {
   const player = useRef<HTMLAudioElement>(null);
   const [failed, setFailed] = useState(false);
+  const [confirmRemove, setConfirmRemove] = useState(false);
   useEffect(() => {
     const objectUrl = URL.createObjectURL(item.file);
     if (player.current) {
@@ -263,13 +320,81 @@ function RecordingCard({
           format.
         </p>
       )}
-      <button
-        type="button"
-        className="mt-3 min-h-11 underline"
-        onClick={onRemove}
-      >
-        Remove local copy
-      </button>
+      <div className="mt-3 flex flex-wrap gap-3 text-sm">
+        <button
+          type="button"
+          className="min-h-11 underline"
+          onClick={() => {
+            const url = URL.createObjectURL(item.file);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = item.name;
+            link.click();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+          }}
+        >
+          Download audio
+        </button>
+        <button
+          type="button"
+          className="min-h-11 underline"
+          onClick={() => {
+            downloadTextFile(
+              `capcar-recording-${item.id}.json`,
+              JSON.stringify(
+                {
+                  id: item.id,
+                  name: item.name,
+                  vehicle: item.vehicle,
+                  category: item.category,
+                  setup: item.setup,
+                  rights: item.rights,
+                  createdAt: item.createdAt,
+                  bytes: item.file.size,
+                  mimeType: item.file.type,
+                  rightsNotice:
+                    "Source permission is owner-declared and unverified. This export does not grant redistribution rights.",
+                },
+                null,
+                2,
+              ),
+            );
+          }}
+        >
+          Download recording notes
+        </button>
+        {onRemove &&
+          (confirmRemove ? (
+            <>
+              <span className="self-center">Delete the saved copy?</span>
+              <button
+                type="button"
+                className="min-h-11 underline"
+                onClick={() => {
+                  onRemove();
+                  setConfirmRemove(false);
+                }}
+              >
+                Confirm removal
+              </button>
+              <button
+                type="button"
+                className="min-h-11 underline"
+                onClick={() => setConfirmRemove(false)}
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              className="min-h-11 underline"
+              onClick={() => setConfirmRemove(true)}
+            >
+              Remove local copy
+            </button>
+          ))}
+      </div>
     </article>
   );
 }

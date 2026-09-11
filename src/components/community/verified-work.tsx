@@ -2,13 +2,18 @@
 import { useCommunity } from "@/features/community/use-community";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 import { actionClass, fieldClass } from "./community-shell";
-export function VerifiedWork() {
+import { activeSpecialists } from "@/features/community/specialists";
+export function VerifiedWork({
+  initialVehicleId = "",
+  initialSpecialistId = "",
+}: {
+  initialVehicleId?: string;
+  initialSpecialistId?: string;
+}) {
   const { data, error, busy, mutate, refresh } = useCommunity();
   const { vehicles } = useVehicles();
-  const specialists =
-    data?.roles.filter(
-      (role) => role.role === "specialist" && role.user_id !== data.userId,
-    ) ?? [];
+  const approved = activeSpecialists(data?.roles ?? []);
+  const specialists = approved.filter((role) => role.user_id !== data?.userId);
   return (
     <div className="space-y-6">
       <p className="max-w-3xl leading-7">
@@ -51,7 +56,19 @@ export function VerifiedWork() {
               <h2 className="text-2xl">Request a work stamp</h2>
               <label className="block">
                 Garage vehicle
-                <select name="vehicle_id" required className={fieldClass}>
+                <select
+                  name="vehicle_id"
+                  required
+                  defaultValue={
+                    vehicles.some(
+                      (vehicle) =>
+                        vehicle.id === initialVehicleId && !vehicle.demoProject,
+                    )
+                      ? initialVehicleId
+                      : ""
+                  }
+                  className={fieldClass}
+                >
                   <option value="">Choose a synced vehicle</option>
                   {vehicles
                     .filter((vehicle) => !vehicle.demoProject)
@@ -65,7 +82,19 @@ export function VerifiedWork() {
               </label>
               <label className="block">
                 Specialist
-                <select name="specialist_id" required className={fieldClass}>
+                <select
+                  name="specialist_id"
+                  required
+                  defaultValue={
+                    specialists.some(
+                      (role) => role.user_id === initialSpecialistId,
+                    )
+                      ? initialSpecialistId
+                      : ""
+                  }
+                  className={fieldClass}
+                >
+                  <option value="">Choose a specialist</option>
                   {specialists.map((role) => (
                     <option key={role.user_id} value={role.user_id}>
                       {role.display_name}
@@ -100,7 +129,7 @@ export function VerifiedWork() {
           <h2 className="text-2xl">Your latest 100 work records</h2>
           {!data.stamps.length && <p>No requests or verified stamps yet.</p>}
           {data.stamps.map((stamp) => {
-            const specialist = data.roles.find(
+            const specialist = approved.find(
               (role) =>
                 role.user_id === stamp.specialist_id &&
                 role.role === "specialist",

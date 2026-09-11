@@ -15,7 +15,7 @@ describe("MarketingLanding", () => {
       screen.getByText("From Plan to Road. No Guesswork."),
     ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Beta" })).toBeInTheDocument();
-    expect(screen.getByText("OBD-II Scanning")).toBeInTheDocument();
+    expect(screen.getByText("OBD-II Scan Imports")).toBeInTheDocument();
     expect(screen.getByText("Interactive Vehicle Models")).toBeInTheDocument();
     expect(screen.getByText("Nearby & Destination Events")).toBeInTheDocument();
     expect(screen.getByText("Motorcycle Garages")).toBeInTheDocument();
@@ -37,6 +37,34 @@ describe("MarketingLanding", () => {
     expect(
       garageLinks.some((link) => link.getAttribute("href") === "/register"),
     ).toBe(true);
+  });
+
+  it("keeps mobile hero actions below the vehicle artwork", () => {
+    render(<MarketingLanding />);
+
+    const mobileActions = screen.getByTestId("mobile-hero-actions");
+    expect(mobileActions).toHaveClass("sm:hidden");
+    expect(
+      mobileActions.querySelector('a[href="/register"]'),
+    ).toHaveTextContent("Open your garage");
+    expect(
+      mobileActions.querySelector('a[href="#live-demo"]'),
+    ).toHaveTextContent("Live demo");
+  });
+
+  it("labels horizontal showcases for keyboard users", () => {
+    render(<MarketingLanding />);
+
+    expect(
+      screen.getByLabelText("Vehicle detail image carousel"),
+    ).toHaveAttribute("tabindex", "0");
+    expect(screen.getByLabelText("Community build carousel")).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
+    expect(
+      screen.getByRole("link", { name: "Skip to content" }),
+    ).toHaveAttribute("href", "#main-content");
   });
 
   it("shows interactive fitment outcomes", () => {
