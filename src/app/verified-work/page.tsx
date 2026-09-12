@@ -21,7 +21,7 @@ export default async function Page({
   const next = `/verified-work?${new URLSearchParams({ vehicle, specialist })}`;
   const user = await currentUser();
   return (
-    <CommunityShell title="Work with a named specialist.">
+    <CommunityShell titleKey="verifiedTitle">
       {user ? (
         <GarageAccountBoundary configured={getAuthStatus().configured}>
           <VerifiedWork

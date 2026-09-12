@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 
 import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-registration";
 import { NotificationBootstrap } from "@/components/notifications/notification-bootstrap";
@@ -20,17 +22,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [locale, messages] = await Promise.all([getLocale(), getMessages()]);
+
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang={locale} data-scroll-behavior="smooth">
       <body className="min-h-dvh font-sans antialiased">
-        {children}
-        <NotificationBootstrap />
-        <ServiceWorkerRegistration />
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          {children}
+          <NotificationBootstrap />
+          <ServiceWorkerRegistration />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

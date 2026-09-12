@@ -19,7 +19,7 @@ export default async function Page({
       : "";
   const user = await currentUser();
   return (
-    <CommunityShell title="Parts with a next chapter.">
+    <CommunityShell titleKey="marketplaceTitle">
       {user ? (
         <Marketplace initialListingId={selected} />
       ) : (

@@ -2,21 +2,24 @@
 
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Menu, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
+import { LanguageSelector } from "@/components/i18n/language-selector";
 import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 
 const navigation = [
-  { label: "Platform", href: "/#platform" },
-  { label: "Projects", href: "/#projects" },
-  { label: "Fitment", href: "/#fitment" },
-  { label: "Roadmap", href: "/roadmap" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "platform", href: "/#platform" },
+  { label: "projects", href: "/#projects" },
+  { label: "fitment", href: "/#fitment" },
+  { label: "roadmap", href: "/roadmap" },
+  { label: "faq", href: "/#faq" },
 ] as const;
 
 export function MarketingHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const t = useTranslations("Navigation");
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -38,14 +41,14 @@ export function MarketingHeader() {
       <header className="mx-auto flex h-18 w-full max-w-[1500px] items-center justify-between px-5 text-[#0e2d30] sm:h-20 sm:px-8">
         <Link
           href="/"
-          aria-label="Capcar home"
+          aria-label={t("home")}
           className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6d0101]"
         >
           <CapcarWordmark glow={false} />
         </Link>
 
         <nav
-          aria-label="Main navigation"
+          aria-label={t("main")}
           className="hidden items-center gap-5 text-sm text-[#0e2d30]/62 md:flex"
         >
           {navigation.map((item) => (
@@ -54,7 +57,7 @@ export function MarketingHeader() {
               className="transition hover:text-[#6d0101]"
               href={item.href}
             >
-              {item.label}
+              {t(item.label)}
             </Link>
           ))}
         </nav>
@@ -63,16 +66,19 @@ export function MarketingHeader() {
           <GlobalPartsSearch />
         </div>
 
-        <Link
-          href="/register"
-          className="hidden min-h-11 items-center gap-2 rounded-full bg-[#0e2d30] px-4 text-sm font-medium text-[#e8e6d7] transition hover:-translate-y-0.5 hover:bg-[#6d0101] md:inline-flex"
-        >
-          Build your car <ArrowRight className="size-4" />
-        </Link>
+        <div className="hidden items-center gap-2 md:flex">
+          <LanguageSelector compact />
+          <Link
+            href="/register"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0e2d30] px-4 text-sm font-medium text-[#e8e6d7] transition hover:-translate-y-0.5 hover:bg-[#6d0101]"
+          >
+            {t("buildYourCar")} <ArrowRight className="size-4" />
+          </Link>
+        </div>
 
         <button
           type="button"
-          aria-label="Open navigation"
+          aria-label={t("open")}
           aria-expanded={menuOpen}
           aria-controls="mobile-marketing-navigation"
           onClick={() => setMenuOpen(true)}
@@ -86,7 +92,7 @@ export function MarketingHeader() {
         <div className="fixed inset-0 z-50 md:hidden">
           <button
             type="button"
-            aria-label="Close navigation backdrop"
+            aria-label={t("closeBackdrop")}
             onClick={() => setMenuOpen(false)}
             className="absolute inset-0 bg-[#050306]/48 backdrop-blur-sm"
           />
@@ -94,14 +100,14 @@ export function MarketingHeader() {
             id="mobile-marketing-navigation"
             role="dialog"
             aria-modal="true"
-            aria-label="Mobile navigation"
+            aria-label={t("mobile")}
             className="absolute top-0 right-0 flex h-full w-[82%] max-w-sm flex-col rounded-l-[1.75rem] bg-[#e8e6d7] p-5 text-[#0e2d30] shadow-[-30px_0_90px_rgba(5,3,6,0.24)]"
           >
             <div className="flex items-center justify-between border-b border-[#0e2d30]/10 pb-5">
               <CapcarWordmark glow={false} />
               <button
                 type="button"
-                aria-label="Close navigation"
+                aria-label={t("close")}
                 onClick={() => setMenuOpen(false)}
                 className="grid size-10 place-items-center rounded-full bg-[#0e2d30]/6 transition hover:bg-[#0e2d30]/10"
               >
@@ -109,7 +115,7 @@ export function MarketingHeader() {
               </button>
             </div>
 
-            <nav aria-label="Mobile main navigation" className="mt-4">
+            <nav aria-label={t("mobileMain")} className="mt-4">
               {navigation.map((item) => (
                 <Link
                   key={item.label}
@@ -117,7 +123,7 @@ export function MarketingHeader() {
                   onClick={() => setMenuOpen(false)}
                   className="flex min-h-15 items-center justify-between border-b border-[#0e2d30]/10 text-lg font-medium tracking-[-0.02em]"
                 >
-                  {item.label}
+                  {t(item.label)}
                   <ChevronRight className="size-4 text-[#0e2d30]/45" />
                 </Link>
               ))}
@@ -125,7 +131,7 @@ export function MarketingHeader() {
 
             <div className="mt-6">
               <p className="mb-2 text-xs font-semibold tracking-[0.12em] text-[#0e2d30]/50 uppercase">
-                Global parts search
+                {t("globalSearch")}
               </p>
               <GlobalPartsSearch expanded />
             </div>
@@ -136,17 +142,20 @@ export function MarketingHeader() {
                 onClick={() => setMenuOpen(false)}
                 className="inline-flex min-h-11 items-center text-sm font-medium"
               >
-                Sign in
+                {t("signIn")}
               </Link>
               <Link
                 href="/register"
                 onClick={() => setMenuOpen(false)}
                 className="mt-2 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-semibold text-[#e8e6d7]"
               >
-                Build your car <ArrowRight className="size-4" />
+                {t("buildYourCar")} <ArrowRight className="size-4" />
               </Link>
+              <div className="mt-4">
+                <LanguageSelector />
+              </div>
               <p className="mt-4 text-xs leading-5 text-[#0e2d30]/45">
-                Beta access · Your garage stays private
+                {t("privacyNote")}
               </p>
             </div>
           </div>

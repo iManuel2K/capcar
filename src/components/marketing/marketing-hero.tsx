@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState, type KeyboardEvent, type PointerEvent } from "react";
 
 import { MarketingHeader } from "@/components/marketing/marketing-header";
@@ -20,6 +21,7 @@ const heroImages = {
 
 export function MarketingHero() {
   const [reveal, setReveal] = useState(52);
+  const t = useTranslations("Hero");
 
   function updateFromPointer(event: PointerEvent<HTMLDivElement>) {
     const bounds = event.currentTarget.getBoundingClientRect();
@@ -47,7 +49,7 @@ export function MarketingHero() {
   }
 
   return (
-    <section className="bg-[#e8e6d7] pb-2 sm:pb-4 lg:pb-6">
+    <section className="bg-[#e8e6d7] pb-8 sm:pb-4 lg:pb-6">
       <MarketingHeader />
 
       <div className="relative mx-2 min-h-[calc(100svh-5.5rem)] overflow-hidden rounded-[1.75rem] bg-[#050306] text-[#e8e6d7] shadow-[0_24px_80px_rgba(5,3,6,0.22)] sm:mx-4 sm:min-h-[calc(100svh-6rem)] sm:rounded-[2.5rem] lg:mx-6">
@@ -66,7 +68,7 @@ export function MarketingHero() {
         <div
           role="slider"
           tabIndex={0}
-          aria-label="Compare current car with vision"
+          aria-label={t("compare")}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(reveal)}
@@ -86,13 +88,13 @@ export function MarketingHero() {
             }
           }}
           onKeyDown={handleKeyDown}
-          className="absolute inset-0 z-[7] cursor-ew-resize touch-none focus-visible:outline-none"
+          className="absolute inset-0 z-[7] cursor-ew-resize touch-none rounded-[1.75rem] focus-visible:ring-3 focus-visible:ring-[#bf8269] focus-visible:outline-none focus-visible:ring-inset sm:rounded-[2.5rem]"
         >
           <span className="pointer-events-none absolute top-4 left-5 rounded-full border border-white/12 bg-black/38 px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-white/60 uppercase backdrop-blur-xl sm:left-8">
-            Current
+            {t("current")}
           </span>
           <span className="pointer-events-none absolute top-4 right-5 rounded-full border border-[#92644d]/35 bg-black/38 px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-[#bf8269] uppercase backdrop-blur-xl sm:right-8">
-            Vision
+            {t("vision")}
           </span>
           <span
             aria-hidden="true"
@@ -108,34 +110,67 @@ export function MarketingHero() {
         <div className="pointer-events-none relative z-10 mx-auto flex min-h-[calc(100svh-5.5rem)] w-full max-w-[1500px] flex-col justify-start px-5 pt-18 pb-12 sm:min-h-[calc(100svh-6rem)] sm:justify-center sm:px-8 sm:pt-12 sm:pb-20">
           <div className="max-w-[790px]">
             <p className="text-xs font-semibold tracking-[0.2em] text-[#bf8269] uppercase">
-              Your project-car workspace
+              {t("eyebrow")}
             </p>
             <h1 className="mt-5 text-[clamp(3rem,14vw,8.5rem)] leading-[0.86] font-medium tracking-[-0.072em] text-balance sm:mt-6 sm:text-[clamp(3.7rem,8.2vw,8.5rem)] sm:leading-[0.84]">
-              Build the car
-              <span className="mt-2 block text-white/44">you planned.</span>
+              {t("title")}
+              <span className="mt-2 block text-white/44">
+                {t("titleAccent")}
+              </span>
             </h1>
             <p className="mt-[22px] max-w-xl text-base leading-6 text-white/60 sm:mt-[30px] sm:text-lg sm:leading-7">
-              Visualize upgrades, verify fitment, compare total cost and keep
-              every install in one garage.
+              {t("description")}
             </p>
-            <div className="pointer-events-auto absolute right-5 bottom-6 left-5 flex flex-col gap-3 sm:static sm:mt-7 sm:flex-row sm:items-center">
-              <Link
-                href="/register"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#6d0101] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#830705]"
-              >
-                Open your garage <ArrowRight className="size-4" />
-              </Link>
-              <a
-                href="#live-demo"
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/16 bg-black/28 px-6 text-sm font-medium text-white/78 backdrop-blur-xl transition hover:border-white/30 hover:text-white"
-              >
-                Live demo
-              </a>
+            <div className="pointer-events-auto mt-7 hidden sm:flex sm:flex-row sm:items-center sm:gap-3">
+              <HeroActions openGarage={t("openGarage")} demo={t("demo")} />
             </div>
           </div>
         </div>
       </div>
+
+      <div
+        data-testid="mobile-hero-actions"
+        className="mx-5 mt-5 grid gap-3 sm:hidden"
+      >
+        <Link
+          href="/register"
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#6d0101] px-6 text-sm font-semibold text-white transition active:scale-[0.99]"
+        >
+          {t("openGarage")} <ArrowRight className="size-4" />
+        </Link>
+        <a
+          href="#live-demo"
+          className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#0e2d30]/18 bg-white/24 px-6 text-sm font-semibold text-[#0e2d30] transition active:scale-[0.99]"
+        >
+          {t("demo")}
+        </a>
+      </div>
     </section>
+  );
+}
+
+function HeroActions({
+  openGarage,
+  demo,
+}: {
+  openGarage: string;
+  demo: string;
+}) {
+  return (
+    <>
+      <Link
+        href="/register"
+        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#6d0101] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#830705]"
+      >
+        {openGarage} <ArrowRight className="size-4" />
+      </Link>
+      <a
+        href="#live-demo"
+        className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/16 bg-black/28 px-6 text-sm font-medium text-white/78 backdrop-blur-xl transition hover:border-white/30 hover:text-white"
+      >
+        {demo}
+      </a>
+    </>
   );
 }
 

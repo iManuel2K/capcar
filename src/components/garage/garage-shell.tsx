@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   Clock3,
   Bell,
@@ -16,10 +17,12 @@ import {
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { GarageToolRail } from "@/components/garage/garage-tool-rail";
+import { LanguageSelector } from "@/components/i18n/language-selector";
 import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 import { useNotifications } from "@/features/notifications/use-notifications";
 
 export function GarageShell({ children }: { children: React.ReactNode }) {
+  const t = useTranslations("GarageNav");
   const pathname = usePathname();
   const notifications = useNotifications();
   const unread = notifications.filter((item) => !item.readAt).length;
@@ -46,7 +49,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             <CapcarWordmark />
           </Link>
           <nav
-            aria-label="Garage navigation"
+            aria-label={t("label")}
             className="hidden items-center gap-1 sm:flex"
           >
             <NavLink
@@ -54,7 +57,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
               active={pathname === "/garage"}
               icon={House}
             >
-              Garage
+              {t("garage")}
             </NavLink>
             {maintenanceHref ? (
               <NavLink
@@ -62,10 +65,10 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
                 active={pathname.endsWith("/maintenance")}
                 icon={Wrench}
               >
-                Maintenance
+                {t("maintenance")}
               </NavLink>
             ) : (
-              <DisabledNav>Maintenance</DisabledNav>
+              <DisabledNav>{t("maintenance")}</DisabledNav>
             )}
             {buildsHref ? (
               <NavLink
@@ -73,10 +76,10 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
                 active={pathname.startsWith(buildsHref)}
                 icon={Layers3}
               >
-                Builds
+                {t("builds")}
               </NavLink>
             ) : (
-              <DisabledNav>Builds</DisabledNav>
+              <DisabledNav>{t("builds")}</DisabledNav>
             )}
             {partsHref ? (
               <NavLink
@@ -84,10 +87,10 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
                 active={pathname.startsWith(partsHref)}
                 icon={ShoppingBag}
               >
-                Parts
+                {t("parts")}
               </NavLink>
             ) : (
-              <DisabledNav>Parts</DisabledNav>
+              <DisabledNav>{t("parts")}</DisabledNav>
             )}
             {timelineHref ? (
               <NavLink
@@ -95,21 +98,24 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
                 active={pathname.startsWith(timelineHref)}
                 icon={Clock3}
               >
-                Timeline
+                {t("timeline")}
               </NavLink>
             ) : (
-              <DisabledNav>Timeline</DisabledNav>
+              <DisabledNav>{t("timeline")}</DisabledNav>
             )}
           </nav>
           <div className="hidden xl:block">
             <GlobalPartsSearch theme="dark" />
           </div>
           <div className="flex items-center gap-2">
+            <div className="hidden md:block">
+              <LanguageSelector compact />
+            </div>
             <span className="hidden rounded-full border border-[#e72d45]/20 bg-[#e72d45]/8 px-3 py-1.5 text-xs text-[#a9c7ff] md:inline-flex">
-              Capcar Beta
+              {t("beta")}
             </span>
             <Link
-              aria-label={`${unread} unread notifications`}
+              aria-label={t("notifications", { count: unread })}
               className="relative grid size-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60"
               href="/notifications"
             >
@@ -122,7 +128,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
               )}
             </Link>
             <Link
-              aria-label="Account and sync"
+              aria-label={t("account")}
               className="grid size-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60"
               href="/account"
             >
@@ -131,26 +137,26 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             {vehicleId && (
               <details className="relative hidden md:block">
                 <summary
-                  aria-label="More vehicle tools"
+                  aria-label={t("more")}
                   className="grid size-10 cursor-pointer list-none place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/60 marker:hidden"
                 >
                   <Menu className="size-4" />
                 </summary>
                 <div className="absolute top-12 right-0 z-50 grid w-52 gap-1 rounded-2xl border border-white/10 bg-[#151515] p-2 shadow-2xl">
                   <MoreLink href={`/garage/${vehicleId}/passport`}>
-                    Vehicle Passport
+                    {t("passport")}
                   </MoreLink>
                   <MoreLink href={`/garage/${vehicleId}/costs`}>
-                    Cost analytics
+                    {t("costs")}
                   </MoreLink>
                   <MoreLink href={`/garage/${vehicleId}/wishlist`}>
-                    Part wishlist
+                    {t("wishlist")}
                   </MoreLink>
                   <MoreLink href={`/garage/${vehicleId}/diagnostics`}>
-                    Diagnostic log
+                    {t("diagnostics")}
                   </MoreLink>
                   <MoreLink href={`/garage/${vehicleId}/specialists`}>
-                    Specialists
+                    {t("specialists")}
                   </MoreLink>
                 </div>
               </details>
@@ -174,12 +180,16 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
         </div>
       </main>
 
+      <div className="fixed right-4 bottom-20 z-40 rounded-full bg-[#151916]/95 text-white shadow-xl backdrop-blur-xl sm:hidden">
+        <LanguageSelector compact />
+      </div>
+
       <nav
-        aria-label="Mobile garage navigation"
+        aria-label={t("mobile")}
         className="fixed right-4 bottom-4 left-4 z-40 flex items-center justify-between rounded-2xl border border-white/10 bg-[#151916]/95 p-2 shadow-2xl backdrop-blur-xl sm:hidden"
       >
         <MobileLink href="/garage" active={pathname === "/garage"} icon={House}>
-          Garage
+          {t("garage")}
         </MobileLink>
         {vehicleId &&
         maintenanceHref &&
@@ -192,28 +202,28 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
               active={pathname.endsWith("/maintenance")}
               icon={Wrench}
             >
-              Service
+              {t("service")}
             </MobileLink>
             <MobileLink
               href={buildsHref}
               active={pathname.startsWith(buildsHref)}
               icon={Layers3}
             >
-              Builds
+              {t("builds")}
             </MobileLink>
             <MobileLink
               href={partsHref}
               active={pathname.startsWith(partsHref)}
               icon={ShoppingBag}
             >
-              Parts
+              {t("parts")}
             </MobileLink>
             <MobileLink
               href={timelineHref}
               active={pathname.startsWith(timelineHref)}
               icon={Clock3}
             >
-              History
+              {t("history")}
             </MobileLink>
           </>
         ) : (
@@ -221,12 +231,12 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             <Link
               className="mx-2 grid size-12 place-items-center rounded-xl bg-[#e72d45] text-[#07101d]"
               href="/garage/new"
-              aria-label="Add vehicle"
+              aria-label={t("add")}
             >
               <Plus className="size-5" />
             </Link>
             <span className="flex min-h-12 flex-1 flex-col items-center justify-center gap-1 rounded-xl text-[11px] text-white/30">
-              <Layers3 className="size-4" /> Builds
+              <Layers3 className="size-4" /> {t("builds")}
             </span>
           </>
         )}

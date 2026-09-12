@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { actionClass, fieldClass } from "./community-shell";
 import Link from "next/link";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
@@ -7,22 +8,20 @@ import { saveRetailItem } from "@/features/retail/save-retail-item";
 import { announceWishlistChange } from "@/features/wishlist/wishlist-storage";
 import { ResilientPartSearch } from "@/components/parts/resilient-part-search";
 export function RetailSearch() {
+  const t = useTranslations("Retail");
+  const locale = useLocale();
   const { vehicles } = useVehicles();
   const [vehicleId, setVehicleId] = useState("");
   const [savedMessage, setSavedMessage] = useState("");
   return (
     <div className="space-y-6">
-      <p className="max-w-3xl leading-7">
-        Search current eBay listings by exact part number or description. Choose
-        a market and delivery country. Purchases are completed at the retailer;
-        Capcar does not take payment.
-      </p>
+      <p className="max-w-3xl leading-7">{t("intro")}</p>
       <ResilientPartSearch>
         {(result, input, search) => (
           <>
             <section className="rounded-2xl border border-[#0e2d30]/20 p-5">
               <label className="block">
-                Save results to a vehicle (optional)
+                {t("saveOptional")}
                 <select
                   className={fieldClass}
                   value={vehicleId}
@@ -31,7 +30,7 @@ export function RetailSearch() {
                     setSavedMessage("");
                   }}
                 >
-                  <option value="">Choose vehicle</option>
+                  <option value="">{t("chooseVehicle")}</option>
                   {vehicles.map((vehicle) => (
                     <option key={vehicle.id} value={vehicle.id}>
                       {vehicle.make} {vehicle.model} ·{" "}
@@ -40,16 +39,13 @@ export function RetailSearch() {
                   ))}
                 </select>
               </label>
-              <p className="mt-3 text-sm">
-                Searching and merchant checkout do not require a vehicle. Saving
-                does not confirm fitment or place an order.
-              </p>
+              <p className="mt-3 text-sm">{t("savingNote")}</p>
               {vehicleId && (
                 <Link
                   className="inline-flex min-h-11 items-center underline"
                   href={`/garage/${vehicleId}/wishlist`}
                 >
-                  Manage saved / ordered / delivered parts →
+                  {t("manage")} →
                 </Link>
               )}
               <p role="status">{savedMessage}</p>
@@ -57,15 +53,13 @@ export function RetailSearch() {
             {result && (
               <>
                 <p role="status">
-                  {result.items.length} results · checked{" "}
-                  {new Date(result.checkedAt).toLocaleString()}
+                  {t("results", {
+                    count: result.items.length,
+                    time: new Date(result.checkedAt).toLocaleString(locale),
+                  })}
                 </p>
                 <p className="text-sm leading-6">{result.warning}</p>
-                {!result.items.length && (
-                  <p>
-                    No matching listings. Try another part number or market.
-                  </p>
-                )}
+                {!result.items.length && <p>{t("empty")}</p>}
                 <div className="grid gap-4 sm:grid-cols-2">
                   {result.items.map((item) => (
                     <article
@@ -78,17 +72,15 @@ export function RetailSearch() {
                       <p>
                         {item.price.toFixed(2)} {item.currency} · shipping{" "}
                         {item.shipping === null
-                          ? "not confirmed"
+                          ? t("notSupplied")
                           : `${item.shipping.toFixed(2)} ${item.currency}`}
                       </p>
                       <p className="text-sm">
-                        {item.condition} · seller location{" "}
-                        {item.country ?? "not supplied"}
+                        {item.condition} · {t("seller")}{" "}
+                        {item.country ?? t("notSupplied")}
                       </p>
                       <p className="text-sm">
-                        {item.affiliate
-                          ? "Affiliate link: Capcar may earn a commission if you purchase."
-                          : "Direct retailer link. No Capcar affiliate campaign applied."}
+                        {item.affiliate ? t("affiliate") : t("direct")}
                       </p>
                       <a
                         className={`${actionClass} inline-flex items-center`}
@@ -100,7 +92,7 @@ export function RetailSearch() {
                             : "noopener noreferrer"
                         }
                       >
-                        View at eBay ↗
+                        {t("view")}
                       </a>
                       <button
                         type="button"
@@ -117,17 +109,13 @@ export function RetailSearch() {
                               localStorage,
                             );
                             announceWishlistChange();
-                            setSavedMessage(
-                              "Saved to this vehicle’s wishlist. Existing duplicates were kept unchanged.",
-                            );
+                            setSavedMessage(t("saved"));
                           } catch {
-                            setSavedMessage(
-                              "Could not save this listing. Check your selected vehicle and browser storage.",
-                            );
+                            setSavedMessage(t("saveError"));
                           }
                         }}
                       >
-                        Save to vehicle
+                        {t("save")}
                       </button>
                     </article>
                   ))}
@@ -141,7 +129,7 @@ export function RetailSearch() {
                         void search({ ...input, page: input.page - 1 })
                       }
                     >
-                      Previous page
+                      {t("previous")}
                     </button>
                   )}
                   {input && result.hasMore && input.page < 9 && (
@@ -152,7 +140,7 @@ export function RetailSearch() {
                         void search({ ...input, page: input.page + 1 })
                       }
                     >
-                      Next page
+                      {t("next")}
                     </button>
                   )}
                 </div>

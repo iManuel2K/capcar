@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import {
   retailRequestSchema,
   type RetailRequest,
@@ -31,6 +32,7 @@ function optionalPrice(value: string) {
 }
 
 export function ResilientPartSearch({ children }: Props) {
+  const t = useTranslations("PartsSearch");
   const id = useId();
   const [input, setInput] = useState<RetailRequest>({
     query: "",
@@ -98,14 +100,10 @@ export function ResilientPartSearch({ children }: Props) {
         setState({
           key,
           error: timedOut
-            ? new SearchFailure(
-                "The retailer took too long. Your search is saved here—try again.",
-              )
+            ? new SearchFailure(t("timeout"))
             : error instanceof SearchFailure
               ? error
-              : new SearchFailure(
-                  "Connection interrupted. Check your connection and try again.",
-                ),
+              : new SearchFailure(t("connection")),
         });
       } finally {
         clearTimeout(timeout);
@@ -116,7 +114,7 @@ export function ResilientPartSearch({ children }: Props) {
       clearTimeout(timeout);
       controller.abort();
     };
-  }, [key, requestKey, valid, composing]);
+  }, [key, requestKey, valid, composing, t]);
 
   function retry() {
     cache.current.delete(requestKey);
@@ -140,7 +138,7 @@ export function ResilientPartSearch({ children }: Props) {
         className="grid gap-4 rounded-2xl border border-[#0e2d30]/20 bg-white/25 p-5 sm:grid-cols-2"
       >
         <label htmlFor={id} className="sm:col-span-2">
-          Part number or search phrase
+          {t("query")}
           <input
             id={id}
             type="search"
@@ -161,12 +159,10 @@ export function ResilientPartSearch({ children }: Props) {
           />
         </label>
         <p id={`${id}-hint`} className="text-sm sm:col-span-2">
-          {submitted && !valid
-            ? "Enter at least 3 characters, such as E90 rear lights."
-            : "Search by part number, chassis or description. No account required."}
+          {submitted && !valid ? t("invalidQuery") : t("queryHint")}
         </p>
         <label>
-          Retailer market
+          {t("market")}
           <select
             value={input.market}
             onChange={(event) =>
@@ -184,7 +180,7 @@ export function ResilientPartSearch({ children }: Props) {
           </select>
         </label>
         <label>
-          Deliver to
+          {t("destination")}
           <select
             value={input.destination}
             onChange={(event) =>
@@ -205,10 +201,10 @@ export function ResilientPartSearch({ children }: Props) {
         </label>
         <fieldset className="grid gap-4 border-t border-[#0e2d30]/15 pt-4 sm:col-span-2 sm:grid-cols-2 lg:grid-cols-4">
           <legend className="px-1 text-sm font-medium tracking-[0.08em] uppercase">
-            Refine live results
+            {t("refine")}
           </legend>
           <label>
-            Condition
+            {t("condition")}
             <select
               value={input.condition}
               onChange={(event) =>
@@ -220,14 +216,14 @@ export function ResilientPartSearch({ children }: Props) {
               }
               className={field}
             >
-              <option value="all">Any condition</option>
-              <option value="new">New</option>
-              <option value="used">Used</option>
-              <option value="parts">For parts / not working</option>
+              <option value="all">{t("anyCondition")}</option>
+              <option value="new">{t("new")}</option>
+              <option value="used">{t("used")}</option>
+              <option value="parts">{t("forParts")}</option>
             </select>
           </label>
           <label>
-            Result order
+            {t("order")}
             <select
               value={input.sort}
               onChange={(event) =>
@@ -239,14 +235,14 @@ export function ResilientPartSearch({ children }: Props) {
               }
               className={field}
             >
-              <option value="bestMatch">Best match</option>
-              <option value="priceAsc">Lowest price</option>
-              <option value="priceDesc">Highest price</option>
-              <option value="newest">Newly listed</option>
+              <option value="bestMatch">{t("bestMatch")}</option>
+              <option value="priceAsc">{t("lowestPrice")}</option>
+              <option value="priceDesc">{t("highestPrice")}</option>
+              <option value="newest">{t("newest")}</option>
             </select>
           </label>
           <label>
-            Minimum price
+            {t("minimum")}
             <input
               type="number"
               inputMode="decimal"
@@ -263,11 +259,11 @@ export function ResilientPartSearch({ children }: Props) {
                 })
               }
               className={field}
-              placeholder="No minimum"
+              placeholder={t("noMinimum")}
             />
           </label>
           <label>
-            Maximum price
+            {t("maximum")}
             <input
               type="number"
               inputMode="decimal"
@@ -284,7 +280,7 @@ export function ResilientPartSearch({ children }: Props) {
                 })
               }
               className={field}
-              placeholder="No maximum"
+              placeholder={t("noMaximum")}
             />
           </label>
           {priceRangeInvalid && (
@@ -292,7 +288,7 @@ export function ResilientPartSearch({ children }: Props) {
               role="alert"
               className="text-sm text-[#6d0101] sm:col-span-2 lg:col-span-3"
             >
-              Minimum price cannot exceed maximum price.
+              {t("invalidRange")}
             </p>
           )}
           {filtersActive && (
@@ -310,7 +306,7 @@ export function ResilientPartSearch({ children }: Props) {
                 })
               }
             >
-              Clear filters
+              {t("clear")}
             </button>
           )}
         </fieldset>
@@ -318,14 +314,14 @@ export function ResilientPartSearch({ children }: Props) {
           className={`${action} sm:col-span-2`}
           disabled={pending || composing || current?.error?.retryable === false}
         >
-          {pending ? "Searching…" : "Search live listings"}
+          {pending ? t("searching") : t("search")}
         </button>
       </form>
       <p role="status" aria-live="polite" className="text-sm">
         {pending
-          ? "Searching live retailer listings…"
+          ? t("searchStatus")
           : current?.data
-            ? `${current.data.items.length} listings found.`
+            ? t("found", { count: current.data.items.length })
             : ""}
       </p>
       {pending && (
@@ -347,7 +343,7 @@ export function ResilientPartSearch({ children }: Props) {
           {current.error.retryable && (
             <div className="mt-3 flex flex-wrap gap-3">
               <button type="button" onClick={retry} className={action}>
-                Try again
+                {t("retry")}
               </button>
               <a
                 href={ebaySearchUrl(input)}
@@ -355,7 +351,7 @@ export function ResilientPartSearch({ children }: Props) {
                 rel="noopener noreferrer"
                 className={`${action} inline-flex items-center`}
               >
-                Continue this search on eBay ↗
+                {t("continueEbay")}
               </a>
             </div>
           )}
@@ -369,8 +365,7 @@ export function ResilientPartSearch({ children }: Props) {
             <p className="text-sm leading-6">{current.data.warning}</p>
             {!current.data.items.length && (
               <p className="rounded-2xl border border-dashed border-[#0e2d30]/30 p-6">
-                No listings for this search. Try the OE number, a shorter phrase
-                or another market.
+                {t("empty")}
               </p>
             )}
             <div className="grid gap-4 sm:grid-cols-2">
@@ -383,15 +378,13 @@ export function ResilientPartSearch({ children }: Props) {
                     {item.title}
                   </h2>
                   <p className="mt-3">
-                    {item.price.toFixed(2)} {item.currency} · shipping{" "}
+                    {item.price.toFixed(2)} {item.currency} · {t("shipping")}{" "}
                     {item.shipping === null
-                      ? "not confirmed"
+                      ? t("notConfirmed")
                       : `${item.shipping.toFixed(2)} ${item.currency}`}
                   </p>
                   <p className="mt-2 text-sm">
-                    {item.affiliate
-                      ? "Affiliate link: CapCar may earn a commission."
-                      : "Direct retailer link."}
+                    {item.affiliate ? t("affiliate") : t("direct")}
                   </p>
                   <a
                     href={item.url}
@@ -403,18 +396,18 @@ export function ResilientPartSearch({ children }: Props) {
                     }
                     className={`${action} mt-4 inline-flex items-center`}
                   >
-                    View at eBay ↗
+                    {t("view")}
                   </a>
                 </article>
               ))}
             </div>
-            <nav aria-label="Search results pages" className="flex gap-3">
+            <nav aria-label={t("pages")} className="flex gap-3">
               {input.page > 0 && (
                 <button
                   className={action}
                   onClick={() => change({ ...input, page: input.page - 1 })}
                 >
-                  Previous
+                  {t("previous")}
                 </button>
               )}
               {current.data.hasMore && input.page < 9 && (
@@ -422,7 +415,7 @@ export function ResilientPartSearch({ children }: Props) {
                   className={action}
                   onClick={() => change({ ...input, page: input.page + 1 })}
                 >
-                  Next
+                  {t("next")}
                 </button>
               )}
             </nav>
