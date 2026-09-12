@@ -24,8 +24,13 @@ export default getRequestConfig(async () => {
     ? saved
     : preferredLocale(headerStore.get("accept-language"));
 
+  const [baseMessages, publicMessages] = await Promise.all([
+    import(`../../messages/${locale}.json`),
+    import(`../../messages/public/${locale}.json`),
+  ]);
+
   return {
     locale,
-    messages: (await import(`../../messages/${locale}.json`)).default,
+    messages: { ...baseMessages.default, ...publicMessages.default },
   };
 });

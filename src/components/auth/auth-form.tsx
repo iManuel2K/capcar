@@ -13,42 +13,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { FormEvent, useEffect, useState } from "react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
+import { LanguageSelector } from "@/components/i18n/language-selector";
 import { createClient } from "@/lib/supabase/client";
 
 type AuthMode = "login" | "register" | "forgot" | "reset";
-
-const content: Record<
-  AuthMode,
-  { eyebrow: string; title: string; description: string; action: string }
-> = {
-  login: {
-    eyebrow: "Welcome back",
-    title: "Open your garage.",
-    description: "Sign in to continue planning, maintaining and building.",
-    action: "Sign in",
-  },
-  register: {
-    eyebrow: "Create your account",
-    title: "Start your garage.",
-    description: "Keep every car, part and maintenance record in one place.",
-    action: "Create account",
-  },
-  forgot: {
-    eyebrow: "Account recovery",
-    title: "Reset your password.",
-    description: "We’ll email you a secure link to choose a new password.",
-    action: "Send reset link",
-  },
-  reset: {
-    eyebrow: "New password",
-    title: "Secure your account.",
-    description: "Choose a new password with at least eight characters.",
-    action: "Save new password",
-  },
-};
 
 function safeNext() {
   const requested = new URLSearchParams(window.location.search).get("next");
@@ -70,8 +42,8 @@ export function AuthForm({
   mode: AuthMode;
   configured: boolean;
 }) {
+  const t = useTranslations("Auth");
   const router = useRouter();
-  const copy = content[mode];
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -98,22 +70,22 @@ export function AuthForm({
     setMessage("");
 
     if (!configured) {
-      setError("Account services are not configured yet.");
+      setError(t("errors.unconfigured"));
       return;
     }
     if ((mode === "register" || mode === "reset") && password.length < 8) {
-      setError("Use at least eight characters for your password.");
+      setError(t("errors.length"));
       return;
     }
     if (
       (mode === "register" || mode === "reset") &&
       password !== confirmPassword
     ) {
-      setError("The passwords do not match.");
+      setError(t("errors.match"));
       return;
     }
     if (mode === "register" && !acceptedTerms) {
-      setError("Accept the Terms and Privacy Policy to continue.");
+      setError(t("errors.terms"));
       return;
     }
 
@@ -144,7 +116,7 @@ export function AuthForm({
           router.replace("/garage");
           router.refresh();
         } else {
-          setMessage("Account created. Check your email to confirm it.");
+          setMessage(t("messages.created"));
         }
       }
 
@@ -154,23 +126,17 @@ export function AuthForm({
           { redirectTo: callbackUrl("/reset-password") },
         );
         if (authError) throw authError;
-        setMessage(
-          "If an account exists for this email, a reset link is on its way.",
-        );
+        setMessage(t("messages.resetSent"));
       }
 
       if (mode === "reset") {
         const { error: authError } = await client.auth.updateUser({ password });
         if (authError) throw authError;
-        setMessage("Password updated. Your garage is ready.");
+        setMessage(t("messages.updated"));
         window.setTimeout(() => router.replace("/garage"), 900);
       }
     } catch (caught) {
-      setError(
-        caught instanceof Error
-          ? caught.message
-          : "Something went wrong. Please try again.",
-      );
+      setError(caught instanceof Error ? caught.message : t("errors.generic"));
     } finally {
       setLoading(false);
     }
@@ -184,42 +150,44 @@ export function AuthForm({
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_17%,rgba(231,45,69,0.2),transparent_27%),radial-gradient(circle_at_18%_88%,rgba(231,45,69,0.1),transparent_24%)]" />
       <div className="relative mx-auto flex min-h-[calc(100dvh-2.5rem)] max-w-7xl flex-col">
         <header className="flex items-center justify-between">
-          <Link href="/" aria-label="Capcar home">
+          <Link href="/" aria-label={t("home")}>
             <CapcarWordmark />
           </Link>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-xs text-white/45 transition hover:text-white"
-          >
-            <ArrowLeft className="size-3.5" /> Back to Capcar
-          </Link>
+          <div className="flex items-center gap-3">
+            <LanguageSelector compact />
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-xs text-white/45 transition hover:text-white"
+            >
+              <ArrowLeft className="size-3.5" /> {t("back")}
+            </Link>
+          </div>
         </header>
 
         <div className="grid flex-1 items-center gap-10 py-10 lg:grid-cols-[1fr_0.78fr] lg:py-16">
           <section className="hidden max-w-xl lg:block">
             <p className="text-xs font-semibold tracking-[0.18em] text-[#ff667a] uppercase">
-              Private by design
+              {t("private")}
             </p>
             <h2 className="mt-6 text-7xl font-medium tracking-[-0.065em] text-balance">
-              One account.
+              {t("oneAccount")}
               <br />
-              Your whole build.
+              {t("wholeBuild")}
             </h2>
             <p className="mt-7 max-w-md text-base leading-7 text-white/42">
-              Your vehicles, maintenance history and project plans stay tied to
-              your account—not one browser.
+              {t("accountDescription")}
             </p>
           </section>
 
           <section className="mx-auto w-full max-w-md rounded-[2rem] border border-white/10 bg-[#111111]/95 p-6 shadow-2xl shadow-black/40 backdrop-blur sm:p-8">
             <p className="text-[11px] font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
-              {copy.eyebrow}
+              {t(`${mode}.eyebrow`)}
             </p>
             <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em]">
-              {copy.title}
+              {t(`${mode}.title`)}
             </h1>
             <p className="mt-3 text-sm leading-6 text-white/42">
-              {copy.description}
+              {t(`${mode}.description`)}
             </p>
 
             <form
@@ -227,27 +195,27 @@ export function AuthForm({
               onSubmit={submit}
               onInvalid={(event) => {
                 const field = event.target as HTMLInputElement;
-                setError(
-                  field.validationMessage ||
-                    "Check the highlighted field and try again.",
-                );
+                setError(field.validationMessage || t("errors.invalid"));
               }}
             >
               {mode === "register" && (
-                <Field label="Name" icon={<UserRound className="size-4" />}>
+                <Field
+                  label={t("name")}
+                  icon={<UserRound className="size-4" />}
+                >
                   <input
                     required
                     autoComplete="name"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
-                    placeholder="Your name"
+                    placeholder={t("namePlaceholder")}
                     className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/20"
                   />
                 </Field>
               )}
 
               {needsEmail && (
-                <Field label="Email" icon={<Mail className="size-4" />}>
+                <Field label={t("email")} icon={<Mail className="size-4" />}>
                   <input
                     required
                     type="email"
@@ -262,13 +230,13 @@ export function AuthForm({
 
               {needsPassword && (
                 <Field
-                  label={mode === "reset" ? "New password" : "Password"}
+                  label={mode === "reset" ? t("newPassword") : t("password")}
                   icon={<LockKeyhole className="size-4" />}
                   action={
                     <button
                       type="button"
                       aria-label={
-                        showPassword ? "Hide password" : "Show password"
+                        showPassword ? t("hidePassword") : t("showPassword")
                       }
                       onClick={() => setShowPassword((current) => !current)}
                       className="text-white/30 hover:text-white"
@@ -290,7 +258,7 @@ export function AuthForm({
                     }
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
-                    placeholder="At least 8 characters"
+                    placeholder={t("passwordPlaceholder")}
                     className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/20"
                   />
                 </Field>
@@ -298,7 +266,7 @@ export function AuthForm({
 
               {(mode === "register" || mode === "reset") && (
                 <Field
-                  label="Confirm password"
+                  label={t("confirmPassword")}
                   icon={<LockKeyhole className="size-4" />}
                 >
                   <input
@@ -308,7 +276,7 @@ export function AuthForm({
                     autoComplete="new-password"
                     value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
-                    placeholder="Repeat your password"
+                    placeholder={t("confirmPlaceholder")}
                     className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/20"
                   />
                 </Field>
@@ -320,7 +288,7 @@ export function AuthForm({
                     href="/forgot-password"
                     className="text-xs text-white/45 transition hover:text-white"
                   >
-                    Forgot password?
+                    {t("forgotLink")}
                   </Link>
                 </div>
               )}
@@ -334,13 +302,13 @@ export function AuthForm({
                     className="mt-0.5 size-4 accent-[#e72d45]"
                   />
                   <span>
-                    I accept the{" "}
+                    {t("accept")}{" "}
                     <Link href="/terms" className="text-white/70 underline">
-                      Terms
+                      {t("terms")}
                     </Link>{" "}
-                    and{" "}
+                    {t("and")}{" "}
                     <Link href="/privacy" className="text-white/70 underline">
-                      Privacy Policy
+                      {t("privacy")}
                     </Link>
                     .
                   </span>
@@ -357,7 +325,7 @@ export function AuthForm({
                 ) : (
                   <ArrowRight className="size-4" />
                 )}
-                {copy.action}
+                {t(`${mode}.action`)}
               </button>
             </form>
 
@@ -377,23 +345,23 @@ export function AuthForm({
 
             {mode === "login" && (
               <p className="mt-7 text-center text-xs text-white/35">
-                New to Capcar?{" "}
+                {t("newToCapcar")}{" "}
                 <Link
                   href="/register"
                   className="font-medium text-white/75 hover:text-white"
                 >
-                  Create an account
+                  {t("createAccount")}
                 </Link>
               </p>
             )}
             {mode === "register" && (
               <p className="mt-7 text-center text-xs text-white/35">
-                Already have an account?{" "}
+                {t("haveAccount")}{" "}
                 <Link
                   href="/login"
                   className="font-medium text-white/75 hover:text-white"
                 >
-                  Sign in
+                  {t("signIn")}
                 </Link>
               </p>
             )}
@@ -403,7 +371,7 @@ export function AuthForm({
                   href="/login"
                   className="font-medium text-white/75 hover:text-white"
                 >
-                  Back to sign in
+                  {t("backToSignIn")}
                 </Link>
               </p>
             )}

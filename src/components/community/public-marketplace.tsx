@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { actionClass } from "./community-shell";
 
@@ -12,6 +13,10 @@ type Listing = {
 };
 
 export async function PublicMarketplace() {
+  const [t, locale] = await Promise.all([
+    getTranslations("CommunityPublic"),
+    getLocale(),
+  ]);
   let listings: Listing[] = [];
   let unavailable = false;
   try {
@@ -24,35 +29,29 @@ export async function PublicMarketplace() {
   }
   return (
     <section>
-      <p className="max-w-2xl leading-7">
-        Browse published listings freely. Sign in to list a part, contact a
-        seller or report a concern. A published listing is not a guarantee of
-        fitment or seller reliability.
-      </p>
+      <p className="max-w-2xl leading-7">{t("intro")}</p>
       <Link
         className={`${actionClass} my-5 inline-flex items-center`}
         href="/login?next=%2Fmarketplace"
       >
-        Sign in to buy or sell
+        {t("signInTrade")}
       </Link>
       {unavailable ? (
         <p role="alert" className="rounded-2xl border border-[#6d0101]/25 p-6">
-          Listings could not load.{" "}
+          {t("loadError")}{" "}
           <Link className="underline" href="/marketplace">
-            Try again
+            {t("tryAgain")}
           </Link>{" "}
-          or{" "}
+          {t("or")}{" "}
           <Link className="underline" href="/connected-parts">
-            search retailers
+            {t("searchRetailers")}
           </Link>
           .
         </p>
       ) : !listings.length ? (
         <div className="rounded-2xl border border-dashed border-[#0e2d30]/25 p-8">
-          <h2 className="text-xl font-medium">No published listings yet.</h2>
-          <p className="mt-2">
-            Have a spare part? Sign in to submit the first listing for review.
-          </p>
+          <h2 className="text-xl font-medium">{t("emptyTitle")}</h2>
+          <p className="mt-2">{t("emptyDescription")}</p>
         </div>
       ) : (
         <div className="grid gap-5 md:grid-cols-2">
@@ -69,7 +68,7 @@ export async function PublicMarketplace() {
                 {item.description}
               </p>
               <p className="mt-4 font-semibold">
-                {new Intl.NumberFormat("de-DE", {
+                {new Intl.NumberFormat(locale, {
                   style: "currency",
                   currency: "EUR",
                 }).format(item.price_cents / 100)}
@@ -78,7 +77,7 @@ export async function PublicMarketplace() {
                 className={`${actionClass} mt-4 inline-flex items-center`}
                 href={`/login?next=${encodeURIComponent(`/marketplace?listing=${item.id}`)}`}
               >
-                Sign in to contact seller
+                {t("contact")}
               </Link>
             </article>
           ))}

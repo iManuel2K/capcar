@@ -9,6 +9,7 @@ import {
   type Concept,
 } from "@/features/visualizer/concept-studio";
 import type { createConceptRenderer } from "./concept-renderer";
+import { useTranslations } from "next-intl";
 
 const button =
   "min-h-11 rounded-full border border-[#0e2d30]/30 px-4 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6d0101] disabled:opacity-40";
@@ -17,12 +18,12 @@ export function ConceptStudio({
   initialConcept = defaultConcept,
   storageKey,
 }: { initialConcept?: Concept; storageKey?: string } = {}) {
+  const t = useTranslations("StudioUi");
+  const showcaseData = useTranslations("ShowcaseData");
   const [value, setValue] = useState<Concept>(initialConcept);
   const [savedMessage, setSavedMessage] = useState("");
   const [active, setActive] = useState(false);
-  const [status, setStatus] = useState(
-    "Choose a direction, then load the interactive model.",
-  );
+  const [status, setStatus] = useState(t("choose"));
   const [attempt, setAttempt] = useState(0);
   const host = useRef<HTMLDivElement>(null);
   const runtime = useRef<ReturnType<typeof createConceptRenderer> | null>(null);
@@ -35,12 +36,9 @@ export function ConceptStudio({
     if (!active || !host.current) return;
     let cancelled = false;
     const fail = () => {
-      if (!cancelled)
-        setStatus(
-          "3D is unavailable. Stop 3D and retry, or keep exploring the configuration below.",
-        );
+      if (!cancelled) setStatus(t("unavailable"));
     };
-    setStatus("Loading concept model…");
+    setStatus(t("loading"));
     import("./concept-renderer")
       .then(async ({ createConceptRenderer }) => {
         if (cancelled || !host.current) return;
@@ -48,7 +46,7 @@ export function ConceptStudio({
         await runtime.current.load(latest.current);
         if (!cancelled) {
           runtime.current?.update(latest.current);
-          setStatus("Model ready. Drag to orbit, or use the camera buttons.");
+          setStatus(t("ready"));
         }
       })
       .catch(fail);
@@ -57,13 +55,13 @@ export function ConceptStudio({
       runtime.current?.dispose();
       runtime.current = null;
     };
-  }, [active, value.model, attempt]);
+  }, [active, value.model, attempt, t]);
   return (
     <div className="overflow-hidden rounded-3xl border border-[#0e2d30]/20 bg-[#f3f1e7] text-[#0e2d30]">
       <div className="grid">
         <div className="min-w-0 p-5 sm:p-8">
           <p className="text-xs font-semibold tracking-widest uppercase">
-            Concept lab · stylized 3D
+            {t("conceptLabel")}
           </p>
           <div
             ref={host}
@@ -75,7 +73,7 @@ export function ConceptStudio({
                   viewBox="0 0 600 170"
                   className="h-28 w-full max-w-md"
                   role="img"
-                  aria-label="Generic stylized side silhouette, not an accurate vehicle preview"
+                  aria-label={t("silhouetteAlt")}
                 >
                   <path
                     d="M60 111 84 83 160 72 218 33 357 33 424 76 510 90 541 112 535 138 63 138Z"
@@ -90,14 +88,11 @@ export function ConceptStudio({
                   <circle cx="445" cy="133" r="13" fill="#c3c8bc" />
                 </svg>
                 <p className="text-3xl font-medium tracking-tight">
-                  Your next direction.
+                  {t("nextDirection")}
                 </p>
-                <p className="max-w-xs text-sm">
-                  Two original generic silhouettes. No vehicle data or account
-                  required.
-                </p>
+                <p className="max-w-xs text-sm">{t("generic")}</p>
                 <button className={button} onClick={() => setActive(true)}>
-                  Load interactive 3D
+                  {t("load")}
                 </button>
               </div>
             )}
@@ -111,13 +106,13 @@ export function ConceptStudio({
                 className={button}
                 onClick={() => runtime.current?.zoom("in")}
               >
-                Zoom in
+                {t("zoomIn")}
               </button>
               <button
                 className={button}
                 onClick={() => runtime.current?.zoom("out")}
               >
-                Zoom out
+                {t("zoomOut")}
               </button>
               {(["front", "side", "rear"] as const).map((view) => (
                 <button
@@ -125,32 +120,30 @@ export function ConceptStudio({
                   className={button}
                   onClick={() => runtime.current?.camera(view)}
                 >
-                  {view[0].toUpperCase() + view.slice(1)} view
+                  {t(view)}
                 </button>
               ))}
               <button
                 className={button}
                 onClick={() => {
                   setActive(false);
-                  setStatus(
-                    "3D stopped. Your configuration is kept until you leave this page.",
-                  );
+                  setStatus(t("stopped"));
                 }}
               >
-                Stop 3D
+                {t("stop")}
               </button>
               <button
                 className={button}
                 onClick={() => setAttempt((n) => n + 1)}
               >
-                Retry
+                {t("retry")}
               </button>
             </div>
           )}
         </div>
         <div className="grid gap-5 border-t border-[#0e2d30]/15 p-5 sm:grid-cols-2 sm:p-6 lg:grid-cols-4">
           <label className="block text-sm font-semibold">
-            Silhouette
+            {t("silhouette")}
             <select
               className="mt-2 block min-h-12 w-full rounded-xl border border-[#0e2d30]/30 bg-transparent px-3"
               value={value.model}
@@ -162,12 +155,12 @@ export function ConceptStudio({
                 })
               }
             >
-              <option value="sedan-sports">Sports sedan</option>
-              <option value="hatchback-sports">Sports hatchback</option>
+              <option value="sedan-sports">{t("sedan")}</option>
+              <option value="hatchback-sports">{t("hatchback")}</option>
             </select>
           </label>
           <fieldset>
-            <legend className="mb-3 text-sm font-semibold">Body paint</legend>
+            <legend className="mb-3 text-sm font-semibold">{t("paint")}</legend>
             <div className="flex flex-wrap gap-2">
               {Object.entries(paints).map(([name, color]) => (
                 <button
@@ -190,7 +183,7 @@ export function ConceptStudio({
           </fieldset>
           <fieldset>
             <legend className="mb-3 text-sm font-semibold">
-              Ride height · visual only
+              {t("height")}
             </legend>
             <div className="flex gap-2">
               {(["stock", "sport"] as const).map((stance) => (
@@ -200,7 +193,7 @@ export function ConceptStudio({
                   aria-pressed={value.stance === stance}
                   onClick={() => setValue({ ...value, stance })}
                 >
-                  {stance}
+                  {t(stance)}
                 </button>
               ))}
             </div>
@@ -215,13 +208,13 @@ export function ConceptStudio({
                 setValue({ ...value, spoiler: event.target.checked })
               }
             />
-            Rear spoiler · sedan only
+            {t("spoiler")}
           </label>
           <button
             className={button}
             onClick={() => setValue({ ...defaultConcept })}
           >
-            Reset configuration
+            {t("reset")}
           </button>
           {storageKey && (
             <div className="flex flex-wrap gap-2">
@@ -231,17 +224,13 @@ export function ConceptStudio({
                 onClick={() => {
                   try {
                     localStorage.setItem(storageKey, JSON.stringify(value));
-                    setSavedMessage(
-                      "Direction saved on this browser. Your vehicle records are unchanged.",
-                    );
+                    setSavedMessage(t("saved"));
                   } catch {
-                    setSavedMessage(
-                      "Browser storage is unavailable. Your current direction is still visible.",
-                    );
+                    setSavedMessage(t("storageUnavailable"));
                   }
                 }}
               >
-                Save direction
+                {t("save")}
               </button>
               <button
                 type="button"
@@ -250,20 +239,18 @@ export function ConceptStudio({
                   try {
                     const stored = localStorage.getItem(storageKey);
                     if (!stored) {
-                      setSavedMessage("No saved direction yet.");
+                      setSavedMessage(t("noSaved"));
                       return;
                     }
                     const parsed = conceptSchema.parse(JSON.parse(stored));
                     setValue(parsed);
-                    setSavedMessage("Saved direction restored.");
+                    setSavedMessage(t("restored"));
                   } catch {
-                    setSavedMessage(
-                      "Saved direction could not be read. Choose a preset to continue.",
-                    );
+                    setSavedMessage(t("readFailed"));
                   }
                 }}
               >
-                Restore direction
+                {t("restore")}
               </button>
               <p role="status" className="w-full text-sm">
                 {savedMessage}
@@ -271,23 +258,16 @@ export function ConceptStudio({
             </div>
           )}
           <p className="text-xs leading-6">
-            {storageKey
-              ? "Shape your next build and save the direction on this browser. "
-              : "Explore a new direction for your build. This preview stays open for your current visit. "}
-            Try paint, ride height and the sedan spoiler. Use the Garage to plan
-            wheels, brakes and interior upgrades, then check fitment against
-            your exact car.
+            {storageKey ? `${t("localIntro")} ` : `${t("sessionIntro")} `}
+            {t("tip")}
           </p>
         </div>
       </div>
       <div className="border-t border-[#0e2d30]/15 p-5 sm:p-8">
-        <h3 className="text-xl font-medium">Cinema-inspired directions</h3>
-        <p className="mt-2 text-sm leading-6">
-          Original themes, not film-car replicas. No studio or manufacturer
-          affiliation.
-        </p>
+        <h3 className="text-xl font-medium">{t("cinema")}</h3>
+        <p className="mt-2 text-sm leading-6">{t("cinemaNotice")}</p>
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
-          {conceptPresets.map((preset) => (
+          {conceptPresets.map((preset, index) => (
             <button
               key={preset.name}
               className="rounded-2xl border border-[#0e2d30]/25 p-5 text-left focus-visible:outline-2 focus-visible:outline-offset-4"
@@ -295,23 +275,22 @@ export function ConceptStudio({
             >
               <span className="block font-semibold">{preset.name}</span>
               <span className="mt-2 block text-sm leading-6">
-                {preset.description}
+                {showcaseData(`s${index + 1}.brief`)}
               </span>
             </button>
           ))}
         </div>
       </div>
       <p className="border-t border-[#0e2d30]/15 px-5 py-4 text-xs leading-6 sm:px-8">
-        Models:{" "}
+        {t("models")}:{" "}
         <a className="underline" href="https://kenney.nl/assets/car-kit">
           Kenney Car Kit
         </a>{" "}
         ·{" "}
         <a className="underline" href="/models/concepts/LICENSE.txt">
-          CC0 license
+          {t("license")}
         </a>
-        . Stylized concepts are not dimensional, engineering or installation
-        guidance.
+        . {t("engineeringNotice")}
       </p>
     </div>
   );

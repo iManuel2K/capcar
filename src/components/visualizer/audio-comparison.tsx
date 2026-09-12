@@ -1,9 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { FileDropzone } from "@/components/ui/file-dropzone";
+import { useTranslations } from "next-intl";
 
 type Clip = { url: string; name: string };
 export function AudioComparison() {
+  const t = useTranslations("SoundUi");
   const [clips, setClips] = useState<
     Partial<Record<"stock" | "modified", Clip>>
   >({});
@@ -30,12 +32,8 @@ export function AudioComparison() {
   }
   return (
     <section className="rounded-2xl border border-current/20 p-5 sm:p-8">
-      <h2 className="text-2xl font-medium">Stock / modified · A/B listening</h2>
-      <p className="mt-3 max-w-2xl text-sm leading-6">
-        Compare your own recordings locally. Choose matching engines, recording
-        positions and driving conditions. Playback starts at 25% volume. This
-        comparison does not measure loudness, legality or performance.
-      </p>
+      <h2 className="text-2xl font-medium">{t("abTitle")}</h2>
+      <p className="mt-3 max-w-2xl text-sm leading-6">{t("abDescription")}</p>
       <div className="mt-6 grid gap-5 md:grid-cols-2">
         {(["stock", "modified"] as const).map((side) => (
           <div
@@ -44,17 +42,23 @@ export function AudioComparison() {
           >
             <div>
               <p className="font-medium">
-                {side === "stock" ? "Stock recording" : "Modified recording"}
+                {side === "stock"
+                  ? t("stockRecording")
+                  : t("modifiedRecording")}
               </p>
               <div className="mt-4">
                 <FileDropzone
                   compact
                   accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4,.mp3,.wav,.ogg,.m4a"
-                  label={`Choose ${side} audio`}
-                  inputLabel={
-                    side === "stock" ? "Stock recording" : "Modified recording"
+                  label={
+                    side === "stock" ? t("chooseStock") : t("chooseModified")
                   }
-                  description="Drop MP3, WAV, Ogg or M4A · up to 30 MB"
+                  inputLabel={
+                    side === "stock"
+                      ? t("stockRecording")
+                      : t("modifiedRecording")
+                  }
+                  description={t("dropAudio")}
                   onFile={(file) => {
                     if (
                       ![
@@ -66,9 +70,7 @@ export function AudioComparison() {
                       ].includes(file.type) ||
                       file.size > 30 * 1024 * 1024
                     ) {
-                      setMessage(
-                        "Choose MP3, WAV, Ogg or M4A audio up to 30 MB.",
-                      );
+                      setMessage(t("filePrompt"));
                       return;
                     }
                     clear(side);
@@ -86,10 +88,10 @@ export function AudioComparison() {
             {clips[side] && (
               <>
                 <p className="mt-3 truncate text-sm">
-                  {clips[side]?.name} · personal, unverified
+                  {clips[side]?.name} · {t("personalUnverified")}
                 </p>
                 <audio
-                  aria-label={`${side} recording preview`}
+                  aria-label={t("preview", { side })}
                   className="mt-4 w-full"
                   ref={(element) => {
                     players.current[side] = element;
@@ -103,28 +105,20 @@ export function AudioComparison() {
                       side === "stock" ? "modified" : "stock"
                     ]?.pause()
                   }
-                  onError={() =>
-                    setMessage(
-                      "This recording could not be decoded. Try a different format.",
-                    )
-                  }
+                  onError={() => setMessage(t("decodeFailed"))}
                 />
                 <button
                   className="mt-3 min-h-11 underline"
                   onClick={() => clear(side)}
                 >
-                  Clear {side}
+                  {side === "stock" ? t("clearStock") : t("clearModified")}
                 </button>
               </>
             )}
           </div>
         ))}
       </div>
-      <p className="mt-4 text-sm leading-6">
-        Files stay in this tab and are never uploaded. Use recordings you own or
-        have permission to use. Public vehicle recordings remain unavailable
-        until distribution rights and setup metadata are checked.
-      </p>
+      <p className="mt-4 text-sm leading-6">{t("localOnly")}</p>
       <p role="status" className="mt-3 text-sm">
         {message}
       </p>

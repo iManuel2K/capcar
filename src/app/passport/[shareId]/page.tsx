@@ -4,13 +4,17 @@ import { notFound } from "next/navigation";
 import { PublicPassport } from "@/components/passport/public-passport";
 import { vehiclePassportSchema } from "@/features/passport/vehicle-passport";
 import { createClient } from "@/lib/supabase/server";
+import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Shared Vehicle Passport",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("PublicPassport");
+  return {
+    title: t("document"),
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function SharedPassportPage({
   params,

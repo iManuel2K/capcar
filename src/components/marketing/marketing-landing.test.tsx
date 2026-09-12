@@ -12,13 +12,15 @@ describe("MarketingLanding", () => {
     expect(screen.getByText("Buy the right part.")).toBeInTheDocument();
     expect(screen.getByText("€804 spent")).toBeInTheDocument();
     expect(
-      screen.getByText("From Plan to Road. No Guesswork."),
+      screen.getByText("Direction without fake deadlines."),
     ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Beta" })).toBeInTheDocument();
-    expect(screen.getByText("OBD-II Scan Imports")).toBeInTheDocument();
-    expect(screen.getByText("Interactive Vehicle Models")).toBeInTheDocument();
-    expect(screen.getByText("Nearby & Destination Events")).toBeInTheDocument();
-    expect(screen.getByText("Motorcycle Garages")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Make it tangible" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("OBD-II and verified work")).toBeInTheDocument();
+    expect(screen.getByText("Interactive vehicle models")).toBeInTheDocument();
+    expect(screen.getByText("Events worth driving to")).toBeInTheDocument();
+    expect(screen.getByText("Motorcycles and bicycles")).toBeInTheDocument();
     expect(
       screen
         .getAllByRole("link", { name: "Roadmap" })

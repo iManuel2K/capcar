@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { BadgeCheck, ShieldCheck } from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { PassportIdentityDocument } from "@/components/passport/passport-identity-document";
 import type { VehiclePassportPayload } from "@/features/passport/vehicle-passport";
 
-export function PublicPassport({
+export async function PublicPassport({
   passport,
   publishedAt,
   liveUrl,
@@ -14,81 +15,93 @@ export function PublicPassport({
   publishedAt: string;
   liveUrl: string;
 }) {
+  const [t, locale] = await Promise.all([
+    getTranslations("PublicPassport"),
+    getLocale(),
+  ]);
   const title = `${passport.vehicle.productionYear} ${passport.vehicle.make} ${passport.vehicle.model}`;
 
   return (
     <main className="min-h-dvh bg-[#0b0e0c] px-4 py-5 text-[#f4f5f2] sm:px-7 sm:py-8">
       <div className="mx-auto max-w-6xl">
         <header className="flex items-center justify-between gap-5">
-          <Link href="/" aria-label="Capcar home">
+          <Link href="/" aria-label={t("home")}>
             <CapcarWordmark />
           </Link>
           <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300/15 bg-emerald-300/6 px-3 py-2 text-xs text-emerald-100/65">
-            <ShieldCheck className="size-3.5" /> Owner-shared record
+            <ShieldCheck className="size-3.5" /> {t("shared")}
           </span>
         </header>
 
-        <h1 className="sr-only">{title} Vehicle Passport</h1>
+        <h1 className="sr-only">
+          {title} {t("document")}
+        </h1>
         <PassportIdentityDocument passport={passport} liveUrl={liveUrl} />
         <p className="mt-3 text-right text-xs text-white/32">
-          Published {new Date(publishedAt).toLocaleDateString("en-GB")}
+          {t("published", {
+            date: new Date(publishedAt).toLocaleDateString(locale),
+          })}
         </p>
 
         <section className="mt-5 grid gap-3 sm:grid-cols-4">
-          <Metric label="Maintenance" value={passport.maintenance.length} />
-          <Metric label="Build items" value={passport.modifications.length} />
-          <Metric label="Diagnostics" value={passport.diagnostics.length} />
           <Metric
-            label="Local work notes"
-            value={passport.installStamps.length}
+            label={t("maintenance")}
+            value={passport.maintenance.length}
           />
+          <Metric
+            label={t("buildItems")}
+            value={passport.modifications.length}
+          />
+          <Metric
+            label={t("diagnostics")}
+            value={passport.diagnostics.length}
+          />
+          <Metric label={t("notes")} value={passport.installStamps.length} />
         </section>
 
         <div className="mt-5 grid gap-5 lg:grid-cols-2">
           <RecordSection
-            title="Maintenance history"
-            empty="No completed maintenance records shared."
+            title={t("maintenanceHistory")}
+            empty={t("noMaintenance")}
             rows={passport.maintenance.map((item) => ({
               title: item.title,
-              detail: `${item.completedDate} · ${item.mileage.toLocaleString("en-US")} km`,
+              detail: `${item.completedDate} · ${item.mileage.toLocaleString(locale)} km`,
             }))}
           />
           <RecordSection
-            title="Build history"
-            empty="No build items shared."
+            title={t("buildHistory")}
+            empty={t("noBuild")}
             rows={passport.modifications.map((item) => ({
               title: item.title,
               detail: `${formatLabel(item.status)} · ${formatEuro(item.cost)} · ${item.verification}`,
             }))}
           />
           <RecordSection
-            title="Diagnostic history"
-            empty="No diagnostic records shared."
+            title={t("diagnosticHistory")}
+            empty={t("noDiagnostics")}
             rows={passport.diagnostics.map((item) => ({
               title: `${item.code} · ${item.title}`,
-              detail: `${formatLabel(item.status)} · ${item.mileage.toLocaleString("en-US")} km${item.resolution ? ` · ${item.resolution}` : ""}`,
+              detail: `${formatLabel(item.status)} · ${item.mileage.toLocaleString(locale)} km${item.resolution ? ` · ${item.resolution}` : ""}`,
             }))}
           />
           <RecordSection
-            title="Local work notes · unverified"
-            empty="No local work notes shared."
+            title={t("workHistory")}
+            empty={t("noWork")}
             rows={passport.installStamps.map((item) => ({
               title: item.work,
-              detail: `${item.specialist} · ${item.installedAt} · Unverified local entry`,
+              detail: `${item.specialist} · ${item.installedAt} · ${t("unverified")}`,
             }))}
           />
         </div>
 
         <aside className="mt-5 rounded-2xl border border-amber-300/12 bg-amber-300/5 p-5 text-xs leading-6 text-white/45">
-          This record was entered and shared by the vehicle owner. Verify parts,
-          invoices, safety-critical work and legal approval against original
-          documents before relying on it.
+          {t("notice")}
         </aside>
 
         <footer className="flex flex-col justify-between gap-5 py-10 text-xs text-white/35 sm:flex-row sm:items-center">
           <CapcarWordmark />
           <Link href="/" className="font-medium text-white/60">
-            Build your own garage →
+            {t("buildGarage")}
           </Link>
         </footer>
       </div>

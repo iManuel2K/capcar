@@ -4,10 +4,15 @@ import { GarageAccountBoundary } from "@/components/account/garage-account-bound
 import { getAuthStatus } from "@/features/auth/auth-config";
 import { currentUser } from "@/lib/supabase/current-user";
 import { SignInCard } from "@/components/community/sign-in-card";
-export const metadata = {
-  title: "Verified work | Capcar",
-  robots: { index: false, follow: false },
-};
+import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Community");
+  return {
+    title: t("verifiedTitle"),
+    robots: { index: false, follow: false },
+  };
+}
 export default async function Page({
   searchParams,
 }: {
@@ -20,6 +25,7 @@ export default async function Page({
     typeof params.specialist === "string" ? params.specialist.slice(0, 36) : "";
   const next = `/verified-work?${new URLSearchParams({ vehicle, specialist })}`;
   const user = await currentUser();
+  const t = await getTranslations("PublicStates");
   return (
     <CommunityShell titleKey="verifiedTitle">
       {user ? (
@@ -30,10 +36,7 @@ export default async function Page({
           />
         </GarageAccountBoundary>
       ) : (
-        <SignInCard next={next}>
-          Request a specialist’s confirmation, follow its status and keep the
-          result in your private vehicle record.
-        </SignInCard>
+        <SignInCard next={next}>{t("verifiedDescription")}</SignInCard>
       )}
     </CommunityShell>
   );

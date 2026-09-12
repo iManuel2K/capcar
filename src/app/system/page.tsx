@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CheckCircle2, CircleDashed, ShieldCheck } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { getAuthStatus } from "@/features/auth/auth-config";
 import { getCopilotStatus } from "@/features/copilot/copilot-provider";
@@ -8,39 +9,40 @@ import { getDeploymentReadiness } from "@/features/deployment/deployment-readine
 
 export const dynamic = "force-dynamic";
 
-export default function SystemPage() {
+export default async function SystemPage() {
+  const t = await getTranslations("Operations");
   const auth = getAuthStatus();
   const copilot = getCopilotStatus();
   const providers = getProviderStatuses();
   const deployment = getDeploymentReadiness();
   const checks = [
     {
-      label: "Production launch configuration",
+      label: t("launchEyebrow"),
       ready: deployment.ready,
-      detail: `Launch state: ${deployment.state}`,
+      detail: t("launchTitle", { state: t(`states.${deployment.state}`) }),
     },
     {
-      label: "Production build and strict TypeScript",
+      label: t("checks.build.label"),
       ready: true,
-      detail: "Automated validation included",
+      detail: t("checks.build.detail"),
     },
     {
-      label: "Security headers",
+      label: t("checks.headers.label"),
       ready: true,
-      detail: "Frame, MIME, referrer and permission protections",
+      detail: t("checks.headers.detail"),
     },
     {
-      label: "Installable web app shell",
+      label: t("checks.pwa.label"),
       ready: true,
-      detail: "Manifest, icon and production service worker",
+      detail: t("checks.pwa.detail"),
     },
     {
-      label: "Supabase account sync",
+      label: t("checks.auth.label"),
       ready: auth.configured,
-      detail: auth.message,
+      detail: t(`checks.auth.${auth.configured ? "ready" : "pending"}`),
     },
     {
-      label: "External AI copilot",
+      label: t("checks.copilot.label"),
       ready: copilot.mode === "external" && copilot.configured,
       detail: `${copilot.providerName} · ${copilot.mode}`,
     },
@@ -54,19 +56,17 @@ export default function SystemPage() {
     <main className="min-h-dvh bg-[#0b0e0c] px-5 py-16 text-[#f4f5f2]">
       <div className="mx-auto max-w-5xl">
         <Link href="/" className="text-sm text-[#ff667a]">
-          ← Capcar
+          {t("homeBack")}
         </Link>
         <header className="mt-12 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(231,45,69,0.2),transparent_30%),#111111] p-7 sm:p-10">
           <p className="text-xs font-semibold tracking-[0.14em] text-[#ff667a] uppercase">
-            Epic 19 · System readiness
+            {t("systemEyebrow")}
           </p>
           <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
-            Production foundations are visible.
+            {t("systemTitle")}
           </h1>
           <p className="mt-5 max-w-2xl leading-7 text-white/45">
-            Green means the application capability is present. Pending
-            integrations remain honest until credentials, licensing and
-            production policies are complete.
+            {t("systemDescription")}
           </p>
         </header>
         <section className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -93,10 +93,14 @@ export default function SystemPage() {
         </section>
         <aside className="mt-5 flex gap-3 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/45">
           <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#9ec2ff]" />
-          This page never exposes API keys. It reports only activation state and
-          provider names.
+          {t("systemSafety")}
         </aside>
-        <Link href="/launch" className="mt-5 inline-flex min-h-12 items-center rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]">Open production launch checklist</Link>
+        <Link
+          href="/launch"
+          className="mt-5 inline-flex min-h-12 items-center rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]"
+        >
+          {t("openLaunch")}
+        </Link>
       </div>
     </main>
   );

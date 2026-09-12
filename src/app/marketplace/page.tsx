@@ -2,10 +2,15 @@ import { Marketplace } from "@/components/community/marketplace";
 import { PublicMarketplace } from "@/components/community/public-marketplace";
 import { currentUser } from "@/lib/supabase/current-user";
 import { CommunityShell } from "@/components/community/community-shell";
-export const metadata = {
-  title: "Community marketplace | Capcar",
-  robots: { index: false, follow: false },
-};
+import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Community");
+  return {
+    title: t("marketplaceTitle"),
+    robots: { index: false, follow: false },
+  };
+}
 export default async function Page({
   searchParams,
 }: {

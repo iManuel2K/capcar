@@ -11,16 +11,19 @@ import {
   Wrench,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 const tabs = [
-  { id: "garage", label: "Garage", icon: CarFront },
-  { id: "build", label: "Build", icon: Layers3 },
-  { id: "service", label: "Service", icon: Wrench },
+  { id: "garage", label: "tabGarage", icon: CarFront },
+  { id: "build", label: "tabBuild", icon: Layers3 },
+  { id: "service", label: "tabService", icon: Wrench },
 ] as const;
 
 type TabId = (typeof tabs)[number]["id"];
 
 export function ProductDashboardPreview() {
+  const t = useTranslations("Demo");
+  const locale = useLocale();
   const [activeTab, setActiveTab] = useState<TabId>("garage");
   const [mileage, setMileage] = useState(147920);
 
@@ -54,18 +57,17 @@ export function ProductDashboardPreview() {
         <div className="grid gap-6 lg:grid-cols-[0.72fr_1fr] lg:items-end">
           <div>
             <p className="text-xs font-semibold tracking-[0.2em] text-[#bf8269] uppercase">
-              Live product preview
+              {t("livePreview")}
             </p>
             <h2
               id="live-demo-title"
               className="mt-4 max-w-3xl text-4xl leading-[0.94] font-medium tracking-[-0.055em] sm:text-7xl sm:leading-[0.92]"
             >
-              The complete build, at a glance.
+              {t("completeGlance")}
             </h2>
           </div>
           <p className="max-w-lg text-base leading-7 text-[#0e2d30]/56 lg:justify-self-end">
-            Budget, mileage, fitment and maintenance stay connected to the car
-            they belong to.
+            {t("connectDescription")}
           </p>
         </div>
 
@@ -78,7 +80,7 @@ export function ProductDashboardPreview() {
               <div>
                 <p className="text-sm font-medium">Project 318</p>
                 <p className="text-[11px] text-white/32">
-                  BMW E90 · Private garage
+                  BMW E90 · {t("privateGarage")}
                 </p>
               </div>
             </div>
@@ -95,7 +97,7 @@ export function ProductDashboardPreview() {
                       : "text-white/42 hover:text-white"
                   }`}
                 >
-                  <Icon className="size-3.5" /> {label}
+                  <Icon className="size-3.5" /> {t(label)}
                 </button>
               ))}
             </div>
@@ -106,17 +108,17 @@ export function ProductDashboardPreview() {
               <div className="flex items-start justify-between gap-5">
                 <div>
                   <p className="text-[10px] font-semibold tracking-[0.14em] text-white/28 uppercase">
-                    Current mileage
+                    {t("currentMileage")}
                   </p>
                   <p className="mt-2 text-4xl font-medium tracking-[-0.045em] tabular-nums sm:text-5xl">
-                    {mileage.toLocaleString("en-US")}
+                    {mileage.toLocaleString(locale)}
                     <span className="ml-2 text-sm tracking-normal text-white/32">
                       km
                     </span>
                   </p>
                 </div>
                 <span className="rounded-full border border-emerald-300/18 bg-emerald-300/8 px-3 py-1.5 text-[11px] text-emerald-200">
-                  Synced
+                  {t("synced")}
                 </span>
               </div>
 
@@ -124,28 +126,36 @@ export function ProductDashboardPreview() {
                 <div className="flex items-end justify-between gap-4">
                   <div>
                     <p className="text-[10px] tracking-[0.13em] text-white/28 uppercase">
-                      Build budget
+                      {t("buildBudget")}
                     </p>
-                    <p className="mt-2 text-2xl font-medium">€804 spent</p>
+                    <p className="mt-2 text-2xl font-medium">{t("spent")}</p>
                   </div>
-                  <p className="text-sm text-white/38">€1,200 total</p>
+                  <p className="text-sm text-white/38">{t("total")}</p>
                 </div>
                 <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/8">
                   <div className="h-full w-[67%] origin-left rounded-full bg-gradient-to-r from-[#6d0101] to-[#92644d] motion-safe:animate-[capcar-budget-fill_1.1s_ease-out_both]" />
                 </div>
                 <div className="mt-4 flex justify-between text-xs text-white/32">
-                  <span>67% allocated</span>
-                  <span>€396 remaining</span>
+                  <span>{t("allocated")}</span>
+                  <span>{t("remaining")}</span>
                 </div>
               </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                <MiniMetric icon={Layers3} label="Parts" value="8 planned" />
-                <MiniMetric icon={Gauge} label="Stage" value="2 of 4" />
+                <MiniMetric
+                  icon={Layers3}
+                  label={t("parts")}
+                  value={t("planned8")}
+                />
+                <MiniMetric
+                  icon={Gauge}
+                  label={t("stage")}
+                  value={t("stageValue")}
+                />
                 <MiniMetric
                   icon={BadgeCheck}
-                  label="Fitment"
-                  value="7 checked"
+                  label={t("fitment")}
+                  value={t("checked7")}
                 />
               </div>
             </div>
@@ -154,33 +164,42 @@ export function ProductDashboardPreview() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[10px] font-semibold tracking-[0.14em] text-white/28 uppercase">
-                    Next attention
+                    {t("nextAttention")}
                   </p>
-                  <h3 className="mt-2 text-xl font-medium">Service overview</h3>
+                  <h3 className="mt-2 text-xl font-medium">
+                    {t("serviceOverview")}
+                  </h3>
                 </div>
                 <CalendarClock className="size-5 text-[#bf8269]" />
               </div>
               <div className="mt-6 space-y-2">
-                <ServiceRow label="Brake fluid" value="Due now" tone="red" />
-                <ServiceRow label="Engine oil" value="1,800 km" tone="amber" />
                 <ServiceRow
-                  label="Cabin filter"
-                  value="Complete"
+                  label={t("brakeFluid")}
+                  value={t("dueNow")}
+                  tone="red"
+                />
+                <ServiceRow
+                  label={t("engineOil")}
+                  value="1,800 km"
+                  tone="amber"
+                />
+                <ServiceRow
+                  label={t("cabinFilter")}
+                  value={t("complete")}
                   tone="green"
                 />
               </div>
               <div className="mt-6 rounded-2xl border border-white/8 bg-[#141414] p-5">
                 <div className="flex items-center gap-2 text-[10px] font-semibold tracking-[0.13em] text-white/28 uppercase">
-                  <CircleGauge className="size-3.5 text-[#bf8269]" /> Fitment
-                  status
+                  <CircleGauge className="size-3.5 text-[#bf8269]" />{" "}
+                  {t("fitmentStatus")}
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <StatusBadge tone="green">Bolt-on · demo fitment</StatusBadge>
-                  <StatusBadge tone="amber">1 condition</StatusBadge>
+                  <StatusBadge tone="green">{t("boltDemo")}</StatusBadge>
+                  <StatusBadge tone="amber">{t("condition")}</StatusBadge>
                 </div>
                 <p className="mt-4 text-xs leading-5 text-white/36">
-                  Selected rear lamps match the E90 sedan. Connector revision
-                  still needs confirmation.
+                  {t("connector")}
                 </p>
               </div>
             </div>

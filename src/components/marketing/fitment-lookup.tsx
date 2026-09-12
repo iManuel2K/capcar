@@ -10,40 +10,48 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { FormEvent, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type FitmentTone = "green" | "amber" | "red";
 
-const parts: Array<{
-  name: string;
-  detail: string;
-  status: string;
+const partKeys: Array<{
+  name: "rearLamps" | "wing" | "brakes";
+  detail: "rearDetail" | "wingDetail" | "brakeDetail";
+  status: "boltOn" | "modification" | "incompatible";
   tone: FitmentTone;
 }> = [
   {
-    name: "Dark-red rear lamps",
-    detail: "E90 sedan · EU specification",
-    status: "Direct Bolt-On",
+    name: "rearLamps",
+    detail: "rearDetail",
+    status: "boltOn",
     tone: "green",
   },
   {
-    name: "M-style rear wing",
-    detail: "Drilling and approval check",
-    status: "Modification Required",
+    name: "wing",
+    detail: "wingDetail",
+    status: "modification",
     tone: "amber",
   },
   {
-    name: "F30 front brake kit",
-    detail: "Different carrier and geometry",
-    status: "Incompatible",
+    name: "brakes",
+    detail: "brakeDetail",
+    status: "incompatible",
     tone: "red",
   },
 ];
 
 export function FitmentLookup() {
+  const t = useTranslations("Demo");
   const [query, setQuery] = useState("WBA-E90-DEMO");
   const [loading, setLoading] = useState(false);
   const [resolved, setResolved] = useState(true);
   const [activePart, setActivePart] = useState(0);
+  const parts = partKeys.map((part) => ({
+    ...part,
+    name: t(part.name),
+    detail: t(part.detail),
+    status: t(part.status),
+  }));
   const selected = parts[activePart];
 
   function lookup(event: FormEvent<HTMLFormElement>) {
@@ -63,30 +71,30 @@ export function FitmentLookup() {
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-[10px] tracking-[0.14em] text-white/34 uppercase">
-              Vehicle lookup
+              {t("vehicleLookup")}
             </p>
-            <p className="mt-2 font-medium">Check the exact setup</p>
+            <p className="mt-2 font-medium">{t("checkSetup")}</p>
           </div>
           <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] text-white/38">
-            Demo data
+            {t("demoData")}
           </span>
         </div>
 
         <form onSubmit={lookup} className="mt-5 flex gap-2">
           <label className="flex min-h-12 flex-1 items-center gap-3 rounded-xl border border-white/10 bg-black/28 px-4 focus-within:border-white/30">
             <Search className="size-4 text-white/30" />
-            <span className="sr-only">VIN or vehicle</span>
+            <span className="sr-only">{t("vin")}</span>
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value.toUpperCase())}
-              placeholder="VIN or vehicle"
+              placeholder={t("vin")}
               className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/22"
             />
           </label>
           <button
             type="submit"
             disabled={loading || !query.trim()}
-            aria-label="Look up vehicle"
+            aria-label={t("lookup")}
             className="grid size-12 shrink-0 place-items-center rounded-xl bg-white text-black transition hover:-translate-y-0.5 disabled:opacity-50"
           >
             {loading ? (
@@ -117,7 +125,7 @@ export function FitmentLookup() {
         <div className="grid gap-px bg-white/8 sm:grid-cols-[0.9fr_1.1fr]">
           <div className="bg-[#0e2d30] p-4 sm:p-5">
             <p className="px-2 text-[10px] tracking-[0.13em] text-white/28 uppercase">
-              Select a part
+              {t("selectPart")}
             </p>
             <div className="mt-3 space-y-1.5">
               {parts.map((part, index) => (
@@ -165,21 +173,22 @@ function FitmentResult({
   status: string;
   tone: FitmentTone;
 }) {
+  const t = useTranslations("Demo");
   const styles = {
     green: {
       badge: "border-emerald-300/20 bg-emerald-300/9 text-emerald-200",
       icon: BadgeCheck,
-      copy: "Matches the selected vehicle configuration.",
+      copy: t("matches"),
     },
     amber: {
       badge: "border-amber-300/20 bg-amber-300/9 text-amber-200",
       icon: CircleAlert,
-      copy: "Additional work or documentation is required.",
+      copy: t("requires"),
     },
     red: {
       badge: "border-red-300/20 bg-red-300/9 text-red-200",
       icon: ShieldAlert,
-      copy: "The selected configuration does not match.",
+      copy: t("noMatch"),
     },
   };
   const Icon = styles[tone].icon;

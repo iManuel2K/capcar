@@ -4,8 +4,14 @@ import { MarketingHeader } from "@/components/marketing/marketing-header";
 import { AudioComparison } from "@/components/visualizer/audio-comparison";
 import { RecordingLibrary } from "@/components/visualizer/recording-library";
 import { CuratedSounds } from "@/components/visualizer/curated-sounds";
-export const metadata = { title: "Sound studio | Capcar" };
-export default function Page() {
+import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("SoundPage");
+  return { title: t("title") };
+}
+export default async function Page() {
+  const t = await getTranslations("SoundPage");
   return (
     <div className="min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
       <MarketingHeader />
@@ -15,10 +21,10 @@ export default function Page() {
             href="/"
             className="inline-flex min-h-11 items-center underline"
           >
-            ← Capcar
+            ← {t("back")}
           </Link>
           <h1 className="my-8 text-4xl font-medium tracking-tight sm:text-6xl">
-            Listen to the difference.
+            {t("title")}
           </h1>
           <CuratedSounds />
           <RecordingLibrary />

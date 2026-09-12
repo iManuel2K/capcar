@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import type { VehiclePassportPayload } from "@/features/passport/vehicle-passport";
@@ -21,12 +22,14 @@ export function PassportIdentityDocument({
   passport: VehiclePassportPayload;
   liveUrl?: string;
 }) {
+  const t = useTranslations("PublicPassport");
+  const locale = useLocale();
   const title = `${passport.vehicle.productionYear} ${passport.vehicle.make} ${passport.vehicle.model}`;
   const vin =
     passport.vehicle.vin ??
     (passport.vehicle.vinLastFive
       ? `••••••••••••${passport.vehicle.vinLastFive}`
-      : "Not recorded");
+      : t("notRecorded"));
   return (
     <section className="passport-document print-surface mt-5 overflow-hidden rounded-[2rem] border border-white/10 bg-[#f2efe5] text-[#102c2d] shadow-[0_28px_80px_rgba(0,0,0,0.28)]">
       <div className="grid lg:grid-cols-[1.12fr_0.88fr]">
@@ -34,11 +37,11 @@ export function PassportIdentityDocument({
           <div className="flex items-center justify-between gap-5 border-b border-[#102c2d]/12 pb-5">
             <CapcarWordmark glow={false} />
             <span className="rounded-full border border-[#6d0101]/18 bg-[#6d0101]/6 px-3 py-1 text-[9px] font-bold tracking-[0.16em] text-[#6d0101] uppercase">
-              Vehicle record · Beta
+              {t("vehicleRecord")}
             </span>
           </div>
           <p className="mt-8 text-[10px] font-bold tracking-[0.18em] text-[#6d0101] uppercase">
-            Digital Vehicle Passport
+            {t("digitalPassport")}
           </p>
           <h2 className="mt-3 text-3xl font-semibold tracking-[-0.045em] sm:text-5xl">
             {title}
@@ -51,30 +54,30 @@ export function PassportIdentityDocument({
           <div className="mt-8 grid gap-x-6 gap-y-5 sm:grid-cols-2">
             <DataPoint
               icon={IdCard}
-              label="Vehicle identification"
+              label={t("vehicleIdentification")}
               value={vin}
               mono
             />
             <DataPoint
               icon={CarFront}
-              label="Recorded mileage"
-              value={`${passport.vehicle.mileage.toLocaleString("en-US")} km`}
+              label={t("recordedMileage")}
+              value={`${passport.vehicle.mileage.toLocaleString(locale)} km`}
             />
             <DataPoint
               icon={CalendarCheck}
-              label="Next TÜV / inspection"
+              label={t("nextInspection")}
               value={
                 passport.official?.nextInspectionDate
                   ? new Date(
                       `${passport.official.nextInspectionDate}T12:00:00`,
-                    ).toLocaleDateString("de-DE")
-                  : "Not recorded"
+                    ).toLocaleDateString(locale)
+                  : t("notRecorded")
               }
             />
             <DataPoint
               icon={ShieldCheck}
-              label="Insurance"
-              value={passport.official?.insuranceCompany ?? "Not recorded"}
+              label={t("insurance")}
+              value={passport.official?.insuranceCompany ?? t("notRecorded")}
               detail={passport.official?.insurancePolicyNumber}
             />
           </div>
@@ -83,7 +86,7 @@ export function PassportIdentityDocument({
             <div className="mt-8 grid gap-4 rounded-2xl border border-[#102c2d]/12 bg-white/38 p-5 sm:grid-cols-[1fr_auto] sm:items-end">
               <div>
                 <p className="text-[10px] font-bold tracking-[0.14em] text-[#102c2d]/45 uppercase">
-                  Registered owner information
+                  {t("ownerInformation")}
                 </p>
                 <p className="mt-2 font-semibold">{passport.owner.name}</p>
                 <p className="mt-2 flex items-start gap-2 text-xs leading-5 whitespace-pre-line text-[#102c2d]/60">
@@ -98,7 +101,7 @@ export function PassportIdentityDocument({
             </div>
           ) : (
             <div className="mt-8 rounded-2xl border border-dashed border-[#102c2d]/18 p-4 text-xs text-[#102c2d]/50">
-              Owner information is private or incomplete.
+              {t("ownerPrivate")}
             </div>
           )}
         </div>
@@ -121,11 +124,9 @@ export function PassportIdentityDocument({
           <div className="absolute right-5 bottom-5 left-5 flex items-end justify-between gap-4">
             <div className="text-white">
               <p className="text-[10px] font-semibold tracking-[0.14em] text-white/55 uppercase">
-                Live verification
+                {t("liveVerification")}
               </p>
-              <p className="mt-1 text-xs text-white/75">
-                Scan to open the current owner-shared record.
-              </p>
+              <p className="mt-1 text-xs text-white/75">{t("scanRecord")}</p>
             </div>
             <div className="grid size-29 shrink-0 place-items-center rounded-xl bg-white p-2 shadow-xl">
               {liveUrl ? (
@@ -134,11 +135,11 @@ export function PassportIdentityDocument({
                   size={96}
                   level="M"
                   marginSize={1}
-                  title="QR code for live Capcar Vehicle Passport"
+                  title={t("qrTitle")}
                 />
               ) : (
                 <span className="px-2 text-center text-[9px] leading-4 text-[#102c2d]/55">
-                  Publish a link to activate the QR
+                  {t("publishQr")}
                 </span>
               )}
             </div>
@@ -147,10 +148,11 @@ export function PassportIdentityDocument({
       </div>
       <div className="flex flex-col justify-between gap-2 border-t border-[#102c2d]/12 px-6 py-4 text-[10px] text-[#102c2d]/48 sm:flex-row sm:px-9">
         <span>
-          Generated {new Date(passport.generatedAt).toLocaleDateString("en-GB")}{" "}
-          · User-entered record
+          {t("generated", {
+            date: new Date(passport.generatedAt).toLocaleDateString(locale),
+          })}
         </span>
-        <span>Verify safety-critical work against original documents</span>
+        <span>{t("verifyCritical")}</span>
       </div>
     </section>
   );
@@ -169,6 +171,7 @@ function DataPoint({
   detail?: string;
   mono?: boolean;
 }) {
+  const t = useTranslations("PublicPassport");
   return (
     <div className="flex gap-3">
       <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#102c2d]/7 text-[#6d0101]">
@@ -183,7 +186,7 @@ function DataPoint({
         </p>
         {detail && (
           <p className="mt-1 font-mono text-[10px] text-[#102c2d]/50">
-            Policy {detail}
+            {t("policy", { number: detail })}
           </p>
         )}
       </div>

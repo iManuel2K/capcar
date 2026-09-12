@@ -1,6 +1,67 @@
 "use client";
 
 import Link from "next/link";
+import { useSyncExternalStore } from "react";
+
+const recoveryCopy = {
+  en: {
+    title: "Capcar recovery",
+    eyebrow: "Drive interrupted",
+    heading: "Capcar could not finish that action.",
+    message:
+      "Try again first. Your browser-local records have not been intentionally deleted.",
+    retry: "Try again",
+    home: "Return home",
+  },
+  de: {
+    title: "Capcar-Wiederherstellung",
+    eyebrow: "Fahrt unterbrochen",
+    heading: "Capcar konnte diese Aktion nicht abschließen.",
+    message:
+      "Versuche es zuerst erneut. Deine browserlokalen Daten wurden nicht absichtlich gelöscht.",
+    retry: "Erneut versuchen",
+    home: "Zur Startseite",
+  },
+  el: {
+    title: "Ανάκτηση Capcar",
+    eyebrow: "Η διαδρομή διακόπηκε",
+    heading: "Το Capcar δεν μπόρεσε να ολοκληρώσει αυτή την ενέργεια.",
+    message:
+      "Δοκιμάστε ξανά πρώτα. Οι τοπικές εγγραφές του browser δεν διαγράφηκαν σκόπιμα.",
+    retry: "Δοκιμή ξανά",
+    home: "Επιστροφή στην αρχική",
+  },
+  sq: {
+    title: "Rikuperimi i Capcar",
+    eyebrow: "Udhëtimi u ndërpre",
+    heading: "Capcar nuk mundi ta përfundonte këtë veprim.",
+    message:
+      "Provo përsëri fillimisht. Të dhënat lokale të shfletuesit nuk janë fshirë qëllimisht.",
+    retry: "Provo përsëri",
+    home: "Kthehu në krye",
+  },
+  ja: {
+    title: "Capcar リカバリー",
+    eyebrow: "操作が中断されました",
+    heading: "Capcar はこの操作を完了できませんでした。",
+    message:
+      "まず再試行してください。ブラウザ内のローカル記録が意図的に削除されたわけではありません。",
+    retry: "再試行",
+    home: "ホームへ戻る",
+  },
+} as const;
+
+type RecoveryLocale = keyof typeof recoveryCopy;
+
+function readLocale(): RecoveryLocale {
+  const selected = document.cookie
+    .split(";")
+    .map((value) => value.trim().split("="))
+    .find(([key]) => key === "capcar_locale")?.[1];
+  return selected && selected in recoveryCopy
+    ? (selected as RecoveryLocale)
+    : "en";
+}
 
 export default function GlobalError({
   reset,
@@ -8,10 +69,16 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const locale = useSyncExternalStore<RecoveryLocale>(
+    () => () => undefined,
+    readLocale,
+    () => "en" as RecoveryLocale,
+  );
+  const copy = recoveryCopy[locale];
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body>
-        <title>Capcar recovery</title>
+        <title>{copy.title}</title>
         <style>{`
           * { box-sizing: border-box; }
           body {
@@ -85,17 +152,14 @@ export default function GlobalError({
           }
         `}</style>
         <main role="alert">
-          <p className="eyebrow">Drive interrupted</p>
-          <h1>Capcar could not finish that action.</h1>
-          <p className="message">
-            Try again first. Your browser-local records have not been
-            intentionally deleted.
-          </p>
+          <p className="eyebrow">{copy.eyebrow}</p>
+          <h1>{copy.heading}</h1>
+          <p className="message">{copy.message}</p>
           <div className="actions">
             <button type="button" onClick={reset}>
-              Try again
+              {copy.retry}
             </button>
-            <Link href="/">Return home</Link>
+            <Link href="/">{copy.home}</Link>
           </div>
         </main>
       </body>

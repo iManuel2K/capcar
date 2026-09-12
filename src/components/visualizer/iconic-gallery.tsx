@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 const cars = [
   {
@@ -19,6 +20,7 @@ const cars = [
 ];
 
 export function IconicGallery() {
+  const t = useTranslations("StudioUi");
   const [selected, setSelected] = useState(0);
   const [active, setActive] = useState(false);
   const [attempt, setAttempt] = useState(0);
@@ -35,7 +37,7 @@ export function IconicGallery() {
   }, [active, loaded, attempt, selected]);
   return (
     <section
-      aria-label="Realistic 3D car collection"
+      aria-label={t("galleryLabel")}
       className="overflow-hidden rounded-3xl border border-[#0e2d30]/20 bg-[#101615] text-[#e8e6d7]"
     >
       <div className="flex gap-3 overflow-x-auto p-4">
@@ -60,7 +62,7 @@ export function IconicGallery() {
         {active ? (
           <iframe
             key={`${car.id}-${attempt}`}
-            title={`${car.name} interactive 3D`}
+            title={`${car.name} ${t("interactive")}`}
             src={`https://sketchfab.com/models/${car.id}/embed?autostart=1&ui_theme=dark`}
             allow="fullscreen; xr-spatial-tracking"
             allowFullScreen
@@ -75,7 +77,7 @@ export function IconicGallery() {
           <>
             <Image
               src={car.image}
-              alt={`${car.name} — preview of the interactive model`}
+              alt={t("previewAlt", { car: car.name })}
               fill
               sizes="(max-width: 768px) 100vw, 1200px"
               className="object-contain"
@@ -89,7 +91,7 @@ export function IconicGallery() {
               }}
               className="absolute bottom-6 left-1/2 min-h-12 -translate-x-1/2 rounded-xl bg-[#e8e6d7] px-6 font-semibold whitespace-nowrap text-[#0e2d30]"
             >
-              Explore in 3D
+              {t("explore")}
             </button>
           </>
         )}
@@ -98,25 +100,16 @@ export function IconicGallery() {
             role="status"
             className="pointer-events-none absolute top-4 left-4 rounded-xl bg-[#101615] px-4 py-3 text-sm"
           >
-            Opening the 3D reference…
+            {t("opening")}
           </p>
         )}
       </div>
       <div className="space-y-3 border-t border-white/15 p-5 text-sm leading-6">
-        {unavailable && (
-          <p role="status">
-            The 3D connection did not finish. Your preview is still available.
-            Try again, or allow Sketchfab in your browser’s privacy settings if
-            it is blocked.
-          </p>
-        )}
-        <p>
-          Drag to orbit. Pinch or scroll to zoom. Loading 3D connects to
-          Sketchfab; no model loads until you choose it.
-        </p>
+        {unavailable && <p role="status">{t("connectionFailed")}</p>}
+        <p>{t("controls")}</p>
         {active && (
           <p>
-            If the viewer stays blank, allow Sketchfab in your privacy settings.{" "}
+            {t("blank")}{" "}
             <button
               type="button"
               className="min-h-11 underline"
@@ -125,7 +118,7 @@ export function IconicGallery() {
                 setAttempt((value) => value + 1);
               }}
             >
-              Retry
+              {t("retry")}
             </button>
             {" · "}
             <button
@@ -133,7 +126,7 @@ export function IconicGallery() {
               className="min-h-11 underline"
               onClick={() => setActive(false)}
             >
-              Show preview
+              {t("showPreview")}
             </button>
           </p>
         )}
@@ -144,7 +137,7 @@ export function IconicGallery() {
             target="_blank"
             rel="noreferrer"
           >
-            {car.name} by {car.creator}
+            {car.name} {t("by")} {car.creator}
           </a>
           {" · "}
           <a
@@ -153,13 +146,9 @@ export function IconicGallery() {
           >
             CC BY 4.0
           </a>
-          . Model and preview unmodified.
+          . {t("unmodified")}
         </p>
-        <p className="text-xs text-white/60">
-          Independent creator references, not official Fast &amp; Furious
-          replicas or manufacturer endorsements. Reference viewing only: paint
-          and parts controls in the sketch lab do not modify these models.
-        </p>
+        <p className="text-xs text-white/60">{t("creatorNotice")}</p>
       </div>
     </section>
   );

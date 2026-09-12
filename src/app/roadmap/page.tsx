@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 import { RoadmapPage } from "@/components/marketing/roadmap-page";
 
-export const metadata: Metadata = {
-  title: "Roadmap",
-  description:
-    "See what Capcar supports today and where the digital garage is going next.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Roadmap");
+  return { title: t("eyebrow"), description: t("description") };
+}
 
 export default function Roadmap() {
   return <RoadmapPage />;
