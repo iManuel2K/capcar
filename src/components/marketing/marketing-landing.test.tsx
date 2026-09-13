@@ -17,7 +17,8 @@ describe("MarketingLanding", () => {
     expect(
       screen.getByRole("heading", { name: "Make it tangible" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("OBD-II and verified work")).toBeInTheDocument();
+    expect(screen.getByText("Native OBD-II diagnostics")).toBeInTheDocument();
+    expect(screen.getByText("Beta hardening")).toBeInTheDocument();
     expect(screen.getByText("Interactive vehicle models")).toBeInTheDocument();
     expect(screen.getByText("Events worth driving to")).toBeInTheDocument();
     expect(screen.getByText("Motorcycles and bicycles")).toBeInTheDocument();

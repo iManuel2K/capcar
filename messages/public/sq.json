@@ -37,9 +37,15 @@
     "sequenceEyebrow": "Tani, më pas, më vonë",
     "sequenceTitle": "Drejtim pa afate të rreme.",
     "sequenceDescription": "Rendi ka më shumë rëndësi se një datë. Reagimet nga Beta mund ta sjellin një ide përpara ose të tregojnë se diçka më e thjeshtë është më e dobishme.",
+    "stageCount": "faza",
+    "milestoneLabel": "piketa",
+    "milestoneCount": "{count} piketa",
+    "stageNavigation": "Fazat e udhërrëfyesit",
     "foundation": {
       "label": "Aktive tani",
       "title": "Themeli",
+      "description": "Regjistri i pronësisë në zemër të Capcar. Këto mjete funksionojnë sot dhe vazhdojnë të përmirësohen nga përdorimi real.",
+      "itemStatus": "Aktive",
       "garage": {
         "title": "Garazh dixhital privat",
         "description": "Krijo makina, mbaj identitetin e tyre të përditësuar dhe sinkronizo garazhin me llogarinë."
@@ -55,11 +61,59 @@
       "passport": {
         "title": "Pasaporta e makinës",
         "description": "Mbaj një regjistër të ndashëm të makinës, punëve të kryera dhe historikut të projektit."
+      },
+      "wishlist": {
+        "title": "Menaxhimi i listës së dëshirave",
+        "description": "Ruaj pjesët e planifikuara për çdo makinë dhe lidhi vendimet e blerjes me build-in e duhur."
+      },
+      "costs": {
+        "title": "Analiza e kostove",
+        "description": "Krahaso kostot e planifikuara, të blera dhe të montuara pa humbur historikun."
+      },
+      "diagnostics": {
+        "title": "Regjistrat e diagnostikimit",
+        "description": "Mbaj kodet e defekteve, simptomat dhe shënimet e kontrollit pranë regjistrit të makinës."
+      },
+      "specialists": {
+        "title": "Drejtoria e specialistëve",
+        "description": "Gjej ekspertizën e duhur me verifikim dhe mbulim shërbimi transparent."
+      }
+    },
+    "hardening": {
+      "label": "Tani · cilësia e nisjes",
+      "title": "Forcimi i Beta-s",
+      "description": "Puna mes një funksioni ekzistues dhe një produkti të besueshëm: më pak rrugë pa dalje, sinjale më të qarta besimi dhe rrjedha publike më të forta.",
+      "itemStatus": "Në punë",
+      "reliability": {
+        "title": "Besueshmëria e kërkimit dhe ofruesve",
+        "description": "Forco përgjigjet e shitësve, limitet, rikuperimin nga gabimet dhe fallback-et e qarta kur një ofrues mungon."
+      },
+      "publicPassport": {
+        "title": "Verifikimi i pasaportës publike",
+        "description": "Përmirëso linket live, gjendjet e padisponueshme, kontrollet QR dhe paraqitjen për inspektim."
+      },
+      "marketplaceTrust": {
+        "title": "Besimi në marketplace",
+        "description": "Forco raportimin, moderimin, sinjalet e shitësit dhe kontaktin rezistent ndaj mashtrimit."
+      },
+      "specialistOnboarding": {
+        "title": "Regjistrimi i specialistëve",
+        "description": "Përcakto regjistrimin, kontrollin e identitetit dhe rregullat për vërtetime reale nga serviset."
+      },
+      "accessibility": {
+        "title": "QA mobile dhe aksesueshmërie",
+        "description": "Përmirëso zonat e prekjes, navigimin me tastierë, layout-et responsive dhe gjendjet e ngarkimit."
+      },
+      "localization": {
+        "title": "Faqja publike në pesë gjuhë",
+        "description": "Mbaj të njëtrajtshme rrjedhat publike në anglisht, gjermanisht, greqisht, shqip dhe japonisht."
       }
     },
     "tangible": {
       "label": "Në Beta · po zgjerohet",
       "title": "Bëje të prekshme",
+      "description": "Shtresa vizuale dhe e lidhur e Capcar. Bazat funksionojnë, ndërsa përmbajtja, mbulimi i makinave dhe partnerët vazhdojnë të rriten.",
+      "itemStatus": "Po zgjerohet",
       "models": {
         "title": "Modele interaktive makinash",
         "description": "Janë aktive disa referenca 3D. Modelet e konfigurueshme për makina specifike vazhdojnë të zgjerohen."
@@ -73,17 +127,31 @@
         "description": "Dëgjo regjistrime me burim dhe ngarko të tuat. Biblioteka po rritet; çiftet e sakta standard/modifikuar mbeten të kufizuara."
       },
       "obd": {
-        "title": "OBD-II dhe punë të verifikuara",
-        "description": "Importo skanime dhe kërko konfirmim nga specialisti. Lidhjet direkte me hardware dhe mbulimi i specialistëve janë ende në zhvillim."
+        "title": "Diagnostikim vendas OBD-II",
+        "description": "Importo skanime të çrregullta, nxirr kodet dhe merr shpjegime të strukturuara. Lidhjet direkte me adapter vijnë më pas."
+      },
+      "verified": {
+        "title": "Vula të verifikuara servisi",
+        "description": "Kërko konfirmim për punët e kryera. Mbulimi dhe regjistrimi i partnerëve realë vazhdon të rritet."
       },
       "connected": {
         "title": "Pjesë të lidhura",
-        "description": "Kërkimi te shitësit dhe listimet e moderuara janë në Beta. Disponueshmëria varet nga ofruesit; pagesa direkte është planifikuar."
+        "description": "Kërko stok live dhe oferta ndërkombëtare. Më shumë ofrues, historik çmimesh dhe përshtatshmëri më e thellë vijnë më pas."
+      },
+      "marketplace": {
+        "title": "Marketplace i komunitetit",
+        "description": "Publiko listime të moderuara me raportim, kontakt privat dhe sinjale më të qarta besimi."
+      },
+      "checkout": {
+        "title": "Pagesë direkte te shitësi",
+        "description": "Planifikuar: kalim i sigurt nga kërkimi i verifikuar te blerja pa fshehur përgjegjësinë e shitësit."
       }
     },
     "beyond": {
       "label": "Më vonë",
       "title": "Përtej makinës",
+      "description": "Kur përvoja e makinës të jetë e besueshme, i njëjti regjistër mund të mbështesë zbulimin, dy rrotat dhe pajisje të tjera.",
+      "itemStatus": "Më vonë",
       "events": {
         "title": "Evente që ia vlejnë udhëtimin",
         "description": "Zbulo takime, ekspozita dhe evente në destinacione që përputhen me interesat e tua."

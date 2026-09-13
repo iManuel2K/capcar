@@ -10,10 +10,22 @@ describe("RoadmapPage", () => {
     expect(
       screen.getByRole("heading", { name: "Where Capcar is going." }),
     ).toBeInTheDocument();
-    expect(screen.getByText("The foundation")).toBeInTheDocument();
-    expect(screen.getByText("Make it tangible")).toBeInTheDocument();
-    expect(screen.getByText("Beyond the car")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "The foundation" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Beta hardening" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Make it tangible" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Beyond the car" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("Interactive vehicle models")).toBeInTheDocument();
+    expect(screen.getByText("Community marketplace")).toBeInTheDocument();
+    expect(screen.getByText("Direct merchant checkout")).toBeInTheDocument();
     expect(screen.getByText("Motorcycles and bicycles")).toBeInTheDocument();
+    expect(screen.getAllByText("26").length).toBeGreaterThan(0);
   });
 });

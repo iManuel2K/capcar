@@ -5,12 +5,42 @@ import { useTranslations } from "next-intl";
 const columns = [
   {
     id: "foundation",
-    items: ["garage", "maintenance", "planning", "passport"],
+    items: [
+      "garage",
+      "maintenance",
+      "planning",
+      "passport",
+      "wishlist",
+      "costs",
+      "diagnostics",
+      "specialists",
+    ],
+    active: true,
+  },
+  {
+    id: "hardening",
+    items: [
+      "reliability",
+      "publicPassport",
+      "marketplaceTrust",
+      "specialistOnboarding",
+      "accessibility",
+      "localization",
+    ],
     active: true,
   },
   {
     id: "tangible",
-    items: ["models", "movie", "sound", "obd", "connected"],
+    items: [
+      "models",
+      "movie",
+      "sound",
+      "obd",
+      "verified",
+      "connected",
+      "marketplace",
+      "checkout",
+    ],
     active: true,
   },
   {
@@ -52,11 +82,11 @@ export function VisionRoadmapSection() {
           </div>
         </div>
 
-        <div className="mt-12 grid overflow-hidden rounded-[1.75rem] border border-white/12 lg:grid-cols-3">
+        <div className="mt-12 grid gap-3 lg:grid-cols-2 xl:grid-cols-4">
           {columns.map((column) => (
             <article
               key={column.id}
-              className={`border-t border-white/10 p-6 first:border-t-0 sm:p-8 lg:border-t-0 lg:border-l lg:first:border-l-0 ${column.id === "tangible" ? "bg-[#183f42]" : "bg-[#153b3e]"}`}
+              className={`rounded-[1.6rem] border border-white/10 p-6 sm:p-7 ${column.id === "hardening" ? "bg-[#1d494b]" : column.id === "tangible" ? "bg-[#183f42]" : "bg-[#153b3e]"}`}
             >
               <p className="text-[11px] font-semibold tracking-[0.14em] text-[#bf8269] uppercase">
                 {t(`${column.id}.label`)}
@@ -64,7 +94,10 @@ export function VisionRoadmapSection() {
               <h3 className="mt-3 text-2xl font-medium tracking-[-0.035em]">
                 {t(`${column.id}.title`)}
               </h3>
-              <ul className="mt-7 space-y-3">
+              <p className="mt-2 text-xs text-white/32">
+                {t("milestoneCount", { count: column.items.length })}
+              </p>
+              <ul className="mt-6 space-y-3">
                 {column.items.map((item) => (
                   <li
                     key={item}

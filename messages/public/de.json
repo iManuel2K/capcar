@@ -37,9 +37,15 @@
     "sequenceEyebrow": "Jetzt, als Nächstes, später",
     "sequenceTitle": "Eine Richtung ohne falsche Termine.",
     "sequenceDescription": "Die Reihenfolge ist wichtiger als ein Datum. Beta-Feedback kann eine Idee vorziehen oder zeigen, dass etwas Einfacheres nützlicher ist.",
+    "stageCount": "Phasen",
+    "milestoneLabel": "Meilensteine",
+    "milestoneCount": "{count} Meilensteine",
+    "stageNavigation": "Roadmap-Phasen",
     "foundation": {
       "label": "Jetzt verfügbar",
       "title": "Das Fundament",
+      "description": "Die Fahrzeugakte im Zentrum von Capcar. Diese Werkzeuge funktionieren heute und reifen durch den Einsatz in echten Garagen weiter.",
+      "itemStatus": "Verfügbar",
       "garage": {
         "title": "Private digitale Garage",
         "description": "Fahrzeuge anlegen, Identität aktuell halten und die Garage mit deinem Konto synchronisieren."
@@ -55,11 +61,59 @@
       "passport": {
         "title": "Fahrzeugpass",
         "description": "Eine teilbare Dokumentation von Fahrzeug, abgeschlossenen Arbeiten und Projekthistorie führen."
+      },
+      "wishlist": {
+        "title": "Wunschlisten-Manager",
+        "description": "Geplante Teile pro Fahrzeug speichern und Kaufentscheidungen dem richtigen Build zuordnen."
+      },
+      "costs": {
+        "title": "Kostenanalyse",
+        "description": "Geplante, gekaufte und verbaute Kosten vergleichen, ohne die Historie hinter der Summe zu verlieren."
+      },
+      "diagnostics": {
+        "title": "Diagnoseprotokolle",
+        "description": "Fehlercodes, Symptome und Prüfhistorie direkt bei der Fahrzeugakte dokumentieren."
+      },
+      "specialists": {
+        "title": "Fachbetriebsverzeichnis",
+        "description": "Passende Expertise finden, während Verifizierung und Abdeckung transparent bleiben."
+      }
+    },
+    "hardening": {
+      "label": "Jetzt · Startqualität",
+      "title": "Beta-Härtung",
+      "description": "Die Arbeit zwischen vorhandener Funktion und verlässlichem Produkt: weniger Sackgassen, klarere Vertrauenssignale und stärkere öffentliche Abläufe.",
+      "itemStatus": "In Arbeit",
+      "reliability": {
+        "title": "Suche und Provider-Zuverlässigkeit",
+        "description": "Händlerantworten, Limits, Fehlerbehebung und ehrliche Ausweichzustände bei Provider-Ausfällen absichern."
+      },
+      "publicPassport": {
+        "title": "Öffentliche Passprüfung",
+        "description": "Live-Links, Nicht-verfügbar-Zustände, QR-Prüfungen und die Darstellung für Kontrollen verfeinern."
+      },
+      "marketplaceTrust": {
+        "title": "Marktplatz-Vertrauen",
+        "description": "Meldungen, Moderation, Verkäufersignale und betrugsresistente Kontaktwege stärken."
+      },
+      "specialistOnboarding": {
+        "title": "Fachbetriebe aufnehmen",
+        "description": "Aufnahme, Identitätsprüfung und Regeln für echte Werkstattbestätigungen definieren."
+      },
+      "accessibility": {
+        "title": "Mobile- und Barrierefreiheits-QA",
+        "description": "Touch-Ziele, Tastaturwege, responsive Layouts und belastbare Ladezustände polieren."
+      },
+      "localization": {
+        "title": "Öffentliche Site in fünf Sprachen",
+        "description": "Englische, deutsche, griechische, albanische und japanische Besucherwege konsistent halten."
       }
     },
     "tangible": {
       "label": "In Beta · wächst weiter",
       "title": "Mach es greifbar",
+      "description": "Die visuelle und vernetzte Ebene von Capcar. Funktionierende Grundlagen stehen, während Inhalte, Fahrzeugabdeckung und Partnerzugänge wachsen.",
+      "itemStatus": "Im Ausbau",
       "models": {
         "title": "Interaktive Fahrzeugmodelle",
         "description": "Ausgewählte 3D-Referenzen sind verfügbar. Fahrzeugspezifisch konfigurierbare Modelle werden weiter ausgebaut."
@@ -73,17 +127,31 @@
         "description": "Spiele gekennzeichnete Aufnahmen ab und lade eigene hoch. Die Bibliothek wächst; exakte Serien-/Umbau-Paare sind noch begrenzt."
       },
       "obd": {
-        "title": "OBD-II und verifizierte Arbeiten",
-        "description": "Scans importieren und Bestätigung durch Fachbetriebe anfordern. Direkte Hardware-Verbindungen und Fachbetriebsabdeckung sind noch in Entwicklung."
+        "title": "Native OBD-II-Diagnose",
+        "description": "Unsaubere Scan-Dateien importieren, Fehlercodes extrahieren und strukturierte Erklärungen erhalten. Direkte Adapterverbindungen folgen."
+      },
+      "verified": {
+        "title": "Verifizierte Werkstattstempel",
+        "description": "Bestätigung abgeschlossener Arbeiten anfordern. Echte Partnerabdeckung und Aufnahme wachsen noch."
       },
       "connected": {
         "title": "Vernetzte Teile",
-        "description": "Händlersuche und moderierte Angebote sind in Beta. Verfügbarkeit hängt vom Provider-Zugang ab; direkter Checkout ist geplant."
+        "description": "Live-Händlerbestände und internationale Angebote durchsuchen. Weitere Anbieter, Preisverlauf und tiefere Passform folgen."
+      },
+      "marketplace": {
+        "title": "Community-Marktplatz",
+        "description": "Moderierte Enthusiasten-Angebote mit Meldungen, privatem Kontakt und klarerem Verkäufervertrauen veröffentlichen."
+      },
+      "checkout": {
+        "title": "Direkter Händler-Checkout",
+        "description": "Geplant: von geprüfter Suche sicher zum Kauf übergeben, ohne die Händlerverantwortung zu verschleiern."
       }
     },
     "beyond": {
       "label": "Später",
       "title": "Über das Auto hinaus",
+      "description": "Wenn das Autoerlebnis verlässlich ist, kann dieselbe durchdachte Akte Entdeckung, Zweiräder und weitere Ausrüstung unterstützen.",
+      "itemStatus": "Später",
       "events": {
         "title": "Events, für die sich die Fahrt lohnt",
         "description": "Entdecke Treffen, Shows und Reiseziele passend zu deinen Interessen."

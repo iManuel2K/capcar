@@ -37,9 +37,15 @@
     "sequenceEyebrow": "Now, next, later",
     "sequenceTitle": "Direction without fake deadlines.",
     "sequenceDescription": "The order matters more than a date. Beta feedback can move an idea forward or show that something simpler is more useful.",
+    "stageCount": "stages",
+    "milestoneLabel": "milestones",
+    "milestoneCount": "{count} milestones",
+    "stageNavigation": "Roadmap stages",
     "foundation": {
       "label": "Live now",
       "title": "The foundation",
+      "description": "The ownership record already at the heart of Capcar. These tools work today and continue to mature through real garage use.",
+      "itemStatus": "Available",
       "garage": {
         "title": "Private digital garage",
         "description": "Create vehicles, keep their identity current and sync the garage to your account."
@@ -55,11 +61,59 @@
       "passport": {
         "title": "Vehicle passport",
         "description": "Keep a shareable record of the car, completed work and project history."
+      },
+      "wishlist": {
+        "title": "Wishlist manager",
+        "description": "Save planned parts by vehicle and keep purchase decisions attached to the correct build."
+      },
+      "costs": {
+        "title": "Cost analytics",
+        "description": "Compare planned, purchased and installed costs without losing the history behind the total."
+      },
+      "diagnostics": {
+        "title": "Diagnostic logs",
+        "description": "Keep fault codes, symptoms and inspection notes alongside the vehicle record."
+      },
+      "specialists": {
+        "title": "Specialist directory",
+        "description": "Find relevant expertise while keeping verification and service coverage transparent."
+      }
+    },
+    "hardening": {
+      "label": "Now · launch quality",
+      "title": "Beta hardening",
+      "description": "The work between a feature existing and a product feeling dependable: fewer dead ends, clearer trust signals and stronger public journeys.",
+      "itemStatus": "In progress",
+      "reliability": {
+        "title": "Search and provider reliability",
+        "description": "Harden retailer responses, rate limits, error recovery and honest fallbacks when a provider is unavailable."
+      },
+      "publicPassport": {
+        "title": "Public Passport verification",
+        "description": "Refine live links, unavailable states, QR checks and inspection-friendly presentation."
+      },
+      "marketplaceTrust": {
+        "title": "Marketplace trust",
+        "description": "Strengthen reporting, moderation, seller signals and fraud-resistant contact flows."
+      },
+      "specialistOnboarding": {
+        "title": "Specialist onboarding",
+        "description": "Define enrollment, identity review and operating rules for genuine workshop attestations."
+      },
+      "accessibility": {
+        "title": "Mobile and accessibility QA",
+        "description": "Polish touch targets, keyboard journeys, responsive layouts and resilient loading states."
+      },
+      "localization": {
+        "title": "Five-language public site",
+        "description": "Keep English, German, Greek, Albanian and Japanese public journeys consistent as Capcar evolves."
       }
     },
     "tangible": {
       "label": "In beta · still expanding",
       "title": "Make it tangible",
+      "description": "The visual and connected layer of Capcar. Working foundations exist, while content, vehicle coverage and partner access continue to grow.",
+      "itemStatus": "Expanding",
       "models": {
         "title": "Interactive vehicle models",
         "description": "Selected 3D references are available. Vehicle-specific configurable models are still expanding."
@@ -73,17 +127,31 @@
         "description": "Play credited recordings and upload your own. The library is growing; exact stock-versus-modified pairs remain limited."
       },
       "obd": {
-        "title": "OBD-II and verified work",
-        "description": "Import scans and request specialist confirmation. Direct hardware connections and specialist coverage remain in development."
+        "title": "Native OBD-II diagnostics",
+        "description": "Import messy scan files, extract fault codes and receive structured explanations. Direct adapter connections remain in development."
+      },
+      "verified": {
+        "title": "Verified shop stamps",
+        "description": "Request specialist confirmation for completed work. Real partner coverage and enrollment are still growing."
       },
       "connected": {
         "title": "Connected parts",
-        "description": "Retailer search and moderated listings are in beta. Availability depends on provider access; direct checkout is planned."
+        "description": "Search live retailer inventory and international offers. More providers, price history and deeper fitment remain ahead."
+      },
+      "marketplace": {
+        "title": "Community marketplace",
+        "description": "Publish moderated enthusiast listings with reporting, private contact and clearer seller trust."
+      },
+      "checkout": {
+        "title": "Direct merchant checkout",
+        "description": "Planned: move from verified discovery to a safe purchase handoff without hiding merchant responsibility."
       }
     },
     "beyond": {
       "label": "Later",
       "title": "Beyond the car",
+      "description": "Once the car experience is dependable, the same considered record can support discovery, two wheels and other enthusiast equipment.",
+      "itemStatus": "Later",
       "events": {
         "title": "Events worth driving to",
         "description": "Discover nearby meets, shows and destination events that match your interests."
