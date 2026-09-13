@@ -33,6 +33,14 @@ describe("community database authorization", () => {
     await db.exec(
       "create role anon; create role authenticated; create schema auth; create table auth.users(id uuid primary key,email_confirmed_at timestamptz); create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated;",
     );
+    await db.exec(`create schema storage;
+      create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
+      create table storage.objects(id uuid default gen_random_uuid(),bucket_id text,name text);
+      alter table storage.objects enable row level security;
+      create function storage.foldername(name text) returns text[] language sql immutable as $$ select (string_to_array(name,'/'))[1:array_length(string_to_array(name,'/'),1)-1] $$;
+      grant usage on schema storage,auth to anon,authenticated;
+      grant select,insert,delete on storage.objects to authenticated;
+      grant select on storage.objects to anon;`);
     for (const id of [seller, buyer, mod, shop])
       await db.query("insert into auth.users values($1,now())", [id]);
     for (const file of [
@@ -44,6 +52,7 @@ describe("community database authorization", () => {
       "20260909090000_community_and_verified_work.sql",
       "20260910090000_public_discovery.sql",
       "20260912180000_beta_hardening.sql",
+      "20260913120000_feature_expansion.sql",
     ])
       await db.exec(readFileSync(`supabase/migrations/${file}`, "utf8"));
     await db.query(
@@ -64,6 +73,88 @@ describe("community database authorization", () => {
       ],
     );
   }, 30000);
+  it("publishes opted-in approved shops and immediately hides revoked access", async () => {
+    const owner = "00000000-0000-4000-8000-000000000021";
+    await db.exec("reset role");
+    await db.query("insert into auth.users values($1,now())", [owner]);
+    await db.query(
+      "insert into public.community_roles values($1,'specialist','New workshop')",
+      [owner],
+    );
+    await db.query(
+      "insert into public.specialist_applications(user_id,business_name,city,website,expertise,status) values($1,'New workshop','Berlin','https://shop.example','BMW maintenance and exhaust installations','approved')",
+      [owner],
+    );
+    await as(owner);
+    await db.query("select public.publish_specialist_profile($1,$2,$3,true)", [
+      "Experienced BMW maintenance workshop.",
+      "BMW diagnostics",
+      "Berlin",
+    ]);
+    await db.exec(
+      "reset role; select set_config('request.jwt.claim.sub','',false); set role anon",
+    );
+    expect(
+      (await db.query("select * from public.browse_specialist_profiles()"))
+        .rows,
+    ).toHaveLength(1);
+    await db.exec("reset role");
+    await db.query(
+      "update public.specialist_applications set status='revoked' where user_id=$1",
+      [owner],
+    );
+    await db.exec("set role anon");
+    expect(
+      (await db.query("select * from public.browse_specialist_profiles()"))
+        .rows,
+    ).toHaveLength(0);
+  });
+  it("keeps replacement photos private until the listing is reviewed again", async () => {
+    const owner = "00000000-0000-4000-8000-000000000022";
+    await db.exec("reset role");
+    await db.query("insert into auth.users values($1,now())", [owner]);
+    const record = (
+      await db.query<{ id: string }>(
+        "insert into public.community_listings(seller_id,title,description,city,price_cents,condition,status) values($1,'BMW rear lights','Original used rear lights with no cracks','Berlin',10000,'used','published') returning id",
+        [owner],
+      )
+    ).rows[0];
+    const path = `${owner}/${record.id}/00000000-0000-4000-8000-000000000030.jpg`;
+    await as(owner);
+    await db.query(
+      "insert into storage.objects(bucket_id,name) values('listing-photos',$1)",
+      [path],
+    );
+    await db.query("select public.attach_listing_photo($1,$2)", [
+      record.id,
+      path,
+    ]);
+    await db.exec(
+      "reset role; select set_config('request.jwt.claim.sub','',false); set role anon",
+    );
+    expect(
+      (await db.query("select * from public.community_listing_photos")).rows,
+    ).toHaveLength(0);
+    expect((await db.query("select * from storage.objects")).rows).toHaveLength(
+      0,
+    );
+    await db.exec("reset role");
+    await db.query(
+      "update public.community_listings set status='published' where id=$1",
+      [record.id],
+    );
+    await db.exec("set role anon");
+    expect(
+      (await db.query("select * from public.community_listing_photos")).rows,
+    ).toHaveLength(1);
+    expect((await db.query("select * from storage.objects")).rows).toHaveLength(
+      1,
+    );
+    await as(buyer);
+    await expect(
+      db.query("select public.attach_listing_photo($1,$2)", [record.id, path]),
+    ).rejects.toThrow();
+  });
   afterAll(async () => {
     await db?.close();
   });
@@ -253,7 +344,9 @@ describe("community database authorization", () => {
     ).toBe("revoked");
   });
   it("denies anonymous table access and direct writes", async () => {
-    await db.exec("reset role; set role anon");
+    await db.exec(
+      "reset role; select set_config('request.jwt.claim.sub','',false); set role anon",
+    );
     await expect(
       db.query("select * from public.community_listings"),
     ).rejects.toThrow();

@@ -116,35 +116,35 @@
       "itemStatus": "Expanding",
       "models": {
         "title": "Interactive vehicle models",
-        "description": "Selected 3D references are available. Vehicle-specific configurable models are still expanding."
+        "description": "Tint model surfaces and save camera views for supported references. Vehicle-specific geometry and selectable fitted parts still need asset coverage."
       },
       "movie": {
         "title": "Iconic movie-car demos",
-        "description": "Planned: licensed movie-car replicas. Current showcase references and original sketches are not movie replicas."
+        "description": "Explore a community-made Brian’s R34 film reference alongside Skyline and Porsche models. More iconic builds are still to come."
       },
       "sound": {
         "title": "Sound studio",
-        "description": "Play credited recordings and upload your own. The library is growing; exact stock-versus-modified pairs remain limited."
+        "description": "Filter and compare five credited recordings. Three additional originals stream through Capcar; exact stock-versus-modified pairs still need verified recordings."
       },
       "obd": {
         "title": "Native OBD-II diagnostics",
-        "description": "Import messy scan files, extract fault codes and receive structured explanations. Direct adapter connections remain in development."
+        "description": "Import scans or read emissions codes and live snapshots through an ELM327 serial adapter in supported desktop browsers. Hardware validation is pending; code clearing is unavailable."
       },
       "verified": {
         "title": "Verified shop stamps",
-        "description": "Request specialist confirmation for completed work. Real partner coverage and enrollment are still growing."
+        "description": "Approved specialists can publish service-area profiles and receive work-record requests. Workshop enrollment and real coverage continue to grow."
       },
       "connected": {
         "title": "Connected parts",
-        "description": "Search live retailer inventory and international offers. More providers, price history and deeper fitment remain ahead."
+        "description": "Compare live eBay offers, save observed price history and set local price targets. Additional retailers, background alerts and deeper fitment remain ahead."
       },
       "marketplace": {
         "title": "Community marketplace",
-        "description": "Publish moderated enthusiast listings with reporting, private contact and clearer seller trust."
+        "description": "Browse and save listings, filter by city and condition, upload a moderated photo and contact sellers privately. Public seller profiles remain ahead."
       },
       "checkout": {
         "title": "Direct merchant checkout",
-        "description": "Planned: move from verified discovery to a safe purchase handoff without hiding merchant responsibility."
+        "description": "Review saved offers and currency-separated subtotals before continuing to eBay. Orders and payment stay with the retailer; native checkout and order sync require partner access."
       }
     },
     "beyond": {
@@ -200,7 +200,10 @@
     "title": "Explore the direction.",
     "description": "Explore creator-made 3D references and original stylized concepts. Reference models are separate from the configurable sketches below."
   },
-  "SoundPage": { "back": "Capcar", "title": "Listen to the difference." },
+  "SoundPage": {
+    "back": "Capcar",
+    "title": "Listen to the difference."
+  },
   "Auth": {
     "home": "Capcar home",
     "back": "Back to Capcar",
@@ -711,7 +714,9 @@
         "ready": "Browser-safe account sync is configured.",
         "pending": "Account sync configuration is incomplete."
       },
-      "copilot": { "label": "External AI copilot" }
+      "copilot": {
+        "label": "External AI copilot"
+      }
     }
   },
   "Metadata": {

@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/marketplace",
     "/connected-parts",
     "/verified-work",
+    "/specialists",
     "/privacy",
     "/terms",
     "/imprint",

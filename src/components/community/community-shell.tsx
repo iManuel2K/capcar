@@ -16,6 +16,7 @@ export function CommunityShell({
   children: React.ReactNode;
 }) {
   const t = useTranslations("Community");
+  const expansion = useTranslations("Expansion");
   return (
     <div className="min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
       <MarketingHeader />
@@ -45,6 +46,12 @@ export function CommunityShell({
               href="/verified-work"
             >
               {t("verifiedWork")}
+            </Link>
+            <Link
+              className="inline-flex min-h-11 items-center underline"
+              href="/specialists"
+            >
+              {expansion("specialists")}
             </Link>
             <Link
               className="inline-flex min-h-11 items-center underline"

@@ -116,35 +116,35 @@
       "itemStatus": "Po zgjerohet",
       "models": {
         "title": "Modele interaktive makinash",
-        "description": "Janë aktive disa referenca 3D. Modelet e konfigurueshme për makina specifike vazhdojnë të zgjerohen."
+        "description": "Ngjyros sipërfaqet dhe ruaj këndet në modelet e mbështetura. Gjeometria sipas automjetit dhe pjesët e montueshme kërkojnë më shumë modele."
       },
       "movie": {
         "title": "Demo të makinave ikonike nga filmat",
-        "description": "Planifikohen kopje të licencuara. Referencat dhe skicat origjinale aktuale nuk janë kopje filmash."
+        "description": "Eksploro R34 e Brian nga komuniteti, si dhe Skyline e Porsche. Modele të tjera ikonike do të shtohen."
       },
       "sound": {
         "title": "Sound Studio",
-        "description": "Dëgjo regjistrime me burim dhe ngarko të tuat. Biblioteka po rritet; çiftet e sakta standard/modifikuar mbeten të kufizuara."
+        "description": "Filtro dhe krahaso pesë regjistrime me burime. Tre origjinale transmetohen përmes Capcar. Çiftet e sakta standarde/modifikuara kërkojnë verifikim."
       },
       "obd": {
         "title": "Diagnostikim vendas OBD-II",
-        "description": "Importo skanime të çrregullta, nxirr kodet dhe merr shpjegime të strukturuara. Lidhjet direkte me adapter vijnë më pas."
+        "description": "Importo skanime ose lexo kode e vlera me ELM327 serial në shfletues desktop të mbështetur. Verifikimi me pajisje mbetet; pa fshirje kodesh."
       },
       "verified": {
         "title": "Vula të verifikuara servisi",
-        "description": "Kërko konfirmim për punët e kryera. Mbulimi dhe regjistrimi i partnerëve realë vazhdon të rritet."
+        "description": "Specialistët e miratuar publikojnë profile me zona shërbimi dhe marrin kërkesa për regjistrime pune. Rrjeti vazhdon të zgjerohet."
       },
       "connected": {
         "title": "Pjesë të lidhura",
-        "description": "Kërko stok live dhe oferta ndërkombëtare. Më shumë ofrues, historik çmimesh dhe përshtatshmëri më e thellë vijnë më pas."
+        "description": "Krahaso oferta eBay, ruaj historikun e vërejtur dhe cakto synime lokale. Shitës të tjerë, njoftime dhe përputhshmëri më e thellë mbeten."
       },
       "marketplace": {
         "title": "Marketplace i komunitetit",
-        "description": "Publiko listime të moderuara me raportim, kontakt privat dhe sinjale më të qarta besimi."
+        "description": "Kërko, ruaj e filtro sipas qytetit/gjendjes, ngarko foto të moderuara dhe kontakto privatisht. Profilet publike të shitësve mbeten."
       },
       "checkout": {
         "title": "Pagesë direkte te shitësi",
-        "description": "Planifikuar: kalim i sigurt nga kërkimi i verifikuar te blerja pa fshehur përgjegjësinë e shitësit."
+        "description": "Shiko ofertat dhe nëntotalet sipas monedhës para eBay. Porositë dhe pagesat te shitësi; pagesa brenda aplikacionit dhe sinkronizimi kërkojnë partneritet."
       }
     },
     "beyond": {
@@ -200,7 +200,10 @@
     "title": "Eksploro drejtimin.",
     "description": "Eksploro referenca 3D nga krijuesit dhe koncepte origjinale të stilizuara. Modelet referuese janë të ndara nga skicat e konfigurueshme më poshtë."
   },
-  "SoundPage": { "back": "Capcar", "title": "Dëgjo ndryshimin." },
+  "SoundPage": {
+    "back": "Capcar",
+    "title": "Dëgjo ndryshimin."
+  },
   "Auth": {
     "home": "Kreu i Capcar",
     "back": "Kthehu te Capcar",
@@ -711,7 +714,9 @@
         "ready": "Sinkronizimi i sigurt i llogarisë është konfiguruar.",
         "pending": "Konfigurimi i sinkronizimit të llogarisë është i paplotë."
       },
-      "copilot": { "label": "Copilot i jashtëm AI" }
+      "copilot": {
+        "label": "Copilot i jashtëm AI"
+      }
     }
   },
   "Metadata": {

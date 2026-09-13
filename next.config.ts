@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
       "form-action 'self'",
       `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://static.sketchfab.com`,
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://*.sketchfab.com",
+      "img-src 'self' data: blob: https://*.sketchfab.com https://*.supabase.co",
       "font-src 'self' data:",
       "connect-src 'self' https://*.supabase.co https://*.sketchfab.com",
       "frame-src https://sketchfab.com https://*.sketchfab.com",

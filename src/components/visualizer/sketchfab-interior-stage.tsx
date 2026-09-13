@@ -21,35 +21,10 @@ import {
 } from "@/features/visualizer/interior-camera-storage";
 import type { VehicleReference } from "@/features/visualizer/vehicle-reference-catalog";
 
-type ViewerApi = {
-  start: () => void;
-  addEventListener: (event: "viewerready", listener: () => void) => void;
-  getCameraLookAt: (
-    callback: (error: unknown, camera: InteriorCamera) => void,
-  ) => void;
-  setCameraLookAt: (
-    position: number[],
-    target: number[],
-    duration?: number,
-  ) => void;
-  setNavigationMode?: (
-    mode: "orbit" | "fps",
-    callback?: (error?: unknown) => void,
-  ) => void;
-};
-
-type SketchfabClient = {
-  init: (uid: string, options: Record<string, unknown>) => void;
-};
-
-declare global {
-  interface Window {
-    Sketchfab?: new (
-      version: string,
-      iframe: HTMLIFrameElement,
-    ) => SketchfabClient;
-  }
-}
+import {
+  loadSketchfab,
+  type ViewerApi,
+} from "@/features/visualizer/sketchfab-api";
 
 const labels: Record<InteriorCameraName, string> = {
   driver: "Driver",
@@ -58,24 +33,7 @@ const labels: Record<InteriorCameraName, string> = {
   rear: "Rear seats",
 };
 
-let viewerScriptPromise: Promise<void> | undefined;
-
-function loadViewerScript() {
-  if (window.Sketchfab) return Promise.resolve();
-  if (viewerScriptPromise) return viewerScriptPromise;
-  viewerScriptPromise = new Promise<void>((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = "https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js";
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => {
-      viewerScriptPromise = undefined;
-      reject(new Error("Sketchfab Viewer API could not load."));
-    };
-    document.head.appendChild(script);
-  });
-  return viewerScriptPromise;
-}
+const loadViewerScript = loadSketchfab;
 
 export function SketchfabInteriorStage({
   reference,

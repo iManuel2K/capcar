@@ -1,3 +1,4 @@
+import { SpecialistProfileEditor } from "@/components/community/specialist-profile-editor";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { MarketingHeader } from "@/components/marketing/marketing-header";
@@ -22,7 +23,10 @@ export default async function Page() {
           {t("title")}
         </h1>
         {user ? (
-          <SpecialistApplications />
+          <>
+            <SpecialistApplications />
+            <SpecialistProfileEditor />
+          </>
         ) : (
           <>
             <p className="mb-6 max-w-3xl leading-7">{t("intro")}</p>

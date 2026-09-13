@@ -12,6 +12,7 @@ import {
   type ScanImport,
 } from "@/features/diagnostics/scan-import";
 import { announceDiagnosticChange } from "@/features/diagnostics/diagnostic-storage";
+import { ObdConnection } from "./obd-connection";
 
 export function ScanImporter({
   vehicleId,
@@ -21,11 +22,18 @@ export function ScanImporter({
   mileage: number;
 }) {
   return (
-    <VehicleScanImporter
-      key={vehicleId}
-      vehicleId={vehicleId}
-      mileage={mileage}
-    />
+    <>
+      <ObdConnection
+        key={`adapter-${vehicleId}`}
+        vehicleId={vehicleId}
+        mileage={mileage}
+      />
+      <VehicleScanImporter
+        key={vehicleId}
+        vehicleId={vehicleId}
+        mileage={mileage}
+      />
+    </>
   );
 }
 

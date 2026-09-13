@@ -19,7 +19,7 @@ import { useState, useSyncExternalStore } from "react";
 import { VehicleModelStage } from "@/components/visualizer/vehicle-model-stage";
 import { ExhaustSoundStudio } from "@/components/visualizer/exhaust-sound-studio";
 import { InteriorStage } from "@/components/visualizer/interior-stage";
-import { SketchfabReferenceStage } from "@/components/visualizer/sketchfab-reference-stage";
+import { ReferenceConfigurator } from "@/components/visualizer/reference-configurator";
 import { SketchfabInteriorStage } from "@/components/visualizer/sketchfab-interior-stage";
 import {
   visualExhausts,
@@ -188,7 +188,28 @@ export function BuildVisualizer({
           )}
         </div>
         {activeView === "reference" && reference ? (
-          <SketchfabReferenceStage reference={reference} />
+          <div className="space-y-3">
+            <ReferenceConfigurator
+              english
+              key={`${vehicleId}-${buildId}`}
+              id={reference.modelUid}
+              name={`${reference.title} · ${reference.yearLabel}`}
+              image={reference.previewImage}
+              storageKey={`${vehicleId}.${buildId}.${reference.modelUid}`}
+            />
+            <p className="px-4 text-xs text-white/65">
+              <a
+                href={reference.sourceUrl}
+                className="underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {reference.title} by {reference.creator}
+              </a>{" "}
+              · Visual reference, edited material tints. Model coverage varies
+              by vehicle; modifications do not verify fitment.
+            </p>
+          </div>
         ) : activeView === "exterior" ? (
           <VehicleModelStage
             vehicle={vehicle}

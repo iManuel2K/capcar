@@ -1,0 +1,36 @@
+export const licensedSounds = [
+  {
+    id: "nissan-vq35hr",
+    title: "Nissan Fuga · VQ35HR V6",
+    author: "TTTNIS",
+    file: "NISSAN_VQ35HR_engine.ogg",
+    path: "0/0a/NISSAN_VQ35HR_engine.ogg",
+    sha1: "d873ebdc254821c89d7fee339accdaf9eaae8383",
+    license: "Public domain",
+    licenseUrl:
+      "https://commons.wikimedia.org/wiki/File:NISSAN_VQ35HR_engine.ogg",
+    cylinders: 6,
+  },
+  {
+    id: "triumph-i6",
+    title: "Triumph · inline-six",
+    author: "James Lewis / Netlore",
+    file: "Triumph-I6_engine.ogg",
+    path: "e/e2/Triumph-I6_engine.ogg",
+    sha1: "3a14d21601493a75174f0c2949cf8e793c2cedd8",
+    license: "CC BY-SA 3.0",
+    licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0/",
+    cylinders: 6,
+  },
+  {
+    id: "slant-six",
+    title: "1965 Chrysler Valiant · 225 Slant Six",
+    author: "Scheinwerfermann",
+    file: "225_Slant_Six.ogg",
+    path: "",
+    sha1: "dd02caf7e5c940f55a61de51591ddbd6e332cd0a",
+    license: "CC BY-SA 4.0",
+    licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+    cylinders: 6,
+  },
+] as const;

@@ -1,4 +1,5 @@
 "use client";
+import { ListingPhoto, ListingBookmark } from "./marketplace-browser";
 import { useState } from "react";
 import { useCommunity } from "@/features/community/use-community";
 import type { Listing } from "@/features/community/contracts";
@@ -274,6 +275,16 @@ export function Marketplace({
                 <h2 className="text-2xl font-medium break-words">
                   {item.title}
                 </h2>
+                <ListingPhoto
+                  listingId={item.id}
+                  title={item.title}
+                  owner={
+                    item.seller_id === data.userId &&
+                    ["pending", "published", "rejected"].includes(item.status)
+                  }
+                  onUploaded={() => void refresh()}
+                />
+                <ListingBookmark id={item.id} />
                 <p className="text-xl">
                   {(item.price_cents / 100).toLocaleString("de-DE", {
                     style: "currency",

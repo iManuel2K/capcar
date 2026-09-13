@@ -116,35 +116,35 @@
       "itemStatus": "Im Ausbau",
       "models": {
         "title": "Interaktive Fahrzeugmodelle",
-        "description": "Ausgewählte 3D-Referenzen sind verfügbar. Fahrzeugspezifisch konfigurierbare Modelle werden weiter ausgebaut."
+        "description": "Oberflächen einfärben und Ansichten unterstützter Modelle speichern. Fahrzeugspezifische Geometrie und anbaubare Teile benötigen weitere Modelle."
       },
       "movie": {
         "title": "Ikonische Filmauto-Demos",
-        "description": "Geplant sind lizenzierte Filmauto-Replikate. Aktuelle Referenzen und eigene Skizzen sind keine Filmreplikate."
+        "description": "Erkunde Brians R34 als Community-Filmreferenz sowie Skyline und Porsche. Weitere ikonische Builds folgen."
       },
       "sound": {
         "title": "Sound Studio",
-        "description": "Spiele gekennzeichnete Aufnahmen ab und lade eigene hoch. Die Bibliothek wächst; exakte Serien-/Umbau-Paare sind noch begrenzt."
+        "description": "Fünf Aufnahmen mit Quellenangabe filtern und vergleichen. Drei weitere Originale streamen über Capcar. Exakte Serien-/Umbaupaare benötigen verifizierte Aufnahmen."
       },
       "obd": {
         "title": "Native OBD-II-Diagnose",
-        "description": "Unsaubere Scan-Dateien importieren, Fehlercodes extrahieren und strukturierte Erklärungen erhalten. Direkte Adapterverbindungen folgen."
+        "description": "Scans importieren oder Fehlercodes und Livewerte über ELM327-Serial am Desktop lesen. Hardwareprüfung steht aus; Löschen von Codes nicht verfügbar."
       },
       "verified": {
         "title": "Verifizierte Werkstattstempel",
-        "description": "Bestätigung abgeschlossener Arbeiten anfordern. Echte Partnerabdeckung und Aufnahme wachsen noch."
+        "description": "Freigegebene Spezialisten veröffentlichen Gebietsprofile und erhalten Nachweisanfragen. Werkstattnetz und Abdeckung wachsen weiter."
       },
       "connected": {
         "title": "Vernetzte Teile",
-        "description": "Live-Händlerbestände und internationale Angebote durchsuchen. Weitere Anbieter, Preisverlauf und tiefere Passform folgen."
+        "description": "Live-eBay-Angebote vergleichen, beobachtete Preise speichern und lokale Zielpreise setzen. Weitere Händler, Hintergrundalarme und tiefere Passformprüfung folgen."
       },
       "marketplace": {
         "title": "Community-Marktplatz",
-        "description": "Moderierte Enthusiasten-Angebote mit Meldungen, privatem Kontakt und klarerem Verkäufervertrauen veröffentlichen."
+        "description": "Anzeigen suchen, speichern und nach Ort/Zustand filtern. Moderiertes Foto hochladen und privat Kontakt aufnehmen. Öffentliche Verkäuferprofile folgen."
       },
       "checkout": {
         "title": "Direkter Händler-Checkout",
-        "description": "Geplant: von geprüfter Suche sicher zum Kauf übergeben, ohne die Händlerverantwortung zu verschleiern."
+        "description": "Gespeicherte Angebote und Summen je Währung prüfen, dann zu eBay wechseln. Bestellung und Zahlung beim Händler; nativer Checkout und Bestellabgleich brauchen Partnerzugang."
       }
     },
     "beyond": {
@@ -200,7 +200,10 @@
     "title": "Erkunde die Richtung.",
     "description": "Entdecke 3D-Referenzen von Kreativen und eigenständige stilisierte Konzepte. Referenzmodelle sind von den konfigurierbaren Skizzen darunter getrennt."
   },
-  "SoundPage": { "back": "Capcar", "title": "Hör den Unterschied." },
+  "SoundPage": {
+    "back": "Capcar",
+    "title": "Hör den Unterschied."
+  },
   "Auth": {
     "home": "Capcar Startseite",
     "back": "Zurück zu Capcar",
@@ -711,7 +714,9 @@
         "ready": "Browser-sichere Kontosynchronisierung ist konfiguriert.",
         "pending": "Die Kontosynchronisierung ist unvollständig konfiguriert."
       },
-      "copilot": { "label": "Externer KI-Copilot" }
+      "copilot": {
+        "label": "Externer KI-Copilot"
+      }
     }
   },
   "Metadata": {

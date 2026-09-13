@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getLocale, getTranslations } from "next-intl/server";
+import { MarketplaceBrowser } from "./marketplace-browser";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { actionClass } from "./community-shell";
 
@@ -13,10 +14,7 @@ type Listing = {
 };
 
 export async function PublicMarketplace() {
-  const [t, locale] = await Promise.all([
-    getTranslations("CommunityPublic"),
-    getLocale(),
-  ]);
+  const t = await getTranslations("CommunityPublic");
   let listings: Listing[] = [];
   const trust = await getTranslations("Hardening.Trust");
   let unavailable = false;
@@ -61,37 +59,7 @@ export async function PublicMarketplace() {
           <p className="mt-2">{t("emptyDescription")}</p>
         </div>
       ) : (
-        <div className="grid gap-5 md:grid-cols-2">
-          {listings.map((item) => (
-            <article
-              key={item.id}
-              className="min-w-0 rounded-2xl border border-[#0e2d30]/15 bg-white/35 p-6"
-            >
-              <p className="text-xs uppercase">
-                {["new", "used", "for-parts"].includes(item.condition)
-                  ? trust(item.condition)
-                  : item.condition}{" "}
-                · {item.city}
-              </p>
-              <h2 className="mt-3 text-2xl font-medium">{item.title}</h2>
-              <p className="mt-3 text-sm leading-6 break-words whitespace-pre-wrap">
-                {item.description}
-              </p>
-              <p className="mt-4 font-semibold">
-                {new Intl.NumberFormat(locale, {
-                  style: "currency",
-                  currency: "EUR",
-                }).format(item.price_cents / 100)}
-              </p>
-              <Link
-                className={`${actionClass} mt-4 inline-flex items-center`}
-                href={`/login?next=${encodeURIComponent(`/marketplace?listing=${item.id}`)}`}
-              >
-                {t("contact")}
-              </Link>
-            </article>
-          ))}
-        </div>
+        <MarketplaceBrowser listings={listings} />
       )}
     </section>
   );

@@ -1,4 +1,5 @@
 "use client";
+import { deleteOwnListingPhotos } from "@/features/community/delete-listing-photos";
 
 import {
   AlertTriangle,
@@ -179,7 +180,9 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
     setLoading(true);
     setError("");
     try {
-      const { error: deleteError } = await createClient().rpc(
+      const client = createClient();
+      await deleteOwnListingPhotos(client);
+      const { error: deleteError } = await client.rpc(
         "delete_current_user_data",
       );
       if (deleteError) throw deleteError;
@@ -201,6 +204,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
     setError("");
     try {
       const client = createClient();
+      await deleteOwnListingPhotos(client);
       const { error: deleteError } = await client.rpc("delete_current_user");
       if (deleteError) throw deleteError;
       clearDeviceAccountData();
