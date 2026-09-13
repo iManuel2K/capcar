@@ -35,4 +35,20 @@ describe("LanguageSelector", () => {
     fireEvent.keyDown(window, { key: "Escape" });
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
+  it("moves focus with arrows and returns it to the trigger on Escape", () => {
+    render(<LanguageSelector compact />);
+    const trigger = screen.getByRole("button", { name: "Language: English" });
+    fireEvent.keyDown(trigger, { key: "ArrowDown" });
+    expect(
+      screen.getByRole("menuitemradio", { name: "English" }),
+    ).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("menu"), { key: "ArrowRight" });
+    expect(
+      screen.getByRole("menuitemradio", { name: "Deutsch" }),
+    ).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("menu"), { key: "End" });
+    expect(screen.getByRole("menuitemradio", { name: "日本語" })).toHaveFocus();
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(trigger).toHaveFocus();
+  });
 });

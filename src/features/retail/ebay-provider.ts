@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { z } from "zod";
 import {
   safeEbayUrl,
@@ -30,20 +31,56 @@ const responseSchema = z.object({
     .max(200)
     .default([]),
 });
-export class RetailUnavailable extends Error {}
-type TokenEntry = { value: string; expiresAt: number; clientId: string };
+export class RetailUnavailable extends Error {
+  constructor(
+    message: string,
+    public kind:
+      | "configuration"
+      | "authorization"
+      | "rate_limit"
+      | "unavailable" = "unavailable",
+  ) {
+    super(message);
+  }
+}
+type TokenEntry = { value: string; expiresAt: number; key: string };
 let applicationToken: TokenEntry | undefined;
+let pendingToken: { key: string; promise: Promise<string> } | undefined;
 
 async function requestApplicationToken(
   clientId: string,
   clientSecret: string,
   request: typeof fetch,
+  signal: AbortSignal,
 ) {
-  if (
-    applicationToken?.clientId === clientId &&
-    applicationToken.expiresAt > Date.now()
-  )
+  const key = createHash("sha256")
+    .update(`${clientId}:${clientSecret}`)
+    .digest("hex");
+  if (applicationToken?.key === key && applicationToken.expiresAt > Date.now())
     return applicationToken.value;
+  if (pendingToken?.key === key) return pendingToken.promise;
+  const promise = mintApplicationToken(
+    clientId,
+    clientSecret,
+    key,
+    request,
+    signal,
+  );
+  pendingToken = { key, promise };
+  try {
+    return await promise;
+  } finally {
+    if (pendingToken?.promise === promise) pendingToken = undefined;
+  }
+}
+
+async function mintApplicationToken(
+  clientId: string,
+  clientSecret: string,
+  key: string,
+  request: typeof fetch,
+  signal: AbortSignal,
+) {
   let response: Response;
   try {
     response = await request("https://api.ebay.com/identity/v1/oauth2/token", {
@@ -57,7 +94,7 @@ async function requestApplicationToken(
         scope: "https://api.ebay.com/oauth/api_scope",
       }),
       cache: "no-store",
-      signal: AbortSignal.timeout(10_000),
+      signal: AbortSignal.any([signal, AbortSignal.timeout(8_000)]),
       redirect: "error",
     });
   } catch {
@@ -67,7 +104,14 @@ async function requestApplicationToken(
   }
   if (!response.ok)
     throw new RetailUnavailable(
-      "eBay rejected Capcar's production App ID or Cert ID.",
+      response.status === 400 || response.status === 401
+        ? "eBay rejected Capcar's production App ID or Cert ID."
+        : "eBay authorization is temporarily unavailable.",
+      response.status === 400 || response.status === 401
+        ? "authorization"
+        : response.status === 429
+          ? "rate_limit"
+          : "unavailable",
     );
   const parsed = z
     .object({
@@ -81,7 +125,7 @@ async function requestApplicationToken(
     );
   applicationToken = {
     value: parsed.data.access_token,
-    clientId,
+    key,
     expiresAt: Date.now() + Math.max(0, parsed.data.expires_in - 120) * 1_000,
   };
   return applicationToken.value;
@@ -91,15 +135,20 @@ export async function searchEbay(
   env: Record<string, string | undefined> = process.env,
   request: typeof fetch = fetch,
 ): Promise<RetailResponse> {
+  // One shared deadline includes token minting and the single permitted auth recovery.
+  const deadline = AbortSignal.timeout(22_000);
   const clientId = env.CAPCAR_EBAY_CLIENT_ID?.trim();
   const clientSecret = env.CAPCAR_EBAY_CLIENT_SECRET?.trim();
   const staticToken = env.CAPCAR_EBAY_ACCESS_TOKEN?.trim();
   if (!staticToken && !(clientId && clientSecret))
-    throw new RetailUnavailable("Live retailer search is not connected yet.");
+    throw new RetailUnavailable(
+      "Live retailer search is not connected yet.",
+      "configuration",
+    );
   // Renewable application credentials take precedence over an expiring static token.
-  const token =
+  let token =
     clientId && clientSecret
-      ? await requestApplicationToken(clientId, clientSecret, request)
+      ? await requestApplicationToken(clientId, clientSecret, request, deadline)
       : staticToken!;
   const url = new URL("https://api.ebay.com/buy/browse/v1/item_summary/search");
   url.searchParams.set("q", input.query);
@@ -130,34 +179,60 @@ export async function searchEbay(
     url.searchParams.set("sort", sorts[input.sort]);
   const campaign = env.CAPCAR_EBAY_CAMPAIGN_ID?.trim();
   if (campaign && !/^\d{1,30}$/.test(campaign))
-    throw new RetailUnavailable("Affiliate configuration is invalid.");
+    throw new RetailUnavailable(
+      "Affiliate configuration is invalid.",
+      "configuration",
+    );
   let response: Response;
   try {
-    response = await request(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "X-EBAY-C-MARKETPLACE-ID": `EBAY_${input.market}`,
-        ...(campaign
-          ? { "X-EBAY-C-ENDUSERCTX": `affiliateCampaignId=${campaign}` }
-          : {}),
-      },
-      cache: "no-store",
-      signal: AbortSignal.timeout(12000),
-      redirect: "error",
-    });
-  } catch {
+    const browse = () =>
+      request(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "X-EBAY-C-MARKETPLACE-ID": `EBAY_${input.market}`,
+          ...(campaign
+            ? { "X-EBAY-C-ENDUSERCTX": `affiliateCampaignId=${campaign}` }
+            : {}),
+        },
+        cache: "no-store",
+        signal: AbortSignal.any([deadline, AbortSignal.timeout(12_000)]),
+        redirect: "error",
+      });
+    response = await browse();
+    if (
+      response.status === 401 &&
+      clientId &&
+      clientSecret &&
+      !deadline.aborted
+    ) {
+      // Do not evict a newer token refreshed by another concurrent search.
+      if (applicationToken?.value === token) applicationToken = undefined;
+      token = await requestApplicationToken(
+        clientId,
+        clientSecret,
+        request,
+        deadline,
+      );
+      response = await browse();
+    }
+  } catch (error) {
+    if (error instanceof RetailUnavailable) throw error;
     throw new RetailUnavailable(
       "eBay search could not be reached. Try again shortly.",
     );
   }
   if (!response.ok) {
-    if (response.status === 401 && clientId) applicationToken = undefined;
     throw new RetailUnavailable(
       response.status === 401 || response.status === 403
         ? "eBay rejected Capcar's Browse API access. Check that the production keyset has Buy API access."
         : response.status === 429
           ? "eBay's current request allowance has been reached. Try again later."
           : "eBay could not complete this search. Try again shortly.",
+      response.status === 401 || response.status === 403
+        ? "authorization"
+        : response.status === 429
+          ? "rate_limit"
+          : "unavailable",
     );
   }
   const parsedPayload = responseSchema.safeParse(

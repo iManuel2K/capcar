@@ -1,0 +1,71 @@
+{
+  "Hardening": {
+    "Search": {
+      "invalid": "Check your search phrase and price range.",
+      "access": "Search could not start. Reload this page and try again.",
+      "limit": "Live search has reached its allowance. Wait a minute before trying again.",
+      "unavailable": "Live listings are temporarily unavailable. Your search is still here.",
+      "timeout": "The retailer took too long. Please try again.",
+      "unreadable": "These listings could not be read. Please try again.",
+      "warning": "Listings are not fitment verification. Shipping, taxes and availability may change. Confirm the final total at the retailer. No currency conversion is applied.",
+      "shipping": "Shipping",
+      "original": "Seller descriptions and conditions are shown in their original language."
+    },
+    "Passport": {
+      "title": "Passport unavailable",
+      "missing": "This link is no longer public.",
+      "missingBody": "The link may be incorrect, or its owner may have withdrawn it.",
+      "outage": "We cannot check this Passport right now.",
+      "outageBody": "The record service is temporarily unavailable. Please try this link again shortly.",
+      "home": "Return to Capcar"
+    },
+    "Trust": {
+      "title": "Trade with care",
+      "body": "Publication is a moderation check, not buyer protection or fitment approval. Ask for current photos and part numbers. Use protected payment; never send gift cards or cryptocurrency.",
+      "details": "Before contacting a seller",
+      "new": "New",
+      "used": "Used",
+      "for-parts": "For parts / not working",
+      "contact": "Keep contact and payment details out of public listings. Use the private inbox.",
+      "invalid": "Remove email addresses and web links from public listing text."
+    },
+    "Specialist": {
+      "title": "Specialist applications",
+      "intro": "Bring your workshop to Capcar. Apply with your business details; an independent moderator reviews every application before installation stamps are enabled.",
+      "apply": "Apply as a specialist",
+      "business": "Workshop / business name",
+      "city": "City",
+      "website": "Business website (HTTPS)",
+      "expertise": "Specialties and professional experience",
+      "consent": "I am authorised to represent this business and confirm these details are accurate.",
+      "submit": "Submit for review",
+      "loading": "Loading applications…",
+      "saving": "Saving…",
+      "error": "Applications could not be loaded. Please try again.",
+      "saveError": "Could not save. Check the fields, account confirmation and current application status.",
+      "saved": "Saved. Your application status is shown below.",
+      "retry": "Try again",
+      "pending": "Awaiting review",
+      "approved": "Approved",
+      "rejected": "Not approved",
+      "revoked": "Approval withdrawn",
+      "empty": "No applications yet.",
+      "queue": "Independent review queue",
+      "evidence": "Review evidence / reason (do not include identity documents)",
+      "decision": "Review decision",
+      "approve": "Approve after independent checks",
+      "reject": "Decline application",
+      "revoke": "Withdraw specialist access",
+      "record": "Record decision",
+      "reviewNote": "Verify the business and the applicant’s authority independently. Approval enables stamps; it is not a guarantee of workmanship.",
+      "websiteLabel": "Business website",
+      "signedOut": "Sign in with a confirmed account to submit or review a specialist application.",
+      "privacy": "Details are visible only to you and authorised moderators. An approved business name appears in specialist selection. Do not submit ID documents.",
+      "resubmit": "You can correct your details and submit again.",
+      "status": "Application status"
+    },
+    "Accessibility": {
+      "skip": "Skip to main content"
+    }
+  }
+}

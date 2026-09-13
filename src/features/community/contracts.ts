@@ -1,9 +1,14 @@
 import { z } from "zod";
+export function noPublicContact(value: string) {
+  return !/(https?:\/\/|www\.|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})/i.test(
+    value,
+  );
+}
 export const listingInput = z
   .object({
-    title: z.string().trim().min(5).max(120),
-    description: z.string().trim().min(20).max(3000),
-    city: z.string().trim().min(2).max(100),
+    title: z.string().trim().min(5).max(120).refine(noPublicContact),
+    description: z.string().trim().min(20).max(3000).refine(noPublicContact),
+    city: z.string().trim().min(2).max(100).refine(noPublicContact),
     price_cents: z.number().int().min(100).max(10000000),
     condition: z.enum(["new", "used", "for-parts"]),
   })

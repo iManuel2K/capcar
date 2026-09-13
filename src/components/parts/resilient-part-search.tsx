@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   retailRequestSchema,
   type RetailRequest,
@@ -28,11 +28,18 @@ const action =
 function optionalPrice(value: string) {
   if (!value) return undefined;
   const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined;
+  return parsed;
 }
 
 export function ResilientPartSearch({ children }: Props) {
   const t = useTranslations("PartsSearch");
+  const errors = useTranslations("Hardening.Search");
+  const locale = useLocale();
+  const regions = new Intl.DisplayNames([locale], { type: "region" });
+  const money = (value: number, currency: string) =>
+    new Intl.NumberFormat(locale, { style: "currency", currency }).format(
+      value,
+    );
   const id = useId();
   const [input, setInput] = useState<RetailRequest>({
     query: "",
@@ -100,7 +107,7 @@ export function ResilientPartSearch({ children }: Props) {
         setState({
           key,
           error: timedOut
-            ? new SearchFailure(t("timeout"))
+            ? new SearchFailure(t("timeout"), true, "timeout")
             : error instanceof SearchFailure
               ? error
               : new SearchFailure(t("connection")),
@@ -146,7 +153,7 @@ export function ResilientPartSearch({ children }: Props) {
             value={input.query}
             maxLength={100}
             aria-describedby={`${id}-hint`}
-            aria-invalid={submitted && !valid}
+            aria-invalid={submitted && input.query.trim().length < 3}
             onCompositionStart={() => {
               active.current?.abort();
               setComposing(true);
@@ -175,7 +182,9 @@ export function ResilientPartSearch({ children }: Props) {
             className={field}
           >
             {["DE", "GB", "FR", "IT", "ES", "US"].map((code) => (
-              <option key={code}>{code}</option>
+              <option key={code} value={code}>
+                {regions.of(code) ?? code}
+              </option>
             ))}
           </select>
         </label>
@@ -194,7 +203,9 @@ export function ResilientPartSearch({ children }: Props) {
           >
             {["DE", "AT", "FR", "IT", "ES", "NL", "BE", "GB", "US"].map(
               (code) => (
-                <option key={code}>{code}</option>
+                <option key={code} value={code}>
+                  {regions.of(code) ?? code}
+                </option>
               ),
             )}
           </select>
@@ -251,6 +262,9 @@ export function ResilientPartSearch({ children }: Props) {
               step="0.01"
               value={input.minPrice ?? ""}
               aria-invalid={priceRangeInvalid}
+              aria-describedby={
+                priceRangeInvalid ? `${id}-price-error` : undefined
+              }
               onChange={(event) =>
                 change({
                   ...input,
@@ -272,6 +286,9 @@ export function ResilientPartSearch({ children }: Props) {
               step="0.01"
               value={input.maxPrice ?? ""}
               aria-invalid={priceRangeInvalid}
+              aria-describedby={
+                priceRangeInvalid ? `${id}-price-error` : undefined
+              }
               onChange={(event) =>
                 change({
                   ...input,
@@ -286,6 +303,7 @@ export function ResilientPartSearch({ children }: Props) {
           {priceRangeInvalid && (
             <p
               role="alert"
+              id={`${id}-price-error`}
               className="text-sm text-[#6d0101] sm:col-span-2 lg:col-span-3"
             >
               {t("invalidRange")}
@@ -339,7 +357,7 @@ export function ResilientPartSearch({ children }: Props) {
           role="alert"
           className="rounded-2xl border border-[#6d0101]/30 bg-white/35 p-5"
         >
-          <p>{current.error.message}</p>
+          <p>{errors(current.error.code)}</p>
           {current.error.retryable && (
             <div className="mt-3 flex flex-wrap gap-3">
               <button type="button" onClick={retry} className={action}>
@@ -362,7 +380,8 @@ export function ResilientPartSearch({ children }: Props) {
           children(current.data, input, (next) => setInput(next))
         ) : (
           <>
-            <p className="text-sm leading-6">{current.data.warning}</p>
+            <p className="text-sm leading-6">{errors("warning")}</p>
+            <p className="text-sm leading-6">{errors("original")}</p>
             {!current.data.items.length && (
               <p className="rounded-2xl border border-dashed border-[#0e2d30]/30 p-6">
                 {t("empty")}
@@ -378,10 +397,10 @@ export function ResilientPartSearch({ children }: Props) {
                     {item.title}
                   </h2>
                   <p className="mt-3">
-                    {item.price.toFixed(2)} {item.currency} · {t("shipping")}{" "}
+                    {money(item.price, item.currency)} · {t("shipping")}{" "}
                     {item.shipping === null
                       ? t("notConfirmed")
-                      : `${item.shipping.toFixed(2)} ${item.currency}`}
+                      : money(item.shipping, item.currency)}
                   </p>
                   <p className="mt-2 text-sm">
                     {item.affiliate ? t("affiliate") : t("direct")}

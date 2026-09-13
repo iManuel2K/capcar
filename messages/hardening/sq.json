@@ -1,0 +1,71 @@
+{
+  "Hardening": {
+    "Search": {
+      "invalid": "Kontrollo kërkimin dhe intervalin e çmimeve.",
+      "access": "Kërkimi nuk filloi. Ringarko faqen dhe provo përsëri.",
+      "limit": "U arrit kufiri i kërkimit. Prit një minutë para se të provosh përsëri.",
+      "unavailable": "Ofertat aktuale nuk janë përkohësisht të disponueshme. Kërkimi yt ruhet.",
+      "timeout": "Shitësi vonoi përgjigjen. Provo përsëri.",
+      "unreadable": "Ofertat nuk mund të lexoheshin. Provo përsëri.",
+      "warning": "Ofertat nuk vërtetojnë përshtatshmërinë. Transporti, taksat dhe disponueshmëria mund të ndryshojnë. Konfirmo shumën përfundimtare te shitësi. Nuk bëhet konvertim valutor.",
+      "shipping": "Transporti",
+      "original": "Përshkrimet dhe gjendja e artikujve shfaqen në gjuhën origjinale të shitësit."
+    },
+    "Passport": {
+      "title": "Pasaporta nuk është e disponueshme",
+      "missing": "Kjo lidhje nuk është më publike.",
+      "missingBody": "Lidhja mund të jetë e pasaktë ose pronari mund ta ketë tërhequr.",
+      "outage": "Nuk mund ta kontrollojmë pasaportën tani.",
+      "outageBody": "Shërbimi i regjistrave nuk është përkohësisht i disponueshëm. Provoje lidhjen përsëri pas pak.",
+      "home": "Kthehu te Capcar"
+    },
+    "Trust": {
+      "title": "Tregto me kujdes",
+      "body": "Publikimi nënkupton kontroll moderimi, jo mbrojtje blerësi apo miratim përshtatshmërie. Kërko foto të fundit dhe numra pjesësh. Përdor pagesa të mbrojtura; mos dërgo karta dhuratash ose kriptomonedha.",
+      "details": "Para se të kontaktosh shitësin",
+      "new": "E re",
+      "used": "E përdorur",
+      "for-parts": "Për pjesë / jo funksionale",
+      "contact": "Mos vendos të dhëna kontakti ose pagese në njoftimet publike. Përdor mesazhet private.",
+      "invalid": "Hiq adresat e emailit dhe lidhjet nga teksti publik i njoftimit."
+    },
+    "Specialist": {
+      "title": "Aplikime specialistësh",
+      "intro": "Sill servisin tënd në Capcar. Apliko me të dhënat e biznesit. Një moderator i pavarur shqyrton çdo aplikim përpara aktivizimit të vulave të montimit.",
+      "apply": "Apliko si specialist",
+      "business": "Servisi / emri i biznesit",
+      "city": "Qyteti",
+      "website": "Faqja e biznesit (HTTPS)",
+      "expertise": "Specializimet dhe përvoja profesionale",
+      "consent": "Jam i autorizuar të përfaqësoj këtë biznes dhe konfirmoj saktësinë e të dhënave.",
+      "submit": "Dërgo për shqyrtim",
+      "loading": "Po ngarkohen aplikimet…",
+      "saving": "Po ruhet…",
+      "error": "Aplikimet nuk u ngarkuan. Provo përsëri.",
+      "saveError": "Ruajtja dështoi. Kontrollo fushat, konfirmimin e llogarisë dhe statusin e aplikimit.",
+      "saved": "U ruajt. Statusi i aplikimit shfaqet më poshtë.",
+      "retry": "Provo përsëri",
+      "pending": "Në pritje të shqyrtimit",
+      "approved": "Miratuar",
+      "rejected": "Nuk u miratua",
+      "revoked": "Miratimi u tërhoq",
+      "empty": "Ende nuk ka aplikime.",
+      "queue": "Radha e shqyrtimit të pavarur",
+      "evidence": "Prova / arsyeja e shqyrtimit (pa dokumente identiteti)",
+      "decision": "Vendimi i shqyrtimit",
+      "approve": "Mirato pas kontrolleve të pavarura",
+      "reject": "Refuzo aplikimin",
+      "revoke": "Hiq qasjen e specialistit",
+      "record": "Ruaj vendimin",
+      "reviewNote": "Verifiko në mënyrë të pavarur biznesin dhe autorizimin e aplikuesit. Miratimi mundëson vulat, por nuk garanton cilësinë e punës.",
+      "websiteLabel": "Faqja e biznesit",
+      "signedOut": "Hyr me llogari të konfirmuar për të dorëzuar ose shqyrtuar një aplikim.",
+      "privacy": "Të dhënat janë të dukshme vetëm për ty dhe moderatorët e autorizuar. Emri i miratuar shfaqet në përzgjedhjen e specialistit. Mos dërgo dokumente identiteti.",
+      "resubmit": "Mund t'i korrigjosh të dhënat dhe të aplikosh përsëri.",
+      "status": "Statusi i aplikimit"
+    },
+    "Accessibility": {
+      "skip": "Kalo te përmbajtja kryesore"
+    }
+  }
+}

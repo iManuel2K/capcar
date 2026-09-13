@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { LanguageSelector } from "@/components/i18n/language-selector";
@@ -20,19 +20,22 @@ const navigation = [
 export function MarketingHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const t = useTranslations("Navigation");
+  const drawer = useRef<HTMLDialogElement>(null);
+  const opener = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!menuOpen) return;
+    const dialog = drawer.current;
+    const trigger = opener.current;
+    dialog?.showModal();
+    dialog?.querySelector<HTMLButtonElement>("[data-close]")?.focus();
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
-    };
-    window.addEventListener("keydown", closeOnEscape);
     return () => {
+      dialog?.close();
+      trigger?.focus();
       document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", closeOnEscape);
     };
   }, [menuOpen]);
 
@@ -49,7 +52,7 @@ export function MarketingHeader() {
 
         <nav
           aria-label={t("main")}
-          className="hidden items-center gap-5 text-sm text-[#0e2d30]/62 md:flex"
+          className="hidden items-center gap-5 text-sm text-[#0e2d30]/75 xl:flex"
         >
           {navigation.map((item) => (
             <Link
@@ -62,11 +65,11 @@ export function MarketingHeader() {
           ))}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden 2xl:block">
           <GlobalPartsSearch />
         </div>
 
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 xl:flex">
           <LanguageSelector compact />
           <Link
             href="/register"
@@ -77,39 +80,47 @@ export function MarketingHeader() {
         </div>
 
         <button
+          ref={opener}
           type="button"
           aria-label={t("open")}
           aria-expanded={menuOpen}
           aria-controls="mobile-marketing-navigation"
           onClick={() => setMenuOpen(true)}
-          className="grid size-11 place-items-center rounded-full border border-[#0e2d30]/12 text-[#0e2d30] transition hover:bg-[#0e2d30]/5 md:hidden"
+          className="grid size-11 place-items-center rounded-full border border-[#0e2d30]/12 text-[#0e2d30] transition hover:bg-[#0e2d30]/5 xl:hidden"
         >
           <Menu className="size-5" />
         </button>
       </header>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
+        <dialog
+          ref={drawer}
+          aria-label={t("mobile")}
+          onCancel={(event) => {
+            event.preventDefault();
+            setMenuOpen(false);
+          }}
+          className="fixed inset-0 z-50 m-0 h-dvh max-h-none w-screen max-w-none overflow-hidden border-0 bg-transparent p-0 backdrop:bg-transparent"
+        >
           <button
             type="button"
             aria-label={t("closeBackdrop")}
+            tabIndex={-1}
             onClick={() => setMenuOpen(false)}
             className="absolute inset-0 bg-[#050306]/48 backdrop-blur-sm"
           />
           <div
             id="mobile-marketing-navigation"
-            role="dialog"
-            aria-modal="true"
-            aria-label={t("mobile")}
-            className="absolute top-0 right-0 flex h-full w-[82%] max-w-sm flex-col rounded-l-[1.75rem] bg-[#e8e6d7] p-5 text-[#0e2d30] shadow-[-30px_0_90px_rgba(5,3,6,0.24)]"
+            className="absolute top-0 right-0 flex h-full w-[min(92%,24rem)] flex-col overflow-y-auto overscroll-contain rounded-l-[1.75rem] bg-[#e8e6d7] p-5 text-[#0e2d30] shadow-[-30px_0_90px_rgba(5,3,6,0.24)]"
           >
             <div className="flex items-center justify-between border-b border-[#0e2d30]/10 pb-5">
               <CapcarWordmark glow={false} />
               <button
                 type="button"
                 aria-label={t("close")}
+                data-close
                 onClick={() => setMenuOpen(false)}
-                className="grid size-10 place-items-center rounded-full bg-[#0e2d30]/6 transition hover:bg-[#0e2d30]/10"
+                className="grid size-11 shrink-0 place-items-center rounded-full bg-[#0e2d30]/6 transition hover:bg-[#0e2d30]/10"
               >
                 <X className="size-4" />
               </button>
@@ -152,14 +163,14 @@ export function MarketingHeader() {
                 {t("buildYourCar")} <ArrowRight className="size-4" />
               </Link>
               <div className="mt-4">
-                <LanguageSelector />
+                <LanguageSelector direction="up" />
               </div>
               <p className="mt-4 text-xs leading-5 text-[#0e2d30]/45">
                 {t("privacyNote")}
               </p>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </>
   );

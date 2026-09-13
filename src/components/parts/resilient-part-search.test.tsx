@@ -141,7 +141,7 @@ it("keeps a failed search actionable with a safe retailer continuation", async (
   });
   await act(() => vi.advanceTimersByTimeAsync(500));
   expect(screen.getByRole("alert")).toHaveTextContent(
-    "eBay authorization could not be reached",
+    "temporarily unavailable",
   );
   expect(
     screen.getByRole("link", { name: /Continue this search on eBay/ }),

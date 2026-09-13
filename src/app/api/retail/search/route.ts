@@ -20,11 +20,26 @@ export async function POST(request: Request) {
     if (blocked) return blocked;
     return NextResponse.json(await searchEbay(input), { headers });
   } catch (error) {
-    if (error instanceof RetailUnavailable)
+    if (error instanceof RetailUnavailable) {
+      console.warn("Retail provider failure", {
+        reason: error.kind,
+        message: error.message,
+      });
       return NextResponse.json(
-        { error: error.message, code: "retailer_unavailable" },
-        { status: 503, headers },
+        {
+          error: "Retailer search is temporarily unavailable.",
+          code: "retailer_unavailable",
+          reason: error.kind,
+        },
+        {
+          status: error.kind === "rate_limit" ? 429 : 503,
+          headers: {
+            ...headers,
+            ...(error.kind === "rate_limit" ? { "Retry-After": "60" } : {}),
+          },
+        },
       );
+    }
     return productApiError(
       error,
       "Retail search failed. No demo prices were substituted.",

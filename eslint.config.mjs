@@ -16,6 +16,10 @@ const eslintConfig = defineConfig([
     "**/capcar-backups/**",
     "**/installer-backups/**",
     "**/_backups/**",
+    "**/.capcar-installer-backups/**",
+    "**/backups/**",
+    "**/backup/**",
+    "**/backup-*/**",
   ]),
 ]);
 

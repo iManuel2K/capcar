@@ -9,7 +9,12 @@ import { announceWishlistChange } from "@/features/wishlist/wishlist-storage";
 import { ResilientPartSearch } from "@/components/parts/resilient-part-search";
 export function RetailSearch() {
   const t = useTranslations("Retail");
+  const labels = useTranslations("Hardening.Search");
   const locale = useLocale();
+  const money = (value: number, currency: string) =>
+    new Intl.NumberFormat(locale, { style: "currency", currency }).format(
+      value,
+    );
   const { vehicles } = useVehicles();
   const [vehicleId, setVehicleId] = useState("");
   const [savedMessage, setSavedMessage] = useState("");
@@ -58,7 +63,8 @@ export function RetailSearch() {
                     time: new Date(result.checkedAt).toLocaleString(locale),
                   })}
                 </p>
-                <p className="text-sm leading-6">{result.warning}</p>
+                <p className="text-sm leading-6">{labels("warning")}</p>
+                <p className="text-sm leading-6">{labels("original")}</p>
                 {!result.items.length && <p>{t("empty")}</p>}
                 <div className="grid gap-4 sm:grid-cols-2">
                   {result.items.map((item) => (
@@ -70,10 +76,11 @@ export function RetailSearch() {
                         {item.title}
                       </h2>
                       <p>
-                        {item.price.toFixed(2)} {item.currency} · shipping{" "}
+                        {money(item.price, item.currency)} ·{" "}
+                        {labels("shipping")}{" "}
                         {item.shipping === null
                           ? t("notSupplied")
-                          : `${item.shipping.toFixed(2)} ${item.currency}`}
+                          : money(item.shipping, item.currency)}
                       </p>
                       <p className="text-sm">
                         {item.condition} · {t("seller")}{" "}

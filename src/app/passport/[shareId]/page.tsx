@@ -32,10 +32,11 @@ export default async function SharedPassportPage({
       .eq("is_public", true)
       .maybeSingle();
   } catch {
-    notFound();
+    throw new Error("Passport record service unavailable");
   }
 
-  if (result.error || !result.data) notFound();
+  if (result.error) throw new Error("Passport record service unavailable");
+  if (!result.data) notFound();
   const parsed = vehiclePassportSchema.safeParse(result.data.payload);
   if (!parsed.success) notFound();
 

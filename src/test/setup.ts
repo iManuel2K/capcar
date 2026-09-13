@@ -5,8 +5,17 @@ import { vi } from "vitest";
 
 import messages from "../../messages/en.json";
 import publicMessages from "../../messages/public/en.json";
+import hardeningMessages from "../../messages/hardening/en.json";
 
-const allMessages = { ...messages, ...publicMessages };
+const allMessages = { ...messages, ...publicMessages, ...hardeningMessages };
+if (typeof HTMLDialogElement !== "undefined") {
+  HTMLDialogElement.prototype.showModal ??= function () {
+    this.setAttribute("open", "");
+  };
+  HTMLDialogElement.prototype.close ??= function () {
+    this.removeAttribute("open");
+  };
+}
 
 function translate(namespace: string) {
   return (key: string, values?: Record<string, string | number>) => {

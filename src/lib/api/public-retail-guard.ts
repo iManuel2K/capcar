@@ -28,7 +28,7 @@ export function consumeProcessRetailBudget(now = Date.now()) {
 export async function guardPublicRetail(
   fallback: () => boolean = consumeProcessRetailBudget,
 ) {
-  const headers = { "Cache-Control": "no-store" };
+  const headers = { "Cache-Control": "no-store", "Retry-After": "60" };
   try {
     const client = await createClient();
     const { data, error } = await client.rpc("consume_public_retail_budget");

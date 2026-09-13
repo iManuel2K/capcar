@@ -6,3 +6,8 @@ pnpm-lock.yaml
 capcar-backups
 installer-backups
 _backups
+.capcar-installer-backups
+backups
+backup
+backup-*
+supabase/.temp

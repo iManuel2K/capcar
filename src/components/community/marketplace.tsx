@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useCommunity } from "@/features/community/use-community";
 import type { Listing } from "@/features/community/contracts";
+import { listingInput } from "@/features/community/contracts";
+import { useTranslations } from "next-intl";
 import { actionClass, fieldClass } from "./community-shell";
 export function Marketplace({
   initialListingId = "",
@@ -9,6 +11,8 @@ export function Marketplace({
   initialListingId?: string;
 }) {
   const { data, error, busy, refresh, mutate } = useCommunity();
+  const trust = useTranslations("Hardening.Trust");
+  const [invalidListing, setInvalidListing] = useState(false);
   const [edit, setEdit] = useState<Listing>();
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState("");
@@ -100,15 +104,21 @@ export function Marketplace({
                 event.preventDefault();
                 const form = event.currentTarget;
                 const fields = new FormData(form);
+                const input = {
+                  title: fields.get("title"),
+                  description: fields.get("description"),
+                  city: fields.get("city"),
+                  price_cents: Math.round(Number(fields.get("price")) * 100),
+                  condition: fields.get("condition"),
+                };
+                if (!listingInput.safeParse(input).success) {
+                  setInvalidListing(true);
+                  return;
+                }
+                setInvalidListing(false);
                 const saved = await mutate(
                   edit ? "edit" : "create",
-                  {
-                    title: fields.get("title"),
-                    description: fields.get("description"),
-                    city: fields.get("city"),
-                    price_cents: Math.round(Number(fields.get("price")) * 100),
-                    condition: fields.get("condition"),
-                  },
+                  input,
                   edit?.id,
                 );
                 if (saved) {
@@ -190,6 +200,11 @@ export function Marketplace({
                 contact details. Use the private inbox. List only parts you own
                 and can legally sell.
               </p>
+              {invalidListing && (
+                <p role="alert" className="text-[#6d0101]">
+                  {trust("invalid")}
+                </p>
+              )}
               <button className={actionClass} disabled={busy}>
                 Submit for review
               </button>

@@ -1,36 +1,26 @@
 import { cookies, headers } from "next/headers";
 import { getRequestConfig } from "next-intl/server";
+import { resolveLocale } from "./resolve-locale";
 
-import {
-  defaultLocale,
-  isAppLocale,
-  localeCookie,
-  type AppLocale,
-} from "@/i18n/config";
-
-function preferredLocale(acceptLanguage: string | null): AppLocale {
-  const requested = acceptLanguage
-    ?.split(",")
-    .map((entry) => entry.trim().split(";")[0]?.toLowerCase())
-    .find(Boolean);
-  const base = requested?.split("-")[0];
-  return isAppLocale(base) ? base : defaultLocale;
-}
+import { localeCookie } from "@/i18n/config";
 
 export default getRequestConfig(async () => {
   const [cookieStore, headerStore] = await Promise.all([cookies(), headers()]);
   const saved = cookieStore.get(localeCookie)?.value;
-  const locale = isAppLocale(saved)
-    ? saved
-    : preferredLocale(headerStore.get("accept-language"));
+  const locale = resolveLocale(saved, headerStore.get("accept-language"));
 
-  const [baseMessages, publicMessages] = await Promise.all([
+  const [baseMessages, publicMessages, hardeningMessages] = await Promise.all([
     import(`../../messages/${locale}.json`),
     import(`../../messages/public/${locale}.json`),
+    import(`../../messages/hardening/${locale}.json`),
   ]);
 
   return {
     locale,
-    messages: { ...baseMessages.default, ...publicMessages.default },
+    messages: {
+      ...baseMessages.default,
+      ...publicMessages.default,
+      ...hardeningMessages.default,
+    },
   };
 });

@@ -1,0 +1,71 @@
+{
+  "Hardening": {
+    "Search": {
+      "invalid": "Prüfe Suchbegriff und Preisspanne.",
+      "access": "Die Suche konnte nicht starten. Lade die Seite neu und versuche es erneut.",
+      "limit": "Das Suchlimit ist erreicht. Warte eine Minute und versuche es erneut.",
+      "unavailable": "Live-Angebote sind vorübergehend nicht verfügbar. Deine Suche bleibt erhalten.",
+      "timeout": "Der Händler hat nicht rechtzeitig geantwortet. Versuche es erneut.",
+      "unreadable": "Die Angebote konnten nicht gelesen werden. Versuche es erneut.",
+      "warning": "Angebote sind keine Bestätigung der Passgenauigkeit. Versand, Steuern und Verfügbarkeit können sich ändern. Prüfe den Endpreis beim Händler. Es erfolgt keine Währungsumrechnung.",
+      "shipping": "Versand",
+      "original": "Beschreibungen und Zustandsangaben der Verkäufer erscheinen in der Originalsprache."
+    },
+    "Passport": {
+      "title": "Pass nicht verfügbar",
+      "missing": "Dieser Link ist nicht mehr öffentlich.",
+      "missingBody": "Der Link ist möglicherweise falsch oder wurde vom Eigentümer zurückgezogen.",
+      "outage": "Dieser Fahrzeugpass kann gerade nicht geprüft werden.",
+      "outageBody": "Der Datendienst ist vorübergehend nicht verfügbar. Versuche diesen Link in Kürze erneut.",
+      "home": "Zurück zu Capcar"
+    },
+    "Trust": {
+      "title": "Sicher handeln",
+      "body": "Eine Veröffentlichung bedeutet Moderationsprüfung, nicht Käuferschutz oder bestätigte Passgenauigkeit. Frage nach aktuellen Fotos und Teilenummern. Nutze geschützte Zahlungen; sende keine Geschenkkarten oder Kryptowährungen.",
+      "details": "Vor der Kontaktaufnahme",
+      "new": "Neu",
+      "used": "Gebraucht",
+      "for-parts": "Als Ersatzteil / defekt",
+      "contact": "Keine Kontakt- oder Zahlungsdaten in öffentlichen Anzeigen. Nutze das private Postfach.",
+      "invalid": "Entferne E-Mail-Adressen und Weblinks aus dem öffentlichen Anzeigentext."
+    },
+    "Specialist": {
+      "title": "Fachbetrieb-Bewerbungen",
+      "intro": "Bring deine Werkstatt zu Capcar. Bewirb dich mit deinen Geschäftsdaten. Ein unabhängiger Moderator prüft jede Bewerbung, bevor Einbaustempel freigeschaltet werden.",
+      "apply": "Als Fachbetrieb bewerben",
+      "business": "Werkstatt / Geschäftsname",
+      "city": "Ort",
+      "website": "Geschäftswebsite (HTTPS)",
+      "expertise": "Fachgebiete und Berufserfahrung",
+      "consent": "Ich bin zur Vertretung dieses Betriebs berechtigt und bestätige die Richtigkeit der Angaben.",
+      "submit": "Zur Prüfung einreichen",
+      "loading": "Bewerbungen werden geladen…",
+      "saving": "Wird gespeichert…",
+      "error": "Bewerbungen konnten nicht geladen werden. Versuche es erneut.",
+      "saveError": "Speichern fehlgeschlagen. Prüfe Angaben, Kontobestätigung und Bewerbungsstatus.",
+      "saved": "Gespeichert. Der Bewerbungsstatus steht unten.",
+      "retry": "Erneut versuchen",
+      "pending": "Prüfung ausstehend",
+      "approved": "Zugelassen",
+      "rejected": "Nicht zugelassen",
+      "revoked": "Zulassung entzogen",
+      "empty": "Noch keine Bewerbungen.",
+      "queue": "Unabhängige Prüfung",
+      "evidence": "Prüfnachweis / Begründung (keine Ausweisdokumente)",
+      "decision": "Prüfentscheidung",
+      "approve": "Nach unabhängiger Prüfung zulassen",
+      "reject": "Bewerbung ablehnen",
+      "revoke": "Fachbetriebszugang entziehen",
+      "record": "Entscheidung speichern",
+      "reviewNote": "Prüfe den Betrieb und die Vertretungsbefugnis unabhängig. Die Zulassung ermöglicht Stempel, garantiert aber keine Arbeitsqualität.",
+      "websiteLabel": "Geschäftswebsite",
+      "signedOut": "Melde dich mit einem bestätigten Konto an, um eine Bewerbung einzureichen oder zu prüfen.",
+      "privacy": "Angaben sind nur für dich und berechtigte Moderatoren sichtbar. Der zugelassene Geschäftsname erscheint in der Fachbetriebsauswahl. Keine Ausweisdokumente einreichen.",
+      "resubmit": "Du kannst die Angaben korrigieren und erneut einreichen.",
+      "status": "Bewerbungsstatus"
+    },
+    "Accessibility": {
+      "skip": "Zum Hauptinhalt"
+    }
+  }
+}

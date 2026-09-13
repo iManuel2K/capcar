@@ -15,7 +15,12 @@ export function useCommunity() {
   }, []);
   const refresh = useCallback((signal?: AbortSignal) => {
     const requestGeneration = ++generation.current;
-    return fetch("/api/community", { cache: "no-store", signal })
+    return fetch("/api/community", {
+      cache: "no-store",
+      signal: signal
+        ? AbortSignal.any([signal, AbortSignal.timeout(15_000)])
+        : AbortSignal.timeout(15_000),
+    })
       .then(async (response) => {
         const result = await response.json();
         if (!response.ok)
@@ -79,6 +84,7 @@ export function useCommunity() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, id, data: fields }),
+        signal: AbortSignal.timeout(15_000),
       });
       const result = await response.json();
       if (identity !== identityGeneration.current) return false;

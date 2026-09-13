@@ -6,6 +6,7 @@ import { currentUser } from "@/lib/supabase/current-user";
 import { SignInCard } from "@/components/community/sign-in-card";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
+import Link from "next/link";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Community");
   return {
@@ -26,8 +27,15 @@ export default async function Page({
   const next = `/verified-work?${new URLSearchParams({ vehicle, specialist })}`;
   const user = await currentUser();
   const t = await getTranslations("PublicStates");
+  const tSpecialist = await getTranslations("Hardening.Specialist");
   return (
     <CommunityShell titleKey="verifiedTitle">
+      <Link
+        href="/specialists/apply"
+        className="mb-6 inline-flex min-h-11 items-center underline"
+      >
+        {tSpecialist("apply")} →
+      </Link>
       {user ? (
         <GarageAccountBoundary configured={getAuthStatus().configured}>
           <VerifiedWork

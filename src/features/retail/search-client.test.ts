@@ -51,7 +51,7 @@ it("rejects unsafe result links even in a successful response", async () => {
     requestRetail(input, new AbortController().signal),
   ).rejects.toThrow("could not be read");
 });
-it("shows a safe provider diagnosis returned by the server", async () => {
+it("keeps operator credential diagnostics out of visitor-facing messages", async () => {
   vi.stubGlobal(
     "fetch",
     vi.fn().mockResolvedValue(
@@ -66,7 +66,7 @@ it("shows a safe provider diagnosis returned by the server", async () => {
   );
   await expect(
     requestRetail(input, new AbortController().signal),
-  ).rejects.toThrow("production App ID or Cert ID");
+  ).rejects.toThrow("temporarily unavailable");
 });
 it("preserves a valid empty result", async () => {
   vi.stubGlobal(

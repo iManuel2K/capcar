@@ -18,6 +18,7 @@ export async function PublicMarketplace() {
     getLocale(),
   ]);
   let listings: Listing[] = [];
+  const trust = await getTranslations("Hardening.Trust");
   let unavailable = false;
   try {
     const client = await createClient();
@@ -30,6 +31,12 @@ export async function PublicMarketplace() {
   return (
     <section>
       <p className="max-w-2xl leading-7">{t("intro")}</p>
+      <details className="my-5 rounded-2xl border border-[#0e2d30]/20 p-5">
+        <summary className="min-h-11 cursor-pointer py-2 font-medium">
+          {trust("details")}
+        </summary>
+        <p className="mt-2 max-w-3xl text-sm leading-6">{trust("body")}</p>
+      </details>
       <Link
         className={`${actionClass} my-5 inline-flex items-center`}
         href="/login?next=%2Fmarketplace"
@@ -61,7 +68,10 @@ export async function PublicMarketplace() {
               className="min-w-0 rounded-2xl border border-[#0e2d30]/15 bg-white/35 p-6"
             >
               <p className="text-xs uppercase">
-                {item.condition} · {item.city}
+                {["new", "used", "for-parts"].includes(item.condition)
+                  ? trust(item.condition)
+                  : item.condition}{" "}
+                · {item.city}
               </p>
               <h2 className="mt-3 text-2xl font-medium">{item.title}</h2>
               <p className="mt-3 text-sm leading-6 break-words whitespace-pre-wrap">

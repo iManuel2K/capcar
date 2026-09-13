@@ -43,6 +43,7 @@ describe("community database authorization", () => {
       "20260908141000_add_account_data_lifecycle.sql",
       "20260909090000_community_and_verified_work.sql",
       "20260910090000_public_discovery.sql",
+      "20260912180000_beta_hardening.sql",
     ])
       await db.exec(readFileSync(`supabase/migrations/${file}`, "utf8"));
     await db.query(
@@ -278,6 +279,122 @@ describe("community database authorization", () => {
       (
         await db.query(
           "select * from public.community_roles where role='reviewed_seller'",
+        )
+      ).rows,
+    ).toHaveLength(0);
+  });
+  it("requires independent specialist approval and prevents stale decisions", async () => {
+    const application = {
+      business_name: "Independent Garage",
+      city: "Berlin",
+      website: "https://garage.example/",
+      expertise: "BMW engine diagnostics and mechanical repairs",
+      consent: true,
+    };
+    await as(buyer);
+    await expect(
+      db.query(
+        "insert into public.specialist_applications(user_id,business_name,city,website,expertise) values($1,'Bypass','Berlin','https://garage.example/','Full engine repair experience')",
+        [buyer],
+      ),
+    ).rejects.toThrow();
+    const result = await db.query<{ id: string }>(
+      "select public.specialist_apply($1::jsonb) as id",
+      [JSON.stringify(application)],
+    );
+    const id = result.rows[0].id;
+    await expect(
+      db.query(
+        "select public.specialist_review($1,'approved','Self approval is prohibited')",
+        [id],
+      ),
+    ).rejects.toThrow();
+    await as(shop);
+    expect(
+      (await db.query("select * from public.specialist_applications")).rows,
+    ).toHaveLength(0);
+    await as(mod);
+    await db.query(
+      "select public.specialist_review($1,'approved','Business and representative independently confirmed')",
+      [id],
+    );
+    await expect(
+      db.query(
+        "select public.specialist_review($1,'rejected','Stale moderator decision must fail')",
+        [id],
+      ),
+    ).rejects.toThrow("status changed");
+    await as(buyer);
+    expect(
+      (
+        await db.query<{ allowed: boolean }>(
+          "select public.community_has_role('specialist') as allowed",
+        )
+      ).rows[0].allowed,
+    ).toBe(true);
+    await expect(
+      db.query("select public.specialist_apply($1::jsonb)", [
+        JSON.stringify(application),
+      ]),
+    ).rejects.toThrow("already active");
+    await as(mod);
+    await db.query(
+      "select public.specialist_review($1,'revoked','Independent evidence requires access withdrawal')",
+      [id],
+    );
+    await as(buyer);
+    expect(
+      (
+        await db.query<{ allowed: boolean }>(
+          "select public.community_has_role('specialist') as allowed",
+        )
+      ).rows[0].allowed,
+    ).toBe(false);
+    await db.query("select public.delete_current_user_data()");
+    expect(
+      (await db.query("select * from public.specialist_applications")).rows,
+    ).toHaveLength(0);
+  });
+  it("blocks public contact links and prevents suspended recipients receiving messages", async () => {
+    await as(buyer);
+    await expect(
+      call("create", null, {
+        ...listing,
+        description: "Contact me at seller@example.com for this part",
+      }),
+    ).rejects.toThrow("Remove email");
+    const id = await call("create", null, listing);
+    await as(mod);
+    await call("moderate", id, {
+      status: "published",
+      reason: "Reviewed item ownership and description",
+    });
+    await as(shop);
+    await call("message", id, { body: "Interested in this original bumper" });
+    await as(buyer);
+    const message = (
+      await db.query<{ id: string }>(
+        "select id from public.community_messages where listing_id=$1",
+        [id],
+      )
+    ).rows[0];
+    await db.exec("reset role");
+    await db.query(
+      "insert into public.community_roles values($1,'suspended','Suspended account')",
+      [shop],
+    );
+    await as(buyer);
+    await expect(
+      call("reply", message.id, {
+        body: "This must not reach a suspended account",
+      }),
+    ).rejects.toThrow();
+    await db.exec("reset role");
+    expect(
+      (
+        await db.query(
+          "select * from public.community_roles where user_id=$1 and role='specialist'",
+          [shop],
         )
       ).rows,
     ).toHaveLength(0);

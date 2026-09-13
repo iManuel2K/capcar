@@ -126,4 +126,90 @@ describe("live retailer adapter", () => {
       ),
     ).rejects.toThrow("Browse API access");
   });
+  it("refreshes a rejected token once and retries the same search", async () => {
+    const request = vi
+      .fn()
+      .mockResolvedValueOnce(
+        Response.json({ access_token: "old", expires_in: 7200 }),
+      )
+      .mockResolvedValueOnce(new Response(null, { status: 401 }))
+      .mockResolvedValueOnce(
+        Response.json({ access_token: "replacement", expires_in: 7200 }),
+      )
+      .mockResolvedValueOnce(Response.json({ itemSummaries: [] }));
+    const result = await searchEbay(
+      input,
+      {
+        CAPCAR_EBAY_CLIENT_ID: "refresh-once",
+        CAPCAR_EBAY_CLIENT_SECRET: "test",
+      },
+      request,
+    );
+    expect(result.items).toEqual([]);
+    expect(request).toHaveBeenCalledTimes(4);
+    expect(request.mock.calls[3][1].headers.Authorization).toBe(
+      "Bearer replacement",
+    );
+  });
+  it("does not retry an authorization denial indefinitely", async () => {
+    const request = vi
+      .fn()
+      .mockImplementation((url) =>
+        String(url).includes("oauth2")
+          ? Promise.resolve(
+              Response.json({ access_token: "denied", expires_in: 7200 }),
+            )
+          : Promise.resolve(new Response(null, { status: 401 })),
+      );
+    await expect(
+      searchEbay(
+        input,
+        {
+          CAPCAR_EBAY_CLIENT_ID: "deny-once",
+          CAPCAR_EBAY_CLIENT_SECRET: "test",
+        },
+        request,
+      ),
+    ).rejects.toMatchObject({ kind: "authorization" });
+    expect(request).toHaveBeenCalledTimes(4);
+  });
+  it("does not diagnose token service outages as bad credentials", async () => {
+    await expect(
+      searchEbay(
+        input,
+        { CAPCAR_EBAY_CLIENT_ID: "outage", CAPCAR_EBAY_CLIENT_SECRET: "test" },
+        vi.fn().mockResolvedValue(new Response(null, { status: 503 })),
+      ),
+    ).rejects.toMatchObject({ kind: "unavailable" });
+  });
+  it("refreshes credentials after rotation and shares simultaneous token requests", async () => {
+    const request = vi
+      .fn()
+      .mockImplementation((url) =>
+        Promise.resolve(
+          String(url).includes("oauth2")
+            ? Response.json({ access_token: "fresh", expires_in: 7200 })
+            : Response.json({ itemSummaries: [] }),
+        ),
+      );
+    const env = {
+      CAPCAR_EBAY_CLIENT_ID: "shared-rotation",
+      CAPCAR_EBAY_CLIENT_SECRET: "first",
+    };
+    await Promise.all([
+      searchEbay(input, env, request),
+      searchEbay(input, env, request),
+    ]);
+    expect(
+      request.mock.calls.filter(([url]) => String(url).includes("oauth2")),
+    ).toHaveLength(1);
+    await searchEbay(
+      input,
+      { ...env, CAPCAR_EBAY_CLIENT_SECRET: "second" },
+      request,
+    );
+    expect(
+      request.mock.calls.filter(([url]) => String(url).includes("oauth2")),
+    ).toHaveLength(2);
+  });
 });
