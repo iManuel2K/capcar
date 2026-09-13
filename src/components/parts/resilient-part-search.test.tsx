@@ -150,3 +150,11 @@ it("keeps a failed search actionable with a safe retailer continuation", async (
     "https://www.ebay.de/sch/i.html?_nkw=2011+e90+rear+lights",
   );
 });
+
+it("retains a project query when opening live retailer search", async () => {
+  request.mockResolvedValue(empty);
+  render(<ResilientPartSearch initialQuery="  BMW E90 rear lights  " />);
+  expect(screen.getByRole("searchbox")).toHaveValue("BMW E90 rear lights");
+  await act(() => vi.advanceTimersByTimeAsync(500));
+  expect(request.mock.calls[0][0].query).toBe("BMW E90 rear lights");
+});

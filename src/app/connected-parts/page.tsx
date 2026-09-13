@@ -6,10 +6,17 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Community");
   return { title: t("connectedTitle") };
 }
-export default function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string | string[] }>;
+}) {
+  const params = await searchParams;
+  const query =
+    typeof params.q === "string" ? params.q.trim().slice(0, 80) : "";
   return (
     <CommunityShell titleKey="connectedTitle">
-      <RetailSearch />
+      <RetailSearch key={query} initialQuery={query} />
     </CommunityShell>
   );
 }

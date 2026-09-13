@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, ChevronRight, Menu, X } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronRight, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
@@ -10,16 +10,35 @@ import { LanguageSelector } from "@/components/i18n/language-selector";
 import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 
 const navigation = [
-  { label: "platform", href: "/#platform" },
+  { label: "how", href: "/#platform" },
   { label: "projects", href: "/#projects" },
-  { label: "fitment", href: "/#fitment" },
-  { label: "roadmap", href: "/roadmap" },
-  { label: "faq", href: "/#faq" },
+  { label: "parts", href: "/parts-search" },
 ] as const;
 
 export function MarketingHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const t = useTranslations("Navigation");
+  const l = useTranslations("Launch");
+  const footer = useTranslations("Footer");
+  const explore = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    const close = (event: MouseEvent) => {
+      if (!explore.current?.contains(event.target as Node))
+        explore.current?.removeAttribute("open");
+    };
+    const escape = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape" && explore.current?.open) {
+        explore.current.removeAttribute("open");
+        explore.current.querySelector("summary")?.focus();
+      }
+    };
+    document.addEventListener("click", close);
+    document.addEventListener("keydown", escape);
+    return () => {
+      document.removeEventListener("click", close);
+      document.removeEventListener("keydown", escape);
+    };
+  }, []);
   const drawer = useRef<HTMLDialogElement>(null);
   const opener = useRef<HTMLButtonElement>(null);
 
@@ -57,25 +76,54 @@ export function MarketingHeader() {
           {navigation.map((item) => (
             <Link
               key={item.label}
-              className="transition hover:text-[#6d0101]"
+              className="inline-flex min-h-11 items-center rounded transition hover:text-[#6d0101] focus-visible:outline-2 focus-visible:outline-offset-4"
               href={item.href}
             >
-              {t(item.label)}
+              {l(`nav.${item.label}`)}
             </Link>
           ))}
+          <details ref={explore} className="relative z-40">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1 rounded focus-visible:outline-2 [&::-webkit-details-marker]:hidden">
+              {l("nav.explore")}
+              <ChevronDown className="size-3" aria-hidden="true" />
+            </summary>
+            <div className="absolute top-full right-0 min-w-56 rounded-xl border border-[#0e2d30]/20 bg-[#f5f2e8] p-2 shadow-lg">
+              {[
+                ["conceptStudio", "/studio"],
+                ["soundStudio", "/sound-studio"],
+                ["marketplace", "/marketplace"],
+                ["roadmap", "/roadmap"],
+                ["faq", "/#faq"],
+              ].map(([label, href]) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => explore.current?.removeAttribute("open")}
+                  className="flex min-h-11 items-center rounded-lg px-3 hover:bg-[#0e2d30]/5 focus-visible:outline-2"
+                >
+                  {footer(label)}
+                </Link>
+              ))}
+            </div>
+          </details>
         </nav>
 
         <div className="hidden 2xl:block">
           <GlobalPartsSearch />
         </div>
-
         <div className="hidden items-center gap-2 xl:flex">
           <LanguageSelector compact />
+          <Link
+            href="/login"
+            className="inline-flex min-h-11 items-center rounded px-2 text-sm focus-visible:outline-2"
+          >
+            {t("signIn")}
+          </Link>
           <Link
             href="/register"
             className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0e2d30] px-4 text-sm font-medium text-[#e8e6d7] transition hover:-translate-y-0.5 hover:bg-[#6d0101]"
           >
-            {t("buildYourCar")} <ArrowRight className="size-4" />
+            {l("start")} <ArrowRight className="size-4" />
           </Link>
         </div>
 
@@ -88,7 +136,7 @@ export function MarketingHeader() {
           onClick={() => setMenuOpen(true)}
           className="grid size-11 place-items-center rounded-full border border-[#0e2d30]/12 text-[#0e2d30] transition hover:bg-[#0e2d30]/5 xl:hidden"
         >
-          <Menu className="size-5" />
+          <Menu className="size-5" aria-hidden="true" />
         </button>
       </header>
 
@@ -134,8 +182,25 @@ export function MarketingHeader() {
                   onClick={() => setMenuOpen(false)}
                   className="flex min-h-15 items-center justify-between border-b border-[#0e2d30]/10 text-lg font-medium tracking-[-0.02em]"
                 >
-                  {t(item.label)}
+                  {l(`nav.${item.label}`)}
                   <ChevronRight className="size-4 text-[#0e2d30]/45" />
+                </Link>
+              ))}
+              {[
+                ["conceptStudio", "/studio"],
+                ["soundStudio", "/sound-studio"],
+                ["marketplace", "/marketplace"],
+                ["roadmap", "/roadmap"],
+                ["faq", "/#faq"],
+              ].map(([label, href]) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  className="flex min-h-12 items-center justify-between border-b border-[#0e2d30]/10 text-base focus-visible:outline-2"
+                >
+                  {footer(label)}
+                  <ChevronRight className="size-4" aria-hidden="true" />
                 </Link>
               ))}
             </nav>
@@ -160,7 +225,7 @@ export function MarketingHeader() {
                 onClick={() => setMenuOpen(false)}
                 className="mt-2 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-semibold text-[#e8e6d7]"
               >
-                {t("buildYourCar")} <ArrowRight className="size-4" />
+                {l("start")} <ArrowRight className="size-4" />
               </Link>
               <div className="mt-4">
                 <LanguageSelector direction="up" />

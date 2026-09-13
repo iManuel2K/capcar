@@ -225,5 +225,176 @@
     "sourceRecording": "Source recording",
     "soundSetup": "Recording setup is not independently verified.",
     "moreListings": "Show more listings"
+  },
+  "Launch": {
+    "nav": {
+      "how": "How it works",
+      "projects": "Example project",
+      "parts": "Find parts",
+      "explore": "Explore",
+      "legal": "Legal",
+      "main": "Main navigation"
+    },
+    "start": "Start a build",
+    "explore": "Explore a project",
+    "hero": {
+      "eyebrow": "The digital garage for project cars",
+      "title": "Build the car",
+      "accent": "you imagine.",
+      "description": "Plan the changes, find parts, explore the look—and keep your car’s story in one garage.",
+      "note": "Your car. Your pace. Your next workshop session."
+    },
+    "visual": {
+      "current": "Starting point",
+      "concept": "Concept direction",
+      "label": "Compare the starting point and concept",
+      "value": "{value}% concept",
+      "note": "Illustrative visuals. Explore a direction; confirm parts and fitment separately.",
+      "alt": "BMW E90 build direction in a garage"
+    },
+    "demo": {
+      "eyebrow": "Inside the Build Wall",
+      "title": "One car. A clearer next step.",
+      "description": "Choose a goal, compare an example part and see the budget and record change together. No account needed.",
+      "sample": "Interactive example · Illustrative data · Not a live offer",
+      "plan": "Build plan",
+      "parts": "Parts comparison",
+      "visual": "Visual direction",
+      "history": "Vehicle Passport",
+      "tabs": "Explore the example build",
+      "goal": "Build goal",
+      "oem": "OEM+ daily: keep the factory character",
+      "restore": "Refresh and preserve the original car",
+      "modification": "Next modification",
+      "lights": "Rear lighting",
+      "wheels": "Wheel refresh",
+      "service": "Maintenance baseline",
+      "phase": "Current phase",
+      "phaseValue": "Plan & compare",
+      "next": "Next action",
+      "checkLights": "Confirm the connector and included adapters.",
+      "checkWheels": "Confirm width, offset and clearance.",
+      "checkService": "Check the service history and engine specification.",
+      "budget": "Build budget",
+      "spent": "Spent",
+      "planned": "Planned",
+      "remaining": "Unallocated",
+      "compare": "Compare example offers",
+      "offer": "Example offer {number}",
+      "item": "Item price",
+      "shipping": "Shipping",
+      "total": "Estimated total",
+      "unknown": "Not provided",
+      "used": "Used · Condition needs checking",
+      "seller": "Seller history, returns and warranty: not provided in this example.",
+      "fitment": "Fitment not confirmed",
+      "select": "Select this example",
+      "selected": "Selected",
+      "add": "Add to the example plan",
+      "added": "Added to the plan and example passport. Nothing purchased.",
+      "remove": "Remove from the example",
+      "reset": "Reset example",
+      "record": "Planned part · Not installed",
+      "evidence": "Evidence checklist",
+      "evidenceText": "Save the listing, part number and connector or dimension photos before deciding. This example includes no manufacturer verification.",
+      "historyTitle": "A record worth keeping.",
+      "historyNote": "Sample history. Planned items stay separate from completed work.",
+      "entryOne": "Vehicle added · Owner-provided details",
+      "entryTwo": "Maintenance review · Service date not recorded",
+      "empty": "Choose an example part to see it appear here.",
+      "session": "Example changes last while this page is open. Your own build starts in your private garage.",
+      "realSearch": "Search live listings",
+      "visualText": "Explore the overall direction. This concept does not render the selected listing or prove its fitment."
+    },
+    "problem": {
+      "title": "The build is yours. The information is everywhere.",
+      "body": "A saved listing. A forum thread. A receipt in the glovebox. Bring the useful details back to the car they belong to."
+    },
+    "journey": {
+      "title": "From the first idea to the next chapter.",
+      "imagine": "Imagine",
+      "imagineText": "Define the car you want to build.",
+      "plan": "Plan",
+      "planText": "Set priorities, tasks and a budget.",
+      "find": "Find",
+      "findText": "Compare offers and the details that matter.",
+      "visualize": "Visualize",
+      "visualizeText": "Explore available visual references.",
+      "build": "Build",
+      "buildText": "Record purchases, installations and progress.",
+      "remember": "Remember",
+      "rememberText": "Keep the history with the car."
+    },
+    "features": {
+      "title": "Everything around the build.",
+      "plan": "Shape the vision.",
+      "planText": "Turn the next change into a plan. Keep the goal, shortlist and spending beside your car.",
+      "parts": "Find what fits.",
+      "partsText": "Search live eBay listings and compare available price, delivery and seller details. Confirm the exact specification before ordering.",
+      "visual": "See the direction before you buy.",
+      "visualText": "Explore available 3D references in Concept Studio. Models and controls vary; visual previews do not confirm fitment.",
+      "history": "Keep the story.",
+      "historyText": "Keep maintenance, modifications, receipts and photos in your Vehicle Passport. Planned work stays separate from completed work.",
+      "view": "See it in the example",
+      "studio": "Open Concept Studio"
+    },
+    "project": {
+      "title": "Small changes. A car that feels like yours.",
+      "body": "Project Streetline keeps the factory character of a BMW E90 while planning considered improvements. Explore its goal, budget and next decision in the example above.",
+      "caption": "Illustrative BMW E90 project · OEM+ means subtle changes that retain the factory character."
+    },
+    "trust": {
+      "title": "Know what’s confirmed. See what needs checking.",
+      "body": "A useful answer includes its limits. Sources, estimates and unresolved details belong beside the decision.",
+      "fact": "Source-backed information",
+      "factText": "Check which vehicle attributes and part numbers the source actually covers.",
+      "owner": "Owner-provided record",
+      "ownerText": "Photos and records tell the story; they are not manufacturer verification.",
+      "estimate": "Estimated total",
+      "estimateText": "Shipping and other missing charges stay visible. An incomplete price is not a final total.",
+      "unknown": "Check before purchase",
+      "unknownText": "Missing details or conflicting records need a closer look. Fitment and road approval are separate checks."
+    },
+    "beta": {
+      "title": "Built around real workshop questions.",
+      "body": "CapCar is in beta. Bring your project and help improve the details. Vehicle coverage, visual references and connected services are still expanding.",
+      "feedback": "Send feedback"
+    },
+    "final": {
+      "title": "Start with the car you want to build.",
+      "body": "Give the plan somewhere to live.",
+      "tagline": "From plan to road."
+    },
+    "faq": {
+      "title": "Before you start.",
+      "one": {
+        "question": "What is CapCar?",
+        "answer": "A digital garage for planning changes, finding parts and keeping your vehicle’s maintenance and build history together."
+      },
+      "two": {
+        "question": "Do I need an account to search for parts?",
+        "answer": "No. Search publicly, then create an account when you want your own garage."
+      },
+      "three": {
+        "question": "Will every part be confirmed to fit?",
+        "answer": "No. Coverage varies. Confirm the vehicle specification, part number and installation requirements before buying."
+      },
+      "four": {
+        "question": "Can I visualize any modification on my exact car?",
+        "answer": "Not yet. Concept Studio offers selected visual references. Models and controls vary, and previews do not prove fitment."
+      },
+      "five": {
+        "question": "Where do I buy the parts?",
+        "answer": "Retailer purchases are completed on the retailer’s website. CapCar does not take payment for those orders."
+      },
+      "six": {
+        "question": "Is my garage public?",
+        "answer": "Your personal garage is private. Review the information before sharing a public passport or publishing a listing."
+      },
+      "seven": {
+        "question": "Do I need a modified car to start?",
+        "answer": "No. Start with the car you have and the next thing you want to maintain, improve or document."
+      }
+    }
   }
 }

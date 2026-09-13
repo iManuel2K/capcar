@@ -225,5 +225,176 @@
     "sourceRecording": "Regjistrimi burimor",
     "soundSetup": "Konfigurimi i automjetit nuk është verifikuar në mënyrë të pavarur.",
     "moreListings": "Më shumë njoftime"
+  },
+  "Launch": {
+    "nav": {
+      "how": "Si funksionon",
+      "projects": "Projekt shembull",
+      "parts": "Gjej pjesë",
+      "explore": "Eksploro",
+      "legal": "Informacione ligjore",
+      "main": "Navigimi kryesor"
+    },
+    "start": "Fillo një projekt",
+    "explore": "Shiko një projekt",
+    "hero": {
+      "eyebrow": "Garazhi digjital për projektin tënd",
+      "title": "Ndërto makinën",
+      "accent": "që imagjinon.",
+      "description": "Planifiko ndryshimet, gjej pjesë, eksploro pamjen dhe ruaj historinë e makinës në një garazh.",
+      "note": "Makina jote. Ritmi yt. Puna e radhës në garazh."
+    },
+    "visual": {
+      "current": "Pikënisja",
+      "concept": "Drejtimi i konceptit",
+      "label": "Krahaso pikënisjen me konceptin",
+      "value": "{value}% koncept",
+      "note": "Pamje ilustruese. Eksploro një drejtim; kontrollo pjesët dhe përshtatjen veçmas.",
+      "alt": "Koncept BMW E90 në garazh"
+    },
+    "demo": {
+      "eyebrow": "Brenda garazhit të projektit",
+      "title": "Një makinë. Një hap i qartë përpara.",
+      "description": "Zgjidh një synim, krahaso një pjesë shembull dhe shiko buxhetin e historikun të ndryshojnë bashkë. Pa llogari.",
+      "sample": "Shembull interaktiv · Të dhëna ilustruese · Jo ofertë reale",
+      "plan": "Plani i projektit",
+      "parts": "Krahasimi i pjesëve",
+      "visual": "Drejtimi vizual",
+      "history": "Pasaporta e automjetit",
+      "tabs": "Eksploro projektin shembull",
+      "goal": "Synimi i projektit",
+      "oem": "OEM+ përditë: ruaj karakterin origjinal",
+      "restore": "Rifresko dhe ruaj makinën origjinale",
+      "modification": "Ndryshimi i radhës",
+      "lights": "Dritat e pasme",
+      "wheels": "Rifreskimi i disqeve",
+      "service": "Mirëmbajtja bazë",
+      "phase": "Faza aktuale",
+      "phaseValue": "Planifiko dhe krahaso",
+      "next": "Hapi i radhës",
+      "checkLights": "Konfirmo lidhësin dhe përshtatësit e përfshirë.",
+      "checkWheels": "Konfirmo gjerësinë, offset-in dhe hapësirën.",
+      "checkService": "Kontrollo historikun e shërbimeve dhe specifikimin e motorit.",
+      "budget": "Buxheti i projektit",
+      "spent": "Shpenzuar",
+      "planned": "Planifikuar",
+      "remaining": "Pa caktuar",
+      "compare": "Krahaso ofertat shembull",
+      "offer": "Ofertë shembull {number}",
+      "item": "Çmimi i artikullit",
+      "shipping": "Transporti",
+      "total": "Totali i vlerësuar",
+      "unknown": "Nuk është dhënë",
+      "used": "E përdorur · Kontrollo gjendjen",
+      "seller": "Historiku i shitësit, kthimet dhe garancia: nuk jepen në këtë shembull.",
+      "fitment": "Përshtatja nuk është konfirmuar",
+      "select": "Zgjidh këtë shembull",
+      "selected": "Zgjedhur",
+      "add": "Shto në planin shembull",
+      "added": "U shtua në plan dhe pasaportën shembull. Asgjë nuk u ble.",
+      "remove": "Hiq nga shembulli",
+      "reset": "Rivendos shembullin",
+      "record": "Pjesë e planifikuar · Nuk është montuar",
+      "evidence": "Lista e provave",
+      "evidenceText": "Ruaj ofertën, numrin e pjesës dhe fotot e lidhësve ose përmasave përpara vendimit. Ky shembull nuk ka verifikim prodhuesi.",
+      "historyTitle": "Një histori që ia vlen të ruhet.",
+      "historyNote": "Historik shembull. Pjesët e planifikuara qëndrojnë veç punëve të përfunduara.",
+      "entryOne": "Automjeti u shtua · Të dhëna nga pronari",
+      "entryTwo": "Rishikim mirëmbajtjeje · Data e shërbimit mungon",
+      "empty": "Zgjidh një pjesë shembull që të shfaqet këtu.",
+      "session": "Ndryshimet e shembullit zgjasin sa është hapur faqja. Projekti yt fillon në garazhin privat.",
+      "realSearch": "Kërko oferta reale",
+      "visualText": "Eksploro drejtimin e përgjithshëm. Koncepti nuk paraqet ofertën e zgjedhur dhe nuk provon përshtatjen."
+    },
+    "problem": {
+      "title": "Projekti është yti. Informacioni është kudo.",
+      "body": "Një ofertë e ruajtur. Një temë forumi. Një faturë në makinë. Lidhi hollësitë e dobishme me makinën tënde."
+    },
+    "journey": {
+      "title": "Nga ideja e parë te kapitulli tjetër.",
+      "imagine": "Imagjino",
+      "imagineText": "Përcakto makinën që dëshiron të ndërtosh.",
+      "plan": "Planifiko",
+      "planText": "Cakto përparësitë, punët dhe buxhetin.",
+      "find": "Gjej",
+      "findText": "Krahaso ofertat dhe hollësitë që kanë rëndësi.",
+      "visualize": "Vizualizo",
+      "visualizeText": "Eksploro referencat vizuale të disponueshme.",
+      "build": "Ndërto",
+      "buildText": "Regjistro blerjet, montimet dhe përparimin.",
+      "remember": "Ruaj",
+      "rememberText": "Ruaj historinë bashkë me makinën."
+    },
+    "features": {
+      "title": "Gjithçka rreth projektit.",
+      "plan": "Jepi formë idesë.",
+      "planText": "Ktheje ndryshimin e radhës në plan. Mbaj synimin, listën dhe shpenzimet pranë makinës.",
+      "parts": "Gjej atë që përshtatet.",
+      "partsText": "Kërko oferta eBay dhe krahaso çmimin, dërgesën dhe shitësin. Konfirmo specifikimin e saktë para blerjes.",
+      "visual": "Shiko drejtimin para blerjes.",
+      "visualText": "Eksploro referencat 3D në Concept Studio. Modelet dhe kontrollet ndryshojnë; pamjet nuk konfirmojnë përshtatjen.",
+      "history": "Ruaj historinë.",
+      "historyText": "Ruaj mirëmbajtjen, ndryshimet, faturat dhe fotot në pasaportë. Ndaj planet nga punët e kryera.",
+      "view": "Shikoje në shembull",
+      "studio": "Hap Concept Studio"
+    },
+    "project": {
+      "title": "Ndryshime të vogla. Një makinë që të përfaqëson.",
+      "body": "Project Streetline ruan karakterin origjinal të BMW E90 me përmirësime të menduara. Shiko synimin, buxhetin dhe vendimin e radhës në shembull.",
+      "caption": "Projekt ilustrues BMW E90 · OEM+ nënkupton ndryshime diskrete me karakter origjinal."
+    },
+    "trust": {
+      "title": "Dallo çfarë është konfirmuar dhe çfarë duhet kontrolluar.",
+      "body": "Një përgjigje e dobishme tregon kufijtë e saj. Burimet, vlerësimet dhe paqartësitë pranë vendimit.",
+      "fact": "Informacion me burim",
+      "factText": "Kontrollo cilat karakteristika dhe numra pjesësh mbulon burimi.",
+      "owner": "Të dhëna nga pronari",
+      "ownerText": "Fotot dhe shënimet tregojnë historinë; nuk janë verifikim prodhuesi.",
+      "estimate": "Totali i vlerësuar",
+      "estimateText": "Transporti dhe kostot që mungojnë mbeten të dukshme. Çmimi i paplotë nuk është total përfundimtar.",
+      "unknown": "Kontrollo para blerjes",
+      "unknownText": "Të dhënat që mungojnë ose bien ndesh duhen kontrolluar. Përshtatja dhe miratimi rrugor janë kontrolle të veçanta."
+    },
+    "beta": {
+      "title": "Për pyetje reale nga garazhi.",
+      "body": "CapCar është në beta. Sill projektin tënd dhe ndihmo përmirësimin. Mbulimi i automjeteve, pamjet dhe shërbimet vazhdojnë të zgjerohen.",
+      "feedback": "Dërgo përshtypjet"
+    },
+    "final": {
+      "title": "Fillo me makinën që dëshiron të ndërtosh.",
+      "body": "Jepi planit tënd një vend.",
+      "tagline": "Nga plani në rrugë."
+    },
+    "faq": {
+      "title": "Para se të fillosh.",
+      "one": {
+        "question": "Çfarë është CapCar?",
+        "answer": "Një garazh digjital për ndryshimet, pjesët dhe historikun e mirëmbajtjes e të projektit të makinës."
+      },
+      "two": {
+        "question": "A duhet llogari për të kërkuar pjesë?",
+        "answer": "Jo. Kërko pa u regjistruar dhe krijo llogari kur të duash garazhin tënd."
+      },
+      "three": {
+        "question": "A konfirmohet përshtatja e çdo pjese?",
+        "answer": "Jo. Mbulimi ndryshon. Kontrollo specifikimin, numrin e pjesës dhe kërkesat e montimit para blerjes."
+      },
+      "four": {
+        "question": "A mund të shoh çdo ndryshim në makinën time të saktë?",
+        "answer": "Ende jo. Concept Studio ofron referenca të zgjedhura. Modelet dhe kontrollet ndryshojnë dhe nuk provojnë përshtatjen."
+      },
+      "five": {
+        "question": "Ku i blej pjesët?",
+        "answer": "Blerjet përfundohen në faqen e shitësit. CapCar nuk merr pagesa për këto porosi."
+      },
+      "six": {
+        "question": "A është publik garazhi im?",
+        "answer": "Garazhi yt është privat. Kontrollo të dhënat para se të ndash pasaportë publike ose të publikosh ofertë."
+      },
+      "seven": {
+        "question": "A duhet makinë e modifikuar për të filluar?",
+        "answer": "Jo. Fillo me makinën që ke dhe atë që dëshiron të mirëmbash, përmirësosh ose dokumentosh."
+      }
+    }
   }
 }

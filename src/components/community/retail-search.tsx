@@ -12,7 +12,7 @@ import { useVehicles } from "@/features/vehicles/use-vehicles";
 import { saveRetailItem } from "@/features/retail/save-retail-item";
 import { announceWishlistChange } from "@/features/wishlist/wishlist-storage";
 import { ResilientPartSearch } from "@/components/parts/resilient-part-search";
-export function RetailSearch() {
+export function RetailSearch({ initialQuery = "" }: { initialQuery?: string }) {
   const t = useTranslations("Retail");
   const labels = useTranslations("Hardening.Search");
   const locale = useLocale();
@@ -27,7 +27,7 @@ export function RetailSearch() {
     <div className="space-y-6">
       <p className="max-w-3xl leading-7">{t("intro")}</p>
       <PartsBoardProvider>
-        <ResilientPartSearch>
+        <ResilientPartSearch initialQuery={initialQuery}>
           {(result, input, search) => (
             <>
               <section className="rounded-2xl border border-[#0e2d30]/20 p-5">

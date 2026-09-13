@@ -15,6 +15,7 @@ type ResultState = {
   error?: SearchFailure;
 };
 type Props = {
+  initialQuery?: string;
   children?: (
     result: RetailResponse,
     input: RetailRequest,
@@ -31,7 +32,7 @@ function optionalPrice(value: string) {
   return parsed;
 }
 
-export function ResilientPartSearch({ children }: Props) {
+export function ResilientPartSearch({ children, initialQuery = "" }: Props) {
   const t = useTranslations("PartsSearch");
   const errors = useTranslations("Hardening.Search");
   const locale = useLocale();
@@ -42,7 +43,7 @@ export function ResilientPartSearch({ children }: Props) {
     );
   const id = useId();
   const [input, setInput] = useState<RetailRequest>({
-    query: "",
+    query: initialQuery.trim().slice(0, 80),
     market: "DE",
     destination: "DE",
     condition: "all",

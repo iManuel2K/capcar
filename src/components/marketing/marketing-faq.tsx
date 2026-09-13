@@ -1,46 +1,51 @@
 import Link from "next/link";
 import { ArrowRight, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
-
-const questions = ["one", "two", "three", "four", "five", "six"] as const;
-
+import styles from "./launch.module.css";
+const questions = [
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+] as const;
 export function MarketingFaq() {
-  const t = useTranslations("Faq");
+  const t = useTranslations("Launch.faq");
+  const nav = useTranslations("Navigation");
   return (
     <section
       id="faq"
-      className="scroll-mt-20 border-y border-[#0e2d30]/10 bg-[#e8e6d7] text-[#0e2d30]"
+      className="scroll-mt-8 bg-[#e8e6d7] text-[#0e2d30]"
+      aria-labelledby="faq-title"
     >
-      <div className="mx-auto grid max-w-[1500px] gap-12 px-5 py-20 sm:px-8 sm:py-32 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
-        <div className="lg:sticky lg:top-28 lg:self-start">
-          <p className="text-xs font-semibold tracking-[0.2em] text-[#6d0101] uppercase">
-            FAQ
-          </p>
-          <h2 className="mt-4 max-w-lg text-4xl leading-[0.94] font-medium tracking-[-0.055em] sm:text-6xl">
+      <div className={`${styles.section} grid gap-8 lg:grid-cols-[.7fr_1.3fr]`}>
+        <div>
+          <p className="text-xs tracking-widest text-[#80533e]">FAQ</p>
+          <h2 id="faq-title" className={`${styles.title} mt-4`}>
             {t("title")}
           </h2>
-          <p className="mt-6 max-w-md text-base leading-7 text-[#0e2d30]/58">
-            {t("description")}
-          </p>
-          <Link
-            href="/roadmap"
-            className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-semibold text-[#e8e6d7] transition hover:bg-[#6d0101]"
-          >
-            {t("roadmap")} <ArrowRight className="size-4" />
+          <Link href="/roadmap" className={`${styles.link} mt-5`}>
+            {nav("roadmap")}
+            <ArrowRight className="size-4" aria-hidden="true" />
           </Link>
         </div>
-
-        <div className="border-t border-[#0e2d30]/16">
-          {questions.map((item) => (
-            <details key={item} className="group border-b border-[#0e2d30]/16">
-              <summary className="flex min-h-20 cursor-pointer list-none items-center justify-between gap-6 py-5 text-lg font-medium tracking-[-0.02em] marker:hidden sm:min-h-24 sm:text-xl [&::-webkit-details-marker]:hidden">
-                {t(`${item}.question`)}
-                <span className="grid size-9 shrink-0 place-items-center rounded-full border border-[#0e2d30]/14 transition group-open:rotate-45 group-open:bg-[#6d0101] group-open:text-white">
-                  <Plus className="size-4" />
-                </span>
+        <div>
+          {questions.map((key) => (
+            <details
+              key={key}
+              className="group border-t border-[#0e2d30]/20 last:border-b"
+            >
+              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-5 py-4 text-base font-medium marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 [&::-webkit-details-marker]:hidden">
+                {t(`${key}.question`)}
+                <Plus
+                  aria-hidden="true"
+                  className="size-4 shrink-0 group-open:rotate-45 motion-safe:transition-transform"
+                />
               </summary>
-              <p className="max-w-2xl pr-12 pb-7 text-sm leading-7 text-[#0e2d30]/62 sm:text-base">
-                {t(`${item}.answer`)}
+              <p className="max-w-2xl pr-8 pb-5 text-sm leading-7 text-[#4b6260]">
+                {t(`${key}.answer`)}
               </p>
             </details>
           ))}

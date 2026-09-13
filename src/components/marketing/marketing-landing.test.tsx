@@ -1,106 +1,128 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { MarketingLanding } from "./marketing-landing";
 
-import { MarketingLanding } from "@/components/marketing/marketing-landing";
+beforeEach(() => window.history.replaceState(null, "", "/"));
+afterEach(cleanup);
 
-describe("MarketingLanding", () => {
-  it("states the product direction", () => {
+describe("the connected homepage example", () => {
+  it("makes the product and its capability limits clear", () => {
     render(<MarketingLanding />);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      /build the car.*you planned/i,
+      "Build the car you imagine.",
     );
-    expect(screen.getByText("Buy the right part.")).toBeInTheDocument();
-    expect(screen.getByText("€804 spent")).toBeInTheDocument();
     expect(
-      screen.getByText("Direction without fake deadlines."),
+      screen.getByText(/Interactive example · Illustrative data/),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "Make it tangible" }),
-    ).toBeInTheDocument();
-    expect(screen.getByText("Native OBD-II diagnostics")).toBeInTheDocument();
-    expect(screen.getByText("Beta hardening")).toBeInTheDocument();
-    expect(screen.getByText("Interactive vehicle models")).toBeInTheDocument();
-    expect(screen.getByText("Events worth driving to")).toBeInTheDocument();
-    expect(screen.getByText("Motorcycles and bicycles")).toBeInTheDocument();
-    expect(
-      screen
-        .getAllByRole("link", { name: "Roadmap" })
-        .some((link) => link.getAttribute("href") === "/roadmap"),
-    ).toBe(true);
-    expect(
-      screen.getByText("What is Capcar trying to solve?"),
-    ).toBeInTheDocument();
-  });
-
-  it("provides direct routes into the garage", () => {
-    render(<MarketingLanding />);
-    const garageLinks = screen.getAllByRole("link", {
-      name: /start your garage|start free|start with your car/i,
-    });
-    expect(
-      garageLinks.some((link) => link.getAttribute("href") === "/register"),
-    ).toBe(true);
-  });
-
-  it("keeps mobile hero actions below the vehicle artwork", () => {
-    render(<MarketingLanding />);
-
-    const mobileActions = screen.getByTestId("mobile-hero-actions");
-    expect(mobileActions).toHaveClass("sm:hidden");
-    expect(
-      mobileActions.querySelector('a[href="/register"]'),
-    ).toHaveTextContent("Open your garage");
-    expect(
-      mobileActions.querySelector('a[href="#live-demo"]'),
-    ).toHaveTextContent("Live demo");
-  });
-
-  it("labels horizontal showcases for keyboard users", () => {
-    render(<MarketingLanding />);
-
-    expect(
-      screen.getByLabelText("Vehicle detail image carousel"),
-    ).toHaveAttribute("tabindex", "0");
-    expect(screen.getByLabelText("Community build carousel")).toHaveAttribute(
-      "tabindex",
-      "0",
-    );
+    expect(screen.queryByText("Verified builder")).not.toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "Skip to content" }),
     ).toHaveAttribute("href", "#main-content");
-  });
-
-  it("shows interactive fitment outcomes", () => {
-    render(<MarketingLanding />);
-    expect(screen.getByText("Direct Bolt-On")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: /m-style rear wing/i }));
-    expect(screen.getByText("Modification Required")).toBeInTheDocument();
-    fireEvent.click(
-      screen.getByRole("button", { name: /f30 front brake kit/i }),
-    );
-    expect(screen.getByText("Incompatible")).toBeInTheDocument();
-  });
-
-  it("opens mobile navigation", () => {
-    render(<MarketingLanding />);
-    fireEvent.click(screen.getByRole("button", { name: "Open navigation" }));
+    const actions = screen.getByTestId("hero-actions");
     expect(
-      screen.getByRole("dialog", { name: "Mobile navigation" }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Sign in" })).toHaveAttribute(
-      "href",
-      "/login",
-    );
+      within(actions).getByRole("link", { name: /Start a build/ }),
+    ).toHaveAttribute("href", "/register");
+    expect(
+      within(actions).getByRole("link", { name: "Explore a project" }),
+    ).toHaveAttribute("href", "#live-demo");
   });
 
-  it("slides between the current car and planned vision", () => {
+  it("connects the chosen part, estimated budget and planned passport record", () => {
     render(<MarketingLanding />);
-    const slider = screen.getByRole("slider", {
-      name: /compare current car with vision/i,
-    });
+    fireEvent.click(
+      screen.getByRole("button", { name: /Compare example offers/ }),
+    );
+    const panel = screen.getByRole("tabpanel");
+    expect(within(panel).getAllByText("Fitment not confirmed")).toHaveLength(2);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Add to the example plan" }),
+    );
+    expect(within(panel).getByRole("status")).toHaveTextContent(
+      "Nothing purchased",
+    );
+    expect(
+      screen.getByRole("button", { name: "Add to the example plan" }),
+    ).toBeDisabled();
+    fireEvent.click(screen.getByRole("tab", { name: "Vehicle Passport" }));
+    expect(
+      screen.getByText("Planned part · Not installed"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Rear lighting · €225")).toBeInTheDocument();
+    expect(screen.getByText("€1,295")).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole("button", { name: "Remove from the example" }),
+    );
+    expect(screen.queryByText("Rear lighting · €225")).not.toBeInTheDocument();
+    expect(screen.getByText("€1,520")).toBeInTheDocument();
+  });
 
-    expect(slider).toHaveAttribute("aria-valuenow", "52");
-    fireEvent.keyDown(slider, { key: "ArrowRight" });
-    expect(slider).toHaveAttribute("aria-valuenow", "54");
+  it("does not present an incomplete price as a final budget balance", () => {
+    render(<MarketingLanding />);
+    fireEvent.click(screen.getByRole("tab", { name: "Parts comparison" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Select this example" }),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: "Add to the example plan" }),
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "Vehicle Passport" }));
+    expect(screen.getByText("€195 + ?")).toBeInTheDocument();
+    expect(screen.queryByText("€1,325")).not.toBeInTheDocument();
+    expect(screen.getByText("Shipping: Not provided")).toBeInTheDocument();
+  });
+
+  it("supports keyboard tabs and replaces one modification instead of duplicating it", () => {
+    render(<MarketingLanding />);
+    const plan = screen.getByRole("tab", { name: "Build plan" });
+    fireEvent.keyDown(plan, { key: "ArrowRight" });
+    expect(screen.getByRole("tab", { name: "Parts comparison" })).toHaveFocus();
+    fireEvent.click(
+      screen.getByRole("button", { name: "Add to the example plan" }),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: "Select this example" }),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: "Add to the example plan" }),
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "Vehicle Passport" }));
+    expect(screen.getAllByText("Planned part · Not installed")).toHaveLength(1);
+    fireEvent.click(screen.getByRole("button", { name: "Reset example" }));
+    expect(screen.getByRole("tab", { name: "Build plan" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByText("€0")).toBeInTheDocument();
+  });
+
+  it("opens a direct view from a section link", () => {
+    window.history.replaceState(null, "", "#demo-history");
+    render(<MarketingLanding />);
+    expect(
+      screen.getByRole("tab", { name: "Vehicle Passport" }),
+    ).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByText("A record worth keeping.")).toBeInTheDocument();
+  });
+
+  it("uses a native comparison range and a working mobile menu", () => {
+    render(<MarketingLanding />);
+    const slider = screen.getByRole("slider");
+    fireEvent.change(slider, { target: { value: "75" } });
+    expect(slider).toHaveAttribute("aria-valuetext", "75% concept");
+    fireEvent.click(screen.getByRole("button", { name: "Open navigation" }));
+    const drawer = screen.getByRole("dialog", { name: "Mobile navigation" });
+    expect(
+      within(drawer).getByRole("link", { name: "Find parts" }),
+    ).toHaveAttribute("href", "/parts-search");
+    fireEvent.click(
+      within(drawer).getByRole("button", { name: "Close navigation" }),
+    );
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });

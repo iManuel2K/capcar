@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, BadgeCheck, PackageSearch } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { SiteFooter } from "@/components/marketing/site-footer";
 import { MarketingHeader } from "@/components/marketing/marketing-header";
 import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 import { searchCatalogParts } from "@/features/parts/part-catalog";
@@ -41,7 +42,11 @@ export default async function PartsSearchPage({
         <div className="mt-8 max-w-2xl">
           <GlobalPartsSearch key={query} expanded initialQuery={query} />
           <Link
-            href="/connected-parts"
+            href={
+              query
+                ? `/connected-parts?q=${encodeURIComponent(query)}`
+                : "/connected-parts"
+            }
             className="mt-3 inline-flex min-h-11 items-center text-sm underline"
           >
             {t("liveOffers")} →
@@ -135,6 +140,7 @@ export default async function PartsSearchPage({
           {t("notice")}
         </aside>
       </main>
+      <SiteFooter />
     </div>
   );
 }

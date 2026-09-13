@@ -225,5 +225,176 @@
     "sourceRecording": "Originalaufnahme",
     "soundSetup": "Fahrzeugzustand der Aufnahme nicht unabhängig geprüft.",
     "moreListings": "Weitere Anzeigen"
+  },
+  "Launch": {
+    "nav": {
+      "how": "So funktioniert’s",
+      "projects": "Beispielprojekt",
+      "parts": "Teile finden",
+      "explore": "Entdecken",
+      "legal": "Rechtliches",
+      "main": "Hauptnavigation"
+    },
+    "start": "Build starten",
+    "explore": "Projekt entdecken",
+    "hero": {
+      "eyebrow": "Die digitale Garage für dein Autoprojekt",
+      "title": "Bau das Auto,",
+      "accent": "das du dir vorstellst.",
+      "description": "Plane Umbauten, finde Teile, erkunde den Look und halte die Geschichte deines Autos in einer Garage fest.",
+      "note": "Dein Auto. Dein Tempo. Dein nächster Werkstattabend."
+    },
+    "visual": {
+      "current": "Ausgangspunkt",
+      "concept": "Designidee",
+      "label": "Ausgangspunkt und Designidee vergleichen",
+      "value": "{value} % Designidee",
+      "note": "Beispielvisualisierungen. Entdecke eine Richtung; Teile und Passform separat prüfen.",
+      "alt": "BMW E90 als Designidee in einer Garage"
+    },
+    "demo": {
+      "eyebrow": "Ein Blick in die Projektgarage",
+      "title": "Ein Auto. Ein klarer nächster Schritt.",
+      "description": "Wähle ein Ziel, vergleiche ein Beispielteil und sieh, wie sich Budget und Verlauf gemeinsam ändern. Ohne Konto.",
+      "sample": "Interaktives Beispiel · Beispieldaten · Kein Live-Angebot",
+      "plan": "Build-Plan",
+      "parts": "Teilevergleich",
+      "visual": "Visuelle Richtung",
+      "history": "Fahrzeugpass",
+      "tabs": "Beispielprojekt erkunden",
+      "goal": "Build-Ziel",
+      "oem": "OEM+ im Alltag: Werkscharakter bewahren",
+      "restore": "Auffrischen und das Original erhalten",
+      "modification": "Nächste Änderung",
+      "lights": "Rückleuchten",
+      "wheels": "Felgen auffrischen",
+      "service": "Wartungsbasis schaffen",
+      "phase": "Aktuelle Phase",
+      "phaseValue": "Planen & vergleichen",
+      "next": "Nächster Schritt",
+      "checkLights": "Stecker und mitgelieferte Adapter prüfen.",
+      "checkWheels": "Breite, Einpresstiefe und Freigängigkeit prüfen.",
+      "checkService": "Servicehistorie und Motorspezifikation prüfen.",
+      "budget": "Build-Budget",
+      "spent": "Ausgegeben",
+      "planned": "Geplant",
+      "remaining": "Noch verfügbar",
+      "compare": "Beispielangebote vergleichen",
+      "offer": "Beispielangebot {number}",
+      "item": "Artikelpreis",
+      "shipping": "Versand",
+      "total": "Geschätzter Gesamtpreis",
+      "unknown": "Nicht angegeben",
+      "used": "Gebraucht · Zustand prüfen",
+      "seller": "Verkäuferhistorie, Rückgabe und Garantie: in diesem Beispiel nicht angegeben.",
+      "fitment": "Passform nicht bestätigt",
+      "select": "Dieses Beispiel wählen",
+      "selected": "Ausgewählt",
+      "add": "Zum Beispielplan hinzufügen",
+      "added": "Zum Plan und Beispielpass hinzugefügt. Nichts gekauft.",
+      "remove": "Aus dem Beispiel entfernen",
+      "reset": "Beispiel zurücksetzen",
+      "record": "Geplantes Teil · Nicht eingebaut",
+      "evidence": "Nachweise prüfen",
+      "evidenceText": "Vor der Entscheidung Angebot, Teilenummer und Fotos von Steckern oder Maßen sichern. Dieses Beispiel enthält keine Herstellerbestätigung.",
+      "historyTitle": "Ein Verlauf, der bleibt.",
+      "historyNote": "Beispielverlauf. Geplante Teile bleiben von erledigten Arbeiten getrennt.",
+      "entryOne": "Fahrzeug angelegt · Angaben des Besitzers",
+      "entryTwo": "Wartung geprüft · Servicedatum nicht erfasst",
+      "empty": "Wähle ein Beispielteil, damit es hier erscheint.",
+      "session": "Beispieländerungen gelten, solange diese Seite geöffnet ist. Dein eigener Build beginnt in deiner privaten Garage.",
+      "realSearch": "Live-Angebote suchen",
+      "visualText": "Erkunde die Gesamtrichtung. Das Konzept zeigt nicht das gewählte Angebot und bestätigt keine Passform."
+    },
+    "problem": {
+      "title": "Dein Build. Die Infos überall.",
+      "body": "Ein gespeichertes Angebot. Ein Forumsthread. Ein Beleg im Handschuhfach. Bring die wichtigen Details zurück zu deinem Auto."
+    },
+    "journey": {
+      "title": "Von der ersten Idee zum nächsten Kapitel.",
+      "imagine": "Vorstellen",
+      "imagineText": "Finde die Richtung für dein Auto.",
+      "plan": "Planen",
+      "planText": "Lege Prioritäten, Aufgaben und Budget fest.",
+      "find": "Finden",
+      "findText": "Vergleiche Angebote und entscheidende Details.",
+      "visualize": "Ansehen",
+      "visualizeText": "Erkunde verfügbare visuelle Referenzen.",
+      "build": "Umsetzen",
+      "buildText": "Halte Käufe, Einbauten und Fortschritte fest.",
+      "remember": "Festhalten",
+      "rememberText": "Bewahre die Geschichte beim Auto."
+    },
+    "features": {
+      "title": "Alles rund um deinen Build.",
+      "plan": "Gib deiner Idee Form.",
+      "planText": "Mach aus der nächsten Änderung einen Plan. Ziel, Merkliste und Kosten bleiben bei deinem Auto.",
+      "parts": "Finde, was passt.",
+      "partsText": "Suche Live-Angebote bei eBay und vergleiche Preis, Lieferung und Verkäuferangaben. Prüfe vor dem Kauf die genaue Spezifikation.",
+      "visual": "Sieh die Richtung vor dem Kauf.",
+      "visualText": "Erkunde verfügbare 3D-Referenzen im Concept Studio. Modelle und Optionen variieren; Vorschauen bestätigen keine Passform.",
+      "history": "Bewahre die Geschichte.",
+      "historyText": "Bewahre Wartung, Umbauten, Belege und Fotos im Fahrzeugpass. Geplante Arbeiten bleiben von erledigten getrennt.",
+      "view": "Im Beispiel ansehen",
+      "studio": "Concept Studio öffnen"
+    },
+    "project": {
+      "title": "Kleine Änderungen. Dein ganz eigenes Auto.",
+      "body": "Project Streetline bewahrt den Werkscharakter eines BMW E90 und plant gezielte Verbesserungen. Ziel, Budget und nächste Entscheidung findest du im Beispiel oben.",
+      "caption": "BMW E90 als Beispielprojekt · OEM+ steht für dezente Änderungen mit Werkscharakter."
+    },
+    "trust": {
+      "title": "Was bestätigt ist. Was noch zu prüfen ist.",
+      "body": "Eine hilfreiche Antwort zeigt ihre Grenzen. Quellen, Schätzungen und offene Fragen gehören direkt zur Entscheidung.",
+      "fact": "Angaben mit Quelle",
+      "factText": "Prüfe, welche Fahrzeugmerkmale und Teilenummern die Quelle tatsächlich abdeckt.",
+      "owner": "Angaben des Besitzers",
+      "ownerText": "Fotos und Aufzeichnungen erzählen die Geschichte; sie sind keine Herstellerbestätigung.",
+      "estimate": "Geschätzter Gesamtpreis",
+      "estimateText": "Versand und fehlende Kosten bleiben sichtbar. Ein unvollständiger Preis ist kein Endpreis.",
+      "unknown": "Vor dem Kauf prüfen",
+      "unknownText": "Fehlende oder widersprüchliche Angaben genauer prüfen. Passform und Straßenzulassung sind getrennte Prüfungen."
+    },
+    "beta": {
+      "title": "Für echte Fragen aus der Garage.",
+      "body": "CapCar ist in der Beta. Bring dein Projekt mit und hilf, Details zu verbessern. Fahrzeugabdeckung, visuelle Referenzen und Anbindungen wachsen weiter.",
+      "feedback": "Feedback senden"
+    },
+    "final": {
+      "title": "Starte mit dem Auto, das du bauen willst.",
+      "body": "Gib deinem Plan einen festen Platz.",
+      "tagline": "Vom Plan auf die Straße."
+    },
+    "faq": {
+      "title": "Bevor du loslegst.",
+      "one": {
+        "question": "Was ist CapCar?",
+        "answer": "Eine digitale Garage, um Änderungen zu planen, Teile zu finden und Wartung und Build-Historie zusammenzuhalten."
+      },
+      "two": {
+        "question": "Brauche ich ein Konto für die Teilesuche?",
+        "answer": "Nein. Suche ohne Anmeldung und erstelle ein Konto, wenn du deine eigene Garage nutzen möchtest."
+      },
+      "three": {
+        "question": "Wird jedes Teil auf Passform bestätigt?",
+        "answer": "Nein. Die Abdeckung variiert. Prüfe Fahrzeugspezifikation, Teilenummer und Einbauanforderungen vor dem Kauf."
+      },
+      "four": {
+        "question": "Kann ich jede Änderung an meinem genauen Auto visualisieren?",
+        "answer": "Noch nicht. Concept Studio bietet ausgewählte Referenzen. Modelle und Optionen variieren; Vorschauen belegen keine Passform."
+      },
+      "five": {
+        "question": "Wo kaufe ich die Teile?",
+        "answer": "Händlerkäufe schließt du auf der Händlerwebsite ab. CapCar nimmt für diese Bestellungen keine Zahlung entgegen."
+      },
+      "six": {
+        "question": "Ist meine Garage öffentlich?",
+        "answer": "Deine persönliche Garage ist privat. Prüfe die Angaben, bevor du einen öffentlichen Pass teilst oder ein Inserat veröffentlichst."
+      },
+      "seven": {
+        "question": "Brauche ich ein umgebautes Auto zum Start?",
+        "answer": "Nein. Starte mit deinem Auto und der nächsten Wartung, Verbesserung oder Aufzeichnung."
+      }
+    }
   }
 }
