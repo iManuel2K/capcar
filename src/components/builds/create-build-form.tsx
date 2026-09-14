@@ -14,9 +14,13 @@ import { useState, useSyncExternalStore } from "react";
 import { buildGoals, buildInputSchema } from "@/features/builds/build-schema";
 import {
   announceBuildChange,
-  createBuild,
+  createStarterBuild,
 } from "@/features/builds/build-storage";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
+import {
+  buildItemInputSchema,
+  buildStages,
+} from "@/features/builds/build-schema";
 
 export function CreateBuildForm({ vehicleId }: { vehicleId: string }) {
   const hydrated = useSyncExternalStore(
@@ -32,8 +36,12 @@ export function CreateBuildForm({ vehicleId }: { vehicleId: string }) {
     goal: "",
     description: "",
     budget: "",
+    modification: "",
+    stage: "appearance",
+    estimate: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [saving, setSaving] = useState(false);
 
   if (!hydrated)
     return (
@@ -45,12 +53,24 @@ export function CreateBuildForm({ vehicleId }: { vehicleId: string }) {
     );
 
   function update(key: keyof typeof form, value: string) {
-    setForm((current) => ({ ...current, [key]: value }));
+    setForm((current) => ({
+      ...current,
+      [key]: value,
+      ...(key === "goal" && value
+        ? {
+            name: current.name || `${vehicle?.model ?? "My car"} ${value}`,
+            description:
+              current.description ||
+              `An ${value} build, starting with one considered modification and a clear budget.`,
+          }
+        : {}),
+    }));
     setErrors((current) => ({ ...current, [key]: "" }));
   }
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (saving) return;
     const result = buildInputSchema.safeParse({
       vehicleId,
       ...form,
@@ -63,9 +83,36 @@ export function CreateBuildForm({ vehicleId }: { vehicleId: string }) {
       setErrors(next);
       return;
     }
-    const build = createBuild(result.data, window.localStorage);
-    announceBuildChange();
-    router.push(`/garage/${vehicleId}/builds/${build.id}`);
+    const first = buildItemInputSchema.safeParse({
+      buildId: "pending",
+      title: form.modification,
+      stage: form.stage,
+      estimatedCost: form.estimate,
+      priority: "now",
+      status: "planned",
+      note: "Owner estimate. Confirm fitment and delivered price before purchase.",
+    });
+    if (!first.success) {
+      setErrors({
+        first: first.error.issues.map((issue) => issue.message).join(". "),
+      });
+      return;
+    }
+    setSaving(true);
+    try {
+      const build = createStarterBuild(
+        result.data,
+        first.data,
+        window.localStorage,
+      );
+      announceBuildChange();
+      router.push(`/garage/${vehicleId}/builds/${build.id}`);
+    } catch {
+      setErrors({
+        save: "Your build could not be saved. Check browser storage and try again; your form is still here.",
+      });
+      setSaving(false);
+    }
   }
 
   return (
@@ -154,6 +201,51 @@ export function CreateBuildForm({ vehicleId }: { vehicleId: string }) {
             />
           </Field>
         </div>
+        <fieldset className="grid gap-5 border-t border-white/10 p-6 sm:grid-cols-3 sm:p-10">
+          <legend className="px-2 text-lg">Your first modification</legend>
+          <Field label="Modification">
+            <input
+              className={inputClass}
+              required
+              maxLength={100}
+              value={form.modification}
+              onChange={(event) => update("modification", event.target.value)}
+              placeholder="Rear lights"
+            />
+          </Field>
+          <Field label="Build phase">
+            <select
+              className={inputClass}
+              value={form.stage}
+              onChange={(event) => update("stage", event.target.value)}
+            >
+              {buildStages.map((stage) => (
+                <option key={stage}>{stage}</option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Initial estimate · EUR">
+            <input
+              className={inputClass}
+              type="number"
+              min="0"
+              step="1"
+              value={form.estimate}
+              onChange={(event) => update("estimate", event.target.value)}
+              placeholder="0 if unknown"
+            />
+          </Field>
+          {errors.first && (
+            <p role="alert" className="text-red-200 sm:col-span-3">
+              {errors.first}
+            </p>
+          )}
+          {errors.save && (
+            <p role="alert" className="text-red-200 sm:col-span-3">
+              {errors.save}
+            </p>
+          )}
+        </fieldset>
         <footer className="flex flex-col-reverse items-stretch justify-between gap-4 border-t border-white/8 p-6 sm:flex-row sm:items-center sm:p-8">
           <p className="flex items-center gap-2 text-xs text-white/35">
             <ShieldCheck className="size-3.5" /> Concept plan · no fitment
@@ -161,9 +253,11 @@ export function CreateBuildForm({ vehicleId }: { vehicleId: string }) {
           </p>
           <button
             type="submit"
+            disabled={saving}
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-6 text-sm font-semibold text-[#07101d]"
           >
-            Create build <ArrowRight className="size-4" />
+            {saving ? "Saving build…" : "Create build"}{" "}
+            <ArrowRight className="size-4" />
           </button>
         </footer>
       </form>

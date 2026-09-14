@@ -3,34 +3,32 @@ import Image from "next/image";
 import { configuratorEnglish } from "@/features/visualizer/configurator-english";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { z } from "zod";
+import {
+  referenceConfigurationSchema as savedSchema,
+  type ReferenceConfiguration,
+} from "@/features/visualizer/build-visual-schema";
 import {
   loadSketchfab,
   type Camera,
   type Material,
   type ViewerApi,
 } from "@/features/visualizer/sketchfab-api";
-const savedSchema = z.object({
-  paints: z.record(z.string(), z.string().regex(/^#[0-9a-f]{6}$/i)),
-  camera: z
-    .object({
-      position: z.array(z.number().finite()).length(3),
-      target: z.array(z.number().finite()).length(3),
-    })
-    .optional(),
-});
 export function ReferenceConfigurator({
   id,
   image,
   name,
   storageKey = id,
   english = false,
+  savedConfiguration,
+  onSaveConfiguration,
 }: {
   id: string;
   image: string;
   name: string;
   storageKey?: string;
   english?: boolean;
+  savedConfiguration?: ReferenceConfiguration;
+  onSaveConfiguration?: (configuration: ReferenceConfiguration) => void;
 }) {
   const translated = useTranslations("Expansion");
   const t = (key: keyof typeof configuratorEnglish) =>
@@ -217,10 +215,10 @@ export function ReferenceConfigurator({
                 api.current?.getCameraLookAt((error, camera) => {
                   try {
                     if (error) throw error;
-                    localStorage.setItem(
-                      key,
-                      JSON.stringify(savedSchema.parse({ paints, camera })),
-                    );
+                    const configuration = savedSchema.parse({ paints, camera });
+                    if (onSaveConfiguration) onSaveConfiguration(configuration);
+                    else
+                      localStorage.setItem(key, JSON.stringify(configuration));
                     setMessage(t("savedLocal"));
                   } catch {
                     setMessage(t("error"));
@@ -235,7 +233,8 @@ export function ReferenceConfigurator({
               onClick={() => {
                 try {
                   const saved = savedSchema.parse(
-                    JSON.parse(localStorage.getItem(key) ?? "null"),
+                    savedConfiguration ??
+                      JSON.parse(localStorage.getItem(key) ?? "null"),
                   );
                   originals.current.forEach((item) =>
                     api.current?.setMaterial(structuredClone(item), () => {}),

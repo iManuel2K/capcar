@@ -61,6 +61,32 @@ export function createBuild(
   return build;
 }
 
+// Save the plan and its first modification atomically in the existing sync key.
+export function createStarterBuild(
+  input: BuildInput,
+  first: Omit<BuildItemInput, "buildId">,
+  storage: WritableStorage,
+) {
+  const now = new Date().toISOString();
+  const build = buildSchema.parse({
+    ...buildInputSchema.parse(input),
+    id: crypto.randomUUID(),
+    createdAt: now,
+  });
+  const item = buildItemSchema.parse({
+    ...first,
+    buildId: build.id,
+    id: crypto.randomUUID(),
+    createdAt: now,
+  });
+  const state = readBuildState(storage);
+  writeBuildState(
+    { builds: [build, ...state.builds], items: [...state.items, item] },
+    storage,
+  );
+  return build;
+}
+
 export function createBuildItem(
   input: BuildItemInput,
   storage: WritableStorage,
@@ -84,7 +110,13 @@ export function updateBuildItemStatus(
 ) {
   const state = readBuildState(storage);
   const items = state.items.map((item) =>
-    item.id === itemId ? buildItemSchema.parse({ ...item, status }) : item,
+    item.id === itemId
+      ? buildItemSchema.parse({
+          ...item,
+          status,
+          updatedAt: new Date().toISOString(),
+        })
+      : item,
   );
   writeBuildState({ ...state, items }, storage);
 }

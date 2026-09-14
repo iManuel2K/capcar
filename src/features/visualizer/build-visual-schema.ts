@@ -29,9 +29,25 @@ export const interiorOptions = {
   drivingSide: ["left", "right"],
 } as const;
 
+export const referenceConfigurationSchema = z.object({
+  paints: z.record(z.string(), z.string().regex(/^#[0-9a-f]{6}$/i)),
+  camera: z
+    .object({
+      position: z.array(z.number().finite()).length(3),
+      target: z.array(z.number().finite()).length(3),
+    })
+    .optional(),
+});
+export type ReferenceConfiguration = z.infer<
+  typeof referenceConfigurationSchema
+>;
+
 export const buildVisualSchema = z.object({
   vehicleId: z.string().min(1),
   buildId: z.string().min(1),
+  reference: referenceConfigurationSchema
+    .extend({ modelUid: z.string().regex(/^[a-f0-9]{32}$/) })
+    .optional(),
   paint: z.enum(visualPaints),
   wheels: z.enum(visualWheels),
   stance: z.enum(visualStances),

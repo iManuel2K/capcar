@@ -15,7 +15,12 @@ let cachedRaw: string | null | undefined;
 let cachedState: BuildState = emptySnapshot;
 
 function getSnapshot() {
-  const raw = window.localStorage.getItem(BUILD_STORAGE_KEY);
+  let raw: string | null;
+  try {
+    raw = window.localStorage.getItem(BUILD_STORAGE_KEY);
+  } catch {
+    return emptySnapshot;
+  }
   if (raw !== cachedRaw) {
     cachedRaw = raw;
     cachedState = readBuildState(window.localStorage);
@@ -25,7 +30,7 @@ function getSnapshot() {
 
 function subscribe(onStoreChange: () => void) {
   const handleStorage = (event: StorageEvent) => {
-    if (event.key === BUILD_STORAGE_KEY) onStoreChange();
+    if (event.key === BUILD_STORAGE_KEY || event.key === null) onStoreChange();
   };
   window.addEventListener("storage", handleStorage);
   window.addEventListener(BUILD_STORAGE_EVENT, onStoreChange);

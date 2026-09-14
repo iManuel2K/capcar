@@ -35,6 +35,7 @@ import {
 } from "@/features/builds/build-storage";
 import { useBuildState } from "@/features/builds/use-builds";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
+import { BuildJourneyPanel } from "./build-journey-panel";
 
 const stageContent: Record<
   BuildStage,
@@ -95,6 +96,7 @@ export function BuildDetail({
     estimatedCost: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [saveError, setSaveError] = useState("");
 
   if (!hydrated)
     return (
@@ -129,8 +131,16 @@ export function BuildDetail({
       setErrors(next);
       return;
     }
-    createBuildItem(result.data, window.localStorage);
-    announceBuildChange();
+    try {
+      createBuildItem(result.data, window.localStorage);
+      announceBuildChange();
+      setSaveError("");
+    } catch {
+      setSaveError(
+        "Could not save this modification. Your input is still here; check browser storage and try again.",
+      );
+      return;
+    }
     setForm({
       title: "",
       note: "",
@@ -143,13 +153,27 @@ export function BuildDetail({
   }
 
   function changeItemStatus(itemId: string, status: BuildItemStatus) {
-    updateBuildItemStatus(itemId, status, window.localStorage);
-    announceBuildChange();
+    try {
+      updateBuildItemStatus(itemId, status, window.localStorage);
+      announceBuildChange();
+      setSaveError("");
+    } catch {
+      setSaveError(
+        "Status was not saved. Check browser storage and try again.",
+      );
+    }
   }
 
   function changeBuildStatus(status: (typeof buildStatuses)[number]) {
-    updateBuildStatus(buildId, status, window.localStorage);
-    announceBuildChange();
+    try {
+      updateBuildStatus(buildId, status, window.localStorage);
+      announceBuildChange();
+      setSaveError("");
+    } catch {
+      setSaveError(
+        "Build status was not saved. Check browser storage and try again.",
+      );
+    }
   }
 
   return (
@@ -196,6 +220,15 @@ export function BuildDetail({
         </div>
       </header>
 
+      {saveError && (
+        <p
+          role="alert"
+          className="mt-5 rounded-xl border border-red-300/30 p-4 text-red-200"
+        >
+          {saveError}
+        </p>
+      )}
+      <BuildJourneyPanel build={build} items={items} />
       <section className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
           label="Budget"
@@ -208,7 +241,7 @@ export function BuildDetail({
           icon={Layers3}
         />
         <MetricCard
-          label="Installed spend"
+          label="Installed estimate"
           value={formatEuro(metrics.installedSpend)}
           icon={Check}
         />
@@ -228,7 +261,8 @@ export function BuildDetail({
           <Eye className="size-5 text-[#ff667a]" />
           <h2 className="mt-5 text-xl font-medium">Visualize this build</h2>
           <p className="mt-2 text-sm leading-6 text-white/40">
-            Compare the current baseline with a saved stylized concept.
+            Explore available 3D references and save a visual direction for this
+            build.
           </p>
         </Link>
         <Link
@@ -258,7 +292,14 @@ export function BuildDetail({
             {items.length} items
           </span>
         </div>
-        <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/8">
+        <div
+          role="progressbar"
+          aria-label="Installed modifications"
+          aria-valuenow={metrics.progress}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          className="mt-5 h-2 overflow-hidden rounded-full bg-white/8"
+        >
           <div
             className="h-full rounded-full bg-[#e72d45] transition-all"
             style={{ width: `${metrics.progress}%` }}
@@ -293,12 +334,14 @@ export function BuildDetail({
             <div>
               <h3 className="font-medium">Add a concept modification</h3>
               <p className="mt-1 text-xs text-white/35">
-                Fitment and pricing will be verified in later epics.
+                Record an estimate, then compare live offers and check fitment
+                evidence.
               </p>
             </div>
             <button
               type="button"
               onClick={() => setAdding(false)}
+              aria-label="Close modification form"
               className="grid size-9 place-items-center rounded-lg text-white/40 hover:bg-white/5"
             >
               <X className="size-4" />
@@ -423,6 +466,31 @@ export function BuildDetail({
                         <p className="mt-3 text-sm text-white/55">
                           {formatEuro(item.estimatedCost)}
                         </p>
+                        {item.selectedOfferId && (
+                          <p className="mt-2 text-xs text-[#c98f72]">
+                            {item.merchantName} offer saved · observed{" "}
+                            {item.deliveredPrice?.toFixed(2)} EUR incl. quoted
+                            shipping · fitment unverified
+                          </p>
+                        )}
+                        {item.selectedOfferUrl && (
+                          <a
+                            href={item.selectedOfferUrl}
+                            target="_blank"
+                            rel="sponsored noopener noreferrer"
+                            className="mt-2 inline-flex min-h-11 items-center text-sm underline"
+                          >
+                            Review saved retailer offer
+                          </a>
+                        )}
+                        {item.status === "planned" && (
+                          <Link
+                            href={`/garage/${vehicleId}/builds/${buildId}/parts?item=${encodeURIComponent(item.id)}`}
+                            className="mt-2 inline-flex min-h-11 items-center text-sm text-[#eee7d8] underline"
+                          >
+                            Compare offers for this modification →
+                          </Link>
+                        )}
                       </div>
                       <select
                         aria-label={`Status for ${item.title}`}
@@ -457,8 +525,9 @@ export function BuildDetail({
         <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#ff667a]" />
         <p>
           This is a planning roadmap. “Planned” does not mean compatible,
-          road-legal or safe. Epic 07 will introduce structured part and fitment
-          evidence.
+          road-legal or safe. Confirm the exact engine, part number and approval
+          documents before purchasing. Installed costs here remain estimates;
+          record receipts and actual expenses in Cost Analytics.
         </p>
       </aside>
     </div>

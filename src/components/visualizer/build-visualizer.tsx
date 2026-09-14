@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   Armchair,
@@ -77,11 +78,12 @@ export function BuildVisualizer({
   const { vehicles } = useVehicles();
   const state = useBuildState();
   const visuals = useBuildVisuals();
+  const [saveError, setSaveError] = useState("");
   const [previewMode, setPreviewMode] = useState<"current" | "concept">(
     "concept",
   );
   const [view, setView] = useState<
-    "auto" | "exterior" | "reference" | "interior"
+    "auto" | "photo" | "exterior" | "reference" | "interior"
   >("auto");
   const vehicle = vehicles.find((candidate) => candidate.id === vehicleId);
   const build = state.builds.find(
@@ -105,22 +107,37 @@ export function BuildVisualizer({
 
   const reference = vehicleReferenceFor(vehicle.platform);
   const viewOptions = reference
-    ? (["exterior", "reference", "interior"] as const)
-    : (["exterior", "interior"] as const);
+    ? (["photo", "exterior", "reference", "interior"] as const)
+    : (["photo", "exterior", "interior"] as const);
   const activeView =
-    view === "auto" ? (reference ? "reference" : "exterior") : view;
+    view === "auto" ? (reference ? "reference" : "photo") : view;
 
   function updateVisual(changes: Partial<BuildVisual>) {
     setPreviewMode("concept");
-    saveBuildVisual(
-      { ...visual, ...changes, vehicleId, buildId },
-      window.localStorage,
-    );
-    announceBuildVisualChange();
+    try {
+      saveBuildVisual(
+        { ...visual, ...changes, vehicleId, buildId },
+        window.localStorage,
+      );
+      announceBuildVisualChange();
+      setSaveError("");
+    } catch {
+      setSaveError(
+        "Your visual changes could not be saved. Check browser storage and try again.",
+      );
+    }
   }
 
   return (
     <div className="pb-24 sm:pb-0">
+      {saveError && (
+        <p
+          role="alert"
+          className="mb-4 rounded-xl border border-red-300/30 p-4 text-red-200"
+        >
+          {saveError}
+        </p>
+      )}
       <Link
         href={`/garage/${vehicleId}/builds/${buildId}`}
         className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
@@ -152,7 +169,7 @@ export function BuildVisualizer({
               : "mb-3"
           }`}
         >
-          <div className="inline-flex rounded-xl border border-white/10 bg-[#111111] p-1">
+          <div className="inline-flex flex-wrap rounded-xl border border-white/10 bg-[#111111] p-1">
             {viewOptions.map((candidate) => (
               <button
                 key={candidate}
@@ -161,18 +178,22 @@ export function BuildVisualizer({
                 aria-pressed={activeView === candidate}
                 className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-xs capitalize ${activeView === candidate ? "bg-white font-semibold text-black" : "text-white/40"}`}
               >
-                {candidate === "exterior" ? (
+                {candidate === "exterior" || candidate === "photo" ? (
                   <CarFront className="size-3.5" />
                 ) : candidate === "reference" ? (
                   <Rotate3D className="size-3.5" />
                 ) : (
                   <Armchair className="size-3.5" />
                 )}
-                {candidate === "reference" ? "3D reference" : candidate}
+                {candidate === "reference"
+                  ? "3D reference"
+                  : candidate === "exterior"
+                    ? "Stylized concept"
+                    : candidate}
               </button>
             ))}
           </div>
-          {activeView !== "reference" && (
+          {activeView !== "reference" && activeView !== "photo" && (
             <div className="inline-flex rounded-xl border border-white/10 bg-[#111111] p-1">
               {(["current", "concept"] as const).map((mode) => (
                 <button
@@ -196,6 +217,26 @@ export function BuildVisualizer({
               name={`${reference.title} · ${reference.yearLabel}`}
               image={reference.previewImage}
               storageKey={`${vehicleId}.${buildId}.${reference.modelUid}`}
+              savedConfiguration={
+                visual.reference?.modelUid === reference.modelUid
+                  ? visual.reference
+                  : undefined
+              }
+              onSaveConfiguration={(configuration) => {
+                saveBuildVisual(
+                  {
+                    ...visual,
+                    vehicleId,
+                    buildId,
+                    reference: {
+                      ...configuration,
+                      modelUid: reference.modelUid,
+                    },
+                  },
+                  window.localStorage,
+                );
+                announceBuildVisualChange();
+              }}
             />
             <p className="px-4 text-xs text-white/65">
               <a
@@ -209,6 +250,28 @@ export function BuildVisualizer({
               · Visual reference, edited material tints. Model coverage varies
               by vehicle; modifications do not verify fitment.
             </p>
+          </div>
+        ) : activeView === "photo" ? (
+          <div className="overflow-hidden rounded-[2rem] border border-white/15 bg-[#0b2528]">
+            {vehicle.imageUrl && (
+              <div className="relative aspect-[16/10] sm:aspect-video">
+                <Image
+                  src={vehicle.imageUrl}
+                  alt={`${vehicle.make} ${vehicle.model} vehicle image`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 1100px"
+                  className="object-contain"
+                />
+              </div>
+            )}
+            <div className="p-6">
+              <h2 className="text-xl font-medium">Start with your car.</h2>
+              <p className="mt-2 text-sm leading-6 text-white/70">
+                {reference
+                  ? "Your vehicle image and the 3D reference are separate views. A reference model may differ from your exact trim."
+                  : "No realistic 3D reference is currently mapped to this vehicle. Your plan still works; the stylized concept is available as an optional illustration."}
+              </p>
+            </div>
           </div>
         ) : activeView === "exterior" ? (
           <VehicleModelStage

@@ -1,5 +1,6 @@
 "use client";
 import { deleteOwnListingPhotos } from "@/features/community/delete-listing-photos";
+import { deleteOwnVehicleDocuments } from "@/features/passport/delete-vehicle-documents";
 
 import {
   AlertTriangle,
@@ -173,7 +174,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
   async function deleteCloudGarage() {
     if (
       !window.confirm(
-        "Delete the cloud garage, shared passports and account activity? Your account will stay active.",
+        "Permanently delete the cloud garage, private documents, shared passports and account activity? Download your original documents first. Your account will stay active.",
       )
     )
       return;
@@ -182,6 +183,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
     try {
       const client = createClient();
       await deleteOwnListingPhotos(client);
+      await deleteOwnVehicleDocuments(client);
       const { error: deleteError } = await client.rpc(
         "delete_current_user_data",
       );
@@ -205,6 +207,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
     try {
       const client = createClient();
       await deleteOwnListingPhotos(client);
+      await deleteOwnVehicleDocuments(client);
       const { error: deleteError } = await client.rpc("delete_current_user");
       if (deleteError) throw deleteError;
       clearDeviceAccountData();
@@ -423,9 +426,11 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
                 Delete what Capcar stores.
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-white/40">
-                Download an export first if you need a copy. Cloud-garage
-                deletion keeps the login; account deletion removes the login and
-                all account-owned records.
+                Download an export first if you need a copy. Private document
+                files are not included in JSON/CSV exports; download them from
+                each Vehicle Passport before deleting. Cloud-garage deletion
+                keeps the login; account deletion removes the login and all
+                account-owned records.
               </p>
               <div className="mt-6 grid gap-5 lg:grid-cols-2">
                 <div className="rounded-2xl border border-white/8 p-4">

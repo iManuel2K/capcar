@@ -32,6 +32,9 @@ import {
 } from "@/features/passport/vehicle-passport";
 import { proFeatureLabels } from "@/features/pro/pro-features";
 import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
+import { useBuildState } from "@/features/builds/use-builds";
+import { VehicleDocuments } from "./vehicle-documents";
 
 type PassportLink = {
   share_id: string;
@@ -44,6 +47,7 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
 }
 
 function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
+  useBuildState(); // Rebuild the Passport when installed work changes in this or another tab.
   const hydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -456,14 +460,18 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
           </div>
         )}
       </section>
+      <VehicleDocuments key={vehicleId} vehicleId={vehicleId} />
       <section className="print-surface mt-5 grid gap-3 sm:grid-cols-4">
         <PassportMetric
           label="Maintenance records"
           value={passport.maintenance.length}
         />
         <PassportMetric
-          label="Build items"
-          value={passport.modifications.length}
+          label="Installed modifications"
+          value={
+            passport.modifications.filter((item) => item.status === "installed")
+              .length
+          }
         />
         <PassportMetric
           label="Diagnostic logs"
@@ -484,13 +492,55 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
           }))}
         />
         <RecordSection
-          title="Build & fitment history"
-          empty="No build items recorded."
-          rows={passport.modifications.map((item) => ({
-            title: item.title,
-            meta: `${capitalize(item.status)} · ${formatEuro(item.cost)} · ${item.fitment} · ${item.verification}${item.selectedMerchant ? ` · ${item.selectedMerchant}` : ""}`,
-          }))}
+          title="Installed modifications · owner recorded"
+          empty="No installations recorded. Planned items are listed separately below."
+          rows={passport.modifications
+            .filter((item) => item.status === "installed")
+            .map((item) => ({
+              title: item.title,
+              meta: `Installed · estimated ${formatEuro(item.cost)} · ${item.fitment} · ${item.verification}${item.selectedMerchant ? ` · ${item.selectedMerchant}` : ""}`,
+            }))}
         />
+        <RecordSection
+          title="Planned & ordered · not installed"
+          empty="No pending modifications."
+          rows={passport.modifications
+            .filter((item) => item.status !== "installed")
+            .map((item) => ({
+              title: item.title,
+              meta: `${capitalize(item.status)} · estimated ${formatEuro(item.cost)} · not installation evidence`,
+            }))}
+        />
+        <aside className="no-print rounded-2xl border border-white/15 p-6">
+          <h2 className="text-xl font-medium">
+            Keep the build and its record connected.
+          </h2>
+          <p className="mt-3 text-sm leading-6 text-white/70">
+            Mark completed work in the build plan to include it here. Estimates
+            are not receipts, and owner-entered installation records are not
+            specialist verification.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              className="inline-flex min-h-11 items-center rounded-xl border border-white/25 px-4"
+              href={`/garage/${vehicleId}/builds`}
+            >
+              Manage builds
+            </Link>
+            <Link
+              className="inline-flex min-h-11 items-center rounded-xl border border-white/25 px-4"
+              href={`/garage/${vehicleId}/costs`}
+            >
+              Record actual expenses
+            </Link>
+            <Link
+              className="inline-flex min-h-11 items-center rounded-xl border border-white/25 px-4"
+              href={`/garage/${vehicleId}/timeline`}
+            >
+              Vehicle timeline
+            </Link>
+          </div>
+        </aside>
         <RecordSection
           title="Diagnostic history"
           empty="No DTC records."
