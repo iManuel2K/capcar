@@ -148,6 +148,42 @@ export function buildVehicleTimeline(
     const part = item.catalogPartId
       ? findCatalogPart(item.catalogPartId)
       : undefined;
+    const purchase = item.workbench?.purchase;
+    if (purchase) {
+      events.push({
+        id: `purchase-${item.id}`,
+        category: "build",
+        title: `Purchased · ${item.title}`,
+        detail: "Owner-recorded purchase · paid amount, net of refunds.",
+        occurredAt: `${purchase.orderedAt}T12:00:00.000Z`,
+        value: formatEuro(purchase.amount - purchase.refunded),
+      });
+      if (purchase.deliveredAt)
+        events.push({
+          id: `delivery-${item.id}`,
+          category: "build",
+          title: `Delivered · ${item.title}`,
+          detail: "Delivery recorded by owner; not proof of installation.",
+          occurredAt: `${purchase.deliveredAt}T12:00:00.000Z`,
+        });
+    }
+    for (const evidence of item.workbench?.evidence ?? [])
+      events.push({
+        id: `evidence-${evidence.id}`,
+        category: "build",
+        title: `Evidence linked · ${item.title}`,
+        detail: `Private ${evidence.kind} reference · authenticity not verified.`,
+        occurredAt: evidence.recordedAt,
+      });
+    if (item.selectedOfferId)
+      events.push({
+        id: `selected-quote-${item.id}`,
+        category: "offer",
+        title: `Offer selected · ${part?.name ?? item.title}`,
+        detail: `${item.merchantName ?? "Retailer"} quote saved for comparison; selection is not a purchase.`,
+        occurredAt: item.offerSelectedAt ?? item.createdAt,
+        value: formatEuro(item.deliveredPrice ?? item.estimatedCost),
+      });
     if (item.status === "installed") {
       events.push({
         id: `installed-${item.id}`,
@@ -155,19 +191,14 @@ export function buildVehicleTimeline(
         title: `Installed · ${item.title}`,
         detail:
           "Build item marked installed. Technical verification remains the owner's responsibility.",
-        occurredAt: item.updatedAt ?? item.createdAt,
-        value: formatEuro(item.deliveredPrice ?? item.estimatedCost),
+        occurredAt: purchase?.installedAt
+          ? `${purchase.installedAt}T12:00:00.000Z`
+          : (item.updatedAt ?? item.createdAt),
+        value: purchase
+          ? `${formatEuro(purchase.amount - purchase.refunded)} paid · ${purchase.mileage ?? "unknown"} km`
+          : `${formatEuro(item.deliveredPrice ?? item.estimatedCost)} estimate`,
       });
-    } else if (item.selectedOfferId) {
-      events.push({
-        id: `offer-${item.id}`,
-        category: "offer",
-        title: `Demo offer selected · ${part?.name ?? item.title}`,
-        detail: `${item.merchantName ?? "Demo merchant"} connected to the build. No purchase was made.`,
-        occurredAt: item.offerSelectedAt ?? item.updatedAt ?? item.createdAt,
-        value: formatEuro(item.deliveredPrice ?? item.estimatedCost),
-      });
-    } else {
+    } else if (!item.selectedOfferId && !purchase) {
       events.push({
         id: `item-${item.id}`,
         category: "build",
@@ -186,8 +217,8 @@ export function buildVehicleTimeline(
     events.push({
       id: `guide-${progress.vehicleId}-${progress.guideSlug}`,
       category: "installation",
-      title: `Guide completed · ${guide?.title ?? progress.guideSlug}`,
-      detail: `${progress.completedSteps.length} demo steps confirmed in ${progress.mode} mode.`,
+      title: `${guide?.purpose === "inspection" ? "Inspection preparation completed" : "Guide completed"} · ${guide?.title ?? progress.guideSlug}`,
+      detail: `${progress.completedSteps.length} ${guide?.purpose === "inspection" ? "preparation" : "guide"} steps recorded in ${progress.mode} mode. Not proof of repair or component failure.`,
       occurredAt: progress.completedAt!,
     });
   }

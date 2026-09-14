@@ -58,6 +58,9 @@ export function selectBuildOffer(
     );
   const selected = buildItemSchema.parse({
     ...current,
+    workbench: current.workbench
+      ? { ...current.workbench, selectedQuoteId: undefined }
+      : undefined,
     selectedOfferId: offer.id,
     selectedOfferUrl: offer.url,
     merchantName: "eBay",

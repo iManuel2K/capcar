@@ -12,6 +12,8 @@ export const costEntryInputSchema = z.object({
 });
 
 export const costEntrySchema = costEntryInputSchema.extend({
+  sourceBuildId: z.string().optional(),
+  sourceBuildItemId: z.string().optional(),
   id: z.string().min(1),
   createdAt: z.string().datetime(),
 });

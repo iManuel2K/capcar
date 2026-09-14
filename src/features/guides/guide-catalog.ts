@@ -1,3 +1,4 @@
+import { dailyCarProblems } from "@/features/problems/daily-car-coverage";
 export type GuideDifficulty = "Easy" | "Moderate" | "Advanced";
 export type GuideReviewStatus = "draft" | "reviewed" | "verified";
 export type GuideSource = {
@@ -17,6 +18,7 @@ export type GuideStep = {
 };
 
 export type InstallationGuide = {
+  purpose?: "inspection";
   slug: string;
   partId: string;
   title: string;
@@ -34,6 +36,47 @@ export type InstallationGuide = {
 };
 
 export const installationGuides: InstallationGuide[] = [
+  ...dailyCarProblems.map((problem): InstallationGuide => ({
+    slug: `inspection-${problem.id}`,
+    partId: `inspection-${problem.id}`,
+    purpose: "inspection",
+    title: problem.title,
+    summary:
+      "Native inspection preparation checklist. Record symptoms, collect evidence and plan the next professional check; completion is not a diagnosis or repair certification.",
+    reviewStatus: "draft",
+    revision: "1.0",
+    updatedAt: "2026-09-14",
+    applicability: [problem.applicability],
+    sources: [
+      {
+        label: problem.sourceLabel,
+        kind: "authoritative",
+        url: problem.sourceUrl,
+        verifiedAt: "2026-09-14",
+      },
+    ],
+    difficulty: "Easy",
+    estimatedMinutes: 15,
+    tools: [
+      "Vehicle handbook",
+      "Camera or notes",
+      "Available service and test records",
+    ],
+    safetyChecks: [
+      "Confirm that the vehicle generation and powertrain match the stated scope.",
+      "Stop if there is a safety warning, impaired steering, overheating or damaged battery. Arrange professional assistance.",
+      "No lifting, disassembly, live electrical work or high-voltage work is part of this checklist.",
+    ],
+    steps: (problem.inspectionSteps ?? []).map((instruction, index) => ({
+      id: `check-${index + 1}`,
+      title: `Inspection preparation · ${index + 1}`,
+      instruction,
+      beginnerDetail:
+        "Mark this step only after recording the observation or arranging the specified professional check. An unknown result should remain unknown.",
+      check:
+        "Observation recorded, or the required professional check arranged. No component failure has been inferred.",
+    })),
+  })),
   {
     slug: "demo-e90-rear-lamps",
     partId: "demo-dark-rear-lamps-e90",

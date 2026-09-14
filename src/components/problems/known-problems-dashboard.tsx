@@ -19,6 +19,11 @@ import {
   type ProblemEvidence,
 } from "@/features/problems/problem-catalog";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
+import {
+  coverageResearchQueue,
+  dailyCarProblems,
+  dailyProblemsForVehicle,
+} from "@/features/problems/daily-car-coverage";
 
 const evidenceLabels: Record<ProblemEvidence, string> = {
   "inspection-data": "Inspection data",
@@ -43,7 +48,10 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
       <div className="py-32 text-center text-white/45">Vehicle not found.</div>
     );
 
-  const problems = problemsForVehicle(vehicle);
+  const problems = [
+    ...problemsForVehicle(vehicle),
+    ...dailyProblemsForVehicle(vehicle),
+  ];
   const systems = [
     "All",
     ...new Set(problems.map((problem) => problem.system)),
@@ -118,71 +126,99 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                 ))}
               </div>
               <div className="space-y-4">
-                {visible.map((problem) => (
-                  <article
-                    key={problem.id}
-                    className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6 sm:p-7"
-                  >
-                    <div className="flex flex-wrap items-start justify-between gap-3">
-                      <div>
-                        <div className="flex flex-wrap gap-2 text-xs">
-                          <span className="rounded-full bg-white/6 px-2.5 py-1 text-white/50">
-                            {problem.system}
-                          </span>
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-300/8 px-2.5 py-1 text-emerald-100/65">
-                            <BadgeCheck className="size-3" />{" "}
-                            {evidenceLabels[problem.evidence]}
-                          </span>
-                        </div>
-                        <h2 className="mt-4 text-2xl font-medium tracking-tight">
-                          {problem.title}
-                        </h2>
-                        <p className="mt-2 text-sm text-white/35">
-                          Applies to: {problem.applicability}
-                        </p>
-                      </div>
-                      <span
-                        className={`rounded-full px-3 py-1.5 text-xs ${problem.severity === "service-soon" ? "bg-amber-300/10 text-amber-100/70" : "bg-[#e72d45]/10 text-[#a9c7ff]"}`}
-                      >
-                        {problem.severity === "service-soon"
-                          ? "Inspect if symptoms appear"
-                          : "Monitor"}
-                      </span>
-                    </div>
-                    <div className="mt-6 grid gap-5 sm:grid-cols-2">
-                      <div>
-                        <p className="text-xs tracking-wider text-white/30 uppercase">
-                          Possible symptoms
-                        </p>
-                        <ul className="mt-3 space-y-2 text-sm leading-6 text-white/55">
-                          {problem.symptoms.map((symptom) => (
-                            <li key={symptom} className="flex gap-2">
-                              <span className="mt-2 size-1.5 shrink-0 rounded-full bg-white/25" />
-                              {symptom}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <p className="text-xs tracking-wider text-white/30 uppercase">
-                          Next check
-                        </p>
-                        <p className="mt-3 text-sm leading-6 text-white/55">
-                          {problem.nextCheck}
-                        </p>
-                      </div>
-                    </div>
-                    <a
-                      href={problem.sourceUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-6 inline-flex items-center gap-2 text-sm text-[#ff667a] hover:text-[#bdd3ff]"
+                {visible.map((problem) => {
+                  const dailyProblem = dailyCarProblems.find(
+                    (candidate) => candidate.id === problem.id,
+                  );
+
+                  return (
+                    <article
+                      key={problem.id}
+                      className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6 sm:p-7"
                     >
-                      {problem.sourceLabel}
-                      <ArrowUpRight className="size-3.5" />
-                    </a>
-                  </article>
-                ))}
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                          <div className="flex flex-wrap gap-2 text-xs">
+                            <span className="rounded-full bg-white/6 px-2.5 py-1 text-white/50">
+                              {problem.system}
+                            </span>
+                            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-300/8 px-2.5 py-1 text-emerald-100/65">
+                              <BadgeCheck className="size-3" />{" "}
+                              {evidenceLabels[problem.evidence]}
+                            </span>
+                          </div>
+                          <h2 className="mt-4 text-2xl font-medium tracking-tight">
+                            {problem.title}
+                          </h2>
+                          <p className="mt-2 text-sm text-white/35">
+                            Applies to: {problem.applicability}
+                          </p>
+                        </div>
+                        <span
+                          className={`rounded-full px-3 py-1.5 text-xs ${problem.severity === "service-soon" ? "bg-amber-300/10 text-amber-100/70" : "bg-[#e72d45]/10 text-[#a9c7ff]"}`}
+                        >
+                          {problem.severity === "service-soon"
+                            ? "Inspect if symptoms appear"
+                            : "Monitor"}
+                        </span>
+                      </div>
+                      <div className="mt-6 grid gap-5 sm:grid-cols-2">
+                        <div>
+                          <p className="text-xs tracking-wider text-white/30 uppercase">
+                            Possible symptoms
+                          </p>
+                          <ul className="mt-3 space-y-2 text-sm leading-6 text-white/55">
+                            {problem.symptoms.map((symptom) => (
+                              <li key={symptom} className="flex gap-2">
+                                <span className="mt-2 size-1.5 shrink-0 rounded-full bg-white/25" />
+                                {symptom}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <p className="text-xs tracking-wider text-white/30 uppercase">
+                            Next check
+                          </p>
+                          <p className="mt-3 text-sm leading-6 text-white/55">
+                            {problem.nextCheck}
+                          </p>
+                        </div>
+                      </div>
+                      <a
+                        href={problem.sourceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-6 inline-flex items-center gap-2 text-sm text-[#ff667a] hover:text-[#bdd3ff]"
+                      >
+                        {problem.sourceLabel}
+                        <ArrowUpRight className="size-3.5" />
+                      </a>
+                      {dailyProblem?.requiresVariantConfirmation && (
+                        <p className="mt-4 text-sm text-amber-200">
+                          Candidate reference only: confirm the fuel type and
+                          engine variant in the stated scope before applying
+                          this record.
+                        </p>
+                      )}
+                      {dailyProblem &&
+                        dailyProblem.inspectionSteps.length > 0 && (
+                          <Link
+                            className="mt-4 flex min-h-11 items-center text-sm underline"
+                            href={`/garage/${vehicleId}/guides/inspection-${problem.id}`}
+                          >
+                            Open native inspection checklist →
+                          </Link>
+                        )}
+                      {dailyProblem?.reviewedAt && (
+                        <p className="mt-2 text-xs text-white/60">
+                          Source checked {dailyProblem.reviewedAt} · inspection
+                          guidance, not a diagnosed fault
+                        </p>
+                      )}
+                    </article>
+                  );
+                })}
               </div>
             </>
           ) : (
@@ -238,6 +274,29 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
           </div>
         </aside>
       </section>
+      <details className="mt-6 rounded-2xl border border-white/20 p-5">
+        <summary className="cursor-pointer font-medium">
+          2006–2026 daily-car coverage · what is actually available
+        </summary>
+        <p className="mt-4 text-sm leading-6 text-white/70">
+          Existing BMW E9x records plus {dailyCarProblems.length} new
+          model-specific references: Golf VII, Fiesta 2008–2017, Auris 2013–2019
+          and Mazda 3 2013–2019. Four native inspection checklists are available
+          when the vehicle identity matches. These are not complete repair
+          manuals.
+        </p>
+        <p className="mt-3 text-sm text-white/70">
+          The following research queue covers daily drivers and enthusiast
+          requests. It is not a sales ranking, completed coverage or a claim
+          that all model years are supported. Newer cars, including 2026
+          variants, require separate sources.
+        </p>
+        <ul className="mt-4 grid gap-2 text-sm text-white/70 sm:grid-cols-2">
+          {coverageResearchQueue.map((name) => (
+            <li key={name}>{name} · further research required</li>
+          ))}
+        </ul>
+      </details>
     </div>
   );
 }

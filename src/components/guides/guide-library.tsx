@@ -20,6 +20,8 @@ import { useGuideReviews } from "@/features/guides/use-guide-reviews";
 import { evaluateFitment } from "@/features/parts/fitment";
 import { findCatalogPart } from "@/features/parts/part-catalog";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
+import { problemsForVehicle } from "@/features/problems/problem-catalog";
+import { dailyProblemsForVehicle } from "@/features/problems/daily-car-coverage";
 
 export function GuideLibrary({ vehicleId }: { vehicleId: string }) {
   const hydrated = useSyncExternalStore(
@@ -40,6 +42,15 @@ export function GuideLibrary({ vehicleId }: { vehicleId: string }) {
       <div className="py-32 text-center text-white/45">Vehicle not found.</div>
     );
 
+  const inspectionSlugs = new Set(
+    [...problemsForVehicle(vehicle), ...dailyProblemsForVehicle(vehicle)].map(
+      (problem) => `inspection-${problem.id}`,
+    ),
+  );
+  const guides = installationGuides.filter(
+    (guide) =>
+      guide.purpose !== "inspection" || inspectionSlugs.has(guide.slug),
+  );
   return (
     <div className="pb-24 sm:pb-0">
       <Link
@@ -50,7 +61,7 @@ export function GuideLibrary({ vehicleId }: { vehicleId: string }) {
       </Link>
       <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_16%,rgba(231,45,69,0.18),transparent_30%),#111111] p-6 sm:p-10">
         <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
-          Epic 14 · Guide trust system
+          Workshop preparation · evidence and scope
         </p>
         <h1 className="mt-4 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
           Every instruction shows its evidence state.
@@ -63,7 +74,7 @@ export function GuideLibrary({ vehicleId }: { vehicleId: string }) {
       </header>
 
       <section className="mt-5 grid gap-5 xl:grid-cols-3">
-        {installationGuides.map((guide) => {
+        {guides.map((guide) => {
           const governance = evaluateGuideGovernance(guide, reviews);
           const part = findCatalogPart(guide.partId);
           const fitment = part ? evaluateFitment(part, vehicle) : undefined;
@@ -78,7 +89,10 @@ export function GuideLibrary({ vehicleId }: { vehicleId: string }) {
                   <BookOpenCheck className="size-5" />
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/20 bg-amber-300/8 px-2.5 py-1 text-[10px] text-amber-100/70 uppercase">
-                  <FileWarning className="size-3" /> {governance.status}
+                  <FileWarning className="size-3" />{" "}
+                  {guide.purpose === "inspection"
+                    ? "Inspection preparation"
+                    : governance.status}
                 </span>
               </div>
               <p className="mt-7 text-xs tracking-[0.12em] text-white/30 uppercase">
@@ -107,7 +121,9 @@ export function GuideLibrary({ vehicleId }: { vehicleId: string }) {
                 ) : (
                   <span className="flex gap-2">
                     <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-white/25" />
-                    {governance.label}
+                    {guide.purpose === "inspection"
+                      ? guide.applicability.join(" ")
+                      : governance.label}
                   </span>
                 )}
               </div>
@@ -121,9 +137,10 @@ export function GuideLibrary({ vehicleId }: { vehicleId: string }) {
 
       <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-emerald-300/15 bg-emerald-300/6 p-5 text-sm leading-6 text-white/45">
         <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-200" />
-        The system is ready for licensed sources later. The current guides
-        correctly remain drafts because no authoritative technical documents are
-        attached.
+        Inspection checklists use cited model-level sources and stay separate
+        from repair procedures. Check the exact powertrain scope before use.
+        Installation drafts still require technical review; completing a
+        checklist does not certify a repair.
       </aside>
     </div>
   );

@@ -4,6 +4,10 @@ import { useState, useSyncExternalStore } from "react";
 import { ResilientPartSearch } from "@/components/parts/resilient-part-search";
 import { useBuildState } from "@/features/builds/use-builds";
 import { announceBuildChange } from "@/features/builds/build-storage";
+import {
+  quoteFromRetail,
+  updateWorkbench,
+} from "@/features/builds/build-workbench";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 import {
   deliveredTotal,
@@ -95,6 +99,7 @@ export function BuildPartsWorkspace({
                   <BuildOfferResults
                     key={`${selected.id}:${result.checkedAt}`}
                     result={result}
+                    destination={input.destination}
                     vehicleId={vehicleId}
                     buildId={buildId}
                     itemId={selected.id}
@@ -134,12 +139,14 @@ export function BuildPartsWorkspace({
 
 function BuildOfferResults({
   result,
+  destination,
   vehicleId,
   buildId,
   itemId,
   savedId,
 }: {
   result: RetailResponse;
+  destination: string;
   vehicleId: string;
   buildId: string;
   itemId: string;
@@ -177,6 +184,37 @@ function BuildOfferResults({
       );
     }
   }
+  function compare(item: RetailItem) {
+    try {
+      updateWorkbench(
+        vehicleId,
+        buildId,
+        itemId,
+        window.localStorage,
+        (state, latest) => {
+          if (state.purchase || latest.status !== "planned")
+            throw new Error("Purchased quotes are preserved.");
+          const quote = quoteFromRetail(item, result.checkedAt, destination);
+          if (state.quotes.some((entry) => entry.id === quote.id))
+            throw new Error(
+              "Already saved. Edit the saved quote to confirm its details.",
+            );
+          return { ...state, quotes: [...state.quotes, quote] };
+        },
+      );
+      announceBuildChange();
+      setError("");
+      setMessage(
+        "Saved to the retailer comparison. Confirm part number and destination charges in the build workbench.",
+      );
+    } catch (caught) {
+      setError(
+        caught instanceof Error && !caught.message.startsWith("[")
+          ? caught.message
+          : "Could not save. The comparison holds up to 12 offers in EUR, GBP or USD.",
+      );
+    }
+  }
   return (
     <div className="space-y-4">
       <p className="text-sm">
@@ -201,6 +239,12 @@ function BuildOfferResults({
       <p role="status" className="text-sm">
         {message}
       </p>
+      <Link
+        className={action}
+        href={`/garage/${vehicleId}/builds/${buildId}#workbench`}
+      >
+        Open saved retailer comparison
+      </Link>
       {compared.length > 0 && (
         <div
           role="region"
@@ -283,6 +327,13 @@ function BuildOfferResults({
               {item.condition} · {item.country ?? "Seller location unknown"}
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
+              <button
+                type="button"
+                className={action}
+                onClick={() => compare(item)}
+              >
+                Save to retailer comparison
+              </button>
               <a
                 className={action}
                 href={item.url}

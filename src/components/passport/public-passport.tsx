@@ -73,7 +73,7 @@ export async function PublicPassport({
             empty={t("noBuild")}
             rows={passport.modifications.map((item) => ({
               title: item.title,
-              detail: `${formatLabel(item.status)} · ${formatEuro(item.cost)} · ${item.verification}`,
+              detail: `${formatLabel(item.status)}${item.installedAt ? ` ${item.installedAt}` : ""} · ${item.costBasis === "paid-net-of-refunds" ? "paid, net of refunds" : "estimated"} ${formatEuro(item.cost)} · ${item.verification}`,
             }))}
           />
           <RecordSection

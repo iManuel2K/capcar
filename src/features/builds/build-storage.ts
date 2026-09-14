@@ -111,11 +111,17 @@ export function updateBuildItemStatus(
   const state = readBuildState(storage);
   const items = state.items.map((item) =>
     item.id === itemId
-      ? buildItemSchema.parse({
-          ...item,
-          status,
-          updatedAt: new Date().toISOString(),
-        })
+      ? (() => {
+          if (item.workbench?.purchase)
+            throw new Error(
+              "Update the dated purchase workflow instead of changing this status.",
+            );
+          return buildItemSchema.parse({
+            ...item,
+            status,
+            updatedAt: new Date().toISOString(),
+          });
+        })()
       : item,
   );
   writeBuildState({ ...state, items }, storage);

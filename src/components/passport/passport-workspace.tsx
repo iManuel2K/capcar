@@ -498,7 +498,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
             .filter((item) => item.status === "installed")
             .map((item) => ({
               title: item.title,
-              meta: `Installed · estimated ${formatEuro(item.cost)} · ${item.fitment} · ${item.verification}${item.selectedMerchant ? ` · ${item.selectedMerchant}` : ""}`,
+              meta: `Installed${item.installedAt ? ` ${item.installedAt}` : " · date unconfirmed"}${item.installationMileage !== undefined ? ` · ${item.installationMileage} km` : ""} · ${item.costBasis === "paid-net-of-refunds" ? "paid, net of refunds" : "estimated"} ${formatEuro(item.cost)} · ${item.fitment} · ${item.verification}${item.selectedMerchant ? ` · ${item.selectedMerchant}` : ""}`,
             }))}
         />
         <RecordSection
@@ -508,7 +508,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
             .filter((item) => item.status !== "installed")
             .map((item) => ({
               title: item.title,
-              meta: `${capitalize(item.status)} · estimated ${formatEuro(item.cost)} · not installation evidence`,
+              meta: `${capitalize(item.status)}${item.orderedAt ? ` ${item.orderedAt}` : ""}${item.deliveredAt ? ` · delivered ${item.deliveredAt}` : ""} · ${item.costBasis === "paid-net-of-refunds" ? "paid, net of refunds" : "estimated"} ${formatEuro(item.cost)} · not installation evidence`,
             }))}
         />
         <aside className="no-print rounded-2xl border border-white/15 p-6">

@@ -5,6 +5,7 @@ import {
   costEntrySchema,
   costStateSchema,
 } from "@/features/costs/cost-schema";
+import { readBuildState } from "@/features/builds/build-storage";
 
 export const COST_STORAGE_KEY = "capcar.costs.v1";
 export const COST_STORAGE_EVENT = "capcar:costs-changed";
@@ -14,6 +15,43 @@ type WritableStorage = Pick<Storage, "getItem" | "setItem">;
 const emptyState: CostState = { budgets: {}, entries: [] };
 
 export function readCostState(storage: ReadableStorage): CostState {
+  const stored = readStoredCosts(storage);
+  const builds = readBuildState(storage);
+  const linked = builds.items.flatMap((item) => {
+    const purchase = item.workbench?.purchase;
+    const build = builds.builds.find((entry) => entry.id === item.buildId);
+    if (
+      !purchase ||
+      !build ||
+      purchase.accounting !== "include" ||
+      purchase.amount === purchase.refunded
+    )
+      return [];
+    return [
+      costEntrySchema.parse({
+        id: `build-purchase-${item.id}`,
+        vehicleId: build.vehicleId,
+        sourceBuildId: build.id,
+        sourceBuildItemId: item.id,
+        label: item.title.slice(0, 120),
+        category: "parts",
+        amount: Math.round((purchase.amount - purchase.refunded) * 100) / 100,
+        occurredOn: purchase.orderedAt,
+        createdAt: purchase.updatedAt,
+        note: "Linked build purchase · net of recorded refunds. Edit in the build workflow.",
+      }),
+    ];
+  });
+  return {
+    ...stored,
+    entries: [
+      ...linked,
+      ...stored.entries.filter((entry) => !entry.sourceBuildItemId),
+    ],
+  };
+}
+
+function readStoredCosts(storage: ReadableStorage): CostState {
   const raw = storage.getItem(COST_STORAGE_KEY);
   if (!raw) return emptyState;
   try {
@@ -25,7 +63,15 @@ export function readCostState(storage: ReadableStorage): CostState {
 }
 
 function write(state: CostState, storage: WritableStorage) {
-  storage.setItem(COST_STORAGE_KEY, JSON.stringify(state));
+  // Purchases have one source of truth in the build snapshot. Never persist a
+  // second copy in the costs key, including during unrelated budget edits.
+  storage.setItem(
+    COST_STORAGE_KEY,
+    JSON.stringify({
+      ...state,
+      entries: state.entries.filter((entry) => !entry.sourceBuildItemId),
+    }),
+  );
 }
 
 export function setVehicleBudget(
@@ -77,6 +123,8 @@ export function updateCostEntry(
     throw new Error(
       "This expense is no longer available. Refresh and try again.",
     );
+  if (existing.sourceBuildItemId)
+    throw new Error("Edit this purchase in its build workflow.");
   const updated = costEntrySchema.parse({ ...existing, ...normalized });
   write(
     {
@@ -96,6 +144,17 @@ export function deleteCostEntry(
   storage: WritableStorage,
 ) {
   const state = readCostState(storage);
+  if (
+    state.entries.some(
+      (entry) =>
+        entry.id === id &&
+        entry.vehicleId === vehicleId &&
+        entry.sourceBuildItemId,
+    )
+  )
+    throw new Error(
+      "Record a refund or change accounting in the build workflow.",
+    );
   write(
     {
       ...state,

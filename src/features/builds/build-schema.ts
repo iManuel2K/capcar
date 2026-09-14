@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { workbenchSchema } from "./build-workbench-schema";
 import { safeEbayUrl } from "@/features/retail/retail-contracts";
 
 export const buildGoals = [
@@ -42,6 +43,7 @@ export const buildSchema = buildInputSchema.extend({
 });
 
 export const buildItemInputSchema = z.object({
+  workbench: workbenchSchema.optional(),
   buildId: z.string().min(1),
   title: z.string().trim().min(2, "Enter the modification").max(100),
   note: z.string().trim().max(300).optional(),

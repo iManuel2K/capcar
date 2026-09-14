@@ -76,6 +76,11 @@ export const vehiclePassportSchema = z.object({
       title: z.string().min(1),
       status: z.string().min(1),
       cost: z.number().nonnegative(),
+      costBasis: z.enum(["estimate", "paid-net-of-refunds"]).optional(),
+      orderedAt: z.iso.date().optional(),
+      deliveredAt: z.iso.date().optional(),
+      installedAt: z.iso.date().optional(),
+      installationMileage: z.number().int().nonnegative().optional(),
       selectedMerchant: z.string().min(1).optional(),
       fitment: z.string().min(1),
       verification: z.string().min(1),
@@ -225,7 +230,20 @@ export function buildVehiclePassport(
         return {
           title: item.title,
           status: item.status,
-          cost: item.deliveredPrice ?? item.estimatedCost,
+          cost: item.workbench?.purchase
+            ? Math.round(
+                (item.workbench.purchase.amount -
+                  item.workbench.purchase.refunded) *
+                  100,
+              ) / 100
+            : (item.deliveredPrice ?? item.estimatedCost),
+          costBasis: item.workbench?.purchase
+            ? "paid-net-of-refunds"
+            : "estimate",
+          orderedAt: item.workbench?.purchase?.orderedAt,
+          deliveredAt: item.workbench?.purchase?.deliveredAt,
+          installedAt: item.workbench?.purchase?.installedAt,
+          installationMileage: item.workbench?.purchase?.mileage,
           selectedMerchant: item.merchantName,
           fitment,
           verification:

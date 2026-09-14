@@ -237,8 +237,17 @@ export function CostAnalyticsDashboard({ vehicleId }: { vehicleId: string }) {
                 </div>
                 <div className="flex flex-wrap items-center gap-3">
                   <p className="font-medium">{formatEuro(entry.amount)}</p>
+                  {entry.sourceBuildId && (
+                    <a
+                      className="inline-flex min-h-11 items-center underline"
+                      href={`/garage/${encodeURIComponent(vehicleId)}/builds/${encodeURIComponent(entry.sourceBuildId)}#workbench`}
+                    >
+                      Edit linked purchase
+                    </a>
+                  )}
                   <button
                     type="button"
+                    hidden={Boolean(entry.sourceBuildItemId)}
                     aria-label={`Edit ${entry.label}`}
                     className="min-h-11 rounded-xl border border-white/20 px-3 text-sm"
                     onClick={() => {
@@ -250,7 +259,7 @@ export function CostAnalyticsDashboard({ vehicleId }: { vehicleId: string }) {
                   >
                     Edit
                   </button>
-                  {deleting === entry.id ? (
+                  {entry.sourceBuildItemId ? null : deleting === entry.id ? (
                     <>
                       <span className="text-sm">Remove this expense?</span>
                       <button

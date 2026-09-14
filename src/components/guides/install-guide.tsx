@@ -18,6 +18,8 @@ import {
 import { useState, useSyncExternalStore } from "react";
 
 import { findGuideBySlug } from "@/features/guides/guide-catalog";
+import { problemsForVehicle } from "@/features/problems/problem-catalog";
+import { dailyProblemsForVehicle } from "@/features/problems/daily-car-coverage";
 import { evaluateGuideGovernance } from "@/features/guides/guide-governance";
 import {
   announceGuideProgressChange,
@@ -59,6 +61,25 @@ export function InstallGuide({
     return (
       <div className="py-32 text-center text-white/45">
         Vehicle or guide not found.
+      </div>
+    );
+  if (
+    guide.purpose === "inspection" &&
+    ![...problemsForVehicle(vehicle), ...dailyProblemsForVehicle(vehicle)].some(
+      (problem) => `inspection-${problem.id}` === guide.slug,
+    )
+  )
+    return (
+      <div className="py-16">
+        <p>
+          This inspection checklist does not match the saved vehicle identity.
+        </p>
+        <Link
+          className="mt-4 inline-flex min-h-11 items-center underline"
+          href={`/garage/${vehicleId}/known-problems`}
+        >
+          View matching references
+        </Link>
       </div>
     );
 
@@ -111,16 +132,26 @@ export function InstallGuide({
   return (
     <div className="pb-24 sm:pb-0">
       <Link
-        href={`/garage/${vehicleId}/parts/${guide.partId}`}
+        href={
+          guide.purpose === "inspection"
+            ? `/garage/${vehicleId}/known-problems`
+            : `/garage/${vehicleId}/parts/${guide.partId}`
+        }
         className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
       >
-        <ArrowLeft className="size-4" /> Part details
+        <ArrowLeft className="size-4" />{" "}
+        {guide.purpose === "inspection"
+          ? "Known problems & inspection"
+          : "Part details"}
       </Link>
 
       <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(231,45,69,0.18),transparent_28%),#111111] p-6 sm:p-10">
         <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/20 bg-amber-300/8 px-3 py-1.5 text-[11px] text-amber-100/70 uppercase">
-            <FileWarning className="size-3" /> {governance.label}
+            <FileWarning className="size-3" />{" "}
+            {guide.purpose === "inspection"
+              ? "Sourced inspection checklist · not a repair procedure"
+              : governance.label}
           </span>
           {current.completedAt && (
             <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1.5 text-[11px] text-emerald-200">
@@ -222,8 +253,9 @@ export function InstallGuide({
                 }
                 className="mt-1 size-4 accent-[#e72d45]"
               />
-              I have read these demo gates and will verify the authoritative
-              procedure for my exact vehicle.
+              {guide.purpose === "inspection"
+                ? "I have checked the stated vehicle and powertrain scope, read the safety limits and understand that this checklist does not diagnose or certify a repair."
+                : "I have read these demo gates and will verify the authoritative procedure for my exact vehicle."}
             </label>
           </div>
         </aside>

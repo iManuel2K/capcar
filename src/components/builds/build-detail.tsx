@@ -36,6 +36,7 @@ import {
 import { useBuildState } from "@/features/builds/use-builds";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 import { BuildJourneyPanel } from "./build-journey-panel";
+import { BuildWorkbench } from "./build-workbench";
 
 const stageContent: Record<
   BuildStage,
@@ -229,6 +230,7 @@ export function BuildDetail({
         </p>
       )}
       <BuildJourneyPanel build={build} items={items} />
+      <BuildWorkbench vehicle={vehicle} buildId={buildId} />
       <section className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
           label="Budget"
@@ -494,6 +496,7 @@ export function BuildDetail({
                       </div>
                       <select
                         aria-label={`Status for ${item.title}`}
+                        disabled={Boolean(item.workbench?.purchase)}
                         value={item.status}
                         onChange={(event) =>
                           changeItemStatus(
@@ -526,8 +529,9 @@ export function BuildDetail({
         <p>
           This is a planning roadmap. “Planned” does not mean compatible,
           road-legal or safe. Confirm the exact engine, part number and approval
-          documents before purchasing. Installed costs here remain estimates;
-          record receipts and actual expenses in Cost Analytics.
+          documents before purchasing. Stage totals are planning estimates;
+          record paid amounts in the purchase workflow to update Cost Analytics
+          once.
         </p>
       </aside>
     </div>

@@ -15,9 +15,16 @@ type Entry = {
 };
 const button =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/25 px-4 text-sm focus-visible:outline-2 focus-visible:outline-offset-4 disabled:opacity-50";
-export function VehicleDocuments({ vehicleId }: { vehicleId: string }) {
+export function VehicleDocuments({
+  vehicleId,
+  onSelect,
+}: {
+  vehicleId: string;
+  onSelect?: (name: string) => void;
+}) {
   const [open, setOpen] = useState(false);
-  if (open) return <DocumentLibrary vehicleId={vehicleId} />;
+  if (open)
+    return <DocumentLibrary vehicleId={vehicleId} onSelect={onSelect} />;
   return (
     <section className="no-print mt-5 rounded-2xl border border-white/15 p-5 sm:p-7">
       <h2 className="text-xl font-medium">Receipts, photos & documents</h2>
@@ -32,7 +39,13 @@ export function VehicleDocuments({ vehicleId }: { vehicleId: string }) {
   );
 }
 
-function DocumentLibrary({ vehicleId }: { vehicleId: string }) {
+function DocumentLibrary({
+  vehicleId,
+  onSelect,
+}: {
+  vehicleId: string;
+  onSelect?: (name: string) => void;
+}) {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -280,7 +293,16 @@ function DocumentLibrary({ vehicleId }: { vehicleId: string }) {
             <span className="min-w-0 text-sm break-all">
               {entry.name.split("--").slice(1).join("--") || entry.name}
             </span>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
+              {onSelect && (
+                <button
+                  className={button}
+                  disabled={busy}
+                  onClick={() => onSelect(entry.name)}
+                >
+                  Link to modification
+                </button>
+              )}
               <button
                 className={button}
                 disabled={busy}
