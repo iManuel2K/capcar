@@ -15,12 +15,23 @@ import {
   evidenceSchema,
   quoteSchema,
   recordEvidenceSchema,
+  workbenchSchema,
   type BuildQuote,
   type BuildWorkbench as Workbench,
+  type PriceSnapshot,
 } from "@/features/builds/build-workbench-schema";
 import type { BuildItem } from "@/features/builds/build-schema";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 import { VehicleDocuments } from "@/components/passport/vehicle-documents";
+import {
+  refreshPriceWatches,
+  snapshotTotal,
+  togglePriceWatch,
+} from "@/features/builds/price-watch";
+import {
+  announceNotificationChange,
+  appendNotifications,
+} from "@/features/notifications/notification-storage";
 
 const control =
   "mt-2 min-h-11 w-full rounded-xl border border-white/25 bg-[#101817] px-3 py-2 text-sm text-[#eee7d8] focus-visible:outline-2 focus-visible:outline-offset-2";
@@ -103,7 +114,8 @@ function ItemWorkbench({
   const [editing, setEditing] = useState<BuildQuote>();
   const [formVersion, setFormVersion] = useState(0);
   const [filter, setFilter] = useState("");
-  const current = item.workbench ?? { quotes: [], fitment: [], evidence: [] };
+  const [sort, setSort] = useState("supported-value");
+  const current = workbenchSchema.parse(item.workbench ?? {});
   const selected = current.quotes.find(
     (quote) => quote.id === current.selectedQuoteId,
   );
@@ -153,9 +165,19 @@ function ItemWorkbench({
           partNumber: text(data, "partNumber"),
           price: number(data, "price"),
           shipping: number(data, "shipping"),
-          extraCharges: number(data, "extraCharges"),
+          extraCharges: editing?.extraCharges ?? null,
+          tax: number(data, "tax"),
+          importCharges: number(data, "importCharges"),
+          otherCharges: number(data, "otherCharges"),
           currency: text(data, "currency"),
           condition: text(data, "condition"),
+          manufacturer: text(data, "manufacturer") || undefined,
+          sellerName: text(data, "sellerName") || undefined,
+          sellerConfidence: text(data, "sellerConfidence"),
+          availability: text(data, "availability"),
+          returnWindowDays: number(data, "returnWindowDays") ?? undefined,
+          estimatedDeliveryDate:
+            text(data, "estimatedDeliveryDate") || undefined,
           destination: text(data, "destination"),
           sellerHistory: text(data, "sellerHistory"),
           warranty: text(data, "warranty"),
@@ -178,39 +200,112 @@ function ItemWorkbench({
       setFormVersion((value) => value + 1);
     }
   }
+  function checkWatches() {
+    let notifications: Parameters<typeof appendNotifications>[0] = [];
+    const saved = save((state) => {
+      const result = refreshPriceWatches(
+        state,
+        vehicle,
+        `${vehicle.productionYear} ${vehicle.make} ${vehicle.model}`,
+        `/garage/${vehicle.id}/builds/${item.buildId}#workbench`,
+      );
+      notifications = result.notifications;
+      return result.workbench;
+    });
+    if (saved && notifications.length) {
+      appendNotifications(notifications, window.localStorage);
+      announceNotificationChange();
+      setMessage(
+        `${notifications.length} price-watch update${notifications.length === 1 ? "" : "s"} added to notifications.`,
+      );
+    } else if (saved)
+      setMessage("Watched offers checked against their latest saved data.");
+  }
   const visible = current.quotes
     .filter(
       (quote) =>
         !filter ||
         quote.partNumber.toLowerCase().includes(filter.toLowerCase()),
     )
-    .toSorted(
-      (a, b) =>
+    .toSorted((a, b) => {
+      const rank = (quote: BuildQuote) => {
+        const verdict = fitmentEvidenceVerdict(
+          quote.partNumber,
+          vehicle,
+          current.fitment,
+        );
+        const ranks: Record<
+          ReturnType<typeof fitmentEvidenceVerdict>["state"],
+          number
+        > = {
+          exact: 0,
+          direct: 0,
+          supported: 1,
+          modification: 2,
+          confirmation: 3,
+          unknown: 4,
+          conflict: 5,
+          incompatible: 6,
+        };
+        return ranks[verdict.state];
+      };
+      if (sort === "price") return a.price - b.price;
+      if (sort === "fitment") return rank(a) - rank(b);
+      if (sort === "delivery")
+        return (a.estimatedDeliveryDate ?? "9999").localeCompare(
+          b.estimatedDeliveryDate ?? "9999",
+        );
+      if (sort === "condition") return a.condition.localeCompare(b.condition);
+      if (sort === "seller")
+        return b.sellerConfidence.localeCompare(a.sellerConfidence);
+      if (sort === "warranty")
+        return Number(Boolean(b.warranty)) - Number(Boolean(a.warranty));
+      if (sort === "retailer") return a.retailer.localeCompare(b.retailer);
+      if (sort === "stock") return a.availability.localeCompare(b.availability);
+      const evidenceDifference = rank(a) - rank(b);
+      const availabilityDifference =
+        Number(a.availability === "unavailable") -
+        Number(b.availability === "unavailable");
+      const sellerDifference =
+        Number(b.sellerConfidence === "established") -
+        Number(a.sellerConfidence === "established");
+      const warrantyDifference =
+        Number(Boolean(b.warranty)) - Number(Boolean(a.warranty));
+      return (
+        evidenceDifference ||
+        availabilityDifference ||
+        sellerDifference ||
+        warrantyDifference ||
         a.currency.localeCompare(b.currency) ||
-        (quoteTotal(a) ?? Infinity) - (quoteTotal(b) ?? Infinity),
-    );
+        (quoteTotal(a) ?? Infinity) - (quoteTotal(b) ?? Infinity)
+      );
+    });
   return (
     <>
       <div
         className="mb-5 flex flex-wrap gap-2"
         aria-label="Workbench sections"
       >
-        {["Compare", "Fitment", "Purchase & install", "Evidence"].map(
-          (name) => (
-            <button
-              key={name}
-              className={`${button} ${tab === name ? "bg-[#eee7d8] text-[#102f2b]" : ""}`}
-              aria-pressed={tab === name}
-              onClick={() => {
-                setTab(name);
-                setError("");
-                setMessage("");
-              }}
-            >
-              {name}
-            </button>
-          ),
-        )}
+        {[
+          "Compare",
+          "Price watch",
+          "Fitment",
+          "Purchase & install",
+          "Evidence",
+        ].map((name) => (
+          <button
+            key={name}
+            className={`${button} ${tab === name ? "bg-[#eee7d8] text-[#102f2b]" : ""}`}
+            aria-pressed={tab === name}
+            onClick={() => {
+              setTab(name);
+              setError("");
+              setMessage("");
+            }}
+          >
+            {name}
+          </button>
+        ))}
       </div>
       {error && (
         <p
@@ -237,13 +332,32 @@ function ItemWorkbench({
             then known total, not a “best value” endorsement. Different part
             numbers may not be equivalent.
           </p>
-          <Field label="Filter saved quotes by part number">
-            <input
-              className={control}
-              value={filter}
-              onChange={(event) => setFilter(event.target.value)}
-            />
-          </Field>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Filter saved quotes by part number">
+              <input
+                className={control}
+                value={filter}
+                onChange={(event) => setFilter(event.target.value)}
+              />
+            </Field>
+            <Field label="Sort comparison">
+              <select
+                className={control}
+                value={sort}
+                onChange={(event) => setSort(event.target.value)}
+              >
+                <option value="supported-value">Known delivered total</option>
+                <option value="price">Item price</option>
+                <option value="delivery">Delivery date</option>
+                <option value="fitment">Fitment confidence</option>
+                <option value="condition">Condition</option>
+                <option value="seller">Seller confidence</option>
+                <option value="warranty">Warranty evidence</option>
+                <option value="retailer">Retailer</option>
+                <option value="stock">Availability</option>
+              </select>
+            </Field>
+          </div>
           <div
             className="overflow-x-auto rounded-xl border border-white/20"
             role="region"
@@ -318,12 +432,41 @@ function ItemWorkbench({
                             ? "unknown"
                             : money(quote.shipping, quote.currency)}
                         </p>
-                        <p>
-                          Extra charges{" "}
-                          {quote.extraCharges === null
-                            ? "unknown"
-                            : money(quote.extraCharges, quote.currency)}
-                        </p>
+                        {quote.tax !== undefined ? (
+                          <>
+                            <p>
+                              Tax{" "}
+                              {quote.tax === null
+                                ? "unknown"
+                                : money(quote.tax, quote.currency)}
+                            </p>
+                            <p>
+                              Import{" "}
+                              {quote.importCharges === null
+                                ? "unknown"
+                                : money(
+                                    quote.importCharges ?? 0,
+                                    quote.currency,
+                                  )}
+                            </p>
+                            <p>
+                              Other{" "}
+                              {quote.otherCharges === null
+                                ? "unknown"
+                                : money(
+                                    quote.otherCharges ?? 0,
+                                    quote.currency,
+                                  )}
+                            </p>
+                          </>
+                        ) : (
+                          <p>
+                            Combined additional charges{" "}
+                            {quote.extraCharges === null
+                              ? "unknown"
+                              : money(quote.extraCharges, quote.currency)}
+                          </p>
+                        )}
                         <p className="mt-2">{quote.condition}</p>
                         <p className="mt-2">Deliver to: {quote.destination}</p>
                       </td>
@@ -342,11 +485,27 @@ function ItemWorkbench({
                           {verdict.label}
                         </p>
                         <p>
-                          Seller: {quote.sellerHistory || "History unconfirmed"}
+                          Seller: {quote.sellerName || "Unknown"} ·{" "}
+                          {quote.sellerConfidence}
+                        </p>
+                        <p>
+                          {quote.sellerHistory || "Seller history unconfirmed"}
+                        </p>
+                        <p>
+                          Availability: {quote.availability.replace("-", " ")}
                         </p>
                         <p>Warranty: {quote.warranty || "Unknown"}</p>
-                        <p>Returns: {quote.returns || "Unknown"}</p>
-                        <p>Delivery: {quote.delivery || "Unconfirmed"}</p>
+                        <p>
+                          Returns:{" "}
+                          {quote.returnWindowDays !== undefined
+                            ? `${quote.returnWindowDays} days`
+                            : quote.returns || "Unknown"}
+                        </p>
+                        <p>
+                          Delivery:{" "}
+                          {(quote.estimatedDeliveryDate ?? quote.delivery) ||
+                            "Unconfirmed"}
+                        </p>
                       </td>
                       <td className="p-4">
                         <div className="flex flex-col gap-2">
@@ -452,6 +611,14 @@ function ItemWorkbench({
                     defaultValue={editing?.partNumber}
                   />
                 </Field>
+                <Field label="Part manufacturer">
+                  <input
+                    className={control}
+                    name="manufacturer"
+                    maxLength={80}
+                    defaultValue={editing?.manufacturer}
+                  />
+                </Field>
                 <Field label="Retailer source URL">
                   <input
                     className={control}
@@ -485,10 +652,9 @@ function ItemWorkbench({
                   [
                     ["price", "Item price"],
                     ["shipping", "Shipping · blank if unknown"],
-                    [
-                      "extraCharges",
-                      "Tax / duties / other · 0 only if confirmed included",
-                    ],
+                    ["tax", "Estimated tax · blank if unknown"],
+                    ["importCharges", "Import charges · blank if unknown"],
+                    ["otherCharges", "Other charges · blank if unknown"],
                   ] as const
                 ).map(([name, label]) => (
                   <Field key={name} label={label}>
@@ -516,6 +682,55 @@ function ItemWorkbench({
                         ? ""
                         : editing?.destination
                     }
+                  />
+                </Field>
+                <Field label="Availability">
+                  <select
+                    className={control}
+                    name="availability"
+                    defaultValue={editing?.availability ?? "unknown"}
+                  >
+                    <option value="unknown">Unknown</option>
+                    <option value="in-stock">In stock</option>
+                    <option value="low-stock">Low stock</option>
+                    <option value="unavailable">Unavailable</option>
+                  </select>
+                </Field>
+                <Field label="Seller name">
+                  <input
+                    className={control}
+                    name="sellerName"
+                    maxLength={100}
+                    defaultValue={editing?.sellerName}
+                  />
+                </Field>
+                <Field label="Seller confidence">
+                  <select
+                    className={control}
+                    name="sellerConfidence"
+                    defaultValue={editing?.sellerConfidence ?? "unknown"}
+                  >
+                    <option value="unknown">Unknown</option>
+                    <option value="limited">Limited history</option>
+                    <option value="established">Established history</option>
+                  </select>
+                </Field>
+                <Field label="Return window · days">
+                  <input
+                    className={control}
+                    name="returnWindowDays"
+                    type="number"
+                    min="0"
+                    max="365"
+                    defaultValue={editing?.returnWindowDays}
+                  />
+                </Field>
+                <Field label="Estimated delivery date">
+                  <input
+                    className={control}
+                    name="estimatedDeliveryDate"
+                    type="date"
+                    defaultValue={editing?.estimatedDeliveryDate}
                   />
                 </Field>
                 {(
@@ -554,8 +769,166 @@ function ItemWorkbench({
           )}
         </div>
       )}
+      {tab === "Price watch" && (
+        <div className="space-y-5">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h3 className="text-xl font-medium">Watched offers</h3>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-white/65">
+                Capcar checks these watches when you refresh their latest saved
+                offer data. Continuous background monitoring and email alerts
+                are not claimed.
+              </p>
+            </div>
+            <button
+              className={button}
+              type="button"
+              disabled={!current.watches.length}
+              onClick={checkWatches}
+            >
+              Check watched prices
+            </button>
+          </div>
+          {current.quotes.map((quote) => {
+            const watch = current.watches.find(
+              (entry) => entry.quoteId === quote.id,
+            );
+            return (
+              <article
+                key={quote.id}
+                className="rounded-2xl border border-white/15 p-5"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <h4 className="font-medium">{quote.title}</h4>
+                    <p className="mt-1 text-sm text-white/55">
+                      {quote.retailer} ·{" "}
+                      {quote.partNumber || "part number unconfirmed"}
+                    </p>
+                    <p className="mt-1 text-sm">
+                      {quoteTotal(quote) === null
+                        ? "Delivered total incomplete"
+                        : money(quoteTotal(quote)!, quote.currency)}
+                    </p>
+                  </div>
+                  <form
+                    className="flex flex-wrap items-end gap-2"
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      const data = new FormData(event.currentTarget);
+                      save((state) =>
+                        togglePriceWatch(
+                          state,
+                          quote,
+                          number(data, "targetPrice") ?? undefined,
+                        ),
+                      );
+                    }}
+                  >
+                    {!watch && (
+                      <Field label="Target delivered price · optional">
+                        <input
+                          className={control}
+                          name="targetPrice"
+                          type="number"
+                          min="0"
+                          max="1000000"
+                          step="0.01"
+                        />
+                      </Field>
+                    )}
+                    <button className={button} type="submit">
+                      {watch ? "Stop watching" : "Watch offer"}
+                    </button>
+                  </form>
+                </div>
+                {watch && (
+                  <div className="mt-5 border-t border-white/10 pt-4">
+                    <p className="text-xs text-white/45">
+                      Target{" "}
+                      {watch.targetPrice === undefined
+                        ? "not set"
+                        : money(watch.targetPrice, quote.currency)}{" "}
+                      · last checked{" "}
+                      {watch.checkedAt
+                        ? new Date(watch.checkedAt).toLocaleString("en-GB")
+                        : "not yet"}
+                    </p>
+                    <PriceHistory
+                      snapshots={watch.snapshots}
+                      currency={quote.currency}
+                    />
+                  </div>
+                )}
+              </article>
+            );
+          })}
+          {!current.quotes.length && (
+            <p className="rounded-2xl border border-dashed border-white/20 p-6 text-white/60">
+              Save an offer to the retailer comparison before watching its
+              price.
+            </p>
+          )}
+        </div>
+      )}
       {tab === "Fitment" && (
         <div className="space-y-5">
+          <div className="grid gap-4 lg:grid-cols-2">
+            {current.quotes.map((quote) => {
+              const verdict = fitmentEvidenceVerdict(
+                quote.partNumber,
+                vehicle,
+                current.fitment,
+              );
+              return (
+                <article
+                  key={quote.id}
+                  className="rounded-2xl border border-white/15 bg-black/15 p-5"
+                >
+                  <p className="text-xs text-white/40 uppercase">
+                    Fitment decision
+                  </p>
+                  <h3 className="mt-2 text-lg font-medium">{quote.title}</h3>
+                  <p
+                    className={`mt-3 font-medium ${["direct", "exact", "supported"].includes(verdict.state) ? "text-emerald-200" : ["conflict", "incompatible"].includes(verdict.state) ? "text-red-200" : "text-amber-200"}`}
+                  >
+                    {verdict.label}
+                  </p>
+                  <p className="mt-2 text-sm text-white/60">
+                    {verdict.nextAction}
+                  </p>
+                  <dl className="mt-4 grid gap-2 text-sm">
+                    <div>
+                      <dt className="text-white/35">Matched</dt>
+                      <dd>
+                        {verdict.matchedAxes.join(", ") || "None established"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-white/35">Missing</dt>
+                      <dd>
+                        {verdict.missingAxes.join(", ") ||
+                          "No required axes missing"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-white/35">Conflicts</dt>
+                      <dd>
+                        {verdict.conflicts.join(" versus ") || "None recorded"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-white/35">Evidence</dt>
+                      <dd>
+                        {verdict.count} matching source
+                        {verdict.count === 1 ? "" : "s"}
+                      </dd>
+                    </div>
+                  </dl>
+                </article>
+              );
+            })}
+          </div>
           <p className="text-sm leading-6 text-white/70">
             A listing title is not a fitment check. Record the source’s exact
             part number, chassis, engine, production range, body and
@@ -577,6 +950,15 @@ function ItemWorkbench({
                 {record.yearTo}
               </p>
               <p className="my-2 text-sm">{record.note}</p>
+              {(record.oeCrossReferences.length > 0 ||
+                record.supportingModifications.length > 0) && (
+                <p className="my-2 text-sm text-white/60">
+                  {record.oeCrossReferences.length > 0 &&
+                    `OE references: ${record.oeCrossReferences.join(", ")}. `}
+                  {record.supportingModifications.length > 0 &&
+                    `Required supporting work: ${record.supportingModifications.join(", ")}.`}
+                </p>
+              )}
               <a
                 className="underline"
                 href={record.url}
@@ -634,6 +1016,22 @@ function ItemWorkbench({
                         yearFrom: number(data, "yearFrom"),
                         yearTo: number(data, "yearTo"),
                         verdict: text(data, "verdict"),
+                        fuelType: text(data, "fuelType") || undefined,
+                        drivetrain: text(data, "drivetrain") || undefined,
+                        axle: text(data, "axle") || undefined,
+                        side: text(data, "side") || undefined,
+                        position: text(data, "position") || undefined,
+                        oeCrossReferences: text(data, "oeCrossReferences")
+                          .split(",")
+                          .map((value) => value.trim())
+                          .filter(Boolean),
+                        supportingModifications: text(
+                          data,
+                          "supportingModifications",
+                        )
+                          .split(",")
+                          .map((value) => value.trim())
+                          .filter(Boolean),
                         note: text(data, "note"),
                         recordedAt: new Date().toISOString(),
                       });
@@ -655,6 +1053,9 @@ function ItemWorkbench({
                 <Field label="Source says">
                   <select name="verdict" className={control}>
                     <option value="direct">Direct bolt-on</option>
+                    <option value="exact">Exact match</option>
+                    <option value="supported">Supported match</option>
+                    <option value="confirmation">Requires confirmation</option>
                     <option value="modification">Requires modification</option>
                     <option value="incompatible">Incompatible</option>
                   </select>
@@ -669,6 +1070,19 @@ function ItemWorkbench({
                     ["engineCode", "Exact engine code in source"],
                     ["bodyStyle", "Body style in source"],
                     ["transmission", "Transmission in source"],
+                    ["fuelType", "Fuel type · optional"],
+                    ["drivetrain", "Drivetrain · optional"],
+                    ["axle", "Axle · optional"],
+                    ["side", "Side · optional"],
+                    ["position", "Position · optional"],
+                    [
+                      "oeCrossReferences",
+                      "OE cross-references · comma separated",
+                    ],
+                    [
+                      "supportingModifications",
+                      "Supporting modifications · comma separated",
+                    ],
                     ["yearFrom", "Production year from"],
                     ["yearTo", "Production year to"],
                     ["note", "What the source establishes / required changes"],
@@ -678,7 +1092,17 @@ function ItemWorkbench({
                     <input
                       name={name}
                       className={control}
-                      required
+                      required={
+                        ![
+                          "fuelType",
+                          "drivetrain",
+                          "axle",
+                          "side",
+                          "position",
+                          "oeCrossReferences",
+                          "supportingModifications",
+                        ].includes(name)
+                      }
                       type={
                         name.startsWith("year")
                           ? "number"
@@ -907,6 +1331,51 @@ function ItemWorkbench({
         </div>
       )}
     </>
+  );
+}
+
+function PriceHistory({
+  snapshots,
+  currency,
+}: {
+  snapshots: PriceSnapshot[];
+  currency: string;
+}) {
+  const points = snapshots
+    .map((snapshot) => ({ snapshot, total: snapshotTotal(snapshot) }))
+    .filter((point): point is { snapshot: PriceSnapshot; total: number } =>
+      Number.isFinite(point.total),
+    );
+  if (!points.length)
+    return (
+      <p className="mt-3 text-sm text-white/45">
+        No complete delivered-total snapshot yet.
+      </p>
+    );
+  const maximum = Math.max(...points.map((point) => point.total), 1);
+  return (
+    <div className="mt-4" aria-label="Delivered price history">
+      <div
+        className="flex h-20 items-end gap-2"
+        role="img"
+        aria-label={`${points.length} recorded delivered-price observations`}
+      >
+        {points.map((point) => (
+          <div
+            key={point.snapshot.observedAt}
+            className="min-w-3 flex-1 rounded-t bg-[#e72d45]"
+            style={{
+              height: `${Math.max(10, (point.total / maximum) * 100)}%`,
+            }}
+            title={`${money(point.total, currency)} · ${new Date(point.snapshot.observedAt).toLocaleString("en-GB")}`}
+          />
+        ))}
+      </div>
+      <p className="mt-2 text-xs text-white/45">
+        {money(points[0].total, currency)} first ·{" "}
+        {money(points.at(-1)!.total, currency)} latest
+      </p>
+    </div>
   );
 }
 function Field({ label, children }: { label: string; children: ReactNode }) {

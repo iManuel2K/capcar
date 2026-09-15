@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { workbenchSchema } from "./build-workbench-schema";
+import { buildPlanningSchema } from "./build-planning-schema";
 import { safeEbayUrl } from "@/features/retail/retail-contracts";
 
 export const buildGoals = [
@@ -40,6 +41,7 @@ export const buildInputSchema = z.object({
 export const buildSchema = buildInputSchema.extend({
   id: z.string().min(1),
   createdAt: z.string().datetime(),
+  planning: buildPlanningSchema.optional(),
 });
 
 export const buildItemInputSchema = z.object({
@@ -58,6 +60,9 @@ export const buildItemInputSchema = z.object({
   deliveredPrice: z.number().min(0).max(1_000_000).optional(),
   offerSelectedAt: z.string().datetime().optional(),
   updatedAt: z.string().datetime().optional(),
+  phaseId: z.string().min(1).max(80).optional(),
+  dependsOn: z.string().min(1).array().max(20).optional(),
+  targetDate: z.iso.date().optional(),
 });
 
 export const buildItemSchema = buildItemInputSchema.extend({

@@ -180,8 +180,8 @@ describe("retailer comparison and exact fitment evidence", () => {
     ).toThrow("Resolve");
   });
   it("selects one quote and updates budget without creating an expense", () => {
-    const { vehicle, quote, edit } = setup();
-    edit((state) => ({ ...state, quotes: [quote] }));
+    const { vehicle, quote, edit, evidence } = setup();
+    edit((state) => ({ ...state, quotes: [quote], fitment: [evidence] }));
     for (let i = 0; i < 2; i++)
       edit((state, item) =>
         selectWorkbenchQuote(state, item, quote.id, vehicle),
@@ -194,14 +194,22 @@ describe("retailer comparison and exact fitment evidence", () => {
     expect(readCostState(localStorage).entries).toHaveLength(0);
   });
   it("rejects missing totals and foreign-currency budget selection", () => {
-    const { vehicle, quote, edit } = setup();
-    edit((state) => ({ ...state, quotes: [{ ...quote, currency: "USD" }] }));
+    const { vehicle, quote, edit, evidence } = setup();
+    edit((state) => ({
+      ...state,
+      quotes: [{ ...quote, currency: "USD" }],
+      fitment: [evidence],
+    }));
     expect(() =>
       edit((state, item) =>
         selectWorkbenchQuote(state, item, quote.id, vehicle),
       ),
     ).toThrow("EUR");
-    edit((state) => ({ ...state, quotes: [{ ...quote, shipping: null }] }));
+    edit((state) => ({
+      ...state,
+      quotes: [{ ...quote, shipping: null }],
+      fitment: [evidence],
+    }));
     expect(() =>
       edit((state, item) =>
         selectWorkbenchQuote(state, item, quote.id, vehicle),
@@ -209,8 +217,8 @@ describe("retailer comparison and exact fitment evidence", () => {
     ).toThrow("charges");
   });
   it("does not let an edit corrupt a selected quote total", () => {
-    const { vehicle, quote, edit } = setup();
-    edit((state) => ({ ...state, quotes: [quote] }));
+    const { vehicle, quote, edit, evidence } = setup();
+    edit((state) => ({ ...state, quotes: [quote], fitment: [evidence] }));
     edit((state, item) => selectWorkbenchQuote(state, item, quote.id, vehicle));
     expect(() =>
       edit((state) => ({ ...state, quotes: [{ ...quote, shipping: null }] })),

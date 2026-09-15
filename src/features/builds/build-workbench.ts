@@ -18,10 +18,33 @@ const normalized = (value: string) =>
     .toUpperCase()
     .replace(/[\s-]+/g, "");
 export function quoteTotal(quote: BuildQuote) {
-  if (quote.shipping === null || quote.extraCharges === null) return null;
-  return (
-    Math.round((quote.price + quote.shipping + quote.extraCharges) * 100) / 100
+  const detailedCharges = [quote.tax, quote.importCharges, quote.otherCharges];
+  const usesDetailedCharges = detailedCharges.some(
+    (value) => value !== undefined,
   );
+  if (
+    quote.shipping === null ||
+    (usesDetailedCharges
+      ? detailedCharges.some((value) => value === null || value === undefined)
+      : quote.extraCharges === null)
+  )
+    return null;
+  const additions = usesDetailedCharges
+    ? (quote.tax ?? 0) + (quote.importCharges ?? 0) + (quote.otherCharges ?? 0)
+    : (quote.extraCharges ?? 0);
+  return Math.round((quote.price + quote.shipping + additions) * 100) / 100;
+}
+
+export function quoteCostBreakdown(quote: BuildQuote) {
+  return {
+    item: quote.price,
+    shipping: quote.shipping,
+    tax: quote.tax,
+    importCharges: quote.importCharges,
+    otherCharges: quote.otherCharges,
+    legacyAdditionalCharges: quote.extraCharges,
+    total: quoteTotal(quote),
+  };
 }
 export function fitmentEvidenceVerdict(
   partNumber: string,
@@ -34,7 +57,15 @@ export function fitmentEvidenceVerdict(
       ["UNKNOWN", "UNCONFIRMED"].includes(normalized(value)),
     )
   )
-    return { state: "unknown", label: "Identity incomplete", count: 0 };
+    return {
+      state: "unknown",
+      label: "Identity incomplete",
+      count: 0,
+      matchedAxes: [] as string[],
+      missingAxes: ["part number", "platform or engine identity"],
+      conflicts: [] as string[],
+      nextAction: "Complete the vehicle identity and exact part number.",
+    };
   const matched = records.filter(
     (record) =>
       normalized(record.partNumber) === normalized(partNumber) &&
@@ -52,15 +83,63 @@ export function fitmentEvidenceVerdict(
       state: "conflict",
       label: "Sources disagree · stop and resolve",
       count: matched.length,
+      matchedAxes: [
+        "part number",
+        "make",
+        "platform",
+        "engine",
+        "body",
+        "transmission",
+        "production year",
+      ],
+      missingAxes: [] as string[],
+      conflicts: [...states],
+      nextAction:
+        "Compare the original source scopes before choosing an offer.",
     };
-  const state = matched[0]?.verdict ?? "unknown";
+  const state: FitmentEvidence["verdict"] | "unknown" =
+    matched[0]?.verdict ?? "unknown";
   const labels = {
     direct: "Direct bolt-on · recorded claim",
+    exact: "Exact fitment match · recorded evidence",
+    supported: "Supported fitment match · recorded evidence",
+    confirmation: "Requires vehicle or part confirmation",
     modification: "Modification required · recorded claim",
     incompatible: "Incompatible · recorded claim",
     unknown: "Fitment not established",
   };
-  return { state, label: labels[state], count: matched.length };
+  return {
+    state,
+    label: labels[state],
+    count: matched.length,
+    matchedAxes: matched.length
+      ? [
+          "part number",
+          "make",
+          "platform",
+          "engine",
+          "body",
+          "transmission",
+          "production year",
+        ]
+      : [],
+    missingAxes: matched.length
+      ? []
+      : [
+          "exact matching evidence for part, platform, engine, body, transmission and year",
+        ],
+    conflicts: [] as string[],
+    nextAction:
+      matched.length === 0
+        ? "Record a source for this exact vehicle and part."
+        : state === "confirmation"
+          ? "Confirm the missing variant details before selecting the offer."
+          : state === "modification"
+            ? "Review the required supporting modifications before purchase."
+            : state === "incompatible"
+              ? "Choose a different part."
+              : "Confirm the source remains current, then continue.",
+  };
 }
 export function quoteFromRetail(
   item: RetailItem,
@@ -77,6 +156,8 @@ export function quoteFromRetail(
     extraCharges: null,
     destination,
     sellerHistory: "",
+    sellerConfidence: "unknown",
+    availability: "unknown",
     warranty: "",
     returns: "",
     delivery: "",
@@ -169,9 +250,13 @@ export function selectWorkbenchQuote(
     vehicle,
     workbench.fitment,
   );
-  if (["incompatible", "conflict"].includes(verdict.state))
+  if (
+    ["unknown", "confirmation", "incompatible", "conflict"].includes(
+      verdict.state,
+    )
+  )
     throw new Error(
-      "Resolve the fitment conflict or incompatibility before selecting this offer.",
+      "Resolve fitment first: add supported evidence and clear any confirmation, conflict or incompatibility.",
     );
   return { ...workbench, selectedQuoteId: quoteId };
 }

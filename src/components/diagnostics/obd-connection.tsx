@@ -238,9 +238,11 @@ export function ObdConnection({
           </button>
         </>
       )}
-      <p role="status" className="text-sm">
-        {message}
-      </p>
+      {message && (
+        <p role="status" className="text-sm">
+          {message}
+        </p>
+      )}
       <p className="text-xs opacity-75">
         Read-only connection. Clearing codes and manufacturer-specific modules
         require a supported diagnostic tool.

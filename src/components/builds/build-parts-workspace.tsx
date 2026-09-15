@@ -9,10 +9,7 @@ import {
   updateWorkbench,
 } from "@/features/builds/build-workbench";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
-import {
-  deliveredTotal,
-  selectBuildOffer,
-} from "@/features/retail/build-offer";
+import { deliveredTotal } from "@/features/retail/build-offer";
 import {
   type RetailItem,
   type RetailResponse,
@@ -103,7 +100,6 @@ export function BuildPartsWorkspace({
                     vehicleId={vehicleId}
                     buildId={buildId}
                     itemId={selected.id}
-                    savedId={selected.selectedOfferId}
                   />
                   <nav aria-label="Search pages" className="mt-4 flex gap-3">
                     {input.page > 0 && (
@@ -143,14 +139,12 @@ function BuildOfferResults({
   vehicleId,
   buildId,
   itemId,
-  savedId,
 }: {
   result: RetailResponse;
   destination: string;
   vehicleId: string;
   buildId: string;
   itemId: string;
-  savedId?: string;
 }) {
   const [ids, setIds] = useState<string[]>([]);
   const [message, setMessage] = useState("");
@@ -160,30 +154,6 @@ function BuildOfferResults({
       amount,
     );
   const compared = result.items.filter((item) => ids.includes(item.id));
-  function save(item: RetailItem) {
-    setError("");
-    setMessage("");
-    try {
-      selectBuildOffer(
-        item,
-        vehicleId,
-        buildId,
-        itemId,
-        result.checkedAt,
-        window.localStorage,
-      );
-      announceBuildChange();
-      setMessage(
-        "Offer saved to this modification. Budget updated; no purchase or expense was recorded.",
-      );
-    } catch (caught) {
-      setError(
-        caught instanceof Error && !caught.message.startsWith("[")
-          ? caught.message
-          : "Could not save. Check browser storage and choose an EUR offer with known shipping.",
-      );
-    }
-  }
   function compare(item: RetailItem) {
     try {
       updateWorkbench(
@@ -195,17 +165,33 @@ function BuildOfferResults({
           if (state.purchase || latest.status !== "planned")
             throw new Error("Purchased quotes are preserved.");
           const quote = quoteFromRetail(item, result.checkedAt, destination);
-          if (state.quotes.some((entry) => entry.id === quote.id))
-            throw new Error(
-              "Already saved. Edit the saved quote to confirm its details.",
-            );
+          const existing = state.quotes.find((entry) => entry.id === quote.id);
+          if (existing)
+            return {
+              ...state,
+              quotes: state.quotes.map((entry) =>
+                entry.id === quote.id
+                  ? {
+                      ...existing,
+                      title: quote.title,
+                      price: quote.price,
+                      shipping: quote.shipping,
+                      condition: quote.condition,
+                      url: quote.url,
+                      affiliate: quote.affiliate,
+                      observedAt: quote.observedAt,
+                      destination: quote.destination,
+                    }
+                  : entry,
+              ),
+            };
           return { ...state, quotes: [...state.quotes, quote] };
         },
       );
       announceBuildChange();
       setError("");
       setMessage(
-        "Saved to the retailer comparison. Confirm part number and destination charges in the build workbench.",
+        "Retailer comparison updated. Confirm the part number and destination charges, then refresh its watch in the build workbench.",
       );
     } catch (caught) {
       setError(
@@ -346,24 +332,16 @@ function BuildOfferResults({
               >
                 {item.affiliate ? "View retailer · affiliate" : "View retailer"}
               </a>
-              <button
-                type="button"
-                className={action}
-                onClick={() => save(item)}
-                disabled={
-                  item.currency !== "EUR" ||
-                  item.shipping === null ||
-                  savedId === item.id
-                }
-              >
-                {savedId === item.id ? "Saved to plan" : "Select for build"}
-              </button>
             </div>
             {(item.currency !== "EUR" || item.shipping === null) && (
               <p className="mt-2 text-xs">
                 The build budget uses EUR and requires a known shipping quote.
               </p>
             )}
+            <p className="mt-2 text-xs">
+              Save to comparison, confirm delivered charges and add fitment
+              evidence before selecting it for the build.
+            </p>
           </article>
         ))}
       </div>

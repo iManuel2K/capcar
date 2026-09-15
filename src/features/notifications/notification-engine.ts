@@ -38,6 +38,7 @@ export function createMaintenanceNotifications(
         vehicleId: vehicle.id,
         vehicleLabel: `${vehicle.productionYear} ${vehicle.make} ${vehicle.model}`,
         taskKey: task.key,
+        category: "maintenance",
         title: `${task.title} ${urgency === "overdue" ? "is due" : "is coming up"}`,
         urgency,
         detail: `Planning target: ${target}.`,

@@ -39,7 +39,27 @@ export const evidenceSchema = z
     transmission: z.string().trim().min(2).max(30),
     yearFrom: z.number().int().min(1900).max(2030),
     yearTo: z.number().int().min(1900).max(2030),
-    verdict: z.enum(["direct", "modification", "incompatible"]),
+    verdict: z.enum([
+      "direct",
+      "exact",
+      "supported",
+      "confirmation",
+      "modification",
+      "incompatible",
+    ]),
+    fuelType: z.string().trim().min(2).max(30).optional(),
+    drivetrain: z.string().trim().min(2).max(30).optional(),
+    axle: z.string().trim().min(2).max(30).optional(),
+    side: z.string().trim().min(2).max(30).optional(),
+    position: z.string().trim().min(2).max(40).optional(),
+    oeCrossReferences: z.string().trim().max(80).array().max(20).default([]),
+    supportingModifications: z
+      .string()
+      .trim()
+      .max(120)
+      .array()
+      .max(20)
+      .default([]),
     note: z.string().trim().min(5).max(500),
     recordedAt: z.iso.datetime(),
   })
@@ -58,8 +78,21 @@ export const quoteSchema = z.object({
   price: amount,
   shipping: amount.nullable(),
   extraCharges: amount.nullable(),
+  tax: amount.nullable().optional(),
+  importCharges: amount.nullable().optional(),
+  otherCharges: amount.nullable().optional(),
   currency: z.enum(["EUR", "GBP", "USD"]),
   condition: z.string().trim().min(1).max(80),
+  manufacturer: z.string().trim().max(80).optional(),
+  sellerName: z.string().trim().max(100).optional(),
+  sellerConfidence: z
+    .enum(["unknown", "limited", "established"])
+    .default("unknown"),
+  availability: z
+    .enum(["unknown", "in-stock", "low-stock", "unavailable"])
+    .default("unknown"),
+  returnWindowDays: z.number().int().min(0).max(365).optional(),
+  estimatedDeliveryDate: z.iso.date().optional(),
   destination: z.string().trim().min(2).max(80).default("Unconfirmed"),
   sellerHistory: z.string().trim().max(200),
   warranty: z.string().trim().max(200),
@@ -67,6 +100,34 @@ export const quoteSchema = z.object({
   delivery: z.string().trim().max(200),
   observedAt: z.iso.datetime(),
   affiliate: z.boolean(),
+});
+
+export const priceSnapshotSchema = z.object({
+  observedAt: z.iso.datetime(),
+  price: amount,
+  shipping: amount.nullable(),
+  extraCharges: amount.nullable(),
+  tax: amount.nullable().optional(),
+  importCharges: amount.nullable().optional(),
+  otherCharges: amount.nullable().optional(),
+  currency: z.enum(["EUR", "GBP", "USD"]),
+  availability: z.enum(["unknown", "in-stock", "low-stock", "unavailable"]),
+  sellerHistory: z.string().trim().max(200),
+  warranty: z.string().trim().max(200),
+  fitmentState: z.string().trim().max(40).optional(),
+});
+
+export const priceWatchSchema = z.object({
+  id: z.string().uuid(),
+  quoteId: z.string().min(1).max(220).optional(),
+  query: z.string().trim().min(2).max(160),
+  partNumber: z.string().trim().max(80),
+  destination: z.string().trim().min(2).max(80),
+  targetPrice: amount.optional(),
+  createdAt: z.iso.datetime(),
+  checkedAt: z.iso.datetime().optional(),
+  lastAlertSignature: z.string().max(300).optional(),
+  snapshots: priceSnapshotSchema.array().max(30).default([]),
 });
 export const purchaseSchema = z
   .object({
@@ -124,8 +185,11 @@ export const workbenchSchema = z.object({
   fitment: evidenceSchema.array().max(20).default([]),
   evidence: recordEvidenceSchema.array().max(30).default([]),
   purchase: purchaseSchema.optional(),
+  watches: priceWatchSchema.array().max(12).default([]),
 });
 export type BuildWorkbench = z.infer<typeof workbenchSchema>;
 export type BuildQuote = z.infer<typeof quoteSchema>;
 export type FitmentEvidence = z.infer<typeof evidenceSchema>;
 export type BuildPurchase = z.infer<typeof purchaseSchema>;
+export type PriceWatch = z.infer<typeof priceWatchSchema>;
+export type PriceSnapshot = z.infer<typeof priceSnapshotSchema>;

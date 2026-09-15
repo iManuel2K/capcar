@@ -37,6 +37,7 @@ import { useBuildState } from "@/features/builds/use-builds";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 import { BuildJourneyPanel } from "./build-journey-panel";
 import { BuildWorkbench } from "./build-workbench";
+import { ConnectedBuildPlanner } from "./connected-build-planner";
 
 const stageContent: Record<
   BuildStage,
@@ -230,6 +231,7 @@ export function BuildDetail({
         </p>
       )}
       <BuildJourneyPanel build={build} items={items} />
+      <ConnectedBuildPlanner build={build} items={items} />
       <BuildWorkbench vehicle={vehicle} buildId={buildId} />
       <section className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard

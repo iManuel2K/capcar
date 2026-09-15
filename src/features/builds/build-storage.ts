@@ -10,6 +10,10 @@ import {
   buildItemSchema,
   buildSchema,
 } from "@/features/builds/build-schema";
+import {
+  buildPlanningSchema,
+  type BuildPlanning,
+} from "@/features/builds/build-planning-schema";
 
 export const BUILD_STORAGE_KEY = "capcar.builds.v1";
 export const BUILD_STORAGE_EVENT = "capcar:builds-changed";
@@ -137,6 +141,71 @@ export function updateBuildStatus(
     build.id === buildId ? buildSchema.parse({ ...build, status }) : build,
   );
   writeBuildState({ ...state, builds }, storage);
+}
+
+export function updateBuildPlanning(
+  buildId: string,
+  planning: BuildPlanning,
+  storage: WritableStorage,
+) {
+  const state = readBuildState(storage);
+  if (!state.builds.some((build) => build.id === buildId))
+    throw new Error("Build not found.");
+  const normalized = buildPlanningSchema.parse(planning);
+  const builds = state.builds.map((build) =>
+    build.id === buildId
+      ? buildSchema.parse({ ...build, planning: normalized })
+      : build,
+  );
+  writeBuildState({ ...state, builds }, storage);
+  return builds.find((build) => build.id === buildId)!;
+}
+
+export function updateBuildItemPlanning(
+  buildId: string,
+  itemId: string,
+  input: Pick<BuildItem, "phaseId" | "targetDate" | "priority"> & {
+    dependsOn: string[];
+  },
+  storage: WritableStorage,
+) {
+  const state = readBuildState(storage);
+  const build = state.builds.find((entry) => entry.id === buildId);
+  const item = state.items.find(
+    (entry) => entry.id === itemId && entry.buildId === buildId,
+  );
+  if (!build || !item) throw new Error("Modification not found in this build.");
+  const planning = build.planning;
+  if (
+    input.phaseId &&
+    planning &&
+    !planning.phases.some((phase) => phase.id === input.phaseId)
+  )
+    throw new Error("Choose a phase from this build.");
+  if (input.dependsOn.includes(itemId))
+    throw new Error("A modification cannot depend on itself.");
+  const siblings = new Set(
+    state.items
+      .filter((entry) => entry.buildId === buildId)
+      .map((entry) => entry.id),
+  );
+  if (input.dependsOn.some((id) => !siblings.has(id)))
+    throw new Error("A dependency must belong to this build.");
+  const updated = buildItemSchema.parse({
+    ...item,
+    ...input,
+    updatedAt: new Date().toISOString(),
+  });
+  writeBuildState(
+    {
+      ...state,
+      items: state.items.map((entry) =>
+        entry.id === itemId ? updated : entry,
+      ),
+    },
+    storage,
+  );
+  return updated;
 }
 
 export function getVehicleBuilds(vehicleId: string, storage: ReadableStorage) {

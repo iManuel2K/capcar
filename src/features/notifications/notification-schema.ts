@@ -14,14 +14,17 @@ export const notificationItemSchema = z.object({
   vehicleLabel: z.string().min(1),
   taskKey: z.string().min(1),
   title: z.string().min(1),
-  urgency: z.enum(["overdue", "soon"]),
+  category: z.enum(["maintenance", "price-watch"]).default("maintenance"),
+  urgency: z.enum(["overdue", "soon", "info"]),
   detail: z.string().min(1),
   href: z.string().startsWith("/"),
   createdAt: z.string().datetime(),
   readAt: z.string().datetime().optional(),
 });
 
-export type NotificationPreferences = z.infer<typeof notificationPreferencesSchema>;
+export type NotificationPreferences = z.infer<
+  typeof notificationPreferencesSchema
+>;
 export type NotificationItem = z.infer<typeof notificationItemSchema>;
 
 export const defaultNotificationPreferences: NotificationPreferences = {
