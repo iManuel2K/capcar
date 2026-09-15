@@ -70,7 +70,7 @@ const stages = [
     tone: "#0e2d30",
     surface: "bg-[#ccd5cc]",
     icon: Sparkles,
-    items: ["events", "ai", "twowheels", "more"],
+    items: ["events", "testMap", "ai", "twowheels", "more"],
   },
 ] as const;
 

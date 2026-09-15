@@ -156,6 +156,10 @@
         "title": "Evente që ia vlejnë udhëtimin",
         "description": "Zbulo takime, ekspozita dhe evente në destinacione që përputhen me interesat e tua."
       },
+      "testMap": {
+        "title": "Terrene ligjore testimi dhe itinerare",
+        "description": "Gjej përmes OpenStreetMap pista të verifikuara për drift, drag strips, track days dhe terrene prove, si edhe informacion itinerari për segmente të Autobahn-it pa kufi të përgjithshëm shpejtësie. Qasja, kufizimet e përkohshme dhe kushtet shënohen sipas burimeve; testet me kronometër mbeten jashtë rrugëve publike."
+      },
       "ai": {
         "title": "Drejtimi i build-it me AI",
         "description": "Gjenero ide të dobishme për përmirësime dhe koncepte vizuale rreth makinës tënde."

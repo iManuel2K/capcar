@@ -156,6 +156,10 @@
         "title": "Events worth driving to",
         "description": "Discover nearby meets, shows and destination events that match your interests."
       },
+      "testMap": {
+        "title": "Legal test grounds & driving routes",
+        "description": "Use OpenStreetMap-powered discovery to find verified drift circuits, drag strips, track days and proving grounds, plus route context for unrestricted Autobahn sections. Access rules, temporary limits and surface conditions stay source-labelled; timed testing stays off public roads."
+      },
       "ai": {
         "title": "AI build direction",
         "description": "Generate useful upgrade ideas and visual concepts around the vehicle you own."

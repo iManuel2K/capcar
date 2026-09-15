@@ -156,6 +156,10 @@
         "title": "Events, für die sich die Fahrt lohnt",
         "description": "Entdecke Treffen, Shows und Reiseziele passend zu deinen Interessen."
       },
+      "testMap": {
+        "title": "Legale Testgelände & Fahrstrecken",
+        "description": "Finde mit OpenStreetMap verifizierte Driftstrecken, Dragstrips, Trackdays und Testgelände sowie Routenkontext zu Autobahnabschnitten ohne allgemeines Tempolimit. Zugang, temporäre Limits und Streckenbedingungen bleiben quellenbasiert gekennzeichnet; Zeitmessungen bleiben von öffentlichen Straßen fern."
+      },
       "ai": {
         "title": "KI-Build-Richtung",
         "description": "Erzeuge sinnvolle Upgrade-Ideen und visuelle Konzepte rund um dein eigenes Fahrzeug."

@@ -45,7 +45,7 @@ const columns = [
   },
   {
     id: "beyond",
-    items: ["events", "ai", "twowheels", "more"],
+    items: ["events", "testMap", "ai", "twowheels", "more"],
     active: false,
   },
 ] as const;
