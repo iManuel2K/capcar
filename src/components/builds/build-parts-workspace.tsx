@@ -97,6 +97,7 @@ export function BuildPartsWorkspace({
                     key={`${selected.id}:${result.checkedAt}`}
                     result={result}
                     destination={input.destination}
+                    market={input.market}
                     vehicleId={vehicleId}
                     buildId={buildId}
                     itemId={selected.id}
@@ -136,12 +137,14 @@ export function BuildPartsWorkspace({
 function BuildOfferResults({
   result,
   destination,
+  market,
   vehicleId,
   buildId,
   itemId,
 }: {
   result: RetailResponse;
   destination: string;
+  market: "DE" | "GB" | "FR" | "IT" | "ES" | "US";
   vehicleId: string;
   buildId: string;
   itemId: string;
@@ -164,7 +167,12 @@ function BuildOfferResults({
         (state, latest) => {
           if (state.purchase || latest.status !== "planned")
             throw new Error("Purchased quotes are preserved.");
-          const quote = quoteFromRetail(item, result.checkedAt, destination);
+          const quote = quoteFromRetail(
+            item,
+            result.checkedAt,
+            destination,
+            market,
+          );
           const existing = state.quotes.find((entry) => entry.id === quote.id);
           if (existing)
             return {
@@ -204,11 +212,30 @@ function BuildOfferResults({
   return (
     <div className="space-y-4">
       <p className="text-sm">
-        Live eBay observations ·{" "}
+        Live retailer observations ·{" "}
         {new Date(result.checkedAt).toLocaleString("en-GB")}. Confirm
         availability, tax and final total at checkout. Affiliate links are
         marked. You purchase from the retailer.
       </p>
+      {result.providers && (
+        <ul
+          aria-label="Retailer provider status"
+          className="flex flex-wrap gap-2 text-xs"
+        >
+          {result.providers.map((provider) => (
+            <li
+              key={provider.id}
+              className={`rounded-full border px-3 py-1.5 ${
+                provider.status === "available"
+                  ? "border-emerald-900/25 bg-emerald-100/45"
+                  : "border-amber-900/25 bg-amber-100/45"
+              }`}
+            >
+              {provider.label} · {provider.status}
+            </li>
+          ))}
+        </ul>
+      )}
       <p className="text-sm">
         Select up to three offers to compare. Fitment, delivery date, seller
         trust and warranty are unverified unless confirmed by the seller or
@@ -310,7 +337,8 @@ function BuildOfferResults({
               shipping
             </p>
             <p className="mt-2 text-sm">
-              {item.condition} · {item.country ?? "Seller location unknown"}
+              {item.retailer ?? "Retailer"} · {item.condition} ·{" "}
+              {item.country ?? "Seller location unknown"}
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               <button

@@ -1,4 +1,8 @@
-import { safeEbayUrl, type RetailItem } from "./retail-contracts";
+import {
+  safeEbayUrl,
+  safeRetailUrl,
+  type RetailItem,
+} from "./retail-contracts";
 import {
   readWishlist,
   saveWishlistItem,
@@ -10,7 +14,12 @@ export function saveRetailItem(
   checkedAt: string,
   storage: Pick<Storage, "getItem" | "setItem">,
 ) {
-  if (!safeEbayUrl(item.url)) throw new Error("Invalid merchant link.");
+  if (
+    item.provider === "partner"
+      ? !safeRetailUrl(item.url)
+      : !safeEbayUrl(item.url)
+  )
+    throw new Error("Invalid merchant link.");
   if (!vehicleId) throw new Error("Choose a vehicle first.");
   const existing = readWishlist(storage).find(
     (saved) => saved.vehicleId === vehicleId && saved.url === item.url,
@@ -21,7 +30,7 @@ export function saveRetailItem(
     {
       vehicleId,
       title: item.title.slice(0, 120),
-      merchant: "eBay",
+      merchant: item.retailer ?? "Retailer",
       url: item.url,
       status: "saved",
       currentPrice: item.currency === "EUR" ? item.price : undefined,

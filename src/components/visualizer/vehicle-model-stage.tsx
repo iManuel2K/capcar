@@ -12,7 +12,10 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { accessoryGeometry, type Surface } from "@/features/visualizer/accessory-geometry";
+import {
+  accessoryGeometry,
+  type Surface,
+} from "@/features/visualizer/accessory-geometry";
 import type { BuildVisual } from "@/features/visualizer/build-visual-schema";
 import {
   projectVector,
@@ -25,6 +28,7 @@ import {
   type VehicleModel,
 } from "@/features/visualizer/vehicle-model-schema";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
+import { LicensedVehicleAsset } from "@/components/visualizer/licensed-vehicle-asset";
 
 const paints: Record<BuildVisual["paint"], string> = {
   "factory-black": "#242a2d",
@@ -131,7 +135,7 @@ export function VehicleModelStage({
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !model) return;
+    if (!canvas || !model || model.delivery) return;
     drawVehicle(canvas, model, visual, camera, viewport);
   }, [camera, model, viewport, visual]);
 
@@ -144,7 +148,7 @@ export function VehicleModelStage({
       <div className="relative h-[520px] min-h-[420px] touch-none sm:h-[620px]">
         <canvas
           ref={canvasRef}
-          className="size-full cursor-grab active:cursor-grabbing"
+          className={`size-full cursor-grab active:cursor-grabbing ${model?.delivery ? "invisible" : ""}`}
           aria-label={`${label} interactive three-dimensional vehicle model`}
           onPointerDown={(event) => {
             event.currentTarget.setPointerCapture(event.pointerId);
@@ -184,6 +188,9 @@ export function VehicleModelStage({
             }));
           }}
         />
+        {model?.delivery && (
+          <LicensedVehicleAsset model={model} visual={visual} label={label} />
+        )}
 
         <div className="pointer-events-none absolute inset-x-5 top-5 flex flex-wrap items-start justify-between gap-3">
           <div>
@@ -191,7 +198,7 @@ export function VehicleModelStage({
               {label}
             </span>
             <p className="mt-3 text-xs text-white/30">
-              Drag to orbit · scroll to zoom
+              Drag to orbit · scroll or pinch to zoom
             </p>
           </div>
           {model && (
@@ -218,45 +225,47 @@ export function VehicleModelStage({
           </div>
         )}
 
-        <div className="absolute right-5 bottom-5 flex items-center gap-2 rounded-2xl border border-white/10 bg-black/40 p-2 backdrop-blur-md">
-          <Control label="Front" onClick={() => setPreset(0)} />
-          <Control label="Side" onClick={() => setPreset(Math.PI / 2)} />
-          <Control label="Rear" onClick={() => setPreset(Math.PI)} />
-          <button
-            type="button"
-            title="Reset camera"
-            onClick={() => setCamera(initialCamera)}
-            className="grid size-9 place-items-center rounded-lg text-white/45 hover:bg-white/8 hover:text-white"
-          >
-            <RotateCcw className="size-4" />
-          </button>
-          <button
-            type="button"
-            title="Zoom out"
-            onClick={() =>
-              setCamera((current) => ({
-                ...current,
-                zoom: Math.max(0.72, current.zoom - 0.1),
-              }))
-            }
-            className="grid size-9 place-items-center rounded-lg text-white/45 hover:bg-white/8 hover:text-white"
-          >
-            <Minus className="size-4" />
-          </button>
-          <button
-            type="button"
-            title="Zoom in"
-            onClick={() =>
-              setCamera((current) => ({
-                ...current,
-                zoom: Math.min(1.38, current.zoom + 0.1),
-              }))
-            }
-            className="grid size-9 place-items-center rounded-lg text-white/45 hover:bg-white/8 hover:text-white"
-          >
-            <Plus className="size-4" />
-          </button>
-        </div>
+        {!model?.delivery && (
+          <div className="absolute right-5 bottom-5 flex items-center gap-2 rounded-2xl border border-white/10 bg-black/40 p-2 backdrop-blur-md">
+            <Control label="Front" onClick={() => setPreset(0)} />
+            <Control label="Side" onClick={() => setPreset(Math.PI / 2)} />
+            <Control label="Rear" onClick={() => setPreset(Math.PI)} />
+            <button
+              type="button"
+              title="Reset camera"
+              onClick={() => setCamera(initialCamera)}
+              className="grid size-9 place-items-center rounded-lg text-white/45 hover:bg-white/8 hover:text-white"
+            >
+              <RotateCcw className="size-4" />
+            </button>
+            <button
+              type="button"
+              title="Zoom out"
+              onClick={() =>
+                setCamera((current) => ({
+                  ...current,
+                  zoom: Math.max(0.72, current.zoom - 0.1),
+                }))
+              }
+              className="grid size-9 place-items-center rounded-lg text-white/45 hover:bg-white/8 hover:text-white"
+            >
+              <Minus className="size-4" />
+            </button>
+            <button
+              type="button"
+              title="Zoom in"
+              onClick={() =>
+                setCamera((current) => ({
+                  ...current,
+                  zoom: Math.min(1.38, current.zoom + 0.1),
+                }))
+              }
+              className="grid size-9 place-items-center rounded-lg text-white/45 hover:bg-white/8 hover:text-white"
+            >
+              <Plus className="size-4" />
+            </button>
+          </div>
+        )}
       </div>
 
       {model && (
@@ -273,11 +282,21 @@ export function VehicleModelStage({
                 {model.dimensions.length} × {model.dimensions.width} ×{" "}
                 {model.dimensions.height} mm · revision {model.revision}
               </p>
+              {model.delivery && (
+                <p className="mt-1 text-xs text-white/30">
+                  {model.license.name ?? "Commercial-use rights confirmed"}
+                  {model.license.attribution
+                    ? ` · ${model.license.attribution}`
+                    : ""}
+                </p>
+              )}
             </div>
           </div>
           <span className="inline-flex items-center gap-2 text-xs text-white/30">
-            <Orbit className="size-4" /> {model.vertices.length} vertices ·{" "}
-            {model.faces.length} surfaces
+            <Orbit className="size-4" />{" "}
+            {model.delivery
+              ? `Integrity-checked GLB · ${(model.delivery.byteLength / 1_000_000).toFixed(1)} MB`
+              : `${model.vertices.length} vertices · ${model.faces.length} surfaces`}
           </span>
         </footer>
       )}
@@ -351,15 +370,27 @@ function drawVehicle(
     ([x, y, z]) => [x, y - model.dimensions.height / 2 - drop, z] as Vector3,
   );
   const surfaces: Surface[] = [
-    ...model.faces.map(face => ({ points: face.indices.map(index => centeredVertices[index]), color: materialColor(face.material, visual), group: "body" })),
+    ...model.faces.map((face) => ({
+      points: face.indices.map((index) => centeredVertices[index]),
+      color: materialColor(face.material, visual),
+      group: "body",
+    })),
     ...accessoryGeometry(model, visual),
   ];
-  const sorted = surfaces.map(surface => ({
-    ...surface,
-    depth: surface.points.reduce((total, point) => total + rotateVector(point, camera)[2], 0) / surface.points.length,
-  })).sort((a,b) => a.depth - b.depth);
+  const sorted = surfaces
+    .map((surface) => ({
+      ...surface,
+      depth:
+        surface.points.reduce(
+          (total, point) => total + rotateVector(point, camera)[2],
+          0,
+        ) / surface.points.length,
+    }))
+    .sort((a, b) => a.depth - b.depth);
   for (const surface of sorted) {
-    const points = surface.points.map(point => projectVector(point, camera, viewport, model.dimensions.length));
+    const points = surface.points.map((point) =>
+      projectVector(point, camera, viewport, model.dimensions.length),
+    );
     context.beginPath();
     context.moveTo(points[0].x, points[0].y);
     for (const point of points.slice(1)) context.lineTo(point.x, point.y);
@@ -367,7 +398,7 @@ function drawVehicle(
     context.fillStyle = surface.color;
     context.fill();
     context.strokeStyle = "rgba(255,255,255,.07)";
-    context.lineWidth = .7;
+    context.lineWidth = 0.7;
     context.stroke();
   }
   context.restore();

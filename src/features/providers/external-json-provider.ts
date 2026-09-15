@@ -14,10 +14,17 @@ export async function requestExternalProvider<TRequest, TResponse>(
       body: JSON.stringify(body),
       cache: "no-store",
       signal: controller.signal,
+      redirect: "error",
     });
     if (!response.ok)
       throw new Error(`Provider request failed with status ${response.status}`);
-    return (await response.json()) as TResponse;
+    const declaredSize = Number(response.headers.get("content-length") ?? 0);
+    if (declaredSize > 2_000_000)
+      throw new Error("Provider response exceeded the safe size limit.");
+    const raw = await response.text();
+    if (new TextEncoder().encode(raw).byteLength > 2_000_000)
+      throw new Error("Provider response exceeded the safe size limit.");
+    return JSON.parse(raw) as TResponse;
   } finally {
     clearTimeout(timeout);
   }

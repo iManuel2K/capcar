@@ -116,7 +116,7 @@
       "itemStatus": "Po zgjerohet",
       "models": {
         "title": "Modele interaktive makinash",
-        "description": "Ngjyros sipërfaqet dhe ruaj këndet në modelet e mbështetura. Gjeometria sipas automjetit dhe pjesët e montueshme kërkojnë më shumë modele."
+        "description": "Përdor sot gjeometri të lehtë reference, ndërsa shpërndarja e modeleve GLB të licencuara me kontroll integriteti është gati për ofrues të miratuar. Mbulimi sipas automjetit vazhdon të varet nga të drejtat e përdorimit."
       },
       "movie": {
         "title": "Demo të makinave ikonike nga filmat",
@@ -136,7 +136,7 @@
       },
       "connected": {
         "title": "Pjesë të lidhura",
-        "description": "Planifiko fazat dhe varësitë, krahaso ofertat aktive të eBay me ofertat e regjistruara nga pronari, rifresko vëzhgimet e çmimeve dhe kontrollo provat e përputhshmërisë. Tregtarë të tjerë aktivë dhe kontrollet e planifikuara në sfond mbeten për më vonë."
+        "description": "Planifiko fazat dhe varësitë, krahaso tregtarë aktivë të normalizuar, rifresko automatikisht vëzhgimet e afatizuara ndërsa garazhi është aktiv dhe importo prova të lidhura OE për përputhshmëri. Njoftimet kur shfletuesi është i mbyllur kërkojnë ende infrastrukturë të planifikuar."
       },
       "marketplace": {
         "title": "Marketplace i komunitetit",

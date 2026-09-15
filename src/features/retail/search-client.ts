@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { safeEbayUrl, type RetailRequest } from "./retail-contracts";
+import { safeRetailUrl, type RetailRequest } from "./retail-contracts";
 
 const responseSchema = z.object({
-  source: z.literal("ebay"),
+  source: z.enum(["ebay", "partner", "multi"]),
   checkedAt: z.iso.datetime(),
   hasMore: z.boolean(),
   warning: z.string(),
@@ -17,10 +17,22 @@ const responseSchema = z.object({
         country: z.string().nullable(),
         condition: z.string(),
         affiliate: z.boolean(),
-        url: z.string().refine(safeEbayUrl),
+        url: z.string().refine(safeRetailUrl),
+        retailer: z.string().max(80).optional(),
+        provider: z.enum(["ebay", "partner"]).optional(),
+        providerItemId: z.string().max(220).optional(),
       }),
     )
     .max(200),
+  providers: z
+    .array(
+      z.object({
+        id: z.enum(["ebay", "partner"]),
+        label: z.string().max(80),
+        status: z.enum(["available", "unavailable"]),
+      }),
+    )
+    .optional(),
 });
 export class SearchFailure extends Error {
   constructor(

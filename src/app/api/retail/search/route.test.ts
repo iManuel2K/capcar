@@ -5,9 +5,8 @@ const mocks = vi.hoisted(() => ({ guard: vi.fn(), search: vi.fn() }));
 vi.mock("@/lib/api/public-retail-guard", () => ({
   guardPublicRetail: mocks.guard,
 }));
-vi.mock("@/features/retail/ebay-provider", async (original) => ({
-  ...(await original<typeof import("@/features/retail/ebay-provider")>()),
-  searchEbay: mocks.search,
+vi.mock("@/features/retail/multi-retailer-provider", () => ({
+  searchRetailers: mocks.search,
 }));
 
 import { POST } from "./route";

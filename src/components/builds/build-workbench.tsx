@@ -31,7 +31,9 @@ import {
 import {
   announceNotificationChange,
   appendNotifications,
+  readNotificationPreferences,
 } from "@/features/notifications/notification-storage";
+import { requestConnectedFitment } from "@/features/fitment/fitment-client";
 
 const control =
   "mt-2 min-h-11 w-full rounded-xl border border-white/25 bg-[#101817] px-3 py-2 text-sm text-[#eee7d8] focus-visible:outline-2 focus-visible:outline-offset-2";
@@ -69,10 +71,10 @@ export function BuildWorkbench({
         Your modification workbench.
       </h2>
       <p className="mt-3 max-w-3xl text-sm leading-6 text-white/70">
-        Compare live eBay observations with quotes you record from other
-        retailers. Evidence stays attached to the part; dated purchases feed
-        Cost Analytics. No automatic checkout or independent fitment
-        certification.
+        Compare normalized live retailer observations with quotes you record
+        yourself. Evidence stays attached to the part; dated purchases feed Cost
+        Analytics. Unknown charges remain unknown—Capcar never invents a cheaper
+        total.
       </p>
       {item ? (
         <>
@@ -115,6 +117,7 @@ function ItemWorkbench({
   const [formVersion, setFormVersion] = useState(0);
   const [filter, setFilter] = useState("");
   const [sort, setSort] = useState("supported-value");
+  const [checkingFitment, setCheckingFitment] = useState("");
   const current = workbenchSchema.parse(item.workbench ?? {});
   const selected = current.quotes.find(
     (quote) => quote.id === current.selectedQuoteId,
@@ -212,7 +215,13 @@ function ItemWorkbench({
       notifications = result.notifications;
       return result.workbench;
     });
-    if (saved && notifications.length) {
+    const preferences = readNotificationPreferences(window.localStorage);
+    if (
+      saved &&
+      notifications.length &&
+      preferences.enabled &&
+      preferences.priceWatchAlerts
+    ) {
       appendNotifications(notifications, window.localStorage);
       announceNotificationChange();
       setMessage(
@@ -220,6 +229,49 @@ function ItemWorkbench({
       );
     } else if (saved)
       setMessage("Watched offers checked against their latest saved data.");
+  }
+  async function checkConnectedFitment(quote: BuildQuote) {
+    if (!quote.partNumber) {
+      setError("Confirm the exact manufacturer part number first.");
+      return;
+    }
+    setCheckingFitment(quote.id);
+    setError("");
+    setMessage("");
+    try {
+      const result = await requestConnectedFitment(
+        { vehicle, partNumber: quote.partNumber },
+        AbortSignal.timeout(15_000),
+      );
+      const saved = save((state) => ({
+        ...state,
+        fitment: [
+          ...state.fitment.filter(
+            (existing) =>
+              !result.records.some(
+                (record) =>
+                  record.url === existing.url &&
+                  record.partNumber === existing.partNumber,
+              ),
+          ),
+          ...result.records,
+        ].slice(-20),
+      }));
+      if (saved)
+        setMessage(
+          result.records.length
+            ? `${result.records.length} fitment record${result.records.length === 1 ? "" : "s"} imported from ${result.provider}.`
+            : `${result.provider} returned no exact fitment record.`,
+        );
+    } catch (caught) {
+      setError(
+        caught instanceof Error
+          ? caught.message
+          : "Connected fitment sources are unavailable.",
+      );
+    } finally {
+      setCheckingFitment("");
+    }
   }
   const visible = current.quotes
     .filter(
@@ -324,13 +376,12 @@ function ItemWorkbench({
             className={button}
             href={`/garage/${vehicle.id}/builds/${item.buildId}/parts?item=${encodeURIComponent(item.id)}`}
           >
-            Search live eBay offers
+            Search connected retailers
           </Link>
           <p className="text-sm text-white/70">
-            Other retailers: add their current quote below. These are
-            owner-recorded snapshots, not connected feeds. Sort is by currency
-            then known total, not a “best value” endorsement. Different part
-            numbers may not be equivalent.
+            Connected feeds and quotes you record share one normalized table.
+            Unknown delivery, tax and import charges remain unknown. Sorting is
+            decision support—not a “best value” endorsement.
           </p>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Filter saved quotes by part number">
@@ -399,9 +450,9 @@ function ItemWorkbench({
                         <p className="my-2 break-words">{quote.title}</p>
                         <p>{quote.partNumber || "Part number unconfirmed"}</p>
                         <p className="mt-2 text-xs text-white/60">
-                          {quote.origin === "ebay-live"
-                            ? "Live eBay observation"
-                            : "Owner-recorded quote"}{" "}
+                          {quote.origin === "owner-quote"
+                            ? "Owner-recorded quote"
+                            : `Live ${quote.retailer} observation`}{" "}
                           · {quote.observedAt.slice(0, 10)}
                         </p>
                         <a
@@ -775,9 +826,10 @@ function ItemWorkbench({
             <div>
               <h3 className="text-xl font-medium">Watched offers</h3>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-white/65">
-                Capcar checks these watches when you refresh their latest saved
-                offer data. Continuous background monitoring and email alerts
-                are not claimed.
+                Capcar checks due connected offers when your garage opens or
+                returns to the foreground. Watches back off safely after
+                provider failures. Closed-browser email and push delivery still
+                require a server scheduler.
               </p>
             </div>
             <button
@@ -853,7 +905,14 @@ function ItemWorkbench({
                       {watch.checkedAt
                         ? new Date(watch.checkedAt).toLocaleString("en-GB")
                         : "not yet"}
+                      {watch.nextCheckAt &&
+                        ` · next in-app check ${new Date(watch.nextCheckAt).toLocaleString("en-GB")}`}
                     </p>
+                    {watch.lastError && (
+                      <p className="mt-2 text-xs text-amber-200/75">
+                        Last check: {watch.lastError} · retry backoff active
+                      </p>
+                    )}
                     <PriceHistory
                       snapshots={watch.snapshots}
                       currency={quote.currency}
@@ -897,6 +956,20 @@ function ItemWorkbench({
                   <p className="mt-2 text-sm text-white/60">
                     {verdict.nextAction}
                   </p>
+                  <button
+                    className={`${button} mt-4`}
+                    type="button"
+                    disabled={
+                      purchased ||
+                      checkingFitment === quote.id ||
+                      !quote.partNumber
+                    }
+                    onClick={() => void checkConnectedFitment(quote)}
+                  >
+                    {checkingFitment === quote.id
+                      ? "Checking connected sources…"
+                      : "Check OE / manufacturer sources"}
+                  </button>
                   <dl className="mt-4 grid gap-2 text-sm">
                     <div>
                       <dt className="text-white/35">Matched</dt>
@@ -965,7 +1038,11 @@ function ItemWorkbench({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {record.source} · owner-recorded {record.kind} source
+                {record.source} ·{" "}
+                {record.capturedBy === "provider"
+                  ? "provider-imported"
+                  : "owner-recorded"}{" "}
+                {record.kind} source
               </a>
               <button
                 className={`${button} ml-3`}

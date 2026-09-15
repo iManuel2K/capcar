@@ -272,6 +272,9 @@ export async function searchEbay(
           condition: item.condition ?? "Not specified",
           url: target,
           affiliate,
+          retailer: "eBay",
+          provider: "ebay",
+          providerItemId: item.itemId,
         },
       ];
     }),

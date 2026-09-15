@@ -4,16 +4,30 @@ import {
   readBuildState,
 } from "@/features/builds/build-storage";
 import { buildItemSchema } from "@/features/builds/build-schema";
-import { safeEbayUrl, type RetailItem } from "./retail-contracts";
+import {
+  safeEbayUrl,
+  safeRetailUrl,
+  type RetailItem,
+} from "./retail-contracts";
 
-const offerSchema = z.object({
-  id: z.string().min(1).max(200),
-  title: z.string().min(1).max(500),
-  price: z.number().finite().nonnegative().max(1e6),
-  shipping: z.number().finite().nonnegative().max(1e6).nullable(),
-  currency: z.literal("EUR"),
-  url: z.string().refine(safeEbayUrl),
-});
+const offerSchema = z
+  .object({
+    id: z.string().min(1).max(200),
+    title: z.string().min(1).max(500),
+    price: z.number().finite().nonnegative().max(1e6),
+    shipping: z.number().finite().nonnegative().max(1e6).nullable(),
+    currency: z.literal("EUR"),
+    url: z.string(),
+    provider: z.enum(["ebay", "partner"]).optional(),
+  })
+  .superRefine((offer, context) => {
+    const valid =
+      offer.provider === "partner"
+        ? safeRetailUrl(offer.url)
+        : safeEbayUrl(offer.url);
+    if (!valid)
+      context.addIssue({ code: "custom", message: "Invalid merchant link." });
+  });
 
 export function deliveredTotal(item: RetailItem): number | null {
   if (
@@ -63,7 +77,7 @@ export function selectBuildOffer(
       : undefined,
     selectedOfferId: offer.id,
     selectedOfferUrl: offer.url,
-    merchantName: "eBay",
+    merchantName: item.retailer ?? "Retailer",
     deliveredPrice: total,
     estimatedCost: Math.ceil(total),
     offerSelectedAt: checkedAt,

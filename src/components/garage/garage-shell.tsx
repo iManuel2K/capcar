@@ -20,6 +20,7 @@ import { GarageToolRail } from "@/components/garage/garage-tool-rail";
 import { LanguageSelector } from "@/components/i18n/language-selector";
 import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 import { useNotifications } from "@/features/notifications/use-notifications";
+import { PriceWatchMonitor } from "@/components/builds/price-watch-monitor";
 
 export function GarageShell({ children }: { children: React.ReactNode }) {
   const t = useTranslations("GarageNav");
@@ -40,6 +41,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-dvh bg-[#0b0e0c] text-[#f4f5f2]">
+      <PriceWatchMonitor />
       <header className="sticky top-0 z-40 border-b border-white/8 bg-[#0b0e0c]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-[1500px] items-center justify-between px-4 sm:px-7">
           <Link

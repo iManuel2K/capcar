@@ -116,7 +116,7 @@
       "itemStatus": "Im Ausbau",
       "models": {
         "title": "Interaktive Fahrzeugmodelle",
-        "description": "Oberflächen einfärben und Ansichten unterstützter Modelle speichern. Fahrzeugspezifische Geometrie und anbaubare Teile benötigen weitere Modelle."
+        "description": "Nutze heute leichtgewichtige Referenzgeometrie; für freigegebene Modellanbieter ist die integritätsgeprüfte Auslieferung lizenzierter GLB-Dateien vorbereitet. Die fahrzeugspezifische Abdeckung bleibt von Nutzungsrechten abhängig."
       },
       "movie": {
         "title": "Ikonische Filmauto-Demos",
@@ -136,7 +136,7 @@
       },
       "connected": {
         "title": "Vernetzte Teile",
-        "description": "Phasen und Abhängigkeiten planen, Live-eBay- und selbst erfasste Angebote vergleichen, Preisbeobachtungen aktualisieren und Passformnachweise prüfen. Weitere Live-Händler und geplante Hintergrundprüfungen folgen."
+        "description": "Plane Phasen und Abhängigkeiten, vergleiche normalisierte Live-Händler, aktualisiere fällige Preisbeobachtungen automatisch im aktiven Garage-Bereich und importiere verbundene OE-Passformnachweise. Hinweise bei geschlossenem Browser benötigen weiterhin geplante Server-Infrastruktur."
       },
       "marketplace": {
         "title": "Community-Marktplatz",

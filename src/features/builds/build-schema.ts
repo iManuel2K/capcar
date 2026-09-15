@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { workbenchSchema } from "./build-workbench-schema";
 import { buildPlanningSchema } from "./build-planning-schema";
-import { safeEbayUrl } from "@/features/retail/retail-contracts";
+import { safeRetailUrl } from "@/features/retail/retail-contracts";
 
 export const buildGoals = [
   "OEM+ daily",
@@ -55,7 +55,7 @@ export const buildItemInputSchema = z.object({
   estimatedCost: z.coerce.number().int().min(0).max(1_000_000),
   status: z.enum(buildItemStatuses).default("planned"),
   selectedOfferId: z.string().min(1).optional(),
-  selectedOfferUrl: z.string().max(2048).refine(safeEbayUrl).optional(),
+  selectedOfferUrl: z.string().max(2048).refine(safeRetailUrl).optional(),
   merchantName: z.string().min(1).optional(),
   deliveredPrice: z.number().min(0).max(1_000_000).optional(),
   offerSelectedAt: z.string().datetime().optional(),

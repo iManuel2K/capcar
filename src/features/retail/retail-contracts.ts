@@ -32,14 +32,38 @@ export type RetailItem = {
   condition: string;
   url: string;
   affiliate: boolean;
+  retailer?: string;
+  provider?: "ebay" | "partner";
+  providerItemId?: string;
 };
 export type RetailResponse = {
-  source: "ebay";
+  source: "ebay" | "partner" | "multi";
   checkedAt: string;
   items: RetailItem[];
   hasMore: boolean;
   warning: string;
+  providers?: Array<{
+    id: "ebay" | "partner";
+    label: string;
+    status: "available" | "unavailable";
+  }>;
 };
+export function safeRetailUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return (
+      url.protocol === "https:" &&
+      !url.username &&
+      !url.password &&
+      url.hostname.includes(".") &&
+      url.hostname !== "localhost" &&
+      !url.hostname.endsWith(".local") &&
+      !/^(127\.|10\.|192\.168\.|169\.254\.)/.test(url.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
 export function safeEbayUrl(value: string): boolean {
   try {
     const url = new URL(value);

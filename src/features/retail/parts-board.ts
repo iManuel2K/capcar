@@ -1,32 +1,45 @@
 import { z } from "zod";
 import {
   safeEbayUrl,
+  safeRetailUrl,
   retailRequestSchema,
   type RetailItem,
   type RetailRequest,
 } from "./retail-contracts";
-export const boardEntry = z.object({
-  id: z.string().min(1).max(200),
-  title: z.string().min(1).max(500),
-  price: z.number().finite().nonnegative(),
-  currency: z.enum(["EUR", "USD", "GBP"]),
-  shipping: z.number().finite().nonnegative().nullable(),
-  country: z.string().nullable(),
-  condition: z.string(),
-  url: z.string().refine(safeEbayUrl),
-  affiliate: z.boolean(),
-  input: retailRequestSchema,
-  checkedAt: z.iso.datetime(),
-  target: z.number().finite().positive().max(1e6).nullable(),
-  history: z
-    .array(
-      z.object({
-        price: z.number().finite().nonnegative(),
-        at: z.iso.datetime(),
-      }),
-    )
-    .max(30),
-});
+export const boardEntry = z
+  .object({
+    id: z.string().min(1).max(200),
+    title: z.string().min(1).max(500),
+    price: z.number().finite().nonnegative(),
+    currency: z.enum(["EUR", "USD", "GBP"]),
+    shipping: z.number().finite().nonnegative().nullable(),
+    country: z.string().nullable(),
+    condition: z.string(),
+    url: z.string(),
+    retailer: z.string().max(80).optional(),
+    provider: z.enum(["ebay", "partner"]).optional(),
+    providerItemId: z.string().max(220).optional(),
+    affiliate: z.boolean(),
+    input: retailRequestSchema,
+    checkedAt: z.iso.datetime(),
+    target: z.number().finite().positive().max(1e6).nullable(),
+    history: z
+      .array(
+        z.object({
+          price: z.number().finite().nonnegative(),
+          at: z.iso.datetime(),
+        }),
+      )
+      .max(30),
+  })
+  .superRefine((entry, context) => {
+    const valid =
+      entry.provider === "partner"
+        ? safeRetailUrl(entry.url)
+        : safeEbayUrl(entry.url);
+    if (!valid)
+      context.addIssue({ code: "custom", message: "Invalid merchant link." });
+  });
 export const boardSchema = z.array(boardEntry).max(12);
 export type BoardEntry = z.infer<typeof boardEntry>;
 export function boardKey(item: Pick<BoardEntry, "id" | "currency" | "input">) {

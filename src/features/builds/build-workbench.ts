@@ -10,7 +10,7 @@ import {
 } from "./build-workbench-schema";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 import type { RetailItem } from "@/features/retail/retail-contracts";
-import { safeEbayUrl } from "@/features/retail/retail-contracts";
+import { safeRetailUrl } from "@/features/retail/retail-contracts";
 
 const normalized = (value: string) =>
   value
@@ -145,13 +145,17 @@ export function quoteFromRetail(
   item: RetailItem,
   checkedAt: string,
   destination = "Unconfirmed",
+  market: "DE" | "GB" | "FR" | "IT" | "ES" | "US" = "DE",
 ): BuildQuote {
   return quoteSchema.parse({
     ...item,
-    id: `ebay:${item.id}`,
-    retailer: "eBay",
+    id: `${item.provider ?? "ebay"}:${item.providerItemId ?? item.id}`,
+    retailer: item.retailer ?? "eBay",
     partNumber: "",
-    origin: "ebay-live",
+    origin: item.provider === "partner" ? "retailer-live" : "ebay-live",
+    provider: item.provider ?? "ebay",
+    providerItemId: item.providerItemId ?? item.id,
+    market,
     // Browse totals do not prove destination-specific taxes or import duties.
     extraCharges: null,
     destination,
@@ -202,7 +206,7 @@ export function updateWorkbench(
     ...(quote && total !== null
       ? {
           selectedOfferId: quote.id,
-          selectedOfferUrl: safeEbayUrl(quote.url) ? quote.url : undefined,
+          selectedOfferUrl: safeRetailUrl(quote.url) ? quote.url : undefined,
           merchantName: quote.retailer,
           deliveredPrice: total,
           estimatedCost: Math.ceil(total),

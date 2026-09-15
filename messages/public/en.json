@@ -116,7 +116,7 @@
       "itemStatus": "Expanding",
       "models": {
         "title": "Interactive vehicle models",
-        "description": "Tint model surfaces and save camera views for supported references. Vehicle-specific geometry and selectable fitted parts still need asset coverage."
+        "description": "Use lightweight reference geometry today, with integrity-checked licensed GLB delivery ready for approved model providers. Vehicle-specific asset coverage still depends on usage rights."
       },
       "movie": {
         "title": "Iconic movie-car demos",
@@ -136,7 +136,7 @@
       },
       "connected": {
         "title": "Connected parts",
-        "description": "Plan phases and dependencies, compare live eBay and owner-recorded offers, refresh price watches and inspect fitment evidence. Additional live retailers and scheduled background checks remain ahead."
+        "description": "Plan phases and dependencies, compare normalized live retailers, automatically refresh due watches while the garage is active and import connected OE fitment evidence. Closed-browser alerts still require scheduled infrastructure."
       },
       "marketplace": {
         "title": "Community marketplace",

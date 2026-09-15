@@ -3,6 +3,7 @@ import { z } from "zod";
 export const notificationPreferencesSchema = z.object({
   enabled: z.boolean(),
   maintenanceReminders: z.boolean(),
+  priceWatchAlerts: z.boolean().default(true),
   daysBeforeDue: z.number().int().min(1).max(180),
   quietHoursStart: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
   quietHoursEnd: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
@@ -30,6 +31,7 @@ export type NotificationItem = z.infer<typeof notificationItemSchema>;
 export const defaultNotificationPreferences: NotificationPreferences = {
   enabled: true,
   maintenanceReminders: true,
+  priceWatchAlerts: true,
   daysBeforeDue: 30,
   quietHoursStart: "21:00",
   quietHoursEnd: "08:00",

@@ -51,8 +51,10 @@ export function togglePriceWatch(
     query: quote.title,
     partNumber: quote.partNumber,
     destination: quote.destination,
+    market: quote.market,
     targetPrice,
     createdAt: now,
+    nextCheckAt: now,
     snapshots: [],
   });
   return { ...workbench, watches: [...workbench.watches, watch] };
