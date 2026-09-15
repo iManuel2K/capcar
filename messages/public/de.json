@@ -145,6 +145,10 @@
       "checkout": {
         "title": "Direkter Händler-Checkout",
         "description": "Gespeicherte Angebote und Summen je Währung prüfen, dann zu eBay wechseln. Bestellung und Zahlung beim Händler; nativer Checkout und Bestellabgleich brauchen Partnerzugang."
+      },
+      "roadbook": {
+        "title": "Roadbook-Fahrkarte",
+        "description": "Entdecke belegte Rundstrecken, kontrollierte Testgelände und Routenkontext auf einer Karte mit vier Ansichten. Speichere Orte im Build und dokumentiere eigene Besuche im Fahrzeugpass."
       }
     },
     "beyond": {
@@ -306,6 +310,7 @@
     "buildItems": "Build-Teile",
     "diagnostics": "Diagnosen",
     "notes": "Lokale Arbeitsnotizen",
+    "roadbookVisits": "Roadbook-Besuche",
     "maintenanceHistory": "Wartungshistorie",
     "noMaintenance": "Keine abgeschlossenen Wartungen geteilt.",
     "buildHistory": "Build-Historie",
@@ -314,6 +319,9 @@
     "noDiagnostics": "Keine Diagnosen geteilt.",
     "workHistory": "Lokale Arbeitsnotizen · ungeprüft",
     "noWork": "Keine lokalen Arbeitsnotizen geteilt.",
+    "roadbookHistory": "Roadbook-Historie",
+    "noRoadbookVisits": "Keine Roadbook-Besuche geteilt.",
+    "ownerRecorded": "Vom Halter erfasster Besuch",
     "unverified": "Ungeprüfter lokaler Eintrag",
     "notice": "Dieser Datensatz wurde vom Fahrzeughalter eingegeben und geteilt. Prüfe Teile, Rechnungen, sicherheitskritische Arbeiten und rechtliche Freigaben anhand der Originalunterlagen.",
     "buildGarage": "Eigene Garage erstellen →",

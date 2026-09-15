@@ -9,11 +9,13 @@ export default getRequestConfig(async () => {
   const saved = cookieStore.get(localeCookie)?.value;
   const locale = resolveLocale(saved, headerStore.get("accept-language"));
 
-  const [baseMessages, publicMessages, hardeningMessages] = await Promise.all([
-    import(`../../messages/${locale}.json`),
-    import(`../../messages/public/${locale}.json`),
-    import(`../../messages/hardening/${locale}.json`),
-  ]);
+  const [baseMessages, publicMessages, hardeningMessages, roadbookMessages] =
+    await Promise.all([
+      import(`../../messages/${locale}.json`),
+      import(`../../messages/public/${locale}.json`),
+      import(`../../messages/hardening/${locale}.json`),
+      import(`../../messages/roadbook/${locale}.json`),
+    ]);
 
   return {
     locale,
@@ -21,6 +23,7 @@ export default getRequestConfig(async () => {
       ...baseMessages.default,
       ...publicMessages.default,
       ...hardeningMessages.default,
+      ...roadbookMessages.default,
     },
   };
 });

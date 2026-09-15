@@ -1,0 +1,135 @@
+{
+  "Roadbook": {
+    "eyebrow": "Roadbook · Legal driving discovery",
+    "title": "Find the right road for the build.",
+    "description": "Discover circuits, controlled test venues and driving routes with their source, access rules and current confidence kept visible.",
+    "filtersLabel": "Roadbook categories",
+    "locate": "Use my location",
+    "loading": "Checking the visible area…",
+    "resultCount": "{count, plural, =1 {One place in view} other {# places in view}}",
+    "retry": "Try again",
+    "categories": {
+      "drift_circuit": "Drift circuits",
+      "drag_acceleration": "Acceleration venues",
+      "track_day": "Track days",
+      "proving_ground": "Proving grounds",
+      "scenic_route": "Scenic routes",
+      "autobahn_context": "Autobahn context"
+    },
+    "modes": {
+      "label": "Map appearance",
+      "workshop_cream": "Workshop Cream",
+      "petrol_night": "Petrol Night",
+      "blueprint": "Blueprint",
+      "touring_clay": "Touring Clay"
+    },
+    "setup": {
+      "title": "Roadbook needs its map token.",
+      "description": "Add the public Mapbox token in Netlify and redeploy. The map is only initialized on this route."
+    },
+    "errors": {
+      "generic": "That action could not be completed.",
+      "load": "Roadbook places could not be loaded.",
+      "signInRequired": "Sign in to save a place, record a visit or submit a report.",
+      "photoTooLarge": "Each photo must be 12 MB or smaller.",
+      "obdTooLarge": "The OBD evidence file must be 1 MB or smaller.",
+      "locationUnavailable": "Location is not available in this browser.",
+      "locationDenied": "Location permission was not granted. You can still move the map manually.",
+      "mapToken": "Mapbox rejected the configured public token."
+    },
+    "empty": {
+      "title": "No sourced places in this view.",
+      "description": "Move the map, widen the view or remove a filter. Capcar does not invent testing locations."
+    },
+    "safety": {
+      "autobahn": "Autobahn layers are route context only. Posted limits, temporary restrictions, traffic and conditions always take priority. Never use public roads for timed acceleration testing.",
+      "closedVenue": "Drifting and timed acceleration belong only at closed or private venues under the operator’s rules. Confirm access before travelling."
+    },
+    "details": {
+      "label": "Roadbook place details",
+      "close": "Close place details",
+      "access": "Access",
+      "surface": "Surface",
+      "length": "Length",
+      "noise": "Noise limit",
+      "hours": "Opening hours",
+      "entry": "Entry",
+      "unknown": "Not recorded",
+      "confirmLimit": "Confirm with venue",
+      "confirmHours": "Check official schedule",
+      "confirmPrice": "Check current price",
+      "verifiedOn": "Last verified {date}",
+      "sourceLinked": "Official source linked; current conditions are not confirmed."
+    },
+    "access": {
+      "closed_venue": "Closed venue",
+      "private": "Private venue",
+      "permit_required": "Booking or permit required",
+      "public_context": "Public-road context",
+      "unknown": "Confirm access"
+    },
+    "verification": {
+      "verified": "Verified record",
+      "official_source": "Official source linked",
+      "community_report": "Community change reported",
+      "stale": "Verification outdated",
+      "unverified": "Not yet verified"
+    },
+    "vehicle": {
+      "label": "Check with your active car",
+      "choose": "Choose a garage vehicle"
+    },
+    "readiness": {
+      "identity": {
+        "ready": "Vehicle identity linked to this plan.",
+        "check": "Choose a vehicle before saving or recording.",
+        "blocked": "Vehicle identity is incompatible."
+      },
+      "access": {
+        "ready": "This entry is categorized as a controlled venue.",
+        "check": "Confirm current access and posted rules before driving.",
+        "blocked": "This activity is not allowed at this location."
+      },
+      "noise": {
+        "ready": "Recorded noise output is inside the venue limit.",
+        "check": "Your build’s measured noise output is not recorded; verify it against the venue limit.",
+        "blocked": "Recorded noise output exceeds the venue limit."
+      },
+      "roadLegal": {
+        "ready": "Road-use evidence is current.",
+        "check": "Confirm TÜV, tyres, brakes and road legality before using public routes.",
+        "blocked": "The current build record is not cleared for public-road use."
+      }
+    },
+    "actions": {
+      "save": "Save to build plan",
+      "saved": "Saved to plan",
+      "booking": "Open booking",
+      "checkSource": "Check official source"
+    },
+    "visit": {
+      "title": "Record a visit",
+      "date": "Visit date",
+      "lap": "Best lap or closed-course run in seconds",
+      "lapPlaceholder": "Optional, for example 124.380",
+      "notes": "Driver notes",
+      "photos": "Add photos",
+      "photosChosen": "{count} photos",
+      "obd": "Add OBD log",
+      "evidenceNotice": "Visit details are owner-recorded evidence, not timing certification or venue approval.",
+      "action": "Add to Vehicle Passport",
+      "recorded": "Visit recorded"
+    },
+    "report": {
+      "title": "Information outdated?",
+      "placeholder": "Describe what changed and what should be checked.",
+      "sourcePlaceholder": "Supporting HTTPS source (optional)",
+      "action": "Send for moderation",
+      "sent": "Report queued"
+    },
+    "poster": {
+      "action": "Export build map",
+      "empty": "Record a visit with this vehicle before exporting."
+    }
+  }
+}

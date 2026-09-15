@@ -145,6 +145,10 @@
       "checkout": {
         "title": "Direct merchant checkout",
         "description": "Review saved offers and currency-separated subtotals before continuing to eBay. Orders and payment stay with the retailer; native checkout and order sync require partner access."
+      },
+      "roadbook": {
+        "title": "Roadbook driving map",
+        "description": "Explore sourced circuits, controlled test venues and route context on a four-mode map. Save places to a build and keep owner-recorded visits in the Vehicle Passport."
       }
     },
     "beyond": {
@@ -306,6 +310,7 @@
     "buildItems": "Build items",
     "diagnostics": "Diagnostics",
     "notes": "Local work notes",
+    "roadbookVisits": "Roadbook visits",
     "maintenanceHistory": "Maintenance history",
     "noMaintenance": "No completed maintenance records shared.",
     "buildHistory": "Build history",
@@ -314,6 +319,9 @@
     "noDiagnostics": "No diagnostic records shared.",
     "workHistory": "Local work notes · unverified",
     "noWork": "No local work notes shared.",
+    "roadbookHistory": "Roadbook history",
+    "noRoadbookVisits": "No Roadbook visits shared.",
+    "ownerRecorded": "Owner-recorded visit",
     "unverified": "Unverified local entry",
     "notice": "This record was entered and shared by the vehicle owner. Verify parts, invoices, safety-critical work and legal approval against original documents before relying on it.",
     "buildGarage": "Build your own garage →",

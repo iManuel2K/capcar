@@ -7,6 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/roadmap",
     "/parts-search",
     "/sound-studio",
+    "/roadbook",
     "/marketplace",
     "/connected-parts",
     "/verified-work",

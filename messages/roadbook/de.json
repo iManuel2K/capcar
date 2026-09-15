@@ -1,0 +1,135 @@
+{
+  "Roadbook": {
+    "eyebrow": "Roadbook · Legale Fahrziele",
+    "title": "Finde die richtige Strecke für dein Projekt.",
+    "description": "Entdecke Rennstrecken, kontrollierte Testgelände und Fahrtrouten – mit Quelle, Zugangsregeln und sichtbarem Prüfstatus.",
+    "filtersLabel": "Roadbook-Kategorien",
+    "locate": "Meinen Standort verwenden",
+    "loading": "Sichtbaren Bereich prüfen…",
+    "resultCount": "{count, plural, =1 {Ein Ort im Ausschnitt} other {# Orte im Ausschnitt}}",
+    "retry": "Erneut versuchen",
+    "categories": {
+      "drift_circuit": "Driftstrecken",
+      "drag_acceleration": "Beschleunigungsgelände",
+      "track_day": "Trackdays",
+      "proving_ground": "Testgelände",
+      "scenic_route": "Panoramarouten",
+      "autobahn_context": "Autobahn-Kontext"
+    },
+    "modes": {
+      "label": "Kartendarstellung",
+      "workshop_cream": "Werkstatt Creme",
+      "petrol_night": "Petrol Nacht",
+      "blueprint": "Blaupause",
+      "touring_clay": "Touring Clay"
+    },
+    "setup": {
+      "title": "Roadbook benötigt den Karten-Token.",
+      "description": "Füge den öffentlichen Mapbox-Token in Netlify ein und deploye erneut. Die Karte wird nur auf dieser Route initialisiert."
+    },
+    "errors": {
+      "generic": "Die Aktion konnte nicht abgeschlossen werden.",
+      "load": "Roadbook-Orte konnten nicht geladen werden.",
+      "signInRequired": "Melde dich an, um Orte zu speichern, Besuche einzutragen oder Änderungen zu melden.",
+      "photoTooLarge": "Jedes Foto darf höchstens 12 MB groß sein.",
+      "obdTooLarge": "Die OBD-Datei darf höchstens 1 MB groß sein.",
+      "locationUnavailable": "Der Standort ist in diesem Browser nicht verfügbar.",
+      "locationDenied": "Der Standort wurde nicht freigegeben. Du kannst die Karte weiterhin manuell bewegen.",
+      "mapToken": "Mapbox hat den konfigurierten öffentlichen Token abgelehnt."
+    },
+    "empty": {
+      "title": "Keine belegten Orte in diesem Ausschnitt.",
+      "description": "Verschiebe die Karte, zoome heraus oder entferne einen Filter. Capcar erfindet keine Testorte."
+    },
+    "safety": {
+      "autobahn": "Autobahn-Ebenen dienen nur als Routenkontext. Beschilderung, temporäre Limits, Verkehr und Bedingungen haben immer Vorrang. Keine Zeitmessung auf öffentlichen Straßen.",
+      "closedVenue": "Driften und gemessene Beschleunigung gehören ausschließlich auf geschlossene oder private Gelände nach Betreiberregeln. Zugang vorher bestätigen."
+    },
+    "details": {
+      "label": "Details zum Roadbook-Ort",
+      "close": "Ortsdetails schließen",
+      "access": "Zugang",
+      "surface": "Belag",
+      "length": "Länge",
+      "noise": "Lärmgrenze",
+      "hours": "Öffnungszeiten",
+      "entry": "Eintritt",
+      "unknown": "Nicht erfasst",
+      "confirmLimit": "Beim Betreiber prüfen",
+      "confirmHours": "Offiziellen Zeitplan prüfen",
+      "confirmPrice": "Aktuellen Preis prüfen",
+      "verifiedOn": "Zuletzt geprüft: {date}",
+      "sourceLinked": "Offizielle Quelle verknüpft; aktuelle Bedingungen sind nicht bestätigt."
+    },
+    "access": {
+      "closed_venue": "Geschlossenes Gelände",
+      "private": "Privates Gelände",
+      "permit_required": "Buchung oder Genehmigung nötig",
+      "public_context": "Kontext für öffentliche Straßen",
+      "unknown": "Zugang bestätigen"
+    },
+    "verification": {
+      "verified": "Geprüfter Eintrag",
+      "official_source": "Offizielle Quelle verknüpft",
+      "community_report": "Änderung gemeldet",
+      "stale": "Prüfung veraltet",
+      "unverified": "Noch nicht geprüft"
+    },
+    "vehicle": {
+      "label": "Mit deinem aktiven Fahrzeug prüfen",
+      "choose": "Fahrzeug aus der Garage wählen"
+    },
+    "readiness": {
+      "identity": {
+        "ready": "Fahrzeugidentität ist mit diesem Plan verknüpft.",
+        "check": "Wähle vor dem Speichern oder Eintragen ein Fahrzeug.",
+        "blocked": "Die Fahrzeugidentität ist nicht kompatibel."
+      },
+      "access": {
+        "ready": "Dieser Eintrag ist als kontrolliertes Gelände eingestuft.",
+        "check": "Aktuellen Zugang und ausgeschilderte Regeln vor der Fahrt prüfen.",
+        "blocked": "Diese Aktivität ist an diesem Ort nicht erlaubt."
+      },
+      "noise": {
+        "ready": "Der erfasste Geräuschwert liegt unter dem Streckenlimit.",
+        "check": "Der gemessene Geräuschwert deines Projekts fehlt; mit dem Streckenlimit vergleichen.",
+        "blocked": "Der erfasste Geräuschwert überschreitet das Streckenlimit."
+      },
+      "roadLegal": {
+        "ready": "Nachweise für den Straßenbetrieb sind aktuell.",
+        "check": "TÜV, Reifen, Bremsen und Straßenzulässigkeit vor öffentlichen Routen prüfen.",
+        "blocked": "Das aktuelle Projekt ist nicht für öffentliche Straßen freigegeben."
+      }
+    },
+    "actions": {
+      "save": "Im Bauplan speichern",
+      "saved": "Im Plan gespeichert",
+      "booking": "Buchung öffnen",
+      "checkSource": "Offizielle Quelle prüfen"
+    },
+    "visit": {
+      "title": "Besuch eintragen",
+      "date": "Besuchsdatum",
+      "lap": "Beste Runde oder geschlossener Lauf in Sekunden",
+      "lapPlaceholder": "Optional, z. B. 124,380",
+      "notes": "Fahrernotizen",
+      "photos": "Fotos hinzufügen",
+      "photosChosen": "{count} Fotos",
+      "obd": "OBD-Protokoll hinzufügen",
+      "evidenceNotice": "Besuchsdaten sind vom Halter erfasste Nachweise, keine Zeitnahme-Zertifizierung oder Streckenfreigabe.",
+      "action": "Zum Fahrzeugpass hinzufügen",
+      "recorded": "Besuch gespeichert"
+    },
+    "report": {
+      "title": "Information veraltet?",
+      "placeholder": "Beschreibe, was sich geändert hat und geprüft werden sollte.",
+      "sourcePlaceholder": "Unterstützende HTTPS-Quelle (optional)",
+      "action": "Zur Prüfung senden",
+      "sent": "Meldung eingereiht"
+    },
+    "poster": {
+      "action": "Build-Karte exportieren",
+      "empty": "Trage zuerst einen Besuch mit diesem Fahrzeug ein."
+    }
+  }
+}

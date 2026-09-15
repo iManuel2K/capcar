@@ -57,6 +57,10 @@ import {
   WISHLIST_STORAGE_EVENT,
   WISHLIST_STORAGE_KEY,
 } from "@/features/wishlist/wishlist-storage";
+import {
+  ROADBOOK_VISITS_STORAGE_EVENT,
+  ROADBOOK_VISITS_STORAGE_KEY,
+} from "@/features/roadbook/roadbook-storage";
 
 export const snapshotKeys = [
   VEHICLE_STORAGE_KEY,
@@ -74,6 +78,7 @@ export const snapshotKeys = [
   WISHLIST_STORAGE_KEY,
   INSTALL_STAMP_STORAGE_KEY,
   PASSPORT_PROFILE_STORAGE_KEY,
+  ROADBOOK_VISITS_STORAGE_KEY,
 ] as const;
 
 export const garageStorageEvents = [
@@ -91,6 +96,7 @@ export const garageStorageEvents = [
   DIAGNOSTIC_STORAGE_EVENT,
   WISHLIST_STORAGE_EVENT,
   INSTALL_STAMP_STORAGE_EVENT,
+  ROADBOOK_VISITS_STORAGE_EVENT,
 ] as const;
 
 export const localSnapshotSchema = z.object({

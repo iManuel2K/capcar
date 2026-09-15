@@ -9,6 +9,7 @@ import { readInstallStamps } from "@/features/specialists/install-stamp-storage"
 import { findVehicle } from "@/features/vehicles/vehicle-storage";
 import { findCatalogPart } from "@/features/parts/part-catalog";
 import { evaluateFitment } from "@/features/parts/fitment";
+import { readRoadbookVisits } from "@/features/roadbook/roadbook-storage";
 
 type ReadableStorage = Pick<Storage, "getItem">;
 
@@ -103,6 +104,19 @@ export const vehiclePassportSchema = z.object({
       verification: z.string().min(1),
     }),
   ),
+  roadbookVisits: z
+    .array(
+      z.object({
+        venueName: z.string().min(2),
+        category: z.string().min(1),
+        visitedAt: z.string().date(),
+        bestLapSeconds: z.number().positive().optional(),
+        photoCount: z.number().int().nonnegative(),
+        hasObdLog: z.boolean(),
+        evidence: z.literal("owner_recorded"),
+      }),
+    )
+    .default([]),
 });
 
 export type VehiclePassportPayload = z.infer<typeof vehiclePassportSchema>;
@@ -269,6 +283,17 @@ export function buildVehiclePassport(
         installedAt: item.installedAt,
         verification: item.verification,
       })),
+    roadbookVisits: readRoadbookVisits(storage)
+      .filter((item) => item.vehicleId === vehicleId)
+      .map((item) => ({
+        venueName: item.venueName,
+        category: item.category,
+        visitedAt: item.visitedAt,
+        bestLapSeconds: item.bestLapSeconds,
+        photoCount: item.photoCount,
+        hasObdLog: item.hasObdLog,
+        evidence: item.evidence,
+      })),
   };
 }
 
@@ -318,6 +343,15 @@ export function passportToCsv(passport: VehiclePassportPayload) {
       "",
       item.specialist,
       item.verification,
+    ]);
+  for (const item of passport.roadbookVisits)
+    rows.push([
+      "roadbook_visit",
+      item.visitedAt,
+      item.venueName,
+      "",
+      "",
+      `${item.category} · owner-recorded${item.bestLapSeconds ? ` · ${item.bestLapSeconds}s` : ""}`,
     ]);
   return rows
     .map((row) =>

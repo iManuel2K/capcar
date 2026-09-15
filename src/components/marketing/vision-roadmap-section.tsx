@@ -40,12 +40,13 @@ const columns = [
       "connected",
       "marketplace",
       "checkout",
+      "roadbook",
     ],
     active: true,
   },
   {
     id: "beyond",
-    items: ["events", "testMap", "ai", "twowheels", "more"],
+    items: ["events", "ai", "twowheels", "more"],
     active: false,
   },
 ] as const;

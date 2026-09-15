@@ -55,6 +55,7 @@ for (const path of [
   "/connected-parts",
   "/verified-work",
   "/specialists/apply",
+  "/roadbook",
 ]) {
   await expectPage(path);
 }

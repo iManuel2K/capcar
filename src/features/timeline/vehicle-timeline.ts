@@ -10,6 +10,7 @@ import { readBuildVisuals } from "@/features/visualizer/build-visual-storage";
 import { readTuningPlans } from "@/features/tuning/tuning-storage";
 import { readDiagnostics } from "@/features/diagnostics/diagnostic-storage";
 import { readInstallStamps } from "@/features/specialists/install-stamp-storage";
+import { readRoadbookVisits } from "@/features/roadbook/roadbook-storage";
 
 export const timelineCategories = [
   "vehicle",
@@ -114,6 +115,21 @@ export function buildVehicleTimeline(
       detail: `${stamp.specialistName} · Partner verification workflow preview`,
       occurredAt: stamp.createdAt,
       value: stamp.installedAt,
+    });
+  }
+
+  for (const visit of readRoadbookVisits(storage).filter(
+    (candidate) => candidate.vehicleId === vehicleId,
+  )) {
+    events.push({
+      id: `roadbook-${visit.id}`,
+      category: "vehicle",
+      title: `Roadbook visit · ${visit.venueName}`,
+      detail: `Owner-recorded visit · ${visit.photoCount} photos${visit.hasObdLog ? " · OBD evidence attached" : ""}`,
+      occurredAt: `${visit.visitedAt}T12:00:00.000Z`,
+      value: visit.bestLapSeconds
+        ? `${visit.bestLapSeconds}s recorded`
+        : undefined,
     });
   }
 

@@ -145,6 +145,10 @@
       "checkout": {
         "title": "Pagesë direkte te shitësi",
         "description": "Shiko ofertat dhe nëntotalet sipas monedhës para eBay. Porositë dhe pagesat te shitësi; pagesa brenda aplikacionit dhe sinkronizimi kërkojnë partneritet."
+      },
+      "roadbook": {
+        "title": "Harta e vozitjes Roadbook",
+        "description": "Zbulo pista me burime, ambiente të kontrolluara testimi dhe kontekst itinerari në një hartë me katër pamje. Ruaj vende në build dhe vizitat e tua në Vehicle Passport."
       }
     },
     "beyond": {
@@ -306,6 +310,7 @@
     "buildItems": "Pjesë projekti",
     "diagnostics": "Diagnostika",
     "notes": "Shënime lokale pune",
+    "roadbookVisits": "Vizita Roadbook",
     "maintenanceHistory": "Historiku i mirëmbajtjes",
     "noMaintenance": "Nuk janë ndarë mirëmbajtje të përfunduara.",
     "buildHistory": "Historiku i projektit",
@@ -314,6 +319,9 @@
     "noDiagnostics": "Nuk janë ndarë regjistra diagnostikë.",
     "workHistory": "Shënime lokale · të paverifikuara",
     "noWork": "Nuk janë ndarë shënime lokale.",
+    "roadbookHistory": "Historiku Roadbook",
+    "noRoadbookVisits": "Nuk janë ndarë vizita Roadbook.",
+    "ownerRecorded": "Vizitë e regjistruar nga pronari",
     "unverified": "Shënim lokal i paverifikuar",
     "notice": "Ky regjistër është futur dhe ndarë nga pronari. Verifiko pjesët, faturat, punët kritike dhe miratimet me dokumentet origjinale.",
     "buildGarage": "Krijo garazhin tënd →",

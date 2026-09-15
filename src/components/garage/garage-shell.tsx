@@ -13,6 +13,7 @@ import {
   UserCircle,
   Wrench,
   Menu,
+  MapPinned,
 } from "lucide-react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
@@ -159,6 +160,11 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
                   </MoreLink>
                   <MoreLink href={`/garage/${vehicleId}/specialists`}>
                     {t("specialists")}
+                  </MoreLink>
+                  <MoreLink href="/roadbook">
+                    <span className="inline-flex items-center gap-2">
+                      <MapPinned className="size-4" /> Roadbook
+                    </span>
                   </MoreLink>
                 </div>
               </details>

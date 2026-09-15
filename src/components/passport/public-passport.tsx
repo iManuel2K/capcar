@@ -43,7 +43,7 @@ export async function PublicPassport({
           })}
         </p>
 
-        <section className="mt-5 grid gap-3 sm:grid-cols-4">
+        <section className="mt-5 grid gap-3 sm:grid-cols-5">
           <Metric
             label={t("maintenance")}
             value={passport.maintenance.length}
@@ -57,6 +57,10 @@ export async function PublicPassport({
             value={passport.diagnostics.length}
           />
           <Metric label={t("notes")} value={passport.installStamps.length} />
+          <Metric
+            label={t("roadbookVisits")}
+            value={passport.roadbookVisits.length}
+          />
         </section>
 
         <div className="mt-5 grid gap-5 lg:grid-cols-2">
@@ -90,6 +94,14 @@ export async function PublicPassport({
             rows={passport.installStamps.map((item) => ({
               title: item.work,
               detail: `${item.specialist} · ${item.installedAt} · ${t("unverified")}`,
+            }))}
+          />
+          <RecordSection
+            title={t("roadbookHistory")}
+            empty={t("noRoadbookVisits")}
+            rows={passport.roadbookVisits.map((item) => ({
+              title: item.venueName,
+              detail: `${item.visitedAt} · ${t("ownerRecorded")}${item.bestLapSeconds ? ` · ${item.bestLapSeconds}s` : ""}`,
             }))}
           />
         </div>

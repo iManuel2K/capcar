@@ -1,0 +1,135 @@
+{
+  "Roadbook": {
+    "eyebrow": "Roadbook · Vende të ligjshme për ngarje",
+    "title": "Gjej rrugën e duhur për projektin.",
+    "description": "Zbulo pista, zona të kontrolluara testimi dhe rrugë me burimin, rregullat e hyrjes dhe statusin e verifikimit gjithmonë të dukshëm.",
+    "filtersLabel": "Kategoritë e Roadbook",
+    "locate": "Përdor vendndodhjen time",
+    "loading": "Po kontrollohet zona e dukshme…",
+    "resultCount": "{count, plural, =1 {Një vend në hartë} other {# vende në hartë}}",
+    "retry": "Provo përsëri",
+    "categories": {
+      "drift_circuit": "Pista drift-i",
+      "drag_acceleration": "Zona përshpejtimi",
+      "track_day": "Track days",
+      "proving_ground": "Poligone testimi",
+      "scenic_route": "Rrugë panoramike",
+      "autobahn_context": "Kontekst Autobahn"
+    },
+    "modes": {
+      "label": "Pamja e hartës",
+      "workshop_cream": "Workshop Cream",
+      "petrol_night": "Petrol Night",
+      "blueprint": "Blueprint",
+      "touring_clay": "Touring Clay"
+    },
+    "setup": {
+      "title": "Roadbook ka nevojë për token-in e hartës.",
+      "description": "Shto token-in publik të Mapbox në Netlify dhe bëj deploy përsëri. Harta ngarkohet vetëm në këtë faqe."
+    },
+    "errors": {
+      "generic": "Veprimi nuk mund të përfundonte.",
+      "load": "Vendet e Roadbook nuk mund të ngarkoheshin.",
+      "signInRequired": "Hyr në llogari për të ruajtur një vend, regjistruar një vizitë ose raportuar ndryshim.",
+      "photoTooLarge": "Çdo foto duhet të jetë maksimumi 12 MB.",
+      "obdTooLarge": "Skedari OBD duhet të jetë maksimumi 1 MB.",
+      "locationUnavailable": "Vendndodhja nuk është e disponueshme në këtë shfletues.",
+      "locationDenied": "Leja për vendndodhjen nuk u dha. Hartën mund ta lëvizësh manualisht.",
+      "mapToken": "Mapbox refuzoi token-in publik të konfiguruar."
+    },
+    "empty": {
+      "title": "Nuk ka vende me burim në këtë pamje.",
+      "description": "Lëviz hartën, zmadho zonën ose hiq një filtër. Capcar nuk shpik vende testimi."
+    },
+    "safety": {
+      "autobahn": "Shtresa Autobahn është vetëm kontekst rruge. Shenjat, kufizimet e përkohshme, trafiku dhe kushtet kanë gjithmonë përparësi. Mos bëj kurrë test përshpejtimi me kohë në rrugë publike.",
+      "closedVenue": "Drift-i dhe përshpejtimi me kohë bëhen vetëm në ambiente të mbyllura ose private sipas rregullave të operatorit. Konfirmo hyrjen para udhëtimit."
+    },
+    "details": {
+      "label": "Detajet e vendit Roadbook",
+      "close": "Mbyll detajet",
+      "access": "Hyrja",
+      "surface": "Sipërfaqja",
+      "length": "Gjatësia",
+      "noise": "Kufiri i zhurmës",
+      "hours": "Orari",
+      "entry": "Hyrja",
+      "unknown": "Nuk është regjistruar",
+      "confirmLimit": "Konfirmo me operatorin",
+      "confirmHours": "Kontrollo orarin zyrtar",
+      "confirmPrice": "Kontrollo çmimin aktual",
+      "verifiedOn": "Kontrolluar së fundmi më {date}",
+      "sourceLinked": "Burimi zyrtar është lidhur; kushtet aktuale nuk janë konfirmuar."
+    },
+    "access": {
+      "closed_venue": "Ambient i mbyllur",
+      "private": "Ambient privat",
+      "permit_required": "Duhet rezervim ose leje",
+      "public_context": "Kontekst rruge publike",
+      "unknown": "Konfirmo hyrjen"
+    },
+    "verification": {
+      "verified": "Regjistrim i verifikuar",
+      "official_source": "Burim zyrtar i lidhur",
+      "community_report": "Ndryshim i raportuar",
+      "stale": "Verifikim i vjetruar",
+      "unverified": "Ende i paverifikuar"
+    },
+    "vehicle": {
+      "label": "Kontrollo me makinën aktive",
+      "choose": "Zgjidh një makinë nga garazhi"
+    },
+    "readiness": {
+      "identity": {
+        "ready": "Identiteti i makinës është lidhur me planin.",
+        "check": "Zgjidh një makinë para ruajtjes ose regjistrimit.",
+        "blocked": "Identiteti i makinës nuk përputhet."
+      },
+      "access": {
+        "ready": "Ky vend klasifikohet si ambient i kontrolluar.",
+        "check": "Konfirmo hyrjen aktuale dhe rregullat para ngarjes.",
+        "blocked": "Ky aktivitet nuk lejohet në këtë vend."
+      },
+      "noise": {
+        "ready": "Zhurma e regjistruar është brenda kufirit.",
+        "check": "Zhurma e matur e build-it nuk është regjistruar; krahasoje me kufirin e ambientit.",
+        "blocked": "Zhurma e regjistruar e kalon kufirin."
+      },
+      "roadLegal": {
+        "ready": "Dëshmitë për përdorim rrugor janë aktuale.",
+        "check": "Kontrollo TÜV-in, gomat, frenat dhe ligjshmërinë para rrugëve publike.",
+        "blocked": "Build-i aktual nuk është miratuar për rrugë publike."
+      }
+    },
+    "actions": {
+      "save": "Ruaje në planin e build-it",
+      "saved": "U ruajt në plan",
+      "booking": "Hap rezervimin",
+      "checkSource": "Kontrollo burimin zyrtar"
+    },
+    "visit": {
+      "title": "Regjistro një vizitë",
+      "date": "Data e vizitës",
+      "lap": "Xhiroja ose prova më e mirë në sekonda",
+      "lapPlaceholder": "Opsionale, p.sh. 124.380",
+      "notes": "Shënime të shoferit",
+      "photos": "Shto foto",
+      "photosChosen": "{count} foto",
+      "obd": "Shto log OBD",
+      "evidenceNotice": "Të dhënat e vizitës regjistrohen nga pronari; nuk janë certifikim kohe ose miratim i ambientit.",
+      "action": "Shto në Pasaportën e Makinës",
+      "recorded": "Vizita u regjistrua"
+    },
+    "report": {
+      "title": "Informacion i vjetruar?",
+      "placeholder": "Përshkruaj çfarë ndryshoi dhe çfarë duhet kontrolluar.",
+      "sourcePlaceholder": "Burim mbështetës HTTPS (opsional)",
+      "action": "Dërgo për moderim",
+      "sent": "Raporti u shtua në radhë"
+    },
+    "poster": {
+      "action": "Eksporto hartën e build-it",
+      "empty": "Regjistro fillimisht një vizitë me këtë makinë."
+    }
+  }
+}

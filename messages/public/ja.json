@@ -145,6 +145,10 @@
       "checkout": {
         "title": "販売店での直接決済",
         "description": "保存した出品を通貨別小計で確認し、eBayへ進めます。注文と決済は販売店が担当します。アプリ内決済と注文同期には提携先の利用許可が必要です。"
+      },
+      "roadbook": {
+        "title": "Roadbookドライビングマップ",
+        "description": "出典付きサーキット、管理されたテスト施設、ルート情報を4つの表示モードで探索できます。場所をビルドに保存し、自分の訪問記録をVehicle Passportに残せます。"
       }
     },
     "beyond": {
@@ -306,6 +310,7 @@
     "buildItems": "ビルド項目",
     "diagnostics": "診断",
     "notes": "ローカル作業メモ",
+    "roadbookVisits": "Roadbook訪問",
     "maintenanceHistory": "整備履歴",
     "noMaintenance": "共有された完了済み整備はありません。",
     "buildHistory": "ビルド履歴",
@@ -314,6 +319,9 @@
     "noDiagnostics": "共有された診断記録はありません。",
     "workHistory": "ローカル作業メモ · 未確認",
     "noWork": "共有されたローカル作業メモはありません。",
+    "roadbookHistory": "Roadbook履歴",
+    "noRoadbookVisits": "共有されたRoadbook訪問はありません。",
+    "ownerRecorded": "オーナー記録の訪問",
     "unverified": "未確認のローカル記録",
     "notice": "この記録は車両オーナーが入力し共有したものです。パーツ、請求書、安全に関わる作業、法的承認を原本で確認してください。",
     "buildGarage": "自分のガレージを作る →",

@@ -1,0 +1,309 @@
+"use client";
+
+import { AlertTriangle, Crosshair, MapPinned, RefreshCw } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
+
+import { RoadbookFilterBar } from "@/components/roadbook/roadbook-filter-bar";
+import { RoadbookMap } from "@/components/roadbook/roadbook-map";
+import { RoadbookModerationQueue } from "@/components/roadbook/roadbook-moderation-queue";
+import { RoadbookPosterButton } from "@/components/roadbook/roadbook-poster-button";
+import { RoadbookThemeSwitcher } from "@/components/roadbook/roadbook-theme-switcher";
+import { RoadbookVenueDrawer } from "@/components/roadbook/roadbook-venue-drawer";
+import {
+  fetchRoadbookVenues,
+  recordRoadbookVisit,
+  reportRoadbookVenue,
+  saveRoadbookPlace,
+  type RoadbookCenter,
+} from "@/features/roadbook/roadbook-client";
+import {
+  roadbookCategories,
+  roadbookMapModes,
+  type RoadbookCategory,
+  type RoadbookMapMode,
+  type RoadbookVenue,
+} from "@/features/roadbook/roadbook-schema";
+import {
+  readRoadbookVisits,
+  ROADBOOK_VISITS_STORAGE_EVENT,
+} from "@/features/roadbook/roadbook-storage";
+import { readBuildState } from "@/features/builds/build-storage";
+import { useVehicles } from "@/features/vehicles/use-vehicles";
+
+const defaultCenter: RoadbookCenter = { latitude: 50.1109, longitude: 8.6821 };
+
+export function RoadbookExperience() {
+  const t = useTranslations("Roadbook");
+  const accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ?? "";
+  const { vehicles } = useVehicles();
+  const [vehicleId, setVehicleId] = useState<string>();
+  const [venues, setVenues] = useState<RoadbookVenue[]>([]);
+  const [selectedVenue, setSelectedVenue] = useState<RoadbookVenue>();
+  const [categories, setCategories] = useState<RoadbookCategory[]>([]);
+  const [mode, setMode] = useState<RoadbookMapMode>("petrol_night");
+  const [center, setCenter] = useState(defaultCenter);
+  const [radiusKm, setRadiusKm] = useState(350);
+  const [userPosition, setUserPosition] = useState<RoadbookCenter>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [visits, setVisits] = useState(() =>
+    typeof window === "undefined"
+      ? []
+      : readRoadbookVisits(window.localStorage),
+  );
+  const fetchSequence = useRef(0);
+  const fetchController = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    const update = () => setVisits(readRoadbookVisits(window.localStorage));
+    window.addEventListener(ROADBOOK_VISITS_STORAGE_EVENT, update);
+    return () =>
+      window.removeEventListener(ROADBOOK_VISITS_STORAGE_EVENT, update);
+  }, []);
+
+  const loadVenues = useCallback(async () => {
+    const sequence = ++fetchSequence.current;
+    fetchController.current?.abort();
+    const controller = new AbortController();
+    fetchController.current = controller;
+    setLoading(true);
+    setError("");
+    try {
+      const result = await fetchRoadbookVenues({
+        center,
+        radiusKm,
+        categories,
+        signal: controller.signal,
+      });
+      if (sequence === fetchSequence.current) setVenues(result);
+    } catch {
+      if (sequence === fetchSequence.current && !controller.signal.aborted)
+        setError(t("errors.load"));
+    } finally {
+      if (sequence === fetchSequence.current) setLoading(false);
+    }
+  }, [categories, center, radiusKm, t]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => void loadVenues(), 320);
+    return () => {
+      window.clearTimeout(timer);
+      fetchController.current?.abort();
+    };
+  }, [loadVenues]);
+
+  const filterLabels = useMemo(
+    () =>
+      Object.fromEntries(
+        roadbookCategories.map((category) => [
+          category,
+          t(`categories.${category}`),
+        ]),
+      ) as Record<RoadbookCategory, string>,
+    [t],
+  );
+  const modeLabels = useMemo(
+    () =>
+      Object.fromEntries(
+        roadbookMapModes.map((mapMode) => [mapMode, t(`modes.${mapMode}`)]),
+      ) as Record<RoadbookMapMode, string>,
+    [t],
+  );
+  const activeVehicleId = vehicleId ?? vehicles[0]?.id;
+  const selectedVehicle = vehicles.find(
+    (vehicle) => vehicle.id === activeVehicleId,
+  );
+
+  const updateViewport = useCallback(
+    (nextCenter: RoadbookCenter, nextRadiusKm: number) => {
+      setCenter(nextCenter);
+      setRadiusKm(nextRadiusKm);
+    },
+    [],
+  );
+
+  function locateUser() {
+    if (!navigator.geolocation) {
+      setError(t("errors.locationUnavailable"));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const next = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+        setUserPosition(next);
+        setCenter(next);
+        setRadiusKm(150);
+      },
+      () => setError(t("errors.locationDenied")),
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 },
+    );
+  }
+
+  if (!accessToken) {
+    return (
+      <div className="grid h-[calc(100dvh-4.5rem)] min-h-[38rem] place-items-center bg-[#0b0e0c] px-5 text-white">
+        <section className="max-w-lg rounded-[2rem] border border-white/10 bg-white/[0.035] p-7 text-center">
+          <MapPinned className="mx-auto size-7 text-[#ff667a]" />
+          <h1 className="mt-5 text-3xl font-medium tracking-[-0.04em]">
+            {t("setup.title")}
+          </h1>
+          <p className="mt-3 text-sm leading-6 text-white/48">
+            {t("setup.description")}
+          </p>
+          <code className="mt-5 block rounded-xl bg-black/30 px-3 py-2 text-xs text-white/65">
+            NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+          </code>
+        </section>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative h-[calc(100dvh-4.5rem)] min-h-[38rem] overflow-hidden bg-[#0b0e0c] text-white sm:h-[calc(100dvh-5rem)]">
+      <RoadbookMap
+        accessToken={accessToken}
+        venues={venues}
+        selectedVenue={selectedVenue}
+        mode={mode}
+        center={center}
+        userPosition={userPosition}
+        onSelect={setSelectedVenue}
+        onViewportChange={updateViewport}
+        onError={(message) => {
+          if (/token|unauthorized|forbidden/i.test(message))
+            setError(t("errors.mapToken"));
+        }}
+      />
+
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-36 bg-gradient-to-b from-[#07100d]/82 to-transparent" />
+      <div className="absolute top-3 left-3 z-20 max-w-[min(38rem,calc(100%-1.5rem))] sm:top-5 sm:left-5">
+        <div className="rounded-2xl border border-white/12 bg-[#09100d]/88 p-4 shadow-2xl backdrop-blur-xl sm:p-5">
+          <p className="text-[10px] font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+            {t("eyebrow")}
+          </p>
+          <h1 className="mt-1 text-xl font-medium tracking-[-0.035em] sm:text-3xl">
+            {t("title")}
+          </h1>
+          <p className="mt-1 hidden max-w-lg text-xs leading-5 text-white/48 sm:block">
+            {t("description")}
+          </p>
+        </div>
+      </div>
+
+      <div className="absolute top-3 right-3 z-20 hidden gap-2 lg:flex">
+        <RoadbookModerationQueue />
+        <RoadbookPosterButton
+          vehicle={selectedVehicle}
+          visits={visits}
+          label={t("poster.action")}
+          emptyLabel={t("poster.empty")}
+        />
+        <RoadbookThemeSwitcher
+          mode={mode}
+          onChange={setMode}
+          label={t("modes.label")}
+          labels={modeLabels}
+        />
+      </div>
+
+      <div className="absolute right-3 bottom-3 left-3 z-20 flex items-end gap-2 lg:right-[28rem] lg:left-5">
+        <div className="min-w-0 flex-1">
+          <RoadbookFilterBar
+            selected={categories}
+            onChange={setCategories}
+            label={t("filtersLabel")}
+            labels={filterLabels}
+          />
+        </div>
+        <button
+          type="button"
+          onClick={locateUser}
+          aria-label={t("locate")}
+          title={t("locate")}
+          className="grid size-12 shrink-0 place-items-center rounded-2xl border border-white/12 bg-[#09100d]/88 text-white/70 shadow-2xl backdrop-blur-xl hover:text-white"
+        >
+          <Crosshair className="size-4" />
+        </button>
+        <div className="lg:hidden">
+          <RoadbookThemeSwitcher
+            mode={mode}
+            onChange={setMode}
+            label={t("modes.label")}
+            labels={modeLabels}
+          />
+        </div>
+      </div>
+
+      <div className="absolute top-37 left-3 z-20 sm:top-42 sm:left-5">
+        <div className="rounded-xl border border-white/10 bg-[#09100d]/82 px-3 py-2 text-[11px] text-white/52 shadow-lg backdrop-blur-xl">
+          {loading ? t("loading") : t("resultCount", { count: venues.length })}
+        </div>
+      </div>
+
+      {error && (
+        <div
+          role="alert"
+          className="absolute top-37 right-3 left-3 z-40 flex items-center justify-between gap-3 rounded-xl border border-red-200/20 bg-[#2d1014]/94 p-3 text-xs text-red-50 shadow-xl sm:top-auto sm:right-auto sm:bottom-21 sm:left-5 sm:max-w-lg"
+        >
+          <span className="inline-flex items-center gap-2">
+            <AlertTriangle className="size-4 shrink-0" /> {error}
+          </span>
+          <button
+            type="button"
+            onClick={() => void loadVenues()}
+            className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-lg border border-white/15 px-3 font-semibold"
+          >
+            <RefreshCw className="size-3.5" /> {t("retry")}
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && venues.length === 0 && (
+        <div className="absolute top-1/2 left-1/2 z-20 w-[min(28rem,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/12 bg-[#09100d]/92 p-5 text-center shadow-2xl backdrop-blur-xl">
+          <MapPinned className="mx-auto size-6 text-white/45" />
+          <h2 className="mt-3 text-lg font-medium">{t("empty.title")}</h2>
+          <p className="mt-2 text-xs leading-5 text-white/45">
+            {t("empty.description")}
+          </p>
+        </div>
+      )}
+
+      {selectedVenue && (
+        <RoadbookVenueDrawer
+          key={selectedVenue.id}
+          venue={selectedVenue}
+          vehicles={vehicles}
+          vehicleId={activeVehicleId}
+          onVehicleChange={(id) => setVehicleId(id || undefined)}
+          onClose={() => setSelectedVenue(undefined)}
+          onSave={async (activeVehicleId) => {
+            const buildId = readBuildState(window.localStorage).builds.find(
+              (build) =>
+                build.vehicleId === activeVehicleId &&
+                build.status !== "complete",
+            )?.id;
+            await saveRoadbookPlace({
+              venueId: selectedVenue.id,
+              vehicleId: activeVehicleId,
+              buildId,
+            });
+          }}
+          onRecord={async ({ vehicle, details, photos, obdFile }) => {
+            await recordRoadbookVisit({
+              venue: selectedVenue,
+              vehicle,
+              details,
+              photos,
+              obdFile,
+            });
+          }}
+          onReport={(report) => reportRoadbookVenue(selectedVenue.id, report)}
+        />
+      )}
+    </div>
+  );
+}

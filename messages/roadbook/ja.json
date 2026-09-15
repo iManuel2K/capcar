@@ -1,0 +1,132 @@
+{
+  "Roadbook": {
+    "eyebrow": "Roadbook · 合法的なドライビングスポット",
+    "title": "このビルドに合う道を見つけよう。",
+    "description": "サーキット、管理されたテスト施設、ドライブルートを、情報源・利用条件・確認状況とともに探せます。",
+    "filtersLabel": "Roadbookカテゴリー",
+    "locate": "現在地を使用",
+    "loading": "表示エリアを確認中…",
+    "resultCount": "表示中のスポット：{count}件",
+    "retry": "再試行",
+    "categories": {
+      "drift_circuit": "ドリフトサーキット",
+      "drag_acceleration": "加速テスト施設",
+      "track_day": "走行会",
+      "proving_ground": "テストコース",
+      "scenic_route": "景観ルート",
+      "autobahn_context": "アウトバーン情報"
+    },
+    "modes": {
+      "label": "地図表示",
+      "workshop_cream": "Workshop Cream",
+      "petrol_night": "Petrol Night",
+      "blueprint": "Blueprint",
+      "touring_clay": "Touring Clay"
+    },
+    "setup": {
+      "title": "Roadbookには地図トークンが必要です。",
+      "description": "Netlifyに公開Mapboxトークンを追加して再デプロイしてください。地図はこのページでのみ初期化されます。"
+    },
+    "errors": {
+      "generic": "操作を完了できませんでした。",
+      "load": "Roadbookのスポットを読み込めませんでした。",
+      "signInRequired": "保存、訪問記録、変更報告にはログインが必要です。",
+      "photoTooLarge": "写真は1枚12MB以下にしてください。",
+      "obdTooLarge": "OBDファイルは1MB以下にしてください。",
+      "locationUnavailable": "このブラウザでは位置情報を利用できません。",
+      "locationDenied": "位置情報が許可されませんでした。地図は手動で移動できます。",
+      "mapToken": "設定された公開トークンがMapboxに拒否されました。"
+    },
+    "empty": {
+      "title": "この範囲に情報源付きスポットはありません。",
+      "description": "地図を移動するか、ズームアウト、またはフィルターを解除してください。Capcarはテスト場所を創作しません。"
+    },
+    "safety": {
+      "autobahn": "アウトバーン表示はルート情報のみです。現地標識、一時規制、交通、路面状況が常に優先されます。公道で計測加速を行わないでください。",
+      "closedVenue": "ドリフトおよび計測加速は、運営者の規則に従い閉鎖・私有施設でのみ行ってください。事前に利用条件を確認してください。"
+    },
+    "details": {
+      "label": "Roadbookスポット詳細",
+      "close": "詳細を閉じる",
+      "access": "利用条件",
+      "surface": "路面",
+      "length": "距離",
+      "noise": "騒音制限",
+      "hours": "営業時間",
+      "entry": "料金",
+      "unknown": "未登録",
+      "confirmLimit": "施設へ確認",
+      "confirmHours": "公式日程を確認",
+      "confirmPrice": "現在料金を確認",
+      "verifiedOn": "最終確認：{date}",
+      "sourceLinked": "公式情報源を掲載していますが、現在の状況は未確認です。"
+    },
+    "access": {
+      "closed_venue": "閉鎖施設",
+      "private": "私有施設",
+      "permit_required": "予約・許可が必要",
+      "public_context": "公道ルート情報",
+      "unknown": "利用条件を確認"
+    },
+    "verification": {
+      "verified": "確認済み",
+      "official_source": "公式情報源あり",
+      "community_report": "変更報告あり",
+      "stale": "確認期限切れ",
+      "unverified": "未確認"
+    },
+    "vehicle": { "label": "現在の車両で確認", "choose": "ガレージ車両を選択" },
+    "readiness": {
+      "identity": {
+        "ready": "車両情報をこのプランに接続しました。",
+        "check": "保存・記録前に車両を選択してください。",
+        "blocked": "車両情報が条件に適合しません。"
+      },
+      "access": {
+        "ready": "管理された施設として分類されています。",
+        "check": "走行前に現在の利用条件と現地ルールを確認してください。",
+        "blocked": "この場所では該当する走行を行えません。"
+      },
+      "noise": {
+        "ready": "記録された騒音値は施設制限内です。",
+        "check": "ビルドの実測騒音値が未登録です。施設制限と照合してください。",
+        "blocked": "記録された騒音値が施設制限を超えています。"
+      },
+      "roadLegal": {
+        "ready": "公道走行に関する記録は最新です。",
+        "check": "公道ルート前に車検、タイヤ、ブレーキ、保安基準への適合を確認してください。",
+        "blocked": "現在のビルドは公道走行可能として記録されていません。"
+      }
+    },
+    "actions": {
+      "save": "ビルド計画に保存",
+      "saved": "計画に保存済み",
+      "booking": "予約ページを開く",
+      "checkSource": "公式情報源を確認"
+    },
+    "visit": {
+      "title": "訪問を記録",
+      "date": "訪問日",
+      "lap": "ベストラップ／閉鎖コース走行（秒）",
+      "lapPlaceholder": "任意：124.380",
+      "notes": "ドライバーメモ",
+      "photos": "写真を追加",
+      "photosChosen": "写真{count}枚",
+      "obd": "OBDログを追加",
+      "evidenceNotice": "訪問情報はオーナー入力であり、公式計時や施設承認ではありません。",
+      "action": "車両パスポートに追加",
+      "recorded": "訪問を記録しました"
+    },
+    "report": {
+      "title": "情報が古いですか？",
+      "placeholder": "変更内容と確認すべき点を記入してください。",
+      "sourcePlaceholder": "参考HTTPSリンク（任意）",
+      "action": "確認キューへ送信",
+      "sent": "報告を送信しました"
+    },
+    "poster": {
+      "action": "ビルドマップを書き出す",
+      "empty": "この車両で訪問を記録してから書き出してください。"
+    }
+  }
+}
