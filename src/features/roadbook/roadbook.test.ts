@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import { createRoadbookMapStyle } from "@/features/roadbook/roadbook-map-style";
@@ -77,5 +77,15 @@ describe("Roadbook contracts", () => {
     expect(migration).toContain(
       "category <> 'autobahn_context' or access_status = 'public_context'",
     );
+  });
+
+  it("uses Mapbox's strict-CSP worker without unsafe-eval", () => {
+    const map = readFileSync(
+      "src/components/roadbook/roadbook-map.tsx",
+      "utf8",
+    );
+    expect(map).toContain('mapbox-gl/dist/mapbox-gl-csp.js');
+    expect(map).toContain('mapboxgl.workerUrl = "/mapbox-gl-csp-worker.js"');
+    expect(existsSync("public/mapbox-gl-csp-worker.js")).toBe(true);
   });
 });

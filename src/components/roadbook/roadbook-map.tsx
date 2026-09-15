@@ -1,6 +1,7 @@
 "use client";
 
-import mapboxgl, { type Map as MapboxMap, type Marker } from "mapbox-gl";
+import type { Map as MapboxMap, Marker } from "mapbox-gl";
+import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp.js";
 import { useEffect, useRef } from "react";
 
 import { createRoadbookMapStyle } from "@/features/roadbook/roadbook-map-style";
@@ -95,6 +96,7 @@ export function RoadbookMap({
   useEffect(() => {
     if (!container.current || map.current || !accessToken) return;
     mapboxgl.accessToken = accessToken;
+    mapboxgl.workerUrl = "/mapbox-gl-csp-worker.js";
     const instance = new mapboxgl.Map({
       container: container.current,
       style: createRoadbookMapStyle(currentMode.current),
