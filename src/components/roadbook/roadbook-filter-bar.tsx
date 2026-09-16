@@ -58,7 +58,7 @@ export function RoadbookFilterBar({
                 : "bg-white/[0.055] text-white/62 hover:bg-white/10 hover:text-white"
             }`}
           >
-            <Icon className="size-3.5" aria-hidden="true" />
+            <Icon aria-hidden="true" className="size-3.5" />
             {labels[value]}
           </button>
         );

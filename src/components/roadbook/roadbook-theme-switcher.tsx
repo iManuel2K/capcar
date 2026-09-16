@@ -41,7 +41,7 @@ export function RoadbookThemeSwitcher({
               : "text-white/55 hover:bg-white/8 hover:text-white"
           }`}
         >
-          <Icon className="size-4" aria-hidden="true" />
+          <Icon aria-hidden="true" className="size-4" />
         </button>
       ))}
     </div>

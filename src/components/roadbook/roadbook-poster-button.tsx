@@ -52,11 +52,14 @@ function drawTrackedRoutes(
     context.strokeStyle = index === 0 ? "#e72d45" : "rgba(244,245,242,.48)";
     context.lineWidth = index === 0 ? 7 : 4;
     context.stroke();
-    const last = position(coordinates.at(-1)!);
-    context.beginPath();
-    context.arc(last.x, last.y, 8, 0, Math.PI * 2);
-    context.fillStyle = "#f4f5f2";
-    context.fill();
+    const lastCoord = coordinates[coordinates.length - 1];
+    if (lastCoord) {
+      const last = position(lastCoord);
+      context.beginPath();
+      context.arc(last.x, last.y, 8, 0, Math.PI * 2);
+      context.fillStyle = "#f4f5f2";
+      context.fill();
+    }
   });
   context.restore();
 }
@@ -90,7 +93,6 @@ export async function renderRoadbookPoster(
 
   context.fillStyle = "#e72d45";
   context.font = "700 24px Arial";
-  context.letterSpacing = "4px";
   context.fillText("CAPCAR ROADBOOK", 72, 92);
   context.fillStyle = "#f4f5f2";
   context.font = "500 76px Arial";
@@ -115,7 +117,11 @@ export async function renderRoadbookPoster(
       const height = image.naturalHeight * ratio;
       context.save();
       context.beginPath();
-      context.roundRect(72, 385, 936, 360, 34);
+      if (typeof context.roundRect === "function") {
+        context.roundRect(72, 385, 936, 360, 34);
+      } else {
+        context.rect(72, 385, 936, 360);
+      }
       context.clip();
       context.drawImage(
         image,
@@ -193,7 +199,7 @@ export function RoadbookPosterButton({
       }}
       className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/12 bg-[#09100d]/88 px-4 text-xs font-semibold text-white/72 shadow-xl backdrop-blur-xl transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
     >
-      <Download className="size-4" aria-hidden="true" />
+      <Download aria-hidden="true" className="size-4" />
       {label}
     </button>
   );

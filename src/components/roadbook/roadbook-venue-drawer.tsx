@@ -126,7 +126,7 @@ export function RoadbookVenueDrawer({
           onClick={onClose}
           className="grid size-10 shrink-0 place-items-center rounded-full border border-white/10 text-white/55 transition hover:bg-white/8 hover:text-white"
         >
-          <X className="size-4" aria-hidden="true" />
+          <X aria-hidden="true" className="size-4" />
         </button>
       </div>
 
@@ -561,7 +561,7 @@ function Fact({
 }) {
   return (
     <div className="min-h-23 rounded-xl border border-white/8 bg-white/[0.025] p-3">
-      <Icon className="size-3.5 text-white/35" aria-hidden="true" />
+      <Icon aria-hidden="true" className="size-3.5 text-white/35" />
       <p className="mt-3 text-[10px] tracking-[0.1em] text-white/28 uppercase">
         {label}
       </p>

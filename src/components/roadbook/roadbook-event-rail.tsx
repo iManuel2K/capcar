@@ -26,7 +26,7 @@ export function RoadbookEventRail({
   const venuesById = new Map(venues.map((venue) => [venue.id, venue]));
 
   return (
-    <section className="absolute top-37 right-3 z-30 sm:top-42 lg:right-5">
+    <section className="absolute top-36 right-3 z-30 sm:top-44 lg:right-5">
       <button
         type="button"
         aria-expanded={open}

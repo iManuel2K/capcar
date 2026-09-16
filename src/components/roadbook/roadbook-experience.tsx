@@ -266,7 +266,7 @@ export function RoadbookExperience() {
         </div>
       </div>
 
-      <div className="absolute top-37 left-3 z-20 sm:top-42 sm:left-5">
+      <div className="absolute top-36 left-3 z-20 sm:top-44 sm:left-5">
         <div className="rounded-xl border border-white/10 bg-[#09100d]/82 px-3 py-2 text-[11px] text-white/52 shadow-lg backdrop-blur-xl">
           {loading ? t("loading") : t("resultCount", { count: venues.length })}
         </div>
@@ -275,7 +275,7 @@ export function RoadbookExperience() {
       {(error || mapError) && (
         <div
           role="alert"
-          className="absolute top-37 right-3 left-3 z-40 flex items-center justify-between gap-3 rounded-xl border border-red-200/20 bg-[#2d1014]/94 p-3 text-xs text-red-50 shadow-xl sm:top-auto sm:right-auto sm:bottom-21 sm:left-5 sm:max-w-lg"
+          className="absolute top-36 right-3 left-3 z-40 flex items-center justify-between gap-3 rounded-xl border border-red-200/20 bg-[#2d1014]/94 p-3 text-xs text-red-50 shadow-xl sm:top-auto sm:right-auto sm:bottom-20 sm:left-5 sm:max-w-lg"
         >
           <span className="inline-flex items-center gap-2">
             <AlertTriangle className="size-4 shrink-0" /> {error || mapError}
@@ -332,6 +332,7 @@ export function RoadbookExperience() {
               photos,
               obdFile,
             });
+            setVisits(readRoadbookVisits(window.localStorage));
           }}
           onReport={(report) => reportRoadbookVenue(selectedVenue.id, report)}
         />

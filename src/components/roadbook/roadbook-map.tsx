@@ -6,6 +6,7 @@ import L, {
   type Polyline,
   type TileLayer,
 } from "leaflet";
+import "leaflet/dist/leaflet.css";
 import { useEffect, useRef } from "react";
 
 import type { RoadbookCenter } from "@/features/roadbook/roadbook-client";
@@ -74,6 +75,13 @@ export const ROADBOOK_MAP_STYLES: Record<
   },
 };
 
+const MODE_TO_MAP_STYLE: Record<RoadbookMapMode, string> = {
+  workshop_cream: "monochrome-light",
+  petrol_night: "midnight-dark",
+  blueprint: "minimal-stealth",
+  touring_clay: "topo-vintage",
+};
+
 const markerIcons: Record<RoadbookCategory, string> = {
   drift_circuit:
     '<path d="M4 17c5-1 5-9 10-10 3-.6 5 1 6 3"/><path d="m16 6 4 4-5 2"/>',
@@ -94,7 +102,8 @@ function markerElement(
 ) {
   const element = document.createElement("div");
   element.className = `roadbook-marker roadbook-marker--${venue.category}${selected ? " is-selected" : ""}`;
-  element.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${markerIcons[venue.category]}</svg>`;
+  const iconSvg = markerIcons[venue.category] ?? markerIcons.track_day;
+  element.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${iconSvg}</svg>`;
   if (upcomingEvents > 0) {
     const badge = document.createElement("span");
     badge.className = "roadbook-marker__events";
@@ -112,7 +121,7 @@ export function RoadbookMap({
   mode,
   center,
   userPosition,
-  mapStyle = "monochrome-light",
+  mapStyle,
   onSelect,
   onViewportChange,
   onError,
@@ -152,8 +161,11 @@ export function RoadbookMap({
   useEffect(() => {
     if (!container.current || map.current) return;
 
+    const initialStyleKey =
+      mapStyle ?? MODE_TO_MAP_STYLE[mode] ?? "midnight-dark";
     const currentStyleConfig =
-      ROADBOOK_MAP_STYLES[mapStyle] ?? ROADBOOK_MAP_STYLES["monochrome-light"];
+      ROADBOOK_MAP_STYLES[initialStyleKey] ??
+      ROADBOOK_MAP_STYLES["midnight-dark"];
 
     const instance = L.map(container.current, {
       center: [initialCenter.current.latitude, initialCenter.current.longitude],
@@ -218,13 +230,15 @@ export function RoadbookMap({
     };
   }, []);
 
-  /* Dynamically change tile layer URL when mapStyle changes */
   useEffect(() => {
     if (!tileLayer.current) return;
+    const activeStyleKey =
+      mapStyle ?? MODE_TO_MAP_STYLE[mode] ?? "midnight-dark";
     const config =
-      ROADBOOK_MAP_STYLES[mapStyle] ?? ROADBOOK_MAP_STYLES["monochrome-light"];
+      ROADBOOK_MAP_STYLES[activeStyleKey] ??
+      ROADBOOK_MAP_STYLES["midnight-dark"];
     tileLayer.current.setUrl(config.url);
-  }, [mapStyle]);
+  }, [mapStyle, mode]);
 
   useEffect(() => {
     const instance = map.current;
