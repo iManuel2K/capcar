@@ -6,6 +6,7 @@
     "filtersLabel": "Roadbookカテゴリー",
     "locate": "現在地を使用",
     "loading": "表示エリアを確認中…",
+    "mapLoading": "Roadbookマップを開いています…",
     "resultCount": "表示中のスポット：{count}件",
     "retry": "再試行",
     "categories": {
@@ -128,6 +129,40 @@
     "poster": {
       "action": "ビルドマップを書き出す",
       "empty": "この車両で訪問を記録してから書き出してください。"
+    },
+    "events": {
+      "eyebrow": "公式カレンダー",
+      "title": "走って行きたいイベント",
+      "description": "会場の公式情報に基づく今後の日程です。出発前に入場条件と空き状況を再確認してください。",
+      "upcoming": "今後のイベント：{count}件",
+      "empty": "この表示範囲には、情報源を確認できる今後のイベントがありません。",
+      "atVenue": "この会場の今後のイベント",
+      "booking": "予約を確認",
+      "source": "公式情報を開く",
+      "types": {
+        "track_day": "走行会",
+        "tourist_driving": "一般走行",
+        "driver_training": "ドライバートレーニング",
+        "motorsport": "モータースポーツ",
+        "meet": "カーミーティング",
+        "festival": "自動車フェスティバル"
+      },
+      "participation": {
+        "spectator": "観戦イベント",
+        "driver": "ドライバー参加",
+        "mixed": "ドライバー・観客"
+      }
+    },
+    "moderation": {
+      "action": "確認キュー",
+      "title": "Roadbook報告",
+      "empty": "確認待ちの報告はありません。",
+      "evidence": "根拠",
+      "review": "確認",
+      "note": "判断メモ",
+      "accept": "報告を承認",
+      "reject": "却下",
+      "error": "モデレーション結果を保存できませんでした。"
     }
   }
 }

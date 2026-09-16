@@ -41,12 +41,13 @@ const columns = [
       "marketplace",
       "checkout",
       "roadbook",
+      "events",
     ],
     active: true,
   },
   {
     id: "beyond",
-    items: ["events", "ai", "twowheels", "more"],
+    items: ["ai", "twowheels", "more"],
     active: false,
   },
 ] as const;

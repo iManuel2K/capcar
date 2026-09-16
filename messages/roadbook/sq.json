@@ -6,6 +6,7 @@
     "filtersLabel": "Kategoritë e Roadbook",
     "locate": "Përdor vendndodhjen time",
     "loading": "Po kontrollohet zona e dukshme…",
+    "mapLoading": "Po hapet harta Roadbook…",
     "resultCount": "{count, plural, =1 {Një vend në hartë} other {# vende në hartë}}",
     "retry": "Provo përsëri",
     "categories": {
@@ -131,6 +132,40 @@
     "poster": {
       "action": "Eksporto hartën e build-it",
       "empty": "Regjistro fillimisht një vizitë me këtë makinë."
+    },
+    "events": {
+      "eyebrow": "Kalendarë zyrtarë",
+      "title": "Evente për të cilat ia vlen rruga",
+      "description": "Datat e ardhshme lidhen me burimin zyrtar. Kontrollo përsëri hyrjen dhe vendet e lira para nisjes.",
+      "upcoming": "{count, plural, =0 {Evente} =1 {Një event} other {# evente}}",
+      "empty": "Nuk ka evente të ardhshme me burim në këtë pjesë të hartës.",
+      "atVenue": "Së shpejti në këtë vend",
+      "booking": "Kontrollo rezervimin",
+      "source": "Hap burimin zyrtar",
+      "types": {
+        "track_day": "Track day",
+        "tourist_driving": "Ngarje publike",
+        "driver_training": "Trajnim drejtimi",
+        "motorsport": "Motorsport",
+        "meet": "Takim makinash",
+        "festival": "Festival automobilistik"
+      },
+      "participation": {
+        "spectator": "Event për spektatorë",
+        "driver": "Pjesëmarrje për shoferë",
+        "mixed": "Shoferë dhe spektatorë"
+      }
+    },
+    "moderation": {
+      "action": "Radha e kontrollit",
+      "title": "Raportet e Roadbook",
+      "empty": "Nuk ka raporte në pritje.",
+      "evidence": "Dëshmi",
+      "review": "Kontrollo",
+      "note": "Shënim vendimi",
+      "accept": "Prano raportin",
+      "reject": "Refuzo",
+      "error": "Vendimi i moderimit nuk u ruajt."
     }
   }
 }

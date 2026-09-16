@@ -149,6 +149,10 @@
       "roadbook": {
         "title": "Harta e vozitjes Roadbook",
         "description": "Zbulo pista me burime, ambiente të kontrolluara testimi dhe kontekst itinerari në një hartë me katër pamje. Ruaj vende në build dhe vizitat e tua në Vehicle Passport."
+      },
+      "events": {
+        "title": "Evente që ia vlejnë udhëtimin",
+        "description": "Shiko track days, trajnime, fundjava motorsporti dhe takime makinash me burim zyrtar direkt në Roadbook."
       }
     },
     "beyond": {
@@ -156,14 +160,6 @@
       "title": "Përtej makinës",
       "description": "Kur përvoja e makinës të jetë e besueshme, i njëjti regjistër mund të mbështesë zbulimin, dy rrotat dhe pajisje të tjera.",
       "itemStatus": "Më vonë",
-      "events": {
-        "title": "Evente që ia vlejnë udhëtimin",
-        "description": "Zbulo takime, ekspozita dhe evente në destinacione që përputhen me interesat e tua."
-      },
-      "testMap": {
-        "title": "Terrene ligjore testimi dhe itinerare",
-        "description": "Gjej përmes OpenStreetMap pista të verifikuara për drift, drag strips, track days dhe terrene prove, si edhe informacion itinerari për segmente të Autobahn-it pa kufi të përgjithshëm shpejtësie. Qasja, kufizimet e përkohshme dhe kushtet shënohen sipas burimeve; testet me kronometër mbeten jashtë rrugëve publike."
-      },
       "ai": {
         "title": "Drejtimi i build-it me AI",
         "description": "Gjenero ide të dobishme për përmirësime dhe koncepte vizuale rreth makinës tënde."

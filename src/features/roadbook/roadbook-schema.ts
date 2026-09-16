@@ -32,11 +32,29 @@ export const roadbookVerificationStatuses = [
   "unverified",
 ] as const;
 
+export const roadbookEventTypes = [
+  "track_day",
+  "tourist_driving",
+  "driver_training",
+  "motorsport",
+  "meet",
+  "festival",
+] as const;
+
+export const roadbookEventParticipation = [
+  "spectator",
+  "driver",
+  "mixed",
+] as const;
+
 export type RoadbookCategory = (typeof roadbookCategories)[number];
 export type RoadbookMapMode = (typeof roadbookMapModes)[number];
 export type RoadbookAccessStatus = (typeof roadbookAccessStatuses)[number];
 export type RoadbookVerificationStatus =
   (typeof roadbookVerificationStatuses)[number];
+export type RoadbookEventType = (typeof roadbookEventTypes)[number];
+export type RoadbookEventParticipation =
+  (typeof roadbookEventParticipation)[number];
 
 const lineStringSchema = z.object({
   type: z.literal("LineString"),
@@ -76,7 +94,7 @@ const roadbookVenueRowSchema = z
     source_label: z.string().min(2),
     source_url: z.string().url(),
     verification_status: z.enum(roadbookVerificationStatuses),
-    verified_at: z.string().datetime().nullable(),
+    verified_at: z.string().datetime({ offset: true }).nullable(),
     distance_m: z.number().nonnegative(),
   })
   .transform((row) => ({
@@ -108,6 +126,52 @@ const roadbookVenueRowSchema = z
 
 export const roadbookVenueListSchema = z.array(roadbookVenueRowSchema);
 export type RoadbookVenue = z.infer<typeof roadbookVenueRowSchema>;
+
+const roadbookEventRowSchema = z
+  .object({
+    id: z.string().uuid(),
+    venue_id: z.string().uuid(),
+    title: z.string().min(2).max(160),
+    slug: z.string().min(1),
+    description: z.string().max(1200),
+    event_type: z.enum(roadbookEventTypes),
+    participation: z.enum(roadbookEventParticipation),
+    booking_required: z.boolean(),
+    starts_at: z.string().datetime({ offset: true }),
+    ends_at: z.string().datetime({ offset: true }),
+    booking_url: z.string().url().nullable(),
+    entry_price_cents: nullableNumber,
+    price_currency: z.string().length(3),
+    source_label: z.string().min(2),
+    source_url: z.string().url(),
+    verification_status: z.enum(roadbookVerificationStatuses),
+    verified_at: z.string().datetime({ offset: true }).nullable(),
+  })
+  .refine((event) => event.ends_at >= event.starts_at, {
+    message: "Event end must follow its start",
+  })
+  .transform((event) => ({
+    id: event.id,
+    venueId: event.venue_id,
+    title: event.title,
+    slug: event.slug,
+    description: event.description,
+    eventType: event.event_type,
+    participation: event.participation,
+    bookingRequired: event.booking_required,
+    startsAt: event.starts_at,
+    endsAt: event.ends_at,
+    bookingUrl: event.booking_url ?? undefined,
+    entryPriceCents: event.entry_price_cents,
+    priceCurrency: event.price_currency,
+    sourceLabel: event.source_label,
+    sourceUrl: event.source_url,
+    verificationStatus: event.verification_status,
+    verifiedAt: event.verified_at ?? undefined,
+  }));
+
+export const roadbookEventListSchema = z.array(roadbookEventRowSchema);
+export type RoadbookEvent = z.infer<typeof roadbookEventRowSchema>;
 
 export const roadbookVisitRecordSchema = z.object({
   id: z.string().uuid(),

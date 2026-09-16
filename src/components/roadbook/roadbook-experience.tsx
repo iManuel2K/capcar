@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { RoadbookFilterBar } from "@/components/roadbook/roadbook-filter-bar";
+import { RoadbookEventRail } from "@/components/roadbook/roadbook-event-rail";
 import { RoadbookMap } from "@/components/roadbook/roadbook-map";
 import { RoadbookModerationQueue } from "@/components/roadbook/roadbook-moderation-queue";
 import { RoadbookPosterButton } from "@/components/roadbook/roadbook-poster-button";
@@ -12,6 +13,7 @@ import { RoadbookThemeSwitcher } from "@/components/roadbook/roadbook-theme-swit
 import { RoadbookVenueDrawer } from "@/components/roadbook/roadbook-venue-drawer";
 import {
   fetchRoadbookVenues,
+  fetchRoadbookEvents,
   recordRoadbookVisit,
   reportRoadbookVenue,
   saveRoadbookPlace,
@@ -21,6 +23,7 @@ import {
   roadbookCategories,
   roadbookMapModes,
   type RoadbookCategory,
+  type RoadbookEvent,
   type RoadbookMapMode,
   type RoadbookVenue,
 } from "@/features/roadbook/roadbook-schema";
@@ -39,6 +42,7 @@ export function RoadbookExperience() {
   const { vehicles } = useVehicles();
   const [vehicleId, setVehicleId] = useState<string>();
   const [venues, setVenues] = useState<RoadbookVenue[]>([]);
+  const [events, setEvents] = useState<RoadbookEvent[]>([]);
   const [selectedVenue, setSelectedVenue] = useState<RoadbookVenue>();
   const [categories, setCategories] = useState<RoadbookCategory[]>([]);
   const [mode, setMode] = useState<RoadbookMapMode>("petrol_night");
@@ -47,6 +51,9 @@ export function RoadbookExperience() {
   const [userPosition, setUserPosition] = useState<RoadbookCenter>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [mapError, setMapError] = useState("");
+  const [mapReady, setMapReady] = useState(false);
+  const [eventsOpen, setEventsOpen] = useState(false);
   const [visits, setVisits] = useState(() =>
     typeof window === "undefined"
       ? []
@@ -76,7 +83,18 @@ export function RoadbookExperience() {
         categories,
         signal: controller.signal,
       });
-      if (sequence === fetchSequence.current) setVenues(result);
+      if (sequence === fetchSequence.current) {
+        setVenues(result);
+        try {
+          const nextEvents = await fetchRoadbookEvents({
+            venueIds: result.map((venue) => venue.id),
+            signal: controller.signal,
+          });
+          if (sequence === fetchSequence.current) setEvents(nextEvents);
+        } catch {
+          if (!controller.signal.aborted) setEvents([]);
+        }
+      }
     } catch {
       if (sequence === fetchSequence.current && !controller.signal.aborted)
         setError(t("errors.load"));
@@ -92,6 +110,15 @@ export function RoadbookExperience() {
       fetchController.current?.abort();
     };
   }, [loadVenues]);
+
+  useEffect(() => {
+    if (mapReady) return;
+    const timeout = window.setTimeout(
+      () => setMapError(t("errors.mapUnavailable")),
+      15000,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [mapReady, t]);
 
   const filterLabels = useMemo(
     () =>
@@ -167,6 +194,7 @@ export function RoadbookExperience() {
       <RoadbookMap
         accessToken={accessToken}
         venues={venues}
+        events={events}
         selectedVenue={selectedVenue}
         mode={mode}
         center={center}
@@ -174,13 +202,26 @@ export function RoadbookExperience() {
         onSelect={setSelectedVenue}
         onViewportChange={updateViewport}
         onError={(message) => {
-          setError(
+          setMapError(
             /token|unauthorized|forbidden/i.test(message)
               ? t("errors.mapToken")
               : t("errors.mapUnavailable"),
           );
         }}
+        onReady={() => {
+          setMapReady(true);
+          setMapError("");
+        }}
       />
+
+      {!mapReady && !mapError && (
+        <div className="pointer-events-none absolute inset-0 z-10 grid place-items-center bg-[#0b0e0c]">
+          <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.035] px-4 py-3 text-xs text-white/55">
+            <RefreshCw className="size-4 animate-spin text-[#ff667a]" />
+            {t("mapLoading")}
+          </div>
+        </div>
+      )}
 
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-36 bg-gradient-to-b from-[#07100d]/82 to-transparent" />
       <div className="absolute top-3 left-3 z-20 max-w-[min(38rem,calc(100%-1.5rem))] sm:top-5 sm:left-5">
@@ -212,6 +253,17 @@ export function RoadbookExperience() {
           labels={modeLabels}
         />
       </div>
+
+      <RoadbookEventRail
+        events={events}
+        venues={venues}
+        open={eventsOpen}
+        onOpenChange={setEventsOpen}
+        onSelectVenue={(venue) => {
+          setSelectedVenue(venue);
+          setEventsOpen(false);
+        }}
+      />
 
       <div className="absolute right-3 bottom-3 left-3 z-20 flex items-end gap-2 lg:right-[28rem] lg:left-5">
         <div className="min-w-0 flex-1">
@@ -247,17 +299,20 @@ export function RoadbookExperience() {
         </div>
       </div>
 
-      {error && (
+      {(error || mapError) && (
         <div
           role="alert"
           className="absolute top-37 right-3 left-3 z-40 flex items-center justify-between gap-3 rounded-xl border border-red-200/20 bg-[#2d1014]/94 p-3 text-xs text-red-50 shadow-xl sm:top-auto sm:right-auto sm:bottom-21 sm:left-5 sm:max-w-lg"
         >
           <span className="inline-flex items-center gap-2">
-            <AlertTriangle className="size-4 shrink-0" /> {error}
+            <AlertTriangle className="size-4 shrink-0" /> {error || mapError}
           </span>
           <button
             type="button"
-            onClick={() => void loadVenues()}
+            onClick={() => {
+              if (mapError) window.location.reload();
+              else void loadVenues();
+            }}
             className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-lg border border-white/15 px-3 font-semibold"
           >
             <RefreshCw className="size-3.5" /> {t("retry")}
@@ -279,6 +334,7 @@ export function RoadbookExperience() {
         <RoadbookVenueDrawer
           key={selectedVenue.id}
           venue={selectedVenue}
+          events={events.filter((event) => event.venueId === selectedVenue.id)}
           vehicles={vehicles}
           vehicleId={activeVehicleId}
           onVehicleChange={(id) => setVehicleId(id || undefined)}

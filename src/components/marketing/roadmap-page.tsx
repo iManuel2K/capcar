@@ -63,6 +63,7 @@ const stages = [
       "marketplace",
       "checkout",
       "roadbook",
+      "events",
     ],
   },
   {
@@ -71,7 +72,7 @@ const stages = [
     tone: "#0e2d30",
     surface: "bg-[#ccd5cc]",
     icon: Sparkles,
-    items: ["events", "ai", "twowheels", "more"],
+    items: ["ai", "twowheels", "more"],
   },
 ] as const;
 

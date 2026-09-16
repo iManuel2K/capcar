@@ -149,6 +149,10 @@
       "roadbook": {
         "title": "Roadbook-Fahrkarte",
         "description": "Entdecke belegte Rundstrecken, kontrollierte Testgelände und Routenkontext auf einer Karte mit vier Ansichten. Speichere Orte im Build und dokumentiere eigene Besuche im Fahrzeugpass."
+      },
+      "events": {
+        "title": "Events, für die sich die Fahrt lohnt",
+        "description": "Sieh kommende Trackdays, Trainings, Motorsport-Wochenenden und Autotreffen mit verlinkter Quelle direkt im Roadbook."
       }
     },
     "beyond": {
@@ -156,14 +160,6 @@
       "title": "Über das Auto hinaus",
       "description": "Wenn das Autoerlebnis verlässlich ist, kann dieselbe durchdachte Akte Entdeckung, Zweiräder und weitere Ausrüstung unterstützen.",
       "itemStatus": "Später",
-      "events": {
-        "title": "Events, für die sich die Fahrt lohnt",
-        "description": "Entdecke Treffen, Shows und Reiseziele passend zu deinen Interessen."
-      },
-      "testMap": {
-        "title": "Legale Testgelände & Fahrstrecken",
-        "description": "Finde mit OpenStreetMap verifizierte Driftstrecken, Dragstrips, Trackdays und Testgelände sowie Routenkontext zu Autobahnabschnitten ohne allgemeines Tempolimit. Zugang, temporäre Limits und Streckenbedingungen bleiben quellenbasiert gekennzeichnet; Zeitmessungen bleiben von öffentlichen Straßen fern."
-      },
       "ai": {
         "title": "KI-Build-Richtung",
         "description": "Erzeuge sinnvolle Upgrade-Ideen und visuelle Konzepte rund um dein eigenes Fahrzeug."

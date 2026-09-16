@@ -1,10 +1,12 @@
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 import {
   recordRoadbookVisitSchema,
+  roadbookEventListSchema,
   roadbookReportSchema,
   roadbookVenueListSchema,
   type RecordRoadbookVisitInput,
   type RoadbookCategory,
+  type RoadbookEvent,
   type RoadbookReportInput,
   type RoadbookVenue,
 } from "@/features/roadbook/roadbook-schema";
@@ -29,6 +31,26 @@ export async function fetchRoadbookVenues(input: {
   const { data, error } = await query;
   if (error) throw new Error("ROADBOOK_UNAVAILABLE");
   return roadbookVenueListSchema.parse(data ?? []);
+}
+
+export async function fetchRoadbookEvents(input: {
+  venueIds: string[];
+  signal?: AbortSignal;
+}) {
+  if (!input.venueIds.length) return [] satisfies RoadbookEvent[];
+  let query = createClient()
+    .from("roadbook_events")
+    .select(
+      "id,venue_id,title,slug,description,event_type,participation,booking_required,starts_at,ends_at,booking_url,entry_price_cents,price_currency,source_label,source_url,verification_status,verified_at",
+    )
+    .in("venue_id", input.venueIds.slice(0, 250))
+    .gte("ends_at", new Date().toISOString())
+    .order("starts_at", { ascending: true })
+    .limit(100);
+  if (input.signal) query = query.abortSignal(input.signal);
+  const { data, error } = await query;
+  if (error) throw new Error("ROADBOOK_EVENTS_UNAVAILABLE");
+  return roadbookEventListSchema.parse(data ?? []);
 }
 
 async function requireUser() {

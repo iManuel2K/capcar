@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { createRoadbookMapStyle } from "@/features/roadbook/roadbook-map-style";
 import type {
   RoadbookCategory,
+  RoadbookEvent,
   RoadbookMapMode,
   RoadbookVenue,
 } from "@/features/roadbook/roadbook-schema";
@@ -25,13 +26,28 @@ const markerIcons: Record<RoadbookCategory, string> = {
     '<path d="M8 21 10 3"/><path d="m16 21-2-18"/><path d="M4 9h16"/><path d="M5 15h14"/>',
 };
 
-function markerElement(venue: RoadbookVenue, selected: boolean) {
+function markerElement(
+  venue: RoadbookVenue,
+  selected: boolean,
+  upcomingEvents: number,
+) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = `roadbook-marker roadbook-marker--${venue.category}${selected ? " is-selected" : ""}`;
   button.setAttribute("aria-label", venue.name);
   button.title = venue.name;
   button.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${markerIcons[venue.category]}</svg>`;
+  if (upcomingEvents > 0) {
+    const badge = document.createElement("span");
+    badge.className = "roadbook-marker__events";
+    badge.textContent = String(Math.min(upcomingEvents, 9));
+    badge.setAttribute("aria-hidden", "true");
+    button.append(badge);
+    button.setAttribute(
+      "aria-label",
+      `${venue.name}, ${upcomingEvents} upcoming event${upcomingEvents === 1 ? "" : "s"}`,
+    );
+  }
   return button;
 }
 
@@ -61,6 +77,7 @@ function addSelectedRoute(map: MapboxMap, venue?: RoadbookVenue) {
 export function RoadbookMap({
   accessToken,
   venues,
+  events,
   selectedVenue,
   mode,
   center,
@@ -68,9 +85,11 @@ export function RoadbookMap({
   onSelect,
   onViewportChange,
   onError,
+  onReady,
 }: {
   accessToken: string;
   venues: RoadbookVenue[];
+  events: RoadbookEvent[];
   selectedVenue?: RoadbookVenue;
   mode: RoadbookMapMode;
   center: RoadbookCenter;
@@ -78,6 +97,7 @@ export function RoadbookMap({
   onSelect: (venue: RoadbookVenue) => void;
   onViewportChange: (center: RoadbookCenter, radiusKm: number) => void;
   onError: (message: string) => void;
+  onReady: () => void;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapboxMap | null>(null);
@@ -87,25 +107,38 @@ export function RoadbookMap({
   const currentMode = useRef(mode);
   const onViewportChangeRef = useRef(onViewportChange);
   const onErrorRef = useRef(onError);
+  const onReadyRef = useRef(onReady);
 
   useEffect(() => {
     onViewportChangeRef.current = onViewportChange;
     onErrorRef.current = onError;
-  }, [onError, onViewportChange]);
+    onReadyRef.current = onReady;
+  }, [onError, onReady, onViewportChange]);
 
   useEffect(() => {
     if (!container.current || map.current || !accessToken) return;
     mapboxgl.accessToken = accessToken;
     mapboxgl.workerUrl = "/mapbox-gl-csp-worker.js";
-    const instance = new mapboxgl.Map({
-      container: container.current,
-      style: createRoadbookMapStyle(currentMode.current),
-      center: [initialCenter.current.longitude, initialCenter.current.latitude],
-      zoom: 7.3,
-      minZoom: 3,
-      maxZoom: 18,
-      attributionControl: false,
-    });
+    let instance: MapboxMap;
+    try {
+      instance = new mapboxgl.Map({
+        container: container.current,
+        style: createRoadbookMapStyle(currentMode.current),
+        center: [
+          initialCenter.current.longitude,
+          initialCenter.current.latitude,
+        ],
+        zoom: 7.3,
+        minZoom: 3,
+        maxZoom: 18,
+        attributionControl: false,
+      });
+    } catch (error) {
+      onErrorRef.current(
+        error instanceof Error ? error.message : "MAP_INITIALIZATION_FAILED",
+      );
+      return;
+    }
     instance.addControl(
       new mapboxgl.NavigationControl({ visualizePitch: true }),
       "bottom-left",
@@ -116,11 +149,16 @@ export function RoadbookMap({
     );
     instance.on("error", (event) => {
       const message = event.error?.message;
-      if (message) {
+      if (
+        message &&
+        (!instance.loaded() ||
+          /token|style|unauthorized|forbidden/i.test(message))
+      ) {
         console.error("Roadbook map error:", message);
         onErrorRef.current(message);
       }
     });
+    instance.once("load", () => onReadyRef.current());
     instance.on("moveend", () => {
       const next = instance.getCenter();
       const bounds = instance.getBounds();
@@ -155,14 +193,25 @@ export function RoadbookMap({
     const instance = map.current;
     if (!instance) return;
     markers.current.forEach((marker) => marker.remove());
+    const eventCounts = events.reduce<Record<string, number>>(
+      (counts, event) => {
+        counts[event.venueId] = (counts[event.venueId] ?? 0) + 1;
+        return counts;
+      },
+      {},
+    );
     markers.current = venues.map((venue) => {
-      const element = markerElement(venue, venue.id === selectedVenue?.id);
+      const element = markerElement(
+        venue,
+        venue.id === selectedVenue?.id,
+        eventCounts[venue.id] ?? 0,
+      );
       element.addEventListener("click", () => onSelect(venue));
       return new mapboxgl.Marker({ element, anchor: "bottom" })
         .setLngLat([venue.longitude, venue.latitude])
         .addTo(instance);
     });
-  }, [onSelect, selectedVenue?.id, venues]);
+  }, [events, onSelect, selectedVenue?.id, venues]);
 
   useEffect(() => {
     const instance = map.current;

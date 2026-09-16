@@ -203,7 +203,10 @@ language sql stable security invoker set search_path = '' as $$
       extensions.st_setsrid(extensions.st_makepoint(p_lng, p_lat), 4326)::extensions.geography,
       least(greatest(p_radius_m, 1000), 1000000)
     )
-  order by v.location <-> extensions.st_setsrid(extensions.st_makepoint(p_lng, p_lat), 4326)::extensions.geography
+  order by extensions.st_distance(
+    v.location,
+    extensions.st_setsrid(extensions.st_makepoint(p_lng, p_lat), 4326)::extensions.geography
+  )
   limit 250;
 $$;
 

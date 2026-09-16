@@ -6,6 +6,7 @@
     "filtersLabel": "Roadbook categories",
     "locate": "Use my location",
     "loading": "Checking the visible area…",
+    "mapLoading": "Opening the Roadbook map…",
     "resultCount": "{count, plural, =1 {One place in view} other {# places in view}}",
     "retry": "Try again",
     "categories": {
@@ -131,6 +132,40 @@
     "poster": {
       "action": "Export build map",
       "empty": "Record a visit with this vehicle before exporting."
+    },
+    "events": {
+      "eyebrow": "Official calendars",
+      "title": "Events worth driving to",
+      "description": "Upcoming dates linked to the venue source. Recheck access and availability before travelling.",
+      "upcoming": "{count, plural, =0 {Events} =1 {One event} other {# events}}",
+      "empty": "No sourced upcoming events are listed in this map view.",
+      "atVenue": "Upcoming at this venue",
+      "booking": "Check booking",
+      "source": "Open official source",
+      "types": {
+        "track_day": "Track day",
+        "tourist_driving": "Public driving",
+        "driver_training": "Driver training",
+        "motorsport": "Motorsport",
+        "meet": "Car meet",
+        "festival": "Automotive festival"
+      },
+      "participation": {
+        "spectator": "Spectator event",
+        "driver": "Driver participation",
+        "mixed": "Drivers and spectators"
+      }
+    },
+    "moderation": {
+      "action": "Review queue",
+      "title": "Roadbook reports",
+      "empty": "No reports are waiting.",
+      "evidence": "Evidence",
+      "review": "Review",
+      "note": "Decision note",
+      "accept": "Accept report",
+      "reject": "Reject",
+      "error": "The moderation decision could not be saved."
     }
   }
 }

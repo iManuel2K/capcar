@@ -6,6 +6,7 @@
     "filtersLabel": "Roadbook-Kategorien",
     "locate": "Meinen Standort verwenden",
     "loading": "Sichtbaren Bereich prüfen…",
+    "mapLoading": "Roadbook-Karte wird geöffnet…",
     "resultCount": "{count, plural, =1 {Ein Ort im Ausschnitt} other {# Orte im Ausschnitt}}",
     "retry": "Erneut versuchen",
     "categories": {
@@ -131,6 +132,40 @@
     "poster": {
       "action": "Build-Karte exportieren",
       "empty": "Trage zuerst einen Besuch mit diesem Fahrzeug ein."
+    },
+    "events": {
+      "eyebrow": "Offizielle Kalender",
+      "title": "Events, für die sich die Fahrt lohnt",
+      "description": "Kommende Termine mit Quelle des Veranstaltungsorts. Prüfe Zugang und Verfügbarkeit vor der Anfahrt erneut.",
+      "upcoming": "{count, plural, =0 {Events} =1 {Ein Event} other {# Events}}",
+      "empty": "In diesem Kartenausschnitt sind keine belegten kommenden Events eingetragen.",
+      "atVenue": "Demnächst an diesem Ort",
+      "booking": "Buchung prüfen",
+      "source": "Offizielle Quelle öffnen",
+      "types": {
+        "track_day": "Trackday",
+        "tourist_driving": "Touristenfahrt",
+        "driver_training": "Fahrertraining",
+        "motorsport": "Motorsport",
+        "meet": "Autotreffen",
+        "festival": "Automobilfestival"
+      },
+      "participation": {
+        "spectator": "Zuschauer-Event",
+        "driver": "Teilnahme für Fahrer",
+        "mixed": "Fahrer und Zuschauer"
+      }
+    },
+    "moderation": {
+      "action": "Prüfliste",
+      "title": "Roadbook-Meldungen",
+      "empty": "Keine Meldungen warten auf Prüfung.",
+      "evidence": "Beleg",
+      "review": "Prüfen",
+      "note": "Entscheidungsnotiz",
+      "accept": "Meldung annehmen",
+      "reject": "Ablehnen",
+      "error": "Die Moderationsentscheidung konnte nicht gespeichert werden."
     }
   }
 }

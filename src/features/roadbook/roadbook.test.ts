@@ -5,6 +5,7 @@ import { createRoadbookMapStyle } from "@/features/roadbook/roadbook-map-style";
 import { evaluateRoadbookReadiness } from "@/features/roadbook/roadbook-readiness";
 import {
   roadbookMapModes,
+  roadbookEventListSchema,
   roadbookVenueListSchema,
   type RoadbookVenue,
 } from "@/features/roadbook/roadbook-schema";
@@ -38,10 +39,38 @@ const venue = roadbookVenueListSchema.parse([
   },
 ])[0] as RoadbookVenue;
 
+const event = roadbookEventListSchema.parse([
+  {
+    id: "f5b1bd86-9fc3-475b-bca8-a2fc49f3b298",
+    venue_id: venue.id,
+    title: "Track evening",
+    slug: "track-evening",
+    description: "A sourced driving event.",
+    event_type: "driver_training",
+    participation: "driver",
+    booking_required: true,
+    starts_at: "2026-10-01T16:00:00.000Z",
+    ends_at: "2026-10-01T20:00:00.000Z",
+    booking_url: "https://example.com/book",
+    entry_price_cents: 9900,
+    price_currency: "EUR",
+    source_label: "Venue calendar",
+    source_url: "https://example.com/calendar",
+    verification_status: "official_source",
+    verified_at: "2026-09-16T12:00:00.000Z",
+  },
+])[0];
+
 describe("Roadbook contracts", () => {
   it("normalizes PostGIS RPC rows for the client", () => {
     expect(venue.accessStatus).toBe("closed_venue");
     expect(venue.distanceM).toBe(1250);
+  });
+
+  it("normalizes sourced venue events", () => {
+    expect(event.venueId).toBe(venue.id);
+    expect(event.participation).toBe("driver");
+    expect(event.bookingRequired).toBe(true);
   });
 
   it("keeps unknown vehicle noise as an explicit check", () => {
@@ -82,5 +111,15 @@ describe("Roadbook contracts", () => {
     expect(map).toContain("mapbox-gl/dist/mapbox-gl-csp.js");
     expect(map).toContain('mapboxgl.workerUrl = "/mapbox-gl-csp-worker.js"');
     expect(existsSync("public/mapbox-gl-csp-worker.js")).toBe(true);
+  });
+
+  it("publishes only active sourced events", () => {
+    const migration = readFileSync(
+      "supabase/migrations/20260916120000_roadbook_events_expansion.sql",
+      "utf8",
+    );
+    expect(migration).toContain("ends_at >= now()");
+    expect(migration).toContain("DEKRA Lausitzring event calendar");
+    expect(migration).toContain("Motorsport Arena official calendar");
   });
 });

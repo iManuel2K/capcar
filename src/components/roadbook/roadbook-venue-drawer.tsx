@@ -24,6 +24,7 @@ import { useId, useMemo, useState } from "react";
 import { evaluateRoadbookReadiness } from "@/features/roadbook/roadbook-readiness";
 import type {
   RecordRoadbookVisitInput,
+  RoadbookEvent,
   RoadbookReportInput,
   RoadbookVenue,
 } from "@/features/roadbook/roadbook-schema";
@@ -33,6 +34,7 @@ type ActionState = "idle" | "working" | "done";
 
 export function RoadbookVenueDrawer({
   venue,
+  events,
   vehicles,
   vehicleId,
   onVehicleChange,
@@ -42,6 +44,7 @@ export function RoadbookVenueDrawer({
   onReport,
 }: {
   venue: RoadbookVenue;
+  events: RoadbookEvent[];
   vehicles: Vehicle[];
   vehicleId?: string;
   onVehicleChange: (vehicleId: string) => void;
@@ -137,6 +140,65 @@ export function RoadbookVenueDrawer({
         )}
 
         <p className="text-sm leading-6 text-white/55">{venue.description}</p>
+
+        {events.length > 0 && (
+          <section className="rounded-2xl border border-[#ff667a]/20 bg-[#ff667a]/[0.055] p-4">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="inline-flex items-center gap-2 text-sm font-semibold">
+                <CalendarDays className="size-4 text-[#ff667a]" />
+                {t("events.atVenue")}
+              </h3>
+              <span className="rounded-full bg-white/7 px-2 py-1 text-[10px] text-white/45">
+                {events.length}
+              </span>
+            </div>
+            <div className="mt-3 space-y-2">
+              {events.map((event) => {
+                const start = new Date(event.startsAt);
+                const end = new Date(event.endsAt);
+                const sameDay = start.toDateString() === end.toDateString();
+                const date = sameDay
+                  ? new Intl.DateTimeFormat(locale, {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    }).format(start)
+                  : `${new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(start)} – ${new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(end)}`;
+                return (
+                  <article
+                    key={event.id}
+                    className="rounded-xl border border-white/9 bg-black/15 p-3"
+                  >
+                    <p className="text-[10px] font-semibold tracking-[0.1em] text-[#ff9baa] uppercase">
+                      {t(`events.types.${event.eventType}`)} · {date}
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-white/85">
+                      {event.title}
+                    </p>
+                    <p className="mt-1 text-[11px] text-white/38">
+                      {t(`events.participation.${event.participation}`)}
+                    </p>
+                    {event.description && (
+                      <p className="mt-1 text-xs leading-5 text-white/42">
+                        {event.description}
+                      </p>
+                    )}
+                    <a
+                      href={event.bookingUrl ?? event.sourceUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-2 inline-flex min-h-8 items-center gap-1.5 text-xs font-semibold text-[#ff788a]"
+                    >
+                      {event.bookingUrl
+                        ? t("events.booking")
+                        : t("events.source")}
+                      <ExternalLink className="size-3" />
+                    </a>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         <div className="grid grid-cols-2 gap-2">
           <Fact

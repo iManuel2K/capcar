@@ -20,6 +20,24 @@
   transform: rotate(45deg);
 }
 
+.roadbook-marker__events {
+  position: absolute;
+  top: -0.42rem;
+  right: -0.42rem;
+  display: grid;
+  width: 1.15rem;
+  height: 1.15rem;
+  place-items: center;
+  border: 2px solid #111613;
+  border-radius: 999px;
+  background: #f1eadf;
+  color: #0e2d30;
+  font-size: 0.6rem;
+  font-weight: 800;
+  line-height: 1;
+  transform: rotate(45deg);
+}
+
 .roadbook-marker:hover,
 .roadbook-marker:focus-visible,
 .roadbook-marker.is-selected {
