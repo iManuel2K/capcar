@@ -13,6 +13,8 @@ import type {
 } from "@/features/roadbook/roadbook-schema";
 import type { RoadbookCenter } from "@/features/roadbook/roadbook-client";
 
+const MAPBOX_CSP_WORKER_PATH = "/mapbox-gl-csp-worker.js";
+
 const markerIcons: Record<RoadbookCategory, string> = {
   drift_circuit:
     '<path d="M4 17c5-1 5-9 10-10 3-.6 5 1 6 3"/><path d="m16 6 4 4-5 2"/>',
@@ -118,7 +120,10 @@ export function RoadbookMap({
   useEffect(() => {
     if (!container.current || map.current || !accessToken) return;
     mapboxgl.accessToken = accessToken;
-    mapboxgl.workerUrl = "/mapbox-gl-csp-worker.js";
+    mapboxgl.workerUrl = new URL(
+      MAPBOX_CSP_WORKER_PATH,
+      window.location.origin,
+    ).href;
     let instance: MapboxMap;
     try {
       instance = new mapboxgl.Map({
@@ -148,11 +153,15 @@ export function RoadbookMap({
       "bottom-right",
     );
     instance.on("error", (event) => {
-      const message = event.error?.message;
+      const message =
+        event.error instanceof Error
+          ? event.error.message
+          : typeof event.error === "string"
+            ? event.error
+            : "MAPBOX_RESOURCE_FAILED";
       if (
-        message &&
-        (!instance.loaded() ||
-          /token|style|unauthorized|forbidden/i.test(message))
+        !instance.loaded() ||
+        /token|style|unauthorized|forbidden/i.test(message)
       ) {
         console.error("Roadbook map error:", message);
         onErrorRef.current(message);

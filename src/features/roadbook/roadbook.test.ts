@@ -109,7 +109,10 @@ describe("Roadbook contracts", () => {
       "utf8",
     );
     expect(map).toContain("mapbox-gl/dist/mapbox-gl-csp.js");
-    expect(map).toContain('mapboxgl.workerUrl = "/mapbox-gl-csp-worker.js"');
+    expect(map).toContain(
+      'MAPBOX_CSP_WORKER_PATH = "/mapbox-gl-csp-worker.js"',
+    );
+    expect(map).toContain("window.location.origin");
     expect(existsSync("public/mapbox-gl-csp-worker.js")).toBe(true);
   });
 
