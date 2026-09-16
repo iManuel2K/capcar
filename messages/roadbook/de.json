@@ -35,7 +35,8 @@
       "obdTooLarge": "Die OBD-Datei darf höchstens 1 MB groß sein.",
       "locationUnavailable": "Der Standort ist in diesem Browser nicht verfügbar.",
       "locationDenied": "Der Standort wurde nicht freigegeben. Du kannst die Karte weiterhin manuell bewegen.",
-      "mapToken": "Mapbox hat den konfigurierten öffentlichen Token abgelehnt."
+      "mapToken": "Mapbox hat den konfigurierten öffentlichen Token abgelehnt.",
+      "mapUnavailable": "Die Straßenebene konnte nicht geladen werden. Lade die Seite neu oder wähle eine andere Kartenansicht."
     },
     "empty": {
       "title": "Keine belegten Orte in diesem Ausschnitt.",

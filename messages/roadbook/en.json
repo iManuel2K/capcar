@@ -35,7 +35,8 @@
       "obdTooLarge": "The OBD evidence file must be 1 MB or smaller.",
       "locationUnavailable": "Location is not available in this browser.",
       "locationDenied": "Location permission was not granted. You can still move the map manually.",
-      "mapToken": "Mapbox rejected the configured public token."
+      "mapToken": "Mapbox rejected the configured public token.",
+      "mapUnavailable": "The map could not load its road layer. Reload the page or try another map mode."
     },
     "empty": {
       "title": "No sourced places in this view.",

@@ -35,7 +35,8 @@
       "obdTooLarge": "Skedari OBD duhet të jetë maksimumi 1 MB.",
       "locationUnavailable": "Vendndodhja nuk është e disponueshme në këtë shfletues.",
       "locationDenied": "Leja për vendndodhjen nuk u dha. Hartën mund ta lëvizësh manualisht.",
-      "mapToken": "Mapbox refuzoi token-in publik të konfiguruar."
+      "mapToken": "Mapbox refuzoi token-in publik të konfiguruar.",
+      "mapUnavailable": "Shtresa e rrugëve nuk u ngarkua. Rifresko faqen ose provo një pamje tjetër harte."
     },
     "empty": {
       "title": "Nuk ka vende me burim në këtë pamje.",

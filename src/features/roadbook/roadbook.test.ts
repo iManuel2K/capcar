@@ -54,16 +54,11 @@ describe("Roadbook contracts", () => {
   });
 
   it("builds a distinct Mapbox style for every Capcar mode", () => {
-    const colors = roadbookMapModes.map((mode) => {
-      const style = createRoadbookMapStyle(mode);
-      const background = style.layers.find(
-        (layer) => layer.id === "background",
-      );
-      return background && "paint" in background
-        ? (background.paint as Record<string, unknown>)?.["background-color"]
-        : undefined;
-    });
-    expect(new Set(colors).size).toBe(4);
+    const styles = roadbookMapModes.map(createRoadbookMapStyle);
+    expect(new Set(styles).size).toBe(4);
+    expect(styles.every((style) => style.startsWith("mapbox://styles/"))).toBe(
+      true,
+    );
   });
 
   it("enforces closed venues for drift and timed acceleration in SQL", () => {
@@ -84,7 +79,7 @@ describe("Roadbook contracts", () => {
       "src/components/roadbook/roadbook-map.tsx",
       "utf8",
     );
-    expect(map).toContain('mapbox-gl/dist/mapbox-gl-csp.js');
+    expect(map).toContain("mapbox-gl/dist/mapbox-gl-csp.js");
     expect(map).toContain('mapboxgl.workerUrl = "/mapbox-gl-csp-worker.js"');
     expect(existsSync("public/mapbox-gl-csp-worker.js")).toBe(true);
   });

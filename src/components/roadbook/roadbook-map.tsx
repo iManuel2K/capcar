@@ -116,7 +116,10 @@ export function RoadbookMap({
     );
     instance.on("error", (event) => {
       const message = event.error?.message;
-      if (message) onErrorRef.current(message);
+      if (message) {
+        console.error("Roadbook map error:", message);
+        onErrorRef.current(message);
+      }
     });
     instance.on("moveend", () => {
       const next = instance.getCenter();

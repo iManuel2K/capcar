@@ -174,8 +174,11 @@ export function RoadbookExperience() {
         onSelect={setSelectedVenue}
         onViewportChange={updateViewport}
         onError={(message) => {
-          if (/token|unauthorized|forbidden/i.test(message))
-            setError(t("errors.mapToken"));
+          setError(
+            /token|unauthorized|forbidden/i.test(message)
+              ? t("errors.mapToken")
+              : t("errors.mapUnavailable"),
+          );
         }}
       />
 
