@@ -1,93 +1,162 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { conceptPresets } from "@/features/visualizer/concept-studio";
-import { ConceptStudio } from "./concept-studio";
-import { IconicGallery } from "./iconic-gallery";
-import { useTranslations } from "next-intl";
+import { useState, useEffect } from "react";
 
-const budgets = ["€1,200–2,400", "€600–1,500", "€1,800–3,500"];
+export interface ConceptSpec {
+  model: "sedan-sports" | "hatchback-sports";
+  paint: "petrol" | "cream" | "clay" | "red";
+  stance: "stock" | "sport";
+  spoiler: boolean;
+}
 
-export function ShowcaseBuilds() {
-  const t = useTranslations("StudioUi");
-  const data = useTranslations("ShowcaseData");
-  const [selected, setSelected] = useState(0);
-  const preset = conceptPresets[selected];
-  const storyKey = `s${selected + 1}`;
-  const parts = ["p1", "p2", "p3"].map((key) => data(`${storyKey}.${key}`));
-  const steps = ["x1", "x2", "x3"].map((key) => data(`${storyKey}.${key}`));
+export interface ConceptStudioProps {
+  initialConcept?: ConceptSpec;
+  storageKey?: string;
+}
+
+const defaultConcept: ConceptSpec = {
+  model: "sedan-sports",
+  paint: "petrol",
+  stance: "stock",
+  spoiler: false,
+};
+
+export function ConceptStudio({
+  initialConcept = defaultConcept,
+  storageKey = "capcar.visual-direction.v1",
+}: ConceptStudioProps) {
+  const [concept, setConcept] = useState<ConceptSpec>(initialConcept);
+
+  useEffect(() => {
+    if (!storageKey || typeof window === "undefined") return;
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        setConcept(JSON.parse(saved));
+      }
+    } catch {
+      // Fallback to initialConcept on invalid JSON
+    }
+  }, [storageKey]);
+
+  const updateConcept = (updates: Partial<ConceptSpec>) => {
+    const updated = { ...concept, ...updates };
+    setConcept(updated);
+    if (storageKey && typeof window !== "undefined") {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(updated));
+      } catch (err) {
+        console.warn("Failed to store concept state:", err);
+      }
+    }
+  };
+
   return (
-    <section aria-label={data("label")} className="my-10">
-      <IconicGallery />
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+    <div className="rounded-2xl border border-[#0e2d30]/20 bg-[#0e2d30]/5 p-6 shadow-sm">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="text-xs tracking-widest uppercase">{t("collection")}</p>
-          <h2 className="mt-2 text-3xl font-medium">{t("three")}</h2>
+          <h3 className="text-xl font-semibold text-[#0e2d30]">
+            Concept Studio
+          </h3>
+          <p className="text-xs text-neutral-600">
+            Customize visual direction and vehicle stance
+          </p>
         </div>
-        <Link
-          href="/sound-studio"
-          className="inline-flex min-h-11 items-center underline"
-        >
-          {t("sound")}
-        </Link>
+        <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-[#0e2d30] uppercase">
+          <span>{concept.model}</span>
+          <span>•</span>
+          <span>{concept.paint}</span>
+        </div>
       </div>
-      <div
-        className="mb-6 flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3"
-        aria-label={t("chooseShowcase")}
-      >
-        {conceptPresets.map((item, index) => (
+
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {/* Model Selection */}
+        <div>
+          <label className="mb-2 block text-xs font-semibold text-neutral-500 uppercase">
+            Model
+          </label>
+          <div className="flex gap-2">
+            {(["sedan-sports", "hatchback-sports"] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => updateConcept({ model: m })}
+                className={`flex-1 rounded-lg border px-3 py-2 text-xs font-medium capitalize transition ${
+                  concept.model === m
+                    ? "border-[#0e2d30] bg-[#0e2d30] text-white"
+                    : "border-neutral-300 bg-white text-neutral-700 hover:border-neutral-400"
+                }`}
+              >
+                {m.replace("-", " ")}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Paint Selection */}
+        <div>
+          <label className="mb-2 block text-xs font-semibold text-neutral-500 uppercase">
+            Paint Finish
+          </label>
+          <div className="flex gap-2">
+            {(["petrol", "cream", "clay", "red"] as const).map((p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => updateConcept({ paint: p })}
+                className={`flex-1 rounded-lg border px-3 py-2 text-xs font-medium capitalize transition ${
+                  concept.paint === p
+                    ? "border-[#0e2d30] bg-[#0e2d30] text-white"
+                    : "border-neutral-300 bg-white text-neutral-700 hover:border-neutral-400"
+                }`}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Stance Selection */}
+        <div>
+          <label className="mb-2 block text-xs font-semibold text-neutral-500 uppercase">
+            Stance
+          </label>
+          <div className="flex gap-2">
+            {(["stock", "sport"] as const).map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => updateConcept({ stance: s })}
+                className={`flex-1 rounded-lg border px-3 py-2 text-xs font-medium capitalize transition ${
+                  concept.stance === s
+                    ? "border-[#0e2d30] bg-[#0e2d30] text-white"
+                    : "border-neutral-300 bg-white text-neutral-700 hover:border-neutral-400"
+                }`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Aero Package */}
+        <div>
+          <label className="mb-2 block text-xs font-semibold text-neutral-500 uppercase">
+            Aero Package
+          </label>
           <button
             type="button"
-            key={item.name}
-            aria-pressed={index === selected}
-            onClick={() => setSelected(index)}
-            className={`min-h-36 min-w-64 flex-1 snap-start rounded-2xl border p-6 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ${selected === index ? "border-[#0e2d30] bg-[#0e2d30] text-[#e8e6d7]" : "border-[#0e2d30]/25"}`}
+            onClick={() => updateConcept({ spoiler: !concept.spoiler })}
+            className={`w-full rounded-lg border px-3 py-2 text-xs font-medium transition ${
+              concept.spoiler
+                ? "border-[#0e2d30] bg-[#0e2d30] text-white"
+                : "border-neutral-300 bg-white text-neutral-700 hover:border-neutral-400"
+            }`}
           >
-            <span className="text-xs">
-              0{index + 1} / {t("original")}
-            </span>
-            <span className="mt-4 block text-xl font-medium">{item.name}</span>
-            <span className="mt-2 block text-sm">
-              {data(`s${index + 1}.brief`)}
-            </span>
+            {concept.spoiler ? "Spoiler Active" : "Clean Decklid"}
           </button>
-        ))}
-      </div>
-      <ConceptStudio
-        key={preset.name}
-        initialConcept={preset.value}
-        storageKey="capcar.visual-direction.v1"
-      />
-      <div className="mt-6 grid gap-6 rounded-2xl border border-[#0e2d30]/20 p-6 md:grid-cols-3">
-        <div>
-          <h3 className="font-semibold">{preset.name}</h3>
-          <p className="mt-3 text-sm leading-6">{data(`${storyKey}.brief`)}</p>
-          <p className="mt-3 font-medium">{budgets[selected]}</p>
-          <p className="text-xs leading-5">{t("planningRange")}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold">{t("partsResearch")}</h3>
-          {parts.map((part) => (
-            <Link
-              key={part}
-              className="flex min-h-11 items-center underline"
-              href={`/parts-search?q=${encodeURIComponent(part)}`}
-            >
-              {part} →
-            </Link>
-          ))}
-          <p className="text-xs">{t("verify")}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold">{t("sequence")}</h3>
-          <ol className="mt-3 list-decimal space-y-3 pl-5 text-sm leading-6">
-            {steps.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
