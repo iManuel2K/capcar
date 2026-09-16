@@ -16,8 +16,63 @@ import type {
   RoadbookVenue,
 } from "@/features/roadbook/roadbook-schema";
 
-const OPENSTREETMAP_TILES =
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+export const ROADBOOK_MAP_STYLES: Record<
+  string,
+  { name: string; url: string; attribution: string }
+> = {
+  "monochrome-light": {
+    name: "01 / Classic Paper",
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
+  "midnight-dark": {
+    name: "02 / Midnight Club",
+    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  },
+  "topo-vintage": {
+    name: "03 / Vintage Topo",
+    url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+    attribution:
+      'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, SRTM',
+  },
+  "cyber-neon": {
+    name: "04 / Neon Grid",
+    url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  },
+  "berlin-asphalt": {
+    name: "05 / Berlin Industrial",
+    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  },
+  "tokyo-drift": {
+    name: "06 / Tokyo High-Contrast",
+    url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  },
+  "monaco-coastal": {
+    name: "07 / Riviera Coastal",
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+    attribution: "Tiles &copy; Esri",
+  },
+  "satellite-hybrid": {
+    name: "08 / Satellite Overhead",
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    attribution: "Tiles &copy; Esri",
+  },
+  "minimal-stealth": {
+    name: "09 / Stealth Minimal",
+    url: "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  },
+};
 
 const markerIcons: Record<RoadbookCategory, string> = {
   drift_circuit:
@@ -57,6 +112,7 @@ export function RoadbookMap({
   mode,
   center,
   userPosition,
+  mapStyle = "monochrome-light",
   onSelect,
   onViewportChange,
   onError,
@@ -68,6 +124,7 @@ export function RoadbookMap({
   mode: RoadbookMapMode;
   center: RoadbookCenter;
   userPosition?: RoadbookCenter;
+  mapStyle?: string;
   onSelect: (venue: RoadbookVenue) => void;
   onViewportChange: (center: RoadbookCenter, radiusKm: number) => void;
   onError: (message: string) => void;
@@ -95,6 +152,9 @@ export function RoadbookMap({
   useEffect(() => {
     if (!container.current || map.current) return;
 
+    const currentStyleConfig =
+      ROADBOOK_MAP_STYLES[mapStyle] ?? ROADBOOK_MAP_STYLES["monochrome-light"];
+
     const instance = L.map(container.current, {
       center: [initialCenter.current.latitude, initialCenter.current.longitude],
       zoom: 7,
@@ -103,14 +163,14 @@ export function RoadbookMap({
       zoomControl: false,
       attributionControl: false,
     });
+
     let tileFailures = 0;
     let hasLoadedTiles = false;
-    const tiles = L.tileLayer(OPENSTREETMAP_TILES, {
+    const tiles = L.tileLayer(currentStyleConfig.url, {
       minZoom: 3,
       maxZoom: 19,
       crossOrigin: true,
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      attribution: currentStyleConfig.attribution,
     });
 
     L.control.zoom({ position: "bottomleft" }).addTo(instance);
@@ -125,7 +185,7 @@ export function RoadbookMap({
     tiles.on("tileerror", () => {
       tileFailures += 1;
       if (!hasLoadedTiles && tileFailures >= 4) {
-        onErrorRef.current("OPENSTREETMAP_TILES_FAILED");
+        onErrorRef.current("MAP_TILES_FAILED");
       }
     });
     tiles.addTo(instance);
@@ -157,6 +217,14 @@ export function RoadbookMap({
       tileLayer.current = null;
     };
   }, []);
+
+  /* Dynamically change tile layer URL when mapStyle changes */
+  useEffect(() => {
+    if (!tileLayer.current) return;
+    const config =
+      ROADBOOK_MAP_STYLES[mapStyle] ?? ROADBOOK_MAP_STYLES["monochrome-light"];
+    tileLayer.current.setUrl(config.url);
+  }, [mapStyle]);
 
   useEffect(() => {
     const instance = map.current;
