@@ -7,6 +7,10 @@
     "locate": "Meinen Standort verwenden",
     "loading": "Sichtbaren Bereich prüfen…",
     "mapLoading": "Roadbook-Karte wird geöffnet…",
+    "fallback": {
+      "label": "Kompatibilitätskarte",
+      "description": "Roadbook nutzt eine leichte Kartenansicht, weil WebGL nicht verfügbar ist. Ortsdetails und gespeicherte Besuche funktionieren weiterhin."
+    },
     "resultCount": "{count, plural, =1 {Ein Ort im Ausschnitt} other {# Orte im Ausschnitt}}",
     "retry": "Erneut versuchen",
     "categories": {

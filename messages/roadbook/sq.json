@@ -7,6 +7,10 @@
     "locate": "Përdor vendndodhjen time",
     "loading": "Po kontrollohet zona e dukshme…",
     "mapLoading": "Po hapet harta Roadbook…",
+    "fallback": {
+      "label": "Harta e përputhshmërisë",
+      "description": "Roadbook kaloi në një hartë më të lehtë sepse WebGL nuk është i disponueshëm. Detajet dhe vizitat e ruajtura vazhdojnë të funksionojnë."
+    },
     "resultCount": "{count, plural, =1 {Një vend në hartë} other {# vende në hartë}}",
     "retry": "Provo përsëri",
     "categories": {

@@ -7,6 +7,10 @@
     "locate": "Use my location",
     "loading": "Checking the visible area…",
     "mapLoading": "Opening the Roadbook map…",
+    "fallback": {
+      "label": "Compatibility map",
+      "description": "Roadbook switched to a lightweight map because WebGL is unavailable. Venue details and saved visits still work."
+    },
     "resultCount": "{count, plural, =1 {One place in view} other {# places in view}}",
     "retry": "Try again",
     "categories": {

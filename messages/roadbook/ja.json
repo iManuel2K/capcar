@@ -7,6 +7,10 @@
     "locate": "現在地を使用",
     "loading": "表示エリアを確認中…",
     "mapLoading": "Roadbookマップを開いています…",
+    "fallback": {
+      "label": "互換マップ",
+      "description": "WebGLを利用できないため、軽量マップに切り替えました。場所の詳細と保存した訪問記録は引き続き利用できます。"
+    },
     "resultCount": "表示中のスポット：{count}件",
     "retry": "再試行",
     "categories": {
