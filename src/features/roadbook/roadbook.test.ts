@@ -1,10 +1,8 @@
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-import { createRoadbookMapStyle } from "@/features/roadbook/roadbook-map-style";
 import { evaluateRoadbookReadiness } from "@/features/roadbook/roadbook-readiness";
 import {
-  roadbookMapModes,
   roadbookEventListSchema,
   roadbookVenueListSchema,
   type RoadbookVenue,
@@ -82,14 +80,6 @@ describe("Roadbook contracts", () => {
     );
   });
 
-  it("builds a distinct Mapbox style for every Capcar mode", () => {
-    const styles = roadbookMapModes.map(createRoadbookMapStyle);
-    expect(new Set(styles).size).toBe(4);
-    expect(styles.every((style) => style.startsWith("mapbox://styles/"))).toBe(
-      true,
-    );
-  });
-
   it("enforces closed venues for drift and timed acceleration in SQL", () => {
     const migration = readFileSync(
       "supabase/migrations/20260915190000_roadbook.sql",
@@ -103,17 +93,15 @@ describe("Roadbook contracts", () => {
     );
   });
 
-  it("uses Mapbox's strict-CSP worker without unsafe-eval", () => {
+  it("uses a non-WebGL OpenStreetMap layer without a paid token", () => {
     const map = readFileSync(
       "src/components/roadbook/roadbook-map.tsx",
       "utf8",
     );
-    expect(map).toContain("mapbox-gl/dist/mapbox-gl-csp.js");
-    expect(map).toContain(
-      'MAPBOX_CSP_WORKER_PATH = "/mapbox-gl-csp-worker.js"',
-    );
-    expect(map).toContain("window.location.origin");
-    expect(existsSync("public/mapbox-gl-csp-worker.js")).toBe(true);
+    expect(map).toContain('from "leaflet"');
+    expect(map).toContain("tile.openstreetmap.org");
+    expect(map).toContain("OpenStreetMap");
+    expect(map).not.toContain("mapbox");
   });
 
   it("publishes only active sourced events", () => {

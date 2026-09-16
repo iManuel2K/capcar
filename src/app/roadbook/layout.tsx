@@ -1,4 +1,4 @@
-import "mapbox-gl/dist/mapbox-gl.css";
+import "leaflet/dist/leaflet.css";
 import "./roadbook.css";
 
 export default function RoadbookLayout({

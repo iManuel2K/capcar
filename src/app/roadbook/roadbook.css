@@ -68,7 +68,39 @@
   box-shadow: 0 0 0 7px rgb(231 45 69 / 20%);
 }
 
-.mapboxgl-ctrl-group {
+.roadbook-leaflet-map {
+  z-index: 0;
+  background: #0b0e0c;
+  font-family: inherit;
+}
+
+.roadbook-leaflet-map .leaflet-tile-pane {
+  transition: filter 240ms ease;
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="workshop_cream"] .leaflet-tile-pane {
+  filter: sepia(0.22) saturate(0.78) brightness(1.02) contrast(0.94);
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="petrol_night"] .leaflet-tile-pane {
+  filter: brightness(0.38) contrast(1.22) saturate(0.55);
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="blueprint"] .leaflet-tile-pane {
+  filter: grayscale(0.55) sepia(0.65) hue-rotate(155deg) saturate(1.35)
+    brightness(0.58) contrast(1.16);
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="touring_clay"] .leaflet-tile-pane {
+  filter: sepia(0.28) saturate(0.88) brightness(0.88) contrast(1.05);
+}
+
+.roadbook-leaflet-marker-shell {
+  border: 0;
+  background: transparent;
+}
+
+.leaflet-control-zoom {
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 12%) !important;
   border-radius: 0.85rem !important;
@@ -76,30 +108,40 @@
   box-shadow: 0 12px 35px rgb(0 0 0 / 22%) !important;
 }
 
-.mapboxgl-ctrl-group button + button {
-  border-top-color: rgb(255 255 255 / 8%) !important;
+.leaflet-control-zoom a {
+  border: 0 !important;
+  background: transparent !important;
+  color: rgb(255 255 255 / 72%) !important;
+  font-family: inherit !important;
 }
 
-.mapboxgl-ctrl-icon {
-  filter: invert(1);
-  opacity: 0.72;
+.leaflet-control-zoom a + a {
+  border-top: 1px solid rgb(255 255 255 / 8%) !important;
 }
 
-.mapboxgl-ctrl-attrib {
+.leaflet-control-zoom a:hover,
+.leaflet-control-zoom a:focus-visible {
+  background: rgb(255 255 255 / 8%) !important;
+  color: white !important;
+}
+
+.leaflet-control-attribution {
+  border-radius: 0.5rem 0 0 !important;
   background: rgb(9 16 13 / 70%) !important;
   color: rgb(255 255 255 / 58%) !important;
+  backdrop-filter: blur(10px);
 }
 
-.mapboxgl-ctrl-attrib a {
+.leaflet-control-attribution a {
   color: inherit !important;
 }
 
 @media (max-width: 639px) {
-  .mapboxgl-ctrl-bottom-left {
+  .leaflet-bottom.leaflet-left {
     bottom: 5.25rem;
   }
 
-  .mapboxgl-ctrl-bottom-right {
+  .leaflet-bottom.leaflet-right {
     bottom: 5rem;
   }
 }

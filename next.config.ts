@@ -18,9 +18,9 @@ const nextConfig: NextConfig = {
       "form-action 'self'",
       `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://static.sketchfab.com`,
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://*.sketchfab.com https://*.supabase.co https://api.mapbox.com https://*.tiles.mapbox.com",
+      "img-src 'self' data: blob: https://*.sketchfab.com https://*.supabase.co https://*.tile.openstreetmap.org",
       "font-src 'self' data:",
-      "connect-src 'self' https://*.supabase.co https://*.sketchfab.com https://api.mapbox.com https://events.mapbox.com https://*.tiles.mapbox.com",
+      "connect-src 'self' https://*.supabase.co https://*.sketchfab.com",
       "frame-src https://sketchfab.com https://*.sketchfab.com",
       "media-src 'self' blob: https://*.sketchfab.com",
       "worker-src 'self' blob:",
@@ -58,19 +58,6 @@ const nextConfig: NextConfig = {
           {
             key: "Cache-Control",
             value: "no-cache, no-store, must-revalidate",
-          },
-        ],
-      },
-      {
-        source: "/mapbox-gl-csp-worker.js",
-        headers: [
-          {
-            key: "Content-Type",
-            value: "application/javascript; charset=utf-8",
-          },
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
           },
         ],
       },

@@ -1,19 +1,23 @@
 "use client";
 
-import type { Map as MapboxMap, Marker } from "mapbox-gl";
-import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp.js";
+import L, {
+  type Map as LeafletMap,
+  type Marker,
+  type Polyline,
+  type TileLayer,
+} from "leaflet";
 import { useEffect, useRef } from "react";
 
-import { createRoadbookMapStyle } from "@/features/roadbook/roadbook-map-style";
+import type { RoadbookCenter } from "@/features/roadbook/roadbook-client";
 import type {
   RoadbookCategory,
   RoadbookEvent,
   RoadbookMapMode,
   RoadbookVenue,
 } from "@/features/roadbook/roadbook-schema";
-import type { RoadbookCenter } from "@/features/roadbook/roadbook-client";
 
-const MAPBOX_CSP_WORKER_PATH = "/mapbox-gl-csp-worker.js";
+const OPENSTREETMAP_TILES =
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
 const markerIcons: Record<RoadbookCategory, string> = {
   drift_circuit:
@@ -33,51 +37,20 @@ function markerElement(
   selected: boolean,
   upcomingEvents: number,
 ) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = `roadbook-marker roadbook-marker--${venue.category}${selected ? " is-selected" : ""}`;
-  button.setAttribute("aria-label", venue.name);
-  button.title = venue.name;
-  button.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${markerIcons[venue.category]}</svg>`;
+  const element = document.createElement("div");
+  element.className = `roadbook-marker roadbook-marker--${venue.category}${selected ? " is-selected" : ""}`;
+  element.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${markerIcons[venue.category]}</svg>`;
   if (upcomingEvents > 0) {
     const badge = document.createElement("span");
     badge.className = "roadbook-marker__events";
     badge.textContent = String(Math.min(upcomingEvents, 9));
     badge.setAttribute("aria-hidden", "true");
-    button.append(badge);
-    button.setAttribute(
-      "aria-label",
-      `${venue.name}, ${upcomingEvents} upcoming event${upcomingEvents === 1 ? "" : "s"}`,
-    );
+    element.append(badge);
   }
-  return button;
-}
-
-function addSelectedRoute(map: MapboxMap, venue?: RoadbookVenue) {
-  if (map.getLayer("roadbook-selected-route"))
-    map.removeLayer("roadbook-selected-route");
-  if (map.getSource("roadbook-selected-route"))
-    map.removeSource("roadbook-selected-route");
-  if (!venue?.routeGeoJson || !map.isStyleLoaded()) return;
-  map.addSource("roadbook-selected-route", {
-    type: "geojson",
-    data: { type: "Feature", properties: {}, geometry: venue.routeGeoJson },
-  });
-  map.addLayer({
-    id: "roadbook-selected-route",
-    type: "line",
-    source: "roadbook-selected-route",
-    paint: {
-      "line-color": "#e72d45",
-      "line-width": 5,
-      "line-opacity": 0.9,
-      "line-dasharray": [1.2, 0.8],
-    },
-  });
+  return element;
 }
 
 export function RoadbookMap({
-  accessToken,
   venues,
   events,
   selectedVenue,
@@ -89,7 +62,6 @@ export function RoadbookMap({
   onError,
   onReady,
 }: {
-  accessToken: string;
   venues: RoadbookVenue[];
   events: RoadbookEvent[];
   selectedVenue?: RoadbookVenue;
@@ -102,105 +74,94 @@ export function RoadbookMap({
   onReady: () => void;
 }) {
   const container = useRef<HTMLDivElement>(null);
-  const map = useRef<MapboxMap | null>(null);
+  const map = useRef<LeafletMap | null>(null);
+  const tileLayer = useRef<TileLayer | null>(null);
   const markers = useRef<Marker[]>([]);
-  const userMarker = useRef<Marker | null>(null);
+  const userMarker = useRef<L.CircleMarker | null>(null);
+  const selectedRoute = useRef<Polyline | null>(null);
   const initialCenter = useRef(center);
-  const currentMode = useRef(mode);
+  const onSelectRef = useRef(onSelect);
   const onViewportChangeRef = useRef(onViewportChange);
   const onErrorRef = useRef(onError);
   const onReadyRef = useRef(onReady);
 
   useEffect(() => {
+    onSelectRef.current = onSelect;
     onViewportChangeRef.current = onViewportChange;
     onErrorRef.current = onError;
     onReadyRef.current = onReady;
-  }, [onError, onReady, onViewportChange]);
+  }, [onError, onReady, onSelect, onViewportChange]);
 
   useEffect(() => {
-    if (!container.current || map.current || !accessToken) return;
-    mapboxgl.accessToken = accessToken;
-    mapboxgl.workerUrl = new URL(
-      MAPBOX_CSP_WORKER_PATH,
-      window.location.origin,
-    ).href;
-    let instance: MapboxMap;
-    try {
-      instance = new mapboxgl.Map({
-        container: container.current,
-        style: createRoadbookMapStyle(currentMode.current),
-        center: [
-          initialCenter.current.longitude,
-          initialCenter.current.latitude,
-        ],
-        zoom: 7.3,
-        minZoom: 3,
-        maxZoom: 18,
-        attributionControl: false,
-      });
-    } catch (error) {
-      onErrorRef.current(
-        error instanceof Error ? error.message : "MAP_INITIALIZATION_FAILED",
-      );
-      return;
-    }
-    instance.addControl(
-      new mapboxgl.NavigationControl({ visualizePitch: true }),
-      "bottom-left",
-    );
-    instance.addControl(
-      new mapboxgl.AttributionControl({ compact: true }),
-      "bottom-right",
-    );
-    instance.on("error", (event) => {
-      const message =
-        event.error instanceof Error
-          ? event.error.message
-          : typeof event.error === "string"
-            ? event.error
-            : "MAPBOX_RESOURCE_FAILED";
-      if (
-        !instance.loaded() ||
-        /token|style|unauthorized|forbidden/i.test(message)
-      ) {
-        console.error("Roadbook map error:", message);
-        onErrorRef.current(message);
+    if (!container.current || map.current) return;
+
+    const instance = L.map(container.current, {
+      center: [initialCenter.current.latitude, initialCenter.current.longitude],
+      zoom: 7,
+      minZoom: 3,
+      maxZoom: 18,
+      zoomControl: false,
+      attributionControl: false,
+    });
+    let tileFailures = 0;
+    let hasLoadedTiles = false;
+    const tiles = L.tileLayer(OPENSTREETMAP_TILES, {
+      minZoom: 3,
+      maxZoom: 19,
+      crossOrigin: true,
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    });
+
+    L.control.zoom({ position: "bottomleft" }).addTo(instance);
+    L.control
+      .attribution({ position: "bottomright", prefix: false })
+      .addTo(instance);
+
+    tiles.on("load", () => {
+      hasLoadedTiles = true;
+      onReadyRef.current();
+    });
+    tiles.on("tileerror", () => {
+      tileFailures += 1;
+      if (!hasLoadedTiles && tileFailures >= 4) {
+        onErrorRef.current("OPENSTREETMAP_TILES_FAILED");
       }
     });
-    instance.once("load", () => onReadyRef.current());
+    tiles.addTo(instance);
+
     instance.on("moveend", () => {
       const next = instance.getCenter();
-      const bounds = instance.getBounds();
-      const radiusKm = bounds
-        ? Math.min(
-            1000,
-            Math.max(10, next.distanceTo(bounds.getNorthEast()) / 1000),
-          )
-        : 150;
+      const radiusKm = Math.min(
+        1000,
+        Math.max(
+          10,
+          next.distanceTo(instance.getBounds().getNorthEast()) / 1000,
+        ),
+      );
       onViewportChangeRef.current(
         { latitude: next.lat, longitude: next.lng },
         radiusKm,
       );
     });
+
     map.current = instance;
+    tileLayer.current = tiles;
+
     return () => {
       markers.current.forEach((marker) => marker.remove());
       userMarker.current?.remove();
+      selectedRoute.current?.remove();
       instance.remove();
       map.current = null;
+      tileLayer.current = null;
     };
-  }, [accessToken]);
-
-  useEffect(() => {
-    const instance = map.current;
-    if (!instance || mode === currentMode.current) return;
-    currentMode.current = mode;
-    instance.setStyle(createRoadbookMapStyle(mode));
-  }, [mode]);
+  }, []);
 
   useEffect(() => {
     const instance = map.current;
     if (!instance) return;
+
     markers.current.forEach((marker) => marker.remove());
     const eventCounts = events.reduce<Record<string, number>>(
       (counts, event) => {
@@ -209,63 +170,94 @@ export function RoadbookMap({
       },
       {},
     );
+
     markers.current = venues.map((venue) => {
-      const element = markerElement(
-        venue,
-        venue.id === selectedVenue?.id,
-        eventCounts[venue.id] ?? 0,
-      );
-      element.addEventListener("click", () => onSelect(venue));
-      return new mapboxgl.Marker({ element, anchor: "bottom" })
-        .setLngLat([venue.longitude, venue.latitude])
-        .addTo(instance);
+      const eventCount = eventCounts[venue.id] ?? 0;
+      const marker = L.marker([venue.latitude, venue.longitude], {
+        icon: L.divIcon({
+          className: "roadbook-leaflet-marker-shell",
+          html: markerElement(
+            venue,
+            venue.id === selectedVenue?.id,
+            eventCount,
+          ),
+          iconSize: [43, 43],
+          iconAnchor: [10, 38],
+        }),
+        keyboard: true,
+        title: venue.name,
+        alt: `${venue.name}${eventCount > 0 ? `, ${eventCount} upcoming events` : ""}`,
+        riseOnHover: true,
+      });
+      marker.on("click", () => onSelectRef.current(venue));
+      return marker.addTo(instance);
     });
-  }, [events, onSelect, selectedVenue?.id, venues]);
+  }, [events, selectedVenue?.id, venues]);
 
   useEffect(() => {
     const instance = map.current;
     if (!instance) return;
+
     userMarker.current?.remove();
     if (!userPosition) return;
-    const dot = document.createElement("div");
-    dot.className = "roadbook-user-position";
-    dot.setAttribute("aria-label", "Your position");
-    userMarker.current = new mapboxgl.Marker({ element: dot })
-      .setLngLat([userPosition.longitude, userPosition.latitude])
-      .addTo(instance);
-    instance.easeTo({
-      center: [userPosition.longitude, userPosition.latitude],
-      zoom: Math.max(instance.getZoom(), 10),
-      duration: 850,
-    });
+
+    userMarker.current = L.circleMarker(
+      [userPosition.latitude, userPosition.longitude],
+      {
+        radius: 8,
+        weight: 3,
+        color: "#ffffff",
+        fillColor: "#e72d45",
+        fillOpacity: 1,
+        className: "roadbook-user-position",
+      },
+    ).addTo(instance);
+    instance.flyTo(
+      [userPosition.latitude, userPosition.longitude],
+      Math.max(instance.getZoom(), 10),
+      { duration: 0.85 },
+    );
   }, [userPosition]);
 
   useEffect(() => {
     const instance = map.current;
     if (!instance) return;
-    const draw = () => addSelectedRoute(instance, selectedVenue);
-    if (instance.isStyleLoaded()) draw();
-    else instance.once("style.load", draw);
-    return () => {
-      instance.off("style.load", draw);
-    };
-  }, [mode, selectedVenue]);
+
+    selectedRoute.current?.remove();
+    if (!selectedVenue?.routeGeoJson) {
+      selectedRoute.current = null;
+      return;
+    }
+
+    selectedRoute.current = L.polyline(
+      selectedVenue.routeGeoJson.coordinates.map(([longitude, latitude]) => [
+        latitude,
+        longitude,
+      ]),
+      {
+        color: "#e72d45",
+        weight: 5,
+        opacity: 0.9,
+        dashArray: "8 6",
+      },
+    ).addTo(instance);
+  }, [selectedVenue]);
 
   useEffect(() => {
     const instance = map.current;
     if (!instance || !selectedVenue) return;
-    instance.easeTo({
-      center: [selectedVenue.longitude, selectedVenue.latitude],
-      zoom: Math.max(instance.getZoom(), 11),
-      padding: { right: window.innerWidth >= 1024 ? 430 : 0 },
-      duration: 850,
-    });
+    instance.flyTo(
+      [selectedVenue.latitude, selectedVenue.longitude],
+      Math.max(instance.getZoom(), 11),
+      { duration: 0.85 },
+    );
   }, [selectedVenue]);
 
   return (
     <div
       ref={container}
-      className="absolute inset-0"
+      className="roadbook-leaflet-map absolute inset-0"
+      data-roadbook-mode={mode}
       aria-label="Capcar Roadbook map"
     />
   );

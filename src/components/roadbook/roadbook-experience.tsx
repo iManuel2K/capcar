@@ -9,7 +9,6 @@ import { RoadbookEventRail } from "@/components/roadbook/roadbook-event-rail";
 import { RoadbookMap } from "@/components/roadbook/roadbook-map";
 import { RoadbookModerationQueue } from "@/components/roadbook/roadbook-moderation-queue";
 import { RoadbookPosterButton } from "@/components/roadbook/roadbook-poster-button";
-import { RoadbookRasterFallback } from "@/components/roadbook/roadbook-raster-fallback";
 import { RoadbookThemeSwitcher } from "@/components/roadbook/roadbook-theme-switcher";
 import { RoadbookVenueDrawer } from "@/components/roadbook/roadbook-venue-drawer";
 import {
@@ -39,7 +38,6 @@ const defaultCenter: RoadbookCenter = { latitude: 50.1109, longitude: 8.6821 };
 
 export function RoadbookExperience() {
   const t = useTranslations("Roadbook");
-  const accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ?? "";
   const { vehicles } = useVehicles();
   const [vehicleId, setVehicleId] = useState<string>();
   const [venues, setVenues] = useState<RoadbookVenue[]>([]);
@@ -53,15 +51,7 @@ export function RoadbookExperience() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [mapError, setMapError] = useState("");
-  const [mapRenderer, setMapRenderer] = useState<"webgl" | "raster">(() => {
-    const canvas = document.createElement("canvas");
-    return canvas.getContext("webgl2", {
-      failIfMajorPerformanceCaveat: false,
-    })
-      ? "webgl"
-      : "raster";
-  });
-  const [mapReady, setMapReady] = useState(mapRenderer === "raster");
+  const [mapReady, setMapReady] = useState(false);
   const [eventsOpen, setEventsOpen] = useState(false);
   const [visits, setVisits] = useState(() =>
     typeof window === "undefined"
@@ -179,72 +169,25 @@ export function RoadbookExperience() {
     );
   }
 
-  if (!accessToken) {
-    return (
-      <div className="grid h-[calc(100dvh-4.5rem)] min-h-[38rem] place-items-center bg-[#0b0e0c] px-5 text-white">
-        <section className="max-w-lg rounded-[2rem] border border-white/10 bg-white/[0.035] p-7 text-center">
-          <MapPinned className="mx-auto size-7 text-[#ff667a]" />
-          <h1 className="mt-5 text-3xl font-medium tracking-[-0.04em]">
-            {t("setup.title")}
-          </h1>
-          <p className="mt-3 text-sm leading-6 text-white/48">
-            {t("setup.description")}
-          </p>
-          <code className="mt-5 block rounded-xl bg-black/30 px-3 py-2 text-xs text-white/65">
-            NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
-          </code>
-        </section>
-      </div>
-    );
-  }
-
   return (
     <div className="relative h-[calc(100dvh-4.5rem)] min-h-[38rem] overflow-hidden bg-[#0b0e0c] text-white sm:h-[calc(100dvh-5rem)]">
-      {mapRenderer === "webgl" && (
-        <RoadbookMap
-          accessToken={accessToken}
-          venues={venues}
-          events={events}
-          selectedVenue={selectedVenue}
-          mode={mode}
-          center={center}
-          userPosition={userPosition}
-          onSelect={setSelectedVenue}
-          onViewportChange={updateViewport}
-          onError={(message) => {
-            if (/webgl/i.test(message)) {
-              setMapRenderer("raster");
-              setMapReady(true);
-              setMapError("");
-              return;
-            }
-            setMapError(
-              /token|unauthorized|forbidden/i.test(message)
-                ? t("errors.mapToken")
-                : t("errors.mapUnavailable"),
-            );
-          }}
-          onReady={() => {
-            setMapReady(true);
-            setMapError("");
-          }}
-        />
-      )}
+      <RoadbookMap
+        venues={venues}
+        events={events}
+        selectedVenue={selectedVenue}
+        mode={mode}
+        center={center}
+        userPosition={userPosition}
+        onSelect={setSelectedVenue}
+        onViewportChange={updateViewport}
+        onError={() => setMapError(t("errors.mapUnavailable"))}
+        onReady={() => {
+          setMapReady(true);
+          setMapError("");
+        }}
+      />
 
-      {mapRenderer === "raster" && (
-        <RoadbookRasterFallback
-          accessToken={accessToken}
-          venues={venues}
-          selectedVenue={selectedVenue}
-          mode={mode}
-          center={center}
-          label={t("fallback.label")}
-          description={t("fallback.description")}
-          onSelect={setSelectedVenue}
-        />
-      )}
-
-      {mapRenderer !== "raster" && !mapReady && !mapError && (
+      {!mapReady && !mapError && (
         <div className="pointer-events-none absolute inset-0 z-10 grid place-items-center bg-[#0b0e0c]">
           <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.035] px-4 py-3 text-xs text-white/55">
             <RefreshCw className="size-4 animate-spin text-[#ff667a]" />
