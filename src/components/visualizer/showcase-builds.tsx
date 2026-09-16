@@ -17,6 +17,7 @@ export function ShowcaseBuilds() {
   const storyKey = `s${selected + 1}`;
   const parts = ["p1", "p2", "p3"].map((key) => data(`${storyKey}.${key}`));
   const steps = ["x1", "x2", "x3"].map((key) => data(`${storyKey}.${key}`));
+
   return (
     <section aria-label={data("label")} className="my-10">
       <IconicGallery />
@@ -91,3 +92,5 @@ export function ShowcaseBuilds() {
     </section>
   );
 }
+
+export default ShowcaseBuilds;
