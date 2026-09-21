@@ -7,13 +7,24 @@ import {
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { MarketingLanding } from "./marketing-landing";
+import { MarketingHeader } from "./marketing-header";
+import { SkipToContent } from "@/components/ui/skip-to-content";
 
 beforeEach(() => window.history.replaceState(null, "", "/"));
 afterEach(cleanup);
 
 describe("the connected homepage example", () => {
+  const renderPage = () =>
+    render(
+      <>
+        <SkipToContent />
+        <MarketingHeader />
+        <MarketingLanding />
+      </>,
+    );
+
   it("makes the product and its capability limits clear", () => {
-    render(<MarketingLanding />);
+    renderPage();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
       "Build the car you imagine.",
     );
@@ -22,7 +33,7 @@ describe("the connected homepage example", () => {
     ).toBeInTheDocument();
     expect(screen.queryByText("Verified builder")).not.toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "Skip to content" }),
+      screen.getByRole("link", { name: "Skip to main content" }),
     ).toHaveAttribute("href", "#main-content");
     const actions = screen.getByTestId("hero-actions");
     expect(
@@ -34,7 +45,7 @@ describe("the connected homepage example", () => {
   });
 
   it("connects the chosen part, estimated budget and planned passport record", () => {
-    render(<MarketingLanding />);
+    renderPage();
     fireEvent.click(
       screen.getByRole("button", { name: /Compare example offers/ }),
     );
@@ -63,7 +74,7 @@ describe("the connected homepage example", () => {
   });
 
   it("does not present an incomplete price as a final budget balance", () => {
-    render(<MarketingLanding />);
+    renderPage();
     fireEvent.click(screen.getByRole("tab", { name: "Parts comparison" }));
     fireEvent.click(
       screen.getByRole("button", { name: "Select this example" }),
@@ -78,7 +89,7 @@ describe("the connected homepage example", () => {
   });
 
   it("supports keyboard tabs and replaces one modification instead of duplicating it", () => {
-    render(<MarketingLanding />);
+    renderPage();
     const plan = screen.getByRole("tab", { name: "Build plan" });
     fireEvent.keyDown(plan, { key: "ArrowRight" });
     expect(screen.getByRole("tab", { name: "Parts comparison" })).toHaveFocus();
@@ -103,7 +114,7 @@ describe("the connected homepage example", () => {
 
   it("opens a direct view from a section link", () => {
     window.history.replaceState(null, "", "#demo-history");
-    render(<MarketingLanding />);
+    renderPage();
     expect(
       screen.getByRole("tab", { name: "Vehicle Passport" }),
     ).toHaveAttribute("aria-selected", "true");
@@ -111,7 +122,7 @@ describe("the connected homepage example", () => {
   });
 
   it("uses a native comparison range and a working mobile menu", () => {
-    render(<MarketingLanding />);
+    renderPage();
     const slider = screen.getByRole("slider");
     fireEvent.change(slider, { target: { value: "75" } });
     expect(slider).toHaveAttribute("aria-valuetext", "75% concept");

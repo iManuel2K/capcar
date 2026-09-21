@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowRight, ChevronDown, ChevronRight, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
@@ -16,6 +17,7 @@ const navigation = [
 ] as const;
 
 export function MarketingHeader() {
+  const pathname = usePathname() ?? "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const t = useTranslations("Navigation");
   const l = useTranslations("Launch");
@@ -58,87 +60,106 @@ export function MarketingHeader() {
     };
   }, [menuOpen]);
 
+  const active = (href: string) => {
+    if (href.includes("#")) return false;
+    const target = href.split("#")[0] || "/";
+    return pathname === target || pathname.startsWith(`${target}/`);
+  };
+
   return (
     <>
-      <header className="mx-auto flex h-18 w-full max-w-[1500px] items-center justify-between px-5 text-[#0e2d30] sm:h-20 sm:px-8">
-        <Link
-          href="/"
-          aria-label={t("home")}
-          className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6d0101]"
-        >
-          <CapcarWordmark glow={false} />
-        </Link>
+      <header className="sticky top-0 z-[80] border-b border-[#0e2d30]/10 bg-[#e8e6d7]/95 text-[#0e2d30] shadow-[0_10px_35px_rgba(14,45,48,0.05)] backdrop-blur-xl">
+        <div className="mx-auto flex h-18 w-full max-w-[1500px] items-center justify-between gap-5 px-5 sm:h-20 sm:px-8">
+          <Link
+            href="/"
+            aria-label={t("home")}
+            className="shrink-0 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6d0101]"
+          >
+            <CapcarWordmark glow={false} />
+          </Link>
 
-        <nav
-          aria-label={t("main")}
-          className="hidden items-center gap-5 text-sm text-[#0e2d30]/75 xl:flex"
-        >
-          {navigation.map((item) => (
+          <nav
+            aria-label={t("main")}
+            className="hidden items-center gap-1 text-sm text-[#0e2d30]/68 xl:flex"
+          >
+            {navigation.map((item) => (
+              <Link
+                key={item.label}
+                aria-current={active(item.href) ? "page" : undefined}
+                className={`inline-flex min-h-11 items-center rounded-full px-3 transition focus-visible:outline-2 focus-visible:outline-offset-2 ${
+                  active(item.href)
+                    ? "bg-[#0e2d30]/7 font-medium text-[#0e2d30]"
+                    : "hover:bg-[#0e2d30]/5 hover:text-[#6d0101]"
+                }`}
+                href={item.href}
+              >
+                {l(`nav.${item.label}`)}
+              </Link>
+            ))}
+            <details ref={explore} className="relative z-40">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1 rounded-full px-3 transition hover:bg-[#0e2d30]/5 focus-visible:outline-2 [&::-webkit-details-marker]:hidden">
+                {l("nav.explore")}
+                <ChevronDown className="size-3" aria-hidden="true" />
+              </summary>
+              <div className="absolute top-[calc(100%+.5rem)] right-0 min-w-60 rounded-2xl border border-[#0e2d30]/14 bg-[#f5f2e8] p-2 shadow-[0_24px_70px_rgba(14,45,48,0.18)]">
+                {[
+                  ["conceptStudio", "/studio"],
+                  ["soundStudio", "/sound-studio"],
+                  ["roadbook", "/roadbook"],
+                  ["marketplace", "/marketplace"],
+                  ["roadmap", "/roadmap"],
+                  ["faq", "/#faq"],
+                ].map(([label, href]) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    aria-current={active(href) ? "page" : undefined}
+                    onClick={() => explore.current?.removeAttribute("open")}
+                    className={`flex min-h-11 items-center rounded-xl px-3 transition focus-visible:outline-2 ${
+                      active(href)
+                        ? "bg-[#0e2d30] text-[#e8e6d7]"
+                        : "hover:bg-[#0e2d30]/6"
+                    }`}
+                  >
+                    {footer(label)}
+                  </Link>
+                ))}
+              </div>
+            </details>
+          </nav>
+
+          <div className="hidden 2xl:block">
+            <GlobalPartsSearch />
+          </div>
+          <div className="hidden items-center gap-2 xl:flex">
+            <LanguageSelector compact />
             <Link
-              key={item.label}
-              className="inline-flex min-h-11 items-center rounded transition hover:text-[#6d0101] focus-visible:outline-2 focus-visible:outline-offset-4"
-              href={item.href}
+              href="/login"
+              aria-current={pathname === "/login" ? "page" : undefined}
+              className="inline-flex min-h-11 items-center rounded-full px-3 text-sm transition hover:bg-[#0e2d30]/5 focus-visible:outline-2"
             >
-              {l(`nav.${item.label}`)}
+              {t("signIn")}
             </Link>
-          ))}
-          <details ref={explore} className="relative z-40">
-            <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1 rounded focus-visible:outline-2 [&::-webkit-details-marker]:hidden">
-              {l("nav.explore")}
-              <ChevronDown className="size-3" aria-hidden="true" />
-            </summary>
-            <div className="absolute top-full right-0 min-w-56 rounded-xl border border-[#0e2d30]/20 bg-[#f5f2e8] p-2 shadow-lg">
-              {[
-                ["conceptStudio", "/studio"],
-                ["soundStudio", "/sound-studio"],
-                ["roadbook", "/roadbook"],
-                ["marketplace", "/marketplace"],
-                ["roadmap", "/roadmap"],
-                ["faq", "/#faq"],
-              ].map(([label, href]) => (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={() => explore.current?.removeAttribute("open")}
-                  className="flex min-h-11 items-center rounded-lg px-3 hover:bg-[#0e2d30]/5 focus-visible:outline-2"
-                >
-                  {footer(label)}
-                </Link>
-              ))}
-            </div>
-          </details>
-        </nav>
+            <Link
+              href="/register"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0e2d30] px-4 text-sm font-medium text-[#e8e6d7] transition hover:-translate-y-0.5 hover:bg-[#6d0101]"
+            >
+              {l("start")} <ArrowRight className="size-4" />
+            </Link>
+          </div>
 
-        <div className="hidden 2xl:block">
-          <GlobalPartsSearch />
-        </div>
-        <div className="hidden items-center gap-2 xl:flex">
-          <LanguageSelector compact />
-          <Link
-            href="/login"
-            className="inline-flex min-h-11 items-center rounded px-2 text-sm focus-visible:outline-2"
+          <button
+            ref={opener}
+            type="button"
+            aria-label={t("open")}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-marketing-navigation"
+            onClick={() => setMenuOpen(true)}
+            className="grid size-11 place-items-center rounded-full border border-[#0e2d30]/12 text-[#0e2d30] transition hover:bg-[#0e2d30]/5 xl:hidden"
           >
-            {t("signIn")}
-          </Link>
-          <Link
-            href="/register"
-            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0e2d30] px-4 text-sm font-medium text-[#e8e6d7] transition hover:-translate-y-0.5 hover:bg-[#6d0101]"
-          >
-            {l("start")} <ArrowRight className="size-4" />
-          </Link>
+            <Menu className="size-5" aria-hidden="true" />
+          </button>
         </div>
-
-        <button
-          ref={opener}
-          type="button"
-          aria-label={t("open")}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-marketing-navigation"
-          onClick={() => setMenuOpen(true)}
-          className="grid size-11 place-items-center rounded-full border border-[#0e2d30]/12 text-[#0e2d30] transition hover:bg-[#0e2d30]/5 xl:hidden"
-        >
-          <Menu className="size-5" aria-hidden="true" />
-        </button>
       </header>
 
       {menuOpen && (
@@ -149,7 +170,7 @@ export function MarketingHeader() {
             event.preventDefault();
             setMenuOpen(false);
           }}
-          className="fixed inset-0 z-50 m-0 h-dvh max-h-none w-screen max-w-none overflow-hidden border-0 bg-transparent p-0 backdrop:bg-transparent"
+          className="fixed inset-0 z-[100] m-0 h-dvh max-h-none w-screen max-w-none overflow-hidden border-0 bg-transparent p-0 backdrop:bg-transparent"
         >
           <button
             type="button"

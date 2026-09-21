@@ -1,10 +1,7 @@
 "use client";
 import { useTranslations } from "next-intl";
-import { usePathname } from "next/navigation";
 export function SkipToContent() {
   const t = useTranslations("Hardening.Accessibility");
-  const pathname = usePathname();
-  if (pathname === "/") return null;
   return (
     <a
       href="#main-content"

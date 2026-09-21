@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 
 import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-registration";
 import { NotificationBootstrap } from "@/components/notifications/notification-bootstrap";
+import { SiteHeader } from "@/components/marketing/site-header";
 import { SkipToContent } from "@/components/ui/skip-to-content";
 
 import "./globals.css";
@@ -35,6 +36,7 @@ export default async function RootLayout({
       <body className="min-h-dvh font-sans antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SkipToContent />
+          <SiteHeader />
           {children}
           <NotificationBootstrap />
           <ServiceWorkerRegistration />

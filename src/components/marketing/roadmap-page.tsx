@@ -12,7 +12,6 @@ import {
 import { useTranslations } from "next-intl";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
-import { MarketingHeader } from "@/components/marketing/marketing-header";
 
 const stages = [
   {
@@ -85,7 +84,6 @@ export function RoadmapPage() {
 
   return (
     <div className="min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
-      <MarketingHeader />
       <main>
         <section className="px-2 pb-2 sm:px-4 sm:pb-4 lg:px-6 lg:pb-6">
           <div className="relative mx-auto grid min-h-[540px] max-w-[1500px] overflow-hidden rounded-[1.75rem] bg-[#0e2d30] text-[#e8e6d7] sm:min-h-[620px] sm:rounded-[2.5rem] lg:grid-cols-[1.12fr_0.88fr]">

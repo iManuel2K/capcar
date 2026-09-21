@@ -146,6 +146,9 @@ export function RoadbookMap({
   const userMarker = useRef<L.CircleMarker | null>(null);
   const selectedRoute = useRef<Polyline | null>(null);
   const initialCenter = useRef(center);
+  const initialStyleKey = useRef(
+    mapStyle ?? MODE_TO_MAP_STYLE[mode] ?? "midnight-dark",
+  );
   const onSelectRef = useRef(onSelect);
   const onViewportChangeRef = useRef(onViewportChange);
   const onErrorRef = useRef(onError);
@@ -161,10 +164,8 @@ export function RoadbookMap({
   useEffect(() => {
     if (!container.current || map.current) return;
 
-    const initialStyleKey =
-      mapStyle ?? MODE_TO_MAP_STYLE[mode] ?? "midnight-dark";
     const currentStyleConfig =
-      ROADBOOK_MAP_STYLES[initialStyleKey] ??
+      ROADBOOK_MAP_STYLES[initialStyleKey.current] ??
       ROADBOOK_MAP_STYLES["midnight-dark"];
 
     const instance = L.map(container.current, {
@@ -177,6 +178,7 @@ export function RoadbookMap({
     });
 
     let tileFailures = 0;
+    let usingFallback = false;
     let hasLoadedTiles = false;
     const tiles = L.tileLayer(currentStyleConfig.url, {
       minZoom: 3,
@@ -197,6 +199,12 @@ export function RoadbookMap({
     tiles.on("tileerror", () => {
       tileFailures += 1;
       if (!hasLoadedTiles && tileFailures >= 4) {
+        if (!usingFallback) {
+          usingFallback = true;
+          tileFailures = 0;
+          tiles.setUrl(ROADBOOK_MAP_STYLES["monochrome-light"].url);
+          return;
+        }
         onErrorRef.current("MAP_TILES_FAILED");
       }
     });

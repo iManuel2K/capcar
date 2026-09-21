@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
-
 export function LegalShell({
   eyebrow,
   title,
@@ -20,19 +18,13 @@ export function LegalShell({
   const documentLayout = variant === "document";
 
   return (
-    <main className="min-h-dvh bg-[#e8e6d7] px-4 py-5 text-[#0e2d30] sm:px-8 sm:py-8">
+    <main
+      id="main-content"
+      className="min-h-[calc(100dvh-4.5rem)] bg-[#e8e6d7] px-4 py-8 text-[#0e2d30] sm:min-h-[calc(100dvh-5rem)] sm:px-8 sm:py-12"
+    >
       <div className="mx-auto max-w-5xl">
-        <header className="flex items-center justify-between gap-5">
-          <Link href="/" aria-label={t("home")}>
-            <CapcarWordmark glow={false} />
-          </Link>
-          <Link href="/" className="text-sm font-medium text-[#0e2d30]/60">
-            {t("back")}
-          </Link>
-        </header>
-
         {documentLayout ? (
-          <section className="mx-auto mt-16 max-w-3xl sm:mt-24">
+          <section className="mx-auto mt-8 max-w-3xl sm:mt-12">
             <p className="text-xs font-semibold tracking-[0.18em] text-[#9d5f4c] uppercase">
               {eyebrow}
             </p>
@@ -49,7 +41,7 @@ export function LegalShell({
             </aside>
           </section>
         ) : (
-          <section className="mt-10 overflow-hidden rounded-[2rem] bg-[#0e2d30] p-6 text-[#e8e6d7] sm:mt-14 sm:rounded-[2.5rem] sm:p-12 lg:p-16">
+          <section className="overflow-hidden rounded-[2rem] bg-[#0e2d30] p-6 text-[#e8e6d7] sm:rounded-[2.5rem] sm:p-12 lg:p-16">
             <p className="text-xs font-semibold tracking-[0.18em] text-[#bf8269] uppercase">
               {eyebrow}
             </p>

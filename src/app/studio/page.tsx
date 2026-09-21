@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { ConceptStudio } from "@/components/visualizer/concept-studio";
 
@@ -11,10 +10,7 @@ export default function StudioPage() {
   return (
     <main className="min-h-dvh bg-[#e8e6d7] px-5 py-8 text-[#0e2d30] sm:px-8">
       <div className="mx-auto max-w-6xl">
-        <Link className="inline-flex min-h-11 items-center underline" href="/">
-          ← Back to Capcar
-        </Link>
-        <p className="mt-10 text-xs font-semibold tracking-widest uppercase">
+        <p className="mt-4 text-xs font-semibold tracking-widest uppercase">
           Capcar / Concept studio
         </p>
         <h1 className="mt-4 text-4xl font-medium tracking-tight sm:text-6xl">

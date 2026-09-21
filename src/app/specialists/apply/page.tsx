@@ -1,7 +1,6 @@
 import { SpecialistProfileEditor } from "@/components/community/specialist-profile-editor";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { MarketingHeader } from "@/components/marketing/marketing-header";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { SpecialistApplications } from "@/components/community/specialist-applications";
 import { SignInCard } from "@/components/community/sign-in-card";
@@ -17,7 +16,6 @@ export default async function Page() {
   ]);
   return (
     <div className="min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
-      <MarketingHeader />
       <main className="mx-auto max-w-5xl px-5 py-12 sm:py-20">
         <h1 className="mb-8 text-4xl font-medium tracking-tight sm:text-6xl">
           {t("title")}

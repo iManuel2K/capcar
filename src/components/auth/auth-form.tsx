@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ArrowLeft,
   ArrowRight,
   CheckCircle2,
   Eye,
@@ -16,8 +15,6 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { FormEvent, useEffect, useState } from "react";
 
-import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
-import { LanguageSelector } from "@/components/i18n/language-selector";
 import { createClient } from "@/lib/supabase/client";
 
 type AuthMode = "login" | "register" | "forgot" | "reset";
@@ -146,24 +143,12 @@ export function AuthForm({
   const needsPassword = mode !== "forgot";
 
   return (
-    <main className="relative min-h-dvh overflow-hidden bg-[#080808] px-4 py-5 text-[#f5f2ed] sm:px-7 sm:py-7">
+    <main
+      id="main-content"
+      className="relative min-h-[calc(100dvh-4.5rem)] overflow-hidden bg-[#080808] px-4 py-5 text-[#f5f2ed] sm:min-h-[calc(100dvh-5rem)] sm:px-7 sm:py-7"
+    >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_17%,rgba(231,45,69,0.2),transparent_27%),radial-gradient(circle_at_18%_88%,rgba(231,45,69,0.1),transparent_24%)]" />
       <div className="relative mx-auto flex min-h-[calc(100dvh-2.5rem)] max-w-7xl flex-col">
-        <header className="flex items-center justify-between">
-          <Link href="/" aria-label={t("home")}>
-            <CapcarWordmark />
-          </Link>
-          <div className="flex items-center gap-3">
-            <LanguageSelector compact />
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-xs text-white/45 transition hover:text-white"
-            >
-              <ArrowLeft className="size-3.5" /> {t("back")}
-            </Link>
-          </div>
-        </header>
-
         <div className="grid flex-1 items-center gap-10 py-10 lg:grid-cols-[1fr_0.78fr] lg:py-16">
           <section className="hidden max-w-xl lg:block">
             <p className="text-xs font-semibold tracking-[0.18em] text-[#ff667a] uppercase">

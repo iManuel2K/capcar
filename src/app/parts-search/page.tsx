@@ -4,7 +4,6 @@ import { ArrowRight, BadgeCheck, PackageSearch } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { SiteFooter } from "@/components/marketing/site-footer";
-import { MarketingHeader } from "@/components/marketing/marketing-header";
 import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 import { searchCatalogParts } from "@/features/parts/part-catalog";
 
@@ -28,7 +27,6 @@ export default async function PartsSearchPage({
   const results = searchCatalogParts(query);
   return (
     <div className="min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
-      <MarketingHeader />
       <main className="mx-auto max-w-[1200px] px-5 pt-10 pb-20 sm:px-8 sm:pt-16">
         <p className="text-xs font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
           {t("eyebrow")}

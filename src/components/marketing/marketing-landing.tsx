@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import {
   ArrowRight,
   BadgeCheck,
@@ -10,23 +11,19 @@ import {
   Wrench,
 } from "lucide-react";
 
-import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { FitmentLookup } from "@/components/marketing/fitment-lookup";
 import { MarketingFaq } from "@/components/marketing/marketing-faq";
 import { MarketingHero } from "@/components/marketing/marketing-hero";
 import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
+import { SiteFooter } from "@/components/marketing/site-footer";
 import { VisionRoadmapSection } from "@/components/marketing/vision-roadmap-section";
 import { ConceptStudio } from "@/components/visualizer/concept-studio";
 
 export function MarketingLanding() {
+  const t = useTranslations("Home");
+
   return (
     <div className="min-h-dvh overflow-hidden bg-[#e8e6d7] text-[#0e2d30]">
-      <a
-        href="#main-content"
-        className="fixed top-3 left-3 z-[100] -translate-y-20 rounded-full bg-[#0e2d30] px-5 py-3 text-sm font-semibold text-white transition focus:translate-y-0"
-      >
-        Skip to content
-      </a>
       <main id="main-content">
         <MarketingHero />
         <ProductDashboardPreview />
@@ -38,59 +35,58 @@ export function MarketingLanding() {
             id="concept-heading"
             className="mb-4 text-4xl font-medium tracking-tight"
           >
-            Explore a different direction.
+            {t("conceptTitle")}
           </h2>
           <p className="mb-8 max-w-xl text-base leading-7">
-            Try our stylized concept lab. Your real car and saved builds stay
-            untouched.
+            {t("conceptDescription")}
           </p>
           <ConceptStudio />
           <Link
             href="/studio"
             className="mt-6 inline-flex min-h-11 items-center underline"
           >
-            Open the concept studio →
+            {t("openStudio")}
           </Link>
         </section>
 
         <section id="platform" className="bg-[#050306] text-[#e8e6d7]">
           <div className="mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-32">
             <SectionHeading
-              eyebrow="The platform"
-              title="One car. One system."
-              description="Maintain it. Plan it. Build it."
+              eyebrow={t("platformEyebrow")}
+              title={t("platformTitle")}
+              description={t("platformDescription")}
               tone="dark"
             />
 
             <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 lg:grid-cols-12">
               <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-7">
-                <CardLabel icon={CircleGauge}>Garage</CardLabel>
+                <CardLabel icon={CircleGauge}>{t("garage")}</CardLabel>
                 <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
-                  Your car, fully documented.
+                  {t("garageHeadline")}
                 </h3>
                 <GaragePreview />
               </article>
 
               <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-5">
-                <CardLabel icon={Wrench}>Maintenance</CardLabel>
+                <CardLabel icon={Wrench}>{t("maintenance")}</CardLabel>
                 <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
-                  Stay ahead of service.
+                  {t("maintenanceHeadline")}
                 </h3>
                 <MaintenancePreview />
               </article>
 
               <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-5">
-                <CardLabel icon={Layers3}>Build</CardLabel>
+                <CardLabel icon={Layers3}>{t("build")}</CardLabel>
                 <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
-                  Plan before you buy.
+                  {t("buildHeadline")}
                 </h3>
                 <BuildPreview />
               </article>
 
               <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-7">
-                <CardLabel icon={ShoppingBag}>Parts</CardLabel>
+                <CardLabel icon={ShoppingBag}>{t("parts")}</CardLabel>
                 <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
-                  Choose with confidence.
+                  {t("partsHeadline")}
                 </h3>
                 <PartsPreview />
               </article>
@@ -101,28 +97,28 @@ export function MarketingLanding() {
         <FitmentSection />
 
         <section
-          aria-label="Vehicle details"
+          aria-label={t("vehicleDetails")}
           className="border-y border-[#0e2d30]/8 bg-[#88988d] py-5"
         >
           <div
             tabIndex={0}
-            aria-label="Vehicle detail image carousel"
+            aria-label={t("carousel")}
             className="mx-auto flex max-w-[1500px] snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain rounded-2xl px-5 pb-1 focus-visible:ring-3 focus-visible:ring-[#0e2d30] focus-visible:outline-none sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-8"
           >
             <PhotoDetail
               src="/capcar-hero-bmw-e90.jpeg"
-              alt="Black BMW E90 side profile"
-              label="The car"
+              alt={t("altCar")}
+              label={t("car")}
             />
             <PhotoDetail
               src="/capcar-detail-rain.jpeg"
-              alt="Rain on the black BMW E90"
-              label="The details"
+              alt={t("altRain")}
+              label={t("details")}
             />
             <PhotoDetail
               src="/capcar-detail-distance.jpeg"
-              alt="Black BMW E90 photographed through foliage"
-              label="The history"
+              alt={t("altDistance")}
+              label={t("history")}
             />
           </div>
         </section>
@@ -132,25 +128,25 @@ export function MarketingLanding() {
           className="mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-36"
         >
           <SectionHeading
-            eyebrow="Community builds"
-            title="Real plans. Measurable progress."
-            description="Builds with mileage, parts and total cost kept visible."
+            eyebrow={t("projectsEyebrow")}
+            title={t("projectsTitle")}
+            description={t("projectsDescription")}
           />
 
           <div
             tabIndex={0}
-            aria-label="Community build carousel"
+            aria-label={t("projectCarousel")}
             className="-mx-5 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain rounded-2xl px-5 pb-2 focus-visible:ring-3 focus-visible:ring-[#6d0101] focus-visible:outline-none sm:mx-0 sm:mt-14 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0"
           >
             <ProjectCard
               image="/capcar-hero-bmw-vision.png"
-              name="Project Street Terrorist"
+              name="Project Streetline"
               vehicle="2011 BMW 318i · E90"
               direction="Street OEM+"
-              status="In progress"
-              stage="Stage 2 of 4"
+              status={t("inProgress")}
+              stage={t("stageOf", { current: 2, total: 4 })}
               kilometres="148,200 km"
-              parts="8 parts"
+              parts={t("partCount", { count: 8 })}
               cost="€3,480"
             />
             <ProjectCard
@@ -158,10 +154,10 @@ export function MarketingLanding() {
               name="Project Night Shift"
               vehicle="Ford F-150"
               direction="Street overland"
-              status="Concept"
-              stage="Stage 1 of 4"
+              status={t("concept")}
+              stage={t("stageOf", { current: 1, total: 4 })}
               kilometres="63,400 km"
-              parts="14 parts"
+              parts={t("partCount", { count: 14 })}
               cost="€8,920"
             />
             <ProjectCard
@@ -169,10 +165,10 @@ export function MarketingLanding() {
               name="Project Blackline"
               vehicle="Mercedes-Benz E-Class · W213"
               direction="Executive OEM+"
-              status="Concept"
-              stage="Stage 1 of 3"
+              status={t("concept")}
+              stage={t("stageOf", { current: 1, total: 3 })}
               kilometres="78,900 km"
-              parts="6 parts"
+              parts={t("partCount", { count: 6 })}
               cost="€4,760"
             />
             <ProjectCard
@@ -180,10 +176,10 @@ export function MarketingLanding() {
               name="Project Redline"
               vehicle="Volkswagen Golf GTI TCR"
               direction="Fast road"
-              status="Concept"
-              stage="Stage 2 of 5"
+              status={t("concept")}
+              stage={t("stageOf", { current: 2, total: 5 })}
               kilometres="54,800 km"
-              parts="11 parts"
+              parts={t("partCount", { count: 11 })}
               cost="€6,340"
             />
           </div>
@@ -200,20 +196,20 @@ export function MarketingLanding() {
               <span className="h-1 w-16 rounded-full bg-[#6d0101]" />
               <div>
                 <h2 className="text-4xl leading-[0.94] font-medium tracking-[-0.055em] sm:text-7xl sm:tracking-[-0.06em] lg:text-8xl">
-                  Your garage starts here.
+                  {t("ctaTitle")}
                 </h2>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="/register"
                     className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-[#6d0101] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#830705]"
                   >
-                    Open your garage <ArrowRight className="size-4" />
+                    {t("openGarage")} <ArrowRight className="size-4" />
                   </Link>
                   <a
                     href="#live-demo"
                     className="inline-flex min-h-13 items-center justify-center rounded-full border border-white/12 px-6 text-sm font-medium text-white/65 transition hover:border-white/25 hover:text-white"
                   >
-                    Live demo
+                    {t("liveDemo")}
                   </a>
                 </div>
               </div>
@@ -222,25 +218,13 @@ export function MarketingLanding() {
         </section>
       </main>
 
-      <footer className="mx-auto flex max-w-[1500px] flex-col justify-between gap-7 px-5 py-12 text-[#0e2d30] sm:flex-row sm:items-center sm:px-8">
-        <CapcarWordmark glow={false} />
-        <p className="max-w-xl text-xs leading-5 text-[#0e2d30]/48">
-          Confirm fitment, safety requirements and legal approval before
-          installation.
-        </p>
-        <div className="flex items-center gap-5 text-sm font-medium text-[#0e2d30]/75">
-          <Link href="/roadmap">Roadmap</Link>
-          <Link href="/#faq">FAQ</Link>
-          <Link href="/privacy">Privacy</Link>
-          <Link href="/imprint">Imprint</Link>
-          <Link href="/register">Open garage →</Link>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
 
 function FitmentSection() {
+  const t = useTranslations("Home");
   return (
     <section
       id="fitment"
@@ -249,19 +233,19 @@ function FitmentSection() {
       <div className="mx-auto grid max-w-[1500px] gap-10 px-5 py-16 sm:px-8 sm:py-32 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <div>
           <p className="text-xs font-semibold tracking-[0.2em] text-[#0e2d30]/68 uppercase">
-            Fitment
+            {t("fitment")}
           </p>
           <h2 className="mt-4 text-4xl leading-[0.92] font-medium tracking-[-0.055em] sm:mt-5 sm:text-7xl">
-            Buy the right part.
+            {t("fitmentTitle")}
           </h2>
           <p className="mt-6 max-w-md text-base leading-7 text-[#0e2d30]/72">
-            Compatibility and requirements before checkout.
+            {t("fitmentDescription")}
           </p>
           <Link
             href="/register"
             className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#6d0101] px-5 text-sm font-semibold text-[#e8e6d7] transition hover:-translate-y-0.5 hover:bg-[#050306]"
           >
-            Start with your car <ArrowRight className="size-4" />
+            {t("startCar")} <ArrowRight className="size-4" />
           </Link>
         </div>
         <FitmentLookup />
@@ -317,6 +301,7 @@ function CardLabel({
 }
 
 function GaragePreview() {
+  const t = useTranslations("Home");
   return (
     <div className="mt-9 rounded-2xl border border-white/8 bg-[#050306] p-5">
       <div className="flex items-center justify-between">
@@ -325,25 +310,26 @@ function GaragePreview() {
           <p className="mt-2 text-xl font-medium">2011 BMW 318i</p>
         </div>
         <span className="rounded-full border border-[#6d0101]/30 bg-[#6d0101]/10 px-3 py-1.5 text-xs text-[#bf8269]">
-          Active
+          {t("active")}
         </span>
       </div>
       <div className="mt-8 grid grid-cols-3 divide-x divide-white/8">
-        <PreviewStat label="Platform" value="E90" />
-        <PreviewStat label="Mileage" value="148,200" />
-        <PreviewStat label="Builds" value="1 active" />
+        <PreviewStat label={t("platform")} value="E90" />
+        <PreviewStat label={t("mileage")} value="148,200" />
+        <PreviewStat label={t("builds")} value={t("activeCount")} />
       </div>
     </div>
   );
 }
 
 function MaintenancePreview() {
+  const t = useTranslations("Home");
   return (
     <div className="mt-9 space-y-2">
       {[
-        ["Brake fluid", "Due now", "text-[#bf8269]"],
-        ["Engine oil", "1,800 km", "text-amber-300"],
-        ["Cabin filter", "Complete", "text-emerald-300"],
+        [t("brakeFluid"), t("dueNow"), "text-[#bf8269]"],
+        [t("engineOil"), "1,800 km", "text-amber-300"],
+        [t("cabinFilter"), t("complete"), "text-emerald-300"],
       ].map(([name, state, color]) => (
         <div
           key={name}
@@ -358,34 +344,36 @@ function MaintenancePreview() {
 }
 
 function BuildPreview() {
+  const t = useTranslations("Home");
   return (
     <div className="mt-9 rounded-2xl border border-white/8 bg-[#050306] p-5">
       <div className="flex items-center justify-between">
         <span className="font-medium">Stealth Rear</span>
-        <span className="text-xs text-white/36">Planning</span>
+        <span className="text-xs text-white/36">{t("planning")}</span>
       </div>
       <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/8">
         <div className="h-full w-2/3 rounded-full bg-[#6d0101]" />
       </div>
       <div className="mt-7 grid grid-cols-2 gap-2">
-        <PreviewStat label="Budget" value="€1,200" />
-        <PreviewStat label="Planned" value="€804" />
+        <PreviewStat label={t("budget")} value="€1,200" />
+        <PreviewStat label={t("planned")} value="€804" />
       </div>
     </div>
   );
 }
 
 function PartsPreview() {
+  const t = useTranslations("Home");
   return (
     <div className="mt-9 grid gap-3 sm:grid-cols-2">
       <div className="rounded-2xl border border-white/8 bg-[#050306] p-5">
         <BadgeCheck className="size-5 text-emerald-300" />
-        <p className="mt-8 text-xs text-white/34">Vehicle match</p>
+        <p className="mt-8 text-xs text-white/34">{t("vehicleMatch")}</p>
         <p className="mt-2 font-medium">E90 · 2011 · Sedan</p>
       </div>
       <div className="rounded-2xl border border-white/8 bg-[#050306] p-5">
         <Euro className="size-5 text-[#bf8269]" />
-        <p className="mt-8 text-xs text-white/34">Delivered from</p>
+        <p className="mt-8 text-xs text-white/34">{t("deliveredFrom")}</p>
         <p className="mt-2 font-medium">€248</p>
       </div>
     </div>
@@ -439,11 +427,12 @@ function ProjectCard({
   parts: string;
   cost: string;
 }) {
+  const t = useTranslations("Home");
   return (
     <article className="group relative min-h-[400px] w-[86vw] max-w-[620px] shrink-0 snap-center overflow-hidden rounded-[1.6rem] border border-[#0e2d30]/12 bg-[#050306] text-white sm:min-h-[510px] sm:w-auto sm:max-w-none sm:rounded-[2rem]">
       <Image
         src={image}
-        alt={`${vehicle}, ${name} project`}
+        alt={t("projectAlt", { vehicle, name })}
         fill
         sizes="(min-width: 640px) 50vw, 86vw"
         className="object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
@@ -456,7 +445,7 @@ function ProjectCard({
         </span>
         <span
           className={`rounded-full border px-3 py-1.5 text-xs font-medium backdrop-blur-xl ${
-            status === "In progress"
+            status === t("inProgress")
               ? "border-[#bf8269]/35 bg-[#6d0101]/45 text-[#e8e6d7]"
               : "border-white/14 bg-black/45 text-white/58"
           }`}
@@ -471,14 +460,14 @@ function ProjectCard({
           {name}
         </h3>
         <div className="mt-5 grid grid-cols-3 gap-2 border-t border-white/12 pt-4">
-          <ProjectMetric label="Logged" value={kilometres} />
-          <ProjectMetric label="Parts" value={parts} />
-          <ProjectMetric label="Build cost" value={cost} />
+          <ProjectMetric label={t("logged")} value={kilometres} />
+          <ProjectMetric label={t("partsMetric")} value={parts} />
+          <ProjectMetric label={t("buildCost")} value={cost} />
         </div>
         <div className="mt-4 flex items-center justify-between text-[11px] text-white/68">
           <span>{stage}</span>
-          <span className="inline-flex items-center gap-1.5 text-emerald-100">
-            <BadgeCheck className="size-3.5" /> Verified builder
+          <span className="inline-flex items-center rounded-full border border-white/12 bg-black/30 px-2.5 py-1 text-[10px] tracking-[0.08em] text-white/64 uppercase">
+            {t("demoBuild")}
           </span>
         </div>
       </div>
