@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
       "form-action 'self'",
       `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://static.sketchfab.com`,
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://*.sketchfab.com https://*.supabase.co https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.tile.opentopomap.org https://server.arcgisonline.com https://api.mapbox.com",
+      "img-src 'self' data: blob: https://*.sketchfab.com https://*.supabase.co https://*.tile.openstreetmap.org https://*.tile.opentopomap.org https://server.arcgisonline.com https://api.mapbox.com",
       "font-src 'self' data:",
       "connect-src 'self' https://*.supabase.co https://*.sketchfab.com https://api.mapbox.com",
       "frame-src https://sketchfab.com https://*.sketchfab.com",
