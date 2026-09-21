@@ -22,11 +22,16 @@
       "autobahn_context": "Autobahn context"
     },
     "modes": {
-      "label": "Map appearance",
-      "workshop_cream": "Workshop Cream",
-      "petrol_night": "Petrol Night",
-      "blueprint": "Blueprint",
-      "touring_clay": "Touring Clay"
+      "label": "City map style",
+      "konstanz": "Konstanz",
+      "reykjavik": "Reykjavík",
+      "lissabon": "Lissabon",
+      "wien": "Wien",
+      "zurich": "Zürich",
+      "venedig": "Venedig",
+      "kyoto": "Kyoto",
+      "marrakesch": "Marrakesch",
+      "tokyo": "Tokyo"
     },
     "setup": {
       "title": "Roadbook needs its map token.",

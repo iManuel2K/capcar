@@ -44,7 +44,7 @@ export function RoadbookExperience() {
   const [events, setEvents] = useState<RoadbookEvent[]>([]);
   const [selectedVenue, setSelectedVenue] = useState<RoadbookVenue>();
   const [categories, setCategories] = useState<RoadbookCategory[]>([]);
-  const [mode, setMode] = useState<RoadbookMapMode>("petrol_night");
+  const [mode, setMode] = useState<RoadbookMapMode>("tokyo");
   const [center, setCenter] = useState(defaultCenter);
   const [radiusKm, setRadiusKm] = useState(350);
   const [userPosition, setUserPosition] = useState<RoadbookCenter>();
@@ -224,6 +224,7 @@ export function RoadbookExperience() {
           onChange={setMode}
           label={t("modes.label")}
           labels={modeLabels}
+          placement="top"
         />
       </div>
 

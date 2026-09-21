@@ -78,21 +78,83 @@
   transition: filter 240ms ease;
 }
 
-.roadbook-leaflet-map[data-roadbook-mode="workshop_cream"] .leaflet-tile-pane {
-  filter: sepia(0.22) saturate(0.78) brightness(1.02) contrast(0.94);
+.roadbook-leaflet-map[data-roadbook-mode="konstanz"] {
+  background: #b7c9c8;
 }
 
-.roadbook-leaflet-map[data-roadbook-mode="petrol_night"] .leaflet-tile-pane {
-  filter: brightness(0.38) contrast(1.22) saturate(0.55);
+.roadbook-leaflet-map[data-roadbook-mode="konstanz"] .leaflet-tile-pane {
+  filter: saturate(0.88) hue-rotate(7deg) brightness(0.96) contrast(0.96);
 }
 
-.roadbook-leaflet-map[data-roadbook-mode="blueprint"] .leaflet-tile-pane {
-  filter: grayscale(0.55) sepia(0.65) hue-rotate(155deg) saturate(1.35)
-    brightness(0.58) contrast(1.16);
+.roadbook-leaflet-map[data-roadbook-mode="reykjavik"] {
+  background: #17272d;
 }
 
-.roadbook-leaflet-map[data-roadbook-mode="touring_clay"] .leaflet-tile-pane {
-  filter: sepia(0.28) saturate(0.88) brightness(0.88) contrast(1.05);
+.roadbook-leaflet-map[data-roadbook-mode="reykjavik"] .leaflet-tile-pane {
+  filter: grayscale(0.32) sepia(0.2) hue-rotate(145deg) saturate(0.72)
+    brightness(0.62) contrast(1.2);
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="lissabon"] {
+  background: #b57953;
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="lissabon"] .leaflet-tile-pane {
+  filter: sepia(0.38) saturate(1.18) hue-rotate(342deg) brightness(0.9)
+    contrast(1.03);
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="wien"] {
+  background: #d8d0c0;
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="wien"] .leaflet-tile-pane {
+  filter: grayscale(0.12) sepia(0.24) saturate(0.66) brightness(1.02)
+    contrast(0.92);
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="zurich"] {
+  background: #aeb7b6;
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="zurich"] .leaflet-tile-pane {
+  filter: grayscale(0.76) saturate(0.42) brightness(0.91) contrast(1.24);
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="venedig"] {
+  background: #5d8580;
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="venedig"] .leaflet-tile-pane {
+  filter: grayscale(0.08) sepia(0.3) hue-rotate(112deg) saturate(0.84)
+    brightness(0.78) contrast(1.06);
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="kyoto"] {
+  background: #746a54;
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="kyoto"] .leaflet-tile-pane {
+  filter: sepia(0.44) saturate(0.76) hue-rotate(326deg) brightness(0.72)
+    contrast(1.12);
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="marrakesch"] {
+  background: #8d5536;
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="marrakesch"] .leaflet-tile-pane {
+  filter: sepia(0.62) saturate(1.28) hue-rotate(338deg) brightness(0.76)
+    contrast(1.12);
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="tokyo"] {
+  background: #050b0d;
+}
+
+.roadbook-leaflet-map[data-roadbook-mode="tokyo"] .leaflet-tile-pane {
+  filter: grayscale(0.72) sepia(0.6) hue-rotate(132deg) saturate(1.58)
+    brightness(0.34) contrast(1.38);
 }
 
 .roadbook-leaflet-marker-shell {

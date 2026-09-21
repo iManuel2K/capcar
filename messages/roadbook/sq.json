@@ -22,11 +22,16 @@
       "autobahn_context": "Kontekst Autobahn"
     },
     "modes": {
-      "label": "Pamja e hartës",
-      "workshop_cream": "Workshop Cream",
-      "petrol_night": "Petrol Night",
-      "blueprint": "Blueprint",
-      "touring_clay": "Touring Clay"
+      "label": "Stili i hartës së qytetit",
+      "konstanz": "Konstanz",
+      "reykjavik": "Reykjavík",
+      "lissabon": "Lissabon",
+      "wien": "Wien",
+      "zurich": "Zürich",
+      "venedig": "Venedig",
+      "kyoto": "Kyoto",
+      "marrakesch": "Marrakesch",
+      "tokyo": "Tokyo"
     },
     "setup": {
       "title": "Roadbook ka nevojë për token-in e hartës.",

@@ -22,11 +22,16 @@
       "autobahn_context": "Autobahn-Kontext"
     },
     "modes": {
-      "label": "Kartendarstellung",
-      "workshop_cream": "Werkstatt Creme",
-      "petrol_night": "Petrol Nacht",
-      "blueprint": "Blaupause",
-      "touring_clay": "Touring Clay"
+      "label": "Stil der Stadtkarte",
+      "konstanz": "Konstanz",
+      "reykjavik": "Reykjavík",
+      "lissabon": "Lissabon",
+      "wien": "Wien",
+      "zurich": "Zürich",
+      "venedig": "Venedig",
+      "kyoto": "Kyoto",
+      "marrakesch": "Marrakesch",
+      "tokyo": "Tokyo"
     },
     "setup": {
       "title": "Roadbook benötigt den Karten-Token.",

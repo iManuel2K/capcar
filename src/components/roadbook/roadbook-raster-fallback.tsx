@@ -9,10 +9,15 @@ import type {
 } from "@/features/roadbook/roadbook-schema";
 
 const styleIds: Record<RoadbookMapMode, string> = {
-  workshop_cream: "light-v11",
-  petrol_night: "dark-v11",
-  blueprint: "navigation-night-v1",
-  touring_clay: "outdoors-v12",
+  konstanz: "streets-v12",
+  reykjavik: "navigation-night-v1",
+  lissabon: "outdoors-v12",
+  wien: "light-v11",
+  zurich: "streets-v12",
+  venedig: "outdoors-v12",
+  kyoto: "light-v11",
+  marrakesch: "outdoors-v12",
+  tokyo: "dark-v11",
 };
 
 export function RoadbookRasterFallback({

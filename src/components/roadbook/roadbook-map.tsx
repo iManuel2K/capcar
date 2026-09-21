@@ -18,68 +18,63 @@ import type {
 } from "@/features/roadbook/roadbook-schema";
 
 export const ROADBOOK_MAP_STYLES: Record<
-  string,
+  RoadbookMapMode,
   { name: string; url: string; attribution: string }
 > = {
-  "monochrome-light": {
-    name: "01 / Classic Paper",
+  konstanz: {
+    name: "01 / Konstanz",
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
-  "midnight-dark": {
-    name: "02 / Midnight Club",
+  reykjavik: {
+    name: "02 / Reykjavík",
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
-  "topo-vintage": {
-    name: "03 / Vintage Topo",
-    url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-    attribution:
-      'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, SRTM',
-  },
-  "cyber-neon": {
-    name: "04 / Neon Grid",
+  lissabon: {
+    name: "03 / Lissabon",
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
-  "berlin-asphalt": {
-    name: "05 / Berlin Industrial",
+  wien: {
+    name: "04 / Wien",
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
-  "tokyo-drift": {
-    name: "06 / Tokyo High-Contrast",
+  zurich: {
+    name: "05 / Zürich",
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
-  "monaco-coastal": {
-    name: "07 / Riviera Coastal",
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
-    attribution: "Tiles &copy; Esri",
-  },
-  "satellite-hybrid": {
-    name: "08 / Satellite Overhead",
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    attribution: "Tiles &copy; Esri",
-  },
-  "minimal-stealth": {
-    name: "09 / Stealth Minimal",
+  venedig: {
+    name: "06 / Venedig",
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
-};
-
-const MODE_TO_MAP_STYLE: Record<RoadbookMapMode, string> = {
-  workshop_cream: "monochrome-light",
-  petrol_night: "midnight-dark",
-  blueprint: "minimal-stealth",
-  touring_clay: "topo-vintage",
+  kyoto: {
+    name: "07 / Kyoto",
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
+  marrakesch: {
+    name: "08 / Marrakesch",
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
+  tokyo: {
+    name: "09 / Tokyo",
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
 };
 
 const markerIcons: Record<RoadbookCategory, string> = {
@@ -146,8 +141,10 @@ export function RoadbookMap({
   const userMarker = useRef<L.CircleMarker | null>(null);
   const selectedRoute = useRef<Polyline | null>(null);
   const initialCenter = useRef(center);
-  const initialStyleKey = useRef(
-    mapStyle ?? MODE_TO_MAP_STYLE[mode] ?? "midnight-dark",
+  const initialStyleKey = useRef<RoadbookMapMode>(
+    mapStyle && mapStyle in ROADBOOK_MAP_STYLES
+      ? (mapStyle as RoadbookMapMode)
+      : mode,
   );
   const onSelectRef = useRef(onSelect);
   const onViewportChangeRef = useRef(onViewportChange);
@@ -165,8 +162,7 @@ export function RoadbookMap({
     if (!container.current || map.current) return;
 
     const currentStyleConfig =
-      ROADBOOK_MAP_STYLES[initialStyleKey.current] ??
-      ROADBOOK_MAP_STYLES["midnight-dark"];
+      ROADBOOK_MAP_STYLES[initialStyleKey.current] ?? ROADBOOK_MAP_STYLES.tokyo;
 
     const instance = L.map(container.current, {
       center: [initialCenter.current.latitude, initialCenter.current.longitude],
@@ -202,7 +198,7 @@ export function RoadbookMap({
         if (!usingFallback) {
           usingFallback = true;
           tileFailures = 0;
-          tiles.setUrl(ROADBOOK_MAP_STYLES["monochrome-light"].url);
+          tiles.setUrl(ROADBOOK_MAP_STYLES.konstanz.url);
           return;
         }
         onErrorRef.current("MAP_TILES_FAILED");
@@ -240,11 +236,12 @@ export function RoadbookMap({
 
   useEffect(() => {
     if (!tileLayer.current) return;
-    const activeStyleKey =
-      mapStyle ?? MODE_TO_MAP_STYLE[mode] ?? "midnight-dark";
+    const activeStyleKey: RoadbookMapMode =
+      mapStyle && mapStyle in ROADBOOK_MAP_STYLES
+        ? (mapStyle as RoadbookMapMode)
+        : mode;
     const config =
-      ROADBOOK_MAP_STYLES[activeStyleKey] ??
-      ROADBOOK_MAP_STYLES["midnight-dark"];
+      ROADBOOK_MAP_STYLES[activeStyleKey] ?? ROADBOOK_MAP_STYLES.tokyo;
     tileLayer.current.setUrl(config.url);
   }, [mapStyle, mode]);
 

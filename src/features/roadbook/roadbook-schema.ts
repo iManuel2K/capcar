@@ -10,10 +10,15 @@ export const roadbookCategories = [
 ] as const;
 
 export const roadbookMapModes = [
-  "workshop_cream",
-  "petrol_night",
-  "blueprint",
-  "touring_clay",
+  "konstanz",
+  "reykjavik",
+  "lissabon",
+  "wien",
+  "zurich",
+  "venedig",
+  "kyoto",
+  "marrakesch",
+  "tokyo",
 ] as const;
 
 export const roadbookAccessStatuses = [
