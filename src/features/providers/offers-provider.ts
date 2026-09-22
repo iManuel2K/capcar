@@ -35,7 +35,7 @@ class DemoOffersProvider implements OffersProvider {
     const request = normalizeRequest(input);
     const searchedAt = new Date().toISOString();
     return {
-      provider: "Capcar offers demo",
+      provider: "CapCar offers demo",
       source: "demo",
       partId: request.partId,
       offers: getOfferComparison(request.partId, {

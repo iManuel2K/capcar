@@ -55,7 +55,7 @@ export async function guardProductApi(
     return {
       ok: false,
       response: NextResponse.json(
-        { error: "Sign in to use this Capcar tool." },
+        { error: "Sign in to use this CapCar tool." },
         { status: 401, headers: { "Cache-Control": "no-store" } },
       ),
     };

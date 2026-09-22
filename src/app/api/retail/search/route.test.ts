@@ -31,7 +31,7 @@ beforeEach(() => {
 
 afterEach(() => vi.unstubAllEnvs());
 
-it("accepts Capcar's public origin when Netlify supplies an internal request URL", async () => {
+it("accepts CapCar's public origin when Netlify supplies an internal request URL", async () => {
   vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://capcar-im.netlify.app");
   const response = await POST(
     new Request("https://internal-runtime.test/api/retail/search", {

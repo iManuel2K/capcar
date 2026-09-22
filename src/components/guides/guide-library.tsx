@@ -67,7 +67,7 @@ export function GuideLibrary({ vehicleId }: { vehicleId: string }) {
           Every instruction shows its evidence state.
         </h1>
         <p className="mt-5 max-w-2xl leading-7 text-white/45">
-          Draft, reviewed and verified are different things. Capcar blocks a
+          Draft, reviewed and verified are different things. CapCar blocks a
           verified label until dated authoritative sources and vehicle
           applicability are attached.
         </p>

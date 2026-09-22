@@ -274,7 +274,7 @@ export function RoadbookMap({
           "--roadbook-map-filter": visualStyle.tileFilter,
         } as CSSProperties
       }
-      aria-label="Capcar Roadbook map"
+      aria-label="CapCar Roadbook map"
     />
   );
 }

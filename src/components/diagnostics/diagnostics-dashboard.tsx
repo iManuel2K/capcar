@@ -53,7 +53,7 @@ export function DiagnosticsDashboard({ vehicleId }: { vehicleId: string }) {
       <aside className="mt-5 flex gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-4 text-sm leading-6 text-amber-100/65">
         <ShieldAlert className="mt-0.5 size-4 shrink-0" /> Critical warnings,
         braking faults, overheating or oil-pressure alerts require qualified
-        inspection. Capcar does not clear codes or replace diagnosis.
+        inspection. CapCar does not clear codes or replace diagnosis.
       </aside>
 
       {formOpen && (

@@ -17,7 +17,7 @@
       "missingBody": "Lidhja mund të jetë e pasaktë ose pronari mund ta ketë tërhequr.",
       "outage": "Nuk mund ta kontrollojmë pasaportën tani.",
       "outageBody": "Shërbimi i regjistrave nuk është përkohësisht i disponueshëm. Provoje lidhjen përsëri pas pak.",
-      "home": "Kthehu te Capcar"
+      "home": "Kthehu te CapCar"
     },
     "Trust": {
       "title": "Tregto me kujdes",
@@ -31,7 +31,7 @@
     },
     "Specialist": {
       "title": "Aplikime specialistësh",
-      "intro": "Sill servisin tënd në Capcar. Apliko me të dhënat e biznesit. Një moderator i pavarur shqyrton çdo aplikim përpara aktivizimit të vulave të montimit.",
+      "intro": "Sill servisin tënd në CapCar. Apliko me të dhënat e biznesit. Një moderator i pavarur shqyrton çdo aplikim përpara aktivizimit të vulave të montimit.",
       "apply": "Apliko si specialist",
       "business": "Servisi / emri i biznesit",
       "city": "Qyteti",

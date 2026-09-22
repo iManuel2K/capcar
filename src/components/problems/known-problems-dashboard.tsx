@@ -100,7 +100,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
         <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6 text-amber-50/70">
           <CircleAlert className="mt-0.5 size-4 shrink-0" /> Confirm the engine
           code from the vehicle documents or a verified VIN source to unlock
-          engine-specific bulletins. Capcar has intentionally hidden uncertain
+          engine-specific bulletins. CapCar has intentionally hidden uncertain
           matches.
         </aside>
       )}

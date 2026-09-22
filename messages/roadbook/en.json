@@ -51,7 +51,7 @@
     },
     "empty": {
       "title": "No sourced places in this view.",
-      "description": "Move the map, widen the view or remove a filter. Capcar does not invent testing locations."
+      "description": "Move the map, widen the view or remove a filter. CapCar does not invent testing locations."
     },
     "safety": {
       "autobahn": "Autobahn layers are route context only. Posted limits, temporary restrictions, traffic and conditions always take priority. Never use public roads for timed acceleration testing.",

@@ -17,7 +17,7 @@
       "missingBody": "Der Link ist möglicherweise falsch oder wurde vom Eigentümer zurückgezogen.",
       "outage": "Dieser Fahrzeugpass kann gerade nicht geprüft werden.",
       "outageBody": "Der Datendienst ist vorübergehend nicht verfügbar. Versuche diesen Link in Kürze erneut.",
-      "home": "Zurück zu Capcar"
+      "home": "Zurück zu CapCar"
     },
     "Trust": {
       "title": "Sicher handeln",
@@ -31,7 +31,7 @@
     },
     "Specialist": {
       "title": "Fachbetrieb-Bewerbungen",
-      "intro": "Bring deine Werkstatt zu Capcar. Bewirb dich mit deinen Geschäftsdaten. Ein unabhängiger Moderator prüft jede Bewerbung, bevor Einbaustempel freigeschaltet werden.",
+      "intro": "Bring deine Werkstatt zu CapCar. Bewirb dich mit deinen Geschäftsdaten. Ein unabhängiger Moderator prüft jede Bewerbung, bevor Einbaustempel freigeschaltet werden.",
       "apply": "Als Fachbetrieb bewerben",
       "business": "Werkstatt / Geschäftsname",
       "city": "Ort",

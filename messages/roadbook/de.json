@@ -51,7 +51,7 @@
     },
     "empty": {
       "title": "Keine belegten Orte in diesem Ausschnitt.",
-      "description": "Verschiebe die Karte, zoome heraus oder entferne einen Filter. Capcar erfindet keine Testorte."
+      "description": "Verschiebe die Karte, zoome heraus oder entferne einen Filter. CapCar erfindet keine Testorte."
     },
     "safety": {
       "autobahn": "Autobahn-Ebenen dienen nur als Routenkontext. Beschilderung, temporäre Limits, Verkehr und Bedingungen haben immer Vorrang. Keine Zeitmessung auf öffentlichen Straßen.",

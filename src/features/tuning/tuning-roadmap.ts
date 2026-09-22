@@ -102,7 +102,7 @@ const goalStages: Record<TuningPlanInput["goal"], StageTemplate[]> = {
         "Wheels, stance, lighting and aero should be planned as one composition before ordering.",
       share: 0.4,
       checks: [
-        "Save a Capcar concept",
+        "Save a CapCar concept",
         "Verify wheel and suspension interaction",
         "Check lighting and aero approval",
       ],

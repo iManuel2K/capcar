@@ -43,7 +43,7 @@ export function buildVehicleTimeline(
     events.push({
       id: `vehicle-${vehicle.id}`,
       category: "vehicle",
-      title: "Vehicle added to Capcar",
+      title: "Vehicle added to CapCar",
       detail: `${vehicle.productionYear} ${vehicle.make} ${vehicle.model} · ${vehicle.platform}`,
       occurredAt: vehicle.createdAt,
       value: `${vehicle.mileage.toLocaleString("de-DE")} km`,

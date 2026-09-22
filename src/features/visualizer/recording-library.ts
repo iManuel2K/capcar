@@ -21,7 +21,7 @@ export async function recordingStore<T>(
     request.onerror = () =>
       reject(new Error("Recording storage is unavailable."));
     request.onblocked = () =>
-      reject(new Error("Close other Capcar tabs and retry."));
+      reject(new Error("Close other CapCar tabs and retry."));
   });
   try {
     return await new Promise<T>((resolve, reject) => {

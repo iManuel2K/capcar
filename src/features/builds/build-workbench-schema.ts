@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// Links are opened by the owner, never fetched by a Capcar server.
+// Links are opened by the owner, never fetched by a CapCar server.
 export function safeEvidenceUrl(value: string) {
   try {
     const url = new URL(value);

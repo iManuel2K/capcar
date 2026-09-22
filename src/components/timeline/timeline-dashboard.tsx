@@ -92,7 +92,7 @@ export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
         </h1>
         <p className="mt-5 max-w-2xl leading-7 text-white/45">
           Maintenance, build plans, selected demo offers and completed guided
-          workflows—combined automatically from your local Capcar records.
+          workflows—combined automatically from your local CapCar records.
         </p>
       </header>
 

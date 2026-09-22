@@ -36,7 +36,7 @@ class DemoCatalogProvider implements CatalogProvider {
       }));
 
     return {
-      provider: "Capcar catalogue demo",
+      provider: "CapCar catalogue demo",
       source: "demo",
       results,
       warnings: [

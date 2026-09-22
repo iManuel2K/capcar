@@ -55,7 +55,7 @@ export function evaluateBuildCompatibility(input: {
       category: "data",
       title: `Manual item needs structured data · ${item.title}`,
       detail:
-        "Capcar cannot evaluate fitment or interactions until this roadmap item is connected to a catalogue part.",
+        "CapCar cannot evaluate fitment or interactions until this roadmap item is connected to a catalogue part.",
       itemIds: [item.id],
     });
   }

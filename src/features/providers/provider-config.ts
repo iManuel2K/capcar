@@ -24,7 +24,7 @@ const definitions: ProviderDefinition[] = [
     nameKey: "CAPCAR_VEHICLE_PROVIDER_NAME",
     endpointKey: "CAPCAR_VEHICLE_PROVIDER_ENDPOINT",
     apiKeyKey: "CAPCAR_VEHICLE_PROVIDER_API_KEY",
-    demoName: "Capcar vehicle demo",
+    demoName: "CapCar vehicle demo",
   },
   {
     domain: "catalog",
@@ -33,7 +33,7 @@ const definitions: ProviderDefinition[] = [
     nameKey: "CAPCAR_CATALOG_PROVIDER_NAME",
     endpointKey: "CAPCAR_CATALOG_PROVIDER_ENDPOINT",
     apiKeyKey: "CAPCAR_CATALOG_PROVIDER_API_KEY",
-    demoName: "Capcar catalogue demo",
+    demoName: "CapCar catalogue demo",
   },
   {
     domain: "offers",
@@ -42,7 +42,7 @@ const definitions: ProviderDefinition[] = [
     nameKey: "CAPCAR_OFFERS_PROVIDER_NAME",
     endpointKey: "CAPCAR_OFFERS_PROVIDER_ENDPOINT",
     apiKeyKey: "CAPCAR_OFFERS_PROVIDER_API_KEY",
-    demoName: "Capcar offers demo",
+    demoName: "CapCar offers demo",
   },
   {
     domain: "models",
@@ -51,7 +51,7 @@ const definitions: ProviderDefinition[] = [
     nameKey: "CAPCAR_MODEL_PROVIDER_NAME",
     endpointKey: "CAPCAR_MODEL_PROVIDER_ENDPOINT",
     apiKeyKey: "CAPCAR_MODEL_PROVIDER_API_KEY",
-    demoName: "Capcar reference geometry",
+    demoName: "CapCar reference geometry",
   },
 ];
 

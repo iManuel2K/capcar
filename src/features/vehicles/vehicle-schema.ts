@@ -31,7 +31,7 @@ export const vehicleInputSchema = z.object({
   productionYear: z.coerce
     .number()
     .int()
-    .min(2000, "Capcar currently supports vehicles from 2000")
+    .min(2000, "CapCar currently supports vehicles from 2000")
     .max(2027, "Check the production year"),
   platform: z
     .string()

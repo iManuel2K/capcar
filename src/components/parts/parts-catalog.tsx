@@ -88,7 +88,7 @@ export function PartsCatalog({ vehicleId }: { vehicleId: string }) {
   const [providerResults, setProviderResults] = useState<ProviderPartResult[]>(
     [],
   );
-  const [providerName, setProviderName] = useState("Capcar catalogue demo");
+  const [providerName, setProviderName] = useState("CapCar catalogue demo");
   const [source, setSource] = useState<"demo" | "external">("demo");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

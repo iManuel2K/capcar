@@ -112,7 +112,7 @@ export function createReferenceVehicleModel(
   const modelDimensions = selected ?? fallbackDimensions(vehicle.bodyStyle);
   const mesh = buildReferenceMesh(modelDimensions);
   return {
-    provider: "Capcar reference geometry",
+    provider: "CapCar reference geometry",
     source: "demo",
     accuracy: "concept",
     assetId: `reference-${platform.toLowerCase()}-${vehicle.bodyStyle.toLowerCase()}`,
@@ -131,7 +131,7 @@ export function createReferenceVehicleModel(
     ],
     license: {
       commercialUse: false,
-      attribution: "Capcar-generated reference geometry",
+      attribution: "CapCar-generated reference geometry",
     },
     warnings: [
       selected

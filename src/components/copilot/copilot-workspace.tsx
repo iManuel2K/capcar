@@ -112,7 +112,7 @@ export function CopilotWorkspace({ vehicleId }: { vehicleId: string }) {
       <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(231,45,69,0.22),transparent_30%),#111111] p-6 sm:p-10">
         <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#e72d45]/25 bg-[#e72d45]/10 px-3 py-1.5 text-[10px] text-[#bad1ff] uppercase">
-            <Bot className="size-3" /> Capcar rules copilot
+            <Bot className="size-3" /> CapCar rules copilot
           </span>
           <span className="rounded-full border border-amber-300/20 bg-amber-300/8 px-3 py-1.5 text-[10px] text-amber-100/65 uppercase">
             No external AI active
@@ -133,7 +133,7 @@ export function CopilotWorkspace({ vehicleId }: { vehicleId: string }) {
       <section className="mt-5 grid gap-5 lg:grid-cols-[0.75fr_1.25fr]">
         <aside className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
           <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
-            Ask Capcar
+            Ask CapCar
           </p>
           <textarea
             value={message}
@@ -241,7 +241,7 @@ export function CopilotWorkspace({ vehicleId }: { vehicleId: string }) {
                 Your context is ready
               </h2>
               <p className="mt-3 max-w-md text-sm leading-6 text-white/40">
-                Capcar can reference this vehicle and {buildItems.length} saved
+                CapCar can reference this vehicle and {buildItems.length} saved
                 build items without sending data to an external AI.
               </p>
             </div>

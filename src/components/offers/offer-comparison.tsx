@@ -43,7 +43,7 @@ export function OfferComparison({
   const vehicle = vehicles.find((candidate) => candidate.id === vehicleId);
   const part = findCatalogPart(partId);
   const [offers, setOffers] = useState<RankedOffer[]>([]);
-  const [providerName, setProviderName] = useState("Capcar offers demo");
+  const [providerName, setProviderName] = useState("CapCar offers demo");
   const [source, setSource] = useState<"demo" | "external">("demo");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

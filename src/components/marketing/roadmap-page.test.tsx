@@ -8,7 +8,7 @@ describe("RoadmapPage", () => {
     render(<RoadmapPage />);
 
     expect(
-      screen.getByRole("heading", { name: "Where Capcar is going." }),
+      screen.getByRole("heading", { name: "Where CapCar is going." }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "The foundation" }),

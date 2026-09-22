@@ -79,7 +79,7 @@ function VehicleScanImporter({
       setMessage(
         caught instanceof Error
           ? caught.message
-          : "Capcar could not read this scan.",
+          : "CapCar could not read this scan.",
       );
     } finally {
       if (request === generation.current) setReading(false);
@@ -113,7 +113,7 @@ function VehicleScanImporter({
           <h2 className="text-xl font-medium">Smart OBD-II import</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-white/55">
             Drop plain text, ELM327 logs, CSV, JSON or BimmerLink exports.
-            Capcar cleans the file, extracts valid DTCs and opens the native
+            CapCar cleans the file, extracts valid DTCs and opens the native
             Inspector before anything is saved.
           </p>
         </div>
@@ -172,7 +172,7 @@ function VehicleScanImporter({
         />
       </div>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-white/35">
-        <span>Read-only import · Capcar never clears vehicle faults</span>
+        <span>Read-only import · CapCar never clears vehicle faults</span>
         <a href="/examples/obd-scan.json" download className="underline">
           Download sample
         </a>
@@ -252,7 +252,7 @@ function DiagnosticInspectorDrawer({
         <header className="flex items-start justify-between gap-5 border-b border-white/8 p-5 sm:p-7">
           <div>
             <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
-              Capcar Diagnostic Inspector
+              CapCar Diagnostic Inspector
             </p>
             <h2
               id="diagnostic-inspector-title"
@@ -396,7 +396,7 @@ function InspectorList({ title, items }: { title: string; items: string[] }) {
 
 function formatSource(source: ScanImport["sourceFormat"]) {
   return {
-    "capcar-json": "Capcar JSON",
+    "capcar-json": "CapCar JSON",
     json: "JSON export",
     csv: "CSV export",
     elm327: "ELM327 log",

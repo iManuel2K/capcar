@@ -1,23 +1,23 @@
 {
   "Faq": {
     "title": "Klarer zum fertigen Build.",
-    "description": "Kurz erklärt: was Capcar ist, für wen es gedacht ist und wohin es sich entwickelt.",
+    "description": "Kurz erklärt: was CapCar ist, für wen es gedacht ist und wohin es sich entwickelt.",
     "roadmap": "Roadmap ansehen",
     "one": {
-      "question": "Welches Problem löst Capcar?",
-      "answer": "Fahrzeugprojekte verteilen sich oft auf Notizen, Händler-Tabs, Foren und Tabellen. Capcar bringt Fahrzeug, Wartung, Teile, Kosten und Build-Plan in einer Garage zusammen."
+      "question": "Welches Problem löst CapCar?",
+      "answer": "Fahrzeugprojekte verteilen sich oft auf Notizen, Händler-Tabs, Foren und Tabellen. CapCar bringt Fahrzeug, Wartung, Teile, Kosten und Build-Plan in einer Garage zusammen."
     },
     "two": {
-      "question": "Wer entwickelt Capcar?",
-      "answer": "Capcar wird von einem Autoenthusiasten entwickelt, der gerne fährt, an Autos arbeitet und dieses einfache Gefühl warmer Luft durchs offene Fenster mag. Das Ziel ist praktisch: Projekte leichter verstehen, organisieren und abschließen."
+      "question": "Wer entwickelt CapCar?",
+      "answer": "CapCar wird von einem Autoenthusiasten entwickelt, der gerne fährt, an Autos arbeitet und dieses einfache Gefühl warmer Luft durchs offene Fenster mag. Das Ziel ist praktisch: Projekte leichter verstehen, organisieren und abschließen."
     },
     "three": {
-      "question": "Ist Capcar während der Beta kostenlos?",
+      "question": "Ist CapCar während der Beta kostenlos?",
       "answer": "Ja. Die Beta ist kostenlos, während die zentrale Garage mit echten Nutzern getestet wird. Sollten später kostenpflichtige Funktionen hinzukommen, bleiben die Basis-Garage und deine exportierten Daten zugänglich."
     },
     "four": {
-      "question": "Garantiert Capcar, dass ein Teil passt?",
-      "answer": "Nein. Capcar ordnet Passform-Nachweise und kennzeichnet Unsicherheit. Vor Kauf oder Einbau solltest du Teilenummern, Fahrzeugdaten und rechtliche Vorgaben weiterhin selbst bestätigen."
+      "question": "Garantiert CapCar, dass ein Teil passt?",
+      "answer": "Nein. CapCar ordnet Passform-Nachweise und kennzeichnet Unsicherheit. Vor Kauf oder Einbau solltest du Teilenummern, Fahrzeugdaten und rechtliche Vorgaben weiterhin selbst bestätigen."
     },
     "five": {
       "question": "Warum brauche ich ein Konto?",
@@ -30,13 +30,13 @@
   },
   "Roadmap": {
     "eyebrow": "Produkt-Roadmap",
-    "title": "Wohin Capcar fährt.",
-    "description": "Ein praktischer Überblick darüber, was heute funktioniert, was als Nächstes kommt und wie Capcar von einer Auto-App zur Garage für jedes Projekt wächst.",
+    "title": "Wohin CapCar fährt.",
+    "description": "Ein praktischer Überblick darüber, was heute funktioniert, was als Nächstes kommt und wie CapCar von einer Auto-App zur Garage für jedes Projekt wächst.",
     "build": "Fahrzeug anlegen",
-    "back": "Zurück zu Capcar",
+    "back": "Zurück zu CapCar",
     "sequenceEyebrow": "Jetzt, als Nächstes, später",
     "sequenceTitle": "Eine Roadmap, geprägt durch echte Nutzung.",
-    "sequenceDescription": "Capcar wächst in der Reihenfolge, die jede Werkstatt-Session klarer macht. Beta-Feedback bringt die nützlichste Arbeit nach vorn.",
+    "sequenceDescription": "CapCar wächst in der Reihenfolge, die jede Werkstatt-Session klarer macht. Beta-Feedback bringt die nützlichste Arbeit nach vorn.",
     "stageCount": "Phasen",
     "milestoneLabel": "Meilensteine",
     "milestoneCount": "{count} Meilensteine",
@@ -44,7 +44,7 @@
     "foundation": {
       "label": "Jetzt verfügbar",
       "title": "Das Fundament",
-      "description": "Die Fahrzeugakte im Zentrum von Capcar. Diese Werkzeuge funktionieren heute und reifen durch den Einsatz in echten Garagen weiter.",
+      "description": "Die Fahrzeugakte im Zentrum von CapCar. Diese Werkzeuge funktionieren heute und reifen durch den Einsatz in echten Garagen weiter.",
       "itemStatus": "Verfügbar",
       "garage": {
         "title": "Private digitale Garage",
@@ -112,7 +112,7 @@
     "tangible": {
       "label": "In Beta · wächst weiter",
       "title": "Mach es greifbar",
-      "description": "Die visuelle und vernetzte Ebene von Capcar. Funktionierende Grundlagen stehen, während Inhalte, Fahrzeugabdeckung und Partnerzugänge wachsen.",
+      "description": "Die visuelle und vernetzte Ebene von CapCar. Funktionierende Grundlagen stehen, während Inhalte, Fahrzeugabdeckung und Partnerzugänge wachsen.",
       "itemStatus": "Im Ausbau",
       "models": {
         "title": "Interaktive Fahrzeugmodelle",
@@ -124,7 +124,7 @@
       },
       "sound": {
         "title": "Sound Studio",
-        "description": "Fünf Aufnahmen mit Quellenangabe filtern und vergleichen. Drei weitere Originale streamen über Capcar. Exakte Serien-/Umbaupaare benötigen verifizierte Aufnahmen."
+        "description": "Fünf Aufnahmen mit Quellenangabe filtern und vergleichen. Drei weitere Originale streamen über CapCar. Exakte Serien-/Umbaupaare benötigen verifizierte Aufnahmen."
       },
       "obd": {
         "title": "Native OBD-II-Diagnose",
@@ -170,12 +170,12 @@
       },
       "more": {
         "title": "Surfbretter und mehr",
-        "description": "Mache Capcar zu einem durchdachten Zuhause für Projekte und Ausrüstung, die dir wichtig sind."
+        "description": "Mache CapCar zu einem durchdachten Zuhause für Projekte und Ausrüstung, die dir wichtig sind."
       }
     },
     "decisionEyebrow": "Wie wir entscheiden",
     "decisionTitle": "Nützlich vor beeindruckend.",
-    "decisionDescription": "Capcar liefert zuerst Werkzeuge, die Besitz und Projekte übersichtlicher machen. Visuelle Technik verdient ihren Platz, wenn sie bessere Entscheidungen ermöglicht – nicht nur, weil sie gut aussieht.",
+    "decisionDescription": "CapCar liefert zuerst Werkzeuge, die Besitz und Projekte übersichtlicher machen. Visuelle Technik verdient ihren Platz, wenn sie bessere Entscheidungen ermöglicht – nicht nur, weil sie gut aussieht.",
     "feedbackEyebrow": "Beta-Feedback",
     "feedbackTitle": "Gestalte den nächsten Schritt mit.",
     "feedbackDescription": "Nutze die Garage mit deinem eigenen Auto und sag uns, wo sich die Arbeit noch unklar anfühlt.",
@@ -185,7 +185,7 @@
   "PartsPage": {
     "eyebrow": "Offener Katalog · kein Konto erforderlich",
     "title": "Erst die Teile. Dann die Garage.",
-    "description": "Suche nach Namen, Teilenummern, Baureihen und Motorcodes. Capcar zeigt, was ein Datensatz abdeckt, ohne für ein unbekanntes Fahrzeug bestätigte Passgenauigkeit zu behaupten.",
+    "description": "Suche nach Namen, Teilenummern, Baureihen und Motorcodes. CapCar zeigt, was ein Datensatz abdeckt, ohne für ein unbekanntes Fahrzeug bestätigte Passgenauigkeit zu behaupten.",
     "liveOffers": "Live-Händlerangebote suchen",
     "resultsFor": "Ergebnisse für „{query}“",
     "prepared": "Vorbereiteter Katalog",
@@ -199,18 +199,18 @@
     "notice": "Suchergebnisse sind Querverweise, keine Einbaufreigabe. Bestätige vor der Bestellung VIN, Produktionsdatum, Ausstattungscodes, Maße und lokale Straßenzulassung."
   },
   "StudioPage": {
-    "back": "Zurück zu Capcar",
+    "back": "Zurück zu CapCar",
     "eyebrow": "Concept Studio",
     "title": "Erkunde die Richtung.",
     "description": "Entdecke 3D-Referenzen von Kreativen und eigenständige stilisierte Konzepte. Referenzmodelle sind von den konfigurierbaren Skizzen darunter getrennt."
   },
   "SoundPage": {
-    "back": "Capcar",
+    "back": "CapCar",
     "title": "Hör den Unterschied."
   },
   "Auth": {
-    "home": "Capcar Startseite",
-    "back": "Zurück zu Capcar",
+    "home": "CapCar Startseite",
+    "back": "Zurück zu CapCar",
     "private": "Standardmäßig privat",
     "oneAccount": "Ein Konto.",
     "wholeBuild": "Dein gesamter Build.",
@@ -230,7 +230,7 @@
     "terms": "Bedingungen",
     "and": "und den",
     "privacy": "Datenschutzhinweis",
-    "newToCapcar": "Neu bei Capcar?",
+    "newToCapcar": "Neu bei CapCar?",
     "createAccount": "Konto erstellen",
     "haveAccount": "Schon ein Konto?",
     "signIn": "Anmelden",
@@ -274,10 +274,10 @@
     }
   },
   "Legal": {
-    "home": "Capcar Startseite",
-    "back": "Zurück zu Capcar →",
+    "home": "CapCar Startseite",
+    "back": "Zurück zu CapCar →",
     "notice": "Hinweis",
-    "beta": "Capcar Private Beta",
+    "beta": "CapCar Private Beta",
     "navigation": "Rechtliche Navigation",
     "privacy": "Datenschutz",
     "terms": "Bedingungen",
@@ -298,7 +298,7 @@
     "browse": "Teile ansehen"
   },
   "PublicPassport": {
-    "home": "Capcar Startseite",
+    "home": "CapCar Startseite",
     "shared": "Vom Halter geteilter Datensatz",
     "document": "Fahrzeugpass",
     "published": "Veröffentlicht am {date}",
@@ -505,7 +505,7 @@
     "models": "Modelle",
     "license": "CC0-Lizenz",
     "engineeringNotice": "Stilisierte Konzepte sind keine Maß-, Konstruktions- oder Einbauanleitung.",
-    "collection": "Capcar Collection / 01—03",
+    "collection": "CapCar Collection / 01—03",
     "three": "Drei Richtungen. Dein Startpunkt.",
     "sound": "Sound-Bibliothek öffnen →",
     "chooseShowcase": "Showcase auswählen",
@@ -517,12 +517,12 @@
   },
   "SoundUi": {
     "includedLabel": "Enthaltene Motoraufnahmen",
-    "collection": "Capcar Hörsammlung / 01—02",
+    "collection": "CapCar Hörsammlung / 01—02",
     "realEngines": "Echte Motoren. Direkt abspielbar.",
     "curatedNotice": "Starte bei niedriger Lautstärke. Aufnahmegeräte und Bedingungen unterscheiden sich; dies sind keine kontrollierten Serien-/Umbau-Vergleiche. Der Umbauzustand ist nicht verifiziert.",
     "audioError": "Audio konnte nicht geladen werden. Lade die Seite neu oder nutze die Quelle darunter.",
     "credits": "Quelle und Credits",
-    "converted": "Original-Ogg unverändert; MP3 von Capcar unter derselben Lizenz konvertiert. Keine Empfehlung impliziert.",
+    "converted": "Original-Ogg unverändert; MP3 von CapCar unter derselben Lizenz konvertiert. Keine Empfehlung impliziert.",
     "archive": "Dein Soundarchiv / Nur lokal",
     "keep": "Bewahre den Charakter.",
     "archiveDescription": "Speichere eigene Aufnahmen mit Fahrzeug, Setup und Quellenberechtigung. Dateien bleiben in diesem Browser, überstehen Neuladen und werden nicht mit der Garage synchronisiert oder exportiert. Browserdaten löschen sie; behalte die Originale.",
@@ -614,21 +614,21 @@
   },
   "ErrorUi": {
     "eyebrow": "Die Fahrt wurde unterbrochen",
-    "title": "Capcar konnte diese Aktion nicht abschließen.",
+    "title": "CapCar konnte diese Aktion nicht abschließen.",
     "description": "Versuche es erneut. Deine gespeicherten Garagendaten wurden nicht absichtlich entfernt.",
     "tryAgain": "Erneut versuchen",
     "home": "Zur Startseite",
     "notFound": "404 · Seite nicht gefunden",
     "roadEnds": "Diese Straße endet hier.",
-    "notFoundDescription": "Kehre zu Capcar zurück und wähle einen anderen Weg."
+    "notFoundDescription": "Kehre zu CapCar zurück und wähle einen anderen Weg."
   },
   "PublicStates": {
     "passportEyebrow": "Passport nicht verfügbar",
     "passportTitle": "Dieser Link ist nicht mehr öffentlich.",
     "passportDescription": "Der Halter hat den Link möglicherweise widerrufen oder der geteilte Datensatz konnte nicht geprüft werden.",
-    "return": "Zurück zu Capcar",
+    "return": "Zurück zu CapCar",
     "verifiedDescription": "Fordere die Bestätigung eines Fachbetriebs an, verfolge den Status und bewahre das Ergebnis im privaten Fahrzeugdatensatz auf.",
-    "loadingCapcar": "Capcar wird geladen",
+    "loadingCapcar": "CapCar wird geladen",
     "loadingMarketplace": "Marktplatz wird geladen…",
     "openingVerified": "Verifizierte Arbeiten werden geöffnet…"
   },
@@ -643,10 +643,10 @@
   },
   "Operations": {
     "systemBack": "← Systemstatus",
-    "homeBack": "← Capcar",
+    "homeBack": "← CapCar",
     "launchEyebrow": "Produktionsstart",
     "launchTitle": "Startstatus: {state}.",
-    "launchDescription": "Capcar bleibt im lokalen Modus nutzbar. Die Produktion gilt erst als bereit, wenn die öffentliche URL und die browser-sicheren Supabase-Einstellungen auf dem Produktionshost vorhanden sind.",
+    "launchDescription": "CapCar bleibt im lokalen Modus nutzbar. Die Produktion gilt erst als bereit, wenn die öffentliche URL und die browser-sicheren Supabase-Einstellungen auf dem Produktionshost vorhanden sind.",
     "activation": "Aktivierungsablauf",
     "steps": {
       "one": "Alle enthaltenen Supabase-Migrationen ausführen: Snapshots, öffentliche Pässe, authentifizierte Affiliate-Erfassung, API-Limits und Kontolöschung.",
@@ -740,18 +740,18 @@
       "meta": "Datenschutz",
       "eyebrow": "Datenschutzhinweis · Private Beta",
       "title": "Deine Garagendaten bleiben unter deiner Kontrolle.",
-      "description": "Dieser Hinweis erklärt, was die Capcar-Beta speichert, warum es benötigt wird und wie du es entfernen kannst. Stand: 8. September 2026.",
+      "description": "Dieser Hinweis erklärt, was die CapCar-Beta speichert, warum es benötigt wird und wie du es entfernen kannst. Stand: 8. September 2026.",
       "blocked": "Der öffentliche Start ist gesperrt, bis Betreiber, Adresse und Datenschutzkontakt konfiguriert sind. Eingeladene Tester nutzen die Kontaktdaten ihrer Einladung.",
       "s1t": "1. Verantwortlicher Betreiber",
       "operatorPending": "Betreiberdaten ausstehend",
       "addressPending": "Adresse ausstehend",
       "privacyContact": "Datenschutzkontakt",
       "contactPending": "Kontakt ausstehend",
-      "s2t": "2. Von Capcar verarbeitete Daten",
-      "s2a": "Capcar speichert Kontodaten aus der Supabase-Anmeldung sowie deine Garageneinträge, darunter Fahrzeugdaten, Wartung, Builds, Kosten, Wunschlisten, Diagnosen, Anleitungsfortschritt und Visualizer-Einstellungen. Für schnelle, offline-tolerante Nutzung wird außerdem ein vollständiger Garagen-Snapshot im Browser gespeichert.",
+      "s2t": "2. Von CapCar verarbeitete Daten",
+      "s2a": "CapCar speichert Kontodaten aus der Supabase-Anmeldung sowie deine Garageneinträge, darunter Fahrzeugdaten, Wartung, Builds, Kosten, Wunschlisten, Diagnosen, Anleitungsfortschritt und Visualizer-Einstellungen. Für schnelle, offline-tolerante Nutzung wird außerdem ein vollständiger Garagen-Snapshot im Browser gespeichert.",
       "s2b": "Wenn du einen Fahrzeugpass veröffentlichst, ist der gewählte Datensatz für jeden mit dem nicht erratbaren Link verfügbar, bis du ihn widerrufst oder löschst. In einem geteilten Pass können nur die letzten fünf VIN-Zeichen erscheinen.",
       "s3t": "3. Zweck und Rechtsgrundlage",
-      "s3": "Konto-, Synchronisations- und Exportverarbeitung ist nötig, um die angeforderte Beta bereitzustellen. Sicherheit, Missbrauchsschutz und kurze Rate-Limit-Datensätze dienen dem berechtigten Interesse an einer zuverlässigen privaten Beta. Capcar verkauft keine Garagendaten.",
+      "s3": "Konto-, Synchronisations- und Exportverarbeitung ist nötig, um die angeforderte Beta bereitzustellen. Sicherheit, Missbrauchsschutz und kurze Rate-Limit-Datensätze dienen dem berechtigten Interesse an einer zuverlässigen privaten Beta. CapCar verkauft keine Garagendaten.",
       "s4t": "4. Hosting und externe Dienste",
       "s4": "Netlify liefert die Anwendung aus; Supabase stellt Anmeldung und Datenbank bereit. Beim Öffnen einer interaktiven 3D-Ansicht verbindet sich dein Browser mit Sketchfab. Fahrzeug-, Händler- und KI-Adapter bleiben im gekennzeichneten Demo-Modus, sofern die Systemseite keinen aktivierten Anbieter meldet.",
       "s5t": "5. Aufbewahrung und Löschung",
@@ -765,16 +765,16 @@
       "meta": "Bedingungen und Sicherheit",
       "eyebrow": "Beta-Bedingungen und Sicherheit",
       "title": "Klar planen. Vor dem Handeln prüfen.",
-      "description": "Capcar organisiert Informationen zu Fahrzeugprojekten. Es ersetzt keine verbindliche Reparaturanleitung, Prüfung oder qualifizierte Fachkraft. Stand: 8. September 2026.",
+      "description": "CapCar organisiert Informationen zu Fahrzeugprojekten. Es ersetzt keine verbindliche Reparaturanleitung, Prüfung oder qualifizierte Fachkraft. Stand: 8. September 2026.",
       "s1t": "1. Private Beta",
-      "s1": "Capcar ist eine private Beta. Funktionen können sich ändern, ausfallen oder gekennzeichnete Demodaten enthalten. Kataloge, Händlerangebote, visuelle Konzepte, Kompatibilitätsregeln, Tuning-Roadmaps und Einbauabläufe können fiktiv oder unvollständig sein, sofern Quelle und Prüfstatus nichts anderes ausweisen.",
+      "s1": "CapCar ist eine private Beta. Funktionen können sich ändern, ausfallen oder gekennzeichnete Demodaten enthalten. Kataloge, Händlerangebote, visuelle Konzepte, Kompatibilitätsregeln, Tuning-Roadmaps und Einbauabläufe können fiktiv oder unvollständig sein, sofern Quelle und Prüfstatus nichts anderes ausweisen.",
       "s2t": "2. Sicherheit und Passgenauigkeit",
-      "s2a": "Nutze Capcar nicht als einzige Grundlage für Teilekäufe, das Anheben eines Fahrzeugs, sicherheitskritische Arbeiten, Änderungen an Abgassystemen oder die Bestimmung der Straßenzulässigkeit. Prüfe Fahrzeug, Produktionsdatum, Ausstattungscodes, Teiledokumentation, Reparaturablauf, Anzugswerte, Flüssigkeiten und lokale Vorgaben.",
+      "s2a": "Nutze CapCar nicht als einzige Grundlage für Teilekäufe, das Anheben eines Fahrzeugs, sicherheitskritische Arbeiten, Änderungen an Abgassystemen oder die Bestimmung der Straßenzulässigkeit. Prüfe Fahrzeug, Produktionsdatum, Ausstattungscodes, Teiledokumentation, Reparaturablauf, Anzugswerte, Flüssigkeiten und lokale Vorgaben.",
       "s2b": "Stoppe die Arbeit und nutze eine Fachkraft, wenn sie deine Kenntnisse, Werkzeuge oder sichere Arbeitsumgebung übersteigt.",
       "s3t": "3. Konten und Aufzeichnungen",
-      "s3": "Schütze deine Anmeldung und speichere nur Datensätze, zu denen du berechtigt bist. Capcar bietet Export und Löschung; Originalrechnungen, Werkstattunterlagen und gesetzlich nötige Nachweise musst du selbst aufbewahren.",
+      "s3": "Schütze deine Anmeldung und speichere nur Datensätze, zu denen du berechtigt bist. CapCar bietet Export und Löschung; Originalrechnungen, Werkstattunterlagen und gesetzlich nötige Nachweise musst du selbst aufbewahren.",
       "s4t": "4. Öffentliche Passport-Links",
-      "s4": "Beim Veröffentlichen eines Fahrzeugpasses wird sein Inhalt für jeden mit dem Link sichtbar. Prüfe ihn vorher und widerrufe oder lösche den Link, wenn er nicht mehr verfügbar sein soll. Öffentliche Pässe sind Halterangaben, keine Capcar-Zertifizierung.",
+      "s4": "Beim Veröffentlichen eines Fahrzeugpasses wird sein Inhalt für jeden mit dem Link sichtbar. Prüfe ihn vorher und widerrufe oder lösche den Link, wenn er nicht mehr verfügbar sein soll. Öffentliche Pässe sind Halterangaben, keine CapCar-Zertifizierung.",
       "s5t": "5. Externe Websites",
       "s5": "Händler-, Quellen- und 3D-Links führen zu unabhängigen Diensten mit eigenen Bedingungen und Datenschutzregeln. Bestätige Preis, Versand, Rückgabe, Echtheit, Passgenauigkeit und Straßenzulassung vor dem Kauf direkt beim Anbieter.",
       "s6t": "6. Änderungen und Verfügbarkeit",
@@ -784,7 +784,7 @@
       "meta": "Impressum",
       "eyebrow": "Betreiberinformationen",
       "title": "Impressum.",
-      "description": "Öffentliche Betreiber- und Kontaktdaten für Capcar.",
+      "description": "Öffentliche Betreiber- und Kontaktdaten für CapCar.",
       "contentsLabel": "Inhalt des Impressums",
       "contents": "Inhalt",
       "provider": "Diensteanbieter",

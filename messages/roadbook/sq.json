@@ -51,7 +51,7 @@
     },
     "empty": {
       "title": "Nuk ka vende me burim në këtë pamje.",
-      "description": "Lëviz hartën, zmadho zonën ose hiq një filtër. Capcar nuk shpik vende testimi."
+      "description": "Lëviz hartën, zmadho zonën ose hiq një filtër. CapCar nuk shpik vende testimi."
     },
     "safety": {
       "autobahn": "Shtresa Autobahn është vetëm kontekst rruge. Shenjat, kufizimet e përkohshme, trafiku dhe kushtet kanë gjithmonë përparësi. Mos bëj kurrë test përshpejtimi me kohë në rrugë publike.",

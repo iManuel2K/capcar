@@ -58,7 +58,7 @@ it("keeps operator credential diagnostics out of visitor-facing messages", async
       Response.json(
         {
           code: "retailer_unavailable",
-          error: "eBay rejected Capcar's production App ID or Cert ID.",
+          error: "eBay rejected CapCar's production App ID or Cert ID.",
         },
         { status: 503 },
       ),

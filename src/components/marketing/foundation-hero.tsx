@@ -89,7 +89,7 @@ export function FoundationHero() {
           className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8"
         >
           <p className="text-xs font-medium tracking-[0.18em] text-[var(--capcar-blue-strong)] uppercase">
-            Capcar v0.1
+            CapCar v0.1
           </p>
           <h2 className="mt-4 max-w-2xl text-3xl font-medium tracking-[-0.035em] sm:text-5xl">
             One connected ownership journey.
