@@ -45,3 +45,6 @@ next-env.d.ts
 
 .capcar-backups/
 supabase/.temp/
+
+# Local Netlify folder
+.netlify
