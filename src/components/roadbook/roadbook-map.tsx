@@ -272,6 +272,7 @@ export function RoadbookMap({
         {
           "--roadbook-map-canvas": visualStyle.canvas,
           "--roadbook-map-filter": visualStyle.tileFilter,
+          "--roadbook-map-wash": visualStyle.wash,
         } as CSSProperties
       }
       aria-label="CapCar Roadbook map"

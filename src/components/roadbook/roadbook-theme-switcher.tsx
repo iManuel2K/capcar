@@ -1,9 +1,7 @@
 "use client";
 
-import type { CSSProperties } from "react";
 import { useRef } from "react";
 
-import { ROADBOOK_MAP_STYLES } from "@/features/roadbook/roadbook-map-style";
 import {
   roadbookMapModes,
   type RoadbookMapMode,
@@ -31,16 +29,12 @@ export function RoadbookThemeSwitcher({
       aria-labelledby="roadbook-style-title"
       className="roadbook-style-picker"
     >
-      <div className="mb-3 px-1">
-        <h2
-          id="roadbook-style-title"
-          className="text-sm font-semibold tracking-[-0.01em] text-white"
-        >
-          Nine Roadbook styles.
+      <div className="roadbook-style-picker__intro">
+        <h2 id="roadbook-style-title" className="roadbook-style-picker__title">
+          Nine city styles
         </h2>
-        <p className="mt-0.5 text-[11px] leading-4 text-white/48">
-          From clear workshop daylight to Tokyo night, choose how your roads
-          should feel.
+        <p className="roadbook-style-picker__description">
+          From bright daylight to Tokyo night, your map in your look.
         </p>
       </div>
       <div
@@ -49,7 +43,6 @@ export function RoadbookThemeSwitcher({
         className="roadbook-style-chips"
       >
         {roadbookMapModes.map((value, index) => {
-          const style = ROADBOOK_MAP_STYLES[value];
           const selected = value === mode;
           return (
             <button
@@ -60,7 +53,6 @@ export function RoadbookThemeSwitcher({
               type="button"
               role="radio"
               aria-checked={selected}
-              title={style.description}
               onClick={() => onChange(value)}
               onKeyDown={(event) => {
                 if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
@@ -73,18 +65,7 @@ export function RoadbookThemeSwitcher({
                 }
               }}
               className={`roadbook-style-chip ${selected ? "is-selected" : ""}`}
-              style={
-                {
-                  "--roadbook-chip-accent": style.accent,
-                  "--roadbook-chip-canvas": style.canvas,
-                } as CSSProperties
-              }
             >
-              <span aria-hidden="true" className="roadbook-style-chip__swatch">
-                {style.swatch.map((color) => (
-                  <i key={color} style={{ background: color }} />
-                ))}
-              </span>
               <span>{labels[value]}</span>
             </button>
           );
