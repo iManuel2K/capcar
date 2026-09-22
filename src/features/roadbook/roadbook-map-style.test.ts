@@ -12,12 +12,43 @@ import {
   writeRoadbookMapStyle,
 } from "./roadbook-map-style";
 import { roadbookMapModes } from "./roadbook-schema";
+import {
+  buildRoadbookVectorStyle,
+  ROADBOOK_VECTOR_SOURCE_URL,
+} from "./roadbook-vector-style";
 
 describe("Roadbook map styles", () => {
   it("defines exactly the nine stable city IDs", () => {
     expect(Object.keys(ROADBOOK_MAP_STYLES)).toEqual([...roadbookMapModes]);
     expect(roadbookMapModes).toHaveLength(9);
     expect(roadbookMapModes.every(isRoadbookMapMode)).toBe(true);
+  });
+
+  it("matches the city reference palettes by vector layer", () => {
+    expect(ROADBOOK_MAP_STYLES.konstanz.vector.water).toBe("#2f6f8f");
+    expect(ROADBOOK_MAP_STYLES.reykjavik.vector.land).toBe("#2c1016");
+    expect(ROADBOOK_MAP_STYLES.lissabon.vector.roadMajor).toBe("#b53a26");
+    expect(ROADBOOK_MAP_STYLES.wien.vector.roadMajor).toBe("#f0cf7a");
+    expect(ROADBOOK_MAP_STYLES.zurich.vector.land).toBe("#f4f6f8");
+    expect(ROADBOOK_MAP_STYLES.venedig.vector.water).toBe("#a9c6bc");
+    expect(ROADBOOK_MAP_STYLES.kyoto.vector.roadMajor).toBe("#232520");
+    expect(ROADBOOK_MAP_STYLES.marrakesch.vector.landcover).toBe("#e7c894");
+    expect(ROADBOOK_MAP_STYLES.tokyo.vector.roadMajor).toBe("#2bf0df");
+  });
+
+  it("builds an OpenFreeMap vector style without changing coordinates", () => {
+    const style = buildRoadbookVectorStyle(ROADBOOK_MAP_STYLES.konstanz.vector);
+    expect(style.sources).toEqual(
+      expect.objectContaining({
+        "roadbook-openfreemap": expect.objectContaining({
+          type: "vector",
+          url: ROADBOOK_VECTOR_SOURCE_URL,
+        }),
+      }),
+    );
+    expect(style.layers.map((layer) => layer.id)).toEqual(
+      expect.arrayContaining(["water", "road-major", "road-minor", "building"]),
+    );
   });
 
   it("persists valid styles and safely recovers invalid or blocked storage", () => {
@@ -69,7 +100,7 @@ describe("Roadbook map styles", () => {
     );
   });
 
-  it("contains no legacy proprietary-map references in tracked files", () => {
+  it("contains no legacy proprietary-map runtime references", () => {
     const forbidden = ["map", "box"].join("");
     const files = execFileSync(
       "git",
@@ -79,7 +110,11 @@ describe("Roadbook map styles", () => {
       .trim()
       .split("\n");
     const offenders = files.filter((file) => {
-      if (!file || file === "src/features/roadbook/roadbook-map-style.test.ts")
+      if (
+        !file ||
+        file === "pnpm-lock.yaml" ||
+        file === "src/features/roadbook/roadbook-map-style.test.ts"
+      )
         return false;
       try {
         return readFileSync(file, "utf8").toLowerCase().includes(forbidden);

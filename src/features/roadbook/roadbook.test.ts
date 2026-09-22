@@ -94,7 +94,7 @@ describe("Roadbook contracts", () => {
     );
   });
 
-  it("uses a non-WebGL OpenStreetMap layer without a paid token", () => {
+  it("keeps Leaflet underneath progressive vector rendering", () => {
     const map = readFileSync(
       "src/components/roadbook/roadbook-map.tsx",
       "utf8",
@@ -102,6 +102,10 @@ describe("Roadbook contracts", () => {
     expect(map).toContain('from "leaflet"');
     expect(map).toContain("tile.openstreetmap.org");
     expect(map).toContain("OpenStreetMap");
+    expect(map).toContain('import("maplibre-gl")');
+    expect(map).toContain("supportsRoadbookWebGL()");
+    expect(map).toContain("fallBackToLeaflet");
+    expect(map).toContain("roadbook-map-shell");
   });
 
   it("bounds stalled location-data requests", () => {

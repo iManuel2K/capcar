@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://*.sketchfab.com https://*.supabase.co https://tile.openstreetmap.org https://*.tile.openstreetmap.org",
       "font-src 'self' data:",
-      "connect-src 'self' https://*.supabase.co https://*.sketchfab.com",
+      "connect-src 'self' https://*.supabase.co https://*.sketchfab.com https://tiles.openfreemap.org",
       "frame-src https://sketchfab.com https://*.sketchfab.com",
       "media-src 'self' blob: https://*.sketchfab.com",
       "worker-src 'self' blob:",
