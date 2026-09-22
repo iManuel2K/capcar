@@ -204,9 +204,11 @@ export function buildRoadbookVectorStyle(
   } as unknown as StyleSpecification;
 }
 
+type PalettePaintProperty = "background-color" | "fill-color" | "line-color";
+
 const palettePaintProperties = (
   palette: RoadbookVectorPalette,
-): ReadonlyArray<readonly [string, string, string]> => [
+): ReadonlyArray<readonly [string, PalettePaintProperty, string]> => [
   ["background", "background-color", palette.land],
   ["landcover", "fill-color", palette.landcover],
   ["park", "fill-color", palette.parks],
