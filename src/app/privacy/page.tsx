@@ -3,10 +3,11 @@ import { getTranslations } from "next-intl/server";
 
 import { LegalSection, LegalShell } from "@/components/legal/legal-shell";
 import { getLegalConfiguration } from "@/features/legal/legal-config";
+import { canonicalMetadata } from "@/features/seo/public-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("LegalDocs.privacy");
-  return { title: t("meta") };
+  return { ...canonicalMetadata("/privacy"), title: t("meta") };
 }
 
 export default async function PrivacyPage() {

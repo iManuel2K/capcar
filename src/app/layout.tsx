@@ -7,15 +7,17 @@ import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-regis
 import { NotificationBootstrap } from "@/components/notifications/notification-bootstrap";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { SkipToContent } from "@/components/ui/skip-to-content";
+import { PUBLIC_SITE_URL } from "@/features/seo/public-metadata";
 
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Metadata");
   return {
-    title: { default: t("siteTitle"), template: "%s · Capcar" },
+    metadataBase: PUBLIC_SITE_URL,
+    title: { default: t("siteTitle"), template: "%s · CapCar" },
     description: t("siteDescription"),
-    applicationName: "Capcar",
+    applicationName: "CapCar",
     manifest: "/manifest.webmanifest",
     icons: {
       icon: [{ url: "/capcar-mark-192.png", type: "image/png" }],

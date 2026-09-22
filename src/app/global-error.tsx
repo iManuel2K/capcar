@@ -5,45 +5,45 @@ import { useSyncExternalStore } from "react";
 
 const recoveryCopy = {
   en: {
-    title: "Capcar recovery",
+    title: "CapCar recovery",
     eyebrow: "Drive interrupted",
-    heading: "Capcar could not finish that action.",
+    heading: "CapCar could not finish that action.",
     message:
       "Try again first. Your browser-local records have not been intentionally deleted.",
     retry: "Try again",
     home: "Return home",
   },
   de: {
-    title: "Capcar-Wiederherstellung",
+    title: "CapCar-Wiederherstellung",
     eyebrow: "Fahrt unterbrochen",
-    heading: "Capcar konnte diese Aktion nicht abschließen.",
+    heading: "CapCar konnte diese Aktion nicht abschließen.",
     message:
       "Versuche es zuerst erneut. Deine browserlokalen Daten wurden nicht absichtlich gelöscht.",
     retry: "Erneut versuchen",
     home: "Zur Startseite",
   },
   el: {
-    title: "Ανάκτηση Capcar",
+    title: "Ανάκτηση CapCar",
     eyebrow: "Η διαδρομή διακόπηκε",
-    heading: "Το Capcar δεν μπόρεσε να ολοκληρώσει αυτή την ενέργεια.",
+    heading: "Το CapCar δεν μπόρεσε να ολοκληρώσει αυτή την ενέργεια.",
     message:
       "Δοκιμάστε ξανά πρώτα. Οι τοπικές εγγραφές του browser δεν διαγράφηκαν σκόπιμα.",
     retry: "Δοκιμή ξανά",
     home: "Επιστροφή στην αρχική",
   },
   sq: {
-    title: "Rikuperimi i Capcar",
+    title: "Rikuperimi i CapCar",
     eyebrow: "Udhëtimi u ndërpre",
-    heading: "Capcar nuk mundi ta përfundonte këtë veprim.",
+    heading: "CapCar nuk mundi ta përfundonte këtë veprim.",
     message:
       "Provo përsëri fillimisht. Të dhënat lokale të shfletuesit nuk janë fshirë qëllimisht.",
     retry: "Provo përsëri",
     home: "Kthehu në krye",
   },
   ja: {
-    title: "Capcar リカバリー",
+    title: "CapCar リカバリー",
     eyebrow: "操作が中断されました",
-    heading: "Capcar はこの操作を完了できませんでした。",
+    heading: "CapCar はこの操作を完了できませんでした。",
     message:
       "まず再試行してください。ブラウザ内のローカル記録が意図的に削除されたわけではありません。",
     retry: "再試行",

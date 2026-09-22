@@ -2,9 +2,13 @@ import { CommunityShell } from "@/components/community/community-shell";
 import { RetailSearch } from "@/components/community/retail-search";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
+import { canonicalMetadata } from "@/features/seo/public-metadata";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Community");
-  return { title: t("connectedTitle") };
+  return {
+    ...canonicalMetadata("/connected-parts"),
+    title: t("connectedTitle"),
+  };
 }
 export default async function Page({
   searchParams,

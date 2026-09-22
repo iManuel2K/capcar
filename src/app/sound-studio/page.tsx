@@ -4,9 +4,10 @@ import { RecordingLibrary } from "@/components/visualizer/recording-library";
 import { CuratedSounds } from "@/components/visualizer/curated-sounds";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
+import { canonicalMetadata } from "@/features/seo/public-metadata";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("SoundPage");
-  return { title: t("title") };
+  return { ...canonicalMetadata("/sound-studio"), title: t("title") };
 }
 export default async function Page() {
   const t = await getTranslations("SoundPage");
