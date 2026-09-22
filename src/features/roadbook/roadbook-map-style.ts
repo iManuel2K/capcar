@@ -11,6 +11,7 @@ export type RoadbookMapStyle = Readonly<{
   accent: string;
   swatch: readonly [string, string, string];
   tileFilter: string;
+  wash: string;
 }>;
 
 export const ROADBOOK_MAP_STYLES = {
@@ -21,7 +22,9 @@ export const ROADBOOK_MAP_STYLES = {
     canvas: "#dce7e2",
     accent: "#176b63",
     swatch: ["#f5efe2", "#176b63", "#9eb8c2"],
-    tileFilter: "saturate(.82) hue-rotate(7deg) brightness(1.04) contrast(.92)",
+    tileFilter:
+      "grayscale(.34) sepia(.18) hue-rotate(132deg) saturate(.9) brightness(.76) contrast(1.34)",
+    wash: "rgb(21 74 82 / 20%)",
   },
   reykjavik: {
     id: "reykjavik",
@@ -31,7 +34,8 @@ export const ROADBOOK_MAP_STYLES = {
     accent: "#6ba8c1",
     swatch: ["#dce7ea", "#68767b", "#8fc7dd"],
     tileFilter:
-      "grayscale(.4) sepia(.1) hue-rotate(150deg) saturate(.72) brightness(.94) contrast(1.18)",
+      "grayscale(.68) sepia(.08) hue-rotate(150deg) saturate(.72) brightness(.82) contrast(1.35)",
+    wash: "rgb(133 169 183 / 16%)",
   },
   lissabon: {
     id: "lissabon",
@@ -41,7 +45,8 @@ export const ROADBOOK_MAP_STYLES = {
     accent: "#b75f45",
     swatch: ["#f3ead8", "#b9684c", "#477a91"],
     tileFilter:
-      "sepia(.38) saturate(1.12) hue-rotate(342deg) brightness(1.01) contrast(.98)",
+      "sepia(.64) saturate(1.4) hue-rotate(334deg) brightness(.78) contrast(1.28)",
+    wash: "rgb(157 77 44 / 17%)",
   },
   wien: {
     id: "wien",
@@ -51,7 +56,8 @@ export const ROADBOOK_MAP_STYLES = {
     accent: "#7d293d",
     swatch: ["#e9dfcd", "#82786d", "#7d293d"],
     tileFilter:
-      "grayscale(.18) sepia(.25) saturate(.68) brightness(1.04) contrast(.94)",
+      "grayscale(.52) sepia(.86) saturate(1.9) hue-rotate(352deg) brightness(.34) contrast(1.62)",
+    wash: "rgb(82 61 19 / 14%)",
   },
   zurich: {
     id: "zurich",
@@ -60,7 +66,8 @@ export const ROADBOOK_MAP_STYLES = {
     canvas: "#dde1e1",
     accent: "#356b88",
     swatch: ["#f4f5f2", "#404748", "#527f99"],
-    tileFilter: "grayscale(.75) saturate(.45) brightness(1.04) contrast(1.16)",
+    tileFilter: "grayscale(.92) saturate(.35) brightness(.68) contrast(1.46)",
+    wash: "rgb(111 125 132 / 14%)",
   },
   venedig: {
     id: "venedig",
@@ -70,7 +77,8 @@ export const ROADBOOK_MAP_STYLES = {
     accent: "#477c72",
     swatch: ["#e8ddbd", "#477c72", "#b8755e"],
     tileFilter:
-      "sepia(.34) hue-rotate(112deg) saturate(.8) brightness(.94) contrast(1.02)",
+      "sepia(.54) hue-rotate(88deg) saturate(.86) brightness(.74) contrast(1.26)",
+    wash: "rgb(66 111 101 / 18%)",
   },
   kyoto: {
     id: "kyoto",
@@ -80,7 +88,8 @@ export const ROADBOOK_MAP_STYLES = {
     accent: "#a34132",
     swatch: ["#eadfc7", "#393633", "#a34132"],
     tileFilter:
-      "sepia(.45) saturate(.72) hue-rotate(326deg) brightness(.91) contrast(1.12)",
+      "grayscale(.66) sepia(.34) saturate(.62) hue-rotate(35deg) brightness(.68) contrast(1.36)",
+    wash: "rgb(91 96 69 / 15%)",
   },
   marrakesch: {
     id: "marrakesch",
@@ -90,7 +99,8 @@ export const ROADBOOK_MAP_STYLES = {
     accent: "#7a6942",
     swatch: ["#d8b27d", "#a75d35", "#617052"],
     tileFilter:
-      "sepia(.62) saturate(1.18) hue-rotate(338deg) brightness(.91) contrast(1.08)",
+      "sepia(.82) saturate(1.12) hue-rotate(344deg) brightness(.7) contrast(1.32)",
+    wash: "rgb(139 92 38 / 19%)",
   },
   tokyo: {
     id: "tokyo",
@@ -100,7 +110,8 @@ export const ROADBOOK_MAP_STYLES = {
     accent: "#e72d45",
     swatch: ["#071a1c", "#164b4d", "#e72d45"],
     tileFilter:
-      "grayscale(.72) sepia(.6) hue-rotate(132deg) saturate(1.58) brightness(.34) contrast(1.38)",
+      "grayscale(.84) sepia(.72) hue-rotate(126deg) saturate(2.35) brightness(.28) contrast(1.78)",
+    wash: "rgb(0 78 84 / 20%)",
   },
 } as const satisfies Record<RoadbookMapMode, RoadbookMapStyle>;
 

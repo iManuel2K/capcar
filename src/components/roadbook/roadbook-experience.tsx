@@ -234,16 +234,17 @@ export function RoadbookExperience() {
         </div>
       </div>
 
-      <div className="absolute top-3 right-3 z-20 hidden w-[min(46rem,calc(100%-42rem))] min-w-[34rem] lg:block">
-        <div className="mb-2 flex justify-end gap-2">
-          <RoadbookModerationQueue />
-          <RoadbookPosterButton
-            vehicle={selectedVehicle}
-            visits={visits}
-            label={t("poster.action")}
-            emptyLabel={t("poster.empty")}
-          />
-        </div>
+      <div className="absolute top-3 right-3 z-20 hidden justify-end gap-2 lg:flex">
+        <RoadbookModerationQueue />
+        <RoadbookPosterButton
+          vehicle={selectedVehicle}
+          visits={visits}
+          label={t("poster.action")}
+          emptyLabel={t("poster.empty")}
+        />
+      </div>
+
+      <div className="absolute bottom-[5.35rem] left-1/2 z-20 hidden w-[min(64rem,calc(100%-8rem))] -translate-x-1/2 lg:block">
         <RoadbookThemeSwitcher
           mode={mode}
           onChange={updateMode}
