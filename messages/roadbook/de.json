@@ -34,8 +34,8 @@
       "tokyo": "Tokyo"
     },
     "setup": {
-      "title": "Roadbook benötigt den Karten-Token.",
-      "description": "Füge den öffentlichen Mapbox-Token in Netlify ein und deploye erneut. Die Karte wird nur auf dieser Route initialisiert."
+      "title": "Roadbook-Karte nicht verfügbar.",
+      "description": "Die leichte Kompatibilitätskarte konnte nicht geladen werden. Prüfe die Verbindung und versuche es erneut."
     },
     "errors": {
       "generic": "Die Aktion konnte nicht abgeschlossen werden.",
@@ -45,7 +45,7 @@
       "obdTooLarge": "Die OBD-Datei darf höchstens 1 MB groß sein.",
       "locationUnavailable": "Der Standort ist in diesem Browser nicht verfügbar.",
       "locationDenied": "Der Standort wurde nicht freigegeben. Du kannst die Karte weiterhin manuell bewegen.",
-      "mapToken": "Mapbox hat den konfigurierten öffentlichen Token abgelehnt.",
+      "mapToken": "Der Kartendienst hat die Anfrage abgelehnt.",
       "mapUnavailable": "Die Straßenebene konnte nicht geladen werden. Lade die Seite neu oder wähle eine andere Kartenansicht."
     },
     "empty": {

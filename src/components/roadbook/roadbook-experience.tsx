@@ -33,6 +33,10 @@ import {
 } from "@/features/roadbook/roadbook-storage";
 import { readBuildState } from "@/features/builds/build-storage";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
+import {
+  readRoadbookMapStyle,
+  writeRoadbookMapStyle,
+} from "@/features/roadbook/roadbook-map-style";
 
 const defaultCenter: RoadbookCenter = { latitude: 50.1109, longitude: 8.6821 };
 
@@ -44,7 +48,11 @@ export function RoadbookExperience() {
   const [events, setEvents] = useState<RoadbookEvent[]>([]);
   const [selectedVenue, setSelectedVenue] = useState<RoadbookVenue>();
   const [categories, setCategories] = useState<RoadbookCategory[]>([]);
-  const [mode, setMode] = useState<RoadbookMapMode>("tokyo");
+  const [mode, setMode] = useState<RoadbookMapMode>(() =>
+    readRoadbookMapStyle(
+      typeof window === "undefined" ? undefined : window.localStorage,
+    ),
+  );
   const [center, setCenter] = useState(defaultCenter);
   const [radiusKm, setRadiusKm] = useState(350);
   const [userPosition, setUserPosition] = useState<RoadbookCenter>();
@@ -149,6 +157,11 @@ export function RoadbookExperience() {
     [],
   );
 
+  const updateMode = useCallback((nextMode: RoadbookMapMode) => {
+    setMode(nextMode);
+    writeRoadbookMapStyle(nextMode, window.localStorage);
+  }, []);
+
   function locateUser() {
     if (!navigator.geolocation) {
       setError(t("errors.locationUnavailable"));
@@ -211,20 +224,30 @@ export function RoadbookExperience() {
         </div>
       </div>
 
-      <div className="absolute top-3 right-3 z-20 hidden gap-2 lg:flex">
-        <RoadbookModerationQueue />
-        <RoadbookPosterButton
-          vehicle={selectedVehicle}
-          visits={visits}
-          label={t("poster.action")}
-          emptyLabel={t("poster.empty")}
-        />
+      <div className="absolute top-3 right-3 z-20 hidden w-[min(46rem,calc(100%-42rem))] min-w-[34rem] lg:block">
+        <div className="mb-2 flex justify-end gap-2">
+          <RoadbookModerationQueue />
+          <RoadbookPosterButton
+            vehicle={selectedVehicle}
+            visits={visits}
+            label={t("poster.action")}
+            emptyLabel={t("poster.empty")}
+          />
+        </div>
         <RoadbookThemeSwitcher
           mode={mode}
-          onChange={setMode}
+          onChange={updateMode}
           label={t("modes.label")}
           labels={modeLabels}
-          placement="top"
+        />
+      </div>
+
+      <div className="absolute top-36 right-3 left-3 z-20 lg:hidden">
+        <RoadbookThemeSwitcher
+          mode={mode}
+          onChange={updateMode}
+          label={t("modes.label")}
+          labels={modeLabels}
         />
       </div>
 
@@ -257,17 +280,9 @@ export function RoadbookExperience() {
         >
           <Crosshair className="size-4" />
         </button>
-        <div className="lg:hidden">
-          <RoadbookThemeSwitcher
-            mode={mode}
-            onChange={setMode}
-            label={t("modes.label")}
-            labels={modeLabels}
-          />
-        </div>
       </div>
 
-      <div className="absolute top-36 left-3 z-20 sm:top-44 sm:left-5">
+      <div className="absolute top-[15.25rem] left-3 z-20 lg:top-44 lg:left-5">
         <div className="rounded-xl border border-white/10 bg-[#09100d]/82 px-3 py-2 text-[11px] text-white/52 shadow-lg backdrop-blur-xl">
           {loading ? t("loading") : t("resultCount", { count: venues.length })}
         </div>

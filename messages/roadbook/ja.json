@@ -34,8 +34,8 @@
       "tokyo": "Tokyo"
     },
     "setup": {
-      "title": "Roadbookには地図トークンが必要です。",
-      "description": "Netlifyに公開Mapboxトークンを追加して再デプロイしてください。地図はこのページでのみ初期化されます。"
+      "title": "Roadbookマップを利用できません。",
+      "description": "軽量互換マップを読み込めませんでした。接続を確認して再試行してください。"
     },
     "errors": {
       "generic": "操作を完了できませんでした。",
@@ -45,7 +45,7 @@
       "obdTooLarge": "OBDファイルは1MB以下にしてください。",
       "locationUnavailable": "このブラウザでは位置情報を利用できません。",
       "locationDenied": "位置情報が許可されませんでした。地図は手動で移動できます。",
-      "mapToken": "設定された公開トークンがMapboxに拒否されました。",
+      "mapToken": "地図サービスがリクエストを拒否しました。",
       "mapUnavailable": "道路レイヤーを読み込めませんでした。再読み込みするか、別のマップ表示を試してください。"
     },
     "empty": {

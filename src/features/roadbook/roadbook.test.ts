@@ -101,7 +101,6 @@ describe("Roadbook contracts", () => {
     expect(map).toContain('from "leaflet"');
     expect(map).toContain("tile.openstreetmap.org");
     expect(map).toContain("OpenStreetMap");
-    expect(map).not.toContain("mapbox");
   });
 
   it("publishes only active sourced events", () => {

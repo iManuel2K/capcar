@@ -7,6 +7,7 @@ import L, {
   type TileLayer,
 } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import type { CSSProperties } from "react";
 import { useEffect, useRef } from "react";
 
 import type { RoadbookCenter } from "@/features/roadbook/roadbook-client";
@@ -16,66 +17,15 @@ import type {
   RoadbookMapMode,
   RoadbookVenue,
 } from "@/features/roadbook/roadbook-schema";
+import {
+  recoverRoadbookTiles,
+  ROADBOOK_MAP_STYLES,
+} from "@/features/roadbook/roadbook-map-style";
 
-export const ROADBOOK_MAP_STYLES: Record<
-  RoadbookMapMode,
-  { name: string; url: string; attribution: string }
-> = {
-  konstanz: {
-    name: "01 / Konstanz",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-  reykjavik: {
-    name: "02 / Reykjavík",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-  lissabon: {
-    name: "03 / Lissabon",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-  wien: {
-    name: "04 / Wien",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-  zurich: {
-    name: "05 / Zürich",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-  venedig: {
-    name: "06 / Venedig",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-  kyoto: {
-    name: "07 / Kyoto",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-  marrakesch: {
-    name: "08 / Marrakesch",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-  tokyo: {
-    name: "09 / Tokyo",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-};
+const PRIMARY_TILES = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+const FALLBACK_TILES = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+const OSM_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 const markerIcons: Record<RoadbookCategory, string> = {
   drift_circuit:
@@ -116,7 +66,6 @@ export function RoadbookMap({
   mode,
   center,
   userPosition,
-  mapStyle,
   onSelect,
   onViewportChange,
   onError,
@@ -128,12 +77,12 @@ export function RoadbookMap({
   mode: RoadbookMapMode;
   center: RoadbookCenter;
   userPosition?: RoadbookCenter;
-  mapStyle?: string;
   onSelect: (venue: RoadbookVenue) => void;
   onViewportChange: (center: RoadbookCenter, radiusKm: number) => void;
   onError: (message: string) => void;
   onReady: () => void;
 }) {
+  const visualStyle = ROADBOOK_MAP_STYLES[mode];
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<LeafletMap | null>(null);
   const tileLayer = useRef<TileLayer | null>(null);
@@ -141,11 +90,6 @@ export function RoadbookMap({
   const userMarker = useRef<L.CircleMarker | null>(null);
   const selectedRoute = useRef<Polyline | null>(null);
   const initialCenter = useRef(center);
-  const initialStyleKey = useRef<RoadbookMapMode>(
-    mapStyle && mapStyle in ROADBOOK_MAP_STYLES
-      ? (mapStyle as RoadbookMapMode)
-      : mode,
-  );
   const onSelectRef = useRef(onSelect);
   const onViewportChangeRef = useRef(onViewportChange);
   const onErrorRef = useRef(onError);
@@ -161,9 +105,6 @@ export function RoadbookMap({
   useEffect(() => {
     if (!container.current || map.current) return;
 
-    const currentStyleConfig =
-      ROADBOOK_MAP_STYLES[initialStyleKey.current] ?? ROADBOOK_MAP_STYLES.tokyo;
-
     const instance = L.map(container.current, {
       center: [initialCenter.current.latitude, initialCenter.current.longitude],
       zoom: 7,
@@ -173,14 +114,13 @@ export function RoadbookMap({
       attributionControl: false,
     });
 
-    let tileFailures = 0;
-    let usingFallback = false;
+    let recovery = { failures: 0, fallbackAttempted: false };
     let hasLoadedTiles = false;
-    const tiles = L.tileLayer(currentStyleConfig.url, {
+    const tiles = L.tileLayer(PRIMARY_TILES, {
       minZoom: 3,
       maxZoom: 19,
       crossOrigin: true,
-      attribution: currentStyleConfig.attribution,
+      attribution: OSM_ATTRIBUTION,
     });
 
     L.control.zoom({ position: "bottomleft" }).addTo(instance);
@@ -193,16 +133,10 @@ export function RoadbookMap({
       onReadyRef.current();
     });
     tiles.on("tileerror", () => {
-      tileFailures += 1;
-      if (!hasLoadedTiles && tileFailures >= 4) {
-        if (!usingFallback) {
-          usingFallback = true;
-          tileFailures = 0;
-          tiles.setUrl(ROADBOOK_MAP_STYLES.konstanz.url);
-          return;
-        }
-        onErrorRef.current("MAP_TILES_FAILED");
-      }
+      const result = recoverRoadbookTiles(recovery, hasLoadedTiles);
+      recovery = result.state;
+      if (result.action === "fallback") tiles.setUrl(FALLBACK_TILES, false);
+      if (result.action === "error") onErrorRef.current("MAP_TILES_FAILED");
     });
     tiles.addTo(instance);
 
@@ -233,17 +167,6 @@ export function RoadbookMap({
       tileLayer.current = null;
     };
   }, []);
-
-  useEffect(() => {
-    if (!tileLayer.current) return;
-    const activeStyleKey: RoadbookMapMode =
-      mapStyle && mapStyle in ROADBOOK_MAP_STYLES
-        ? (mapStyle as RoadbookMapMode)
-        : mode;
-    const config =
-      ROADBOOK_MAP_STYLES[activeStyleKey] ?? ROADBOOK_MAP_STYLES.tokyo;
-    tileLayer.current.setUrl(config.url);
-  }, [mapStyle, mode]);
 
   useEffect(() => {
     const instance = map.current;
@@ -344,7 +267,13 @@ export function RoadbookMap({
     <div
       ref={container}
       className="roadbook-leaflet-map absolute inset-0"
-      data-roadbook-mode={mode}
+      data-roadbook-style={mode}
+      style={
+        {
+          "--roadbook-map-canvas": visualStyle.canvas,
+          "--roadbook-map-filter": visualStyle.tileFilter,
+        } as CSSProperties
+      }
       aria-label="Capcar Roadbook map"
     />
   );
