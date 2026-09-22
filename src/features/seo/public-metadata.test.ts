@@ -1,7 +1,11 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-import { canonicalMetadata, PUBLIC_INDEXABLE_ROUTES } from "./public-metadata";
+import {
+  canonicalMetadata,
+  PUBLIC_INDEXABLE_ROUTES,
+  PUBLIC_SITE_URL,
+} from "./public-metadata";
 
 describe("public metadata", () => {
   it("defines unique indexable routes without inventing a standalone FAQ", () => {
@@ -22,6 +26,8 @@ describe("public metadata", () => {
   });
 
   it("creates self-referencing canonical metadata", () => {
+    expect(PUBLIC_SITE_URL.href).toBe("https://capcar.dev/");
+
     for (const route of PUBLIC_INDEXABLE_ROUTES) {
       expect(canonicalMetadata(route)).toEqual({
         alternates: { canonical: route || "/" },
