@@ -38,6 +38,7 @@
       "description": "The lightweight compatibility map could not load. Check the connection and try again."
     },
     "errors": {
+      "slow": "Roadbook is taking longer than expected.",
       "generic": "That action could not be completed.",
       "load": "Roadbook places could not be loaded.",
       "signInRequired": "Sign in to save a place, record a visit or submit a report.",

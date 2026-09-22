@@ -7,6 +7,7 @@ import {
   roadbookVenueListSchema,
   type RoadbookVenue,
 } from "@/features/roadbook/roadbook-schema";
+import { ROADBOOK_DATA_TIMEOUT_MS } from "@/features/roadbook/roadbook-timeout";
 
 const venue = roadbookVenueListSchema.parse([
   {
@@ -101,6 +102,16 @@ describe("Roadbook contracts", () => {
     expect(map).toContain('from "leaflet"');
     expect(map).toContain("tile.openstreetmap.org");
     expect(map).toContain("OpenStreetMap");
+  });
+
+  it("bounds stalled location-data requests", () => {
+    expect(ROADBOOK_DATA_TIMEOUT_MS).toBe(12_000);
+    const experience = readFileSync(
+      "src/components/roadbook/roadbook-experience.tsx",
+      "utf8",
+    );
+    expect(experience).toContain("controller.abort()");
+    expect(experience).toContain('t(timedOut ? "errors.slow" : "errors.load")');
   });
 
   it("publishes only active sourced events", () => {

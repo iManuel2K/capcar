@@ -38,6 +38,7 @@
       "description": "Die leichte Kompatibilitätskarte konnte nicht geladen werden. Prüfe die Verbindung und versuche es erneut."
     },
     "errors": {
+      "slow": "Das Roadbook braucht länger als erwartet.",
       "generic": "Die Aktion konnte nicht abgeschlossen werden.",
       "load": "Roadbook-Orte konnten nicht geladen werden.",
       "signInRequired": "Melde dich an, um Orte zu speichern, Besuche einzutragen oder Änderungen zu melden.",

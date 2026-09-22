@@ -38,6 +38,7 @@
       "description": "Harta e lehtë e përputhshmërisë nuk u ngarkua. Kontrollo lidhjen dhe provo përsëri."
     },
     "errors": {
+      "slow": "Roadbook po zgjat më shumë se pritej.",
       "generic": "Veprimi nuk mund të përfundonte.",
       "load": "Vendet e Roadbook nuk mund të ngarkoheshin.",
       "signInRequired": "Hyr në llogari për të ruajtur një vend, regjistruar një vizitë ose raportuar ndryshim.",
