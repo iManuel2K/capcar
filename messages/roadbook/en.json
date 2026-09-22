@@ -34,8 +34,8 @@
       "tokyo": "Tokyo"
     },
     "setup": {
-      "title": "Roadbook needs its map token.",
-      "description": "Add the public Mapbox token in Netlify and redeploy. The map is only initialized on this route."
+      "title": "Roadbook map unavailable.",
+      "description": "The lightweight compatibility map could not load. Check the connection and try again."
     },
     "errors": {
       "generic": "That action could not be completed.",
@@ -45,7 +45,7 @@
       "obdTooLarge": "The OBD evidence file must be 1 MB or smaller.",
       "locationUnavailable": "Location is not available in this browser.",
       "locationDenied": "Location permission was not granted. You can still move the map manually.",
-      "mapToken": "Mapbox rejected the configured public token.",
+      "mapToken": "The map tile service rejected the request.",
       "mapUnavailable": "The map could not load its road layer. Reload the page or try another map mode."
     },
     "empty": {

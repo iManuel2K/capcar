@@ -34,8 +34,8 @@
       "tokyo": "Tokyo"
     },
     "setup": {
-      "title": "Roadbook ka nevojë për token-in e hartës.",
-      "description": "Shto token-in publik të Mapbox në Netlify dhe bëj deploy përsëri. Harta ngarkohet vetëm në këtë faqe."
+      "title": "Harta Roadbook nuk është e disponueshme.",
+      "description": "Harta e lehtë e përputhshmërisë nuk u ngarkua. Kontrollo lidhjen dhe provo përsëri."
     },
     "errors": {
       "generic": "Veprimi nuk mund të përfundonte.",
@@ -45,7 +45,7 @@
       "obdTooLarge": "Skedari OBD duhet të jetë maksimumi 1 MB.",
       "locationUnavailable": "Vendndodhja nuk është e disponueshme në këtë shfletues.",
       "locationDenied": "Leja për vendndodhjen nuk u dha. Hartën mund ta lëvizësh manualisht.",
-      "mapToken": "Mapbox refuzoi token-in publik të konfiguruar.",
+      "mapToken": "Shërbimi i hartës e refuzoi kërkesën.",
       "mapUnavailable": "Shtresa e rrugëve nuk u ngarkua. Rifresko faqen ose provo një pamje tjetër harte."
     },
     "empty": {
