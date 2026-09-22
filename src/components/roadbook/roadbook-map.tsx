@@ -7,7 +7,6 @@ import L, {
   type TileLayer,
 } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import type { FeatureCollection, LineString } from "geojson";
 import type {
   GeoJSONSource,
   Map as MapLibreMap,
@@ -40,7 +39,12 @@ const OSM_ATTRIBUTION =
 const VECTOR_LOAD_TIMEOUT_MS = 9_000;
 const ROUTE_SOURCE_ID = "roadbook-selected-route";
 
-const emptyRoute: FeatureCollection<LineString> = {
+type RoadbookRouteData = Exclude<
+  Parameters<GeoJSONSource["setData"]>[0],
+  string
+>;
+
+const emptyRoute: RoadbookRouteData = {
   type: "FeatureCollection",
   features: [],
 };
@@ -101,9 +105,7 @@ function radiusFromVectorMap(instance: MapLibreMap) {
   return Math.min(1000, Math.max(10, center.distanceTo(corner) / 1000));
 }
 
-function routeData(
-  selectedVenue?: RoadbookVenue,
-): FeatureCollection<LineString> {
+function routeData(selectedVenue?: RoadbookVenue): RoadbookRouteData {
   if (!selectedVenue?.routeGeoJson) return emptyRoute;
   return {
     type: "FeatureCollection",
