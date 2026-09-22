@@ -94,7 +94,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
           updated_at: new Date().toISOString(),
         });
       if (syncError) throw syncError;
-      setMessage("Local Capcar data was backed up to your account.");
+      setMessage("Local CapCar data was backed up to your account.");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Upload failed.");
     } finally {
@@ -105,7 +105,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
   async function restoreSnapshot() {
     if (
       !window.confirm(
-        "Restore the cloud snapshot over matching local Capcar records?",
+        "Restore the cloud snapshot over matching local CapCar records?",
       )
     )
       return;
@@ -150,7 +150,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
           });
         if (syncError) {
           throw new Error(
-            "Capcar could not save your latest changes. Your device data was kept and you remain signed in.",
+            "CapCar could not save your latest changes. Your device data was kept and you remain signed in.",
           );
         }
       }
@@ -249,7 +249,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
     <div className="mx-auto max-w-5xl py-10 sm:py-16">
       <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10">
         <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
-          Capcar account
+          CapCar account
         </p>
         <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
           Your garage stays yours.
@@ -337,7 +337,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
                 Create account or sign in
               </h2>
               <p className="mt-3 text-sm leading-6 text-white/40">
-                Enter your email and Capcar will send a secure one-time link. A
+                Enter your email and CapCar will send a secure one-time link. A
                 new account is created automatically when needed—no password to
                 remember.
               </p>
@@ -390,7 +390,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
               Take the complete garage with you.
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-6 text-white/40">
-              Export every local Capcar record—including the wishlist,
+              Export every local CapCar record—including the wishlist,
               diagnostics, costs and install stamps—without closing your
               account.
             </p>
@@ -423,7 +423,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
                 Account controls
               </p>
               <h2 className="mt-2 text-2xl font-medium">
-                Delete what Capcar stores.
+                Delete what CapCar stores.
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-white/40">
                 Download an export first if you need a copy. Private document

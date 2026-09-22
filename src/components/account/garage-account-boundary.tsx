@@ -324,7 +324,7 @@ export function GarageAccountBoundary({
             Two garage versions were found.
           </h1>
           <p className="mt-5 max-w-xl leading-7 text-white/50">
-            Capcar will not silently overwrite either version. Choose the garage
+            CapCar will not silently overwrite either version. Choose the garage
             from this device or restore the version saved in your account.
           </p>
           <dl className="mt-7 grid gap-3 sm:grid-cols-2">

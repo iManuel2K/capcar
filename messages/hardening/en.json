@@ -17,7 +17,7 @@
       "missingBody": "The link may be incorrect, or its owner may have withdrawn it.",
       "outage": "We cannot check this Passport right now.",
       "outageBody": "The record service is temporarily unavailable. Please try this link again shortly.",
-      "home": "Return to Capcar"
+      "home": "Return to CapCar"
     },
     "Trust": {
       "title": "Trade with care",
@@ -31,7 +31,7 @@
     },
     "Specialist": {
       "title": "Specialist applications",
-      "intro": "Bring your workshop to Capcar. Apply with your business details; an independent moderator reviews every application before installation stamps are enabled.",
+      "intro": "Bring your workshop to CapCar. Apply with your business details; an independent moderator reviews every application before installation stamps are enabled.",
       "apply": "Apply as a specialist",
       "business": "Workshop / business name",
       "city": "City",

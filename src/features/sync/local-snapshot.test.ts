@@ -7,7 +7,7 @@ import {
 import { VEHICLE_STORAGE_KEY } from "@/features/vehicles/vehicle-storage";
 
 describe("local snapshot", () => {
-  it("collects and safely restores only known Capcar keys", () => {
+  it("collects and safely restores only known CapCar keys", () => {
     localStorage.clear();
     localStorage.setItem(VEHICLE_STORAGE_KEY, "[]");
     localStorage.setItem("unrelated", "private");

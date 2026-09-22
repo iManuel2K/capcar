@@ -92,13 +92,13 @@ export function NotificationCenter() {
       return;
     const registration = await navigator.serviceWorker?.getRegistration();
     if (registration)
-      await registration.showNotification("Capcar reminder preview", {
+      await registration.showNotification("CapCar reminder preview", {
         body: "Your maintenance reminders are ready.",
         tag: "capcar-preview",
         data: { url: "/notifications" },
       });
     else
-      new Notification("Capcar reminder preview", {
+      new Notification("CapCar reminder preview", {
         body: "Your maintenance reminders are ready.",
       });
   }
@@ -120,7 +120,7 @@ export function NotificationCenter() {
             Nothing important should surprise you.
           </h1>
           <p className="mt-5 max-w-2xl leading-7 text-white/45">
-            Capcar creates reminders from the maintenance history on this
+            CapCar creates reminders from the maintenance history on this
             device. Browser alerts are opt-in and quiet hours remain under your
             control.
           </p>
@@ -289,7 +289,7 @@ export function NotificationCenter() {
             </div>
             <div className="flex gap-3 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/45">
               <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#9ec2ff]" />
-              In-app reminders update whenever Capcar opens. Alerts while every
+              In-app reminders update whenever CapCar opens. Alerts while every
               device is offline require a later server push service and are not
               claimed here.
             </div>

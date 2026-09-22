@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
 import { LegalSection, LegalShell } from "@/components/legal/legal-shell";
+import { canonicalMetadata } from "@/features/seo/public-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("LegalDocs.terms");
-  return { title: t("meta") };
+  return { ...canonicalMetadata("/terms"), title: t("meta") };
 }
 
 export default async function TermsPage() {

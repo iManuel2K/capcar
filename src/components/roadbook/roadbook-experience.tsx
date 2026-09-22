@@ -37,6 +37,7 @@ import {
   readRoadbookMapStyle,
   writeRoadbookMapStyle,
 } from "@/features/roadbook/roadbook-map-style";
+import { ROADBOOK_DATA_TIMEOUT_MS } from "@/features/roadbook/roadbook-timeout";
 
 const defaultCenter: RoadbookCenter = { latitude: 50.1109, longitude: 8.6821 };
 
@@ -81,6 +82,11 @@ export function RoadbookExperience() {
     fetchController.current?.abort();
     const controller = new AbortController();
     fetchController.current = controller;
+    let timedOut = false;
+    const timeout = window.setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, ROADBOOK_DATA_TIMEOUT_MS);
     setLoading(true);
     setError("");
     try {
@@ -103,9 +109,13 @@ export function RoadbookExperience() {
         }
       }
     } catch {
-      if (sequence === fetchSequence.current && !controller.signal.aborted)
-        setError(t("errors.load"));
+      if (
+        sequence === fetchSequence.current &&
+        (timedOut || !controller.signal.aborted)
+      )
+        setError(t(timedOut ? "errors.slow" : "errors.load"));
     } finally {
+      window.clearTimeout(timeout);
       if (sequence === fetchSequence.current) setLoading(false);
     }
   }, [categories, center, radiusKm, t]);

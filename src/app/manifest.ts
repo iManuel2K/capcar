@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Capcar — Project Car Copilot",
-    short_name: "Capcar",
+    name: "CapCar — Project Car Copilot",
+    short_name: "CapCar",
     description: "Plan, price and build your project car.",
     start_url: "/garage",
     display: "standalone",

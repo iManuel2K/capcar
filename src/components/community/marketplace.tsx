@@ -43,7 +43,7 @@ export function Marketplace({
       <p className="max-w-3xl leading-7">
         Community listings are reviewed before publication. Seller review is not
         a transaction guarantee. Inspect the part and fitment, use protected
-        payment, and never send deposits by gift card or cryptocurrency. Capcar
+        payment, and never send deposits by gift card or cryptocurrency. CapCar
         does not take payments or provide escrow.
       </p>
       {error && (
@@ -301,7 +301,7 @@ export function Marketplace({
                       role.user_id === item.seller_id &&
                       role.role === "reviewed_seller",
                   )
-                    ? "reviewed by a Capcar moderator; not buyer protection"
+                    ? "reviewed by a CapCar moderator; not buyer protection"
                     : "identity not reviewed"}
                 </p>
                 <details className="rounded-xl border border-[#0e2d30]/20 p-3">
@@ -319,7 +319,7 @@ export function Marketplace({
                     </li>
                     <li>
                       Do not send deposits by gift card or cryptocurrency.
-                      Capcar provides no escrow.
+                      CapCar provides no escrow.
                     </li>
                     <li>
                       Keep messages here and report pressure, impersonation or

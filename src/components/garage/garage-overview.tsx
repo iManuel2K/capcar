@@ -90,7 +90,7 @@ export function GarageOverview() {
             </h2>
             <p className="mt-3 leading-7 text-white/50">
               It takes about one minute. VIN is optional for this prototype, and
-              your garage is saved to your private Capcar account.
+              your garage is saved to your private CapCar account.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -127,7 +127,7 @@ export function GarageOverview() {
         href="/studio"
         className="mb-6 flex min-h-14 items-center justify-between rounded-2xl border border-white/15 px-5 text-sm text-white/80 hover:bg-white/5"
       >
-        Explore the Capcar showcase collection{" "}
+        Explore the CapCar showcase collection{" "}
         <ArrowRight className="size-4" aria-hidden="true" />
       </Link>
       <div className="mb-8 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">

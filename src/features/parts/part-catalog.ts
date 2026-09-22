@@ -43,7 +43,7 @@ export const partCatalog: CatalogPart[] = [
   {
     id: "demo-n43-service-kit",
     name: "N43 oil-service kit",
-    brand: "Capcar Demo",
+    brand: "CapCar Demo",
     partNumber: "DEMO-SVC-N43-01",
     category: "Service",
     quality: "OEM style",
@@ -71,7 +71,7 @@ export const partCatalog: CatalogPart[] = [
   {
     id: "demo-dark-rear-lamps-e90",
     name: "Dark-red rear lamp set",
-    brand: "Capcar Demo",
+    brand: "CapCar Demo",
     partNumber: "DEMO-LGT-E90-02",
     category: "Lighting",
     quality: "Premium",
@@ -101,7 +101,7 @@ export const partCatalog: CatalogPart[] = [
   {
     id: "demo-rear-diffuser-e90",
     name: "Gloss-black rear diffuser",
-    brand: "Capcar Demo",
+    brand: "CapCar Demo",
     partNumber: "DEMO-EXT-E90-08",
     category: "Exterior",
     quality: "OEM style",
@@ -131,7 +131,7 @@ export const partCatalog: CatalogPart[] = [
   {
     id: "demo-front-brake-kit-e9x",
     name: "Front brake refresh kit",
-    brand: "Capcar Demo",
+    brand: "CapCar Demo",
     partNumber: "DEMO-BRK-E9X-11",
     category: "Brakes",
     quality: "Premium",
@@ -162,7 +162,7 @@ export const partCatalog: CatalogPart[] = [
   {
     id: "demo-18-wheel-set-e9x",
     name: "18-inch graphite wheel set",
-    brand: "Capcar Demo",
+    brand: "CapCar Demo",
     partNumber: "DEMO-WHL-E9X-18",
     category: "Wheels",
     quality: "Performance",
@@ -191,7 +191,7 @@ export const partCatalog: CatalogPart[] = [
   {
     id: "demo-street-coilovers-e9x",
     name: "Street coilover concept",
-    brand: "Capcar Demo",
+    brand: "CapCar Demo",
     partNumber: "DEMO-SUS-E9X-21",
     category: "Suspension",
     quality: "Performance",
@@ -221,7 +221,7 @@ export const partCatalog: CatalogPart[] = [
   {
     id: "demo-intake-n43",
     name: "Panel-filter intake upgrade",
-    brand: "Capcar Demo",
+    brand: "CapCar Demo",
     partNumber: "DEMO-PER-N43-05",
     category: "Performance",
     quality: "Performance",
@@ -435,7 +435,7 @@ export const partCatalog: CatalogPart[] = [
   {
     id: "demo-g20-splitter",
     name: "G20 front splitter concept",
-    brand: "Capcar Demo",
+    brand: "CapCar Demo",
     partNumber: "DEMO-EXT-G20-01",
     category: "Exterior",
     quality: "Value",

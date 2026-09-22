@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
+import {
+  PUBLIC_INDEXABLE_ROUTES,
+  PUBLIC_SITE_URL,
+} from "@/features/seo/public-metadata";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  return ["", "/roadmap", "/privacy", "/terms", "/imprint", "/studio"].map(
-    (path) => ({
-      url: `${siteUrl}${path}`,
-      lastModified: new Date(),
-      changeFrequency: path === "" ? "weekly" : "monthly",
-      priority: path === "" ? 1 : path === "/roadmap" ? 0.7 : 0.4,
-    }),
-  );
+  return PUBLIC_INDEXABLE_ROUTES.map((path) => ({
+    url: new URL(path || "/", PUBLIC_SITE_URL).toString(),
+    lastModified: new Date(),
+    changeFrequency: path === "" ? "weekly" : "monthly",
+    priority: path === "" ? 1 : path === "/roadmap" ? 0.7 : 0.4,
+  }));
 }

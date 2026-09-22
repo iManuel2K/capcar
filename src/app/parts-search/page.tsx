@@ -6,10 +6,15 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 import { searchCatalogParts } from "@/features/parts/part-catalog";
+import { canonicalMetadata } from "@/features/seo/public-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("PartsPage");
-  return { title: t("title"), description: t("description") };
+  return {
+    ...canonicalMetadata("/parts-search"),
+    title: t("title"),
+    description: t("description"),
+  };
 }
 
 export default async function PartsSearchPage({

@@ -7,7 +7,7 @@ describe("legal configuration", () => {
     expect(getLegalConfiguration({}).complete).toBe(false);
     expect(
       getLegalConfiguration({
-        NEXT_PUBLIC_LEGAL_OPERATOR: "Capcar Beta",
+        NEXT_PUBLIC_LEGAL_OPERATOR: "CapCar Beta",
         NEXT_PUBLIC_LEGAL_ADDRESS: "Example address",
         NEXT_PUBLIC_PRIVACY_CONTACT: "privacy@example.test",
       }).complete,

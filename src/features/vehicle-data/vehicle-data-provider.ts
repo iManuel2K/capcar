@@ -25,7 +25,7 @@ class DemoVehicleDataProvider implements VehicleDataProvider {
       "transmission",
     ];
     return {
-      provider: "Capcar vehicle demo",
+      provider: "CapCar vehicle demo",
       source: "demo",
       confidence: request.vin ? "partial" : "provided",
       resolvedAt: new Date().toISOString(),

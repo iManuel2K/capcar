@@ -24,7 +24,7 @@ function passportUnavailableResponse(
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>${t.title} | Capcar</title>
+    <title>${t.title} | CapCar</title>
     <style>
       * { box-sizing: border-box; }
       body { margin: 0; background: #0b0e0c; color: #f4f5f2; font-family: Arial, sans-serif; }
@@ -42,7 +42,7 @@ function passportUnavailableResponse(
   <body>
     <main>
       <section aria-labelledby="passport-unavailable-title">
-        <div class="brand">Capcar</div>
+        <div class="brand">CapCar</div>
         <div class="icon" aria-hidden="true">&#8856;</div>
         <p class="eyebrow">${t.title}</p>
         <h1 id="passport-unavailable-title">${status === 404 ? t.missing : t.outage}</h1>

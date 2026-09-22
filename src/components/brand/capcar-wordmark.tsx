@@ -10,7 +10,7 @@ export function CapcarWordmark({
   glow = true,
 }: CapcarWordmarkProps) {
   return (
-    <div className="inline-flex items-center gap-1.5" aria-label="Capcar">
+    <div className="inline-flex items-center gap-1.5" aria-label="CapCar">
       <span
         className={`relative block h-10 w-14 shrink-0 ${glow ? "drop-shadow-[0_4px_12px_rgba(255,79,139,0.2)]" : ""}`}
       >

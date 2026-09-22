@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { ConceptStudio } from "@/components/visualizer/concept-studio";
+import { canonicalMetadata } from "@/features/seo/public-metadata";
 
 export const metadata: Metadata = {
-  title: "Concept studio | Capcar",
+  ...canonicalMetadata("/studio"),
+  title: "Concept studio",
   description:
     "Explore stylized automotive concepts with paint, stance and original cinema-inspired presets.",
 };
@@ -11,7 +13,7 @@ export default function StudioPage() {
     <main className="min-h-dvh bg-[#e8e6d7] px-5 py-8 text-[#0e2d30] sm:px-8">
       <div className="mx-auto max-w-6xl">
         <p className="mt-4 text-xs font-semibold tracking-widest uppercase">
-          Capcar / Concept studio
+          CapCar / Concept studio
         </p>
         <h1 className="mt-4 text-4xl font-medium tracking-tight sm:text-6xl">
           Explore the direction.

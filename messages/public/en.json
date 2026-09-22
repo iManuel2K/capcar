@@ -1,23 +1,23 @@
 {
   "Faq": {
     "title": "A clearer way to build.",
-    "description": "The short version of what Capcar is, who it is for and where it is going.",
+    "description": "The short version of what CapCar is, who it is for and where it is going.",
     "roadmap": "Read the roadmap",
     "one": {
-      "question": "What is Capcar trying to solve?",
-      "answer": "Car projects are usually split across notes, retailer tabs, forums and spreadsheets. Capcar brings the vehicle, maintenance, parts, costs and build plan into one garage."
+      "question": "What is CapCar trying to solve?",
+      "answer": "Car projects are usually split across notes, retailer tabs, forums and spreadsheets. CapCar brings the vehicle, maintenance, parts, costs and build plan into one garage."
     },
     "two": {
-      "question": "Who is building Capcar?",
-      "answer": "Capcar is being built by a car enthusiast who enjoys driving, working on cars and that simple feeling of warm air through an open window. The goal is practical: make projects easier to understand, organize and finish."
+      "question": "Who is building CapCar?",
+      "answer": "CapCar is being built by a car enthusiast who enjoys driving, working on cars and that simple feeling of warm air through an open window. The goal is practical: make projects easier to understand, organize and finish."
     },
     "three": {
-      "question": "Is Capcar free during the Beta?",
+      "question": "Is CapCar free during the Beta?",
       "answer": "Yes. The Beta is free while the core garage is tested with real users. If paid features arrive later, the basic garage and your own exported data will remain accessible."
     },
     "four": {
-      "question": "Does Capcar guarantee that a part fits?",
-      "answer": "No. Capcar helps organize fitment evidence and flags uncertainty, but users should still confirm part numbers, vehicle specifications and legal requirements before buying or installing."
+      "question": "Does CapCar guarantee that a part fits?",
+      "answer": "No. CapCar helps organize fitment evidence and flags uncertainty, but users should still confirm part numbers, vehicle specifications and legal requirements before buying or installing."
     },
     "five": {
       "question": "Why do I need an account?",
@@ -30,13 +30,13 @@
   },
   "Roadmap": {
     "eyebrow": "Product roadmap",
-    "title": "Where Capcar is going.",
-    "description": "A practical view of what works today, what comes next and how Capcar grows from a car app into a garage for every project.",
+    "title": "Where CapCar is going.",
+    "description": "A practical view of what works today, what comes next and how CapCar grows from a car app into a garage for every project.",
     "build": "Build your car",
-    "back": "Back to Capcar",
+    "back": "Back to CapCar",
     "sequenceEyebrow": "Now, next, later",
     "sequenceTitle": "A roadmap shaped by real use.",
-    "sequenceDescription": "Capcar grows in the order that makes each workshop session clearer. Beta feedback can move the most useful work forward.",
+    "sequenceDescription": "CapCar grows in the order that makes each workshop session clearer. Beta feedback can move the most useful work forward.",
     "stageCount": "stages",
     "milestoneLabel": "milestones",
     "milestoneCount": "{count} milestones",
@@ -44,7 +44,7 @@
     "foundation": {
       "label": "Live now",
       "title": "The foundation",
-      "description": "The ownership record already at the heart of Capcar. These tools work today and continue to mature through real garage use.",
+      "description": "The ownership record already at the heart of CapCar. These tools work today and continue to mature through real garage use.",
       "itemStatus": "Available",
       "garage": {
         "title": "Private digital garage",
@@ -106,13 +106,13 @@
       },
       "localization": {
         "title": "Five-language public site",
-        "description": "Keep English, German, Greek, Albanian and Japanese public journeys consistent as Capcar evolves."
+        "description": "Keep English, German, Greek, Albanian and Japanese public journeys consistent as CapCar evolves."
       }
     },
     "tangible": {
       "label": "In beta · still expanding",
       "title": "Make it tangible",
-      "description": "The visual and connected layer of Capcar. Working foundations exist, while content, vehicle coverage and partner access continue to grow.",
+      "description": "The visual and connected layer of CapCar. Working foundations exist, while content, vehicle coverage and partner access continue to grow.",
       "itemStatus": "Expanding",
       "models": {
         "title": "Interactive vehicle models",
@@ -124,7 +124,7 @@
       },
       "sound": {
         "title": "Sound studio",
-        "description": "Filter and compare five credited recordings. Three additional originals stream through Capcar; exact stock-versus-modified pairs still need verified recordings."
+        "description": "Filter and compare five credited recordings. Three additional originals stream through CapCar; exact stock-versus-modified pairs still need verified recordings."
       },
       "obd": {
         "title": "Native OBD-II diagnostics",
@@ -170,12 +170,12 @@
       },
       "more": {
         "title": "Surfboards and more",
-        "description": "Turn Capcar into one considered home for the projects and equipment you care about."
+        "description": "Turn CapCar into one considered home for the projects and equipment you care about."
       }
     },
     "decisionEyebrow": "How we decide",
     "decisionTitle": "Useful before impressive.",
-    "decisionDescription": "Capcar ships the tools that make ownership and projects clearer first. Visual technology earns its place when it helps someone make a better decision—not only because it looks good.",
+    "decisionDescription": "CapCar ships the tools that make ownership and projects clearer first. Visual technology earns its place when it helps someone make a better decision—not only because it looks good.",
     "feedbackEyebrow": "Beta feedback",
     "feedbackTitle": "Help shape what comes next.",
     "feedbackDescription": "Use the garage with your own car and tell us where the work still feels unclear.",
@@ -185,7 +185,7 @@
   "PartsPage": {
     "eyebrow": "Open catalogue · no account required",
     "title": "Parts first. Garage later.",
-    "description": "Search names, part numbers, chassis codes and engine references. Capcar shows what each record covers without claiming confirmed fitment for an unidentified vehicle.",
+    "description": "Search names, part numbers, chassis codes and engine references. CapCar shows what each record covers without claiming confirmed fitment for an unidentified vehicle.",
     "liveOffers": "Search live retailer offers",
     "resultsFor": "Results for “{query}”",
     "prepared": "Prepared catalogue",
@@ -199,18 +199,18 @@
     "notice": "Search results are cross-references, not installation approval. Confirm VIN, production date, option codes, dimensions and local road approval before ordering."
   },
   "StudioPage": {
-    "back": "Back to Capcar",
+    "back": "Back to CapCar",
     "eyebrow": "Concept studio",
     "title": "Explore the direction.",
     "description": "Explore creator-made 3D references and original stylized concepts. Reference models are separate from the configurable sketches below."
   },
   "SoundPage": {
-    "back": "Capcar",
+    "back": "CapCar",
     "title": "Listen to the difference."
   },
   "Auth": {
-    "home": "Capcar home",
-    "back": "Back to Capcar",
+    "home": "CapCar home",
+    "back": "Back to CapCar",
     "private": "Private by default",
     "oneAccount": "One account.",
     "wholeBuild": "Your whole build.",
@@ -230,7 +230,7 @@
     "terms": "Terms",
     "and": "and",
     "privacy": "Privacy Notice",
-    "newToCapcar": "New to Capcar?",
+    "newToCapcar": "New to CapCar?",
     "createAccount": "Create an account",
     "haveAccount": "Already have an account?",
     "signIn": "Sign in",
@@ -274,10 +274,10 @@
     }
   },
   "Legal": {
-    "home": "Capcar home",
-    "back": "Back to Capcar →",
+    "home": "CapCar home",
+    "back": "Back to CapCar →",
     "notice": "Notice",
-    "beta": "Capcar private beta",
+    "beta": "CapCar private beta",
     "navigation": "Legal navigation",
     "privacy": "Privacy",
     "terms": "Terms",
@@ -298,7 +298,7 @@
     "browse": "Browse parts"
   },
   "PublicPassport": {
-    "home": "Capcar home",
+    "home": "CapCar home",
     "shared": "Owner-shared record",
     "document": "Vehicle Passport",
     "published": "Published {date}",
@@ -332,7 +332,7 @@
     "ownerPrivate": "Owner information is private or incomplete.",
     "liveVerification": "Live verification",
     "scanRecord": "Scan to open the current owner-shared record.",
-    "qrTitle": "QR code for live Capcar Vehicle Passport",
+    "qrTitle": "QR code for live CapCar Vehicle Passport",
     "publishQr": "Publish a link to activate the QR",
     "generated": "Generated {date} · User-entered record",
     "verifyCritical": "Verify safety-critical work against original documents",
@@ -505,7 +505,7 @@
     "models": "Models",
     "license": "CC0 license",
     "engineeringNotice": "Stylized concepts are not dimensional, engineering or installation guidance.",
-    "collection": "Capcar collection / 01—03",
+    "collection": "CapCar collection / 01—03",
     "three": "Three directions. Your starting point.",
     "sound": "Open sound library →",
     "chooseShowcase": "Choose a showcase",
@@ -517,12 +517,12 @@
   },
   "SoundUi": {
     "includedLabel": "Included engine recordings",
-    "collection": "Capcar listening collection / 01—02",
+    "collection": "CapCar listening collection / 01—02",
     "realEngines": "Real engines. Ready to play.",
     "curatedNotice": "Start at a low volume. Recording equipment and conditions differ; these are not controlled stock-versus-modified comparisons. Modification status is not verified.",
     "audioError": "Audio could not load. Reload the page or use the source below.",
     "credits": "Source and credits",
-    "converted": "Original Ogg unchanged; MP3 converted by Capcar under the same license. No endorsement implied.",
+    "converted": "Original Ogg unchanged; MP3 converted by CapCar under the same license. No endorsement implied.",
     "archive": "Your sound archive / Local only",
     "keep": "Keep the character.",
     "archiveDescription": "Save your own recordings with vehicle, setup and source permission. Files stay in this browser, survive reloads, and are not included in Garage sync or account exports. Clearing browser data removes them; keep your originals.",
@@ -614,21 +614,21 @@
   },
   "ErrorUi": {
     "eyebrow": "Something interrupted the drive",
-    "title": "Capcar could not finish that action.",
+    "title": "CapCar could not finish that action.",
     "description": "Try the action again. Your saved garage data has not been intentionally removed.",
     "tryAgain": "Try again",
     "home": "Return home",
     "notFound": "404 · Route not found",
     "roadEnds": "This road ends here.",
-    "notFoundDescription": "Return to Capcar and choose another route."
+    "notFoundDescription": "Return to CapCar and choose another route."
   },
   "PublicStates": {
     "passportEyebrow": "Passport unavailable",
     "passportTitle": "This link is no longer public.",
     "passportDescription": "The owner may have revoked the link, or the shared record could not be verified.",
-    "return": "Return to Capcar",
+    "return": "Return to CapCar",
     "verifiedDescription": "Request a specialist’s confirmation, follow its status and keep the result in your private vehicle record.",
-    "loadingCapcar": "Loading Capcar",
+    "loadingCapcar": "Loading CapCar",
     "loadingMarketplace": "Loading marketplace…",
     "openingVerified": "Opening verified work…"
   },
@@ -643,10 +643,10 @@
   },
   "Operations": {
     "systemBack": "← System readiness",
-    "homeBack": "← Capcar",
+    "homeBack": "← CapCar",
     "launchEyebrow": "Production launch",
     "launchTitle": "Launch status: {state}.",
-    "launchDescription": "Capcar remains usable in local mode. Production is marked ready only when the public URL and browser-safe Supabase settings are present on the production host.",
+    "launchDescription": "CapCar remains usable in local mode. Production is marked ready only when the public URL and browser-safe Supabase settings are present on the production host.",
     "activation": "Activation sequence",
     "steps": {
       "one": "Run all included Supabase migrations: snapshots, public passports, authenticated affiliate capture, API rate limits and account deletion.",
@@ -728,7 +728,7 @@
     }
   },
   "Metadata": {
-    "siteTitle": "Capcar — Build with clarity.",
+    "siteTitle": "CapCar — Build with clarity.",
     "siteDescription": "Visualize upgrades, verify fitment, compare total cost and keep every install in one private garage.",
     "login": "Sign in",
     "register": "Create account",
@@ -740,18 +740,18 @@
       "meta": "Privacy",
       "eyebrow": "Privacy notice · Private beta",
       "title": "Your garage data stays under your control.",
-      "description": "This notice explains what the Capcar beta stores, why it is needed and how you can remove it. Last updated 8 September 2026.",
+      "description": "This notice explains what the CapCar beta stores, why it is needed and how you can remove it. Last updated 8 September 2026.",
       "blocked": "Public launch is blocked until the operator, address and privacy contact are configured. Invite-only testers should use the contact details supplied with their invitation.",
       "s1t": "1. Responsible operator",
       "operatorPending": "Operator details pending",
       "addressPending": "Address pending",
       "privacyContact": "Privacy contact",
       "contactPending": "Contact pending",
-      "s2t": "2. Data Capcar processes",
-      "s2a": "Capcar stores account details supplied through Supabase authentication and the garage records you create, including vehicle details, maintenance, builds, costs, wishlists, diagnostics, guide progress and visualizer settings. A complete garage snapshot is also kept in browser storage for responsive offline-tolerant use.",
+      "s2t": "2. Data CapCar processes",
+      "s2a": "CapCar stores account details supplied through Supabase authentication and the garage records you create, including vehicle details, maintenance, builds, costs, wishlists, diagnostics, guide progress and visualizer settings. A complete garage snapshot is also kept in browser storage for responsive offline-tolerant use.",
       "s2b": "When you publish a Vehicle Passport, the selected passport record is available to anyone with its unguessable link until you revoke or delete it. Only the final five VIN characters can appear in a shared passport.",
       "s3t": "3. Purpose and legal basis",
-      "s3": "Account, synchronization and export processing is necessary to provide the beta service you request. Security, abuse prevention and short rate-limit records support Capcar’s legitimate interest in operating a reliable private beta. Capcar does not sell garage data.",
+      "s3": "Account, synchronization and export processing is necessary to provide the beta service you request. Security, abuse prevention and short rate-limit records support CapCar’s legitimate interest in operating a reliable private beta. CapCar does not sell garage data.",
       "s4t": "4. Hosting and external services",
       "s4": "Netlify delivers the application and Supabase provides authentication and database storage. Opening an interactive 3D view connects your browser to Sketchfab. Vehicle, retailer and AI provider adapters remain in labelled demo mode unless the System page reports an activated external provider.",
       "s5t": "5. Retention and deletion",
@@ -765,16 +765,16 @@
       "meta": "Terms and safety",
       "eyebrow": "Beta terms and safety",
       "title": "Plan clearly. Verify before you act.",
-      "description": "Capcar organizes project-car information. It does not replace an authoritative repair procedure, inspection or qualified professional. Last updated 8 September 2026.",
+      "description": "CapCar organizes project-car information. It does not replace an authoritative repair procedure, inspection or qualified professional. Last updated 8 September 2026.",
       "s1t": "1. Private beta",
-      "s1": "Capcar is a private beta. Features may change, be unavailable or contain labelled demonstration data. Catalogue entries, merchant offers, visual concepts, compatibility rules, tuning roadmaps and installation workflows may be fictional or incomplete unless their source and verification state explicitly say otherwise.",
+      "s1": "CapCar is a private beta. Features may change, be unavailable or contain labelled demonstration data. Catalogue entries, merchant offers, visual concepts, compatibility rules, tuning roadmaps and installation workflows may be fictional or incomplete unless their source and verification state explicitly say otherwise.",
       "s2t": "2. Safety and fitment",
-      "s2a": "Do not use Capcar as the sole basis for purchasing parts, lifting a vehicle, performing safety-critical work, modifying emissions equipment or determining road legality. Verify the exact vehicle, production date, option codes, part documentation, repair procedure, tightening values, fluids and local legal requirements.",
+      "s2a": "Do not use CapCar as the sole basis for purchasing parts, lifting a vehicle, performing safety-critical work, modifying emissions equipment or determining road legality. Verify the exact vehicle, production date, option codes, part documentation, repair procedure, tightening values, fluids and local legal requirements.",
       "s2b": "Stop and use a qualified professional whenever the work exceeds your competence, tools or safe working environment.",
       "s3t": "3. Accounts and records",
-      "s3": "Keep your login secure and enter only records you are entitled to store. Capcar provides export and deletion controls, but you remain responsible for retaining original invoices, workshop documents and legally required evidence.",
+      "s3": "Keep your login secure and enter only records you are entitled to store. CapCar provides export and deletion controls, but you remain responsible for retaining original invoices, workshop documents and legally required evidence.",
       "s4t": "4. Public Passport links",
-      "s4": "Publishing a Vehicle Passport makes its contents accessible to anyone who receives the link. Review the record before publishing and revoke or delete the link when it should no longer be available. Public passports are owner-entered records, not Capcar certification.",
+      "s4": "Publishing a Vehicle Passport makes its contents accessible to anyone who receives the link. Review the record before publishing and revoke or delete the link when it should no longer be available. Public passports are owner-entered records, not CapCar certification.",
       "s5t": "5. External websites",
       "s5": "Merchant, source and 3D links lead to independent services with their own terms and privacy practices. Confirm price, shipping, returns, authenticity, fitment and road approval directly with the relevant provider before purchasing.",
       "s6t": "6. Changes and availability",
@@ -784,7 +784,7 @@
       "meta": "Imprint",
       "eyebrow": "Operator information",
       "title": "Imprint.",
-      "description": "Public operator and contact information for Capcar.",
+      "description": "Public operator and contact information for CapCar.",
       "contentsLabel": "Imprint contents",
       "contents": "Contents",
       "provider": "Service provider",

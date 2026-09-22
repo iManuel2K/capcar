@@ -23,7 +23,7 @@ export default function SharedPassportNotFound() {
           href="/"
           className="mt-8 inline-flex min-h-12 items-center rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-white"
         >
-          Return to Capcar
+          Return to CapCar
         </Link>
       </section>
     </main>

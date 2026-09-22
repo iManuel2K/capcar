@@ -5,9 +5,10 @@ import {
   type PublicSpecialist,
 } from "@/components/community/public-specialists";
 import { createClient } from "@/lib/supabase/server";
+import { canonicalMetadata } from "@/features/seo/public-metadata";
 export async function generateMetadata() {
   const t = await getTranslations("Expansion");
-  return { title: t("specialists") };
+  return { ...canonicalMetadata("/specialists"), title: t("specialists") };
 }
 export default async function Page() {
   const t = await getTranslations("Expansion");

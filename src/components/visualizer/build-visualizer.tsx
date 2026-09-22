@@ -315,7 +315,7 @@ export function BuildVisualizer({
               <div className="rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/55">
                 The embedded E90 loads immediately from Sketchfab. Use it to
                 inspect the base body and cabin; switch to Exterior or Interior
-                to save Capcar concept choices.
+                to save CapCar concept choices.
               </div>
             ) : (
               <>

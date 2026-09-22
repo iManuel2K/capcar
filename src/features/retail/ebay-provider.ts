@@ -105,7 +105,7 @@ async function mintApplicationToken(
   if (!response.ok)
     throw new RetailUnavailable(
       response.status === 400 || response.status === 401
-        ? "eBay rejected Capcar's production App ID or Cert ID."
+        ? "eBay rejected CapCar's production App ID or Cert ID."
         : "eBay authorization is temporarily unavailable.",
       response.status === 400 || response.status === 401
         ? "authorization"
@@ -224,7 +224,7 @@ export async function searchEbay(
   if (!response.ok) {
     throw new RetailUnavailable(
       response.status === 401 || response.status === 403
-        ? "eBay rejected Capcar's Browse API access. Check that the production keyset has Buy API access."
+        ? "eBay rejected CapCar's Browse API access. Check that the production keyset has Buy API access."
         : response.status === 429
           ? "eBay's current request allowance has been reached. Try again later."
           : "eBay could not complete this search. Try again shortly.",
@@ -240,7 +240,7 @@ export async function searchEbay(
   );
   if (!parsedPayload.success)
     throw new RetailUnavailable(
-      "eBay returned listings Capcar could not read.",
+      "eBay returned listings CapCar could not read.",
     );
   const payload = parsedPayload.data;
   return {

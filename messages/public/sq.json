@@ -1,23 +1,23 @@
 {
   "Faq": {
     "title": "Një mënyrë më e qartë për të ndërtuar.",
-    "description": "Shpjegimi i shkurtër: çfarë është Capcar, për kë është dhe ku po shkon.",
+    "description": "Shpjegimi i shkurtër: çfarë është CapCar, për kë është dhe ku po shkon.",
     "roadmap": "Lexo udhërrëfyesin",
     "one": {
-      "question": "Çfarë problemi zgjidh Capcar?",
-      "answer": "Projektet e makinave zakonisht shpërndahen në shënime, faqe shitësish, forume dhe tabela. Capcar bashkon makinën, mirëmbajtjen, pjesët, kostot dhe planin e build-it në një garazh."
+      "question": "Çfarë problemi zgjidh CapCar?",
+      "answer": "Projektet e makinave zakonisht shpërndahen në shënime, faqe shitësish, forume dhe tabela. CapCar bashkon makinën, mirëmbajtjen, pjesët, kostot dhe planin e build-it në një garazh."
     },
     "two": {
-      "question": "Kush po e ndërton Capcar?",
-      "answer": "Capcar po ndërtohet nga një entuziast makinash që shijon drejtimin, punën me makina dhe atë ndjesinë e thjeshtë të ajrit të ngrohtë nga dritarja e hapur. Qëllimi është praktik: projektet të kuptohen, organizohen dhe përfundohen më lehtë."
+      "question": "Kush po e ndërton CapCar?",
+      "answer": "CapCar po ndërtohet nga një entuziast makinash që shijon drejtimin, punën me makina dhe atë ndjesinë e thjeshtë të ajrit të ngrohtë nga dritarja e hapur. Qëllimi është praktik: projektet të kuptohen, organizohen dhe përfundohen më lehtë."
     },
     "three": {
-      "question": "A është Capcar falas gjatë Beta-s?",
+      "question": "A është CapCar falas gjatë Beta-s?",
       "answer": "Po. Beta është falas ndërsa garazhi bazë testohet me përdorues realë. Nëse më vonë shtohen funksione me pagesë, garazhi bazë dhe të dhënat e tua të eksportuara do të mbeten të aksesueshme."
     },
     "four": {
-      "question": "A garanton Capcar që një pjesë përshtatet?",
-      "answer": "Jo. Capcar organizon provat e përshtatshmërisë dhe shënon pasigurinë, por para blerjes ose montimit duhet të konfirmosh numrat e pjesëve, specifikat e makinës dhe kërkesat ligjore."
+      "question": "A garanton CapCar që një pjesë përshtatet?",
+      "answer": "Jo. CapCar organizon provat e përshtatshmërisë dhe shënon pasigurinë, por para blerjes ose montimit duhet të konfirmosh numrat e pjesëve, specifikat e makinës dhe kërkesat ligjore."
     },
     "five": {
       "question": "Pse më duhet një llogari?",
@@ -30,13 +30,13 @@
   },
   "Roadmap": {
     "eyebrow": "Udhërrëfyesi i produktit",
-    "title": "Ku po shkon Capcar.",
-    "description": "Një pamje praktike e asaj që funksionon sot, çfarë vjen më pas dhe si Capcar rritet nga një aplikacion makinash në një garazh për çdo projekt.",
+    "title": "Ku po shkon CapCar.",
+    "description": "Një pamje praktike e asaj që funksionon sot, çfarë vjen më pas dhe si CapCar rritet nga një aplikacion makinash në një garazh për çdo projekt.",
     "build": "Shto makinën tënde",
-    "back": "Kthehu te Capcar",
+    "back": "Kthehu te CapCar",
     "sequenceEyebrow": "Tani, më pas, më vonë",
     "sequenceTitle": "Një roadmap që formohet nga përdorimi real.",
-    "sequenceDescription": "Capcar zhvillohet sipas rendit që e bën çdo punë në garazh më të qartë. Reagimet nga Beta sjellin përpara atë që është më e dobishme.",
+    "sequenceDescription": "CapCar zhvillohet sipas rendit që e bën çdo punë në garazh më të qartë. Reagimet nga Beta sjellin përpara atë që është më e dobishme.",
     "stageCount": "faza",
     "milestoneLabel": "piketa",
     "milestoneCount": "{count} piketa",
@@ -44,7 +44,7 @@
     "foundation": {
       "label": "Aktive tani",
       "title": "Themeli",
-      "description": "Regjistri i pronësisë në zemër të Capcar. Këto mjete funksionojnë sot dhe vazhdojnë të përmirësohen nga përdorimi real.",
+      "description": "Regjistri i pronësisë në zemër të CapCar. Këto mjete funksionojnë sot dhe vazhdojnë të përmirësohen nga përdorimi real.",
       "itemStatus": "Aktive",
       "garage": {
         "title": "Garazh dixhital privat",
@@ -112,7 +112,7 @@
     "tangible": {
       "label": "Në Beta · po zgjerohet",
       "title": "Bëje të prekshme",
-      "description": "Shtresa vizuale dhe e lidhur e Capcar. Bazat funksionojnë, ndërsa përmbajtja, mbulimi i makinave dhe partnerët vazhdojnë të rriten.",
+      "description": "Shtresa vizuale dhe e lidhur e CapCar. Bazat funksionojnë, ndërsa përmbajtja, mbulimi i makinave dhe partnerët vazhdojnë të rriten.",
       "itemStatus": "Po zgjerohet",
       "models": {
         "title": "Modele interaktive makinash",
@@ -124,7 +124,7 @@
       },
       "sound": {
         "title": "Sound Studio",
-        "description": "Filtro dhe krahaso pesë regjistrime me burime. Tre origjinale transmetohen përmes Capcar. Çiftet e sakta standarde/modifikuara kërkojnë verifikim."
+        "description": "Filtro dhe krahaso pesë regjistrime me burime. Tre origjinale transmetohen përmes CapCar. Çiftet e sakta standarde/modifikuara kërkojnë verifikim."
       },
       "obd": {
         "title": "Diagnostikim vendas OBD-II",
@@ -170,12 +170,12 @@
       },
       "more": {
         "title": "Dërrasa sërfi dhe më shumë",
-        "description": "Ktheje Capcar në një shtëpi të organizuar për projektet dhe pajisjet që të interesojnë."
+        "description": "Ktheje CapCar në një shtëpi të organizuar për projektet dhe pajisjet që të interesojnë."
       }
     },
     "decisionEyebrow": "Si vendosim",
     "decisionTitle": "E dobishme para se të jetë mbresëlënëse.",
-    "decisionDescription": "Capcar sjell fillimisht mjetet që e bëjnë pronësinë dhe projektet më të qarta. Teknologjia vizuale e fiton vendin kur ndihmon një vendim më të mirë — jo vetëm sepse duket bukur.",
+    "decisionDescription": "CapCar sjell fillimisht mjetet që e bëjnë pronësinë dhe projektet më të qarta. Teknologjia vizuale e fiton vendin kur ndihmon një vendim më të mirë — jo vetëm sepse duket bukur.",
     "feedbackEyebrow": "Reagimet për Beta",
     "feedbackTitle": "Ndihmo të formojmë hapin tjetër.",
     "feedbackDescription": "Përdor garazhin me makinën tënde dhe na trego ku puna ende nuk është e qartë.",
@@ -185,7 +185,7 @@
   "PartsPage": {
     "eyebrow": "Katalog i hapur · pa llogari",
     "title": "Së pari pjesët. Garazhi më vonë.",
-    "description": "Kërko emra, numra pjesësh, kode shasie dhe motori. Capcar tregon çfarë mbulon çdo rekord pa pretenduar përshtatshmëri të konfirmuar për një makinë të paidentifikuar.",
+    "description": "Kërko emra, numra pjesësh, kode shasie dhe motori. CapCar tregon çfarë mbulon çdo rekord pa pretenduar përshtatshmëri të konfirmuar për një makinë të paidentifikuar.",
     "liveOffers": "Kërko oferta live",
     "resultsFor": "Rezultate për “{query}”",
     "prepared": "Katalog i përgatitur",
@@ -199,18 +199,18 @@
     "notice": "Rezultatet janë referenca, jo miratim montimi. Konfirmo VIN-in, datën e prodhimit, kodet e pajisjeve, përmasat dhe homologimin lokal para porosisë."
   },
   "StudioPage": {
-    "back": "Kthehu te Capcar",
+    "back": "Kthehu te CapCar",
     "eyebrow": "Concept Studio",
     "title": "Eksploro drejtimin.",
     "description": "Eksploro referenca 3D nga krijuesit dhe koncepte origjinale të stilizuara. Modelet referuese janë të ndara nga skicat e konfigurueshme më poshtë."
   },
   "SoundPage": {
-    "back": "Capcar",
+    "back": "CapCar",
     "title": "Dëgjo ndryshimin."
   },
   "Auth": {
-    "home": "Kreu i Capcar",
-    "back": "Kthehu te Capcar",
+    "home": "Kreu i CapCar",
+    "back": "Kthehu te CapCar",
     "private": "Privat si parazgjedhje",
     "oneAccount": "Një llogari.",
     "wholeBuild": "I gjithë projekti yt.",
@@ -230,7 +230,7 @@
     "terms": "Kushtet",
     "and": "dhe",
     "privacy": "Njoftimin e privatësisë",
-    "newToCapcar": "I ri në Capcar?",
+    "newToCapcar": "I ri në CapCar?",
     "createAccount": "Krijo llogari",
     "haveAccount": "Ke tashmë llogari?",
     "signIn": "Hyr",
@@ -274,10 +274,10 @@
     }
   },
   "Legal": {
-    "home": "Kreu i Capcar",
-    "back": "Kthehu te Capcar →",
+    "home": "Kreu i CapCar",
+    "back": "Kthehu te CapCar →",
     "notice": "Njoftim",
-    "beta": "Beta private e Capcar",
+    "beta": "Beta private e CapCar",
     "navigation": "Navigimi ligjor",
     "privacy": "Privatësia",
     "terms": "Kushtet",
@@ -298,7 +298,7 @@
     "browse": "Shfleto pjesët"
   },
   "PublicPassport": {
-    "home": "Kreu i Capcar",
+    "home": "Kreu i CapCar",
     "shared": "Regjistër i ndarë nga pronari",
     "document": "Pasaporta e automjetit",
     "published": "Publikuar më {date}",
@@ -332,7 +332,7 @@
     "ownerPrivate": "Të dhënat e pronarit janë private ose të paplota.",
     "liveVerification": "Verifikim live",
     "scanRecord": "Skano për të hapur regjistrin aktual të ndarë nga pronari.",
-    "qrTitle": "Kodi QR për Pasaportën live të Capcar",
+    "qrTitle": "Kodi QR për Pasaportën live të CapCar",
     "publishQr": "Publiko lidhjen për të aktivizuar QR",
     "generated": "Krijuar më {date} · Regjistër i përdoruesit",
     "verifyCritical": "Verifiko punët kritike me dokumentet origjinale",
@@ -505,7 +505,7 @@
     "models": "Modelet",
     "license": "Licenca CC0",
     "engineeringNotice": "Konceptet e stilizuara nuk janë udhëzime dimensionale, inxhinierike ose montimi.",
-    "collection": "Koleksioni Capcar / 01—03",
+    "collection": "Koleksioni CapCar / 01—03",
     "three": "Tre drejtime. Pika jote e nisjes.",
     "sound": "Hap bibliotekën e zërit →",
     "chooseShowcase": "Zgjidh showcase",
@@ -517,12 +517,12 @@
   },
   "SoundUi": {
     "includedLabel": "Regjistrime motori të përfshira",
-    "collection": "Koleksioni i dëgjimit Capcar / 01—02",
+    "collection": "Koleksioni i dëgjimit CapCar / 01—02",
     "realEngines": "Motorë realë. Gati për dëgjim.",
     "curatedNotice": "Fillo me volum të ulët. Pajisjet dhe kushtet ndryshojnë; këto nuk janë krahasime të kontrolluara standard/modifikuar. Gjendja e modifikimit nuk verifikohet.",
     "audioError": "Audioja nuk u ngarkua. Rifresko faqen ose përdor burimin më poshtë.",
     "credits": "Burimi dhe kreditet",
-    "converted": "Ogg origjinal i pandryshuar; MP3 u konvertua nga Capcar me të njëjtën licencë. Nuk nënkuptohet miratim.",
+    "converted": "Ogg origjinal i pandryshuar; MP3 u konvertua nga CapCar me të njëjtën licencë. Nuk nënkuptohet miratim.",
     "archive": "Arkivi yt i zërit / Vetëm lokal",
     "keep": "Ruaj karakterin.",
     "archiveDescription": "Ruaj regjistrimet e tua me automjet, setup dhe lejen e burimit. Skedarët qëndrojnë në këtë shfletues dhe nuk përfshihen në sinkronizim apo eksport. Fshirja e të dhënave të shfletuesit i heq; ruaj origjinalet.",
@@ -614,21 +614,21 @@
   },
   "ErrorUi": {
     "eyebrow": "Diçka e ndërpreu udhëtimin",
-    "title": "Capcar nuk e përfundoi veprimin.",
+    "title": "CapCar nuk e përfundoi veprimin.",
     "description": "Provo përsëri. Të dhënat e ruajtura të garazhit nuk janë hequr qëllimisht.",
     "tryAgain": "Provo përsëri",
     "home": "Kthehu në krye",
     "notFound": "404 · Faqja nuk u gjet",
     "roadEnds": "Kjo rrugë mbaron këtu.",
-    "notFoundDescription": "Kthehu te Capcar dhe zgjidh një rrugë tjetër."
+    "notFoundDescription": "Kthehu te CapCar dhe zgjidh një rrugë tjetër."
   },
   "PublicStates": {
     "passportEyebrow": "Pasaporta nuk është e disponueshme",
     "passportTitle": "Kjo lidhje nuk është më publike.",
     "passportDescription": "Pronari mund ta ketë anuluar lidhjen ose regjistri i ndarë nuk u verifikua.",
-    "return": "Kthehu te Capcar",
+    "return": "Kthehu te CapCar",
     "verifiedDescription": "Kërko konfirmim nga një specialist, ndiq gjendjen dhe ruaj rezultatin në regjistrin privat të automjetit.",
-    "loadingCapcar": "Po ngarkohet Capcar",
+    "loadingCapcar": "Po ngarkohet CapCar",
     "loadingMarketplace": "Po ngarkohet marketplace…",
     "openingVerified": "Po hapen punët e verifikuara…"
   },
@@ -643,10 +643,10 @@
   },
   "Operations": {
     "systemBack": "← Gatishmëria e sistemit",
-    "homeBack": "← Capcar",
+    "homeBack": "← CapCar",
     "launchEyebrow": "Nisja në prodhim",
     "launchTitle": "Statusi i nisjes: {state}.",
-    "launchDescription": "Capcar mbetet i përdorshëm në modalitetin lokal. Prodhimi shënohet gati vetëm kur URL-ja publike dhe cilësimet e sigurta të Supabase për shfletuesin janë në hostin e prodhimit.",
+    "launchDescription": "CapCar mbetet i përdorshëm në modalitetin lokal. Prodhimi shënohet gati vetëm kur URL-ja publike dhe cilësimet e sigurta të Supabase për shfletuesin janë në hostin e prodhimit.",
     "activation": "Rrjedha e aktivizimit",
     "steps": {
       "one": "Ekzekuto të gjitha migrimet Supabase: snapshot-et, pasaportat publike, regjistrimin e autentikuar të affiliate, kufijtë API dhe fshirjen e llogarisë.",
@@ -728,7 +728,7 @@
     }
   },
   "Metadata": {
-    "siteTitle": "Capcar — Ndërto me qartësi.",
+    "siteTitle": "CapCar — Ndërto me qartësi.",
     "siteDescription": "Vizualizo përmirësimet, verifiko përputhshmërinë, krahaso koston totale dhe ruaj çdo montim në një garazh privat.",
     "login": "Hyr",
     "register": "Krijo llogari",
@@ -740,18 +740,18 @@
       "meta": "Privatësia",
       "eyebrow": "Njoftimi i privatësisë · Beta private",
       "title": "Të dhënat e garazhit mbeten nën kontrollin tënd.",
-      "description": "Ky njoftim shpjegon çfarë ruan beta e Capcar, pse nevojitet dhe si mund ta fshish. Përditësuar më 8 shtator 2026.",
+      "description": "Ky njoftim shpjegon çfarë ruan beta e CapCar, pse nevojitet dhe si mund ta fshish. Përditësuar më 8 shtator 2026.",
       "blocked": "Publikimi bllokohet derisa të caktohen operatori, adresa dhe kontakti i privatësisë.",
       "s1t": "1. Operatori përgjegjës",
       "operatorPending": "Të dhënat e operatorit mungojnë",
       "addressPending": "Adresa mungon",
       "privacyContact": "Kontakti i privatësisë",
       "contactPending": "Kontakti mungon",
-      "s2t": "2. Të dhënat që përpunon Capcar",
-      "s2a": "Capcar ruan të dhënat e llogarisë nga Supabase dhe regjistrat e garazhit, përfshirë automjetet, mirëmbajtjen, build-et, kostot, listat, diagnostikën, përparimin e udhëzuesve dhe rregullimet vizuale. Një kopje e plotë ruhet edhe në shfletues për përdorim të shpejtë me tolerancë offline.",
+      "s2t": "2. Të dhënat që përpunon CapCar",
+      "s2a": "CapCar ruan të dhënat e llogarisë nga Supabase dhe regjistrat e garazhit, përfshirë automjetet, mirëmbajtjen, build-et, kostot, listat, diagnostikën, përparimin e udhëzuesve dhe rregullimet vizuale. Një kopje e plotë ruhet edhe në shfletues për përdorim të shpejtë me tolerancë offline.",
       "s2b": "Kur publikon një Pasaportë Automjeti, regjistri i zgjedhur është i dukshëm për këdo me lidhjen e paparashikueshme derisa ta anulosh ose fshish. Mund të shfaqen vetëm pesë shenjat e fundit të VIN-it.",
       "s3t": "3. Qëllimi dhe baza ligjore",
-      "s3": "Përpunimi i llogarisë, sinkronizimit dhe eksportit nevojitet për shërbimin beta. Siguria, parandalimi i abuzimit dhe kufijtë e shkurtër mbështesin interesin legjitim për një beta të besueshme. Capcar nuk shet të dhënat e garazhit.",
+      "s3": "Përpunimi i llogarisë, sinkronizimit dhe eksportit nevojitet për shërbimin beta. Siguria, parandalimi i abuzimit dhe kufijtë e shkurtër mbështesin interesin legjitim për një beta të besueshme. CapCar nuk shet të dhënat e garazhit.",
       "s4t": "4. Pritja dhe shërbimet e jashtme",
       "s4": "Netlify shpërndan aplikacionin dhe Supabase ofron identifikimin e databazën. Hapja e pamjes 3D lidh shfletuesin me Sketchfab. Përshtatësit e automjeteve, shitësve dhe AI mbeten në demo të shënuar, përveçse kur faqja System tregon një ofrues aktiv.",
       "s5t": "5. Ruajtja dhe fshirja",
@@ -765,16 +765,16 @@
       "meta": "Kushtet dhe siguria",
       "eyebrow": "Kushtet e beta-s dhe siguria",
       "title": "Planifiko qartë. Verifiko para se të veprosh.",
-      "description": "Capcar organizon informacionin e projekteve të makinave. Nuk zëvendëson procedurën zyrtare, inspektimin apo profesionistin. Përditësuar më 8 shtator 2026.",
+      "description": "CapCar organizon informacionin e projekteve të makinave. Nuk zëvendëson procedurën zyrtare, inspektimin apo profesionistin. Përditësuar më 8 shtator 2026.",
       "s1t": "1. Beta private",
-      "s1": "Capcar është beta private. Veçoritë mund të ndryshojnë, të mungojnë ose të përmbajnë të dhëna demo të shënuara. Katalogët, ofertat, konceptet, rregullat e përshtatjes dhe proceset mund të jenë fiktive ose të paplota kur nuk thuhet ndryshe.",
+      "s1": "CapCar është beta private. Veçoritë mund të ndryshojnë, të mungojnë ose të përmbajnë të dhëna demo të shënuara. Katalogët, ofertat, konceptet, rregullat e përshtatjes dhe proceset mund të jenë fiktive ose të paplota kur nuk thuhet ndryshe.",
       "s2t": "2. Siguria dhe përshtatja",
-      "s2a": "Mos e përdor Capcar si bazën e vetme për blerje, ngritje automjeti, punë kritike, ndryshim emisionesh ose ligjshmëri rrugore. Verifiko automjetin, datën, kodet, dokumentacionin, momentet e shtrëngimit, lëngjet dhe ligjet lokale.",
+      "s2a": "Mos e përdor CapCar si bazën e vetme për blerje, ngritje automjeti, punë kritike, ndryshim emisionesh ose ligjshmëri rrugore. Verifiko automjetin, datën, kodet, dokumentacionin, momentet e shtrëngimit, lëngjet dhe ligjet lokale.",
       "s2b": "Ndalo dhe përdor një profesionist kur puna tejkalon aftësitë, veglat ose mjedisin tënd të sigurt.",
       "s3t": "3. Llogaritë dhe regjistrat",
-      "s3": "Mbro hyrjen dhe ruaj vetëm regjistra për të cilët ke të drejtë. Capcar ofron eksport dhe fshirje, por faturat, dokumentet e servisit dhe provat ligjore duhet t’i ruash vetë.",
+      "s3": "Mbro hyrjen dhe ruaj vetëm regjistra për të cilët ke të drejtë. CapCar ofron eksport dhe fshirje, por faturat, dokumentet e servisit dhe provat ligjore duhet t’i ruash vetë.",
       "s4t": "4. Lidhjet publike të Pasaportës",
-      "s4": "Publikimi e bën përmbajtjen të dukshme për këdo me lidhjen. Kontrolloje para publikimit dhe anuloje ose fshije kur nuk duhet të jetë më aktive. Pasaportat publike janë regjistra të pronarit, jo certifikim Capcar.",
+      "s4": "Publikimi e bën përmbajtjen të dukshme për këdo me lidhjen. Kontrolloje para publikimit dhe anuloje ose fshije kur nuk duhet të jetë më aktive. Pasaportat publike janë regjistra të pronarit, jo certifikim CapCar.",
       "s5t": "5. Faqet e jashtme",
       "s5": "Lidhjet e shitësve, burimeve dhe 3D çojnë te shërbime të pavarura. Konfirmo çmimin, transportin, kthimin, origjinalitetin, përshtatjen dhe miratimin rrugor me ofruesin.",
       "s6t": "6. Ndryshimet dhe disponueshmëria",
@@ -784,7 +784,7 @@
       "meta": "Të dhënat ligjore",
       "eyebrow": "Informacioni i operatorit",
       "title": "Të dhënat ligjore.",
-      "description": "Të dhëna publike për operatorin dhe kontaktin e Capcar.",
+      "description": "Të dhëna publike për operatorin dhe kontaktin e CapCar.",
       "contentsLabel": "Përmbajtja ligjore",
       "contents": "Përmbajtja",
       "provider": "Ofruesi i shërbimit",

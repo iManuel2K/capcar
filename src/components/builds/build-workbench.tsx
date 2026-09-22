@@ -73,7 +73,7 @@ export function BuildWorkbench({
       <p className="mt-3 max-w-3xl text-sm leading-6 text-white/70">
         Compare normalized live retailer observations with quotes you record
         yourself. Evidence stays attached to the part; dated purchases feed Cost
-        Analytics. Unknown charges remain unknown—Capcar never invents a cheaper
+        Analytics. Unknown charges remain unknown—CapCar never invents a cheaper
         total.
       </p>
       {item ? (
@@ -826,7 +826,7 @@ function ItemWorkbench({
             <div>
               <h3 className="text-xl font-medium">Watched offers</h3>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-white/65">
-                Capcar checks due connected offers when your garage opens or
+                CapCar checks due connected offers when your garage opens or
                 returns to the foreground. Watches back off safely after
                 provider failures. Closed-browser email and push delivery still
                 require a server scheduler.

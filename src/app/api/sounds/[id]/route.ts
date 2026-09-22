@@ -25,7 +25,7 @@ export async function GET(
             redirect: "error",
             headers: {
               "User-Agent":
-                "Capcar/1.0 (licensed audio; capcar-im.netlify.app)",
+                "CapCar/1.0 (licensed audio; capcar-im.netlify.app)",
             },
           },
         );

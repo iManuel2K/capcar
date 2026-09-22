@@ -7,7 +7,7 @@ describe("scan import", () => {
     scannedAt: "2026-01-01T12:00:00.000Z",
     codes: ["p0300", "P0300", "P0420"],
   });
-  it("normalizes and deduplicates a Capcar JSON scan", () => {
+  it("normalizes and deduplicates a CapCar JSON scan", () => {
     const scan = parseScan(text);
     expect(scan.codes).toEqual(["P0300", "P0420"]);
     expect(scan.sourceFormat).toBe("capcar-json");

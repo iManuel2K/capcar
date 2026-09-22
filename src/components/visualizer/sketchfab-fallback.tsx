@@ -28,7 +28,7 @@ export function SketchfabFallback({
           <h3 className="mt-4 text-xl font-medium">3D viewer was blocked</h3>
           <p className="mt-2 text-sm leading-6 text-white/55">
             An ad blocker, Brave Shields or a privacy extension may have stopped
-            the Sketchfab connection. Temporarily allow Sketchfab for Capcar,
+            the Sketchfab connection. Temporarily allow Sketchfab for CapCar,
             then retry. The static vehicle preview remains available here.
           </p>
           <button

@@ -27,7 +27,7 @@ export function selectOfferForBuild(
       {
         buildId,
         title: part.name,
-        note: "Selected from fictional Capcar offers. Verify fitment and terms.",
+        note: "Selected from fictional CapCar offers. Verify fitment and terms.",
         catalogPartId: part.id,
         stage: part.buildStage,
         priority: "next",
