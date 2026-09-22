@@ -68,11 +68,45 @@
   box-shadow: 0 0 0 7px rgb(231 45 69 / 20%);
 }
 
+.roadbook-map-shell {
+  isolation: isolate;
+  background: var(--roadbook-map-canvas, #0b0e0c);
+  transition: background-color 240ms ease;
+}
+
 .roadbook-leaflet-map {
   z-index: 0;
   background: var(--roadbook-map-canvas, #0b0e0c);
   font-family: inherit;
   transition: background-color 240ms ease;
+}
+
+.roadbook-vector-map {
+  z-index: 1;
+  background: var(--roadbook-map-canvas, #0b0e0c);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 240ms ease,
+    background-color 240ms ease;
+}
+
+.roadbook-map-shell.is-vector-ready .roadbook-vector-map {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.roadbook-map-shell.is-vector-ready .roadbook-leaflet-map {
+  pointer-events: none;
+}
+
+.roadbook-vector-map .maplibregl-canvas {
+  outline: none;
+}
+
+.roadbook-vector-marker-shell {
+  border: 0;
+  background: transparent;
 }
 
 .roadbook-leaflet-map .leaflet-tile-pane {
@@ -227,6 +261,53 @@
   color: inherit !important;
 }
 
+.roadbook-vector-map .maplibregl-ctrl-bottom-left {
+  bottom: 5.3rem;
+  left: 0.75rem;
+}
+
+.roadbook-vector-map .maplibregl-ctrl-bottom-left .maplibregl-ctrl {
+  margin: 0;
+}
+
+.roadbook-vector-map .maplibregl-ctrl-group {
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 0.85rem;
+  background: rgb(9 16 13 / 92%);
+  box-shadow: 0 12px 35px rgb(0 0 0 / 22%);
+}
+
+.roadbook-vector-map .maplibregl-ctrl-group button {
+  width: 2.75rem;
+  height: 2.75rem;
+  background-color: transparent;
+}
+
+.roadbook-vector-map .maplibregl-ctrl-group button + button {
+  border-top: 1px solid rgb(255 255 255 / 8%);
+}
+
+.roadbook-vector-map .maplibregl-ctrl-group button:hover,
+.roadbook-vector-map .maplibregl-ctrl-group button:focus-visible {
+  background-color: rgb(255 255 255 / 8%);
+}
+
+.roadbook-vector-map .maplibregl-ctrl-icon {
+  filter: invert(1);
+}
+
+.roadbook-vector-map .maplibregl-ctrl-attrib {
+  border-radius: 0.5rem 0 0;
+  background: rgb(9 16 13 / 70%);
+  color: rgb(255 255 255 / 58%);
+  backdrop-filter: blur(10px);
+}
+
+.roadbook-vector-map .maplibregl-ctrl-attrib a {
+  color: inherit;
+}
+
 @media (max-width: 639px) {
   .roadbook-style-picker {
     border-radius: 1rem;
@@ -249,7 +330,8 @@
     bottom: 0;
   }
 
-  .leaflet-bottom.leaflet-right {
+  .leaflet-bottom.leaflet-right,
+  .roadbook-vector-map .maplibregl-ctrl-bottom-right {
     bottom: 5rem;
   }
 }
