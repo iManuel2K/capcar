@@ -59,17 +59,6 @@ describe("Roadbook map styles", () => {
     expect(styles).not.toContain("wash:");
   });
 
-  it("keeps zoom controls clear of the bottom Roadbook overlays", () => {
-    const css = readFileSync("src/app/roadbook/roadbook.css", "utf8");
-    expect(css).toContain(
-      ".roadbook-leaflet-map .leaflet-bottom.leaflet-left",
-    );
-    expect(css).toContain(
-      ".roadbook-vector-map .maplibregl-ctrl-bottom-left",
-    );
-    expect(css).toContain("top: 50%");
-  });
-
   it("persists valid styles and safely recovers invalid or blocked storage", () => {
     const values = new Map<string, string>();
     const storage = {
