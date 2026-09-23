@@ -27,6 +27,28 @@ export function MarketingHero() {
           <p className="mt-5 text-xs leading-5 text-[#bfcac5]">
             {t("hero.note")}
           </p>
+          <div
+            className="mt-7 max-w-md border-t border-white/20 pt-5"
+            aria-label={t("hero.aiLabel")}
+          >
+            <p className="text-[10px] font-semibold tracking-[0.17em] text-[#d6aa92] uppercase">
+              {t("hero.aiLabel")}
+            </p>
+            <div
+              className="mt-3 flex flex-wrap items-center gap-2"
+              aria-label="ChatGPT and Claude"
+            >
+              <span className="rounded-full border border-white/25 px-3 py-1.5 text-xs font-medium text-[#f5f0e8]">
+                ChatGPT
+              </span>
+              <span className="rounded-full border border-white/25 px-3 py-1.5 text-xs font-medium text-[#f5f0e8]">
+                Claude
+              </span>
+            </div>
+            <p className="mt-2 text-xs leading-5 text-[#bfcac5]">
+              {t("hero.aiSupport")}
+            </p>
+          </div>
         </div>
         <BuildTransformation eager />
       </div>

@@ -1,4 +1,47 @@
 {
+  "Story": {
+    "label": "Nga pyetja në garazh",
+    "steps": "Hapat",
+    "ask": {
+      "title": "Fillo me pyetjen.",
+      "description": "Trego ChatGPT ose Claude çfarë nget, çfarë do të ndryshosh dhe çfarë ka rëndësi.",
+      "card": "Pyet AI-n",
+      "prompt": "Kam një BMW E90 318i të vitit 2011. Planifiko dritat e pasme OEM+ brenda 500 €.",
+      "context": "Shembull · Përshtatshmëria duhet kontrolluar"
+    },
+    "plan": {
+      "title": "E njëjta ide. Hapa të qartë.",
+      "description": "CapCar e organizon përgjigjen në pjesë, kontrolle përshtatshmërie, kosto dhe punë për t’u verifikuar.",
+      "card": "Plani",
+      "vehicle": "BMW E90 318i · 2011",
+      "modification": "Drita të pasme OEM+",
+      "parts": "Kontrollo numrin e pjesës",
+      "budget": "Deri 500 €",
+      "fitment": "E pakonfirmuar",
+      "verify": "Kontrollo pjesën dhe ligjshmërinë"
+    },
+    "garage": {
+      "title": "Dhe kalon në garazhin tënd.",
+      "description": "Ruaje planin te makina e duhur, krahaso ofertat aktuale dhe vazhdo deri në punëtori.",
+      "card": "Garazhi yt",
+      "vehicle": "BMW E90 318i · 2011",
+      "stage": "E planifikuar",
+      "part": "Drita e pasme · pa blerë",
+      "budget": "Deri 500 €",
+      "next": "Krahaso ofertat / punëtorinë"
+    },
+    "fields": {
+      "vehicle": "Automjeti",
+      "modification": "Modifikimi",
+      "parts": "Pjesët",
+      "budget": "Buxheti",
+      "fitment": "Përshtatshmëria",
+      "verify": "Verifikimi i nevojshëm",
+      "stage": "Faza",
+      "part": "Pjesë e ruajtur",
+      "next": "Hapi tjetër"
+    }
+  },
   "Language": {
     "label": "Gjuha"
   },
@@ -258,6 +301,8 @@
     "start": "Fillo një projekt",
     "explore": "Shiko një projekt",
     "hero": {
+      "aiLabel": "PUNON ME AI-N TËND",
+      "aiSupport": "Planifiko me ChatGPT ose Claude dhe kalo planin e strukturuar te CapCar përmes MCP.",
       "eyebrow": "Garazhi digjital për projektin tënd",
       "title": "Ndërto makinën",
       "accent": "që imagjinon.",
