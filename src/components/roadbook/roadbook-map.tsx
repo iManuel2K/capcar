@@ -283,6 +283,7 @@ export function RoadbookMap({
         if (disposed || !vectorContainer.current) return;
 
         vectorModule.current = maplibre;
+        maplibre.setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
         const leaflet = map.current;
         const leafletCenter = leaflet?.getCenter();
         instance = new maplibre.Map({
