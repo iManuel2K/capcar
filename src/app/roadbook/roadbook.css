@@ -104,6 +104,23 @@
   outline: none;
 }
 
+/* Keep map navigation clear of the style picker and category rail. */
+.roadbook-leaflet-map .leaflet-bottom.leaflet-left,
+.roadbook-vector-map .maplibregl-ctrl-bottom-left {
+  top: 50%;
+  bottom: auto;
+  left: max(0.75rem, env(safe-area-inset-left));
+  z-index: 30;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.roadbook-leaflet-map .leaflet-bottom.leaflet-left .leaflet-control,
+.roadbook-vector-map .maplibregl-ctrl-bottom-left .maplibregl-ctrl {
+  margin: 0;
+  pointer-events: auto;
+}
+
 .roadbook-vector-marker-shell {
   border: 0;
   background: transparent;
