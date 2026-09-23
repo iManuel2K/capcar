@@ -5,14 +5,18 @@ import { getAuthStatus } from "@/features/auth/auth-config";
 import { currentUser } from "@/lib/supabase/current-user";
 import { SignInCard } from "@/components/community/sign-in-card";
 import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/features/seo/public-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Community");
-  return {
-    title: t("verifiedTitle"),
-    robots: { index: false, follow: false },
-  };
+  const description = await getTranslations("PageMeta");
+  return pageMetadata(
+    "/verified-work",
+    t("verifiedTitle"),
+    description("verified-work"),
+    { index: false, follow: false },
+  );
 }
 export default async function Page({
   searchParams,

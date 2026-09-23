@@ -1,4 +1,18 @@
 {
+  "PageMeta": {
+    "sound-studio": "Listen to licensed real-engine recordings and keep your own local sound archive with vehicle and setup context.",
+    "connected-parts": "Search current retailer listings by part number, vehicle reference and delivery market, then compare offers before buying.",
+    "specialists": "Find enrolled automotive specialists by service and location, with clear approval and verification context.",
+    "marketplace": "Browse published automotive parts and connect with sellers while keeping fitment and seller verification clearly separated.",
+    "verified-work": "Request specialist confirmation and keep verified work connected to the correct vehicle record.",
+    "privacy": "Learn how CapCar stores, processes, exports and removes account and private garage data.",
+    "terms": "Review CapCar’s beta terms, safety limitations, fitment guidance and responsibilities before planning vehicle work.",
+    "imprint": "Operator and contact information for the CapCar private beta.",
+    "login": "Sign in to access your private CapCar garage, vehicles, build plans and maintenance records.",
+    "register": "Create a CapCar account and keep your vehicles, plans, costs and workshop history in one private garage.",
+    "forgot-password": "Request a secure password-reset link for your CapCar account.",
+    "system": "View CapCar’s current beta capabilities, active providers and technical readiness."
+  },
   "Faq": {
     "title": "A clearer way to build.",
     "description": "The short version of what CapCar is, who it is for and where it is going.",
@@ -149,6 +163,10 @@
       "roadbook": {
         "title": "Roadbook driving map",
         "description": "Explore sourced circuits, controlled test venues and route context on a four-mode map. Save places to a build and keep owner-recorded visits in the Vehicle Passport."
+      },
+      "photoSpots": {
+        "title": "Car photo spots",
+        "description": "Discover legal, accessible locations for automotive photography, including light, access, parking and verification context."
       },
       "events": {
         "title": "Events worth driving to",
@@ -642,6 +660,7 @@
     "modified": "Modified"
   },
   "Operations": {
+    "betaStatus": "Beta status: operational.",
     "systemBack": "← System readiness",
     "homeBack": "← CapCar",
     "launchEyebrow": "Production launch",

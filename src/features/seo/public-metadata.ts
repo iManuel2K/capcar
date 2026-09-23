@@ -23,3 +23,21 @@ export function canonicalMetadata(
 ): Pick<Metadata, "alternates"> {
   return { alternates: { canonical: route || "/" } };
 }
+
+/** Full route-specific share metadata; indexing is deliberately independent. */
+export function pageMetadata(
+  route: string,
+  title: string,
+  description: string,
+  robots?: Metadata["robots"],
+): Metadata {
+  const url = new URL(route, PUBLIC_SITE_URL).toString();
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { title, description, url, siteName: "CapCar", type: "website" },
+    twitter: { card: "summary_large_image", title, description },
+    ...(robots ? { robots } : {}),
+  };
+}

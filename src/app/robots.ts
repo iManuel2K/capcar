@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
+import { PUBLIC_SITE_URL } from "@/features/seo/public-metadata";
 
 export default function robots(): MetadataRoute.Robots {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   return {
     rules: {
       userAgent: "*",
@@ -13,14 +13,11 @@ export default function robots(): MetadataRoute.Robots {
         "/garage/",
         "/international-parts",
         "/launch",
-        "/login",
         "/notifications",
         "/passport/",
-        "/register",
         "/reset-password",
-        "/system",
       ],
     },
-    sitemap: `${siteUrl}/sitemap.xml`,
+    sitemap: new URL("/sitemap.xml", PUBLIC_SITE_URL).toString(),
   };
 }

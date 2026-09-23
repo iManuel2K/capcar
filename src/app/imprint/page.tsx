@@ -3,11 +3,12 @@ import { getTranslations } from "next-intl/server";
 
 import { LegalSection, LegalShell } from "@/components/legal/legal-shell";
 import { getLegalConfiguration } from "@/features/legal/legal-config";
-import { canonicalMetadata } from "@/features/seo/public-metadata";
+import { pageMetadata } from "@/features/seo/public-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("LegalDocs.imprint");
-  return { ...canonicalMetadata("/imprint"), title: t("meta") };
+  const description = await getTranslations("PageMeta");
+  return pageMetadata("/imprint", t("meta"), description("imprint"));
 }
 
 export default async function ImprintPage() {

@@ -1,4 +1,18 @@
 {
+  "PageMeta": {
+    "sound-studio": "Höre lizenzierte echte Motoraufnahmen und verwalte dein lokales Soundarchiv mit Fahrzeug- und Setup-Kontext.",
+    "connected-parts": "Suche aktuelle Händlerangebote nach Teilenummer, Fahrzeugbezug und Lieferland und vergleiche Angebote vor dem Kauf.",
+    "specialists": "Finde registrierte Kfz-Spezialisten nach Leistung und Standort mit transparentem Freigabe- und Prüfstatus.",
+    "marketplace": "Entdecke veröffentlichte Fahrzeugteile und kontaktiere Verkäufer; Passgenauigkeit und Verkäuferprüfung bleiben getrennt.",
+    "verified-work": "Bitte Spezialisten um Bestätigung und verknüpfe verifizierte Arbeiten mit dem richtigen Fahrzeug.",
+    "privacy": "Erfahre, wie CapCar Konto- und private Garagendaten speichert, verarbeitet, exportiert und entfernt.",
+    "terms": "Lies die Beta-Bedingungen, Sicherheitshinweise, Passform-Hinweise und Verantwortlichkeiten von CapCar.",
+    "imprint": "Betreiber- und Kontaktinformationen zur privaten CapCar-Beta.",
+    "login": "Melde dich an, um auf deine private CapCar-Garage, Fahrzeuge, Baupläne und Wartungseinträge zuzugreifen.",
+    "register": "Erstelle ein CapCar-Konto und verwalte Fahrzeuge, Pläne, Kosten und Werkstatthistorie in einer privaten Garage.",
+    "forgot-password": "Fordere einen sicheren Link zum Zurücksetzen deines CapCar-Passworts an.",
+    "system": "Sieh dir die aktuellen Beta-Funktionen, aktiven Anbieter und die technische Bereitschaft von CapCar an."
+  },
   "Faq": {
     "title": "Klarer zum fertigen Build.",
     "description": "Kurz erklärt: was CapCar ist, für wen es gedacht ist und wohin es sich entwickelt.",
@@ -149,6 +163,10 @@
       "roadbook": {
         "title": "Roadbook-Fahrkarte",
         "description": "Entdecke belegte Rundstrecken, kontrollierte Testgelände und Routenkontext auf einer Karte mit vier Ansichten. Speichere Orte im Build und dokumentiere eigene Besuche im Fahrzeugpass."
+      },
+      "photoSpots": {
+        "title": "Auto-Fotospots",
+        "description": "Entdecke legale, zugängliche Orte für Autofotografie mit Licht-, Zufahrts-, Park- und Prüfhinweisen."
       },
       "events": {
         "title": "Events, für die sich die Fahrt lohnt",
@@ -642,6 +660,7 @@
     "modified": "Modifiziert"
   },
   "Operations": {
+    "betaStatus": "Beta-Status: betriebsbereit.",
     "systemBack": "← Systemstatus",
     "homeBack": "← CapCar",
     "launchEyebrow": "Produktionsstart",

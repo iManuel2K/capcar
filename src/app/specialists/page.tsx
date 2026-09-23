@@ -1,14 +1,20 @@
 import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import {
   PublicSpecialists,
   type PublicSpecialist,
 } from "@/components/community/public-specialists";
 import { createClient } from "@/lib/supabase/server";
-import { canonicalMetadata } from "@/features/seo/public-metadata";
-export async function generateMetadata() {
+import { pageMetadata } from "@/features/seo/public-metadata";
+export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Expansion");
-  return { ...canonicalMetadata("/specialists"), title: t("specialists") };
+  const description = await getTranslations("PageMeta");
+  return pageMetadata(
+    "/specialists",
+    t("specialists"),
+    description("specialists"),
+  );
 }
 export default async function Page() {
   const t = await getTranslations("Expansion");
