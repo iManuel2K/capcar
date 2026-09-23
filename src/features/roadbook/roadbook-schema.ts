@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+// Zod's default capability probe calls Function("") even when the error is
+// caught. It still triggers a CSP violation on the Roadbook's public page.
+z.config({ jitless: true });
+
 export const roadbookCategories = [
   "drift_circuit",
   "drag_acceleration",

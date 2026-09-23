@@ -136,8 +136,8 @@ export function supportsRoadbookWebGL() {
     const context = canvas.getContext("webgl2", {
       failIfMajorPerformanceCaveat: false,
     });
-    const loseContext = context?.getExtension("WEBGL_lose_context");
-    loseContext?.loseContext();
+    // Explicitly losing the probe context emits a browser warning and can
+    // cause the map's next context to fail on constrained devices.
     return Boolean(context);
   } catch {
     return false;
