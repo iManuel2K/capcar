@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Camera,
   FlagTriangleRight,
   Gauge,
   Milestone,
@@ -17,6 +18,7 @@ const filters = [
   { value: "track_day", icon: FlagTriangleRight },
   { value: "proving_ground", icon: TestTubeDiagonal },
   { value: "scenic_route", icon: Mountain },
+  { value: "car_photo_spot", icon: Camera },
   { value: "autobahn_context", icon: Milestone },
 ] as const;
 

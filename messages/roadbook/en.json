@@ -1,5 +1,32 @@
 {
   "Roadbook": {
+    "search": "Search places in view",
+    "photoSpot": {
+      "title": "Photo location",
+      "safety": "Stop only where parking is permitted. Never block roads or access, enter private property without permission or stop at unsafe roadside locations.",
+      "bestTime": "Best time",
+      "lighting": "Light",
+      "parking": "Parking / access",
+      "permission": "Permission",
+      "permissionCheck": "Confirm permission before visiting",
+      "permissionNotRequired": "No special permission recorded; check current rules",
+      "vehicle": "Suitable vehicles",
+      "safetyNotes": "Safety notes",
+      "example": "Licensed example",
+      "directions": "Open directions",
+      "tags": {
+        "skyline": "skyline",
+        "industrial": "industrial",
+        "forest": "forest",
+        "mountain": "mountain",
+        "coastal": "coastal",
+        "architecture": "architecture",
+        "night": "night",
+        "sunrise": "sunrise",
+        "sunset": "sunset",
+        "urban": "urban"
+      }
+    },
     "eyebrow": "Roadbook · Legal driving discovery",
     "title": "Find the right road for the build.",
     "description": "Discover circuits, controlled test venues and driving routes with their source, access rules and current confidence kept visible.",
@@ -8,6 +35,7 @@
     "loading": "Checking the visible area…",
     "mapLoading": "Opening the Roadbook map…",
     "fallback": {
+      "styles": "Original OpenStreetMap tiles · city colors require WebGL.",
       "label": "Compatibility map",
       "description": "Roadbook switched to a lightweight map because WebGL is unavailable. Venue details and saved visits still work."
     },
@@ -19,10 +47,13 @@
       "track_day": "Track days",
       "proving_ground": "Proving grounds",
       "scenic_route": "Scenic routes",
+      "car_photo_spot": "Car photo spots",
       "autobahn_context": "Autobahn context"
     },
     "modes": {
       "label": "City map style",
+      "headline": "Nine Roadbook styles.",
+      "description": "From clear workshop daylight to Tokyo night, choose how your roads should feel.",
       "konstanz": "Konstanz",
       "reykjavik": "Reykjavík",
       "lissabon": "Lissabon",

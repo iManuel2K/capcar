@@ -1,5 +1,32 @@
 {
   "Roadbook": {
+    "search": "Αναζήτηση σημείων στον χάρτη",
+    "photoSpot": {
+      "title": "Σημείο φωτογράφισης",
+      "safety": "Στάθμευε μόνο όπου επιτρέπεται. Μην εμποδίζεις δρόμους ή εισόδους και μην μπαίνεις σε ιδιωτικό χώρο χωρίς άδεια.",
+      "bestTime": "Καλύτερη ώρα",
+      "lighting": "Φωτισμός",
+      "parking": "Στάθμευση / πρόσβαση",
+      "permission": "Άδεια",
+      "permissionCheck": "Έλεγξε την άδεια πριν επισκεφθείς",
+      "permissionNotRequired": "Δεν καταγράφηκε ειδική άδεια· έλεγξε τους κανόνες",
+      "vehicle": "Κατάλληλα οχήματα",
+      "safetyNotes": "Ασφάλεια",
+      "example": "Αδειοδοτημένο παράδειγμα",
+      "directions": "Άνοιγμα οδηγιών",
+      "tags": {
+        "skyline": "skyline",
+        "industrial": "industrial",
+        "forest": "forest",
+        "mountain": "mountain",
+        "coastal": "coastal",
+        "architecture": "architecture",
+        "night": "night",
+        "sunrise": "sunrise",
+        "sunset": "sunset",
+        "urban": "urban"
+      }
+    },
     "eyebrow": "Roadbook · Νόμιμοι προορισμοί οδήγησης",
     "title": "Βρες τον σωστό δρόμο για το project σου.",
     "description": "Ανακάλυψε πίστες, ελεγχόμενους χώρους δοκιμών και διαδρομές με εμφανείς πηγές, κανόνες πρόσβασης και κατάσταση επαλήθευσης.",
@@ -8,6 +35,7 @@
     "loading": "Έλεγχος ορατής περιοχής…",
     "mapLoading": "Άνοιγμα του χάρτη Roadbook…",
     "fallback": {
+      "styles": "Αρχικά πλακίδια OpenStreetMap · τα χρώματα πόλεων απαιτούν WebGL.",
       "label": "Συμβατός χάρτης",
       "description": "Το Roadbook χρησιμοποιεί ελαφριά προβολή επειδή το WebGL δεν είναι διαθέσιμο. Οι λεπτομέρειες και οι αποθηκευμένες επισκέψεις συνεχίζουν να λειτουργούν."
     },
@@ -19,10 +47,13 @@
       "track_day": "Track days",
       "proving_ground": "Πεδία δοκιμών",
       "scenic_route": "Πανοραμικές διαδρομές",
+      "car_photo_spot": "Τοποθεσίες φωτογράφισης αυτοκινήτων",
       "autobahn_context": "Πληροφορίες Autobahn"
     },
     "modes": {
       "label": "Στυλ χάρτη πόλης",
+      "headline": "Εννέα στυλ Roadbook.",
+      "description": "Από το καθαρό φως του συνεργείου μέχρι τη νύχτα του Τόκιο, διάλεξε την αίσθηση των δρόμων σου.",
       "konstanz": "Konstanz",
       "reykjavik": "Reykjavík",
       "lissabon": "Lissabon",

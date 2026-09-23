@@ -1,4 +1,47 @@
 {
+  "Story": {
+    "label": "質問からガレージへ",
+    "steps": "手順",
+    "ask": {
+      "title": "まず質問から。",
+      "description": "ChatGPT または Claude に車、変更したいこと、大切な条件を伝えます。",
+      "card": "AI に相談",
+      "prompt": "2011年式 BMW E90 318i。500ユーロ以内で OEM+ のテールランプ交換を計画して。",
+      "context": "例示です。適合性は別途確認が必要です"
+    },
+    "plan": {
+      "title": "同じアイデアを、明確な手順に。",
+      "description": "CapCar で部品、適合確認、費用、購入前に調べるべき作業を整理します。",
+      "card": "ビルド計画",
+      "vehicle": "2011年式 BMW E90 318i",
+      "modification": "OEM+ テールランプ",
+      "parts": "品番の確認が必要",
+      "budget": "上限 €500",
+      "fitment": "未確認",
+      "verify": "品番と公道での適法性を確認"
+    },
+    "garage": {
+      "title": "そして CapCar ガレージに。",
+      "description": "正しい車両に計画を保存し、現在の出品を比べ、作業場まで進めます。",
+      "card": "ガレージ",
+      "vehicle": "2011年式 BMW E90 318i",
+      "stage": "計画中",
+      "part": "テールランプ · 未購入",
+      "budget": "上限 €500",
+      "next": "最新出品と作業場を比較"
+    },
+    "fields": {
+      "vehicle": "車両",
+      "modification": "変更内容",
+      "parts": "候補部品",
+      "budget": "予算",
+      "fitment": "適合性",
+      "verify": "必要な確認",
+      "stage": "段階",
+      "part": "保存部品",
+      "next": "次のステップ"
+    }
+  },
   "Language": {
     "label": "言語"
   },
@@ -258,6 +301,8 @@
     "start": "ビルドを始める",
     "explore": "プロジェクトを見る",
     "hero": {
+      "aiLabel": "いつものAIと連携",
+      "aiSupport": "ChatGPT または Claude で計画し、MCP を通じて構造化したプランを CapCar に取り込みます。",
       "eyebrow": "プロジェクトカーのためのデジタルガレージ",
       "title": "思い描いた一台を、",
       "accent": "自分の手で。",

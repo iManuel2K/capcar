@@ -1,5 +1,32 @@
 {
   "Roadbook": {
+    "search": "Orte in der Ansicht suchen",
+    "photoSpot": {
+      "title": "Fotospot",
+      "safety": "Halte nur dort, wo Parken erlaubt ist. Blockiere keine Straßen oder Zufahrten und betrete kein Privatgelände ohne Erlaubnis.",
+      "bestTime": "Beste Zeit",
+      "lighting": "Licht",
+      "parking": "Parken / Zufahrt",
+      "permission": "Genehmigung",
+      "permissionCheck": "Genehmigung vor dem Besuch prüfen",
+      "permissionNotRequired": "Keine Sondergenehmigung erfasst; aktuelle Regeln prüfen",
+      "vehicle": "Geeignete Fahrzeuge",
+      "safetyNotes": "Sicherheit",
+      "example": "Lizenziertes Beispiel",
+      "directions": "Route öffnen",
+      "tags": {
+        "skyline": "skyline",
+        "industrial": "industrial",
+        "forest": "forest",
+        "mountain": "mountain",
+        "coastal": "coastal",
+        "architecture": "architecture",
+        "night": "night",
+        "sunrise": "sunrise",
+        "sunset": "sunset",
+        "urban": "urban"
+      }
+    },
     "eyebrow": "Roadbook · Legale Fahrziele",
     "title": "Finde die richtige Strecke für dein Projekt.",
     "description": "Entdecke Rennstrecken, kontrollierte Testgelände und Fahrtrouten – mit Quelle, Zugangsregeln und sichtbarem Prüfstatus.",
@@ -8,6 +35,7 @@
     "loading": "Sichtbaren Bereich prüfen…",
     "mapLoading": "Roadbook-Karte wird geöffnet…",
     "fallback": {
+      "styles": "Originale OpenStreetMap-Kacheln · Stadtfarben benötigen WebGL.",
       "label": "Kompatibilitätskarte",
       "description": "Roadbook nutzt eine leichte Kartenansicht, weil WebGL nicht verfügbar ist. Ortsdetails und gespeicherte Besuche funktionieren weiterhin."
     },
@@ -19,10 +47,13 @@
       "track_day": "Trackdays",
       "proving_ground": "Testgelände",
       "scenic_route": "Panoramarouten",
+      "car_photo_spot": "Auto-Fotospots",
       "autobahn_context": "Autobahn-Kontext"
     },
     "modes": {
       "label": "Stil der Stadtkarte",
+      "headline": "Neun Roadbook-Stile.",
+      "description": "Von klarem Werkstatt-Tageslicht bis zur Tokio-Nacht: Wähle, wie sich deine Straßen anfühlen sollen.",
       "konstanz": "Konstanz",
       "reykjavik": "Reykjavík",
       "lissabon": "Lissabon",

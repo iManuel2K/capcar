@@ -6,6 +6,7 @@ export const roadbookCategories = [
   "track_day",
   "proving_ground",
   "scenic_route",
+  "car_photo_spot",
   "autobahn_context",
 ] as const;
 
@@ -74,6 +75,41 @@ const nullableNumber = z
   .number()
   .nullable()
   .transform((value) => value ?? undefined);
+
+export const roadbookPhotoSpotSchema = z
+  .object({
+    visualDescription: z.string().min(1),
+    bestTime: z.string().min(1),
+    lighting: z.string().min(1),
+    parkingAccess: z.string().min(1),
+    permissionRequired: z.boolean(),
+    vehicleSuitability: z.string().min(1),
+    safetyNotes: z.string().min(1),
+    tags: z
+      .array(
+        z.enum([
+          "skyline",
+          "industrial",
+          "forest",
+          "mountain",
+          "coastal",
+          "architecture",
+          "night",
+          "sunrise",
+          "sunset",
+          "urban",
+        ]),
+      )
+      .default([]),
+    imageUrl: z.url().startsWith("https://").optional(),
+    imageLicense: z.string().min(1).optional(),
+  })
+  .refine((value) => !value.imageUrl || Boolean(value.imageLicense));
+
+export function photoSpotDetails(venue: RoadbookVenue) {
+  if (venue.category !== "car_photo_spot") return undefined;
+  return roadbookPhotoSpotSchema.safeParse(venue.requirements.photo_spot).data;
+}
 
 const roadbookVenueRowSchema = z
   .object({

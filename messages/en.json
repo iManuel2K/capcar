@@ -1,4 +1,47 @@
 {
+  "Story": {
+    "label": "From question to garage",
+    "steps": "Story steps",
+    "ask": {
+      "title": "Start with the question.",
+      "description": "Tell ChatGPT or Claude what you drive, what you want to change and what matters most.",
+      "card": "Ask your AI",
+      "prompt": "I have a 2011 BMW E90 318i. Help me plan an OEM+ rear-light upgrade within a €500 budget.",
+      "context": "Example prompt · Fitment still needs checking"
+    },
+    "plan": {
+      "title": "Same idea. Clear next steps.",
+      "description": "CapCar structures the answer into parts, fitment checks, costs and work you can verify before buying.",
+      "card": "Build plan",
+      "vehicle": "2011 BMW E90 318i",
+      "modification": "OEM+ rear lights",
+      "parts": "Part number to confirm",
+      "budget": "€500 maximum",
+      "fitment": "Not confirmed",
+      "verify": "Verify part number and road legality"
+    },
+    "garage": {
+      "title": "And it lands in your CapCar garage.",
+      "description": "Save the plan to the correct vehicle, compare live offers and carry the build from the first idea to the workshop.",
+      "card": "Your garage",
+      "vehicle": "2011 BMW E90 318i",
+      "stage": "Planned",
+      "part": "Rear light · not purchased",
+      "budget": "€500 maximum",
+      "next": "Compare current offers / workshop"
+    },
+    "fields": {
+      "vehicle": "Vehicle",
+      "modification": "Modification",
+      "parts": "Suggested parts",
+      "budget": "Budget",
+      "fitment": "Fitment",
+      "verify": "Required verification",
+      "stage": "Build stage",
+      "part": "Saved part",
+      "next": "Next step"
+    }
+  },
   "Language": {
     "label": "Language"
   },
@@ -258,6 +301,8 @@
     "start": "Start a build",
     "explore": "Explore a project",
     "hero": {
+      "aiLabel": "WORKS WITH YOUR AI",
+      "aiSupport": "Plan with ChatGPT or Claude, then bring the structured build into CapCar through MCP.",
       "eyebrow": "The digital garage for project cars",
       "title": "Build the car",
       "accent": "you imagine.",

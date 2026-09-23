@@ -17,7 +17,7 @@ import { MarketingHero } from "@/components/marketing/marketing-hero";
 import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { VisionRoadmapSection } from "@/components/marketing/vision-roadmap-section";
-import { ConceptStudio } from "@/components/visualizer/concept-studio";
+import { CapcarStory } from "@/components/marketing/capcar-story";
 
 export function MarketingLanding() {
   const t = useTranslations("Home");
@@ -27,27 +27,7 @@ export function MarketingLanding() {
       <main id="main-content">
         <MarketingHero />
         <ProductDashboardPreview />
-        <section
-          className="mx-auto max-w-[1500px] px-5 py-16 sm:px-8 sm:py-24"
-          aria-labelledby="concept-heading"
-        >
-          <h2
-            id="concept-heading"
-            className="mb-4 text-4xl font-medium tracking-tight"
-          >
-            {t("conceptTitle")}
-          </h2>
-          <p className="mb-8 max-w-xl text-base leading-7">
-            {t("conceptDescription")}
-          </p>
-          <ConceptStudio />
-          <Link
-            href="/studio"
-            className="mt-6 inline-flex min-h-11 items-center underline"
-          >
-            {t("openStudio")}
-          </Link>
-        </section>
+        <CapcarStory />
 
         <section id="platform" className="bg-[#050306] text-[#e8e6d7]">
           <div className="mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-32">

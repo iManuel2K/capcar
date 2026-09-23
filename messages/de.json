@@ -1,4 +1,47 @@
 {
+  "Story": {
+    "label": "Von der Frage zur Garage",
+    "steps": "Schritte",
+    "ask": {
+      "title": "Beginne mit der Frage.",
+      "description": "Erzähle ChatGPT oder Claude, welches Auto du fährst, was du ändern möchtest und was dir wichtig ist.",
+      "card": "Frag deine KI",
+      "prompt": "Ich habe einen BMW E90 318i von 2011. Plane ein OEM+-Rücklicht-Upgrade für höchstens 500 €.",
+      "context": "Beispiel · Passform muss geprüft werden"
+    },
+    "plan": {
+      "title": "Dieselbe Idee. Klare Schritte.",
+      "description": "CapCar ordnet die Antwort in Teile, Passformprüfungen, Kosten und vor dem Kauf zu prüfende Arbeit.",
+      "card": "Bauplan",
+      "vehicle": "BMW E90 318i · 2011",
+      "modification": "OEM+-Rücklichter",
+      "parts": "Teilenummer prüfen",
+      "budget": "Maximal 500 €",
+      "fitment": "Nicht bestätigt",
+      "verify": "Teilenummer und Zulässigkeit prüfen"
+    },
+    "garage": {
+      "title": "Und sie landet in deiner CapCar-Garage.",
+      "description": "Speichere den Plan beim richtigen Fahrzeug, vergleiche aktuelle Angebote und begleite den Umbau bis zur Werkstatt.",
+      "card": "Deine Garage",
+      "vehicle": "BMW E90 318i · 2011",
+      "stage": "Geplant",
+      "part": "Rücklicht · nicht gekauft",
+      "budget": "Maximal 500 €",
+      "next": "Angebote / Werkstatt vergleichen"
+    },
+    "fields": {
+      "vehicle": "Fahrzeug",
+      "modification": "Umbau",
+      "parts": "Teilevorschläge",
+      "budget": "Budget",
+      "fitment": "Passform",
+      "verify": "Erforderliche Prüfung",
+      "stage": "Projektstatus",
+      "part": "Gespeichertes Teil",
+      "next": "Nächster Schritt"
+    }
+  },
   "Language": {
     "label": "Sprache"
   },
@@ -258,6 +301,8 @@
     "start": "Build starten",
     "explore": "Projekt entdecken",
     "hero": {
+      "aiLabel": "FUNKTIONIERT MIT DEINER KI",
+      "aiSupport": "Plane mit ChatGPT oder Claude und übertrage den strukturierten Bauplan per MCP in CapCar.",
       "eyebrow": "Die digitale Garage für dein Autoprojekt",
       "title": "Bau das Auto,",
       "accent": "das du dir vorstellst.",

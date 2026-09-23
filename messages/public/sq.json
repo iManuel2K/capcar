@@ -1,4 +1,18 @@
 {
+  "PageMeta": {
+    "sound-studio": "Dëgjo regjistrime të licencuara të motorëve realë dhe ruaj arkivin lokal të tingujve me kontekst automjeti e konfigurimi.",
+    "connected-parts": "Kërko oferta aktuale sipas numrit të pjesës, automjetit dhe tregut të dorëzimit, pastaj krahasoji para blerjes.",
+    "specialists": "Gjej specialistë automobilistikë të regjistruar sipas shërbimit dhe vendndodhjes, me kontekst të qartë miratimi e verifikimi.",
+    "marketplace": "Shfleto pjesë të publikuara dhe lidhu me shitësit, duke dalluar përshtatshmërinë nga verifikimi i shitësit.",
+    "verified-work": "Kërko konfirmim nga specialisti dhe lidhe punën e verifikuar me automjetin e duhur.",
+    "privacy": "Mëso si CapCar ruan, përpunon, eksporton dhe fshin të dhënat e llogarisë dhe garazhit privat.",
+    "terms": "Lexo kushtet beta, kufizimet e sigurisë, udhëzimet e përshtatshmërisë dhe përgjegjësitë në CapCar.",
+    "imprint": "Të dhënat e operatorit dhe kontaktit për beta-n private të CapCar.",
+    "login": "Hyr për të përdorur garazhin privat CapCar, automjetet, planet e ndërtimit dhe regjistrat e mirëmbajtjes.",
+    "register": "Krijo llogari CapCar dhe mbaj automjetet, planet, kostot dhe historikun e punës në një garazh privat.",
+    "forgot-password": "Kërko një lidhje të sigurt për rivendosjen e fjalëkalimit të CapCar.",
+    "system": "Shiko aftësitë aktuale beta të CapCar, ofruesit aktivë dhe gatishmërinë teknike."
+  },
   "Faq": {
     "title": "Një mënyrë më e qartë për të ndërtuar.",
     "description": "Shpjegimi i shkurtër: çfarë është CapCar, për kë është dhe ku po shkon.",
@@ -149,6 +163,10 @@
       "roadbook": {
         "title": "Harta e vozitjes Roadbook",
         "description": "Zbulo pista me burime, ambiente të kontrolluara testimi dhe kontekst itinerari në një hartë me katër pamje. Ruaj vende në build dhe vizitat e tua në Vehicle Passport."
+      },
+      "photoSpots": {
+        "title": "Vende për foto makinash",
+        "description": "Zbulo vende ligjore e të arritshme për fotografi makinash, me dritë, hyrje, parkim dhe verifikim."
       },
       "events": {
         "title": "Evente që ia vlejnë udhëtimin",
@@ -642,6 +660,7 @@
     "modified": "Modifikuar"
   },
   "Operations": {
+    "betaStatus": "Statusi beta: funksional.",
     "systemBack": "← Gatishmëria e sistemit",
     "homeBack": "← CapCar",
     "launchEyebrow": "Nisja në prodhim",

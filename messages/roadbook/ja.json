@@ -1,5 +1,32 @@
 {
   "Roadbook": {
+    "search": "表示中の場所を検索",
+    "photoSpot": {
+      "title": "撮影スポット",
+      "safety": "駐車が許可されている場所だけで停車してください。道路や出入口をふさがず、無断で私有地に立ち入らないでください。",
+      "bestTime": "おすすめの時間帯",
+      "lighting": "光の向き",
+      "parking": "駐車・アクセス",
+      "permission": "許可",
+      "permissionCheck": "訪問前に許可を確認",
+      "permissionNotRequired": "特別な許可の記録なし。現地規則を確認",
+      "vehicle": "適した車両",
+      "safetyNotes": "安全上の注意",
+      "example": "使用許可のある写真例",
+      "directions": "経路を開く",
+      "tags": {
+        "skyline": "skyline",
+        "industrial": "industrial",
+        "forest": "forest",
+        "mountain": "mountain",
+        "coastal": "coastal",
+        "architecture": "architecture",
+        "night": "night",
+        "sunrise": "sunrise",
+        "sunset": "sunset",
+        "urban": "urban"
+      }
+    },
     "eyebrow": "Roadbook · 合法的なドライビングスポット",
     "title": "このビルドに合う道を見つけよう。",
     "description": "サーキット、管理されたテスト施設、ドライブルートを、情報源・利用条件・確認状況とともに探せます。",
@@ -8,6 +35,7 @@
     "loading": "表示エリアを確認中…",
     "mapLoading": "Roadbookマップを開いています…",
     "fallback": {
+      "styles": "OpenStreetMap の標準タイルを表示中。都市ごとの配色には WebGL が必要です。",
       "label": "互換マップ",
       "description": "WebGLを利用できないため、軽量マップに切り替えました。場所の詳細と保存した訪問記録は引き続き利用できます。"
     },
@@ -19,10 +47,13 @@
       "track_day": "走行会",
       "proving_ground": "テストコース",
       "scenic_route": "景観ルート",
+      "car_photo_spot": "車の撮影スポット",
       "autobahn_context": "アウトバーン情報"
     },
     "modes": {
       "label": "シティマップスタイル",
+      "headline": "9つのRoadbookスタイル。",
+      "description": "明るいガレージの日差しから東京の夜まで、走る道の雰囲気を選ぼう。",
       "konstanz": "Konstanz",
       "reykjavik": "Reykjavík",
       "lissabon": "Lissabon",

@@ -62,6 +62,7 @@ const stages = [
       "marketplace",
       "checkout",
       "roadbook",
+      "photoSpots",
       "events",
     ],
   },

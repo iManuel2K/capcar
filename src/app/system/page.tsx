@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { CheckCircle2, CircleDashed, ShieldCheck } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/features/seo/public-metadata";
 
 import { getAuthStatus } from "@/features/auth/auth-config";
 import { getCopilotStatus } from "@/features/copilot/copilot-provider";
@@ -8,6 +10,15 @@ import { getProviderStatuses } from "@/features/providers/provider-config";
 import { getDeploymentReadiness } from "@/features/deployment/deployment-readiness";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Operations");
+  const description = await getTranslations("PageMeta");
+  return pageMetadata("/system", t("systemTitle"), description("system"), {
+    index: false,
+    follow: false,
+  });
+}
 
 export default async function SystemPage() {
   const t = await getTranslations("Operations");
@@ -19,7 +30,7 @@ export default async function SystemPage() {
     {
       label: t("launchEyebrow"),
       ready: deployment.ready,
-      detail: t("launchTitle", { state: t(`states.${deployment.state}`) }),
+      detail: t("betaStatus"),
     },
     {
       label: t("checks.build.label"),

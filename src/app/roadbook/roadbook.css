@@ -109,26 +109,18 @@
   background: transparent;
 }
 
-.roadbook-leaflet-map .leaflet-tile-pane {
-  transition: filter 240ms ease;
-  filter: var(--roadbook-map-filter, none);
-}
-
 .roadbook-leaflet-map::after {
   position: absolute;
   z-index: 250;
   inset: 0;
-  background:
-    linear-gradient(
-      180deg,
-      transparent 34%,
-      rgb(3 7 6 / 10%) 58%,
-      rgb(3 6 5 / 68%) 100%
-    ),
-    linear-gradient(var(--roadbook-map-wash), var(--roadbook-map-wash));
+  background: linear-gradient(
+    180deg,
+    transparent 34%,
+    rgb(3 7 6 / 10%) 58%,
+    rgb(3 6 5 / 68%) 100%
+  );
   content: "";
   pointer-events: none;
-  transition: background 240ms ease;
 }
 
 .roadbook-style-picker {
