@@ -12,6 +12,8 @@ export function RoadbookThemeSwitcher({
   onChange,
   label,
   labels,
+  headline,
+  description,
   compatibility,
   compatibilityLabel,
 }: {
@@ -19,6 +21,8 @@ export function RoadbookThemeSwitcher({
   onChange: (mode: RoadbookMapMode) => void;
   label: string;
   labels: Record<RoadbookMapMode, string>;
+  headline: string;
+  description: string;
   compatibility: boolean;
   compatibilityLabel: string;
 }) {
@@ -35,10 +39,10 @@ export function RoadbookThemeSwitcher({
     >
       <div className="roadbook-style-picker__intro">
         <h2 id="roadbook-style-title" className="roadbook-style-picker__title">
-          Nine city styles
+          {headline}
         </h2>
         <p className="roadbook-style-picker__description">
-          From bright daylight to Tokyo night, your map in your look.
+          {description}
         </p>
         {compatibility && (
           <p className="roadbook-style-picker__description" role="status">

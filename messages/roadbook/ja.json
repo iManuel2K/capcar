@@ -52,6 +52,8 @@
     },
     "modes": {
       "label": "シティマップスタイル",
+      "headline": "9つのRoadbookスタイル。",
+      "description": "明るいガレージの日差しから東京の夜まで、走る道の雰囲気を選ぼう。",
       "konstanz": "Konstanz",
       "reykjavik": "Reykjavík",
       "lissabon": "Lissabon",

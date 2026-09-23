@@ -52,6 +52,8 @@
     },
     "modes": {
       "label": "Stil der Stadtkarte",
+      "headline": "Neun Roadbook-Stile.",
+      "description": "Von klarem Werkstatt-Tageslicht bis zur Tokio-Nacht: Wähle, wie sich deine Straßen anfühlen sollen.",
       "konstanz": "Konstanz",
       "reykjavik": "Reykjavík",
       "lissabon": "Lissabon",

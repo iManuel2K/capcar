@@ -52,6 +52,8 @@
     },
     "modes": {
       "label": "City map style",
+      "headline": "Nine Roadbook styles.",
+      "description": "From clear workshop daylight to Tokyo night, choose how your roads should feel.",
       "konstanz": "Konstanz",
       "reykjavik": "Reykjavík",
       "lissabon": "Lissabon",

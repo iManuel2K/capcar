@@ -280,6 +280,8 @@ export function RoadbookExperience() {
           onChange={updateMode}
           label={t("modes.label")}
           labels={modeLabels}
+          headline={t("modes.headline")}
+          description={t("modes.description")}
           compatibility={!vectorReady}
           compatibilityLabel={t("fallback.styles")}
         />
@@ -291,6 +293,8 @@ export function RoadbookExperience() {
           onChange={updateMode}
           label={t("modes.label")}
           labels={modeLabels}
+          headline={t("modes.headline")}
+          description={t("modes.description")}
           compatibility={!vectorReady}
           compatibilityLabel={t("fallback.styles")}
         />

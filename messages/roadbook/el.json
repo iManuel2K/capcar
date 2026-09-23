@@ -52,6 +52,8 @@
     },
     "modes": {
       "label": "Στυλ χάρτη πόλης",
+      "headline": "Εννέα στυλ Roadbook.",
+      "description": "Από το καθαρό φως του συνεργείου μέχρι τη νύχτα του Τόκιο, διάλεξε την αίσθηση των δρόμων σου.",
       "konstanz": "Konstanz",
       "reykjavik": "Reykjavík",
       "lissabon": "Lissabon",
