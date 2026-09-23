@@ -1,0 +1,346 @@
+.roadbook-marker {
+  display: grid;
+  width: 2.65rem;
+  height: 2.65rem;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 0.9rem 0.9rem 0.9rem 0.2rem;
+  background: #111613;
+  color: #f4f5f2;
+  box-shadow: 0 14px 34px rgb(0 0 0 / 30%);
+  transform: rotate(-45deg);
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.roadbook-marker svg {
+  width: 1rem;
+  height: 1rem;
+  transform: rotate(45deg);
+}
+
+.roadbook-marker__events {
+  position: absolute;
+  top: -0.42rem;
+  right: -0.42rem;
+  display: grid;
+  width: 1.15rem;
+  height: 1.15rem;
+  place-items: center;
+  border: 2px solid #111613;
+  border-radius: 999px;
+  background: #f1eadf;
+  color: #0e2d30;
+  font-size: 0.6rem;
+  font-weight: 800;
+  line-height: 1;
+  transform: rotate(45deg);
+}
+
+.roadbook-marker:hover,
+.roadbook-marker:focus-visible,
+.roadbook-marker.is-selected {
+  z-index: 2;
+  background: #e72d45;
+  transform: rotate(-45deg) translateY(-3px) scale(1.08);
+  outline: none;
+}
+
+.roadbook-marker--scenic_route {
+  background: #174e44;
+}
+
+.roadbook-marker--autobahn_context {
+  background: #153d53;
+}
+
+.roadbook-marker--proving_ground {
+  background: #514736;
+}
+
+.roadbook-user-position {
+  width: 1rem;
+  height: 1rem;
+  border: 3px solid white;
+  border-radius: 999px;
+  background: #e72d45;
+  box-shadow: 0 0 0 7px rgb(231 45 69 / 20%);
+}
+
+.roadbook-map-shell {
+  isolation: isolate;
+  background: var(--roadbook-map-canvas, #0b0e0c);
+  transition: background-color 240ms ease;
+}
+
+.roadbook-leaflet-map {
+  z-index: 0;
+  background: var(--roadbook-map-canvas, #0b0e0c);
+  font-family: inherit;
+  transition: background-color 240ms ease;
+}
+
+.roadbook-vector-map {
+  z-index: 1;
+  background: var(--roadbook-map-canvas, #0b0e0c);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 240ms ease,
+    background-color 240ms ease;
+}
+
+.roadbook-map-shell.is-vector-ready .roadbook-vector-map {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.roadbook-map-shell.is-vector-ready .roadbook-leaflet-map {
+  pointer-events: none;
+}
+
+.roadbook-vector-map .maplibregl-canvas {
+  outline: none;
+}
+
+/* Keep map navigation clear of the style picker and category rail. */
+.roadbook-leaflet-map .leaflet-bottom.leaflet-left,
+.roadbook-vector-map .maplibregl-ctrl-bottom-left {
+  top: 50%;
+  bottom: auto;
+  left: max(0.75rem, env(safe-area-inset-left));
+  z-index: 30;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.roadbook-leaflet-map .leaflet-bottom.leaflet-left .leaflet-control,
+.roadbook-vector-map .maplibregl-ctrl-bottom-left .maplibregl-ctrl {
+  margin: 0;
+  pointer-events: auto;
+}
+
+.roadbook-vector-marker-shell {
+  border: 0;
+  background: transparent;
+}
+
+.roadbook-leaflet-map::after {
+  position: absolute;
+  z-index: 250;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 34%,
+    rgb(3 7 6 / 10%) 58%,
+    rgb(3 6 5 / 68%) 100%
+  );
+  content: "";
+  pointer-events: none;
+}
+
+.roadbook-style-picker {
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, rgb(7 11 10 / 88%), rgb(7 11 10 / 66%));
+  padding: 1rem 1.1rem 0.85rem;
+  box-shadow: 0 24px 64px rgb(0 0 0 / 30%);
+  backdrop-filter: blur(22px) saturate(1.15);
+}
+
+.roadbook-style-picker__intro {
+  margin-bottom: 0.9rem;
+}
+
+.roadbook-style-picker__title {
+  color: white;
+  font-size: clamp(1.15rem, 1.45vw, 1.55rem);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.roadbook-style-picker__description {
+  margin-top: 0.4rem;
+  color: rgb(255 255 255 / 62%);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.roadbook-style-chips {
+  display: flex;
+  gap: 0.48rem;
+  overflow-x: auto;
+  padding: 0.05rem 0.05rem 0.2rem;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+}
+
+.roadbook-style-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.roadbook-style-chip {
+  display: inline-flex;
+  min-height: 2.25rem;
+  flex: none;
+  align-items: center;
+  border: 1px solid rgb(255 255 255 / 34%);
+  border-radius: 999px;
+  padding: 0.38rem 0.78rem;
+  color: rgb(255 255 255 / 82%);
+  font-size: 0.69rem;
+  font-weight: 700;
+  scroll-snap-align: start;
+  transition:
+    color 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease,
+    transform 220ms ease;
+}
+
+.roadbook-style-chip:hover,
+.roadbook-style-chip:focus-visible {
+  border-color: rgb(255 255 255 / 32%);
+  color: white;
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.roadbook-style-chip:focus-visible {
+  box-shadow:
+    0 0 0 2px #09100d,
+    0 0 0 4px rgb(255 255 255 / 78%);
+}
+
+.roadbook-style-chip.is-selected {
+  border-color: white;
+  background: white;
+  color: #101412;
+  box-shadow: 0 7px 20px rgb(0 0 0 / 22%);
+}
+
+.roadbook-leaflet-marker-shell {
+  border: 0;
+  background: transparent;
+}
+
+.leaflet-control-zoom {
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 12%) !important;
+  border-radius: 0.85rem !important;
+  background: rgb(9 16 13 / 88%) !important;
+  box-shadow: 0 12px 35px rgb(0 0 0 / 22%) !important;
+  margin-bottom: 5.3rem !important;
+  margin-left: 0.75rem !important;
+}
+
+.leaflet-control-zoom a {
+  width: 2.75rem !important;
+  height: 2.75rem !important;
+  border: 0 !important;
+  background: rgb(9 16 13 / 94%) !important;
+  color: white !important;
+  font-size: 1.25rem !important;
+  font-weight: 500 !important;
+  font-family: inherit !important;
+  line-height: 2.75rem !important;
+}
+
+.leaflet-control-zoom a + a {
+  border-top: 1px solid rgb(255 255 255 / 8%) !important;
+}
+
+.leaflet-control-zoom a:hover,
+.leaflet-control-zoom a:focus-visible {
+  background: rgb(255 255 255 / 8%) !important;
+  color: white !important;
+}
+
+.leaflet-control-attribution {
+  border-radius: 0.5rem 0 0 !important;
+  background: rgb(9 16 13 / 70%) !important;
+  color: rgb(255 255 255 / 58%) !important;
+  backdrop-filter: blur(10px);
+}
+
+.leaflet-control-attribution a {
+  color: inherit !important;
+}
+
+.roadbook-vector-map .maplibregl-ctrl-bottom-left {
+  bottom: 5.3rem;
+  left: 0.75rem;
+}
+
+.roadbook-vector-map .maplibregl-ctrl-bottom-left .maplibregl-ctrl {
+  margin: 0;
+}
+
+.roadbook-vector-map .maplibregl-ctrl-group {
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 0.85rem;
+  background: rgb(9 16 13 / 92%);
+  box-shadow: 0 12px 35px rgb(0 0 0 / 22%);
+}
+
+.roadbook-vector-map .maplibregl-ctrl-group button {
+  width: 2.75rem;
+  height: 2.75rem;
+  background-color: transparent;
+}
+
+.roadbook-vector-map .maplibregl-ctrl-group button + button {
+  border-top: 1px solid rgb(255 255 255 / 8%);
+}
+
+.roadbook-vector-map .maplibregl-ctrl-group button:hover,
+.roadbook-vector-map .maplibregl-ctrl-group button:focus-visible {
+  background-color: rgb(255 255 255 / 8%);
+}
+
+.roadbook-vector-map .maplibregl-ctrl-icon {
+  filter: invert(1);
+}
+
+.roadbook-vector-map .maplibregl-ctrl-attrib {
+  border-radius: 0.5rem 0 0;
+  background: rgb(9 16 13 / 70%);
+  color: rgb(255 255 255 / 58%);
+  backdrop-filter: blur(10px);
+}
+
+.roadbook-vector-map .maplibregl-ctrl-attrib a {
+  color: inherit;
+}
+
+@media (max-width: 639px) {
+  .roadbook-style-picker {
+    border-radius: 1rem;
+    padding: 0.75rem;
+  }
+
+  .roadbook-style-picker__intro {
+    margin-bottom: 0.65rem;
+  }
+
+  .roadbook-style-picker__title {
+    font-size: 1rem;
+  }
+
+  .roadbook-style-picker__description {
+    font-size: 0.66rem;
+  }
+
+  .leaflet-bottom.leaflet-left {
+    bottom: 0;
+  }
+
+  .leaflet-bottom.leaflet-right,
+  .roadbook-vector-map .maplibregl-ctrl-bottom-right {
+    bottom: 5rem;
+  }
+}
