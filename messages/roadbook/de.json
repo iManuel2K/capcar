@@ -35,6 +35,7 @@
     "loading": "Sichtbaren Bereich prüfen…",
     "mapLoading": "Roadbook-Karte wird geöffnet…",
     "fallback": {
+      "styles": "Originale OpenStreetMap-Kacheln · Stadtfarben benötigen WebGL.",
       "label": "Kompatibilitätskarte",
       "description": "Roadbook nutzt eine leichte Kartenansicht, weil WebGL nicht verfügbar ist. Ortsdetails und gespeicherte Besuche funktionieren weiterhin."
     },

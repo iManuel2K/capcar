@@ -12,11 +12,15 @@ export function RoadbookThemeSwitcher({
   onChange,
   label,
   labels,
+  compatibility,
+  compatibilityLabel,
 }: {
   mode: RoadbookMapMode;
   onChange: (mode: RoadbookMapMode) => void;
   label: string;
   labels: Record<RoadbookMapMode, string>;
+  compatibility: boolean;
+  compatibilityLabel: string;
 }) {
   const buttons = useRef<Array<HTMLButtonElement | null>>([]);
   const moveFocus = (index: number, direction: -1 | 1) =>
@@ -36,6 +40,11 @@ export function RoadbookThemeSwitcher({
         <p className="roadbook-style-picker__description">
           From bright daylight to Tokyo night, your map in your look.
         </p>
+        {compatibility && (
+          <p className="roadbook-style-picker__description" role="status">
+            {compatibilityLabel}
+          </p>
+        )}
       </div>
       <div
         role="radiogroup"

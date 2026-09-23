@@ -135,6 +135,7 @@ export function RoadbookMap({
   onViewportChange,
   onError,
   onReady,
+  onRendererChange,
 }: {
   venues: RoadbookVenue[];
   events: RoadbookEvent[];
@@ -146,6 +147,7 @@ export function RoadbookMap({
   onViewportChange: (center: RoadbookCenter, radiusKm: number) => void;
   onError: (message: string) => void;
   onReady: () => void;
+  onRendererChange: (vector: boolean) => void;
 }) {
   const visualStyle = ROADBOOK_MAP_STYLES[mode];
   const leafletContainer = useRef<HTMLDivElement>(null);
@@ -166,6 +168,7 @@ export function RoadbookMap({
   const onViewportChangeRef = useRef(onViewportChange);
   const onErrorRef = useRef(onError);
   const onReadyRef = useRef(onReady);
+  const onRendererChangeRef = useRef(onRendererChange);
   const [vectorReady, setVectorReady] = useState(false);
 
   useEffect(() => {
@@ -173,7 +176,8 @@ export function RoadbookMap({
     onViewportChangeRef.current = onViewportChange;
     onErrorRef.current = onError;
     onReadyRef.current = onReady;
-  }, [onError, onReady, onSelect, onViewportChange]);
+    onRendererChangeRef.current = onRendererChange;
+  }, [onError, onReady, onRendererChange, onSelect, onViewportChange]);
 
   useEffect(() => {
     if (!leafletContainer.current || map.current) return;
@@ -264,6 +268,7 @@ export function RoadbookMap({
       }
       vectorActive.current = false;
       setVectorReady(false);
+      onRendererChangeRef.current(false);
       vectorMarkers.current.forEach((marker) => marker.remove());
       vectorMarkers.current = [];
       vectorUserMarker.current?.remove();
@@ -407,6 +412,7 @@ export function RoadbookMap({
           }
           vectorActive.current = true;
           setVectorReady(true);
+          onRendererChangeRef.current(true);
           onReadyRef.current();
         });
 

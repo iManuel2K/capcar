@@ -35,6 +35,7 @@
     "loading": "表示エリアを確認中…",
     "mapLoading": "Roadbookマップを開いています…",
     "fallback": {
+      "styles": "OpenStreetMap の標準タイルを表示中。都市ごとの配色には WebGL が必要です。",
       "label": "互換マップ",
       "description": "WebGLを利用できないため、軽量マップに切り替えました。場所の詳細と保存した訪問記録は引き続き利用できます。"
     },

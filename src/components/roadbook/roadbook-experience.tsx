@@ -1,6 +1,12 @@
 "use client";
 
-import { AlertTriangle, Crosshair, MapPinned, RefreshCw, Search } from "lucide-react";
+import {
+  AlertTriangle,
+  Crosshair,
+  MapPinned,
+  RefreshCw,
+  Search,
+} from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
@@ -62,6 +68,7 @@ export function RoadbookExperience() {
   const [error, setError] = useState("");
   const [mapError, setMapError] = useState("");
   const [mapReady, setMapReady] = useState(false);
+  const [vectorReady, setVectorReady] = useState(false);
   const [eventsOpen, setEventsOpen] = useState(false);
   const [visits, setVisits] = useState(() =>
     typeof window === "undefined"
@@ -151,7 +158,11 @@ export function RoadbookExperience() {
   const visibleVenues = useMemo(() => {
     const term = search.trim().toLocaleLowerCase();
     return term
-      ? venues.filter((venue) => [venue.name, venue.city, venue.countryCode, venue.description].some((value) => value.toLocaleLowerCase().includes(term)))
+      ? venues.filter((venue) =>
+          [venue.name, venue.city, venue.countryCode, venue.description].some(
+            (value) => value.toLocaleLowerCase().includes(term),
+          ),
+        )
       : venues;
   }, [search, venues]);
   const modeLabels = useMemo(
@@ -215,6 +226,7 @@ export function RoadbookExperience() {
           setMapReady(true);
           setMapError("");
         }}
+        onRendererChange={setVectorReady}
       />
 
       {!mapReady && !mapError && (
@@ -240,7 +252,14 @@ export function RoadbookExperience() {
           </p>
           <label className="mt-3 flex min-h-11 items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 text-white/60">
             <Search className="size-4 shrink-0" aria-hidden="true" />
-            <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t("search")} aria-label={t("search")} className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/45" />
+            <input
+              type="search"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder={t("search")}
+              aria-label={t("search")}
+              className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/45"
+            />
           </label>
         </div>
       </div>
@@ -261,6 +280,8 @@ export function RoadbookExperience() {
           onChange={updateMode}
           label={t("modes.label")}
           labels={modeLabels}
+          compatibility={!vectorReady}
+          compatibilityLabel={t("fallback.styles")}
         />
       </div>
 
@@ -270,6 +291,8 @@ export function RoadbookExperience() {
           onChange={updateMode}
           label={t("modes.label")}
           labels={modeLabels}
+          compatibility={!vectorReady}
+          compatibilityLabel={t("fallback.styles")}
         />
       </div>
 
@@ -304,9 +327,11 @@ export function RoadbookExperience() {
         </button>
       </div>
 
-      <div className="absolute top-[18.5rem] left-3 z-20 lg:top-44 lg:left-5">
+      <div className="absolute top-[23rem] left-3 z-20 lg:top-[14.5rem] lg:left-5">
         <div className="rounded-xl border border-white/10 bg-[#09100d]/82 px-3 py-2 text-[11px] text-white/52 shadow-lg backdrop-blur-xl">
-          {loading ? t("loading") : t("resultCount", { count: visibleVenues.length })}
+          {loading
+            ? t("loading")
+            : t("resultCount", { count: visibleVenues.length })}
         </div>
       </div>
 

@@ -35,6 +35,7 @@
     "loading": "Checking the visible area…",
     "mapLoading": "Opening the Roadbook map…",
     "fallback": {
+      "styles": "Original OpenStreetMap tiles · city colors require WebGL.",
       "label": "Compatibility map",
       "description": "Roadbook switched to a lightweight map because WebGL is unavailable. Venue details and saved visits still work."
     },
