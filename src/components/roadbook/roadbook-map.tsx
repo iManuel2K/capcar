@@ -28,7 +28,7 @@ import type {
 } from "@/features/roadbook/roadbook-schema";
 import {
   applyRoadbookVectorPalette,
-  buildRoadbookVectorStyle,
+  ROADBOOK_VECTOR_STYLE_URL,
   supportsRoadbookWebGL,
 } from "@/features/roadbook/roadbook-vector-style";
 
@@ -271,9 +271,7 @@ export function RoadbookMap({
         const leafletCenter = leaflet?.getCenter();
         instance = new maplibre.Map({
           container: vectorContainer.current,
-          style: buildRoadbookVectorStyle(
-            ROADBOOK_MAP_STYLES[initialMode.current].vector,
-          ),
+          style: ROADBOOK_VECTOR_STYLE_URL,
           center: leafletCenter
             ? [leafletCenter.lng, leafletCenter.lat]
             : [initialCenter.current.longitude, initialCenter.current.latitude],
@@ -286,7 +284,7 @@ export function RoadbookMap({
           touchPitch: false,
           canvasContextAttributes: {
             contextType: "webgl2",
-            failIfMajorPerformanceCaveat: true,
+            failIfMajorPerformanceCaveat: false,
           },
         });
         vectorMap.current = instance;
@@ -307,8 +305,14 @@ export function RoadbookMap({
         );
 
         instance.on("error", () => {
-          if (!failed) window.setTimeout(fallBackToLeaflet, 0);
+          // Keep rendering if an individual vector tile fails. Initialization,
+          // worker and style failures are covered by the load timeout below.
         });
+        instance
+          .getCanvas()
+          .addEventListener("webglcontextlost", fallBackToLeaflet, {
+            once: true,
+          });
 
         instance.on("moveend", () => {
           if (!vectorActive.current || !instance) return;
@@ -328,6 +332,10 @@ export function RoadbookMap({
 
         instance.once("load", () => {
           if (disposed || failed || !instance) return;
+          applyRoadbookVectorPalette(
+            instance,
+            ROADBOOK_MAP_STYLES[initialMode.current].vector,
+          );
           instance.addSource(ROUTE_SOURCE_ID, {
             type: "geojson",
             data: emptyRoute,
@@ -577,7 +585,7 @@ export function RoadbookMap({
 
   return (
     <div
-      className={`roadbook-map-shell absolute inset-0${vectorReady ? " is-vector-ready" : ""}`}
+      className={`roadbook-map-shell absolute inset-0 ${vectorReady ? "is-vector-ready" : ""}`}
       data-roadbook-style={mode}
       style={
         {

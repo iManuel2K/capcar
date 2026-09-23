@@ -12,10 +12,7 @@ import {
   writeRoadbookMapStyle,
 } from "./roadbook-map-style";
 import { roadbookMapModes } from "./roadbook-schema";
-import {
-  buildRoadbookVectorStyle,
-  ROADBOOK_VECTOR_SOURCE_URL,
-} from "./roadbook-vector-style";
+import { ROADBOOK_VECTOR_STYLE_URL } from "./roadbook-vector-style";
 
 describe("Roadbook map styles", () => {
   it("defines exactly the nine stable city IDs", () => {
@@ -36,19 +33,18 @@ describe("Roadbook map styles", () => {
     expect(ROADBOOK_MAP_STYLES.tokyo.vector.roadMajor).toBe("#2bf0df");
   });
 
-  it("builds an OpenFreeMap vector style without changing coordinates", () => {
-    const style = buildRoadbookVectorStyle(ROADBOOK_MAP_STYLES.konstanz.vector);
-    expect(style.sources).toEqual(
-      expect.objectContaining({
-        "roadbook-openfreemap": expect.objectContaining({
-          type: "vector",
-          url: ROADBOOK_VECTOR_SOURCE_URL,
-        }),
-      }),
+  it("uses and restyles the complete OpenFreeMap vector map", () => {
+    expect(ROADBOOK_VECTOR_STYLE_URL).toBe(
+      "https://tiles.openfreemap.org/styles/liberty",
     );
-    expect(style.layers.map((layer) => layer.id)).toEqual(
-      expect.arrayContaining(["water", "road-major", "road-minor", "building"]),
+    const vectorStyle = readFileSync(
+      "src/features/roadbook/roadbook-vector-style.ts",
+      "utf8",
     );
+    expect(vectorStyle).toContain("map.getStyle().layers");
+    expect(vectorStyle).toContain('sourceLayer === "transportation"');
+    expect(vectorStyle).toContain('sourceLayer === "water"');
+    expect(vectorStyle).toContain('layer.type === "symbol"');
   });
 
   it("persists valid styles and safely recovers invalid or blocked storage", () => {

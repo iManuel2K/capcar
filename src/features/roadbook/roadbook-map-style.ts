@@ -15,6 +15,9 @@ export type RoadbookVectorPalette = Readonly<{
   roadMinor: string;
   roadPath: string;
   roadOutline: string;
+  label: string;
+  labelHalo: string;
+  boundary: string;
 }>;
 
 export type RoadbookMapStyle = Readonly<{
@@ -52,6 +55,9 @@ export const ROADBOOK_MAP_STYLES = {
       roadMinor: "#2f5f72",
       roadPath: "#a7c0c7",
       roadOutline: "#e6eeef",
+      label: "#173642",
+      labelHalo: "#eef3f4",
+      boundary: "#8aa2aa",
     },
   },
   reykjavik: {
@@ -76,6 +82,9 @@ export const ROADBOOK_MAP_STYLES = {
       roadMinor: "#cf8f9b",
       roadPath: "#5e3a44",
       roadOutline: "#190a0f",
+      label: "#f3d2d8",
+      labelHalo: "#2c1016",
+      boundary: "#6f3a46",
     },
   },
   lissabon: {
@@ -100,6 +109,9 @@ export const ROADBOOK_MAP_STYLES = {
       roadMinor: "#cf6f44",
       roadPath: "#e6c4a0",
       roadOutline: "#f7efe1",
+      label: "#6f281d",
+      labelHalo: "#f5ecdc",
+      boundary: "#cc8d70",
     },
   },
   wien: {
@@ -124,6 +136,9 @@ export const ROADBOOK_MAP_STYLES = {
       roadMinor: "#d9b25c",
       roadPath: "#6f5836",
       roadOutline: "#080b14",
+      label: "#f7e8bd",
+      labelHalo: "#101626",
+      boundary: "#5b4b2c",
     },
   },
   zurich: {
@@ -147,6 +162,9 @@ export const ROADBOOK_MAP_STYLES = {
       roadMinor: "#3f4954",
       roadPath: "#b6bdc6",
       roadOutline: "#eef2f5",
+      label: "#161b22",
+      labelHalo: "#f4f6f8",
+      boundary: "#86929e",
     },
   },
   venedig: {
@@ -171,6 +189,9 @@ export const ROADBOOK_MAP_STYLES = {
       roadMinor: "#b35e30",
       roadPath: "#ddb892",
       roadOutline: "#f8efe0",
+      label: "#573323",
+      labelHalo: "#f7ecdb",
+      boundary: "#b88c70",
     },
   },
   kyoto: {
@@ -195,6 +216,9 @@ export const ROADBOOK_MAP_STYLES = {
       roadMinor: "#51564a",
       roadPath: "#b7baa8",
       roadOutline: "#efece2",
+      label: "#232520",
+      labelHalo: "#f3f0e8",
+      boundary: "#8e9388",
     },
   },
   marrakesch: {
@@ -219,6 +243,9 @@ export const ROADBOOK_MAP_STYLES = {
       roadMinor: "#b15c2e",
       roadPath: "#ddb583",
       roadOutline: "#f5e6cd",
+      label: "#592616",
+      labelHalo: "#f1dcc0",
+      boundary: "#ba875e",
     },
   },
   tokyo: {
@@ -243,6 +270,9 @@ export const ROADBOOK_MAP_STYLES = {
       roadMinor: "#2bb6c4",
       roadPath: "#214e5c",
       roadOutline: "#060810",
+      label: "#f4f1e8",
+      labelHalo: "#0d0f16",
+      boundary: "#20515a",
     },
   },
 } as const satisfies Record<RoadbookMapMode, RoadbookMapStyle>;
