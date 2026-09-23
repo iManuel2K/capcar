@@ -32,12 +32,12 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllEnvs());
 
 it("accepts Capcar's public origin when Netlify supplies an internal request URL", async () => {
-  vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://capcar-im.netlify.app");
+  vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://capcar.dev");
   const response = await POST(
     new Request("https://internal-runtime.test/api/retail/search", {
       method: "POST",
       headers: {
-        origin: "https://capcar-im.netlify.app",
+        origin: "https://capcar.dev",
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
@@ -53,7 +53,7 @@ it("accepts Capcar's public origin when Netlify supplies an internal request URL
 });
 
 it("still rejects a cross-site request before quota or eBay access", async () => {
-  vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://capcar-im.netlify.app");
+  vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://capcar.dev");
   const response = await POST(
     new Request("https://internal-runtime.test/api/retail/search", {
       method: "POST",

@@ -7,7 +7,7 @@ Epic 76 closes the beta engineering loop without adding another product surface.
 1. `pnpm.cmd preflight:production` passes with the intended Netlify production variables loaded.
 2. Formatting, lint, strict TypeScript, Vitest and the production build pass locally.
 3. The Netlify deployment completes from the repository's tracked production branch.
-4. `pnpm.cmd smoke:production -- https://capcar-im.netlify.app` passes, including readiness, metadata routes, security headers and the missing-Passport 404.
+4. `pnpm.cmd smoke:production -- https://capcar.dev` passes, including readiness, metadata routes, security headers and the missing-Passport 404.
 5. The manual acceptance journeys in `BETA-LAUNCH.md` are recorded against the deployed commit.
 
 ## Configuration policy

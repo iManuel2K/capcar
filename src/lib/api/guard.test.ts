@@ -12,17 +12,17 @@ describe("API request protection", () => {
   it("accepts the configured public origin behind an internal deployment URL", () => {
     const request = new Request("https://internal-runtime.test/api/tool", {
       method: "POST",
-      headers: { origin: "https://capcar-im.netlify.app" },
+      headers: { origin: "https://capcar.dev" },
     });
     expect(
       isSameOriginRequest(request, {
-        NEXT_PUBLIC_SITE_URL: "https://capcar-im.netlify.app",
+        NEXT_PUBLIC_SITE_URL: "https://capcar.dev",
       }),
     ).toBe(true);
   });
 
   it("accepts a Netlify deploy origin but rejects untrusted origins", () => {
-    const deployment = "https://deploy-preview-90--capcar-im.netlify.app";
+    const deployment = "https://deploy-preview-90--capcar.dev";
     expect(
       isSameOriginRequest(
         new Request("https://internal-runtime.test/api/tool", {
@@ -38,14 +38,14 @@ describe("API request protection", () => {
           method: "POST",
           headers: { origin: "https://attacker.test" },
         }),
-        { NEXT_PUBLIC_SITE_URL: "https://capcar-im.netlify.app" },
+        { NEXT_PUBLIC_SITE_URL: "https://capcar.dev" },
       ),
     ).toBe(false);
   });
 
   it("requires a syntactically exact browser origin", () => {
     const environment = {
-      NEXT_PUBLIC_SITE_URL: "https://capcar-im.netlify.app",
+      NEXT_PUBLIC_SITE_URL: "https://capcar.dev",
     };
     expect(
       isSameOriginRequest(
@@ -59,7 +59,7 @@ describe("API request protection", () => {
       isSameOriginRequest(
         new Request("https://internal-runtime.test/api/tool", {
           method: "POST",
-          headers: { origin: "https://capcar-im.netlify.app/path" },
+          headers: { origin: "https://capcar.dev/path" },
         }),
         environment,
       ),

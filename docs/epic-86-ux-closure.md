@@ -25,6 +25,6 @@ Listings previously marked published become publicly readable through the explic
 
 The delivery message reports the completed checks. Database regression tests execute the migration in embedded PostgreSQL and check anonymous grants, unpublished and suspended exclusions, and shared budgets. These are not tests against your production Supabase instance.
 
-After deployment: test retailer search signed out, browse a moderated listing, verify sign-in returns to marketplace/verified work, submit an invalid registration, and check header/search/navigation at mobile and desktop sizes. Then run `pnpm.cmd smoke:production -- https://capcar-im.netlify.app`.
+After deployment: test retailer search signed out, browse a moderated listing, verify sign-in returns to marketplace/verified work, submit an invalid registration, and check header/search/navigation at mobile and desktop sizes. Then run `pnpm.cmd smoke:production -- https://capcar.dev`.
 
 The Netlify badge/platform injection setting, real provider connectivity, authenticated workflows, and a fresh live mobile/desktop UX audit remain unverified. No CSS workaround hides platform branding. An above-8/10 experience must be confirmed from the deployed result; it is not guaranteed by passing code checks.

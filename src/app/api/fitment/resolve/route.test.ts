@@ -38,7 +38,7 @@ beforeEach(() => {
 
 it("rejects cross-origin fitment requests before provider access", async () => {
   const response = await POST(
-    new Request("https://capcar-im.netlify.app/api/fitment/resolve", {
+    new Request("https://capcar.dev/api/fitment/resolve", {
       method: "POST",
       headers: {
         origin: "https://attacker.example",
@@ -54,10 +54,10 @@ it("rejects cross-origin fitment requests before provider access", async () => {
 
 it("validates and resolves an authenticated same-origin request", async () => {
   const response = await POST(
-    new Request("https://capcar-im.netlify.app/api/fitment/resolve", {
+    new Request("https://capcar.dev/api/fitment/resolve", {
       method: "POST",
       headers: {
-        origin: "https://capcar-im.netlify.app",
+        origin: "https://capcar.dev",
         "content-type": "application/json",
       },
       body: JSON.stringify(body),

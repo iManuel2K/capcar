@@ -20,6 +20,6 @@ An ordinary HTTP 200 Passport page, a generic error response, or an unavailable-
 - TypeScript strict checking
 - Complete Vitest suite
 - Next.js production build
-- Production smoke test against `https://capcar-im.netlify.app`
+- Production smoke test against `https://capcar.dev`
 
 No environment variables, dependencies, database migrations or product data are changed by this package.

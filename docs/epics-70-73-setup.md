@@ -88,7 +88,7 @@ After deployment:
 
 ```powershell
 Set-Location "E:\capcar"
-pnpm.cmd smoke:production -- https://capcar-im.netlify.app
+pnpm.cmd smoke:production -- https://capcar.dev
 ```
 
 The smoke script now includes all four new public page shells. Database permissions and credential-dependent flows still require the acceptance checks above.

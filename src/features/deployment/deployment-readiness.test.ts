@@ -36,7 +36,7 @@ describe("deployment readiness", () => {
 
   it("recognizes a Netlify production deployment", () => {
     const result = getDeploymentReadiness({
-      NEXT_PUBLIC_SITE_URL: "https://capcar-im.netlify.app",
+      NEXT_PUBLIC_SITE_URL: "https://capcar.dev",
       NEXT_PUBLIC_SUPABASE_URL: "https://project.supabase.co",
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test",
       NEXT_PUBLIC_LEGAL_OPERATOR: "Capcar Beta",
@@ -50,7 +50,7 @@ describe("deployment readiness", () => {
 
   it("supports an explicit production marker when the host omits build context", () => {
     const result = getDeploymentReadiness({
-      NEXT_PUBLIC_SITE_URL: "https://capcar-im.netlify.app",
+      NEXT_PUBLIC_SITE_URL: "https://capcar.dev",
       NEXT_PUBLIC_SUPABASE_URL: "https://project.supabase.co",
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test",
       NEXT_PUBLIC_LEGAL_OPERATOR: "Capcar Beta",

@@ -37,7 +37,7 @@ Before public release, verify on desktop and a real phone:
 4. All three presets select the intended model and configuration; Reset restores defaults.
 5. Stop 3D releases the viewer; Retry and switching models work under slow/offline conditions.
 6. Keyboard focus, screen-reader labels, portrait widths and page scrolling remain usable.
-7. Run pnpm.cmd smoke:production -- https://capcar-im.netlify.app after deployment.
+7. Run pnpm.cmd smoke:production -- https://capcar.dev after deployment.
 
 Do not treat the package as visually certified or a complete real-vehicle configurator until these checks are done.
 

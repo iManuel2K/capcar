@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "CapCar",
       images: [
         {
-          url: "https://capcar-im.netlify.app/capcar-hero-bmw-garage.png",
+          url: "https://capcar.dev/capcar-hero-bmw-garage.png",
           alt: t("visual.alt"),
         },
       ],
@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
-      images: ["https://capcar-im.netlify.app/capcar-hero-bmw-garage.png"],
+      images: ["https://capcar.dev/capcar-hero-bmw-garage.png"],
     },
   };
 }

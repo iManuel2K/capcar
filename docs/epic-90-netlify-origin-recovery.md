@@ -5,7 +5,7 @@
 Connected Parts compared the browser `Origin` header only with
 `new URL(request.url).origin`. Behind Netlify's proxy, the request URL seen by
 the Next.js runtime can use an internal deployment origin even though the
-browser correctly posts from `https://capcar-im.netlify.app`. Capcar therefore
+browser correctly posts from `https://capcar.dev`. Capcar therefore
 returned `403` before quota protection or eBay search ran.
 
 ## Resolution
@@ -25,7 +25,7 @@ access. Connected Parts, International Parts and authenticated Community
 mutations share the correction.
 
 No new environment variable or database migration is required. Keep
-`NEXT_PUBLIC_SITE_URL=https://capcar-im.netlify.app` in the production Netlify
+`NEXT_PUBLIC_SITE_URL=https://capcar.dev` in the production Netlify
 environment.
 
 ## Acceptance

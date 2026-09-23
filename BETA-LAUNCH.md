@@ -27,8 +27,8 @@ Use the Supabase migration workflow or SQL editor for the target project. Do not
 
 In Supabase Authentication → URL Configuration:
 
-- Site URL: `https://capcar-im.netlify.app`
-- Redirect URL: `https://capcar-im.netlify.app/auth/callback`
+- Site URL: `https://capcar.dev`
+- Redirect URL: `https://capcar.dev/auth/callback`
 - Local redirect URL: `http://localhost:3000/auth/callback`
 
 Keep email confirmation enabled for the beta. Test registration, callback handling, password reset and sign-out with a new address before inviting testers.
@@ -38,8 +38,8 @@ Keep email confirmation enabled for the beta. Test registration, callback handli
 Set these Production environment variables:
 
 ```text
-NEXT_PUBLIC_APP_URL=https://capcar-im.netlify.app
-NEXT_PUBLIC_SITE_URL=https://capcar-im.netlify.app
+NEXT_PUBLIC_APP_URL=https://capcar.dev
+NEXT_PUBLIC_SITE_URL=https://capcar.dev
 NEXT_PUBLIC_DEPLOYMENT_ENV=production
 NEXT_PUBLIC_SUPABASE_URL=<public Supabase project URL>
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<browser-safe publishable key>
@@ -79,7 +79,7 @@ After Netlify reports a successful production deploy:
 
 ```powershell
 Set-Location "E:\capcar"
-pnpm.cmd smoke:production -- https://capcar-im.netlify.app
+pnpm.cmd smoke:production -- https://capcar.dev
 ```
 
 This checks public pages, security headers, health status, provider-status redaction, missing Passport handling and the signed-out garage redirect.
