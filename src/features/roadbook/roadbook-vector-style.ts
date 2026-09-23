@@ -133,9 +133,9 @@ export function supportsRoadbookWebGL() {
   if (typeof document === "undefined") return false;
   try {
     const canvas = document.createElement("canvas");
-    const context =
-      canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true }) ??
-      canvas.getContext("webgl", { failIfMajorPerformanceCaveat: true });
+    const context = canvas.getContext("webgl2", {
+      failIfMajorPerformanceCaveat: false,
+    });
     const loseContext = context?.getExtension("WEBGL_lose_context");
     loseContext?.loseContext();
     return Boolean(context);

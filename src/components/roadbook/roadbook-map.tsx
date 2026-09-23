@@ -284,7 +284,7 @@ export function RoadbookMap({
           touchPitch: false,
           canvasContextAttributes: {
             contextType: "webgl2",
-            failIfMajorPerformanceCaveat: true,
+            failIfMajorPerformanceCaveat: false,
           },
         });
         vectorMap.current = instance;
