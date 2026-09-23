@@ -58,6 +58,8 @@ const markerIcons: Record<RoadbookCategory, string> = {
   proving_ground:
     '<path d="M9 3h6"/><path d="M10 3v5l-5 9a3 3 0 0 0 3 4h8a3 3 0 0 0 3-4l-5-9V3"/><path d="M8 15h8"/>',
   scenic_route: '<path d="m3 20 6-10 3 5 3-7 6 12"/><path d="M3 20h18"/>',
+  car_photo_spot:
+    '<path d="M4 8h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="14" r="3"/>',
   autobahn_context:
     '<path d="M8 21 10 3"/><path d="m16 21-2-18"/><path d="M4 9h16"/><path d="M5 15h14"/>',
 };
@@ -244,6 +246,7 @@ export function RoadbookMap({
 
     let disposed = false;
     let failed = false;
+    let vectorTileFailures = 0;
     let instance: MapLibreMap | undefined;
     let timeout = 0;
 
@@ -251,6 +254,14 @@ export function RoadbookMap({
       if (failed) return;
       failed = true;
       window.clearTimeout(timeout);
+      // The dormant raster map only inherits the active camera on recovery.
+      // It never runs a second, continuously synchronized viewport state.
+      if (instance && map.current) {
+        const camera = instance.getCenter();
+        map.current.setView([camera.lat, camera.lng], instance.getZoom(), {
+          animate: false,
+        });
+      }
       vectorActive.current = false;
       setVectorReady(false);
       vectorMarkers.current.forEach((marker) => marker.remove());
@@ -299,14 +310,24 @@ export function RoadbookMap({
         instance.addControl(
           new maplibre.AttributionControl({
             compact: true,
-            customAttribution: "OpenFreeMap · OpenStreetMap",
+            customAttribution:
+              "OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
           }),
           "bottom-right",
         );
 
         instance.on("error", () => {
-          // Keep rendering if an individual vector tile fails. Initialization,
-          // worker and style failures are covered by the load timeout below.
+          // A single tile error is transient. Repeated failures or an initial
+          // style/worker error should expose the already-mounted OSM map.
+          if (!instance?.loaded() && !instance?.isStyleLoaded()) {
+            fallBackToLeaflet();
+            return;
+          }
+          vectorTileFailures += 1;
+          if (vectorTileFailures >= 8) fallBackToLeaflet();
+        });
+        instance.on("idle", () => {
+          vectorTileFailures = 0;
         });
         instance
           .getCanvas()
@@ -317,13 +338,6 @@ export function RoadbookMap({
         instance.on("moveend", () => {
           if (!vectorActive.current || !instance) return;
           const next = instance.getCenter();
-          const leafletMap = map.current;
-          if (leafletMap)
-            leafletMap.setView(
-              [next.lat, next.lng],
-              Math.round(instance.getZoom()),
-              { animate: false },
-            );
           onViewportChangeRef.current(
             { latitude: next.lat, longitude: next.lng },
             radiusFromVectorMap(instance),
@@ -590,8 +604,6 @@ export function RoadbookMap({
       style={
         {
           "--roadbook-map-canvas": visualStyle.canvas,
-          "--roadbook-map-filter": visualStyle.tileFilter,
-          "--roadbook-map-wash": visualStyle.wash,
         } as CSSProperties
       }
       role="application"

@@ -1,5 +1,32 @@
 {
   "Roadbook": {
+    "search": "Kërko vende në hartë",
+    "photoSpot": {
+      "title": "Vend për fotografi",
+      "safety": "Ndalo vetëm ku lejohet parkimi. Mos blloko rrugët ose hyrjet dhe mos hy në pronë private pa leje.",
+      "bestTime": "Koha më e mirë",
+      "lighting": "Ndriçimi",
+      "parking": "Parkim / hyrje",
+      "permission": "Leja",
+      "permissionCheck": "Konfirmo lejen para vizitës",
+      "permissionNotRequired": "Nuk shënohet leje e veçantë; kontrollo rregullat",
+      "vehicle": "Automjete të përshtatshme",
+      "safetyNotes": "Siguria",
+      "example": "Shembull i licencuar",
+      "directions": "Hap udhëzimet",
+      "tags": {
+        "skyline": "skyline",
+        "industrial": "industrial",
+        "forest": "forest",
+        "mountain": "mountain",
+        "coastal": "coastal",
+        "architecture": "architecture",
+        "night": "night",
+        "sunrise": "sunrise",
+        "sunset": "sunset",
+        "urban": "urban"
+      }
+    },
     "eyebrow": "Roadbook · Vende të ligjshme për ngarje",
     "title": "Gjej rrugën e duhur për projektin.",
     "description": "Zbulo pista, zona të kontrolluara testimi dhe rrugë me burimin, rregullat e hyrjes dhe statusin e verifikimit gjithmonë të dukshëm.",
@@ -19,6 +46,7 @@
       "track_day": "Track days",
       "proving_ground": "Poligone testimi",
       "scenic_route": "Rrugë panoramike",
+      "car_photo_spot": "Vende për foto makinash",
       "autobahn_context": "Kontekst Autobahn"
     },
     "modes": {

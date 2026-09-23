@@ -23,9 +23,9 @@ describe("Roadbook map styles", () => {
 
   it("matches the city reference palettes by vector layer", () => {
     expect(ROADBOOK_MAP_STYLES.konstanz.vector.water).toBe("#2f6f8f");
-    expect(ROADBOOK_MAP_STYLES.reykjavik.vector.land).toBe("#2c1016");
+    expect(ROADBOOK_MAP_STYLES.reykjavik.vector.land).toBe("#e4e8e7");
     expect(ROADBOOK_MAP_STYLES.lissabon.vector.roadMajor).toBe("#b53a26");
-    expect(ROADBOOK_MAP_STYLES.wien.vector.roadMajor).toBe("#f0cf7a");
+    expect(ROADBOOK_MAP_STYLES.wien.vector.roadMajor).toBe("#70333d");
     expect(ROADBOOK_MAP_STYLES.zurich.vector.land).toBe("#f4f6f8");
     expect(ROADBOOK_MAP_STYLES.venedig.vector.water).toBe("#a9c6bc");
     expect(ROADBOOK_MAP_STYLES.kyoto.vector.roadMajor).toBe("#232520");
@@ -45,6 +45,18 @@ describe("Roadbook map styles", () => {
     expect(vectorStyle).toContain('sourceLayer === "transportation"');
     expect(vectorStyle).toContain('sourceLayer === "water"');
     expect(vectorStyle).toContain('layer.type === "symbol"');
+  });
+
+  it("does not color-filter raster tiles to masquerade as vector styles", () => {
+    const css = readFileSync("src/app/roadbook/roadbook.css", "utf8");
+    const styles = readFileSync(
+      "src/features/roadbook/roadbook-map-style.ts",
+      "utf8",
+    );
+    expect(css).not.toContain("roadbook-map-filter");
+    expect(css).not.toContain("roadbook-map-wash");
+    expect(styles).not.toContain("tileFilter");
+    expect(styles).not.toContain("wash:");
   });
 
   it("persists valid styles and safely recovers invalid or blocked storage", () => {

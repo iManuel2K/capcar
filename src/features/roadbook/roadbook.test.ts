@@ -5,6 +5,8 @@ import { evaluateRoadbookReadiness } from "@/features/roadbook/roadbook-readines
 import {
   roadbookEventListSchema,
   roadbookVenueListSchema,
+  photoSpotDetails,
+  roadbookCategories,
   type RoadbookVenue,
 } from "@/features/roadbook/roadbook-schema";
 import { ROADBOOK_DATA_TIMEOUT_MS } from "@/features/roadbook/roadbook-timeout";
@@ -61,6 +63,41 @@ const event = roadbookEventListSchema.parse([
 ])[0];
 
 describe("Roadbook contracts", () => {
+  it("accepts verified photo-spot details through the existing sourced venue pipeline", () => {
+    const photo: RoadbookVenue = {
+      ...venue,
+      category: "car_photo_spot",
+      accessStatus: "public_context",
+      requirements: {
+        photo_spot: {
+          visualDescription: "Open skyline view",
+          bestTime: "Sunset",
+          lighting: "West-facing",
+          parkingAccess: "Public parking area",
+          permissionRequired: false,
+          vehicleSuitability: "Passenger cars",
+          safetyNotes: "Stay in marked bays",
+          tags: ["skyline", "sunset"],
+        },
+      },
+    };
+    expect(roadbookCategories).toContain("car_photo_spot");
+    expect(photoSpotDetails(photo)?.tags).toEqual(["skyline", "sunset"]);
+    expect(
+      photoSpotDetails({
+        ...photo,
+        requirements: {
+          photo_spot: { imageUrl: "https://example.com/unlicensed.jpg" },
+        },
+      }),
+    ).toBeUndefined();
+    const migration = readFileSync(
+      "supabase/migrations/20260923140000_roadbook_photo_spots.sql",
+      "utf8",
+    );
+    expect(migration).toContain("roadbook_photo_spot_public_access_check");
+    expect(migration).toContain("not published");
+  });
   it("normalizes PostGIS RPC rows for the client", () => {
     expect(venue.accessStatus).toBe("closed_venue");
     expect(venue.distanceM).toBe(1250);

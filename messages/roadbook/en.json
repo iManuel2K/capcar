@@ -1,5 +1,32 @@
 {
   "Roadbook": {
+    "search": "Search places in view",
+    "photoSpot": {
+      "title": "Photo location",
+      "safety": "Stop only where parking is permitted. Never block roads or access, enter private property without permission or stop at unsafe roadside locations.",
+      "bestTime": "Best time",
+      "lighting": "Light",
+      "parking": "Parking / access",
+      "permission": "Permission",
+      "permissionCheck": "Confirm permission before visiting",
+      "permissionNotRequired": "No special permission recorded; check current rules",
+      "vehicle": "Suitable vehicles",
+      "safetyNotes": "Safety notes",
+      "example": "Licensed example",
+      "directions": "Open directions",
+      "tags": {
+        "skyline": "skyline",
+        "industrial": "industrial",
+        "forest": "forest",
+        "mountain": "mountain",
+        "coastal": "coastal",
+        "architecture": "architecture",
+        "night": "night",
+        "sunrise": "sunrise",
+        "sunset": "sunset",
+        "urban": "urban"
+      }
+    },
     "eyebrow": "Roadbook · Legal driving discovery",
     "title": "Find the right road for the build.",
     "description": "Discover circuits, controlled test venues and driving routes with their source, access rules and current confidence kept visible.",
@@ -19,6 +46,7 @@
       "track_day": "Track days",
       "proving_ground": "Proving grounds",
       "scenic_route": "Scenic routes",
+      "car_photo_spot": "Car photo spots",
       "autobahn_context": "Autobahn context"
     },
     "modes": {

@@ -22,6 +22,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useId, useMemo, useState } from "react";
 
 import { evaluateRoadbookReadiness } from "@/features/roadbook/roadbook-readiness";
+import { photoSpotDetails } from "@/features/roadbook/roadbook-schema";
 import type {
   RecordRoadbookVisitInput,
   RoadbookEvent,
@@ -63,6 +64,8 @@ export function RoadbookVenueDrawer({
   const photoInputId = useId();
   const obdInputId = useId();
   const selectedVehicle = vehicles.find((vehicle) => vehicle.id === vehicleId);
+  const photoSpot = photoSpotDetails(venue);
+  const isPhotoSpot = venue.category === "car_photo_spot";
   const readiness = useMemo(
     () => evaluateRoadbookReadiness(selectedVehicle, venue),
     [selectedVehicle, venue],
@@ -138,8 +141,63 @@ export function RoadbookVenueDrawer({
           venue.category === "drag_acceleration") && (
           <SafetyNotice text={t("safety.closedVenue")} />
         )}
+        {isPhotoSpot && <SafetyNotice text={t("photoSpot.safety")} />}
 
         <p className="text-sm leading-6 text-white/55">{venue.description}</p>
+
+        {isPhotoSpot && photoSpot && (
+          <section
+            className="space-y-3 rounded-2xl border border-white/9 bg-white/[0.035] p-4"
+            aria-label={t("photoSpot.title")}
+          >
+            <h3 className="text-sm font-semibold">{t("photoSpot.title")}</h3>
+            <p className="text-sm leading-6 text-white/65">
+              {photoSpot.visualDescription}
+            </p>
+            <dl className="grid gap-3 text-xs sm:grid-cols-2">
+              {(
+                [
+                  ["bestTime", photoSpot.bestTime],
+                  ["lighting", photoSpot.lighting],
+                  ["parking", photoSpot.parkingAccess],
+                  [
+                    "permission",
+                    t(
+                      photoSpot.permissionRequired
+                        ? "photoSpot.permissionCheck"
+                        : "photoSpot.permissionNotRequired",
+                    ),
+                  ],
+                  ["vehicle", photoSpot.vehicleSuitability],
+                  ["safetyNotes", photoSpot.safetyNotes],
+                ] as const
+              ).map(([key, value]) => (
+                <div key={key} className="min-w-0">
+                  <dt className="text-white/40">{t(`photoSpot.${key}`)}</dt>
+                  <dd className="mt-1 break-words text-white/80">{value}</dd>
+                </div>
+              ))}
+            </dl>
+            {photoSpot.tags.length > 0 && (
+              <p className="text-xs text-white/55">
+                {photoSpot.tags
+                  .map((tag) => t(`photoSpot.tags.${tag}`))
+                  .join(" · ")}
+              </p>
+            )}
+            {photoSpot.imageUrl && photoSpot.imageLicense && (
+              <a
+                href={photoSpot.imageUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center gap-2 text-xs text-[#ff9baa] underline"
+              >
+                {t("photoSpot.example")} · {photoSpot.imageLicense}
+                <ExternalLink className="size-3" />
+              </a>
+            )}
+          </section>
+        )}
 
         {events.length > 0 && (
           <section className="rounded-2xl border border-[#ff667a]/20 bg-[#ff667a]/[0.055] p-4">
@@ -211,24 +269,28 @@ export function RoadbookVenueDrawer({
             label={t("details.surface")}
             value={venue.surface ?? t("details.unknown")}
           />
-          <Fact
-            icon={Ruler}
-            label={t("details.length")}
-            value={
-              venue.lengthM
-                ? `${(venue.lengthM / 1000).toLocaleString(locale)} km`
-                : t("details.unknown")
-            }
-          />
-          <Fact
-            icon={Volume2}
-            label={t("details.noise")}
-            value={
-              venue.noiseLimitDb
-                ? `${venue.noiseLimitDb} dB`
-                : t("details.confirmLimit")
-            }
-          />
+          {!isPhotoSpot && (
+            <Fact
+              icon={Ruler}
+              label={t("details.length")}
+              value={
+                venue.lengthM
+                  ? `${(venue.lengthM / 1000).toLocaleString(locale)} km`
+                  : t("details.unknown")
+              }
+            />
+          )}
+          {!isPhotoSpot && (
+            <Fact
+              icon={Volume2}
+              label={t("details.noise")}
+              value={
+                venue.noiseLimitDb
+                  ? `${venue.noiseLimitDb} dB`
+                  : t("details.confirmLimit")
+              }
+            />
+          )}
           <Fact
             icon={Clock3}
             label={t("details.hours")}
@@ -296,21 +358,23 @@ export function RoadbookVenueDrawer({
               </option>
             ))}
           </select>
-          <div className="mt-4 grid gap-2">
-            {readiness.map((check) => (
-              <div
-                key={check.key}
-                className="flex items-start gap-2 text-xs leading-5 text-white/48"
-              >
-                {check.state === "ready" ? (
-                  <Check className="mt-0.5 size-3.5 shrink-0 text-[#6bd2ae]" />
-                ) : (
-                  <AlertTriangle className="mt-0.5 size-3.5 shrink-0 text-amber-300" />
-                )}
-                {t(`readiness.${check.key}.${check.state}`)}
-              </div>
-            ))}
-          </div>
+          {!isPhotoSpot && (
+            <div className="mt-4 grid gap-2">
+              {readiness.map((check) => (
+                <div
+                  key={check.key}
+                  className="flex items-start gap-2 text-xs leading-5 text-white/48"
+                >
+                  {check.state === "ready" ? (
+                    <Check className="mt-0.5 size-3.5 shrink-0 text-[#6bd2ae]" />
+                  ) : (
+                    <AlertTriangle className="mt-0.5 size-3.5 shrink-0 text-amber-300" />
+                  )}
+                  {t(`readiness.${check.key}.${check.state}`)}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {error && (
@@ -347,7 +411,16 @@ export function RoadbookVenueDrawer({
             )}
             {saveState === "done" ? t("actions.saved") : t("actions.save")}
           </button>
-          {venue.bookingUrl ? (
+          {isPhotoSpot ? (
+            <a
+              href={`https://www.openstreetmap.org/directions?engine=fossgis_osrm_car&route=;${venue.latitude}%2C${venue.longitude}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/12 px-4 text-sm font-semibold text-white/75 hover:bg-white/7"
+            >
+              {t("photoSpot.directions")} <ExternalLink className="size-4" />
+            </a>
+          ) : venue.bookingUrl ? (
             <a
               href={venue.bookingUrl}
               target="_blank"
@@ -384,19 +457,21 @@ export function RoadbookVenueDrawer({
                 className="min-h-11 rounded-xl border border-white/12 bg-[#111713] px-3 text-sm text-white"
               />
             </label>
-            <label className="grid gap-1.5 text-xs text-white/48">
-              {t("visit.lap")}
-              <input
-                type="number"
-                min="1"
-                max="86400"
-                step="0.001"
-                value={bestLap}
-                onChange={(event) => setBestLap(event.target.value)}
-                placeholder={t("visit.lapPlaceholder")}
-                className="min-h-11 rounded-xl border border-white/12 bg-[#111713] px-3 text-sm text-white placeholder:text-white/25"
-              />
-            </label>
+            {!isPhotoSpot && (
+              <label className="grid gap-1.5 text-xs text-white/48">
+                {t("visit.lap")}
+                <input
+                  type="number"
+                  min="1"
+                  max="86400"
+                  step="0.001"
+                  value={bestLap}
+                  onChange={(event) => setBestLap(event.target.value)}
+                  placeholder={t("visit.lapPlaceholder")}
+                  className="min-h-11 rounded-xl border border-white/12 bg-[#111713] px-3 text-sm text-white placeholder:text-white/25"
+                />
+              </label>
+            )}
             <label className="grid gap-1.5 text-xs text-white/48">
               {t("visit.notes")}
               <textarea

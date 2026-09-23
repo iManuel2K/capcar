@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, Crosshair, MapPinned, RefreshCw } from "lucide-react";
+import { AlertTriangle, Crosshair, MapPinned, RefreshCw, Search } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
@@ -46,6 +46,7 @@ export function RoadbookExperience() {
   const { vehicles } = useVehicles();
   const [vehicleId, setVehicleId] = useState<string>();
   const [venues, setVenues] = useState<RoadbookVenue[]>([]);
+  const [search, setSearch] = useState("");
   const [events, setEvents] = useState<RoadbookEvent[]>([]);
   const [selectedVenue, setSelectedVenue] = useState<RoadbookVenue>();
   const [categories, setCategories] = useState<RoadbookCategory[]>([]);
@@ -147,6 +148,12 @@ export function RoadbookExperience() {
       ) as Record<RoadbookCategory, string>,
     [t],
   );
+  const visibleVenues = useMemo(() => {
+    const term = search.trim().toLocaleLowerCase();
+    return term
+      ? venues.filter((venue) => [venue.name, venue.city, venue.countryCode, venue.description].some((value) => value.toLocaleLowerCase().includes(term)))
+      : venues;
+  }, [search, venues]);
   const modeLabels = useMemo(
     () =>
       Object.fromEntries(
@@ -195,7 +202,7 @@ export function RoadbookExperience() {
   return (
     <div className="relative h-[calc(100dvh-4.5rem)] min-h-[38rem] overflow-hidden bg-[#0b0e0c] text-white sm:h-[calc(100dvh-5rem)]">
       <RoadbookMap
-        venues={venues}
+        venues={visibleVenues}
         events={events}
         selectedVenue={selectedVenue}
         mode={mode}
@@ -231,6 +238,10 @@ export function RoadbookExperience() {
           <p className="mt-1 hidden max-w-lg text-xs leading-5 text-white/48 sm:block">
             {t("description")}
           </p>
+          <label className="mt-3 flex min-h-11 items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 text-white/60">
+            <Search className="size-4 shrink-0" aria-hidden="true" />
+            <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t("search")} aria-label={t("search")} className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/45" />
+          </label>
         </div>
       </div>
 
@@ -253,7 +264,7 @@ export function RoadbookExperience() {
         />
       </div>
 
-      <div className="absolute top-36 right-3 left-3 z-20 lg:hidden">
+      <div className="absolute top-52 right-3 left-3 z-20 lg:hidden">
         <RoadbookThemeSwitcher
           mode={mode}
           onChange={updateMode}
@@ -293,16 +304,16 @@ export function RoadbookExperience() {
         </button>
       </div>
 
-      <div className="absolute top-[15.25rem] left-3 z-20 lg:top-44 lg:left-5">
+      <div className="absolute top-[18.5rem] left-3 z-20 lg:top-44 lg:left-5">
         <div className="rounded-xl border border-white/10 bg-[#09100d]/82 px-3 py-2 text-[11px] text-white/52 shadow-lg backdrop-blur-xl">
-          {loading ? t("loading") : t("resultCount", { count: venues.length })}
+          {loading ? t("loading") : t("resultCount", { count: visibleVenues.length })}
         </div>
       </div>
 
       {(error || mapError) && (
         <div
           role="alert"
-          className="absolute top-36 right-3 left-3 z-40 flex items-center justify-between gap-3 rounded-xl border border-red-200/20 bg-[#2d1014]/94 p-3 text-xs text-red-50 shadow-xl sm:top-auto sm:right-auto sm:bottom-20 sm:left-5 sm:max-w-lg"
+          className="absolute top-[21rem] right-3 left-3 z-40 flex items-center justify-between gap-3 rounded-xl border border-red-200/20 bg-[#2d1014]/94 p-3 text-xs text-red-50 shadow-xl sm:top-auto sm:right-auto sm:bottom-20 sm:left-5 sm:max-w-lg"
         >
           <span className="inline-flex items-center gap-2">
             <AlertTriangle className="size-4 shrink-0" /> {error || mapError}
@@ -320,7 +331,7 @@ export function RoadbookExperience() {
         </div>
       )}
 
-      {!loading && !error && venues.length === 0 && (
+      {!loading && !error && visibleVenues.length === 0 && (
         <div className="absolute top-1/2 left-1/2 z-20 w-[min(28rem,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/12 bg-[#09100d]/92 p-5 text-center shadow-2xl backdrop-blur-xl">
           <MapPinned className="mx-auto size-6 text-white/45" />
           <h2 className="mt-3 text-lg font-medium">{t("empty.title")}</h2>

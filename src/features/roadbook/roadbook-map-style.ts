@@ -27,8 +27,6 @@ export type RoadbookMapStyle = Readonly<{
   canvas: string;
   accent: string;
   swatch: readonly [string, string, string];
-  tileFilter: string;
-  wash: string;
   vector: RoadbookVectorPalette;
 }>;
 
@@ -40,9 +38,6 @@ export const ROADBOOK_MAP_STYLES = {
     canvas: "#eef3f4",
     accent: "#123243",
     swatch: ["#eef3f4", "#123243", "#2f6f8f"],
-    tileFilter:
-      "grayscale(.34) sepia(.18) hue-rotate(132deg) saturate(.9) brightness(.86) contrast(1.22)",
-    wash: "rgb(21 74 82 / 10%)",
     vector: {
       land: "#eef3f4",
       landcover: "#dce8ea",
@@ -63,28 +58,25 @@ export const ROADBOOK_MAP_STYLES = {
   reykjavik: {
     id: "reykjavik",
     name: "Reykjavík",
-    description: "Burgundy polar night",
-    canvas: "#2c1016",
-    accent: "#f3d2d8",
-    swatch: ["#2c1016", "#cf8f9b", "#f3d2d8"],
-    tileFilter:
-      "grayscale(.62) sepia(.78) hue-rotate(292deg) saturate(1.65) brightness(.32) contrast(1.5)",
-    wash: "rgb(73 17 31 / 20%)",
+    description: "Cool stone and pale blue",
+    canvas: "#e4e8e7",
+    accent: "#405866",
+    swatch: ["#e4e8e7", "#b6d2de", "#405866"],
     vector: {
-      land: "#2c1016",
-      landcover: "#3a1820",
-      parks: "#231a16",
-      water: "#1f0d14",
-      waterway: "#3a1a26",
-      buildings: "#3a1c24",
-      aeroway: "#3a1c24",
-      roadMajor: "#f3d2d8",
-      roadMinor: "#cf8f9b",
-      roadPath: "#5e3a44",
-      roadOutline: "#190a0f",
-      label: "#f3d2d8",
-      labelHalo: "#2c1016",
-      boundary: "#6f3a46",
+      land: "#e4e8e7",
+      landcover: "#d6ddda",
+      parks: "#c7d7cf",
+      water: "#b6d2de",
+      waterway: "#94bccb",
+      buildings: "#d5dbd9",
+      aeroway: "#d5dbd9",
+      roadMajor: "#405866",
+      roadMinor: "#738d95",
+      roadPath: "#b1bfc0",
+      roadOutline: "#f3f5f2",
+      label: "#304650",
+      labelHalo: "#e4e8e7",
+      boundary: "#95a9ae",
     },
   },
   lissabon: {
@@ -94,9 +86,6 @@ export const ROADBOOK_MAP_STYLES = {
     canvas: "#f5ecdc",
     accent: "#b53a26",
     swatch: ["#f5ecdc", "#b53a26", "#8fbcd6"],
-    tileFilter:
-      "sepia(.64) saturate(1.4) hue-rotate(334deg) brightness(.88) contrast(1.18)",
-    wash: "rgb(157 77 44 / 9%)",
     vector: {
       land: "#f5ecdc",
       landcover: "#efd9bb",
@@ -117,28 +106,25 @@ export const ROADBOOK_MAP_STYLES = {
   wien: {
     id: "wien",
     name: "Wien",
-    description: "Midnight blue and Vienna gold",
-    canvas: "#101626",
-    accent: "#f0cf7a",
-    swatch: ["#101626", "#f0cf7a", "#d9b25c"],
-    tileFilter:
-      "grayscale(.52) sepia(.86) saturate(1.9) hue-rotate(352deg) brightness(.34) contrast(1.62)",
-    wash: "rgb(17 22 38 / 18%)",
+    description: "Warm stone and burgundy",
+    canvas: "#eee7dc",
+    accent: "#70333d",
+    swatch: ["#eee7dc", "#70333d", "#a5b8b5"],
     vector: {
-      land: "#101626",
-      landcover: "#141b2c",
-      parks: "#13201f",
-      water: "#0b101d",
-      waterway: "#16243a",
-      buildings: "#19202f",
-      aeroway: "#19202f",
-      roadMajor: "#f0cf7a",
-      roadMinor: "#d9b25c",
-      roadPath: "#6f5836",
-      roadOutline: "#080b14",
-      label: "#f7e8bd",
-      labelHalo: "#101626",
-      boundary: "#5b4b2c",
+      land: "#eee7dc",
+      landcover: "#e2dacb",
+      parks: "#d4dec8",
+      water: "#a5b8b5",
+      waterway: "#92aaa7",
+      buildings: "#e0d5c5",
+      aeroway: "#e0d5c5",
+      roadMajor: "#70333d",
+      roadMinor: "#a05c61",
+      roadPath: "#c8a9a3",
+      roadOutline: "#fbf7ec",
+      label: "#55353b",
+      labelHalo: "#eee7dc",
+      boundary: "#a18c87",
     },
   },
   zurich: {
@@ -148,8 +134,6 @@ export const ROADBOOK_MAP_STYLES = {
     canvas: "#f4f6f8",
     accent: "#161b22",
     swatch: ["#f4f6f8", "#161b22", "#b7cdde"],
-    tileFilter: "grayscale(.92) saturate(.35) brightness(.82) contrast(1.34)",
-    wash: "rgb(111 125 132 / 8%)",
     vector: {
       land: "#f4f6f8",
       landcover: "#e6ebef",
@@ -174,9 +158,6 @@ export const ROADBOOK_MAP_STYLES = {
     canvas: "#f7ecdb",
     accent: "#8a3a18",
     swatch: ["#f7ecdb", "#8a3a18", "#a9c6bc"],
-    tileFilter:
-      "sepia(.54) hue-rotate(88deg) saturate(.86) brightness(.84) contrast(1.18)",
-    wash: "rgb(66 111 101 / 9%)",
     vector: {
       land: "#f7ecdb",
       landcover: "#f0d9bd",
@@ -201,9 +182,6 @@ export const ROADBOOK_MAP_STYLES = {
     canvas: "#f3f0e8",
     accent: "#232520",
     swatch: ["#f3f0e8", "#232520", "#c0cabb"],
-    tileFilter:
-      "grayscale(.66) sepia(.34) saturate(.62) hue-rotate(35deg) brightness(.8) contrast(1.28)",
-    wash: "rgb(91 96 69 / 8%)",
     vector: {
       land: "#f3f0e8",
       landcover: "#e4e2d2",
@@ -228,9 +206,6 @@ export const ROADBOOK_MAP_STYLES = {
     canvas: "#f1dcc0",
     accent: "#883517",
     swatch: ["#f1dcc0", "#883517", "#ccb86f"],
-    tileFilter:
-      "sepia(.82) saturate(1.12) hue-rotate(344deg) brightness(.8) contrast(1.24)",
-    wash: "rgb(139 92 38 / 10%)",
     vector: {
       land: "#f1dcc0",
       landcover: "#e7c894",
@@ -255,9 +230,6 @@ export const ROADBOOK_MAP_STYLES = {
     canvas: "#0d0f16",
     accent: "#2bf0df",
     swatch: ["#0d0f16", "#2bf0df", "#2bb6c4"],
-    tileFilter:
-      "grayscale(.84) sepia(.72) hue-rotate(126deg) saturate(2.35) brightness(.28) contrast(1.78)",
-    wash: "rgb(0 78 84 / 14%)",
     vector: {
       land: "#0d0f16",
       landcover: "#12141d",
