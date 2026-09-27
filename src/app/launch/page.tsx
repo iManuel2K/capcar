@@ -1,8 +1,11 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { CheckCircle2, CircleDashed, Rocket, ShieldCheck } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { getDeploymentReadiness } from "@/features/deployment/deployment-readiness";
+
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export const dynamic = "force-dynamic";
 
