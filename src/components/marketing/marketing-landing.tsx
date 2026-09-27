@@ -26,8 +26,9 @@ export function MarketingLanding() {
     <div className="min-h-dvh overflow-hidden bg-[#e8e6d7] text-[#0e2d30]">
       <main id="main-content">
         <MarketingHero />
-        <ProductDashboardPreview />
         <CapcarStory />
+        <ProductDashboardPreview />
+        <FitmentSection />
 
         <section id="platform" className="bg-[#050306] text-[#e8e6d7]">
           <div className="mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-32">
@@ -73,8 +74,6 @@ export function MarketingLanding() {
             </div>
           </div>
         </section>
-
-        <FitmentSection />
 
         <section
           aria-label={t("vehicleDetails")}
