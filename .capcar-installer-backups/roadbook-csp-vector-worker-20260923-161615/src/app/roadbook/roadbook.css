@@ -104,23 +104,6 @@
   outline: none;
 }
 
-/* Keep map navigation clear of the style picker and category rail. */
-.roadbook-leaflet-map .leaflet-bottom.leaflet-left,
-.roadbook-vector-map .maplibregl-ctrl-bottom-left {
-  top: 50%;
-  bottom: auto;
-  left: max(0.75rem, env(safe-area-inset-left));
-  z-index: 30;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.roadbook-leaflet-map .leaflet-bottom.leaflet-left .leaflet-control,
-.roadbook-vector-map .maplibregl-ctrl-bottom-left .maplibregl-ctrl {
-  margin: 0;
-  pointer-events: auto;
-}
-
 .roadbook-vector-marker-shell {
   border: 0;
   background: transparent;
@@ -187,7 +170,6 @@
   min-height: 2.25rem;
   flex: none;
   align-items: center;
-  gap: 0.5rem;
   border: 1px solid rgb(255 255 255 / 34%);
   border-radius: 999px;
   padding: 0.38rem 0.78rem;
@@ -200,25 +182,6 @@
     border-color 220ms ease,
     background 220ms ease,
     transform 220ms ease;
-}
-
-.roadbook-style-chip__swatch {
-  width: 1.45rem;
-  height: 0.72rem;
-  flex: none;
-  border: 1px solid rgb(255 255 255 / 26%);
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    var(--roadbook-chip-land) 0 34%,
-    var(--roadbook-chip-road) 34% 67%,
-    var(--roadbook-chip-water) 67% 100%
-  );
-  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 8%);
-}
-
-.roadbook-style-chip.is-selected .roadbook-style-chip__swatch {
-  border-color: rgb(16 20 18 / 22%);
 }
 
 .roadbook-style-chip:hover,
