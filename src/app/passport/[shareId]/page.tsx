@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { PublicPassport } from "@/components/passport/public-passport";
 import { vehiclePassportSchema } from "@/features/passport/vehicle-passport";
+import { PUBLIC_SITE_URL } from "@/features/seo/public-metadata";
 import { createClient } from "@/lib/supabase/server";
 import { getTranslations } from "next-intl/server";
 
@@ -44,7 +45,7 @@ export default async function SharedPassportPage({
     <PublicPassport
       passport={parsed.data}
       publishedAt={result.data.created_at}
-      liveUrl={`${process.env.NEXT_PUBLIC_SITE_URL ?? "https://capcar-im.netlify.app"}/passport/${shareId}`}
+      liveUrl={new URL(`/passport/${shareId}`, PUBLIC_SITE_URL).toString()}
     />
   );
 }
