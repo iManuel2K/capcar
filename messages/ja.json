@@ -1,4 +1,40 @@
 {
+  "Walkthrough": {
+    "eyebrow": "60秒でわかるCapCar",
+    "title": "最初のアイデアから、公道へ。",
+    "description": "車を選び、方向性を決め、パーツと予算を確認し、履歴を残して走りを楽しみます。",
+    "runtime": "60秒未満",
+    "captions": "日本語の映像説明",
+    "videoFallback": "動画を再生できません。全工程は下に記載しています。",
+    "play": "60秒のCapCar紹介を再生",
+    "pause": "CapCar紹介を一時停止",
+    "playShort": "60秒でわかるCapCar",
+    "pauseShort": "一時停止",
+    "car": {
+      "title": "愛車を選択、または追加。",
+      "description": "実車の車種、プラットフォーム、年式から始めます。"
+    },
+    "direction": {
+      "title": "現実的な方向性を検討。",
+      "description": "現在の車とOEM+の参考案を比較します。"
+    },
+    "parts": {
+      "title": "パーツを探し、適合を確認。",
+      "description": "出品、仕様、不足している根拠を比較します。"
+    },
+    "budget": {
+      "title": "作業と予算を計画。",
+      "description": "支出、予定、未配分額を確認します。"
+    },
+    "garage": {
+      "title": "Garageに履歴を保存。",
+      "description": "予定パーツ、完了作業、領収書、整備を記録します。"
+    },
+    "roadbook": {
+      "title": "完成した車で道へ。",
+      "description": "Roadbookでルート、スポット、イベント、撮影場所を探します。"
+    }
+  },
   "Story": {
     "label": "質問からガレージへ",
     "steps": "手順",
@@ -301,8 +337,10 @@
     "start": "ビルドを始める",
     "explore": "プロジェクトを見る",
     "hero": {
-      "aiLabel": "いつものAIと連携",
-      "aiSupport": "ChatGPT または Claude で計画し、MCP を通じて構造化したプランを CapCar に取り込みます。",
+      "aiLabel": "アシスタント接続",
+      "aiProtocol": "MCP · 対応環境",
+      "status": "Beta · Operational",
+      "aiSupport": "MCP接続に対応する環境でChatGPTやClaudeからCapCarツールを利用できます。",
       "eyebrow": "プロジェクトカーのためのデジタルガレージ",
       "title": "思い描いた一台を、",
       "accent": "自分の手で。",

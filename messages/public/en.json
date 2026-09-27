@@ -358,8 +358,6 @@
   },
   "Home": {
     "skip": "Skip to content",
-    "conceptTitle": "Explore a different direction.",
-    "conceptDescription": "Explore real-world car shapes in 3D. Your real car and saved builds stay untouched.",
     "optionalLab": "Optional stylized sketch lab",
     "openStudio": "Open the concept studio →",
     "platformEyebrow": "The platform",

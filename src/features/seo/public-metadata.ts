@@ -20,8 +20,9 @@ export type PublicIndexableRoute = (typeof PUBLIC_INDEXABLE_ROUTES)[number];
 
 export function canonicalMetadata(
   route: PublicIndexableRoute,
-): Pick<Metadata, "alternates"> {
-  return { alternates: { canonical: route || "/" } };
+): Pick<Metadata, "alternates" | "openGraph"> {
+  const url = new URL(route || "/", PUBLIC_SITE_URL).toString();
+  return { alternates: { canonical: url }, openGraph: { url } };
 }
 
 /** Full route-specific share metadata; indexing is deliberately independent. */

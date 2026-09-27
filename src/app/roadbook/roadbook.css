@@ -187,6 +187,7 @@
   min-height: 2.25rem;
   flex: none;
   align-items: center;
+  gap: 0.5rem;
   border: 1px solid rgb(255 255 255 / 34%);
   border-radius: 999px;
   padding: 0.38rem 0.78rem;
@@ -199,6 +200,25 @@
     border-color 220ms ease,
     background 220ms ease,
     transform 220ms ease;
+}
+
+.roadbook-style-chip__swatch {
+  width: 1.45rem;
+  height: 0.72rem;
+  flex: none;
+  border: 1px solid rgb(255 255 255 / 26%);
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--roadbook-chip-land) 0 34%,
+    var(--roadbook-chip-road) 34% 67%,
+    var(--roadbook-chip-water) 67% 100%
+  );
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 8%);
+}
+
+.roadbook-style-chip.is-selected .roadbook-style-chip__swatch {
+  border-color: rgb(16 20 18 / 22%);
 }
 
 .roadbook-style-chip:hover,

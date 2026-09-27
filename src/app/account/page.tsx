@@ -3,7 +3,10 @@ import type { Metadata } from "next";
 import { AccountWorkspace } from "@/components/account/account-workspace";
 import { getAuthStatus } from "@/features/auth/auth-config";
 
-export const metadata: Metadata = { title: "Account" };
+export const metadata: Metadata = {
+  title: "Account",
+  robots: { index: false, follow: false },
+};
 export const dynamic = "force-dynamic";
 
 export default function AccountPage() {

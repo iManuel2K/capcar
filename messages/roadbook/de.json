@@ -34,6 +34,11 @@
     "locate": "Meinen Standort verwenden",
     "loading": "Sichtbaren Bereich prüfen…",
     "mapLoading": "Roadbook-Karte wird geöffnet…",
+    "map": {
+      "label": "Interaktive CapCar-Roadbook-Karte",
+      "userLocation": "Dein Standort",
+      "upcomingEvents": "{count, plural, =1 {eine bevorstehende Veranstaltung} other {# bevorstehende Veranstaltungen}}"
+    },
     "fallback": {
       "styles": "Originale OpenStreetMap-Kacheln · Stadtfarben benötigen WebGL.",
       "label": "Kompatibilitätskarte",

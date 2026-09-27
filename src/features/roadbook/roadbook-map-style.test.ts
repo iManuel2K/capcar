@@ -22,7 +22,7 @@ describe("Roadbook map styles", () => {
   });
 
   it("matches the city reference palettes by vector layer", () => {
-    expect(ROADBOOK_MAP_STYLES.konstanz.vector.water).toBe("#2f6f8f");
+    expect(ROADBOOK_MAP_STYLES.konstanz.vector.water).toBe("#9eb8c2");
     expect(ROADBOOK_MAP_STYLES.reykjavik.vector.land).toBe("#e4e8e7");
     expect(ROADBOOK_MAP_STYLES.lissabon.vector.roadMajor).toBe("#b53a26");
     expect(ROADBOOK_MAP_STYLES.wien.vector.roadMajor).toBe("#70333d");
@@ -30,7 +30,7 @@ describe("Roadbook map styles", () => {
     expect(ROADBOOK_MAP_STYLES.venedig.vector.water).toBe("#a9c6bc");
     expect(ROADBOOK_MAP_STYLES.kyoto.vector.roadMajor).toBe("#232520");
     expect(ROADBOOK_MAP_STYLES.marrakesch.vector.landcover).toBe("#e7c894");
-    expect(ROADBOOK_MAP_STYLES.tokyo.vector.roadMajor).toBe("#2bf0df");
+    expect(ROADBOOK_MAP_STYLES.tokyo.vector.roadMajor).toBe("#1f6665");
   });
 
   it("uses and restyles the complete OpenFreeMap vector map", () => {

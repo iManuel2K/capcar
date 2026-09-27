@@ -136,6 +136,9 @@ export function RoadbookMap({
   onError,
   onReady,
   onRendererChange,
+  mapLabel,
+  userLocationLabel,
+  upcomingEventsLabel,
 }: {
   venues: RoadbookVenue[];
   events: RoadbookEvent[];
@@ -148,6 +151,9 @@ export function RoadbookMap({
   onError: (message: string) => void;
   onReady: () => void;
   onRendererChange: (vector: boolean) => void;
+  mapLabel: string;
+  userLocationLabel: string;
+  upcomingEventsLabel: (count: number) => string;
 }) {
   const visualStyle = ROADBOOK_MAP_STYLES[mode];
   const leafletContainer = useRef<HTMLDivElement>(null);
@@ -459,13 +465,13 @@ export function RoadbookMap({
         }),
         keyboard: true,
         title: venue.name,
-        alt: `${venue.name}${eventCount > 0 ? `, ${eventCount} upcoming events` : ""}`,
+        alt: `${venue.name}${eventCount > 0 ? `, ${upcomingEventsLabel(eventCount)}` : ""}`,
         riseOnHover: true,
       });
       marker.on("click", () => onSelectRef.current(venue));
       return marker.addTo(instance);
     });
-  }, [events, selectedVenue?.id, venues]);
+  }, [events, selectedVenue?.id, upcomingEventsLabel, venues]);
 
   useEffect(() => {
     const instance = vectorMap.current;
@@ -487,7 +493,7 @@ export function RoadbookMap({
       element.setAttribute("role", "button");
       element.setAttribute(
         "aria-label",
-        `${venue.name}${eventCount > 0 ? `, ${eventCount} upcoming events` : ""}`,
+        `${venue.name}${eventCount > 0 ? `, ${upcomingEventsLabel(eventCount)}` : ""}`,
       );
       const selectVenue = () => onSelectRef.current(venue);
       element.addEventListener("click", selectVenue);
@@ -501,7 +507,7 @@ export function RoadbookMap({
         .setLngLat([venue.longitude, venue.latitude])
         .addTo(instance);
     });
-  }, [events, selectedVenue?.id, vectorReady, venues]);
+  }, [events, selectedVenue?.id, upcomingEventsLabel, vectorReady, venues]);
 
   useEffect(() => {
     const instance = map.current;
@@ -529,7 +535,7 @@ export function RoadbookMap({
     if (userPosition && vectorReady && vector && maplibre) {
       const element = document.createElement("div");
       element.className = "roadbook-user-position";
-      element.setAttribute("aria-label", "Your location");
+      element.setAttribute("aria-label", userLocationLabel);
       vectorUserMarker.current = new maplibre.Marker({ element })
         .setLngLat([userPosition.longitude, userPosition.latitude])
         .addTo(vector);
@@ -549,7 +555,7 @@ export function RoadbookMap({
         { duration: 0.85 },
       );
     }
-  }, [userPosition, vectorReady]);
+  }, [userLocationLabel, userPosition, vectorReady]);
 
   useEffect(() => {
     const instance = map.current;
@@ -614,7 +620,7 @@ export function RoadbookMap({
         } as CSSProperties
       }
       role="application"
-      aria-label="CapCar Roadbook map"
+      aria-label={mapLabel}
     >
       <div
         ref={leafletContainer}

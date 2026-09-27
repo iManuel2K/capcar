@@ -17,23 +17,16 @@ describe("Roadbook browser compatibility", () => {
     expect(unsafeFunction).not.toHaveBeenCalled();
   });
 
-  it("checks WebGL2 without intentionally losing the context", () => {
-    const getExtension = vi.fn();
-    const getContext = vi.fn(() => ({ getExtension }));
-    vi.stubGlobal("document", {
-      createElement: vi.fn(() => ({ getContext })),
-    });
+  it("checks WebGL2 without allocating a competing canvas context", () => {
+    const createElement = vi.fn();
+    vi.stubGlobal("WebGL2RenderingContext", class WebGL2RenderingContext {});
+    vi.spyOn(document, "createElement").mockImplementation(createElement);
     expect(supportsRoadbookWebGL()).toBe(true);
-    expect(getContext).toHaveBeenCalledWith("webgl2", {
-      failIfMajorPerformanceCaveat: false,
-    });
-    expect(getExtension).not.toHaveBeenCalled();
+    expect(createElement).not.toHaveBeenCalled();
   });
 
   it("keeps the raster fallback when WebGL2 is unavailable", () => {
-    vi.stubGlobal("document", {
-      createElement: vi.fn(() => ({ getContext: () => null })),
-    });
+    vi.stubGlobal("WebGL2RenderingContext", undefined);
     expect(supportsRoadbookWebGL()).toBe(false);
   });
 });
