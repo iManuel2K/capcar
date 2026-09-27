@@ -41,6 +41,7 @@ const columns = [
       "marketplace",
       "checkout",
       "roadbook",
+      "photoSpots",
       "events",
     ],
     active: true,
