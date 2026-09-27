@@ -32,6 +32,16 @@ describe("the connected homepage example", () => {
       screen.getByText(/Interactive example · Illustrative data/),
     ).toBeInTheDocument();
     expect(screen.queryByText("Verified builder")).not.toBeInTheDocument();
+    expect(screen.getByText("Beta · Operational")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Play CapCar in 60 seconds" }),
+    ).toBeInTheDocument();
+    const walkthrough = document.querySelector("video");
+    expect(walkthrough).toHaveAttribute("preload", "none");
+    expect(walkthrough).toHaveAttribute(
+      "poster",
+      "/walkthrough/capcar-walkthrough-poster.webp",
+    );
     expect(
       screen.getByRole("link", { name: "Skip to main content" }),
     ).toHaveAttribute("href", "#main-content");
