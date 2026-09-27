@@ -1,4 +1,40 @@
 {
+  "Walkthrough": {
+    "eyebrow": "CapCar in 60 seconds",
+    "title": "From the first idea to the road.",
+    "description": "Choose the car, shape the direction, verify parts, control the budget, keep the record and enjoy the result.",
+    "runtime": "Under 60 seconds",
+    "captions": "English visual descriptions",
+    "videoFallback": "Your browser cannot play the walkthrough. The complete sequence is described below.",
+    "play": "Play CapCar in 60 seconds",
+    "pause": "Pause the CapCar walkthrough",
+    "playShort": "CapCar in 60 seconds",
+    "pauseShort": "Pause walkthrough",
+    "car": {
+      "title": "Choose or add your car.",
+      "description": "Start with the real vehicle, platform and year so every decision stays with the right project."
+    },
+    "direction": {
+      "title": "Explore a believable direction.",
+      "description": "Compare the current car with an illustrative OEM+ direction before committing to parts."
+    },
+    "parts": {
+      "title": "Find parts and check fitment.",
+      "description": "Compare current offers, specifications and missing evidence before leaving for the retailer."
+    },
+    "budget": {
+      "title": "Plan the work and budget.",
+      "description": "Keep spent, planned and unallocated money visible beside the next modification."
+    },
+    "garage": {
+      "title": "Keep the history in the Garage.",
+      "description": "Save planned parts, completed work, receipts and maintenance with an honest status."
+    },
+    "roadbook": {
+      "title": "Take the finished car onto the road.",
+      "description": "Use Roadbook for sourced routes, venues, events and car-photo locations."
+    }
+  },
   "Story": {
     "label": "From question to garage",
     "steps": "Story steps",
@@ -301,8 +337,10 @@
     "start": "Start a build",
     "explore": "Explore a project",
     "hero": {
-      "aiLabel": "WORKS WITH YOUR AI",
-      "aiSupport": "Plan with ChatGPT or Claude, then bring the structured build into CapCar through MCP.",
+      "aiLabel": "ASSISTANT CONNECTION",
+      "aiProtocol": "MCP · where supported",
+      "status": "Beta · Operational",
+      "aiSupport": "Use CapCar tools from ChatGPT or Claude where MCP connections are supported.",
       "eyebrow": "The digital garage for project cars",
       "title": "Build the car",
       "accent": "you imagine.",
