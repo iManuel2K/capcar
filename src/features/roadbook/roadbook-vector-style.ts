@@ -130,16 +130,10 @@ export function applyRoadbookVectorPalette(
 }
 
 export function supportsRoadbookWebGL() {
-  if (typeof document === "undefined") return false;
-  try {
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("webgl2", {
-      failIfMajorPerformanceCaveat: false,
-    });
-    // Explicitly losing the probe context emits a browser warning and can
-    // cause the map's next context to fail on constrained devices.
-    return Boolean(context);
-  } catch {
-    return false;
-  }
+  if (typeof window === "undefined") return false;
+  // Do not allocate a throwaway WebGL context before MapLibre creates the
+  // real map context. Some browsers have a low per-page context budget and
+  // will immediately evict one of them. The Map constructor remains the
+  // authoritative capability check and its failure path exposes Leaflet.
+  return typeof window.WebGL2RenderingContext !== "undefined";
 }
