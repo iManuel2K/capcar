@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type CSSProperties } from "react";
 
 import {
   roadbookMapModes,
   type RoadbookMapMode,
 } from "@/features/roadbook/roadbook-schema";
+import { ROADBOOK_MAP_STYLES } from "@/features/roadbook/roadbook-map-style";
 
 export function RoadbookThemeSwitcher({
   mode,
@@ -27,10 +28,11 @@ export function RoadbookThemeSwitcher({
   compatibilityLabel: string;
 }) {
   const buttons = useRef<Array<HTMLButtonElement | null>>([]);
-  const moveFocus = (index: number, direction: -1 | 1) =>
-    buttons.current[
-      (index + direction + roadbookMapModes.length) % roadbookMapModes.length
-    ]?.focus();
+  const choose = (index: number) => {
+    const next = (index + roadbookMapModes.length) % roadbookMapModes.length;
+    buttons.current[next]?.focus();
+    onChange(roadbookMapModes[next]);
+  };
 
   return (
     <section
@@ -41,9 +43,7 @@ export function RoadbookThemeSwitcher({
         <h2 id="roadbook-style-title" className="roadbook-style-picker__title">
           {headline}
         </h2>
-        <p className="roadbook-style-picker__description">
-          {description}
-        </p>
+        <p className="roadbook-style-picker__description">{description}</p>
         {compatibility && (
           <p className="roadbook-style-picker__description" role="status">
             {compatibilityLabel}
@@ -57,6 +57,7 @@ export function RoadbookThemeSwitcher({
       >
         {roadbookMapModes.map((value, index) => {
           const selected = value === mode;
+          const swatch = ROADBOOK_MAP_STYLES[value].swatch;
           return (
             <button
               key={value}
@@ -66,19 +67,39 @@ export function RoadbookThemeSwitcher({
               type="button"
               role="radio"
               aria-checked={selected}
+              tabIndex={selected ? 0 : -1}
               onClick={() => onChange(value)}
               onKeyDown={(event) => {
                 if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
                   event.preventDefault();
-                  moveFocus(index, -1);
+                  choose(index - 1);
                 }
                 if (event.key === "ArrowRight" || event.key === "ArrowDown") {
                   event.preventDefault();
-                  moveFocus(index, 1);
+                  choose(index + 1);
+                }
+                if (event.key === "Home") {
+                  event.preventDefault();
+                  choose(0);
+                }
+                if (event.key === "End") {
+                  event.preventDefault();
+                  choose(roadbookMapModes.length - 1);
                 }
               }}
               className={`roadbook-style-chip ${selected ? "is-selected" : ""}`}
+              style={
+                {
+                  "--roadbook-chip-land": swatch[0],
+                  "--roadbook-chip-road": swatch[1],
+                  "--roadbook-chip-water": swatch[2],
+                } as CSSProperties
+              }
             >
+              <span
+                className="roadbook-style-chip__swatch"
+                aria-hidden="true"
+              />
               <span>{labels[value]}</span>
             </button>
           );
