@@ -34,6 +34,11 @@
     "locate": "現在地を使用",
     "loading": "表示エリアを確認中…",
     "mapLoading": "Roadbookマップを開いています…",
+    "map": {
+      "label": "CapCar Roadbook インタラクティブマップ",
+      "userLocation": "現在地",
+      "upcomingEvents": "今後のイベント：{count}件"
+    },
     "fallback": {
       "styles": "OpenStreetMap の標準タイルを表示中。都市ごとの配色には WebGL が必要です。",
       "label": "互換マップ",
