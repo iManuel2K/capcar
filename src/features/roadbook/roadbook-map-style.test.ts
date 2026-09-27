@@ -61,13 +61,24 @@ describe("Roadbook map styles", () => {
 
   it("keeps zoom controls clear of the bottom Roadbook overlays", () => {
     const css = readFileSync("src/app/roadbook/roadbook.css", "utf8");
-    expect(css).toContain(
-      ".roadbook-leaflet-map .leaflet-bottom.leaflet-left",
-    );
-    expect(css).toContain(
-      ".roadbook-vector-map .maplibregl-ctrl-bottom-left",
-    );
+    expect(css).toContain(".roadbook-leaflet-map .leaflet-bottom.leaflet-left");
+    expect(css).toContain(".roadbook-vector-map .maplibregl-ctrl-bottom-left");
     expect(css).toContain("top: 50%");
+    expect(css).toContain("right: max(0.75rem, env(safe-area-inset-right))");
+    expect(css).toContain("z-index: 1000");
+  });
+
+  it("keeps map zoom enabled and lets MapLibre recover its own context", () => {
+    const map = readFileSync(
+      "src/components/roadbook/roadbook-map.tsx",
+      "utf8",
+    );
+    expect(map).toContain("scrollWheelZoom: true");
+    expect(map).toContain("scrollZoom: true");
+    expect(map).toContain('instance.on("webglcontextrestored"');
+    expect(map).not.toContain(
+      '.getCanvas()\n          .addEventListener("webglcontextlost"',
+    );
   });
 
   it("persists valid styles and safely recovers invalid or blocked storage", () => {
