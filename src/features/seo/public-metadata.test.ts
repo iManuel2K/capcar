@@ -29,8 +29,10 @@ describe("public metadata", () => {
     expect(PUBLIC_SITE_URL.href).toBe("https://capcar.dev/");
 
     for (const route of PUBLIC_INDEXABLE_ROUTES) {
+      const url = new URL(route || "/", PUBLIC_SITE_URL).toString();
       expect(canonicalMetadata(route)).toEqual({
-        alternates: { canonical: route || "/" },
+        alternates: { canonical: url },
+        openGraph: { url },
       });
     }
   });
