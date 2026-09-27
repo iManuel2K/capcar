@@ -6,7 +6,7 @@ import { getAuthStatus } from "@/features/auth/auth-config";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Metadata");
-  return { title: t("reset") };
+  return { title: t("reset"), robots: { index: false, follow: false } };
 }
 export const dynamic = "force-dynamic";
 
