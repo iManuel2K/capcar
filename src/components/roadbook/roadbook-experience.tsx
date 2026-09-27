@@ -190,6 +190,11 @@ export function RoadbookExperience() {
     writeRoadbookMapStyle(nextMode, window.localStorage);
   }, []);
 
+  const upcomingEventsLabel = useCallback(
+    (count: number) => t("map.upcomingEvents", { count }),
+    [t],
+  );
+
   function locateUser() {
     if (!navigator.geolocation) {
       setError(t("errors.locationUnavailable"));
@@ -219,6 +224,9 @@ export function RoadbookExperience() {
         mode={mode}
         center={center}
         userPosition={userPosition}
+        mapLabel={t("map.label")}
+        userLocationLabel={t("map.userLocation")}
+        upcomingEventsLabel={upcomingEventsLabel}
         onSelect={setSelectedVenue}
         onViewportChange={updateViewport}
         onError={() => setMapError(t("errors.mapUnavailable"))}
