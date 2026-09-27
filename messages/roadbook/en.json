@@ -34,6 +34,11 @@
     "locate": "Use my location",
     "loading": "Checking the visible area…",
     "mapLoading": "Opening the Roadbook map…",
+    "map": {
+      "label": "Interactive CapCar Roadbook map",
+      "userLocation": "Your location",
+      "upcomingEvents": "{count, plural, =1 {one upcoming event} other {# upcoming events}}"
+    },
     "fallback": {
       "styles": "Original OpenStreetMap tiles · city colors require WebGL.",
       "label": "Compatibility map",
