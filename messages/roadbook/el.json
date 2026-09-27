@@ -34,6 +34,11 @@
     "locate": "Χρήση τοποθεσίας μου",
     "loading": "Έλεγχος ορατής περιοχής…",
     "mapLoading": "Άνοιγμα του χάρτη Roadbook…",
+    "map": {
+      "label": "Διαδραστικός χάρτης CapCar Roadbook",
+      "userLocation": "Η τοποθεσία σου",
+      "upcomingEvents": "{count, plural, =1 {μία επερχόμενη εκδήλωση} other {# επερχόμενες εκδηλώσεις}}"
+    },
     "fallback": {
       "styles": "Αρχικά πλακίδια OpenStreetMap · τα χρώματα πόλεων απαιτούν WebGL.",
       "label": "Συμβατός χάρτης",
