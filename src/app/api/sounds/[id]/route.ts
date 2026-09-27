@@ -24,8 +24,7 @@ export async function GET(
             signal: AbortSignal.timeout(10000),
             redirect: "error",
             headers: {
-              "User-Agent":
-                "CapCar/1.0 (licensed audio; capcar-im.netlify.app)",
+              "User-Agent": "CapCar/1.0 (licensed audio; https://capcar.dev)",
             },
           },
         );
