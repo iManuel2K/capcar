@@ -37,6 +37,7 @@ const FALLBACK_TILES = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 const OSM_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 const VECTOR_LOAD_TIMEOUT_MS = 9_000;
+const WEBGL_RECOVERY_TIMEOUT_MS = 5_000;
 const ROUTE_SOURCE_ID = "roadbook-selected-route";
 
 type RoadbookRouteData = Exclude<
@@ -170,6 +171,7 @@ export function RoadbookMap({
   const vectorActive = useRef(false);
   const initialCenter = useRef(center);
   const initialMode = useRef(mode);
+  const activeMode = useRef(mode);
   const onSelectRef = useRef(onSelect);
   const onViewportChangeRef = useRef(onViewportChange);
   const onErrorRef = useRef(onError);
@@ -178,12 +180,13 @@ export function RoadbookMap({
   const [vectorReady, setVectorReady] = useState(false);
 
   useEffect(() => {
+    activeMode.current = mode;
     onSelectRef.current = onSelect;
     onViewportChangeRef.current = onViewportChange;
     onErrorRef.current = onError;
     onReadyRef.current = onReady;
     onRendererChangeRef.current = onRendererChange;
-  }, [onError, onReady, onRendererChange, onSelect, onViewportChange]);
+  }, [mode, onError, onReady, onRendererChange, onSelect, onViewportChange]);
 
   useEffect(() => {
     if (!leafletContainer.current || map.current) return;
@@ -195,6 +198,11 @@ export function RoadbookMap({
       maxZoom: 18,
       zoomControl: false,
       attributionControl: false,
+      scrollWheelZoom: true,
+      doubleClickZoom: true,
+      touchZoom: true,
+      boxZoom: true,
+      keyboard: true,
     });
 
     let recovery = { failures: 0, fallbackAttempted: false };
@@ -259,11 +267,13 @@ export function RoadbookMap({
     let vectorTileFailures = 0;
     let instance: MapLibreMap | undefined;
     let timeout = 0;
+    let contextRecoveryTimeout = 0;
 
     const fallBackToLeaflet = () => {
       if (failed) return;
       failed = true;
       window.clearTimeout(timeout);
+      window.clearTimeout(contextRecoveryTimeout);
       // The dormant raster map only inherits the active camera on recovery.
       // It never runs a second, continuously synchronized viewport state.
       if (instance && map.current) {
@@ -290,6 +300,7 @@ export function RoadbookMap({
 
         vectorModule.current = maplibre;
         maplibre.setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
+        maplibre.setWorkerCount(1);
         const leaflet = map.current;
         const leafletCenter = leaflet?.getCenter();
         instance = new maplibre.Map({
@@ -305,9 +316,18 @@ export function RoadbookMap({
           dragRotate: false,
           pitchWithRotate: false,
           touchPitch: false,
+          scrollZoom: true,
+          doubleClickZoom: true,
+          touchZoomRotate: true,
+          boxZoom: true,
+          keyboard: true,
+          maxTileCacheSize: 64,
+          pixelRatio: Math.min(window.devicePixelRatio || 1, 1.5),
           canvasContextAttributes: {
             contextType: "webgl2",
             failIfMajorPerformanceCaveat: false,
+            antialias: false,
+            preserveDrawingBuffer: false,
           },
         });
         vectorMap.current = instance;
@@ -329,23 +349,42 @@ export function RoadbookMap({
         );
 
         instance.on("error", () => {
-          // A single tile error is transient. Repeated failures or an initial
-          // style/worker error should expose the already-mounted OSM map.
-          if (!instance?.loaded() && !instance?.isStyleLoaded()) {
-            fallBackToLeaflet();
-            return;
-          }
+          // Tile, glyph, and sprite requests can fail independently and then
+          // recover. The load timeout still catches a broken style or worker.
           vectorTileFailures += 1;
           if (vectorTileFailures >= 8) fallBackToLeaflet();
         });
         instance.on("idle", () => {
           vectorTileFailures = 0;
         });
-        instance
-          .getCanvas()
-          .addEventListener("webglcontextlost", fallBackToLeaflet, {
-            once: true,
+        instance.on("webglcontextlost", () => {
+          if (failed || !instance) return;
+          const camera = instance.getCenter();
+          map.current?.setView([camera.lat, camera.lng], instance.getZoom(), {
+            animate: false,
           });
+          vectorActive.current = false;
+          setVectorReady(false);
+          onRendererChangeRef.current(false);
+          window.clearTimeout(contextRecoveryTimeout);
+          contextRecoveryTimeout = window.setTimeout(
+            fallBackToLeaflet,
+            WEBGL_RECOVERY_TIMEOUT_MS,
+          );
+        });
+        instance.on("webglcontextrestored", () => {
+          if (disposed || failed || !instance) return;
+          window.clearTimeout(contextRecoveryTimeout);
+          contextRecoveryTimeout = 0;
+          vectorTileFailures = 0;
+          applyRoadbookVectorPalette(
+            instance,
+            ROADBOOK_MAP_STYLES[activeMode.current].vector,
+          );
+          vectorActive.current = true;
+          setVectorReady(true);
+          onRendererChangeRef.current(true);
+        });
 
         instance.on("moveend", () => {
           if (!vectorActive.current || !instance) return;
@@ -432,6 +471,7 @@ export function RoadbookMap({
     return () => {
       disposed = true;
       window.clearTimeout(timeout);
+      window.clearTimeout(contextRecoveryTimeout);
       vectorActive.current = false;
       vectorMarkers.current.forEach((marker) => marker.remove());
       vectorMarkers.current = [];

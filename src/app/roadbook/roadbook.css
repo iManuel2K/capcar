@@ -108,9 +108,10 @@
 .roadbook-leaflet-map .leaflet-bottom.leaflet-left,
 .roadbook-vector-map .maplibregl-ctrl-bottom-left {
   top: 50%;
+  right: max(0.75rem, env(safe-area-inset-right));
   bottom: auto;
-  left: max(0.75rem, env(safe-area-inset-left));
-  z-index: 30;
+  left: auto;
+  z-index: 1000;
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -253,8 +254,7 @@
   border-radius: 0.85rem !important;
   background: rgb(9 16 13 / 88%) !important;
   box-shadow: 0 12px 35px rgb(0 0 0 / 22%) !important;
-  margin-bottom: 5.3rem !important;
-  margin-left: 0.75rem !important;
+  margin: 0 !important;
 }
 
 .leaflet-control-zoom a {
@@ -288,11 +288,6 @@
 
 .leaflet-control-attribution a {
   color: inherit !important;
-}
-
-.roadbook-vector-map .maplibregl-ctrl-bottom-left {
-  bottom: 5.3rem;
-  left: 0.75rem;
 }
 
 .roadbook-vector-map .maplibregl-ctrl-bottom-left .maplibregl-ctrl {
