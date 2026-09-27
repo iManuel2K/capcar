@@ -34,6 +34,11 @@
     "locate": "Përdor vendndodhjen time",
     "loading": "Po kontrollohet zona e dukshme…",
     "mapLoading": "Po hapet harta Roadbook…",
+    "map": {
+      "label": "Harta interaktive CapCar Roadbook",
+      "userLocation": "Vendndodhja jote",
+      "upcomingEvents": "{count, plural, =1 {një event i ardhshëm} other {# evente të ardhshme}}"
+    },
     "fallback": {
       "styles": "Harta origjinale OpenStreetMap · ngjyrat e qyteteve kërkojnë WebGL.",
       "label": "Harta e përputhshmërisë",
