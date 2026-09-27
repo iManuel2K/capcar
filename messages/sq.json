@@ -1,4 +1,40 @@
 {
+  "Walkthrough": {
+    "eyebrow": "CapCar në 60 sekonda",
+    "title": "Nga ideja e parë në rrugë.",
+    "description": "Zgjidh makinën, formo drejtimin, kontrollo pjesët, planifiko buxhetin dhe ruaj historikun.",
+    "runtime": "Nën 60 sekonda",
+    "captions": "Përshkrime pamore në shqip",
+    "videoFallback": "Prezantimi nuk mund të luhet. Rrjedha e plotë përshkruhet më poshtë.",
+    "play": "Luaj CapCar në 60 sekonda",
+    "pause": "Ndalo prezantimin e CapCar",
+    "playShort": "CapCar në 60 sekonda",
+    "pauseShort": "Ndalo",
+    "car": {
+      "title": "Zgjidh ose shto makinën tënde.",
+      "description": "Fillo me automjetin, platformën dhe vitin real."
+    },
+    "direction": {
+      "title": "Eksploro një drejtim të besueshëm.",
+      "description": "Krahaso makinën me një drejtim ilustrues OEM+."
+    },
+    "parts": {
+      "title": "Gjej pjesë dhe kontrollo përshtatshmërinë.",
+      "description": "Krahaso ofertat, specifikimet dhe provat."
+    },
+    "budget": {
+      "title": "Planifiko punën dhe buxhetin.",
+      "description": "Mbaj të dukshme shpenzimet dhe shumën e lirë."
+    },
+    "garage": {
+      "title": "Ruaj historikun në Garage.",
+      "description": "Ruaj planet, punët, faturat dhe mirëmbajtjen."
+    },
+    "roadbook": {
+      "title": "Nxirre makinën në rrugë.",
+      "description": "Përdor Roadbook për rrugë, vende, evente dhe pika fotografimi."
+    }
+  },
   "Story": {
     "label": "Nga pyetja në garazh",
     "steps": "Hapat",
@@ -301,8 +337,10 @@
     "start": "Fillo një projekt",
     "explore": "Shiko një projekt",
     "hero": {
-      "aiLabel": "PUNON ME AI-N TËND",
-      "aiSupport": "Planifiko me ChatGPT ose Claude dhe kalo planin e strukturuar te CapCar përmes MCP.",
+      "aiLabel": "LIDHJA ME ASISTENTIN",
+      "aiProtocol": "MCP · ku mbështetet",
+      "status": "Beta · Operational",
+      "aiSupport": "Përdor veglat CapCar nga ChatGPT ose Claude aty ku mbështeten lidhjet MCP.",
       "eyebrow": "Garazhi digjital për projektin tënd",
       "title": "Ndërto makinën",
       "accent": "që imagjinon.",
