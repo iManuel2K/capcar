@@ -110,9 +110,22 @@ export const roadbookPhotoSpotSchema = z
   })
   .refine((value) => !value.imageUrl || Boolean(value.imageLicense));
 
+export const roadbookVenueImageSchema = z.object({
+  url: z.union([z.string().startsWith("/"), z.url().startsWith("https://")]),
+  alt: z.string().min(1),
+  photographer: z.string().min(1),
+  sourceUrl: z.url().startsWith("https://"),
+  license: z.string().min(1),
+  context: z.enum(["location", "representative"]),
+});
+
 export function photoSpotDetails(venue: RoadbookVenue) {
   if (venue.category !== "car_photo_spot") return undefined;
   return roadbookPhotoSpotSchema.safeParse(venue.requirements.photo_spot).data;
+}
+
+export function venueHeroImage(venue: RoadbookVenue) {
+  return roadbookVenueImageSchema.safeParse(venue.requirements.hero_image).data;
 }
 
 const roadbookVenueRowSchema = z
@@ -182,6 +195,7 @@ const roadbookEventRowSchema = z
     event_type: z.enum(roadbookEventTypes),
     participation: z.enum(roadbookEventParticipation),
     booking_required: z.boolean(),
+    all_day: z.boolean().default(false),
     starts_at: z.string().datetime({ offset: true }),
     ends_at: z.string().datetime({ offset: true }),
     booking_url: z.string().url().nullable(),
@@ -204,6 +218,7 @@ const roadbookEventRowSchema = z
     eventType: event.event_type,
     participation: event.participation,
     bookingRequired: event.booking_required,
+    allDay: event.all_day,
     startsAt: event.starts_at,
     endsAt: event.ends_at,
     bookingUrl: event.booking_url ?? undefined,

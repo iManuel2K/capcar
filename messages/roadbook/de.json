@@ -27,6 +27,11 @@
         "urban": "urban"
       }
     },
+    "media": {
+      "location": "Foto von diesem Ort",
+      "representative": "Beispielbild",
+      "credit": "Foto · {photographer}"
+    },
     "eyebrow": "Roadbook · Legale Fahrziele",
     "title": "Finde die richtige Strecke für dein Projekt.",
     "description": "Entdecke Rennstrecken, kontrollierte Testgelände und Fahrtrouten – mit Quelle, Zugangsregeln und sichtbarem Prüfstatus.",

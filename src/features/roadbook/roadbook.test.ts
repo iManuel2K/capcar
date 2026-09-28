@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import { evaluateRoadbookReadiness } from "@/features/roadbook/roadbook-readiness";
@@ -7,6 +7,7 @@ import {
   roadbookVenueListSchema,
   photoSpotDetails,
   roadbookCategories,
+  venueHeroImage,
   type RoadbookVenue,
 } from "@/features/roadbook/roadbook-schema";
 import { ROADBOOK_DATA_TIMEOUT_MS } from "@/features/roadbook/roadbook-timeout";
@@ -107,6 +108,30 @@ describe("Roadbook contracts", () => {
     expect(event.venueId).toBe(venue.id);
     expect(event.participation).toBe("driver");
     expect(event.bookingRequired).toBe(true);
+    expect(event.allDay).toBe(false);
+  });
+
+  it("validates compact venue imagery with honest context metadata", () => {
+    const image = venueHeroImage({
+      ...venue,
+      requirements: {
+        hero_image: {
+          url: "/roadbook/places/tunitas-creek-bmw.webp",
+          alt: "A black BMW in a forest",
+          photographer: "User-supplied reference",
+          sourceUrl: "https://capcar.dev/roadbook",
+          license: "User supplied for CapCar",
+          context: "location",
+        },
+      },
+    });
+    expect(image?.context).toBe("location");
+    expect(existsSync("public/roadbook/places/tunitas-creek-bmw.webp")).toBe(
+      true,
+    );
+    expect(existsSync("public/roadbook/places/english-forest-road.webp")).toBe(
+      true,
+    );
   });
 
   it("keeps unknown vehicle noise as an explicit check", () => {
@@ -163,5 +188,26 @@ describe("Roadbook contracts", () => {
     expect(migration).toContain("ends_at >= now()");
     expect(migration).toContain("DEKRA Lausitzring event calendar");
     expect(migration).toContain("Motorsport Arena official calendar");
+  });
+
+  it("seeds sourced European discovery imagery and controlled venues", () => {
+    const migration = readFileSync(
+      "supabase/migrations/20260928142919_roadbook_europe_discovery.sql",
+      "utf8",
+    );
+    const unsplashPhotos = new Set(
+      migration.match(/https:\/\/unsplash\.com\/photos\/[A-Za-z0-9_-]+/g),
+    );
+    expect(unsplashPhotos.size).toBe(25);
+    expect(migration).toContain("'santa-pod-raceway', 'drag_acceleration'");
+    expect(migration).toContain("'driftland', 'drift_circuit'");
+    expect(migration).toContain("all_day boolean not null default false");
+
+    const drawer = readFileSync(
+      "src/components/roadbook/roadbook-venue-drawer.tsx",
+      "utf8",
+    );
+    expect(drawer).toContain("h-44 w-full object-cover");
+    expect(drawer).not.toContain("fixed inset-0");
   });
 });

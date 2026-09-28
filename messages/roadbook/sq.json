@@ -27,6 +27,11 @@
         "urban": "urban"
       }
     },
+    "media": {
+      "location": "Foto nga ky vend",
+      "representative": "Imazh ilustrues",
+      "credit": "Foto · {photographer}"
+    },
     "eyebrow": "Roadbook · Vende të ligjshme për ngarje",
     "title": "Gjej rrugën e duhur për projektin.",
     "description": "Zbulo pista, zona të kontrolluara testimi dhe rrugë me burimin, rregullat e hyrjes dhe statusin e verifikimit gjithmonë të dukshëm.",

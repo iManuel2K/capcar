@@ -41,7 +41,7 @@ export async function fetchRoadbookEvents(input: {
   let query = createClient()
     .from("roadbook_events")
     .select(
-      "id,venue_id,title,slug,description,event_type,participation,booking_required,starts_at,ends_at,booking_url,entry_price_cents,price_currency,source_label,source_url,verification_status,verified_at",
+      "id,venue_id,title,slug,description,event_type,participation,booking_required,all_day,starts_at,ends_at,booking_url,entry_price_cents,price_currency,source_label,source_url,verification_status,verified_at",
     )
     .in("venue_id", input.venueIds.slice(0, 250))
     .gte("ends_at", new Date().toISOString())

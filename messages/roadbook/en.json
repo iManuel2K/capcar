@@ -27,6 +27,11 @@
         "urban": "urban"
       }
     },
+    "media": {
+      "location": "Photo from this location",
+      "representative": "Representative image",
+      "credit": "Photo · {photographer}"
+    },
     "eyebrow": "Roadbook · Legal driving discovery",
     "title": "Find the right road for the build.",
     "description": "Discover circuits, controlled test venues and driving routes with their source, access rules and current confidence kept visible.",

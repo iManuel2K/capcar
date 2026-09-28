@@ -61,10 +61,16 @@ export function RoadbookEventRail({
               const startsAt = new Date(event.startsAt);
               const endsAt = new Date(event.endsAt);
               const sameDay = startsAt.toDateString() === endsAt.toDateString();
-              const date = new Intl.DateTimeFormat(locale, {
-                dateStyle: "medium",
-                ...(sameDay ? { timeStyle: "short" as const } : {}),
-              }).format(startsAt);
+              const date = event.allDay
+                ? sameDay
+                  ? new Intl.DateTimeFormat(locale, {
+                      dateStyle: "medium",
+                    }).format(startsAt)
+                  : `${new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(startsAt)} – ${new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(endsAt)}`
+                : new Intl.DateTimeFormat(locale, {
+                    dateStyle: "medium",
+                    ...(sameDay ? { timeStyle: "short" as const } : {}),
+                  }).format(startsAt);
 
               return (
                 <article

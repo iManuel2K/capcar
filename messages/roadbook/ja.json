@@ -27,6 +27,11 @@
         "urban": "urban"
       }
     },
+    "media": {
+      "location": "この場所の写真",
+      "representative": "イメージ写真",
+      "credit": "写真 · {photographer}"
+    },
     "eyebrow": "Roadbook · 合法的なドライビングスポット",
     "title": "このビルドに合う道を見つけよう。",
     "description": "サーキット、管理されたテスト施設、ドライブルートを、情報源・利用条件・確認状況とともに探せます。",
