@@ -22,7 +22,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { useId, useMemo, useState } from "react";
 
 import { evaluateRoadbookReadiness } from "@/features/roadbook/roadbook-readiness";
-import { photoSpotDetails } from "@/features/roadbook/roadbook-schema";
+import {
+  photoSpotDetails,
+  venueHeroImage,
+} from "@/features/roadbook/roadbook-schema";
 import type {
   RecordRoadbookVisitInput,
   RoadbookEvent,
@@ -65,6 +68,7 @@ export function RoadbookVenueDrawer({
   const obdInputId = useId();
   const selectedVehicle = vehicles.find((vehicle) => vehicle.id === vehicleId);
   const photoSpot = photoSpotDetails(venue);
+  const heroImage = venueHeroImage(venue);
   const isPhotoSpot = venue.category === "car_photo_spot";
   const readiness = useMemo(
     () => evaluateRoadbookReadiness(selectedVehicle, venue),
@@ -134,6 +138,34 @@ export function RoadbookVenueDrawer({
       </div>
 
       <div className="space-y-5 p-5">
+        {heroImage && (
+          <figure className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035]">
+            {/* Curated Roadbook imagery keeps the drawer lightweight and avoids a fullscreen takeover. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={heroImage.url}
+              alt={heroImage.alt}
+              loading="lazy"
+              decoding="async"
+              className="h-44 w-full object-cover sm:h-52 lg:h-44"
+            />
+            <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-black/90 via-black/45 to-transparent px-3 pt-10 pb-3 text-[10px] text-white/72">
+              <span className="rounded-full border border-white/15 bg-black/35 px-2 py-1 font-semibold tracking-[0.08em] uppercase backdrop-blur-md">
+                {t(`media.${heroImage.context}`)}
+              </span>
+              <a
+                href={heroImage.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-8 items-center gap-1.5 text-right transition hover:text-white"
+              >
+                {t("media.credit", { photographer: heroImage.photographer })}
+                <ExternalLink className="size-3" />
+              </a>
+            </figcaption>
+          </figure>
+        )}
+
         {venue.category === "autobahn_context" && (
           <SafetyNotice text={t("safety.autobahn")} />
         )}
@@ -185,7 +217,7 @@ export function RoadbookVenueDrawer({
                   .join(" · ")}
               </p>
             )}
-            {photoSpot.imageUrl && photoSpot.imageLicense && (
+            {!heroImage && photoSpot.imageUrl && photoSpot.imageLicense && (
               <a
                 href={photoSpot.imageUrl}
                 target="_blank"
@@ -215,12 +247,18 @@ export function RoadbookVenueDrawer({
                 const start = new Date(event.startsAt);
                 const end = new Date(event.endsAt);
                 const sameDay = start.toDateString() === end.toDateString();
-                const date = sameDay
-                  ? new Intl.DateTimeFormat(locale, {
-                      dateStyle: "medium",
-                      timeStyle: "short",
-                    }).format(start)
-                  : `${new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(start)} – ${new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(end)}`;
+                const date = event.allDay
+                  ? sameDay
+                    ? new Intl.DateTimeFormat(locale, {
+                        dateStyle: "medium",
+                      }).format(start)
+                    : `${new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(start)} – ${new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(end)}`
+                  : sameDay
+                    ? new Intl.DateTimeFormat(locale, {
+                        dateStyle: "medium",
+                        timeStyle: "short",
+                      }).format(start)
+                    : `${new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(start)} – ${new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(end)}`;
                 return (
                   <article
                     key={event.id}
