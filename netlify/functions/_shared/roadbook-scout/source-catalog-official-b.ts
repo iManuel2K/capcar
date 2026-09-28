@@ -1,0 +1,28 @@
+import type { ScoutSource } from "./types";
+
+export const data = [
+  {"key":"slovakia-ring","kind":"event_page","scope":"europe","name":"Slovakia Ring","url":"https://slovakiaring.sk/en/calendar","countryCode":"SK"},
+  {"key":"grobnk","kind":"event_page","scope":"europe","name":"Automotodrom Grobnik","url":"https://grobnik.hr/events/","countryCode":"HR"},
+  {"key":"drift-masters","kind":"event_page","scope":"europe","name":"Drift Masters","url":"https://dm.gp/events/","countryCode":"PL"},
+  {"key":"tierp-arena","kind":"event_page","scope":"europe","name":"Tierp Arena","url":"https://tierparena.com/events/","countryCode":"SE"},
+  {"key":"mantorp-park","kind":"event_page","scope":"europe","name":"Mantorp Park","url":"https://www.mantorppark.com/kalender/","countryCode":"SE"},
+  {"key":"cota","kind":"event_page","scope":"global_major","name":"Circuit of the Americas","url":"https://circuitoftheamericas.com/calendar/","countryCode":"US"},
+  {"key":"laguna-seca","kind":"event_page","scope":"global_major","name":"WeatherTech Raceway Laguna Seca","url":"https://www.weathertechraceway.com/events","countryCode":"US"},
+  {"key":"daytona","kind":"event_page","scope":"global_major","name":"Daytona International Speedway","url":"https://www.daytonainternationalspeedway.com/events/","countryCode":"US"},
+  {"key":"sebring","kind":"event_page","scope":"global_major","name":"Sebring International Raceway","url":"https://www.sebringraceway.com/events/","countryCode":"US"},
+  {"key":"watkins-glen","kind":"event_page","scope":"global_major","name":"Watkins Glen International","url":"https://www.theglen.com/events/","countryCode":"US"},
+  {"key":"road-atlanta","kind":"event_page","scope":"global_major","name":"Michelin Raceway Road Atlanta","url":"https://www.roadatlanta.com/events","countryCode":"US"},
+  {"key":"suzuka","kind":"event_page","scope":"global_major","name":"Suzuka Circuit","url":"https://www.suzukacircuit.jp/eng/event_s/","countryCode":"JP"},
+  {"key":"fuji-speedway","kind":"event_page","scope":"global_major","name":"Fuji Speedway","url":"https://www.fsw.tv/en/event/","countryCode":"JP"},
+  {"key":"motegi","kind":"event_page","scope":"global_major","name":"Mobility Resort Motegi","url":"https://www.mr-motegi.jp/eng/event/","countryCode":"JP"},
+  {"key":"sepang","kind":"event_page","scope":"global_major","name":"Sepang International Circuit","url":"https://www.sepangcircuit.com/events","countryCode":"MY"},
+  {"key":"bathurst","kind":"event_page","scope":"global_major","name":"Mount Panorama","url":"https://www.bathurst.nsw.gov.au/Events","countryCode":"AU"},
+  {"key":"yas-marina","kind":"event_page","scope":"global_major","name":"Yas Marina Circuit","url":"https://www.yasmarinacircuit.com/en/calendar","countryCode":"AE"},
+  {"key":"bahrain-circuit","kind":"event_page","scope":"global_major","name":"Bahrain International Circuit","url":"https://www.bahraingp.com/events/","countryCode":"BH"},
+  {"key":"kyalami","kind":"event_page","scope":"global_major","name":"Kyalami Grand Prix Circuit","url":"https://kyalamigrandprixcircuit.com/pebble.asp?relid=161","countryCode":"ZA"},
+  {"key":"route-grandes-alpes","kind":"place_page","scope":"europe","name":"Route des Grandes Alpes","url":"https://en.routedesgrandesalpes.com/","countryCode":"FR"},
+  {"key":"norwegian-scenic-routes","kind":"place_page","scope":"europe","name":"Norwegian Scenic Routes","url":"https://www.nasjonaleturistveger.no/en/routes/","countryCode":"NO"},
+  {"key":"grossglockner-road","kind":"place_page","scope":"europe","name":"Grossglockner High Alpine Road","url":"https://www.grossglockner.at/gg/en/index","countryCode":"AT"},
+  {"key":"north-coast-500","kind":"place_page","scope":"europe","name":"North Coast 500","url":"https://www.northcoast500.com/","countryCode":"GB"},
+  {"key":"wild-atlantic-way","kind":"place_page","scope":"europe","name":"Wild Atlantic Way","url":"https://www.discoverireland.ie/wild-atlantic-way","countryCode":"IE"},
+] satisfies readonly ScoutSource[];
