@@ -40,9 +40,9 @@
       "upcomingEvents": "{count, plural, =1 {një event i ardhshëm} other {# evente të ardhshme}}"
     },
     "fallback": {
-      "styles": "Harta origjinale OpenStreetMap · ngjyrat e qyteteve kërkojnë WebGL.",
+      "styles": "Rezerva OpenStreetMap është aktive · pllakat e stiluara po ngarkohen ose nuk janë të disponueshme.",
       "label": "Harta e përputhshmërisë",
-      "description": "Roadbook kaloi në një hartë më të lehtë sepse WebGL nuk është i disponueshëm. Detajet dhe vizitat e ruajtura vazhdojnë të funksionojnë."
+      "description": "Roadbook po përdor hartën e lehtë rezervë. Detajet dhe vizitat e ruajtura vazhdojnë të funksionojnë."
     },
     "resultCount": "{count, plural, =1 {Një vend në hartë} other {# vende në hartë}}",
     "retry": "Provo përsëri",

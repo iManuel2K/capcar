@@ -40,9 +40,9 @@
       "upcomingEvents": "今後のイベント：{count}件"
     },
     "fallback": {
-      "styles": "OpenStreetMap の標準タイルを表示中。都市ごとの配色には WebGL が必要です。",
+      "styles": "OpenStreetMap のフォールバックを表示中。スタイル付きタイルは読み込み中、または利用できません。",
       "label": "互換マップ",
-      "description": "WebGLを利用できないため、軽量マップに切り替えました。場所の詳細と保存した訪問記録は引き続き利用できます。"
+      "description": "軽量フォールバックマップを使用しています。場所の詳細と保存した訪問記録は引き続き利用できます。"
     },
     "resultCount": "表示中のスポット：{count}件",
     "retry": "再試行",

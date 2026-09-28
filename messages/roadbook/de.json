@@ -40,9 +40,9 @@
       "upcomingEvents": "{count, plural, =1 {eine bevorstehende Veranstaltung} other {# bevorstehende Veranstaltungen}}"
     },
     "fallback": {
-      "styles": "Originale OpenStreetMap-Kacheln · Stadtfarben benötigen WebGL.",
+      "styles": "OpenStreetMap-Fallback aktiv · Stil-Kacheln werden geladen oder sind nicht verfügbar.",
       "label": "Kompatibilitätskarte",
-      "description": "Roadbook nutzt eine leichte Kartenansicht, weil WebGL nicht verfügbar ist. Ortsdetails und gespeicherte Besuche funktionieren weiterhin."
+      "description": "Roadbook nutzt die leichte Ersatzkarte. Ortsdetails und gespeicherte Besuche funktionieren weiterhin."
     },
     "resultCount": "{count, plural, =1 {Ein Ort im Ausschnitt} other {# Orte im Ausschnitt}}",
     "retry": "Erneut versuchen",

@@ -40,9 +40,9 @@
       "upcomingEvents": "{count, plural, =1 {one upcoming event} other {# upcoming events}}"
     },
     "fallback": {
-      "styles": "Original OpenStreetMap tiles · city colors require WebGL.",
+      "styles": "OpenStreetMap fallback active · styled tiles are loading or unavailable.",
       "label": "Compatibility map",
-      "description": "Roadbook switched to a lightweight map because WebGL is unavailable. Venue details and saved visits still work."
+      "description": "Roadbook is using its lightweight fallback. Venue details and saved visits still work."
     },
     "resultCount": "{count, plural, =1 {One place in view} other {# places in view}}",
     "retry": "Try again",
