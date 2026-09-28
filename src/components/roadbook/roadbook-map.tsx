@@ -7,11 +7,6 @@ import L, {
   type TileLayer,
 } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import type {
-  GeoJSONSource,
-  Map as MapLibreMap,
-  Marker as MapLibreMarker,
-} from "maplibre-gl";
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -27,28 +22,19 @@ import type {
   RoadbookVenue,
 } from "@/features/roadbook/roadbook-schema";
 import {
-  applyRoadbookVectorPalette,
-  ROADBOOK_VECTOR_STYLE_URL,
-  supportsRoadbookWebGL,
+  createRoadbookVectorLayerStyles,
+  parseRoadbookVectorProvider,
+  ROADBOOK_VECTOR_TILEJSON_URL,
+  type RoadbookVectorProvider,
 } from "@/features/roadbook/roadbook-vector-style";
 
 const PRIMARY_TILES = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const FALLBACK_TILES = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 const OSM_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-const VECTOR_LOAD_TIMEOUT_MS = 9_000;
-const WEBGL_RECOVERY_TIMEOUT_MS = 5_000;
-const ROUTE_SOURCE_ID = "roadbook-selected-route";
-
-type RoadbookRouteData = Exclude<
-  Parameters<GeoJSONSource["setData"]>[0],
-  string
->;
-
-const emptyRoute: RoadbookRouteData = {
-  type: "FeatureCollection",
-  features: [],
-};
+const OPENFREE_ATTRIBUTION =
+  '&copy; <a href="https://openfreemap.org/">OpenFreeMap</a> · OpenMapTiles';
+const VECTOR_PANE = "roadbook-vector-basemap";
 
 const markerIcons: Record<RoadbookCategory, string> = {
   drift_circuit:
@@ -91,7 +77,7 @@ function markerElement(
   return element;
 }
 
-function radiusFromLeafletMap(instance: LeafletMap) {
+function radiusFromMap(instance: LeafletMap) {
   return Math.min(
     1000,
     Math.max(
@@ -102,27 +88,24 @@ function radiusFromLeafletMap(instance: LeafletMap) {
   );
 }
 
-function radiusFromVectorMap(instance: MapLibreMap) {
-  const center = instance.getCenter();
-  const corner = instance.getBounds().getNorthEast();
-  return Math.min(1000, Math.max(10, center.distanceTo(corner) / 1000));
-}
-
-function routeData(selectedVenue?: RoadbookVenue): RoadbookRouteData {
-  if (!selectedVenue?.routeGeoJson) return emptyRoute;
-  return {
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        properties: {},
-        geometry: {
-          type: "LineString",
-          coordinates: selectedVenue.routeGeoJson.coordinates,
-        },
-      },
-    ],
-  };
+function monitorVectorTiles(
+  layer: L.VectorGrid.Protobuf,
+  onResult: (loaded: boolean) => void,
+) {
+  const original = layer._getVectorTilePromise.bind(layer) as (
+    ...args: unknown[]
+  ) => Promise<unknown>;
+  layer._getVectorTilePromise = ((...args: unknown[]) =>
+    original(...args)
+      .then((result) => {
+        const layers = (result as { layers?: Record<string, unknown> }).layers;
+        onResult(Boolean(layers && Object.keys(layers).length > 0));
+        return result;
+      })
+      .catch(() => {
+        onResult(false);
+        return { layers: {} };
+      })) as typeof layer._getVectorTilePromise;
 }
 
 export function RoadbookMap({
@@ -158,35 +141,31 @@ export function RoadbookMap({
 }) {
   const visualStyle = ROADBOOK_MAP_STYLES[mode];
   const leafletContainer = useRef<HTMLDivElement>(null);
-  const vectorContainer = useRef<HTMLDivElement>(null);
   const map = useRef<LeafletMap | null>(null);
-  const tileLayer = useRef<TileLayer | null>(null);
+  const rasterTiles = useRef<TileLayer | null>(null);
+  const styledTiles = useRef<L.VectorGrid.Protobuf | null>(null);
+  const attribution = useRef<L.Control.Attribution | null>(null);
+  const hasOpenFreeAttribution = useRef(false);
   const markers = useRef<Marker[]>([]);
   const userMarker = useRef<L.CircleMarker | null>(null);
   const selectedRoute = useRef<Polyline | null>(null);
-  const vectorMap = useRef<MapLibreMap | null>(null);
-  const vectorMarkers = useRef<MapLibreMarker[]>([]);
-  const vectorUserMarker = useRef<MapLibreMarker | null>(null);
-  const vectorModule = useRef<typeof import("maplibre-gl") | null>(null);
-  const vectorActive = useRef(false);
   const initialCenter = useRef(center);
-  const initialMode = useRef(mode);
-  const activeMode = useRef(mode);
   const onSelectRef = useRef(onSelect);
   const onViewportChangeRef = useRef(onViewportChange);
   const onErrorRef = useRef(onError);
   const onReadyRef = useRef(onReady);
   const onRendererChangeRef = useRef(onRendererChange);
-  const [vectorReady, setVectorReady] = useState(false);
+  const [vectorProvider, setVectorProvider] =
+    useState<RoadbookVectorProvider | null>(null);
+  const [styledReady, setStyledReady] = useState(false);
 
   useEffect(() => {
-    activeMode.current = mode;
     onSelectRef.current = onSelect;
     onViewportChangeRef.current = onViewportChange;
     onErrorRef.current = onError;
     onReadyRef.current = onReady;
     onRendererChangeRef.current = onRendererChange;
-  }, [mode, onError, onReady, onRendererChange, onSelect, onViewportChange]);
+  }, [onError, onReady, onRendererChange, onSelect, onViewportChange]);
 
   useEffect(() => {
     if (!leafletContainer.current || map.current) return;
@@ -204,6 +183,9 @@ export function RoadbookMap({
       boxZoom: true,
       keyboard: true,
     });
+    const vectorPane = instance.createPane(VECTOR_PANE);
+    vectorPane.style.zIndex = "210";
+    vectorPane.style.pointerEvents = "none";
 
     let recovery = { failures: 0, fallbackAttempted: false };
     let hasLoadedTiles = false;
@@ -215,9 +197,11 @@ export function RoadbookMap({
     });
 
     L.control.zoom({ position: "bottomleft" }).addTo(instance);
-    L.control
-      .attribution({ position: "bottomright", prefix: false })
-      .addTo(instance);
+    const attributionControl = L.control.attribution({
+      position: "bottomright",
+      prefix: false,
+    });
+    attributionControl.addTo(instance);
 
     tiles.on("load", () => {
       hasLoadedTiles = true;
@@ -227,22 +211,22 @@ export function RoadbookMap({
       const result = recoverRoadbookTiles(recovery, hasLoadedTiles);
       recovery = result.state;
       if (result.action === "fallback") tiles.setUrl(FALLBACK_TILES, false);
-      if (result.action === "error" && !vectorActive.current)
+      if (result.action === "error" && !styledTiles.current)
         onErrorRef.current("MAP_TILES_FAILED");
     });
     tiles.addTo(instance);
 
     instance.on("moveend", () => {
-      if (vectorActive.current) return;
       const next = instance.getCenter();
       onViewportChangeRef.current(
         { latitude: next.lat, longitude: next.lng },
-        radiusFromLeafletMap(instance),
+        radiusFromMap(instance),
       );
     });
 
     map.current = instance;
-    tileLayer.current = tiles;
+    rasterTiles.current = tiles;
+    attribution.current = attributionControl;
 
     return () => {
       markers.current.forEach((marker) => marker.remove());
@@ -250,238 +234,96 @@ export function RoadbookMap({
       selectedRoute.current?.remove();
       instance.remove();
       map.current = null;
-      tileLayer.current = null;
+      rasterTiles.current = null;
+      styledTiles.current = null;
+      attribution.current = null;
     };
   }, []);
 
   useEffect(() => {
-    if (
-      !vectorContainer.current ||
-      vectorMap.current ||
-      !supportsRoadbookWebGL()
-    )
-      return;
-
+    const controller = new AbortController();
     let disposed = false;
-    let failed = false;
-    let vectorTileFailures = 0;
-    let instance: MapLibreMap | undefined;
-    let timeout = 0;
-    let contextRecoveryTimeout = 0;
+    (window as Window & { L?: typeof L }).L = L;
 
-    const fallBackToLeaflet = () => {
-      if (failed) return;
-      failed = true;
-      window.clearTimeout(timeout);
-      window.clearTimeout(contextRecoveryTimeout);
-      // The dormant raster map only inherits the active camera on recovery.
-      // It never runs a second, continuously synchronized viewport state.
-      if (instance && map.current) {
-        const camera = instance.getCenter();
-        map.current.setView([camera.lat, camera.lng], instance.getZoom(), {
-          animate: false,
+    void import("leaflet.vectorgrid")
+      .then(async () => {
+        const response = await fetch(ROADBOOK_VECTOR_TILEJSON_URL, {
+          signal: controller.signal,
         });
-      }
-      vectorActive.current = false;
-      setVectorReady(false);
-      onRendererChangeRef.current(false);
-      vectorMarkers.current.forEach((marker) => marker.remove());
-      vectorMarkers.current = [];
-      vectorUserMarker.current?.remove();
-      vectorUserMarker.current = null;
-      instance?.remove();
-      vectorMap.current = null;
-      vectorModule.current = null;
-    };
-
-    void import("maplibre-gl")
-      .then((maplibre) => {
-        if (disposed || !vectorContainer.current) return;
-
-        vectorModule.current = maplibre;
-        maplibre.setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
-        maplibre.setWorkerCount(1);
-        const leaflet = map.current;
-        const leafletCenter = leaflet?.getCenter();
-        instance = new maplibre.Map({
-          container: vectorContainer.current,
-          style: ROADBOOK_VECTOR_STYLE_URL,
-          center: leafletCenter
-            ? [leafletCenter.lng, leafletCenter.lat]
-            : [initialCenter.current.longitude, initialCenter.current.latitude],
-          zoom: leaflet?.getZoom() ?? 7,
-          minZoom: 3,
-          maxZoom: 18,
-          attributionControl: false,
-          dragRotate: false,
-          pitchWithRotate: false,
-          touchPitch: false,
-          scrollZoom: true,
-          doubleClickZoom: true,
-          touchZoomRotate: true,
-          boxZoom: true,
-          keyboard: true,
-          maxTileCacheSize: 64,
-          pixelRatio: Math.min(window.devicePixelRatio || 1, 1.5),
-          canvasContextAttributes: {
-            contextType: "webgl2",
-            failIfMajorPerformanceCaveat: false,
-            antialias: false,
-            preserveDrawingBuffer: false,
-          },
-        });
-        vectorMap.current = instance;
-
-        instance.addControl(
-          new maplibre.NavigationControl({
-            showCompass: false,
-            visualizePitch: false,
-          }),
-          "bottom-left",
-        );
-        instance.addControl(
-          new maplibre.AttributionControl({
-            compact: true,
-            customAttribution:
-              "OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
-          }),
-          "bottom-right",
-        );
-
-        instance.on("error", () => {
-          // Tile, glyph, and sprite requests can fail independently and then
-          // recover. The load timeout still catches a broken style or worker.
-          vectorTileFailures += 1;
-          if (vectorTileFailures >= 8) fallBackToLeaflet();
-        });
-        instance.on("idle", () => {
-          vectorTileFailures = 0;
-        });
-        instance.on("webglcontextlost", () => {
-          if (failed || !instance) return;
-          const camera = instance.getCenter();
-          map.current?.setView([camera.lat, camera.lng], instance.getZoom(), {
-            animate: false,
-          });
-          vectorActive.current = false;
-          setVectorReady(false);
-          onRendererChangeRef.current(false);
-          window.clearTimeout(contextRecoveryTimeout);
-          contextRecoveryTimeout = window.setTimeout(
-            fallBackToLeaflet,
-            WEBGL_RECOVERY_TIMEOUT_MS,
-          );
-        });
-        instance.on("webglcontextrestored", () => {
-          if (disposed || failed || !instance) return;
-          window.clearTimeout(contextRecoveryTimeout);
-          contextRecoveryTimeout = 0;
-          vectorTileFailures = 0;
-          applyRoadbookVectorPalette(
-            instance,
-            ROADBOOK_MAP_STYLES[activeMode.current].vector,
-          );
-          vectorActive.current = true;
-          setVectorReady(true);
-          onRendererChangeRef.current(true);
-        });
-
-        instance.on("moveend", () => {
-          if (!vectorActive.current || !instance) return;
-          const next = instance.getCenter();
-          onViewportChangeRef.current(
-            { latitude: next.lat, longitude: next.lng },
-            radiusFromVectorMap(instance),
-          );
-        });
-
-        instance.once("load", () => {
-          if (disposed || failed || !instance) return;
-          applyRoadbookVectorPalette(
-            instance,
-            ROADBOOK_MAP_STYLES[initialMode.current].vector,
-          );
-          instance.addSource(ROUTE_SOURCE_ID, {
-            type: "geojson",
-            data: emptyRoute,
-          });
-          instance.addLayer({
-            id: "roadbook-route-casing",
-            type: "line",
-            source: ROUTE_SOURCE_ID,
-            layout: { "line-cap": "round", "line-join": "round" },
-            paint: {
-              "line-color": "#07100d",
-              "line-width": [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                7,
-                5,
-                12,
-                9.5,
-                15,
-                13,
-              ],
-              "line-opacity": 0.82,
-            },
-          });
-          instance.addLayer({
-            id: "roadbook-route-line",
-            type: "line",
-            source: ROUTE_SOURCE_ID,
-            layout: { "line-cap": "round", "line-join": "round" },
-            paint: {
-              "line-color": "#e72d45",
-              "line-width": [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                7,
-                2.4,
-                12,
-                5,
-                15,
-                7,
-              ],
-              "line-opacity": 1,
-            },
-          });
-          window.clearTimeout(timeout);
-          const fallbackMap = map.current;
-          if (fallbackMap) {
-            const fallbackCenter = fallbackMap.getCenter();
-            instance.jumpTo({
-              center: [fallbackCenter.lng, fallbackCenter.lat],
-              zoom: fallbackMap.getZoom(),
-            });
-          }
-          vectorActive.current = true;
-          setVectorReady(true);
-          onRendererChangeRef.current(true);
-          onReadyRef.current();
-        });
-
-        timeout = window.setTimeout(fallBackToLeaflet, VECTOR_LOAD_TIMEOUT_MS);
+        if (!response.ok) throw new Error("OPENFREE_TILEJSON_FAILED");
+        const provider = parseRoadbookVectorProvider(await response.json());
+        if (!provider) throw new Error("OPENFREE_TILEJSON_INVALID");
+        if (!disposed) setVectorProvider(provider);
       })
       .catch(() => {
-        if (!disposed) fallBackToLeaflet();
+        if (disposed || controller.signal.aborted) return;
+        setStyledReady(false);
+        onRendererChangeRef.current(false);
       });
 
     return () => {
       disposed = true;
-      window.clearTimeout(timeout);
-      window.clearTimeout(contextRecoveryTimeout);
-      vectorActive.current = false;
-      vectorMarkers.current.forEach((marker) => marker.remove());
-      vectorMarkers.current = [];
-      vectorUserMarker.current?.remove();
-      vectorUserMarker.current = null;
-      instance?.remove();
-      vectorMap.current = null;
-      vectorModule.current = null;
+      controller.abort();
     };
   }, []);
+
+  useEffect(() => {
+    const instance = map.current;
+    if (!instance || !vectorProvider || !L.vectorGrid) return;
+
+    let disposed = false;
+    let successfulTiles = 0;
+    const previous = styledTiles.current;
+    const next = L.vectorGrid.protobuf(vectorProvider.tileUrl, {
+      pane: VECTOR_PANE,
+      minZoom: 3,
+      maxZoom: 18,
+      maxNativeZoom: 14,
+      rendererFactory: L.canvas.tile,
+      interactive: false,
+      vectorTileLayerStyles: createRoadbookVectorLayerStyles(
+        visualStyle.vector,
+        vectorProvider.layerIds,
+      ) as L.VectorGrid.ProtobufOptions["vectorTileLayerStyles"],
+    });
+
+    monitorVectorTiles(next, (loaded) => {
+      if (loaded) successfulTiles += 1;
+    });
+
+    const activate = () => {
+      if (disposed) return;
+      if (successfulTiles === 0) {
+        next.remove();
+        if (!previous) {
+          rasterTiles.current?.setOpacity(1);
+          setStyledReady(false);
+          onRendererChangeRef.current(false);
+        }
+        return;
+      }
+
+      previous?.remove();
+      styledTiles.current = next;
+      rasterTiles.current?.setOpacity(0);
+      if (!hasOpenFreeAttribution.current) {
+        attribution.current?.addAttribution(OPENFREE_ATTRIBUTION);
+        hasOpenFreeAttribution.current = true;
+      }
+      setStyledReady(true);
+      onRendererChangeRef.current(true);
+      onReadyRef.current();
+    };
+
+    next.once("load", activate);
+    next.addTo(instance);
+
+    return () => {
+      disposed = true;
+      next.off("load", activate);
+      if (styledTiles.current !== next) next.remove();
+    };
+  }, [vectorProvider, visualStyle.vector]);
 
   useEffect(() => {
     const instance = map.current;
@@ -489,7 +331,6 @@ export function RoadbookMap({
 
     markers.current.forEach((marker) => marker.remove());
     const counts = eventCounts(events);
-
     markers.current = venues.map((venue) => {
       const eventCount = counts[venue.id] ?? 0;
       const marker = L.marker([venue.latitude, venue.longitude], {
@@ -514,42 +355,6 @@ export function RoadbookMap({
   }, [events, selectedVenue?.id, upcomingEventsLabel, venues]);
 
   useEffect(() => {
-    const instance = vectorMap.current;
-    const maplibre = vectorModule.current;
-    if (!vectorReady || !instance || !maplibre) return;
-
-    vectorMarkers.current.forEach((marker) => marker.remove());
-    const counts = eventCounts(events);
-    vectorMarkers.current = venues.map((venue) => {
-      const eventCount = counts[venue.id] ?? 0;
-      const shell = document.createElement("div");
-      shell.className = "roadbook-vector-marker-shell";
-      const element = markerElement(
-        venue,
-        venue.id === selectedVenue?.id,
-        eventCount,
-      );
-      element.tabIndex = 0;
-      element.setAttribute("role", "button");
-      element.setAttribute(
-        "aria-label",
-        `${venue.name}${eventCount > 0 ? `, ${upcomingEventsLabel(eventCount)}` : ""}`,
-      );
-      const selectVenue = () => onSelectRef.current(venue);
-      element.addEventListener("click", selectVenue);
-      element.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
-        selectVenue();
-      });
-      shell.append(element);
-      return new maplibre.Marker({ element: shell, anchor: "bottom" })
-        .setLngLat([venue.longitude, venue.latitude])
-        .addTo(instance);
-    });
-  }, [events, selectedVenue?.id, upcomingEventsLabel, vectorReady, venues]);
-
-  useEffect(() => {
     const instance = map.current;
     if (!instance) return;
 
@@ -566,36 +371,18 @@ export function RoadbookMap({
           className: "roadbook-user-position",
         },
       ).addTo(instance);
-    }
-
-    vectorUserMarker.current?.remove();
-    vectorUserMarker.current = null;
-    const vector = vectorMap.current;
-    const maplibre = vectorModule.current;
-    if (userPosition && vectorReady && vector && maplibre) {
-      const element = document.createElement("div");
-      element.className = "roadbook-user-position";
-      element.setAttribute("aria-label", userLocationLabel);
-      vectorUserMarker.current = new maplibre.Marker({ element })
-        .setLngLat([userPosition.longitude, userPosition.latitude])
-        .addTo(vector);
+      const element = userMarker.current.getElement();
+      element?.setAttribute("role", "img");
+      element?.setAttribute("aria-label", userLocationLabel);
     }
 
     if (!userPosition) return;
-    if (vectorActive.current && vector) {
-      vector.flyTo({
-        center: [userPosition.longitude, userPosition.latitude],
-        zoom: Math.max(vector.getZoom(), 10),
-        duration: 850,
-      });
-    } else {
-      instance.flyTo(
-        [userPosition.latitude, userPosition.longitude],
-        Math.max(instance.getZoom(), 10),
-        { duration: 0.85 },
-      );
-    }
-  }, [userLocationLabel, userPosition, vectorReady]);
+    instance.flyTo(
+      [userPosition.latitude, userPosition.longitude],
+      Math.max(instance.getZoom(), 10),
+      { duration: 0.85 },
+    );
+  }, [userLocationLabel, userPosition]);
 
   useEffect(() => {
     const instance = map.current;
@@ -618,24 +405,10 @@ export function RoadbookMap({
     } else {
       selectedRoute.current = null;
     }
-
-    const vectorSource = vectorMap.current?.getSource(
-      ROUTE_SOURCE_ID,
-    ) as GeoJSONSource | null;
-    vectorSource?.setData(routeData(selectedVenue));
-  }, [selectedVenue, vectorReady]);
+  }, [selectedVenue]);
 
   useEffect(() => {
     if (!selectedVenue) return;
-    const vector = vectorMap.current;
-    if (vectorActive.current && vector) {
-      vector.flyTo({
-        center: [selectedVenue.longitude, selectedVenue.latitude],
-        zoom: Math.max(vector.getZoom(), 11),
-        duration: 850,
-      });
-      return;
-    }
     const instance = map.current;
     instance?.flyTo(
       [selectedVenue.latitude, selectedVenue.longitude],
@@ -644,15 +417,9 @@ export function RoadbookMap({
     );
   }, [selectedVenue]);
 
-  useEffect(() => {
-    const instance = vectorMap.current;
-    if (!vectorReady || !instance || !instance.isStyleLoaded()) return;
-    applyRoadbookVectorPalette(instance, visualStyle.vector);
-  }, [vectorReady, visualStyle.vector]);
-
   return (
     <div
-      className={`roadbook-map-shell absolute inset-0 ${vectorReady ? "is-vector-ready" : ""}`}
+      className={`roadbook-map-shell absolute inset-0 ${styledReady ? "is-vector-ready" : ""}`}
       data-roadbook-style={mode}
       style={
         {
@@ -665,14 +432,6 @@ export function RoadbookMap({
       <div
         ref={leafletContainer}
         className="roadbook-leaflet-map absolute inset-0"
-        aria-hidden={vectorReady || undefined}
-        inert={vectorReady}
-      />
-      <div
-        ref={vectorContainer}
-        className="roadbook-vector-map absolute inset-0"
-        aria-hidden={!vectorReady}
-        inert={!vectorReady}
       />
     </div>
   );

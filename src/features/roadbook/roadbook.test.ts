@@ -139,9 +139,9 @@ describe("Roadbook contracts", () => {
     expect(map).toContain('from "leaflet"');
     expect(map).toContain("tile.openstreetmap.org");
     expect(map).toContain("OpenStreetMap");
-    expect(map).toContain('import("maplibre-gl")');
-    expect(map).toContain("supportsRoadbookWebGL()");
-    expect(map).toContain("fallBackToLeaflet");
+    expect(map).toContain('import("leaflet.vectorgrid")');
+    expect(map).toContain("ROADBOOK_VECTOR_TILEJSON_URL");
+    expect(map).toContain("rasterTiles.current?.setOpacity(1)");
     expect(map).toContain("roadbook-map-shell");
   });
 

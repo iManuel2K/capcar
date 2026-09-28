@@ -12,7 +12,10 @@ import {
   writeRoadbookMapStyle,
 } from "./roadbook-map-style";
 import { roadbookMapModes } from "./roadbook-schema";
-import { ROADBOOK_VECTOR_STYLE_URL } from "./roadbook-vector-style";
+import {
+  createRoadbookVectorLayerStyles,
+  ROADBOOK_VECTOR_TILEJSON_URL,
+} from "./roadbook-vector-style";
 
 describe("Roadbook map styles", () => {
   it("defines exactly the nine stable city IDs", () => {
@@ -33,18 +36,18 @@ describe("Roadbook map styles", () => {
     expect(ROADBOOK_MAP_STYLES.tokyo.vector.roadMajor).toBe("#1f6665");
   });
 
-  it("uses and restyles the complete OpenFreeMap vector map", () => {
-    expect(ROADBOOK_VECTOR_STYLE_URL).toBe(
-      "https://tiles.openfreemap.org/styles/liberty",
+  it("uses real OpenFreeMap vector tiles and styles their source layers", () => {
+    expect(ROADBOOK_VECTOR_TILEJSON_URL).toBe(
+      "https://tiles.openfreemap.org/planet",
     );
-    const vectorStyle = readFileSync(
-      "src/features/roadbook/roadbook-vector-style.ts",
-      "utf8",
+    const styles = createRoadbookVectorLayerStyles(
+      ROADBOOK_MAP_STYLES.konstanz.vector,
+      ["transportation", "water", "landcover", "place"],
     );
-    expect(vectorStyle).toContain("map.getStyle().layers");
-    expect(vectorStyle).toContain('sourceLayer === "transportation"');
-    expect(vectorStyle).toContain('sourceLayer === "water"');
-    expect(vectorStyle).toContain('layer.type === "symbol"');
+    expect(styles.transportation).toBeTypeOf("function");
+    expect(styles.water).toMatchObject({ fill: true, fillOpacity: 1 });
+    expect(styles.landcover).toMatchObject({ fill: true });
+    expect(styles.place).toEqual([]);
   });
 
   it("does not color-filter raster tiles to masquerade as vector styles", () => {
@@ -62,23 +65,21 @@ describe("Roadbook map styles", () => {
   it("keeps zoom controls clear of the bottom Roadbook overlays", () => {
     const css = readFileSync("src/app/roadbook/roadbook.css", "utf8");
     expect(css).toContain(".roadbook-leaflet-map .leaflet-bottom.leaflet-left");
-    expect(css).toContain(".roadbook-vector-map .maplibregl-ctrl-bottom-left");
     expect(css).toContain("top: 50%");
     expect(css).toContain("right: max(0.75rem, env(safe-area-inset-right))");
     expect(css).toContain("z-index: 1000");
   });
 
-  it("keeps map zoom enabled and lets MapLibre recover its own context", () => {
+  it("keeps map zoom enabled without requiring WebGL", () => {
     const map = readFileSync(
       "src/components/roadbook/roadbook-map.tsx",
       "utf8",
     );
     expect(map).toContain("scrollWheelZoom: true");
-    expect(map).toContain("scrollZoom: true");
-    expect(map).toContain('instance.on("webglcontextrestored"');
-    expect(map).not.toContain(
-      '.getCanvas()\n          .addEventListener("webglcontextlost"',
-    );
+    expect(map).toContain("doubleClickZoom: true");
+    expect(map).toContain("L.vectorGrid.protobuf");
+    expect(map.toLowerCase()).not.toContain("webgl");
+    expect(map.toLowerCase()).not.toContain("maplibre");
   });
 
   it("persists valid styles and safely recovers invalid or blocked storage", () => {

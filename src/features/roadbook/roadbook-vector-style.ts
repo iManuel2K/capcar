@@ -1,139 +1,149 @@
-import type { LayerSpecification, Map as MapLibreMap } from "maplibre-gl";
+import type L from "leaflet";
 
 import type { RoadbookVectorPalette } from "./roadbook-map-style";
 
-export const ROADBOOK_VECTOR_STYLE_URL =
-  "https://tiles.openfreemap.org/styles/liberty";
+export const ROADBOOK_VECTOR_TILEJSON_URL =
+  "https://tiles.openfreemap.org/planet";
 
-type PaintProperty =
-  | "background-color"
-  | "fill-color"
-  | "fill-extrusion-color"
-  | "icon-color"
-  | "line-color"
-  | "text-color"
-  | "text-halo-color";
+export type RoadbookVectorProvider = Readonly<{
+  tileUrl: string;
+  layerIds: readonly string[];
+}>;
 
-function roadColor(layerId: string, palette: RoadbookVectorPalette) {
-  if (layerId.includes("casing")) return palette.roadOutline;
-  if (layerId.includes("rail")) return palette.roadOutline;
-  if (/(motorway|trunk|primary)/.test(layerId)) return palette.roadMajor;
-  if (/(path|pedestrian|service|track)/.test(layerId)) return palette.roadPath;
+type VectorLayerStyle =
+  | L.PathOptions
+  | L.PathOptions[]
+  | ((properties: Record<string, string>, zoom: number) => L.PathOptions[]);
+
+const majorRoads = new Set(["motorway", "trunk", "primary"]);
+const paths = new Set([
+  "path",
+  "track",
+  "footway",
+  "cycleway",
+  "pedestrian",
+  "steps",
+]);
+
+function roadWeight(zoom: number, roadClass: string) {
+  if (majorRoads.has(roadClass)) return Math.max(1.35, (zoom - 6) * 0.88);
+  if (paths.has(roadClass)) return Math.max(0.45, (zoom - 10) * 0.28);
+  return Math.max(0.75, (zoom - 8) * 0.52);
+}
+
+function roadColor(roadClass: string, palette: RoadbookVectorPalette) {
+  if (majorRoads.has(roadClass)) return palette.roadMajor;
+  if (paths.has(roadClass)) return palette.roadPath;
   return palette.roadMinor;
 }
 
-function setPaint(
-  map: MapLibreMap,
-  layer: LayerSpecification,
-  property: PaintProperty,
-  value: string,
-) {
-  try {
-    map.setPaintProperty(layer.id, property, value);
-  } catch {
-    // OpenFreeMap can add or remove optional layers without breaking Roadbook.
-  }
+export function parseRoadbookVectorProvider(
+  value: unknown,
+): RoadbookVectorProvider | null {
+  if (!value || typeof value !== "object") return null;
+  const tileJson = value as {
+    tiles?: unknown;
+    vector_layers?: unknown;
+  };
+  const tileUrl = Array.isArray(tileJson.tiles)
+    ? tileJson.tiles.find((tile): tile is string => typeof tile === "string")
+    : undefined;
+  if (!tileUrl || !tileUrl.startsWith("https://tiles.openfreemap.org/"))
+    return null;
+
+  const layerIds = Array.isArray(tileJson.vector_layers)
+    ? tileJson.vector_layers
+        .map((layer) =>
+          layer && typeof layer === "object" && "id" in layer
+            ? (layer as { id?: unknown }).id
+            : undefined,
+        )
+        .filter((id): id is string => typeof id === "string")
+    : [];
+
+  return layerIds.length > 0 ? { tileUrl, layerIds } : null;
 }
 
-export function applyRoadbookVectorPalette(
-  map: MapLibreMap,
+export function createRoadbookVectorLayerStyles(
   palette: RoadbookVectorPalette,
+  layerIds: readonly string[],
 ) {
-  const layers = map.getStyle().layers ?? [];
+  const styles: Record<string, VectorLayerStyle | []> = Object.fromEntries(
+    layerIds.map((id) => [id, []]),
+  );
 
-  for (const layer of layers) {
-    const sourceLayer = "source-layer" in layer ? layer["source-layer"] : "";
+  styles.landcover = {
+    fill: true,
+    fillColor: palette.landcover,
+    fillOpacity: 0.64,
+    stroke: false,
+  };
+  styles.landuse = styles.landcover;
+  styles.park = {
+    fill: true,
+    fillColor: palette.parks,
+    fillOpacity: 0.9,
+    stroke: false,
+  };
+  styles.water = {
+    fill: true,
+    fillColor: palette.water,
+    fillOpacity: 1,
+    stroke: false,
+  };
+  styles.waterway = {
+    color: palette.waterway,
+    opacity: 0.9,
+    weight: 1.1,
+  };
+  styles.aeroway = {
+    color: palette.aeroway,
+    fill: true,
+    fillColor: palette.aeroway,
+    fillOpacity: 0.8,
+    opacity: 0.85,
+    weight: 1.2,
+  };
+  styles.building = (_properties, zoom) =>
+    zoom < 13
+      ? []
+      : [
+          {
+            fill: true,
+            fillColor: palette.buildings,
+            fillOpacity: Math.min(0.72, (zoom - 12.5) * 0.32),
+            stroke: false,
+          },
+        ];
+  styles.boundary = {
+    color: palette.boundary,
+    dashArray: "4 4",
+    opacity: 0.5,
+    weight: 0.8,
+  };
+  styles.transportation = (properties, zoom) => {
+    const roadClass = properties.class ?? "";
+    const isPath = paths.has(roadClass);
+    if (isPath && zoom < 12) return [];
+    if (!majorRoads.has(roadClass) && !isPath && zoom < 9) return [];
+    const weight = roadWeight(zoom, roadClass);
+    return [
+      {
+        color: palette.roadOutline,
+        lineCap: "round",
+        lineJoin: "round",
+        opacity: isPath ? 0.45 : 0.78,
+        weight: weight + Math.max(0.75, weight * 0.42),
+      },
+      {
+        color: roadColor(roadClass, palette),
+        lineCap: "round",
+        lineJoin: "round",
+        opacity: isPath ? 0.82 : 1,
+        weight,
+      },
+    ];
+  };
 
-    if (layer.type === "raster") {
-      map.setLayoutProperty(layer.id, "visibility", "none");
-      continue;
-    }
-
-    if (layer.type === "background") {
-      setPaint(map, layer, "background-color", palette.land);
-      continue;
-    }
-
-    if (layer.type === "symbol") {
-      setPaint(map, layer, "text-color", palette.label);
-      setPaint(map, layer, "text-halo-color", palette.labelHalo);
-      setPaint(map, layer, "icon-color", palette.label);
-      continue;
-    }
-
-    if (sourceLayer === "water" || sourceLayer === "water_name") {
-      setPaint(
-        map,
-        layer,
-        layer.type === "line" ? "line-color" : "fill-color",
-        palette.water,
-      );
-      continue;
-    }
-
-    if (sourceLayer === "waterway") {
-      setPaint(map, layer, "line-color", palette.waterway);
-      continue;
-    }
-
-    if (sourceLayer === "park") {
-      setPaint(
-        map,
-        layer,
-        layer.type === "line" ? "line-color" : "fill-color",
-        palette.parks,
-      );
-      continue;
-    }
-
-    if (sourceLayer === "landcover" || sourceLayer === "landuse") {
-      setPaint(
-        map,
-        layer,
-        layer.type === "line" ? "line-color" : "fill-color",
-        palette.landcover,
-      );
-      continue;
-    }
-
-    if (sourceLayer === "building") {
-      setPaint(
-        map,
-        layer,
-        layer.type === "fill-extrusion" ? "fill-extrusion-color" : "fill-color",
-        palette.buildings,
-      );
-      continue;
-    }
-
-    if (sourceLayer === "aeroway") {
-      setPaint(
-        map,
-        layer,
-        layer.type === "line" ? "line-color" : "fill-color",
-        palette.aeroway,
-      );
-      continue;
-    }
-
-    if (sourceLayer === "transportation") {
-      if (layer.type === "fill")
-        setPaint(map, layer, "fill-color", palette.roadMinor);
-      if (layer.type === "line")
-        setPaint(map, layer, "line-color", roadColor(layer.id, palette));
-      continue;
-    }
-
-    if (sourceLayer === "boundary" && layer.type === "line")
-      setPaint(map, layer, "line-color", palette.boundary);
-  }
-}
-
-export function supportsRoadbookWebGL() {
-  if (typeof window === "undefined") return false;
-  // Do not allocate a throwaway WebGL context before MapLibre creates the
-  // real map context. Some browsers have a low per-page context budget and
-  // will immediately evict one of them. The Map constructor remains the
-  // authoritative capability check and its failure path exposes Leaflet.
-  return typeof window.WebGL2RenderingContext !== "undefined";
+  return styles;
 }
