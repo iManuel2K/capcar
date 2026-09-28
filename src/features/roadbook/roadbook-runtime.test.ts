@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 
 import { roadbookVenueListSchema } from "./roadbook-schema";
-import { supportsRoadbookWebGL } from "./roadbook-vector-style";
+import { parseRoadbookVectorProvider } from "./roadbook-vector-style";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -17,16 +17,32 @@ describe("Roadbook browser compatibility", () => {
     expect(unsafeFunction).not.toHaveBeenCalled();
   });
 
-  it("checks WebGL2 without allocating a competing canvas context", () => {
-    const createElement = vi.fn();
-    vi.stubGlobal("WebGL2RenderingContext", class WebGL2RenderingContext {});
-    vi.spyOn(document, "createElement").mockImplementation(createElement);
-    expect(supportsRoadbookWebGL()).toBe(true);
-    expect(createElement).not.toHaveBeenCalled();
+  it("accepts the versioned OpenFreeMap vector provider", () => {
+    expect(
+      parseRoadbookVectorProvider({
+        tiles: [
+          "https://tiles.openfreemap.org/planet/20260913/{z}/{x}/{y}.pbf",
+        ],
+        vector_layers: [{ id: "water" }, { id: "transportation" }],
+      }),
+    ).toEqual({
+      tileUrl: "https://tiles.openfreemap.org/planet/20260913/{z}/{x}/{y}.pbf",
+      layerIds: ["water", "transportation"],
+    });
   });
 
-  it("keeps the raster fallback when WebGL2 is unavailable", () => {
-    vi.stubGlobal("WebGL2RenderingContext", undefined);
-    expect(supportsRoadbookWebGL()).toBe(false);
+  it("rejects untrusted or incomplete vector providers", () => {
+    expect(
+      parseRoadbookVectorProvider({
+        tiles: ["https://example.com/{z}/{x}/{y}.pbf"],
+        vector_layers: [{ id: "water" }],
+      }),
+    ).toBeNull();
+    expect(
+      parseRoadbookVectorProvider({
+        tiles: ["https://tiles.openfreemap.org/planet/{z}/{x}/{y}.pbf"],
+        vector_layers: [],
+      }),
+    ).toBeNull();
   });
 });
