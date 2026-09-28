@@ -286,6 +286,7 @@ export function RoadbookMap({
         vectorProvider.layerIds,
       ) as L.VectorGrid.ProtobufOptions["vectorTileLayerStyles"],
     });
+    next.setOpacity(0);
 
     monitorVectorTiles(next, (loaded) => {
       if (loaded) successfulTiles += 1;
@@ -303,8 +304,12 @@ export function RoadbookMap({
         return;
       }
 
-      previous?.remove();
       styledTiles.current = next;
+      next.setOpacity(1);
+      if (previous) {
+        previous.setOpacity(0);
+        window.setTimeout(() => previous.remove(), 240);
+      }
       rasterTiles.current?.setOpacity(0);
       if (!hasOpenFreeAttribution.current) {
         attribution.current?.addAttribution(OPENFREE_ATTRIBUTION);
