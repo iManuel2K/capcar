@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { getConnectedBuildMetrics, planningForBuild } from "./build-planning";
+import {
+  dependencyBlockers,
+  getConnectedBuildMetrics,
+  hasDependencyCycle,
+  planningForBuild,
+} from "./build-planning";
 import { buildSchema, buildItemSchema } from "./build-schema";
 
 const createdAt = "2026-09-15T10:00:00.000Z";
@@ -74,9 +79,39 @@ describe("connected build planning", () => {
       planned: 1_420,
       committed: 280,
       paid: 250,
+      forecast: 1_370,
+      remaining: 630,
       progress: 33,
       next: { id: "alignment" },
     });
     expect(metrics.blocked.map((item) => item.id)).toEqual(["wheels"]);
+    expect(dependencyBlockers(blocked, [first, blocked, next])).toEqual([next]);
+  });
+
+  it("detects dependency loops without treating completed work as blocked", () => {
+    const first = buildItemSchema.parse({
+      id: "first",
+      buildId: build.id,
+      title: "First",
+      stage: "foundation",
+      priority: "now",
+      estimatedCost: 100,
+      dependsOn: ["second"],
+      status: "planned",
+      createdAt,
+    });
+    const second = buildItemSchema.parse({
+      id: "second",
+      buildId: build.id,
+      title: "Second",
+      stage: "handling",
+      priority: "next",
+      estimatedCost: 100,
+      dependsOn: ["first"],
+      status: "installed",
+      createdAt,
+    });
+    expect(hasDependencyCycle([first, second])).toBe(true);
+    expect(dependencyBlockers(first, [first, second])).toEqual([]);
   });
 });

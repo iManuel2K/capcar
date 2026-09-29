@@ -11,6 +11,7 @@ import {
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 import type { RetailItem } from "@/features/retail/retail-contracts";
 import { safeRetailUrl } from "@/features/retail/retail-contracts";
+import { dependencyBlockers } from "./build-planning";
 
 const normalized = (value: string) =>
   value
@@ -189,6 +190,16 @@ export function updateWorkbench(
   const workbench = workbenchSchema.parse(
     update(item.workbench ?? workbenchSchema.parse({}), item),
   );
+  if (
+    workbench.purchase?.installedAt &&
+    dependencyBlockers(
+      item,
+      state.items.filter((entry) => entry.buildId === buildId),
+    ).length > 0
+  )
+    throw new Error(
+      "Install the required modifications before recording this installation.",
+    );
   const quote = workbench.quotes.find(
     (entry) => entry.id === workbench.selectedQuoteId,
   );
