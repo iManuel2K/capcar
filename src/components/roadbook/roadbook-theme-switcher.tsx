@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 
 import {
   roadbookMapModes,
@@ -28,6 +28,23 @@ export function RoadbookThemeSwitcher({
   compatibilityLabel: string;
 }) {
   const buttons = useRef<Array<HTMLButtonElement | null>>([]);
+  const rail = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const active = buttons.current[roadbookMapModes.indexOf(mode)];
+    const container = rail.current;
+    if (!active || !container || typeof container.scrollTo !== "function")
+      return;
+    const left =
+      active.offsetLeft - (container.clientWidth - active.clientWidth) / 2;
+    container.scrollTo({
+      left: Math.max(0, left),
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+    });
+  }, [mode]);
+
   const choose = (index: number) => {
     const next = (index + roadbookMapModes.length) % roadbookMapModes.length;
     buttons.current[next]?.focus();
@@ -51,6 +68,7 @@ export function RoadbookThemeSwitcher({
         )}
       </div>
       <div
+        ref={rail}
         role="radiogroup"
         aria-label={label}
         className="roadbook-style-chips"
