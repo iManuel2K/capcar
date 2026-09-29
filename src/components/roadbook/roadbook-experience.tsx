@@ -296,7 +296,13 @@ export function RoadbookExperience() {
         />
       </div>
 
-      <div className="absolute bottom-[5.35rem] left-1/2 z-20 hidden w-[min(64rem,calc(100%-8rem))] -translate-x-1/2 lg:block">
+      <div
+        className={`absolute bottom-[5.35rem] z-20 hidden lg:block ${
+          selectedVenue
+            ? "right-[28rem] left-5 w-auto translate-x-0"
+            : "left-1/2 w-[min(64rem,calc(100%-8rem))] -translate-x-1/2"
+        }`}
+      >
         <RoadbookThemeSwitcher
           mode={mode}
           onChange={updateMode}
