@@ -11,7 +11,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { RoadbookFilterBar } from "@/components/roadbook/roadbook-filter-bar";
-import { RoadbookEventRail } from "@/components/roadbook/roadbook-event-rail";
+import {
+  RoadbookDiscoveryRail,
+  type RoadbookDiscoveryPanel,
+} from "@/components/roadbook/roadbook-discovery-rail";
 import { RoadbookMap } from "@/components/roadbook/roadbook-map";
 import { RoadbookModerationQueue } from "@/components/roadbook/roadbook-moderation-queue";
 import { RoadbookPosterButton } from "@/components/roadbook/roadbook-poster-button";
@@ -45,7 +48,7 @@ import {
 } from "@/features/roadbook/roadbook-map-style";
 import { ROADBOOK_DATA_TIMEOUT_MS } from "@/features/roadbook/roadbook-timeout";
 
-const defaultCenter: RoadbookCenter = { latitude: 50.1109, longitude: 8.6821 };
+const defaultCenter: RoadbookCenter = { latitude: 50.1, longitude: 10.4 };
 
 export function RoadbookExperience() {
   const t = useTranslations("Roadbook");
@@ -62,14 +65,15 @@ export function RoadbookExperience() {
     ),
   );
   const [center, setCenter] = useState(defaultCenter);
-  const [radiusKm, setRadiusKm] = useState(350);
+  const [radiusKm, setRadiusKm] = useState(2500);
   const [userPosition, setUserPosition] = useState<RoadbookCenter>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [mapError, setMapError] = useState("");
   const [mapReady, setMapReady] = useState(false);
   const [vectorReady, setVectorReady] = useState(false);
-  const [eventsOpen, setEventsOpen] = useState(false);
+  const [discoveryPanel, setDiscoveryPanel] =
+    useState<RoadbookDiscoveryPanel>();
   const [visits, setVisits] = useState(() =>
     typeof window === "undefined"
       ? []
@@ -247,7 +251,7 @@ export function RoadbookExperience() {
       )}
 
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-36 bg-gradient-to-b from-[#07100d]/82 to-transparent" />
-      <div className="absolute top-3 left-3 z-20 max-w-[min(38rem,calc(100%-1.5rem))] sm:top-5 sm:left-5">
+      <div className="absolute top-3 left-3 z-30 max-w-[min(38rem,calc(100%-1.5rem))] sm:top-5 sm:left-5">
         <div className="rounded-2xl border border-white/12 bg-[#09100d]/88 p-4 shadow-2xl backdrop-blur-xl sm:p-5">
           <p className="text-[10px] font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
             {t("eyebrow")}
@@ -269,6 +273,16 @@ export function RoadbookExperience() {
               className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/45"
             />
           </label>
+          <RoadbookDiscoveryRail
+            venues={visibleVenues}
+            events={events}
+            open={discoveryPanel}
+            onOpenChange={setDiscoveryPanel}
+            onSelectVenue={(venue) => {
+              setSelectedVenue(venue);
+              setDiscoveryPanel(undefined);
+            }}
+          />
         </div>
       </div>
 
@@ -295,7 +309,7 @@ export function RoadbookExperience() {
         />
       </div>
 
-      <div className="absolute top-52 right-3 left-3 z-20 lg:hidden">
+      <div className="absolute top-[17rem] right-3 left-3 z-20 lg:hidden">
         <RoadbookThemeSwitcher
           mode={mode}
           onChange={updateMode}
@@ -307,17 +321,6 @@ export function RoadbookExperience() {
           compatibilityLabel={t("fallback.styles")}
         />
       </div>
-
-      <RoadbookEventRail
-        events={events}
-        venues={venues}
-        open={eventsOpen}
-        onOpenChange={setEventsOpen}
-        onSelectVenue={(venue) => {
-          setSelectedVenue(venue);
-          setEventsOpen(false);
-        }}
-      />
 
       <div className="absolute right-3 bottom-3 left-3 z-20 flex items-end gap-2 lg:right-[28rem] lg:left-5">
         <div className="min-w-0 flex-1">
@@ -339,7 +342,7 @@ export function RoadbookExperience() {
         </button>
       </div>
 
-      <div className="absolute top-[23rem] left-3 z-20 lg:top-[14.5rem] lg:left-5">
+      <div className="absolute top-[27rem] left-3 z-20 lg:top-[16.5rem] lg:left-5">
         <div className="rounded-xl border border-white/10 bg-[#09100d]/82 px-3 py-2 text-[11px] text-white/52 shadow-lg backdrop-blur-xl">
           {loading
             ? t("loading")

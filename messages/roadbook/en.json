@@ -30,7 +30,17 @@
     "media": {
       "location": "Photo from this location",
       "representative": "Representative image",
+      "representativeShort": "Reference",
       "credit": "Photo · {photographer}"
+    },
+    "places": {
+      "action": "Places · {count}",
+      "images": "{count} photos",
+      "eyebrow": "Visual Roadbook",
+      "title": "Places worth the drive",
+      "description": "Browse the images first, then open a place on the map for access, source and safety details.",
+      "close": "Close Roadbook discovery",
+      "empty": "No sourced places are available in this map view. Move or zoom the map to explore another area."
     },
     "eyebrow": "Roadbook · Legal driving discovery",
     "title": "Find the right road for the build.",
@@ -209,12 +219,26 @@
     },
     "moderation": {
       "action": "Review queue",
-      "title": "Roadbook reports",
-      "empty": "No reports are waiting.",
+      "title": "Roadbook review queue",
+      "description": "Review scout discoveries and community reports. Approval records an editorial decision; it never publishes an unverified place automatically.",
+      "tabs": {
+        "discoveries": "Discoveries",
+        "reports": "Reports"
+      },
+      "emptyDiscoveries": "No scout discoveries are waiting.",
+      "emptyReports": "No community reports are waiting.",
+      "kinds": {
+        "image": "Image",
+        "event": "Event",
+        "place": "Place"
+      },
+      "photographer": "Photo · {photographer}",
+      "source": "Open source",
       "evidence": "Evidence",
       "review": "Review",
       "note": "Decision note",
-      "accept": "Accept report",
+      "acceptReport": "Accept report",
+      "approveCandidate": "Approve",
       "reject": "Reject",
       "error": "The moderation decision could not be saved."
     }

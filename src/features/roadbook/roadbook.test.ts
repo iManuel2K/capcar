@@ -104,6 +104,20 @@ describe("Roadbook contracts", () => {
     expect(venue.distanceM).toBe(1250);
   });
 
+  it("opens with a bounded Europe-wide discovery query", () => {
+    const migration = readFileSync(
+      "supabase/migrations/20260929060538_finish_roadbook_discovery.sql",
+      "utf8",
+    );
+    const experience = readFileSync(
+      "src/components/roadbook/roadbook-experience.tsx",
+      "utf8",
+    );
+    expect(migration).toContain("3500000");
+    expect(migration).toContain("limit 250");
+    expect(experience).toContain("useState(2500)");
+  });
+
   it("normalizes sourced venue events", () => {
     expect(event.venueId).toBe(venue.id);
     expect(event.participation).toBe("driver");

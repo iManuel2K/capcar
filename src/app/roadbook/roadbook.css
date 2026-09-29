@@ -90,9 +90,9 @@
 /* Keep map navigation clear of the style picker and category rail. */
 .roadbook-leaflet-map .leaflet-bottom.leaflet-left {
   top: 50%;
-  right: max(0.75rem, env(safe-area-inset-right));
+  right: auto;
   bottom: auto;
-  left: auto;
+  left: max(0.75rem, env(safe-area-inset-left));
   z-index: 1000;
   transform: translateY(-50%);
   pointer-events: none;
@@ -282,6 +282,10 @@
 
   .roadbook-style-picker__description {
     font-size: 0.66rem;
+  }
+
+  .roadbook-style-picker__intro {
+    display: none;
   }
 
   .leaflet-bottom.leaflet-left {

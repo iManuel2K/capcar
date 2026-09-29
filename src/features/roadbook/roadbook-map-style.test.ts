@@ -66,7 +66,7 @@ describe("Roadbook map styles", () => {
     const css = readFileSync("src/app/roadbook/roadbook.css", "utf8");
     expect(css).toContain(".roadbook-leaflet-map .leaflet-bottom.leaflet-left");
     expect(css).toContain("top: 50%");
-    expect(css).toContain("right: max(0.75rem, env(safe-area-inset-right))");
+    expect(css).toContain("left: max(0.75rem, env(safe-area-inset-left))");
     expect(css).toContain("z-index: 1000");
   });
 

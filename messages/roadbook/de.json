@@ -30,7 +30,17 @@
     "media": {
       "location": "Foto von diesem Ort",
       "representative": "Beispielbild",
+      "representativeShort": "Referenz",
       "credit": "Foto · {photographer}"
+    },
+    "places": {
+      "action": "Orte · {count}",
+      "images": "{count} Fotos",
+      "eyebrow": "Visuelles Roadbook",
+      "title": "Orte, die die Fahrt wert sind",
+      "description": "Sieh dir zuerst die Bilder an und öffne dann einen Ort auf der Karte für Zugang, Quelle und Sicherheitshinweise.",
+      "close": "Roadbook-Entdeckung schließen",
+      "empty": "In diesem Kartenausschnitt sind keine belegten Orte verfügbar. Verschiebe oder verkleinere die Karte."
     },
     "eyebrow": "Roadbook · Legale Fahrziele",
     "title": "Finde die richtige Strecke für dein Projekt.",
@@ -209,12 +219,26 @@
     },
     "moderation": {
       "action": "Prüfliste",
-      "title": "Roadbook-Meldungen",
-      "empty": "Keine Meldungen warten auf Prüfung.",
+      "title": "Roadbook-Prüfliste",
+      "description": "Prüfe Scout-Funde und Community-Meldungen. Eine Freigabe dokumentiert die redaktionelle Entscheidung, veröffentlicht aber nie automatisch einen ungeprüften Ort.",
+      "tabs": {
+        "discoveries": "Funde",
+        "reports": "Meldungen"
+      },
+      "emptyDiscoveries": "Keine Scout-Funde warten auf Prüfung.",
+      "emptyReports": "Keine Community-Meldungen warten auf Prüfung.",
+      "kinds": {
+        "image": "Bild",
+        "event": "Veranstaltung",
+        "place": "Ort"
+      },
+      "photographer": "Foto · {photographer}",
+      "source": "Quelle öffnen",
       "evidence": "Beleg",
       "review": "Prüfen",
       "note": "Entscheidungsnotiz",
-      "accept": "Meldung annehmen",
+      "acceptReport": "Meldung annehmen",
+      "approveCandidate": "Freigeben",
       "reject": "Ablehnen",
       "error": "Die Moderationsentscheidung konnte nicht gespeichert werden."
     }

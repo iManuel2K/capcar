@@ -30,7 +30,17 @@
     "media": {
       "location": "Foto nga ky vend",
       "representative": "Imazh ilustrues",
+      "representativeShort": "Referencë",
       "credit": "Foto · {photographer}"
+    },
+    "places": {
+      "action": "Vende · {count}",
+      "images": "{count} foto",
+      "eyebrow": "Roadbook vizual",
+      "title": "Vende që ia vlejnë udhëtimin",
+      "description": "Shiko fillimisht fotot, pastaj hap vendin në hartë për hyrjen, burimin dhe informacionin e sigurisë.",
+      "close": "Mbyll zbulimin e Roadbook",
+      "empty": "Nuk ka vende me burim në këtë pamje. Lëviz ose zvogëlo hartën për të eksploruar një zonë tjetër."
     },
     "eyebrow": "Roadbook · Vende të ligjshme për ngarje",
     "title": "Gjej rrugën e duhur për projektin.",
@@ -209,12 +219,26 @@
     },
     "moderation": {
       "action": "Radha e kontrollit",
-      "title": "Raportet e Roadbook",
-      "empty": "Nuk ka raporte në pritje.",
+      "title": "Radha e kontrollit të Roadbook",
+      "description": "Kontrollo gjetjet e Scout dhe raportet e komunitetit. Miratimi regjistron një vendim redaktorial dhe nuk publikon automatikisht një vend të paverifikuar.",
+      "tabs": {
+        "discoveries": "Gjetje",
+        "reports": "Raporte"
+      },
+      "emptyDiscoveries": "Nuk ka gjetje të Scout në pritje.",
+      "emptyReports": "Nuk ka raporte të komunitetit në pritje.",
+      "kinds": {
+        "image": "Imazh",
+        "event": "Event",
+        "place": "Vend"
+      },
+      "photographer": "Foto · {photographer}",
+      "source": "Hap burimin",
       "evidence": "Dëshmi",
       "review": "Kontrollo",
       "note": "Shënim vendimi",
-      "accept": "Prano raportin",
+      "acceptReport": "Prano raportin",
+      "approveCandidate": "Mirato",
       "reject": "Refuzo",
       "error": "Vendimi i moderimit nuk u ruajt."
     }

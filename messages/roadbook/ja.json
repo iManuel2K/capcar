@@ -30,7 +30,17 @@
     "media": {
       "location": "この場所の写真",
       "representative": "イメージ写真",
+      "representativeShort": "参考",
       "credit": "写真 · {photographer}"
+    },
+    "places": {
+      "action": "スポット · {count}",
+      "images": "写真 {count}枚",
+      "eyebrow": "ビジュアルRoadbook",
+      "title": "走る価値のある場所",
+      "description": "まず写真を見て、地図上の場所を開き、アクセス・情報源・安全情報を確認できます。",
+      "close": "Roadbookのスポット一覧を閉じる",
+      "empty": "この地図範囲には情報源付きの場所がありません。地図を移動するか縮小してください。"
     },
     "eyebrow": "Roadbook · 合法的なドライビングスポット",
     "title": "このビルドに合う道を見つけよう。",
@@ -206,12 +216,26 @@
     },
     "moderation": {
       "action": "確認キュー",
-      "title": "Roadbook報告",
-      "empty": "確認待ちの報告はありません。",
+      "title": "Roadbook確認キュー",
+      "description": "Scoutの候補とコミュニティ報告を確認します。承認は編集判断を記録するだけで、未確認の場所を自動公開しません。",
+      "tabs": {
+        "discoveries": "候補",
+        "reports": "報告"
+      },
+      "emptyDiscoveries": "確認待ちのScout候補はありません。",
+      "emptyReports": "確認待ちのコミュニティ報告はありません。",
+      "kinds": {
+        "image": "画像",
+        "event": "イベント",
+        "place": "場所"
+      },
+      "photographer": "写真 · {photographer}",
+      "source": "情報源を開く",
       "evidence": "根拠",
       "review": "確認",
       "note": "判断メモ",
-      "accept": "報告を承認",
+      "acceptReport": "報告を承認",
+      "approveCandidate": "承認",
       "reject": "却下",
       "error": "モデレーション結果を保存できませんでした。"
     }
