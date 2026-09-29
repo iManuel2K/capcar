@@ -16,6 +16,7 @@ type ResultState = {
 };
 type Props = {
   initialQuery?: string;
+  vehicle?: RetailRequest["vehicle"];
   children?: (
     result: RetailResponse,
     input: RetailRequest,
@@ -32,10 +33,16 @@ function optionalPrice(value: string) {
   return parsed;
 }
 
-export function ResilientPartSearch({ children, initialQuery = "" }: Props) {
+export function ResilientPartSearch({
+  children,
+  initialQuery = "",
+  vehicle,
+}: Props) {
   const t = useTranslations("PartsSearch");
   const errors = useTranslations("Hardening.Search");
   const locale = useLocale();
+  const timeoutMessage = t("timeout");
+  const connectionMessage = t("connection");
   const regions = new Intl.DisplayNames([locale], { type: "region" });
   const money = (value: number, currency: string) =>
     new Intl.NumberFormat(locale, { style: "currency", currency }).format(
@@ -49,9 +56,11 @@ export function ResilientPartSearch({ children, initialQuery = "" }: Props) {
     condition: "all",
     sort: "bestMatch",
     page: 0,
+    vehicle,
   });
   const [attempt, setAttempt] = useState(0);
   const [state, setState] = useState<ResultState>({ key: "" });
+  const [inFlight, setInFlight] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [composing, setComposing] = useState(false);
   const active = useRef<AbortController | null>(null);
@@ -68,9 +77,12 @@ export function ResilientPartSearch({ children, initialQuery = "" }: Props) {
     input.minPrice !== undefined ||
     input.maxPrice !== undefined;
   const requestKey = JSON.stringify({ ...input, query: input.query.trim() });
-  const key = `${requestKey}:${attempt}`;
-  const current = state.key === key ? state : undefined;
-  const pending = valid && !composing && !current;
+  const loadKey = `${requestKey}:${attempt}`;
+  const current = state.key === requestKey ? state : undefined;
+  const loading = inFlight === loadKey;
+  const pending =
+    valid && !composing && !current?.data && (!current || loading);
+  const refreshing = valid && !composing && Boolean(current?.data) && loading;
 
   function change(next: RetailRequest) {
     if (JSON.stringify({ ...next, query: next.query.trim() }) !== requestKey)
@@ -85,9 +97,11 @@ export function ResilientPartSearch({ children, initialQuery = "" }: Props) {
     let timedOut = false;
     let timeout: ReturnType<typeof setTimeout> | undefined;
     const debounce = setTimeout(async () => {
+      setInFlight(loadKey);
       const cached = cache.current.get(requestKey);
       if (cached && Date.now() - cached.at < 30_000) {
-        setState({ key, data: cached.data });
+        setState({ key: requestKey, data: cached.data });
+        setInFlight((currentKey) => (currentKey === loadKey ? "" : currentKey));
         return;
       }
       timeout = setTimeout(() => {
@@ -102,19 +116,22 @@ export function ResilientPartSearch({ children, initialQuery = "" }: Props) {
         if (controller.signal.aborted) return;
         if (cache.current.size >= 10) cache.current.clear();
         cache.current.set(requestKey, { at: Date.now(), data });
-        setState({ key, data });
+        setState({ key: requestKey, data });
       } catch (error) {
         if (controller.signal.aborted && !timedOut) return;
-        setState({
-          key,
-          error: timedOut
-            ? new SearchFailure(t("timeout"), true, "timeout")
-            : error instanceof SearchFailure
-              ? error
-              : new SearchFailure(t("connection")),
-        });
+        const failure = timedOut
+          ? new SearchFailure(timeoutMessage, true, "timeout")
+          : error instanceof SearchFailure
+            ? error
+            : new SearchFailure(connectionMessage);
+        setState((previous) => ({
+          key: requestKey,
+          data: previous.key === requestKey ? previous.data : undefined,
+          error: failure,
+        }));
       } finally {
         clearTimeout(timeout);
+        setInFlight((currentKey) => (currentKey === loadKey ? "" : currentKey));
       }
     }, 500);
     return () => {
@@ -122,11 +139,26 @@ export function ResilientPartSearch({ children, initialQuery = "" }: Props) {
       clearTimeout(timeout);
       controller.abort();
     };
-  }, [key, requestKey, valid, composing, t]);
+  }, [
+    attempt,
+    requestKey,
+    loadKey,
+    valid,
+    composing,
+    timeoutMessage,
+    connectionMessage,
+  ]);
 
   function retry() {
     cache.current.delete(requestKey);
-    setAttempt((value) => value + 1);
+    setState((previous) =>
+      previous.key === requestKey
+        ? { ...previous, error: undefined }
+        : previous,
+    );
+    const nextAttempt = attempt + 1;
+    setInFlight(`${requestKey}:${nextAttempt}`);
+    setAttempt(nextAttempt);
   }
   return (
     <div className="space-y-5 text-[#0e2d30]">
@@ -138,6 +170,7 @@ export function ResilientPartSearch({ children, initialQuery = "" }: Props) {
           if (
             valid &&
             !pending &&
+            !refreshing &&
             !composing &&
             current?.error?.retryable !== false
           )
@@ -331,13 +364,18 @@ export function ResilientPartSearch({ children, initialQuery = "" }: Props) {
         </fieldset>
         <button
           className={`${action} sm:col-span-2`}
-          disabled={pending || composing || current?.error?.retryable === false}
+          disabled={
+            pending ||
+            refreshing ||
+            composing ||
+            (!current?.data && current?.error?.retryable === false)
+          }
         >
-          {pending ? t("searching") : t("search")}
+          {pending || refreshing ? t("searching") : t("search")}
         </button>
       </form>
       <p role="status" aria-live="polite" className="text-sm">
-        {pending
+        {pending || refreshing
           ? t("searchStatus")
           : current?.data
             ? t("found", { count: current.data.items.length })
@@ -375,6 +413,48 @@ export function ResilientPartSearch({ children, initialQuery = "" }: Props) {
             </div>
           )}
         </div>
+      )}
+      {current?.data && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#0e2d30]/15 bg-white/20 p-4">
+          <p className="text-sm">
+            {refreshing
+              ? t("refreshing")
+              : t("checkedAt", {
+                  time: new Date(current.data.checkedAt).toLocaleString(locale),
+                })}
+          </p>
+          <button
+            type="button"
+            onClick={retry}
+            disabled={loading}
+            className={action}
+          >
+            {refreshing ? t("refreshing") : t("refresh")}
+          </button>
+        </div>
+      )}
+      {current?.data?.providers && (
+        <ul
+          aria-label={t("providerStatus")}
+          className="flex flex-wrap gap-2 text-xs"
+        >
+          {current.data.providers.map((provider) => (
+            <li
+              key={provider.id}
+              className={`rounded-full border px-3 py-1.5 ${
+                provider.status === "available"
+                  ? "border-emerald-900/25 bg-emerald-100/45"
+                  : "border-amber-900/25 bg-amber-100/45"
+              }`}
+            >
+              {provider.label} ·{" "}
+              {provider.status === "available"
+                ? t("providerAvailable")
+                : t("providerUnavailable")}
+              {provider.code && ` · ${errors(provider.code)}`}
+            </li>
+          ))}
+        </ul>
       )}
       {current?.data &&
         (children ? (

@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { safeRetailUrl, type RetailRequest } from "./retail-contracts";
+import {
+  retailVehicleMatchSchema,
+  safeRetailUrl,
+  type RetailRequest,
+} from "./retail-contracts";
 
 const responseSchema = z.object({
   source: z.enum(["ebay", "partner", "multi"]),
@@ -21,6 +25,7 @@ const responseSchema = z.object({
         retailer: z.string().max(80).optional(),
         provider: z.enum(["ebay", "partner"]).optional(),
         providerItemId: z.string().max(220).optional(),
+        vehicleMatch: retailVehicleMatchSchema.optional(),
       }),
     )
     .max(200),
@@ -30,6 +35,8 @@ const responseSchema = z.object({
         id: z.enum(["ebay", "partner"]),
         label: z.string().max(80),
         status: z.enum(["available", "unavailable"]),
+        code: z.enum(["access", "limit", "unavailable"]).optional(),
+        retryable: z.boolean().optional(),
       }),
     )
     .optional(),

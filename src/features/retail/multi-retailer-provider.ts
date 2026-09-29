@@ -5,6 +5,29 @@ import type {
   RetailResponse,
 } from "@/features/retail/retail-contracts";
 
+function unavailableProvider(
+  id: "ebay" | "partner",
+  label: string,
+  attempt: PromiseSettledResult<RetailResponse | undefined>,
+): NonNullable<RetailResponse["providers"]>[number] {
+  const kind =
+    attempt.status === "rejected" && attempt.reason instanceof RetailUnavailable
+      ? attempt.reason.kind
+      : "unavailable";
+  return {
+    id,
+    label,
+    status: "unavailable",
+    code:
+      kind === "configuration" || kind === "authorization"
+        ? "access"
+        : kind === "rate_limit"
+          ? "limit"
+          : "unavailable",
+    retryable: !["configuration", "authorization"].includes(kind),
+  };
+}
+
 export async function searchRetailers(
   input: RetailRequest,
   environment: Record<string, string | undefined> = process.env,
@@ -29,21 +52,25 @@ export async function searchRetailers(
     );
   }
   const providers: NonNullable<RetailResponse["providers"]> = [
-    {
-      id: "ebay",
-      label: "eBay",
-      status: attempts[0].status === "fulfilled" ? "available" : "unavailable",
-    },
+    attempts[0].status === "fulfilled"
+      ? { id: "ebay", label: "eBay", status: "available" }
+      : unavailableProvider("ebay", "eBay", attempts[0]),
     ...(environment.CAPCAR_RETAIL_PARTNER_NAME
       ? [
-          {
-            id: "partner" as const,
-            label: environment.CAPCAR_RETAIL_PARTNER_NAME.trim().slice(0, 80),
-            status:
-              attempts[1].status === "fulfilled"
-                ? ("available" as const)
-                : ("unavailable" as const),
-          },
+          attempts[1].status === "fulfilled"
+            ? {
+                id: "partner" as const,
+                label: environment.CAPCAR_RETAIL_PARTNER_NAME.trim().slice(
+                  0,
+                  80,
+                ),
+                status: "available" as const,
+              }
+            : unavailableProvider(
+                "partner",
+                environment.CAPCAR_RETAIL_PARTNER_NAME.trim().slice(0, 80),
+                attempts[1],
+              ),
         ]
       : []),
   ];

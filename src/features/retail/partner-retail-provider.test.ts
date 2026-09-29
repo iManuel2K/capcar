@@ -10,6 +10,15 @@ describe("partner retailer adapter", () => {
     query: "BMW E90 rear light",
     market: "DE",
     destination: "DE",
+    vehicle: {
+      make: "BMW",
+      model: "318i",
+      productionYear: 2011,
+      platform: "E90",
+      bodyStyle: "Sedan",
+      engineCode: "N43B20",
+      transmission: "Manual",
+    },
   });
 
   it("normalizes an approved partner without exposing its API key", async () => {
@@ -25,6 +34,14 @@ describe("partner retailer adapter", () => {
             country: "DE",
             condition: "New",
             url: "https://parts.example/item/1",
+            fitment: {
+              make: "BMW",
+              platforms: ["E90"],
+              engineCodes: ["N43B20"],
+              yearFrom: 2009,
+              yearTo: 2011,
+              bodyStyles: ["Sedan"],
+            },
           },
         ],
       }),
@@ -39,6 +56,18 @@ describe("partner retailer adapter", () => {
       retailer: "Parts Partner",
       provider: "partner",
       providerItemId: "partner-1",
+      vehicleMatch: {
+        status: "exact",
+        matchedAxes: [
+          "make",
+          "platform",
+          "engine",
+          "production year",
+          "body style",
+        ],
+        mismatchedAxes: [],
+        source: "structured",
+      },
     });
     expect(request.mock.calls[0][1].headers.authorization).toBe(
       "Bearer server-secret",

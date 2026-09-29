@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import {
+  evaluateRetailVehicleMatch,
   safeEbayUrl,
   type RetailRequest,
   type RetailResponse,
@@ -275,6 +276,7 @@ export async function searchEbay(
           retailer: "eBay",
           provider: "ebay",
           providerItemId: item.itemId,
+          vehicleMatch: evaluateRetailVehicleMatch(input.vehicle),
         },
       ];
     }),

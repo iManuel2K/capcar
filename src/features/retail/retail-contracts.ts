@@ -1,4 +1,35 @@
 import { z } from "zod";
+import { vehicleDataRequestSchema } from "@/features/vehicle-data/vehicle-data-schema";
+
+export const retailVehicleSchema = vehicleDataRequestSchema.omit({ vin: true });
+
+export const retailApplicabilitySchema = z
+  .object({
+    make: z.string().trim().min(2).max(40),
+    platforms: z.string().trim().min(1).max(20).array().min(1).max(20),
+    engineCodes: z.string().trim().min(1).max(30).array().min(1).max(50),
+    yearFrom: z.number().int().min(1900).max(2030),
+    yearTo: z.number().int().min(1900).max(2030),
+    bodyStyles: z.string().trim().min(2).max(30).array().min(1).max(20),
+  })
+  .refine((value) => value.yearFrom <= value.yearTo, {
+    message: "Check the structured fitment production range.",
+  });
+
+const vehicleMatchAxes = [
+  "make",
+  "platform",
+  "engine",
+  "production year",
+  "body style",
+] as const;
+
+export const retailVehicleMatchSchema = z.object({
+  status: z.enum(["exact", "mismatch", "unverified"]),
+  matchedAxes: z.enum(vehicleMatchAxes).array().max(vehicleMatchAxes.length),
+  mismatchedAxes: z.enum(vehicleMatchAxes).array().max(vehicleMatchAxes.length),
+  source: z.enum(["structured", "none"]),
+});
 export const retailRequestSchema = z
   .object({
     query: z.string().trim().min(3).max(100),
@@ -11,6 +42,7 @@ export const retailRequestSchema = z
     minPrice: z.number().finite().nonnegative().max(1_000_000).optional(),
     maxPrice: z.number().finite().nonnegative().max(1_000_000).optional(),
     page: z.number().int().min(0).max(9).default(0),
+    vehicle: retailVehicleSchema.optional(),
   })
   .strict()
   .refine(
@@ -22,6 +54,69 @@ export const retailRequestSchema = z
     },
   );
 export type RetailRequest = z.infer<typeof retailRequestSchema>;
+export type RetailApplicability = z.infer<typeof retailApplicabilitySchema>;
+export type RetailVehicleMatch = z.infer<typeof retailVehicleMatchSchema>;
+
+const normalized = (value: string) =>
+  value
+    .trim()
+    .toUpperCase()
+    .replace(/[\s-]+/g, "");
+
+export function evaluateRetailVehicleMatch(
+  vehicle: RetailRequest["vehicle"],
+  applicability?: RetailApplicability,
+): RetailVehicleMatch | undefined {
+  if (!vehicle) return undefined;
+  if (!applicability)
+    return {
+      status: "unverified",
+      matchedAxes: [],
+      mismatchedAxes: [],
+      source: "none",
+    };
+  const checks = [
+    {
+      axis: "make" as const,
+      matched: normalized(applicability.make) === normalized(vehicle.make),
+    },
+    {
+      axis: "platform" as const,
+      matched: applicability.platforms.some(
+        (value) => normalized(value) === normalized(vehicle.platform),
+      ),
+    },
+    {
+      axis: "engine" as const,
+      matched: applicability.engineCodes.some(
+        (value) => normalized(value) === normalized(vehicle.engineCode),
+      ),
+    },
+    {
+      axis: "production year" as const,
+      matched:
+        vehicle.productionYear >= applicability.yearFrom &&
+        vehicle.productionYear <= applicability.yearTo,
+    },
+    {
+      axis: "body style" as const,
+      matched: applicability.bodyStyles.some(
+        (value) => normalized(value) === normalized(vehicle.bodyStyle),
+      ),
+    },
+  ];
+  const mismatchedAxes = checks
+    .filter((check) => !check.matched)
+    .map((check) => check.axis);
+  return {
+    status: mismatchedAxes.length ? "mismatch" : "exact",
+    matchedAxes: checks
+      .filter((check) => check.matched)
+      .map((check) => check.axis),
+    mismatchedAxes,
+    source: "structured",
+  };
+}
 export type RetailItem = {
   id: string;
   title: string;
@@ -35,6 +130,7 @@ export type RetailItem = {
   retailer?: string;
   provider?: "ebay" | "partner";
   providerItemId?: string;
+  vehicleMatch?: RetailVehicleMatch;
 };
 export type RetailResponse = {
   source: "ebay" | "partner" | "multi";
@@ -46,6 +142,8 @@ export type RetailResponse = {
     id: "ebay" | "partner";
     label: string;
     status: "available" | "unavailable";
+    code?: "access" | "limit" | "unavailable";
+    retryable?: boolean;
   }>;
 };
 export function safeRetailUrl(value: string): boolean {
