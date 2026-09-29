@@ -37,6 +37,8 @@ describe("multi-retailer search", () => {
       id: "partner",
       label: "Partner",
       status: "unavailable",
+      code: "unavailable",
+      retryable: true,
     });
   });
 

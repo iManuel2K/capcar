@@ -90,6 +90,15 @@ export function BuildPartsWorkspace({
             <ResilientPartSearch
               key={selected.id}
               initialQuery={`${vehicle.make} ${vehicle.platform} ${selected.title}`}
+              vehicle={{
+                make: vehicle.make,
+                model: vehicle.model,
+                productionYear: vehicle.productionYear,
+                platform: vehicle.platform,
+                bodyStyle: vehicle.bodyStyle,
+                engineCode: vehicle.engineCode,
+                transmission: vehicle.transmission,
+              }}
             >
               {(result, input, navigate) => (
                 <>
@@ -217,29 +226,11 @@ function BuildOfferResults({
         availability, tax and final total at checkout. Affiliate links are
         marked. You purchase from the retailer.
       </p>
-      {result.providers && (
-        <ul
-          aria-label="Retailer provider status"
-          className="flex flex-wrap gap-2 text-xs"
-        >
-          {result.providers.map((provider) => (
-            <li
-              key={provider.id}
-              className={`rounded-full border px-3 py-1.5 ${
-                provider.status === "available"
-                  ? "border-emerald-900/25 bg-emerald-100/45"
-                  : "border-amber-900/25 bg-amber-100/45"
-              }`}
-            >
-              {provider.label} · {provider.status}
-            </li>
-          ))}
-        </ul>
-      )}
       <p className="text-sm">
-        Select up to three offers to compare. Fitment, delivery date, seller
-        trust and warranty are unverified unless confirmed by the seller or
-        manufacturer. No automatic “best value” claim is made from price alone.
+        Select up to three offers to compare. An exact vehicle match appears
+        only when a retailer supplies structured make, platform, engine,
+        production-year and body-style coverage. Listing titles are never used
+        as fitment evidence.
       </p>
       {error && (
         <p
@@ -295,7 +286,9 @@ function BuildOfferResults({
                       ? "Shipping unknown"
                       : money(deliveredTotal(item)!, item.currency)}
                   </td>
-                  <td className="p-3">Not verified</td>
+                  <td className="p-3">
+                    <VehicleMatchLabel item={item} />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -340,6 +333,9 @@ function BuildOfferResults({
               {item.retailer ?? "Retailer"} · {item.condition} ·{" "}
               {item.country ?? "Seller location unknown"}
             </p>
+            <p className="mt-2 text-sm">
+              <VehicleMatchLabel item={item} />
+            </p>
             <div className="mt-4 flex flex-wrap gap-3">
               <button
                 type="button"
@@ -375,4 +371,12 @@ function BuildOfferResults({
       </div>
     </div>
   );
+}
+
+function VehicleMatchLabel({ item }: { item: RetailItem }) {
+  if (item.vehicleMatch?.status === "exact")
+    return <>Exact structured vehicle match</>;
+  if (item.vehicleMatch?.status === "mismatch")
+    return <>Vehicle mismatch: {item.vehicleMatch.mismatchedAxes.join(", ")}</>;
+  return <>Fitment not verified · no structured vehicle data</>;
 }

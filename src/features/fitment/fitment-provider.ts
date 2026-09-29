@@ -29,6 +29,29 @@ export type FitmentResolution = {
 
 export class FitmentProviderUnavailable extends Error {}
 
+const normalized = (value: string) =>
+  value
+    .trim()
+    .toUpperCase()
+    .replace(/[\s-]+/g, "");
+
+function recordMatchesRequest(
+  record: z.infer<typeof evidenceSchema>,
+  input: FitmentResolutionRequest,
+) {
+  return (
+    normalized(record.partNumber) === normalized(input.partNumber) &&
+    normalized(record.make) === normalized(input.vehicle.make) &&
+    normalized(record.platform) === normalized(input.vehicle.platform) &&
+    normalized(record.engineCode) === normalized(input.vehicle.engineCode) &&
+    normalized(record.bodyStyle) === normalized(input.vehicle.bodyStyle) &&
+    normalized(record.transmission) ===
+      normalized(input.vehicle.transmission) &&
+    record.yearFrom <= input.vehicle.productionYear &&
+    record.yearTo >= input.vehicle.productionYear
+  );
+}
+
 export async function resolveConnectedFitment(
   input: FitmentResolutionRequest,
   environment: Record<string, string | undefined> = process.env,
@@ -51,18 +74,30 @@ export async function resolveConnectedFitment(
       input,
     ),
   );
+  const records = response.records.map((record) =>
+    evidenceSchema.parse({
+      ...(record && typeof record === "object" ? record : {}),
+      id: crypto.randomUUID(),
+      kind: "manufacturer",
+      capturedBy: "provider",
+      recordedAt: response.checkedAt ?? checkedAt,
+    }),
+  );
+  const exactRecords = records.filter((record) =>
+    recordMatchesRequest(record, input),
+  );
+  const ignored = records.length - exactRecords.length;
   return {
     provider: response.provider?.trim() || provider,
     checkedAt: response.checkedAt ?? checkedAt,
-    warnings: response.warnings,
-    records: response.records.map((record) =>
-      evidenceSchema.parse({
-        ...(record && typeof record === "object" ? record : {}),
-        id: crypto.randomUUID(),
-        kind: "manufacturer",
-        capturedBy: "provider",
-        recordedAt: response.checkedAt ?? checkedAt,
-      }),
-    ),
+    warnings: [
+      ...response.warnings,
+      ...(ignored
+        ? [
+            `${ignored} provider record${ignored === 1 ? " was" : "s were"} ignored because its part number or vehicle scope did not exactly match.`,
+          ]
+        : []),
+    ],
+    records: exactRecords,
   };
 }

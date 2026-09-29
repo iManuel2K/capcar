@@ -2,6 +2,8 @@ import { z } from "zod";
 
 import { requestExternalProvider } from "@/features/providers/external-json-provider";
 import {
+  evaluateRetailVehicleMatch,
+  retailApplicabilitySchema,
   safeRetailUrl,
   type RetailRequest,
   type RetailResponse,
@@ -22,6 +24,7 @@ const responseSchema = z.object({
         country: z.string().max(3).nullable(),
         condition: z.string().min(1).max(80),
         url: z.string().refine(safeRetailUrl),
+        fitment: retailApplicabilitySchema.optional(),
       }),
     )
     .max(50),
@@ -59,11 +62,19 @@ export async function searchPartnerRetailer(
     warning: payload.warning,
     providers: [{ id: "partner", label: connection.name, status: "available" }],
     items: payload.items.map((item) => ({
-      ...item,
+      id: item.id,
+      title: item.title,
+      price: item.price,
+      currency: item.currency,
+      shipping: item.shipping,
+      country: item.country,
+      condition: item.condition,
+      url: item.url,
       affiliate: false,
       retailer: connection.name,
       provider: "partner",
       providerItemId: item.id,
+      vehicleMatch: evaluateRetailVehicleMatch(input.vehicle, item.fitment),
     })),
   };
 }

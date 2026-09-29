@@ -158,3 +158,58 @@ it("retains a project query when opening live retailer search", async () => {
   await act(() => vi.advanceTimersByTimeAsync(500));
   expect(request.mock.calls[0][0].query).toBe("BMW E90 rear lights");
 });
+
+it("keeps the last successful offers visible when a refresh fails", async () => {
+  request
+    .mockResolvedValueOnce({
+      ...empty,
+      items: [
+        {
+          id: "offer-1",
+          title: "E90 rear lamp",
+          price: 200,
+          currency: "EUR",
+          shipping: 10,
+          country: "DE",
+          condition: "Used",
+          affiliate: false,
+          url: "https://www.ebay.de/itm/offer-1",
+        },
+      ],
+    })
+    .mockRejectedValueOnce(
+      new (await import("@/features/retail/search-client")).SearchFailure(
+        "Provider unavailable",
+      ),
+    );
+  render(<ResilientPartSearch initialQuery="BMW E90 rear lights" />);
+  await act(() => vi.advanceTimersByTimeAsync(500));
+  expect(screen.getByText("E90 rear lamp")).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Refresh live offers" }));
+  await act(() => vi.advanceTimersByTimeAsync(500));
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "temporarily unavailable",
+  );
+  expect(screen.getByText("E90 rear lamp")).toBeInTheDocument();
+});
+
+it("sends the exact project vehicle profile with live searches", async () => {
+  request.mockResolvedValue(empty);
+  const vehicle = {
+    make: "BMW",
+    model: "318i",
+    productionYear: 2011,
+    platform: "E90",
+    bodyStyle: "Sedan" as const,
+    engineCode: "N43B20",
+    transmission: "Manual" as const,
+  };
+  render(
+    <ResilientPartSearch
+      initialQuery="BMW E90 rear lights"
+      vehicle={vehicle}
+    />,
+  );
+  await act(() => vi.advanceTimersByTimeAsync(500));
+  expect(request.mock.calls[0][0].vehicle).toEqual(vehicle);
+});

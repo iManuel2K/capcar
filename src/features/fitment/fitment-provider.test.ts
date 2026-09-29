@@ -62,4 +62,37 @@ describe("connected fitment provider", () => {
       "not configured",
     );
   });
+
+  it("ignores provider records scoped to a different exact vehicle", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        Response.json({
+          records: [
+            {
+              source: "BMW ETK",
+              url: "https://parts.bmw.example/e91/63217252093",
+              partNumber: input.partNumber,
+              make: "BMW",
+              platform: "E91",
+              engineCode: "N47D20",
+              bodyStyle: "Touring",
+              transmission: "Manual",
+              yearFrom: 2009,
+              yearTo: 2011,
+              verdict: "exact",
+              note: "A valid record, but for a different vehicle profile.",
+            },
+          ],
+        }),
+      ),
+    );
+    const result = await resolveConnectedFitment(input, {
+      CAPCAR_FITMENT_PROVIDER_NAME: "BMW catalogue partner",
+      CAPCAR_FITMENT_PROVIDER_ENDPOINT: "https://fitment.example/resolve",
+      CAPCAR_FITMENT_PROVIDER_API_KEY: "secret",
+    });
+    expect(result.records).toEqual([]);
+    expect(result.warnings[0]).toContain("ignored");
+  });
 });
