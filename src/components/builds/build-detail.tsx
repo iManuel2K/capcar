@@ -17,7 +17,11 @@ import {
 } from "lucide-react";
 import { useState, useSyncExternalStore } from "react";
 
-import { getBuildMetrics } from "@/features/builds/build-metrics";
+import {
+  getConnectedBuildMetrics,
+  phaseForItem,
+  planningForBuild,
+} from "@/features/builds/build-planning";
 import {
   buildItemInputSchema,
   buildItemStatuses,
@@ -93,7 +97,7 @@ export function BuildDetail({
   const [form, setForm] = useState({
     title: "",
     note: "",
-    stage: "appearance",
+    phaseId: "",
     priority: "next",
     estimatedCost: "",
   });
@@ -117,13 +121,20 @@ export function BuildDetail({
       </div>
     );
 
-  const metrics = getBuildMetrics(build, items);
+  const planning = planningForBuild(build);
+  const metrics = getConnectedBuildMetrics(build, items, planning);
 
   function submitItem(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const selectedPhaseId = form.phaseId || planning.currentPhaseId;
+    const legacyStage = buildStages.includes(selectedPhaseId as BuildStage)
+      ? (selectedPhaseId as BuildStage)
+      : "appearance";
     const result = buildItemInputSchema.safeParse({
       buildId,
       ...form,
+      phaseId: selectedPhaseId,
+      stage: legacyStage,
       status: "planned",
     });
     if (!result.success) {
@@ -146,7 +157,7 @@ export function BuildDetail({
     setForm({
       title: "",
       note: "",
-      stage: "appearance",
+      phaseId: "",
       priority: "next",
       estimatedCost: "",
     });
@@ -159,9 +170,11 @@ export function BuildDetail({
       updateBuildItemStatus(itemId, status, window.localStorage);
       announceBuildChange();
       setSaveError("");
-    } catch {
+    } catch (caught) {
       setSaveError(
-        "Status was not saved. Check browser storage and try again.",
+        caught instanceof Error
+          ? caught.message
+          : "Status was not saved. Check browser storage and try again.",
       );
     }
   }
@@ -240,20 +253,20 @@ export function BuildDetail({
           icon={WalletCards}
         />
         <MetricCard
-          label="Planned total"
-          value={formatEuro(metrics.plannedTotal)}
+          label="Forecast"
+          value={formatEuro(metrics.forecast)}
           icon={Layers3}
         />
         <MetricCard
-          label="Installed estimate"
-          value={formatEuro(metrics.installedSpend)}
+          label="Paid"
+          value={formatEuro(metrics.paid)}
           icon={Check}
         />
         <MetricCard
           label="Remaining"
-          value={formatEuro(metrics.remainingBudget)}
+          value={formatEuro(metrics.remaining)}
           icon={Sparkles}
-          warning={metrics.remainingBudget < 0}
+          warning={metrics.remaining < 0}
         />
       </section>
 
@@ -362,17 +375,21 @@ export function BuildDetail({
                 }
               />
             </Field>
-            <Field label="Stage" error={errors.stage}>
+            <Field label="Build phase" error={errors.phaseId}>
               <select
                 className={inputClass}
-                value={form.stage}
+                value={form.phaseId || planning.currentPhaseId}
                 onChange={(event) =>
-                  setForm({ ...form, stage: event.target.value })
+                  setForm({ ...form, phaseId: event.target.value })
                 }
               >
-                {buildStages.map((stage) => (
-                  <option key={stage}>{stage}</option>
-                ))}
+                {[...planning.phases]
+                  .sort((left, right) => left.order - right.order)
+                  .map((phase) => (
+                    <option key={phase.id} value={phase.id}>
+                      {phase.title}
+                    </option>
+                  ))}
               </select>
             </Field>
             <Field label="Priority">
@@ -428,102 +445,111 @@ export function BuildDetail({
       )}
 
       <section className="mt-5 grid gap-5 xl:grid-cols-2">
-        {buildStages.map((stage) => {
-          const content = stageContent[stage];
-          const StageIcon = content.icon;
-          const stageItems = items.filter((item) => item.stage === stage);
-          return (
-            <article
-              key={stage}
-              className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]"
-            >
-              <header className="flex items-start justify-between gap-4 border-b border-white/8 p-5 sm:p-7">
-                <div>
-                  <p className="text-xs text-[#ff667a]">{content.number}</p>
-                  <h3 className="mt-2 text-xl font-medium">{content.title}</h3>
-                  <p className="mt-1 text-sm text-white/35">
-                    {content.description}
-                  </p>
-                </div>
-                <span className="grid size-10 place-items-center rounded-xl border border-white/8 bg-white/[0.03] text-white/45">
-                  <StageIcon className="size-4" />
-                </span>
-              </header>
-              <div className="divide-y divide-white/8">
-                {stageItems.map((item) => (
-                  <div key={item.id} className="p-5 sm:p-6">
-                    <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-                      <div>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <p className="font-medium text-white/85">
-                            {item.title}
+        {[...planning.phases]
+          .sort((left, right) => left.order - right.order)
+          .map((phase, index) => {
+            const content = stageContent[phase.id as BuildStage] ?? {
+              number: String(index + 1).padStart(2, "0"),
+              title: phase.title,
+              description: "A custom phase in this build plan.",
+              icon: Wrench,
+            };
+            const StageIcon = content.icon;
+            const stageItems = items.filter(
+              (item) => phaseForItem(item, planning)?.id === phase.id,
+            );
+            return (
+              <article
+                key={phase.id}
+                className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]"
+              >
+                <header className="flex items-start justify-between gap-4 border-b border-white/8 p-5 sm:p-7">
+                  <div>
+                    <p className="text-xs text-[#ff667a]">{content.number}</p>
+                    <h3 className="mt-2 text-xl font-medium">{phase.title}</h3>
+                    <p className="mt-1 text-sm text-white/35">
+                      {content.description}
+                    </p>
+                  </div>
+                  <span className="grid size-10 place-items-center rounded-xl border border-white/8 bg-white/[0.03] text-white/45">
+                    <StageIcon className="size-4" />
+                  </span>
+                </header>
+                <div className="divide-y divide-white/8">
+                  {stageItems.map((item) => (
+                    <div key={item.id} className="p-5 sm:p-6">
+                      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+                        <div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <p className="font-medium text-white/85">
+                              {item.title}
+                            </p>
+                            <span className="rounded-full border border-white/8 px-2 py-1 text-[10px] text-white/35">
+                              {item.priority}
+                            </span>
+                          </div>
+                          {item.note && (
+                            <p className="mt-2 text-sm leading-6 text-white/35">
+                              {item.note}
+                            </p>
+                          )}
+                          <p className="mt-3 text-sm text-white/55">
+                            {formatEuro(item.estimatedCost)}
                           </p>
-                          <span className="rounded-full border border-white/8 px-2 py-1 text-[10px] text-white/35">
-                            {item.priority}
-                          </span>
+                          {item.selectedOfferId && (
+                            <p className="mt-2 text-xs text-[#c98f72]">
+                              {item.merchantName} offer saved · observed{" "}
+                              {item.deliveredPrice?.toFixed(2)} EUR incl. quoted
+                              shipping · fitment evidence attached
+                            </p>
+                          )}
+                          {item.selectedOfferUrl && (
+                            <a
+                              href={item.selectedOfferUrl}
+                              target="_blank"
+                              rel="sponsored noopener noreferrer"
+                              className="mt-2 inline-flex min-h-11 items-center text-sm underline"
+                            >
+                              Review saved retailer offer
+                            </a>
+                          )}
+                          {item.status === "planned" && (
+                            <Link
+                              href={`/garage/${vehicleId}/builds/${buildId}/parts?item=${encodeURIComponent(item.id)}`}
+                              className="mt-2 inline-flex min-h-11 items-center text-sm text-[#eee7d8] underline"
+                            >
+                              Compare offers for this modification →
+                            </Link>
+                          )}
                         </div>
-                        {item.note && (
-                          <p className="mt-2 text-sm leading-6 text-white/35">
-                            {item.note}
-                          </p>
-                        )}
-                        <p className="mt-3 text-sm text-white/55">
-                          {formatEuro(item.estimatedCost)}
-                        </p>
-                        {item.selectedOfferId && (
-                          <p className="mt-2 text-xs text-[#c98f72]">
-                            {item.merchantName} offer saved · observed{" "}
-                            {item.deliveredPrice?.toFixed(2)} EUR incl. quoted
-                            shipping · fitment unverified
-                          </p>
-                        )}
-                        {item.selectedOfferUrl && (
-                          <a
-                            href={item.selectedOfferUrl}
-                            target="_blank"
-                            rel="sponsored noopener noreferrer"
-                            className="mt-2 inline-flex min-h-11 items-center text-sm underline"
-                          >
-                            Review saved retailer offer
-                          </a>
-                        )}
-                        {item.status === "planned" && (
-                          <Link
-                            href={`/garage/${vehicleId}/builds/${buildId}/parts?item=${encodeURIComponent(item.id)}`}
-                            className="mt-2 inline-flex min-h-11 items-center text-sm text-[#eee7d8] underline"
-                          >
-                            Compare offers for this modification →
-                          </Link>
-                        )}
+                        <select
+                          aria-label={`Status for ${item.title}`}
+                          disabled={Boolean(item.workbench?.purchase)}
+                          value={item.status}
+                          onChange={(event) =>
+                            changeItemStatus(
+                              item.id,
+                              event.target.value as BuildItemStatus,
+                            )
+                          }
+                          className="min-h-10 rounded-xl border border-white/10 bg-[#0d0d0d] px-3 text-xs text-white/65 capitalize outline-none"
+                        >
+                          {buildItemStatuses.map((status) => (
+                            <option key={status}>{status}</option>
+                          ))}
+                        </select>
                       </div>
-                      <select
-                        aria-label={`Status for ${item.title}`}
-                        disabled={Boolean(item.workbench?.purchase)}
-                        value={item.status}
-                        onChange={(event) =>
-                          changeItemStatus(
-                            item.id,
-                            event.target.value as BuildItemStatus,
-                          )
-                        }
-                        className="min-h-10 rounded-xl border border-white/10 bg-[#0d0d0d] px-3 text-xs text-white/65 capitalize outline-none"
-                      >
-                        {buildItemStatuses.map((status) => (
-                          <option key={status}>{status}</option>
-                        ))}
-                      </select>
                     </div>
-                  </div>
-                ))}
-                {stageItems.length === 0 && (
-                  <div className="p-7 text-sm text-white/30">
-                    No modifications in this stage yet.
-                  </div>
-                )}
-              </div>
-            </article>
-          );
-        })}
+                  ))}
+                  {stageItems.length === 0 && (
+                    <div className="p-7 text-sm text-white/30">
+                      No modifications in this stage yet.
+                    </div>
+                  )}
+                </div>
+              </article>
+            );
+          })}
       </section>
 
       <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/40">

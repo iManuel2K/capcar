@@ -1,9 +1,5 @@
-import {
-  buildStages,
-  buildPriorities,
-  type Build,
-  type BuildItem,
-} from "./build-schema";
+import type { Build, BuildItem } from "./build-schema";
+import { getConnectedBuildMetrics, planningForBuild } from "./build-planning";
 
 export function getBuildJourney(
   build: Build,
@@ -12,14 +8,9 @@ export function getBuildJourney(
 ) {
   const items = allItems.filter((item) => item.buildId === build.id);
   const remaining = items.filter((item) => item.status !== "installed");
-  const next = [...remaining].sort(
-    (a, b) =>
-      buildPriorities.indexOf(a.priority) -
-        buildPriorities.indexOf(b.priority) ||
-      buildStages.indexOf(a.stage) - buildStages.indexOf(b.stage) ||
-      a.createdAt.localeCompare(b.createdAt) ||
-      a.id.localeCompare(b.id),
-  )[0];
+  const planning = planningForBuild(build);
+  const metrics = getConnectedBuildMetrics(build, items, planning);
+  const next = metrics.next;
   return {
     next,
     activated: items.some((item) => Boolean(item.selectedOfferId)),
@@ -37,11 +28,11 @@ export function getBuildJourney(
         done: items.some((item) => item.status === "installed"),
       },
     ],
-    stages: buildStages.map((stage) => ({
-      stage,
-      allocated: items
-        .filter((item) => item.stage === stage)
-        .reduce((sum, item) => sum + item.estimatedCost, 0),
+    stages: metrics.phases.map((phase) => ({
+      stage: phase.id,
+      title: phase.title,
+      allocated: phase.forecast,
     })),
+    blocked: metrics.blocked,
   };
 }

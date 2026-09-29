@@ -7,6 +7,46 @@ import {
 
 const priority = { now: 0, next: 1, later: 2 } as const;
 
+export function dependencyBlockers(item: BuildItem, items: BuildItem[]) {
+  const installedIds = new Set(
+    items
+      .filter((candidate) => candidate.status === "installed")
+      .map((candidate) => candidate.id),
+  );
+  const byId = new Map(items.map((candidate) => [candidate.id, candidate]));
+  return (item.dependsOn ?? [])
+    .filter((id) => !installedIds.has(id))
+    .map((id) => byId.get(id))
+    .filter((candidate): candidate is BuildItem => Boolean(candidate));
+}
+
+export function hasDependencyCycle(items: BuildItem[]) {
+  const byId = new Map(items.map((item) => [item.id, item]));
+  const visiting = new Set<string>();
+  const visited = new Set<string>();
+
+  function visit(id: string): boolean {
+    if (visiting.has(id)) return true;
+    if (visited.has(id)) return false;
+    visiting.add(id);
+    const item = byId.get(id);
+    for (const dependency of item?.dependsOn ?? []) {
+      if (byId.has(dependency) && visit(dependency)) return true;
+    }
+    visiting.delete(id);
+    visited.add(id);
+    return false;
+  }
+
+  return items.some((item) => visit(item.id));
+}
+
+function itemForecast(item: BuildItem) {
+  const purchase = item.workbench?.purchase;
+  if (purchase) return Math.max(0, purchase.amount - purchase.refunded);
+  return item.deliveredPrice ?? item.estimatedCost;
+}
+
 export function defaultBuildPlanning(build: Build): BuildPlanning {
   void build;
   const phases: BuildPhase[] = [
@@ -53,8 +93,8 @@ export function getConnectedBuildMetrics(
         : 0),
     0,
   );
+  const forecast = relevant.reduce((sum, item) => sum + itemForecast(item), 0);
   const completed = relevant.filter((item) => item.status === "installed");
-  const installedIds = new Set(completed.map((item) => item.id));
   const remaining = relevant.filter((item) => item.status !== "installed");
   const orderedPhases = [...planning.phases].sort(
     (left, right) => left.order - right.order,
@@ -68,17 +108,18 @@ export function getConnectedBuildMetrics(
       left.createdAt.localeCompare(right.createdAt)
     );
   });
-  const blocked = ordered.filter((item) =>
-    (item.dependsOn ?? []).some((id) => !installedIds.has(id)),
+  const blocked = ordered.filter(
+    (item) => dependencyBlockers(item, relevant).length > 0,
   );
   const next = ordered.find(
-    (item) => !(item.dependsOn ?? []).some((id) => !installedIds.has(id)),
+    (item) => dependencyBlockers(item, relevant).length === 0,
   );
   return {
     planned,
     committed,
     paid,
-    remaining: build.budget - Math.max(planned, committed, paid),
+    forecast,
+    remaining: build.budget - forecast,
     progress:
       relevant.length === 0
         ? 0
@@ -89,9 +130,28 @@ export function getConnectedBuildMetrics(
       const phaseItems = relevant.filter(
         (item) => phaseForItem(item, planning)?.id === phase.id,
       );
+      const phaseForecast = phaseItems.reduce(
+        (sum, item) => sum + itemForecast(item),
+        0,
+      );
       return {
         ...phase,
         planned: phaseItems.reduce((sum, item) => sum + item.estimatedCost, 0),
+        committed: phaseItems.reduce(
+          (sum, item) => sum + (item.deliveredPrice ?? 0),
+          0,
+        ),
+        paid: phaseItems.reduce(
+          (sum, item) =>
+            sum +
+            (item.workbench?.purchase
+              ? item.workbench.purchase.amount -
+                item.workbench.purchase.refunded
+              : 0),
+          0,
+        ),
+        forecast: phaseForecast,
+        remaining: phase.budget - phaseForecast,
         completed: phaseItems.filter((item) => item.status === "installed")
           .length,
         itemCount: phaseItems.length,

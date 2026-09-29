@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import {
+  createBuildItem,
   createStarterBuild,
   readBuildState,
+  updateBuildItemPlanning,
   updateBuildItemStatus,
 } from "./build-storage";
 import {
@@ -317,6 +319,46 @@ describe("purchase workflow, costs and Passport", () => {
     expect(() =>
       deleteCostEntry(`build-purchase-${item.id}`, "car", localStorage),
     ).toThrow("refund");
+  });
+  it("does not record an installation before its dependencies", () => {
+    const { build, item, edit } = setup();
+    const prerequisite = createBuildItem(
+      {
+        buildId: build.id,
+        title: "Wiring adapter",
+        stage: "appearance",
+        priority: "now",
+        estimatedCost: 45,
+      },
+      localStorage,
+    );
+    updateBuildItemPlanning(
+      build.id,
+      item.id,
+      {
+        title: item.title,
+        note: item.note,
+        estimatedCost: item.estimatedCost,
+        phaseId: item.phaseId,
+        targetDate: item.targetDate,
+        priority: item.priority,
+        dependsOn: [prerequisite.id],
+      },
+      localStorage,
+    );
+    expect(() =>
+      edit((state) =>
+        saveWorkbenchPurchase(
+          {
+            ...purchase,
+            deliveredAt: "2026-09-02",
+            installedAt: "2026-09-03",
+            mileage: 140010,
+          },
+          state,
+        ),
+      ),
+    ).toThrow("required modifications");
   });
   it.each([
     { deliveredAt: "2026-08-01" },

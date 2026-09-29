@@ -52,9 +52,11 @@ export function BuildJourneyPanel({
           <h2 className="mt-2 text-2xl font-medium">
             {next
               ? next.title
-              : items.length
-                ? "Review your build record"
-                : "Add your first modification"}
+              : journey.blocked.length
+                ? "Resolve blocked work"
+                : items.length
+                  ? "Review your build record"
+                  : "Add your first modification"}
           </h2>
           <p className="mt-3 text-sm leading-6 text-white/75">
             {next?.status === "ordered"
@@ -63,7 +65,9 @@ export function BuildJourneyPanel({
                 ? "An offer is saved. Confirm fitment, returns and the final total before ordering."
                 : next
                   ? "Compare live offers for this modification, then save your choice to the plan."
-                  : "Installed work appears in your Vehicle Passport as an owner-supplied record."}
+                  : journey.blocked.length
+                    ? "Every remaining modification is waiting on another task. Open the plan below to review its dependencies."
+                    : "Installed work appears in your Vehicle Passport as an owner-supplied record."}
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             {next && (
@@ -87,9 +91,9 @@ export function BuildJourneyPanel({
             Phase allocation · EUR estimates
           </p>
           <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">
-            {journey.stages.map(({ stage, allocated }) => (
+            {journey.stages.map(({ stage, title, allocated }) => (
               <div key={stage}>
-                <dt className="text-white/65 capitalize">{stage}</dt>
+                <dt className="text-white/65">{title}</dt>
                 <dd className="mt-1 font-mono">
                   €{allocated.toLocaleString("en-IE")}
                 </dd>

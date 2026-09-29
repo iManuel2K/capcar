@@ -14,6 +14,11 @@ import {
   buildPlanningSchema,
   type BuildPlanning,
 } from "@/features/builds/build-planning-schema";
+import {
+  dependencyBlockers,
+  hasDependencyCycle,
+  planningForBuild,
+} from "@/features/builds/build-planning";
 
 export const BUILD_STORAGE_KEY = "capcar.builds.v1";
 export const BUILD_STORAGE_EVENT = "capcar:builds-changed";
@@ -22,11 +27,21 @@ const buildStateSchema = {
   parse(value: unknown) {
     if (!value || typeof value !== "object") return { builds: [], items: [] };
     const state = value as { builds?: unknown; items?: unknown };
-    const builds = buildSchema.array().safeParse(state.builds);
-    const items = buildItemSchema.array().safeParse(state.items);
+    const builds = Array.isArray(state.builds)
+      ? state.builds.flatMap((candidate) => {
+          const result = buildSchema.safeParse(candidate);
+          return result.success ? [result.data] : [];
+        })
+      : [];
+    const items = Array.isArray(state.items)
+      ? state.items.flatMap((candidate) => {
+          const result = buildItemSchema.safeParse(candidate);
+          return result.success ? [result.data] : [];
+        })
+      : [];
     return {
-      builds: builds.success ? builds.data : [],
-      items: items.success ? items.data : [],
+      builds,
+      items,
     };
   },
 };
@@ -113,6 +128,18 @@ export function updateBuildItemStatus(
   storage: WritableStorage,
 ) {
   const state = readBuildState(storage);
+  const current = state.items.find((item) => item.id === itemId);
+  if (!current) throw new Error("Modification not found.");
+  if (
+    status === "installed" &&
+    dependencyBlockers(
+      current,
+      state.items.filter((item) => item.buildId === current.buildId),
+    ).length > 0
+  )
+    throw new Error(
+      "Install the required modifications before completing this one.",
+    );
   const items = state.items.map((item) =>
     item.id === itemId
       ? (() => {
@@ -143,6 +170,35 @@ export function updateBuildStatus(
   writeBuildState({ ...state, builds }, storage);
 }
 
+export function updateBuildDetails(
+  buildId: string,
+  input: Pick<Build, "name" | "goal" | "description" | "budget">,
+  storage: WritableStorage,
+) {
+  const state = readBuildState(storage);
+  const current = state.builds.find((build) => build.id === buildId);
+  if (!current) throw new Error("Build not found.");
+  const normalized = buildInputSchema.parse({
+    ...input,
+    vehicleId: current.vehicleId,
+    status: current.status,
+  });
+  const updated = buildSchema.parse({
+    ...current,
+    ...normalized,
+  });
+  writeBuildState(
+    {
+      ...state,
+      builds: state.builds.map((build) =>
+        build.id === buildId ? updated : build,
+      ),
+    },
+    storage,
+  );
+  return updated;
+}
+
 export function updateBuildPlanning(
   buildId: string,
   planning: BuildPlanning,
@@ -164,9 +220,10 @@ export function updateBuildPlanning(
 export function updateBuildItemPlanning(
   buildId: string,
   itemId: string,
-  input: Pick<BuildItem, "phaseId" | "targetDate" | "priority"> & {
-    dependsOn: string[];
-  },
+  input: Pick<
+    BuildItem,
+    "title" | "note" | "estimatedCost" | "phaseId" | "targetDate" | "priority"
+  > & { dependsOn: string[] },
   storage: WritableStorage,
 ) {
   const state = readBuildState(storage);
@@ -175,10 +232,9 @@ export function updateBuildItemPlanning(
     (entry) => entry.id === itemId && entry.buildId === buildId,
   );
   if (!build || !item) throw new Error("Modification not found in this build.");
-  const planning = build.planning;
+  const planning = planningForBuild(build);
   if (
     input.phaseId &&
-    planning &&
     !planning.phases.some((phase) => phase.id === input.phaseId)
   )
     throw new Error("Choose a phase from this build.");
@@ -196,12 +252,19 @@ export function updateBuildItemPlanning(
     ...input,
     updatedAt: new Date().toISOString(),
   });
+  const nextItems = state.items.map((entry) =>
+    entry.id === itemId ? updated : entry,
+  );
+  if (
+    hasDependencyCycle(nextItems.filter((entry) => entry.buildId === buildId))
+  )
+    throw new Error(
+      "This dependency creates a loop. Keep the installation order one-way.",
+    );
   writeBuildState(
     {
       ...state,
-      items: state.items.map((entry) =>
-        entry.id === itemId ? updated : entry,
-      ),
+      items: nextItems,
     },
     storage,
   );

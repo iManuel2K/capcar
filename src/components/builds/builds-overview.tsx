@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useSyncExternalStore } from "react";
 
 import { VehicleArt } from "@/components/garage/vehicle-art";
-import { getBuildMetrics } from "@/features/builds/build-metrics";
+import { getConnectedBuildMetrics } from "@/features/builds/build-planning";
 import {
   announceBuildChange,
   createStealthRearBuild,
@@ -96,8 +96,8 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
               Create the first direction
             </h2>
             <p className="mt-3 leading-7 text-white/45">
-              Start from a goal and budget. Individual products, prices and
-              fitment will connect to the plan in later epics.
+              Start from a goal and budget, then connect phases, fitment
+              evidence, retailer offers and installation records.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -122,7 +122,7 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
             const buildItems = items.filter(
               (item) => item.buildId === build.id,
             );
-            const metrics = getBuildMetrics(build, buildItems);
+            const metrics = getConnectedBuildMetrics(build, buildItems);
             return (
               <Link
                 key={build.id}
@@ -145,8 +145,8 @@ export function BuildsOverview({ vehicleId }: { vehicleId: string }) {
                 </div>
                 <div className="grid gap-px bg-white/8 sm:grid-cols-3">
                   <BuildStat
-                    label="Planned"
-                    value={formatEuro(metrics.plannedTotal)}
+                    label="Forecast"
+                    value={formatEuro(metrics.forecast)}
                   />
                   <BuildStat label="Budget" value={formatEuro(build.budget)} />
                   <BuildStat label="Installed" value={`${metrics.progress}%`} />
