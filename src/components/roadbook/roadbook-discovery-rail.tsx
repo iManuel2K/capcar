@@ -60,17 +60,17 @@ export function RoadbookDiscoveryRail({
     onOpenChange(open === panel ? undefined : panel);
 
   return (
-    <div className="relative mt-3">
+    <div className="relative mt-2 sm:mt-3">
       <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
           aria-expanded={open === "places"}
           onClick={() => toggle("places")}
-          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/12 bg-white/[0.045] px-3 text-xs font-semibold text-white/72 transition hover:border-white/22 hover:bg-white/[0.08] hover:text-white"
+          className="inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-white/12 bg-white/[0.045] px-2.5 text-[11px] font-semibold text-white/72 transition hover:border-white/22 hover:bg-white/[0.08] hover:text-white sm:min-h-10 sm:gap-2 sm:px-3 sm:text-xs"
         >
           <Camera className="size-4 text-[#ff788a]" aria-hidden="true" />
           {t("places.action", { count: venues.length })}
-          <span className="rounded-full bg-white/8 px-1.5 py-0.5 text-[10px] text-white/48">
+          <span className="rounded-full bg-white/8 px-1.5 py-0.5 text-[9px] text-white/48 sm:text-[10px]">
             {t("places.images", { count: imageCount })}
           </span>
         </button>
@@ -78,7 +78,7 @@ export function RoadbookDiscoveryRail({
           type="button"
           aria-expanded={open === "events"}
           onClick={() => toggle("events")}
-          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/12 bg-white/[0.045] px-3 text-xs font-semibold text-white/72 transition hover:border-white/22 hover:bg-white/[0.08] hover:text-white"
+          className="inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-white/12 bg-white/[0.045] px-2.5 text-[11px] font-semibold text-white/72 transition hover:border-white/22 hover:bg-white/[0.08] hover:text-white sm:min-h-10 sm:gap-2 sm:px-3 sm:text-xs"
         >
           <CalendarDays className="size-4 text-[#ff788a]" aria-hidden="true" />
           {t("events.upcoming", { count: events.length })}
@@ -86,7 +86,7 @@ export function RoadbookDiscoveryRail({
       </div>
 
       {open && (
-        <section className="absolute top-full left-0 z-40 mt-2 w-[min(27rem,calc(100vw-2.5rem))] overflow-hidden rounded-2xl border border-white/12 bg-[#09100d]/98 text-white shadow-2xl backdrop-blur-xl">
+        <section className="absolute top-full left-0 z-40 mt-2 w-[min(27rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-white/12 bg-[#09100d]/98 text-white shadow-2xl backdrop-blur-xl sm:w-[min(27rem,calc(100vw-2.5rem))]">
           <header className="flex items-start justify-between gap-4 border-b border-white/9 p-4">
             <div>
               <p className="text-[10px] font-semibold tracking-[0.14em] text-[#ff667a] uppercase">
@@ -113,7 +113,7 @@ export function RoadbookDiscoveryRail({
             </button>
           </header>
 
-          <div className="max-h-[min(34rem,58dvh)] overflow-y-auto p-2">
+          <div className="max-h-[min(34rem,52dvh)] overflow-y-auto p-2 sm:max-h-[min(34rem,58dvh)]">
             {open === "places" && !orderedVenues.length && (
               <p className="p-4 text-xs leading-5 text-white/45">
                 {t("places.empty")}

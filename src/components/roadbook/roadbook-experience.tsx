@@ -220,7 +220,7 @@ export function RoadbookExperience() {
   }
 
   return (
-    <div className="relative h-[calc(100dvh-4.5rem)] min-h-[38rem] overflow-hidden bg-[#0b0e0c] text-white sm:h-[calc(100dvh-5rem)]">
+    <div className="relative h-[calc(100dvh-4.5rem)] min-h-[32rem] overflow-hidden bg-[#0b0e0c] text-white sm:h-[calc(100dvh-5rem)] sm:min-h-[38rem]">
       <RoadbookMap
         venues={visibleVenues}
         events={events}
@@ -251,18 +251,18 @@ export function RoadbookExperience() {
       )}
 
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-36 bg-gradient-to-b from-[#07100d]/82 to-transparent" />
-      <div className="absolute top-3 left-3 z-30 max-w-[min(38rem,calc(100%-1.5rem))] sm:top-5 sm:left-5">
-        <div className="rounded-2xl border border-white/12 bg-[#09100d]/88 p-4 shadow-2xl backdrop-blur-xl sm:p-5">
-          <p className="text-[10px] font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+      <div className="absolute top-2 right-2 left-2 z-30 max-w-none sm:top-5 sm:right-auto sm:left-5 sm:max-w-[min(38rem,calc(100%-2.5rem))]">
+        <div className="rounded-[1.25rem] border border-white/12 bg-[#09100d]/88 p-3 shadow-2xl backdrop-blur-xl sm:rounded-2xl sm:p-5">
+          <p className="text-[9px] font-semibold tracking-[0.16em] text-[#ff667a] uppercase sm:text-[10px]">
             {t("eyebrow")}
           </p>
-          <h1 className="mt-1 text-xl font-medium tracking-[-0.035em] sm:text-3xl">
+          <h1 className="mt-1 text-lg font-medium tracking-[-0.035em] sm:text-3xl">
             {t("title")}
           </h1>
           <p className="mt-1 hidden max-w-lg text-xs leading-5 text-white/48 sm:block">
             {t("description")}
           </p>
-          <label className="mt-3 flex min-h-11 items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 text-white/60">
+          <label className="mt-2 flex min-h-10 items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 text-white/60 sm:mt-3 sm:min-h-11">
             <Search className="size-4 shrink-0" aria-hidden="true" />
             <input
               type="search"
@@ -282,6 +282,18 @@ export function RoadbookExperience() {
               setSelectedVenue(venue);
               setDiscoveryPanel(undefined);
             }}
+          />
+        </div>
+        <div className="mt-2 lg:hidden">
+          <RoadbookThemeSwitcher
+            mode={mode}
+            onChange={updateMode}
+            label={t("modes.label")}
+            labels={modeLabels}
+            headline={t("modes.headline")}
+            description={t("modes.description")}
+            compatibility={!vectorReady}
+            compatibilityLabel={t("fallback.styles")}
           />
         </div>
       </div>
@@ -315,20 +327,7 @@ export function RoadbookExperience() {
         />
       </div>
 
-      <div className="absolute top-[17rem] right-3 left-3 z-20 lg:hidden">
-        <RoadbookThemeSwitcher
-          mode={mode}
-          onChange={updateMode}
-          label={t("modes.label")}
-          labels={modeLabels}
-          headline={t("modes.headline")}
-          description={t("modes.description")}
-          compatibility={!vectorReady}
-          compatibilityLabel={t("fallback.styles")}
-        />
-      </div>
-
-      <div className="absolute right-3 bottom-3 left-3 z-20 flex items-end gap-2 lg:right-[28rem] lg:left-5">
+      <div className="absolute right-2 bottom-2 left-2 z-20 flex items-end gap-2 sm:right-3 sm:bottom-3 sm:left-3 lg:right-[28rem] lg:left-5">
         <div className="min-w-0 flex-1">
           <RoadbookFilterBar
             selected={categories}
@@ -342,19 +341,24 @@ export function RoadbookExperience() {
           onClick={locateUser}
           aria-label={t("locate")}
           title={t("locate")}
-          className="grid size-12 shrink-0 place-items-center rounded-2xl border border-white/12 bg-[#09100d]/88 text-white/70 shadow-2xl backdrop-blur-xl hover:text-white"
+          className="grid size-11 shrink-0 place-items-center rounded-xl border border-white/12 bg-[#09100d]/88 text-white/70 shadow-2xl backdrop-blur-xl hover:text-white sm:size-12 sm:rounded-2xl"
         >
           <Crosshair className="size-4" />
         </button>
       </div>
 
-      <div className="absolute top-[27rem] left-3 z-20 lg:top-[16.5rem] lg:left-5">
+      <div className="absolute top-[27rem] left-3 z-20 hidden sm:block lg:top-[16.5rem] lg:left-5">
         <div className="rounded-xl border border-white/10 bg-[#09100d]/82 px-3 py-2 text-[11px] text-white/52 shadow-lg backdrop-blur-xl">
           {loading
             ? t("loading")
             : t("resultCount", { count: visibleVenues.length })}
         </div>
       </div>
+      <span className="sr-only" role="status" aria-live="polite">
+        {loading
+          ? t("loading")
+          : t("resultCount", { count: visibleVenues.length })}
+      </span>
 
       {(error || mapError) && (
         <div
