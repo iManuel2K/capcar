@@ -79,7 +79,7 @@ function markerElement(
 
 function radiusFromMap(instance: LeafletMap) {
   return Math.min(
-    1000,
+    3500,
     Math.max(
       10,
       instance.getCenter().distanceTo(instance.getBounds().getNorthEast()) /
@@ -172,7 +172,7 @@ export function RoadbookMap({
 
     const instance = L.map(leafletContainer.current, {
       center: [initialCenter.current.latitude, initialCenter.current.longitude],
-      zoom: 7,
+      zoom: 4,
       minZoom: 3,
       maxZoom: 18,
       zoomControl: false,
@@ -182,6 +182,7 @@ export function RoadbookMap({
       touchZoom: true,
       boxZoom: true,
       keyboard: true,
+      dragging: true,
     });
     const vectorPane = instance.createPane(VECTOR_PANE);
     vectorPane.style.zIndex = "210";

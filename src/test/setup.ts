@@ -6,8 +6,14 @@ import { vi } from "vitest";
 import messages from "../../messages/en.json";
 import publicMessages from "../../messages/public/en.json";
 import hardeningMessages from "../../messages/hardening/en.json";
+import roadbookMessages from "../../messages/roadbook/en.json";
 
-const allMessages = { ...messages, ...publicMessages, ...hardeningMessages };
+const allMessages = {
+  ...messages,
+  ...publicMessages,
+  ...hardeningMessages,
+  ...roadbookMessages,
+};
 if (typeof HTMLDialogElement !== "undefined") {
   HTMLDialogElement.prototype.showModal ??= function () {
     this.setAttribute("open", "");

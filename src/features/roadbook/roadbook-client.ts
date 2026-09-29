@@ -229,6 +229,89 @@ export type RoadbookModerationReport = {
   createdAt: string;
 };
 
+export type RoadbookDiscoveryCandidate = {
+  id: string;
+  kind: "event" | "place" | "image";
+  title: string;
+  sourceUrl: string;
+  countryCode?: string;
+  region?: string;
+  confidence: number;
+  createdAt: string;
+  image?: {
+    url: string;
+    alt: string;
+    photographer?: string;
+  };
+};
+
+function objectValue(value: unknown): Record<string, unknown> | undefined {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : undefined;
+}
+
+function httpsValue(value: unknown) {
+  if (typeof value !== "string") return undefined;
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" ? url.toString() : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+export async function fetchRoadbookDiscoveryQueue() {
+  const { client } = await requireUser();
+  const { data, error } = await client
+    .from("roadbook_discovery_candidates")
+    .select(
+      "id,candidate_kind,title,source_url,country_code,region,confidence,payload,created_at",
+    )
+    .eq("status", "pending")
+    .order("last_seen_at", { ascending: false })
+    .limit(100);
+  if (error) throw new Error(error.message);
+
+  return (data ?? []).flatMap((row) => {
+    if (
+      !["event", "place", "image"].includes(row.candidate_kind) ||
+      typeof row.title !== "string" ||
+      typeof row.source_url !== "string"
+    )
+      return [];
+    const payload = objectValue(row.payload);
+    const image = objectValue(payload?.image);
+    const photographer = objectValue(payload?.photographer);
+    const imageUrl = httpsValue(image?.smallUrl) ?? httpsValue(image?.url);
+    return [
+      {
+        id: row.id,
+        kind: row.candidate_kind as RoadbookDiscoveryCandidate["kind"],
+        title: row.title,
+        sourceUrl: row.source_url,
+        countryCode: row.country_code ?? undefined,
+        region: row.region ?? undefined,
+        confidence: Number(row.confidence),
+        createdAt: row.created_at,
+        image: imageUrl
+          ? {
+              url: imageUrl,
+              alt:
+                typeof image?.alt === "string"
+                  ? image.alt
+                  : "Roadbook discovery candidate",
+              photographer:
+                typeof photographer?.name === "string"
+                  ? photographer.name
+                  : undefined,
+            }
+          : undefined,
+      } satisfies RoadbookDiscoveryCandidate,
+    ];
+  });
+}
+
 export async function fetchRoadbookModerationQueue() {
   const { client } = await requireUser();
   const { data, error } = await client
@@ -261,6 +344,20 @@ export async function moderateRoadbookReport(
   const { client } = await requireUser();
   const { error } = await client.rpc("moderate_roadbook_report", {
     p_report_id: reportId,
+    p_status: status,
+    p_note: note,
+  });
+  if (error) throw new Error(error.message);
+}
+
+export async function moderateRoadbookDiscoveryCandidate(
+  candidateId: string,
+  status: "approved" | "rejected",
+  note: string,
+) {
+  const { client } = await requireUser();
+  const { error } = await client.rpc("moderate_roadbook_discovery_candidate", {
+    p_candidate_id: candidateId,
     p_status: status,
     p_note: note,
   });
