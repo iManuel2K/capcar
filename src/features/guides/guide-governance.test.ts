@@ -61,21 +61,43 @@ describe("guide governance", () => {
 
   it("does not count a local self-attestation as trusted approval", () => {
     const guide = installationGuides[0];
-    const governance = evaluateGuideGovernance(guide, [{
-      id: "local-review",
-      guideSlug: guide.slug,
-      guideRevision: guide.revision,
-      reviewerName: "Local tester",
-      reviewerRole: "mechanic",
-      outcome: "approved",
-      sourceChecked: true,
-      applicabilityChecked: true,
-      safetyChecked: true,
-      notes: "Demo only",
-      evidenceState: "local-demo",
-      createdAt: "2026-09-05T10:00:00.000Z",
-    }]);
+    const governance = evaluateGuideGovernance(guide, [
+      {
+        id: "local-review",
+        guideSlug: guide.slug,
+        guideRevision: guide.revision,
+        reviewerName: "Local tester",
+        reviewerRole: "mechanic",
+        outcome: "approved",
+        sourceChecked: true,
+        applicabilityChecked: true,
+        safetyChecked: true,
+        notes: "Demo only",
+        evidenceState: "local-demo",
+        createdAt: "2026-09-05T10:00:00.000Z",
+      },
+    ]);
     expect(governance.trustedApprovals).toBe(0);
     expect(governance.canVerify).toBe(false);
+  });
+
+  it("gives every installation guide a complete, honest preparation plan", () => {
+    const installGuides = installationGuides.filter(
+      (guide) => guide.purpose !== "inspection",
+    );
+    expect(installGuides.length).toBeGreaterThan(0);
+
+    for (const guide of installGuides) {
+      expect(guide.installationPlan).toBeDefined();
+      expect(guide.installationPlan!.costRange.min).toBeGreaterThanOrEqual(0);
+      expect(guide.installationPlan!.costRange.max).toBeGreaterThanOrEqual(
+        guide.installationPlan!.costRange.min,
+      );
+      expect(guide.installationPlan!.costRange.note).toMatch(/planning|vary/i);
+      expect(guide.installationPlan!.prerequisites.length).toBeGreaterThan(0);
+      expect(guide.installationPlan!.technicalChecks.length).toBeGreaterThan(0);
+      expect(guide.installationPlan!.legalChecks.length).toBeGreaterThan(0);
+      expect(guide.reviewStatus).not.toBe("verified");
+    }
   });
 });
