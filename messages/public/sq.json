@@ -69,8 +69,12 @@
         "description": "Regjistro punët e servisit, problemet e njohura dhe kodet manuale të diagnostikimit."
       },
       "planning": {
-        "title": "Planifikimi i build-it",
-        "description": "Organizo përmirësimet, buxhetet, listat, provat e përshtatshmërisë dhe historikun e montimeve."
+        "title": "Build Planner 2.0",
+        "description": "Organizo modifikimet në faza, cakto varësitë, buxhetet dhe datat, krahaso pjesët dhe dërgo blerjet e punët e montuara te Cost Analytics dhe Vehicle Passport."
+      },
+      "guidance": {
+        "title": "Udhëzimet e montimit 2.0",
+        "description": "Përgatit montimet demo të mbuluara me mjete, parakushte, intervale kostoje, kontrolle sigurie dhe një rekomandim të qartë DIY ose servis. Mbulimi i automjeteve mbetet i kufizuar dhe draftet kërkojnë ende procedura zyrtare."
       },
       "passport": {
         "title": "Pasaporta e makinës",
