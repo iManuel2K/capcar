@@ -98,6 +98,14 @@ export function InstallGuide({
     (current.completedSteps.length / resolvedGuide.steps.length) * 100,
   );
   const governance = evaluateGuideGovernance(resolvedGuide, reviews);
+  const installationPlan = resolvedGuide.installationPlan;
+  const planningCost = installationPlan
+    ? new Intl.NumberFormat("en-IE", {
+        style: "currency",
+        currency: installationPlan.costRange.currency,
+        maximumFractionDigits: 0,
+      })
+    : undefined;
 
   function persist(changes: Partial<GuideProgress>) {
     saveGuideProgress(
@@ -178,6 +186,13 @@ export function InstallGuide({
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2">
             <ListChecks className="size-3.5" /> {completion}%
           </span>
+          {installationPlan && planningCost && (
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2">
+              {planningCost.format(installationPlan.costRange.min)}–
+              {planningCost.format(installationPlan.costRange.max)} planning
+              range
+            </span>
+          )}
         </div>
       </header>
 
@@ -233,6 +248,38 @@ export function InstallGuide({
               ))}
             </ul>
           </div>
+          {installationPlan && (
+            <div className="rounded-[2rem] border border-[#e72d45]/20 bg-[#e72d45]/[0.045] p-6">
+              <p className="text-[10px] font-semibold tracking-[0.14em] text-[#ff667a] uppercase">
+                Installation Guidance 2.0 · Beta coverage
+              </p>
+              <h2 className="mt-3 text-xl font-medium">
+                {installationPlan.recommendedSetting}
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-white/50">
+                {installationPlan.recommendation}
+              </p>
+              <p className="mt-4 text-xs leading-5 text-white/35">
+                {installationPlan.costRange.note}
+              </p>
+              <PreparationList
+                title="Confirm before starting"
+                items={installationPlan.prerequisites}
+              />
+              <PreparationList
+                title="Consumables"
+                items={installationPlan.consumables}
+              />
+              <PreparationList
+                title="Technical checks"
+                items={installationPlan.technicalChecks}
+              />
+              <PreparationList
+                title="Legal and disposal"
+                items={installationPlan.legalChecks}
+              />
+            </div>
+          )}
           <div className="rounded-[2rem] border border-amber-300/15 bg-amber-300/6 p-6">
             <h2 className="flex items-center gap-2 font-medium text-amber-100/80">
               <ShieldCheck className="size-4" /> Safety gate
@@ -347,6 +394,24 @@ export function InstallGuide({
           </div>
         </article>
       </section>
+    </div>
+  );
+}
+
+function PreparationList({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div className="mt-5 border-t border-white/8 pt-4">
+      <h3 className="text-xs font-semibold tracking-[0.1em] text-white/55 uppercase">
+        {title}
+      </h3>
+      <ul className="mt-3 space-y-2">
+        {items.map((item) => (
+          <li key={item} className="flex gap-2 text-sm leading-6 text-white/45">
+            <Check className="mt-1 size-3.5 shrink-0 text-white/25" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
