@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   ArrowDown,
   ArrowUp,
@@ -22,6 +23,7 @@ import {
   type Build,
   type BuildItem,
 } from "@/features/builds/build-schema";
+import { findGuideForPart } from "@/features/guides/guide-catalog";
 import {
   announceBuildChange,
   updateBuildDetails,
@@ -500,6 +502,9 @@ export function ConnectedBuildPlanner({
         <div className="mt-4 space-y-3">
           {items.map((item) => {
             const blockers = dependencyBlockers(item, items);
+            const guide = item.catalogPartId
+              ? findGuideForPart(item.catalogPartId)
+              : undefined;
             return (
               <details
                 key={item.id}
@@ -523,6 +528,47 @@ export function ConnectedBuildPlanner({
                     installed.
                   </p>
                 )}
+
+                <div className="mt-3 rounded-xl border border-white/10 bg-black/10 p-3">
+                  <p className="text-[10px] font-semibold tracking-[0.12em] text-white/35 uppercase">
+                    Installation preparation
+                  </p>
+                  {guide ? (
+                    <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                      <div>
+                        <p className="font-medium text-white/80">
+                          {guide.title}
+                        </p>
+                        <p className="mt-1 text-xs leading-5 text-white/45">
+                          {guide.difficulty} · {guide.estimatedMinutes} min
+                          {guide.installationPlan
+                            ? " · " + guide.installationPlan.recommendedSetting
+                            : ""}
+                          {blockers.length
+                            ? " · Dependencies must be installed first"
+                            : " · Sequence ready"}
+                        </p>
+                      </div>
+                      <Link
+                        href={
+                          "/garage/" +
+                          encodeURIComponent(build.vehicleId) +
+                          "/guides/" +
+                          encodeURIComponent(guide.slug)
+                        }
+                        className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl border border-white/15 px-4 text-sm font-medium text-white/70 hover:border-[#e72d45]/50 hover:text-white"
+                      >
+                        Open preparation
+                      </Link>
+                    </div>
+                  ) : (
+                    <p className="mt-2 text-xs leading-5 text-white/40">
+                      No vehicle-specific guide is attached. This plan is not
+                      installation instruction; verify the exact workshop
+                      procedure before starting.
+                    </p>
+                  )}
+                </div>
 
                 <form
                   className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"

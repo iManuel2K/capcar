@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Check, ArrowRight } from "lucide-react";
 import type { Build, BuildItem } from "@/features/builds/build-schema";
 import { getBuildJourney } from "@/features/builds/build-journey";
+import { findGuideForPart } from "@/features/guides/guide-catalog";
 import { useBuildVisuals } from "@/features/visualizer/use-build-visuals";
 
 export function BuildJourneyPanel({
@@ -19,6 +20,9 @@ export function BuildJourneyPanel({
   const journey = getBuildJourney(build, items, Boolean(visual));
   const base = `/garage/${encodeURIComponent(build.vehicleId)}/builds/${encodeURIComponent(build.id)}`;
   const next = journey.next;
+  const nextGuide = next?.catalogPartId
+    ? findGuideForPart(next.catalogPartId)
+    : undefined;
   const parts = `${base}/parts${next ? `?item=${encodeURIComponent(next.id)}` : ""}`;
   return (
     <section
@@ -76,6 +80,19 @@ export function BuildJourneyPanel({
                 href={parts}
               >
                 Compare parts <ArrowRight className="size-4" />
+              </Link>
+            )}
+            {nextGuide && (
+              <Link
+                className="inline-flex min-h-11 items-center rounded-xl border border-white/30 px-4 text-sm"
+                href={
+                  "/garage/" +
+                  encodeURIComponent(build.vehicleId) +
+                  "/guides/" +
+                  encodeURIComponent(nextGuide.slug)
+                }
+              >
+                Prepare installation
               </Link>
             )}
             <Link

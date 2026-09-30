@@ -69,8 +69,12 @@
         "description": "Track service work, known problems and manual diagnostic fault logs."
       },
       "planning": {
-        "title": "Build planning",
-        "description": "Organize upgrades, budgets, wishlists, fitment evidence and installation history."
+        "title": "Build Planner 2.0",
+        "description": "Sequence modifications in phases, set dependencies, budgets and dates, compare parts, then carry purchases and installed work into Cost Analytics and the Vehicle Passport."
+      },
+      "guidance": {
+        "title": "Installation Guidance 2.0",
+        "description": "Prepare covered demo installations with tools, prerequisites, cost ranges, safety gates and a clear DIY-or-workshop recommendation. Vehicle coverage remains limited and draft guides still require authoritative procedures."
       },
       "passport": {
         "title": "Vehicle passport",

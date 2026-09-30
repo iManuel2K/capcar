@@ -32,6 +32,10 @@ import {
   vehiclePassportSchema,
 } from "@/features/passport/vehicle-passport";
 import { buildVehicleTimeline } from "@/features/timeline/vehicle-timeline";
+import {
+  collectLocalSnapshot,
+  localSnapshotSchema,
+} from "@/features/sync/local-snapshot";
 
 const at = "2026-09-01T12:00:00.000Z";
 beforeEach(() => localStorage.clear());
@@ -420,5 +424,11 @@ describe("purchase workflow, costs and Passport", () => {
     expect(
       events.some((event) => event.title.startsWith("Evidence linked")),
     ).toBe(true);
+
+    const accountSnapshot = collectLocalSnapshot(localStorage, at);
+    expect(localSnapshotSchema.safeParse(accountSnapshot).success).toBe(true);
+    expect(JSON.stringify(accountSnapshot.data)).toContain("OEM street");
+    expect(JSON.stringify(accountSnapshot.data)).toContain("Rear lamps");
+    expect(JSON.stringify(accountSnapshot.data)).toContain("318i");
   });
 });

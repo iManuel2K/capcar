@@ -24,6 +24,7 @@ const stages = [
       "garage",
       "maintenance",
       "planning",
+      "guidance",
       "passport",
       "wishlist",
       "costs",
