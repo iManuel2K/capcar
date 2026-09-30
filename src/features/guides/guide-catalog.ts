@@ -17,6 +17,24 @@ export type GuideStep = {
   warning?: string;
 };
 
+export type GuideInstallationPlan = {
+  costRange: {
+    min: number;
+    max: number;
+    currency: "EUR";
+    note: string;
+  };
+  prerequisites: string[];
+  consumables: string[];
+  technicalChecks: string[];
+  legalChecks: string[];
+  recommendedSetting:
+    | "DIY suitable"
+    | "Experienced DIY"
+    | "Workshop recommended";
+  recommendation: string;
+};
+
 export type InstallationGuide = {
   purpose?: "inspection";
   slug: string;
@@ -32,51 +50,54 @@ export type InstallationGuide = {
   estimatedMinutes: number;
   tools: string[];
   safetyChecks: string[];
+  installationPlan?: GuideInstallationPlan;
   steps: GuideStep[];
 };
 
 export const installationGuides: InstallationGuide[] = [
-  ...dailyCarProblems.map((problem): InstallationGuide => ({
-    slug: `inspection-${problem.id}`,
-    partId: `inspection-${problem.id}`,
-    purpose: "inspection",
-    title: problem.title,
-    summary:
-      "Native inspection preparation checklist. Record symptoms, collect evidence and plan the next professional check; completion is not a diagnosis or repair certification.",
-    reviewStatus: "draft",
-    revision: "1.0",
-    updatedAt: "2026-09-14",
-    applicability: [problem.applicability],
-    sources: [
-      {
-        label: problem.sourceLabel,
-        kind: "authoritative",
-        url: problem.sourceUrl,
-        verifiedAt: "2026-09-14",
-      },
-    ],
-    difficulty: "Easy",
-    estimatedMinutes: 15,
-    tools: [
-      "Vehicle handbook",
-      "Camera or notes",
-      "Available service and test records",
-    ],
-    safetyChecks: [
-      "Confirm that the vehicle generation and powertrain match the stated scope.",
-      "Stop if there is a safety warning, impaired steering, overheating or damaged battery. Arrange professional assistance.",
-      "No lifting, disassembly, live electrical work or high-voltage work is part of this checklist.",
-    ],
-    steps: (problem.inspectionSteps ?? []).map((instruction, index) => ({
-      id: `check-${index + 1}`,
-      title: `Inspection preparation · ${index + 1}`,
-      instruction,
-      beginnerDetail:
-        "Mark this step only after recording the observation or arranging the specified professional check. An unknown result should remain unknown.",
-      check:
-        "Observation recorded, or the required professional check arranged. No component failure has been inferred.",
-    })),
-  })),
+  ...dailyCarProblems.map(
+    (problem): InstallationGuide => ({
+      slug: `inspection-${problem.id}`,
+      partId: `inspection-${problem.id}`,
+      purpose: "inspection",
+      title: problem.title,
+      summary:
+        "Native inspection preparation checklist. Record symptoms, collect evidence and plan the next professional check; completion is not a diagnosis or repair certification.",
+      reviewStatus: "draft",
+      revision: "1.0",
+      updatedAt: "2026-09-14",
+      applicability: [problem.applicability],
+      sources: [
+        {
+          label: problem.sourceLabel,
+          kind: "authoritative",
+          url: problem.sourceUrl,
+          verifiedAt: "2026-09-14",
+        },
+      ],
+      difficulty: "Easy",
+      estimatedMinutes: 15,
+      tools: [
+        "Vehicle handbook",
+        "Camera or notes",
+        "Available service and test records",
+      ],
+      safetyChecks: [
+        "Confirm that the vehicle generation and powertrain match the stated scope.",
+        "Stop if there is a safety warning, impaired steering, overheating or damaged battery. Arrange professional assistance.",
+        "No lifting, disassembly, live electrical work or high-voltage work is part of this checklist.",
+      ],
+      steps: (problem.inspectionSteps ?? []).map((instruction, index) => ({
+        id: `check-${index + 1}`,
+        title: `Inspection preparation · ${index + 1}`,
+        instruction,
+        beginnerDetail:
+          "Mark this step only after recording the observation or arranging the specified professional check. An unknown result should remain unknown.",
+        check:
+          "Observation recorded, or the required professional check arranged. No component failure has been inferred.",
+      })),
+    }),
+  ),
   {
     slug: "demo-e90-rear-lamps",
     partId: "demo-dark-rear-lamps-e90",
@@ -102,6 +123,35 @@ export const installationGuides: InstallationGuide[] = [
     ],
     difficulty: "Moderate",
     estimatedMinutes: 95,
+    installationPlan: {
+      costRange: {
+        min: 0,
+        max: 120,
+        currency: "EUR",
+        note: "Labour-only planning range. Parts, coding and repairs are excluded.",
+      },
+      prerequisites: [
+        "VIN-specific workshop procedure",
+        "Exact connector and production-split match",
+        "Road-approved lamp assembly for the registration country",
+      ],
+      consumables: [
+        "Clean gloves",
+        "Contact-safe cleaning cloth",
+        "Vehicle-approved sealing material only when the exact procedure requires it",
+      ],
+      technicalChecks: [
+        "Use only vehicle-specific fastener values from an authoritative source.",
+        "Confirm every light function, warning state, seal and panel gap after installation.",
+      ],
+      legalChecks: [
+        "Confirm E-mark or applicable road approval before fitting.",
+        "Do not alter required light colour, position or visibility.",
+      ],
+      recommendedSetting: "Experienced DIY",
+      recommendation:
+        "Suitable only with the exact procedure and approval confirmed; electrical or sealing damage belongs in a workshop.",
+    },
     tools: [
       "Trim-removal tool",
       "Vehicle-appropriate socket set",
@@ -179,6 +229,35 @@ export const installationGuides: InstallationGuide[] = [
     ],
     difficulty: "Moderate",
     estimatedMinutes: 70,
+    installationPlan: {
+      costRange: {
+        min: 90,
+        max: 220,
+        currency: "EUR",
+        note: "Planning range for materials, disposal and independent labour; local prices vary.",
+      },
+      prerequisites: [
+        "VIN-specific oil approval and capacity",
+        "Correct filter, seals and drain hardware",
+        "Approved level access or lifting equipment",
+      ],
+      consumables: [
+        "Approved oil in the confirmed quantity",
+        "Filter and all one-use seals",
+        "Spill control and a legal waste-oil return route",
+      ],
+      technicalChecks: [
+        "Take every tightening value and level-check sequence from an authoritative source.",
+        "Record oil specification, quantity, date and mileage after the leak check.",
+      ],
+      legalChecks: [
+        "Return used oil and contaminated materials through an approved collection route.",
+        "Do not work beneath a vehicle supported only by a jack.",
+      ],
+      recommendedSetting: "Workshop recommended",
+      recommendation:
+        "Use a workshop unless safe access, fluid handling and the exact authoritative procedure are already available.",
+    },
     tools: [
       "Approved lifting or access equipment",
       "Correct filter tool",
@@ -254,6 +333,31 @@ export const installationGuides: InstallationGuide[] = [
     ],
     difficulty: "Easy",
     estimatedMinutes: 25,
+    installationPlan: {
+      costRange: {
+        min: 20,
+        max: 80,
+        currency: "EUR",
+        note: "Parts and consumables planning range; workshop labour is excluded.",
+      },
+      prerequisites: [
+        "Exact airbox and filter application",
+        "Vehicle-specific opening sequence",
+        "Cool engine bay and clean working area",
+      ],
+      consumables: ["Clean cloth", "Low-pressure vacuum where appropriate"],
+      technicalChecks: [
+        "Confirm the seal is flat around its complete perimeter.",
+        "Reconnect every hose, clip, sensor and fastener disturbed for access.",
+      ],
+      legalChecks: [
+        "Use only a filter approved for the vehicle and local road requirements.",
+        "Do not remove emissions or intake-monitoring equipment.",
+      ],
+      recommendedSetting: "DIY suitable",
+      recommendation:
+        "A low-risk DIY task when the exact filter and airbox procedure are confirmed; stop if sensors or brittle hoses must be disturbed.",
+    },
     tools: ["Work light", "Clean cloth", "Vehicle-appropriate hand tools"],
     safetyChecks: [
       "Switch the engine off and allow the engine bay to cool.",
