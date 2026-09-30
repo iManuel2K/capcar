@@ -69,8 +69,12 @@
         "description": "Servicearbeiten, bekannte Probleme und manuelle Diagnose-Fehlerprotokolle dokumentieren."
       },
       "planning": {
-        "title": "Build-Planung",
-        "description": "Upgrades, Budgets, Wunschlisten, Passform-Nachweise und Einbauhistorie organisieren."
+        "title": "Build Planner 2.0",
+        "description": "Umbauten in Phasen planen, Abhängigkeiten, Budgets und Termine festlegen, Teile vergleichen und Käufe sowie verbaute Arbeiten in Kostenanalyse und Fahrzeugpass übernehmen."
+      },
+      "guidance": {
+        "title": "Einbau-Guides 2.0",
+        "description": "Bereite abgedeckte Demo-Einbauten mit Werkzeugen, Voraussetzungen, Kostenspannen, Sicherheitschecks und einer klaren DIY-oder-Werkstatt-Empfehlung vor. Die Fahrzeugabdeckung bleibt begrenzt; Entwürfe benötigen weiterhin verbindliche Verfahren."
       },
       "passport": {
         "title": "Fahrzeugpass",
