@@ -15,16 +15,16 @@
       "example": "使用許可のある写真例",
       "directions": "経路を開く",
       "tags": {
-        "skyline": "skyline",
-        "industrial": "industrial",
-        "forest": "forest",
-        "mountain": "mountain",
-        "coastal": "coastal",
-        "architecture": "architecture",
-        "night": "night",
-        "sunrise": "sunrise",
-        "sunset": "sunset",
-        "urban": "urban"
+        "skyline": "都市景観",
+        "industrial": "工業地帯",
+        "forest": "森林",
+        "mountain": "山岳",
+        "coastal": "海岸",
+        "architecture": "建築",
+        "night": "夜景",
+        "sunrise": "日の出",
+        "sunset": "夕景",
+        "urban": "都市"
       }
     },
     "media": {

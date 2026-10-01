@@ -397,7 +397,7 @@
     "concept": "Koncept",
     "ctaTitle": "Garazhi yt fillon këtu.",
     "openGarage": "Hap garazhin",
-    "liveDemo": "Demo live",
+    "liveDemo": "Demo e drejtpërdrejtë",
     "fitment": "Përshtatja",
     "fitmentTitle": "Bli pjesën e duhur.",
     "fitmentDescription": "Përputhshmëria dhe kërkesat para pagesës.",
@@ -405,7 +405,7 @@
     "active": "Aktiv",
     "platform": "Platforma",
     "mileage": "Kilometrazhi",
-    "builds": "Build-e",
+    "builds": "Projekte",
     "activeCount": "1 aktiv",
     "brakeFluid": "Lëngu i frenave",
     "dueNow": "Duhet tani",
@@ -606,7 +606,7 @@
     "localOnly": "Skedarët qëndrojnë në këtë tab dhe nuk ngarkohen. Përdor regjistrime që zotëron ose ke leje. Regjistrimet publike mbeten jashtë derisa të kontrollohen të drejtat dhe metadata."
   },
   "ShowcaseData": {
-    "label": "Build-e showcase",
+    "label": "Projekte shembull",
     "s1": {
       "brief": "Sedan për natën vonë: bojë e përmbajtur, siluetë më e ulët dhe profil i pastër pas.",
       "p1": "Amortizim sportiv",

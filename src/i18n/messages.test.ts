@@ -10,6 +10,11 @@ import publicEl from "../../messages/public/el.json";
 import publicEn from "../../messages/public/en.json";
 import publicJa from "../../messages/public/ja.json";
 import publicSq from "../../messages/public/sq.json";
+import roadbookDe from "../../messages/roadbook/de.json";
+import roadbookEl from "../../messages/roadbook/el.json";
+import roadbookEn from "../../messages/roadbook/en.json";
+import roadbookJa from "../../messages/roadbook/ja.json";
+import roadbookSq from "../../messages/roadbook/sq.json";
 
 function keys(value: object, prefix = ""): string[] {
   return Object.entries(value).flatMap(([key, child]) => {
@@ -40,4 +45,24 @@ describe("localized messages", () => {
     expect(keys(messages).sort()).toEqual(keys(publicEn).sort());
     expect(Object.values(messages).every(Boolean)).toBe(true);
   });
+
+  it.each([
+    ["German", roadbookDe],
+    ["Greek", roadbookEl],
+    ["Albanian", roadbookSq],
+    ["Japanese", roadbookJa],
+  ])(
+    "keeps localized Roadbook discovery labels out of accidental English in %s",
+    (_name, messages) => {
+      expect(keys(messages).sort()).toEqual(keys(roadbookEn).sort());
+      const translated = messages.Roadbook.photoSpot.tags;
+      const english = roadbookEn.Roadbook.photoSpot.tags;
+      for (const key of Object.keys(english) as (keyof typeof english)[]) {
+        expect(translated[key]).not.toBe(english[key]);
+      }
+      expect(messages.Roadbook.categories.track_day).not.toBe(
+        roadbookEn.Roadbook.categories.track_day,
+      );
+    },
+  );
 });

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useLocale } from "next-intl";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -9,6 +10,7 @@ import {
   CheckCircle2,
   ChevronLeft,
   Clock3,
+  ExternalLink,
   FileCheck2,
   FileWarning,
   ListChecks,
@@ -37,6 +39,7 @@ export function InstallGuide({
   vehicleId: string;
   guideSlug: string;
 }) {
+  const locale = useLocale();
   const hydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -100,7 +103,7 @@ export function InstallGuide({
   const governance = evaluateGuideGovernance(resolvedGuide, reviews);
   const installationPlan = resolvedGuide.installationPlan;
   const planningCost = installationPlan
-    ? new Intl.NumberFormat("en-IE", {
+    ? new Intl.NumberFormat(locale, {
         style: "currency",
         currency: installationPlan.costRange.currency,
         maximumFractionDigits: 0,
@@ -176,6 +179,16 @@ export function InstallGuide({
         <p className="mt-4 max-w-2xl leading-7 text-white/45">
           {guide.summary}
         </p>
+        <div className="mt-5 flex flex-wrap gap-2" aria-label="Guide scope">
+          {guide.applicability.map((item) => (
+            <span
+              key={item}
+              className="rounded-full border border-white/10 bg-black/10 px-3 py-1.5 text-xs leading-5 text-white/45"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
         <div className="mt-7 flex flex-wrap gap-3 text-xs text-white/45">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2">
             <Clock3 className="size-3.5" /> {guide.estimatedMinutes} min
@@ -205,8 +218,14 @@ export function InstallGuide({
             Revision {resolvedGuide.revision}
           </h2>
           <p className="mt-3 text-sm leading-6 text-white/40">
-            Updated {resolvedGuide.updatedAt}. This guide cannot receive a
-            verified label while its source requirements remain open.
+            Updated{" "}
+            {new Intl.DateTimeFormat(locale, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            }).format(new Date(`${resolvedGuide.updatedAt}T00:00:00Z`))}
+            . This guide cannot receive a verified label while its source
+            requirements remain open.
           </p>
           <Link
             href={`/garage/${vehicleId}/guides/${guideSlug}/review`}
@@ -219,15 +238,32 @@ export function InstallGuide({
           {resolvedGuide.sources.map((source) => (
             <div
               key={source.label}
-              className="rounded-2xl border border-white/8 bg-black/10 p-4"
+              className="min-w-0 rounded-2xl border border-white/8 bg-black/10 p-4"
             >
               <FileCheck2 className="size-4 text-white/25" />
-              <p className="mt-3 text-sm leading-6 text-white/50">
+              <p className="mt-3 text-sm leading-6 break-words text-white/50">
                 {source.label}
               </p>
               <p className="mt-2 text-[10px] tracking-[0.12em] text-white/25 uppercase">
                 {source.kind}
+                {source.verifiedAt
+                  ? ` · checked ${new Intl.DateTimeFormat(locale, {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    }).format(new Date(`${source.verifiedAt}T00:00:00Z`))}`
+                  : ""}
               </p>
+              {source.url && (
+                <a
+                  href={source.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-3 inline-flex min-h-11 items-center gap-2 text-xs text-white/60 underline decoration-white/25 underline-offset-4 hover:text-white"
+                >
+                  Open source <ExternalLink className="size-3.5" />
+                </a>
+              )}
             </div>
           ))}
         </div>
@@ -267,6 +303,10 @@ export function InstallGuide({
                 items={installationPlan.prerequisites}
               />
               <PreparationList
+                title="Work area"
+                items={installationPlan.workAreaChecks}
+              />
+              <PreparationList
                 title="Consumables"
                 items={installationPlan.consumables}
               />
@@ -277,6 +317,15 @@ export function InstallGuide({
               <PreparationList
                 title="Legal and disposal"
                 items={installationPlan.legalChecks}
+              />
+              <PreparationList
+                title="Stop and reassess when"
+                items={installationPlan.stopConditions}
+                tone="warning"
+              />
+              <PreparationList
+                title="Save to the build history"
+                items={installationPlan.completionRecord}
               />
             </div>
           )}
@@ -308,9 +357,12 @@ export function InstallGuide({
         </aside>
 
         <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-9">
-          <div className="flex items-center justify-between gap-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-5">
             <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
               Step {stepIndex + 1} of {guide.steps.length}
+              {step.estimatedMinutes
+                ? ` · about ${step.estimatedMinutes} min`
+                : ""}
             </p>
             <div className="flex rounded-xl border border-white/10 bg-black/10 p-1 text-xs">
               {(["beginner", "expert"] as const).map((mode) => (
@@ -349,6 +401,38 @@ export function InstallGuide({
               </p>
             </div>
           )}
+          {(step.whyItMatters || step.mistakesToAvoid?.length) && (
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {step.whyItMatters && (
+                <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-5">
+                  <p className="text-xs font-semibold tracking-[0.12em] text-white/40 uppercase">
+                    Why this matters
+                  </p>
+                  <p className="mt-3 text-sm leading-6 text-white/55">
+                    {step.whyItMatters}
+                  </p>
+                </div>
+              )}
+              {Boolean(step.mistakesToAvoid?.length) && (
+                <div className="rounded-2xl border border-amber-300/15 bg-amber-300/[0.045] p-5">
+                  <p className="text-xs font-semibold tracking-[0.12em] text-amber-100/65 uppercase">
+                    Avoid these mistakes
+                  </p>
+                  <ul className="mt-3 space-y-2">
+                    {step.mistakesToAvoid?.map((mistake) => (
+                      <li
+                        key={mistake}
+                        className="flex gap-2 text-sm leading-6 text-white/50"
+                      >
+                        <AlertTriangle className="mt-1 size-3.5 shrink-0 text-amber-200/60" />
+                        <span>{mistake}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
           {step.warning && (
             <div className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6 text-white/50">
               <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-200" />
@@ -360,6 +444,24 @@ export function InstallGuide({
               Confirmation
             </p>
             <p className="mt-3 text-sm leading-6 text-white/60">{step.check}</p>
+            {Boolean(step.recordAfterStep?.length) && (
+              <div className="mt-5 border-t border-white/8 pt-4">
+                <p className="text-xs tracking-[0.12em] text-white/30 uppercase">
+                  Record before continuing
+                </p>
+                <ul className="mt-3 space-y-2">
+                  {step.recordAfterStep?.map((record) => (
+                    <li
+                      key={record}
+                      className="flex gap-2 text-sm leading-6 text-white/50"
+                    >
+                      <FileCheck2 className="mt-1 size-3.5 shrink-0 text-white/30" />
+                      <span>{record}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
           <div className="mt-8 flex items-center justify-between gap-3">
             <button
@@ -398,7 +500,15 @@ export function InstallGuide({
   );
 }
 
-function PreparationList({ title, items }: { title: string; items: string[] }) {
+function PreparationList({
+  title,
+  items,
+  tone = "default",
+}: {
+  title: string;
+  items: string[];
+  tone?: "default" | "warning";
+}) {
   return (
     <div className="mt-5 border-t border-white/8 pt-4">
       <h3 className="text-xs font-semibold tracking-[0.1em] text-white/55 uppercase">
@@ -407,7 +517,11 @@ function PreparationList({ title, items }: { title: string; items: string[] }) {
       <ul className="mt-3 space-y-2">
         {items.map((item) => (
           <li key={item} className="flex gap-2 text-sm leading-6 text-white/45">
-            <Check className="mt-1 size-3.5 shrink-0 text-white/25" />
+            {tone === "warning" ? (
+              <AlertTriangle className="mt-1 size-3.5 shrink-0 text-amber-200/60" />
+            ) : (
+              <Check className="mt-1 size-3.5 shrink-0 text-white/25" />
+            )}
             <span>{item}</span>
           </li>
         ))}

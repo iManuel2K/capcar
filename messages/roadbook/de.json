@@ -15,16 +15,16 @@
       "example": "Lizenziertes Beispiel",
       "directions": "Route öffnen",
       "tags": {
-        "skyline": "skyline",
-        "industrial": "industrial",
-        "forest": "forest",
-        "mountain": "mountain",
-        "coastal": "coastal",
-        "architecture": "architecture",
-        "night": "night",
-        "sunrise": "sunrise",
-        "sunset": "sunset",
-        "urban": "urban"
+        "skyline": "Skyline",
+        "industrial": "Industrie",
+        "forest": "Wald",
+        "mountain": "Berge",
+        "coastal": "Küste",
+        "architecture": "Architektur",
+        "night": "Nacht",
+        "sunrise": "Sonnenaufgang",
+        "sunset": "Sonnenuntergang",
+        "urban": "Stadt"
       }
     },
     "media": {

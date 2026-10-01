@@ -13,6 +13,10 @@ export type GuideStep = {
   title: string;
   instruction: string;
   beginnerDetail: string;
+  whyItMatters?: string;
+  mistakesToAvoid?: string[];
+  recordAfterStep?: string[];
+  estimatedMinutes?: number;
   check: string;
   warning?: string;
 };
@@ -25,13 +29,14 @@ export type GuideInstallationPlan = {
     note: string;
   };
   prerequisites: string[];
+  workAreaChecks: string[];
   consumables: string[];
   technicalChecks: string[];
   legalChecks: string[];
+  stopConditions: string[];
+  completionRecord: string[];
   recommendedSetting:
-    | "DIY suitable"
-    | "Experienced DIY"
-    | "Workshop recommended";
+    "DIY suitable" | "Experienced DIY" | "Workshop recommended";
   recommendation: string;
 };
 
@@ -55,49 +60,47 @@ export type InstallationGuide = {
 };
 
 export const installationGuides: InstallationGuide[] = [
-  ...dailyCarProblems.map(
-    (problem): InstallationGuide => ({
-      slug: `inspection-${problem.id}`,
-      partId: `inspection-${problem.id}`,
-      purpose: "inspection",
-      title: problem.title,
-      summary:
-        "Native inspection preparation checklist. Record symptoms, collect evidence and plan the next professional check; completion is not a diagnosis or repair certification.",
-      reviewStatus: "draft",
-      revision: "1.0",
-      updatedAt: "2026-09-14",
-      applicability: [problem.applicability],
-      sources: [
-        {
-          label: problem.sourceLabel,
-          kind: "authoritative",
-          url: problem.sourceUrl,
-          verifiedAt: "2026-09-14",
-        },
-      ],
-      difficulty: "Easy",
-      estimatedMinutes: 15,
-      tools: [
-        "Vehicle handbook",
-        "Camera or notes",
-        "Available service and test records",
-      ],
-      safetyChecks: [
-        "Confirm that the vehicle generation and powertrain match the stated scope.",
-        "Stop if there is a safety warning, impaired steering, overheating or damaged battery. Arrange professional assistance.",
-        "No lifting, disassembly, live electrical work or high-voltage work is part of this checklist.",
-      ],
-      steps: (problem.inspectionSteps ?? []).map((instruction, index) => ({
-        id: `check-${index + 1}`,
-        title: `Inspection preparation · ${index + 1}`,
-        instruction,
-        beginnerDetail:
-          "Mark this step only after recording the observation or arranging the specified professional check. An unknown result should remain unknown.",
-        check:
-          "Observation recorded, or the required professional check arranged. No component failure has been inferred.",
-      })),
-    }),
-  ),
+  ...dailyCarProblems.map((problem): InstallationGuide => ({
+    slug: `inspection-${problem.id}`,
+    partId: `inspection-${problem.id}`,
+    purpose: "inspection",
+    title: problem.title,
+    summary:
+      "Native inspection preparation checklist. Record symptoms, collect evidence and plan the next professional check; completion is not a diagnosis or repair certification.",
+    reviewStatus: "draft",
+    revision: "1.0",
+    updatedAt: "2026-09-14",
+    applicability: [problem.applicability],
+    sources: [
+      {
+        label: problem.sourceLabel,
+        kind: "authoritative",
+        url: problem.sourceUrl,
+        verifiedAt: "2026-09-14",
+      },
+    ],
+    difficulty: "Easy",
+    estimatedMinutes: 15,
+    tools: [
+      "Vehicle handbook",
+      "Camera or notes",
+      "Available service and test records",
+    ],
+    safetyChecks: [
+      "Confirm that the vehicle generation and powertrain match the stated scope.",
+      "Stop if there is a safety warning, impaired steering, overheating or damaged battery. Arrange professional assistance.",
+      "No lifting, disassembly, live electrical work or high-voltage work is part of this checklist.",
+    ],
+    steps: (problem.inspectionSteps ?? []).map((instruction, index) => ({
+      id: `check-${index + 1}`,
+      title: `Inspection preparation · ${index + 1}`,
+      instruction,
+      beginnerDetail:
+        "Mark this step only after recording the observation or arranging the specified professional check. An unknown result should remain unknown.",
+      check:
+        "Observation recorded, or the required professional check arranged. No component failure has been inferred.",
+    })),
+  })),
   {
     slug: "demo-e90-rear-lamps",
     partId: "demo-dark-rear-lamps-e90",
@@ -135,6 +138,11 @@ export const installationGuides: InstallationGuide[] = [
         "Exact connector and production-split match",
         "Road-approved lamp assembly for the registration country",
       ],
+      workAreaChecks: [
+        "Level parking position with the parking brake applied and enough room to open the luggage compartment fully",
+        "Dry, clean sealing surfaces and lighting that makes connector locks and panel gaps visible",
+        "A labelled tray for trim clips, nuts and any side-specific lamp hardware",
+      ],
       consumables: [
         "Clean gloves",
         "Contact-safe cleaning cloth",
@@ -147,6 +155,16 @@ export const installationGuides: InstallationGuide[] = [
       legalChecks: [
         "Confirm E-mark or applicable road approval before fitting.",
         "Do not alter required light colour, position or visibility.",
+      ],
+      stopConditions: [
+        "The connector, pin count, mounting pattern or housing shape differs from the removed assembly.",
+        "A harness is brittle, repaired, wet or heat-damaged, or a connector lock will not retain the plug.",
+        "The seal is torn, compressed unevenly or cannot sit on a clean, undamaged surface.",
+      ],
+      completionRecord: [
+        "Photograph the approval marking, connector seating, seal and final panel gaps.",
+        "Record the part number, installation date, mileage and every light-function result.",
+        "Recheck the luggage area for moisture after the next rain or controlled wash.",
       ],
       recommendedSetting: "Experienced DIY",
       recommendation:
@@ -171,6 +189,17 @@ export const installationGuides: InstallationGuide[] = [
           "Compare the demo replacement with the installed assembly and confirm every connector and mounting point.",
         beginnerDetail:
           "Photograph the original connector routing and panel gaps. These references help during reassembly.",
+        whyItMatters:
+          "Confirming the physical and electrical match before dismantling avoids leaving the vehicle open with an unusable replacement.",
+        mistakesToAvoid: [
+          "Assuming an E90 listing fits every body style and production split",
+          "Comparing only the visible lens while ignoring the connector, seal and locating tabs",
+        ],
+        recordAfterStep: [
+          "Original lamp part number and approval mark",
+          "Wide photo of panel gaps plus close-ups of connector and seal",
+        ],
+        estimatedMinutes: 15,
         check:
           "The replacement appears identical at every mounting and connector location.",
         warning: "A visual match does not prove fitment or road approval.",
@@ -182,6 +211,17 @@ export const installationGuides: InstallationGuide[] = [
           "Follow the verified vehicle procedure to expose the lamp fasteners without forcing trim.",
         beginnerDetail:
           "Store clips and fasteners in order. Stop if a panel resists beyond light trim-tool pressure.",
+        whyItMatters:
+          "Controlled access protects trim, wiring and water barriers that are easy to damage but unrelated to the lamp itself.",
+        mistakesToAvoid: [
+          "Pulling trim before locating every retained clip or fastener",
+          "Mixing side-specific hardware or allowing loose fasteners into body cavities",
+        ],
+        recordAfterStep: [
+          "Fastener order and trim orientation",
+          "Any pre-existing moisture, corrosion or damaged clips",
+        ],
+        estimatedMinutes: 20,
         check:
           "The work area is supported, illuminated and free of loose trim.",
       },
@@ -192,6 +232,17 @@ export const installationGuides: InstallationGuide[] = [
           "Support the lamp, release the verified fasteners and connector, then position the replacement without trapping wiring.",
         beginnerDetail:
           "Never pull on wires. Release the connector by its housing and keep the sealing surface clean.",
+        whyItMatters:
+          "A correctly seated connector and undisturbed seal protect both lighting reliability and the vehicle interior from water ingress.",
+        mistakesToAvoid: [
+          "Using the wiring as a handle or levering against the painted body",
+          "Trapping the harness behind the housing or tightening against a folded seal",
+        ],
+        recordAfterStep: [
+          "Connector lock fully engaged",
+          "Seal position and cable routing before the access trim is closed",
+        ],
+        estimatedMinutes: 35,
         check: "The connector is fully seated and the seal lies flat.",
         warning:
           "Use only the authoritative tightening specification for your exact vehicle.",
@@ -203,6 +254,17 @@ export const installationGuides: InstallationGuide[] = [
           "Test every lamp function, inspect panel gaps and check the luggage area for sealing concerns.",
         beginnerDetail:
           "Ask a second person to observe brake and indicator functions while you operate the controls.",
+        whyItMatters:
+          "A lamp can illuminate yet still have an incorrect function, warning state, beam appearance or sealing problem.",
+        mistakesToAvoid: [
+          "Checking only the parking light and overlooking brake, reverse, fog and indicator functions",
+          "Closing all trim before checking warnings, gaps and moisture protection",
+        ],
+        recordAfterStep: [
+          "Photo or short video of every required function",
+          "Final panel gaps, dashboard warning state and follow-up moisture check date",
+        ],
+        estimatedMinutes: 25,
         check: "All functions work and no warning is displayed.",
       },
     ],
@@ -241,6 +303,11 @@ export const installationGuides: InstallationGuide[] = [
         "Correct filter, seals and drain hardware",
         "Approved level access or lifting equipment",
       ],
+      workAreaChecks: [
+        "Level, ventilated work area with the vehicle secured against movement",
+        "Approved lifting points, stands or a lift rated for the vehicle when underbody access is required",
+        "Drain container capacity, absorbent material and a clear route to the legal waste-oil return point",
+      ],
       consumables: [
         "Approved oil in the confirmed quantity",
         "Filter and all one-use seals",
@@ -253,6 +320,16 @@ export const installationGuides: InstallationGuide[] = [
       legalChecks: [
         "Return used oil and contaminated materials through an approved collection route.",
         "Do not work beneath a vehicle supported only by a jack.",
+      ],
+      stopConditions: [
+        "The specified oil approval, capacity, filter or sealing parts cannot be confirmed for the VIN.",
+        "The lifting point, undertray, drain plug, filter housing or threads show damage.",
+        "Oil contains metallic debris, coolant contamination or an unexplained fuel smell.",
+      ],
+      completionRecord: [
+        "Record oil approval, brand, quantity, filter part number, mileage and service date.",
+        "Photograph the clean drain and filter areas after the leak check.",
+        "Keep the disposal receipt and note the vehicle-specific level-check result.",
       ],
       recommendedSetting: "Workshop recommended",
       recommendation:
@@ -277,6 +354,17 @@ export const installationGuides: InstallationGuide[] = [
           "Match the filter and sealing components to authoritative data for the exact engine and production date.",
         beginnerDetail:
           "Engine code alone may not resolve every part. Use VIN-specific data when available.",
+        whyItMatters:
+          "The wrong approval, quantity or seal can cause lubrication loss even when the filter appears to fit.",
+        mistakesToAvoid: [
+          "Buying by model name alone instead of confirming VIN and production date",
+          "Reusing one-time seals or drain hardware when the verified procedure requires replacement",
+        ],
+        recordAfterStep: [
+          "Oil approval and planned quantity",
+          "Filter, seal and drain-hardware part numbers",
+        ],
+        estimatedMinutes: 15,
         check:
           "Oil approval, quantity, filter and seals are independently confirmed.",
       },
@@ -287,6 +375,17 @@ export const installationGuides: InstallationGuide[] = [
           "Set up safe access, containment and spill protection using a verified workshop procedure.",
         beginnerDetail:
           "Have enough container capacity before opening the system and keep absorbent material nearby.",
+        whyItMatters:
+          "Stable access and spill containment are prerequisites, not cleanup details after fluid has already been released.",
+        mistakesToAvoid: [
+          "Relying on a jack without rated stands or a lift",
+          "Opening the system before checking container position, capacity and escape route",
+        ],
+        recordAfterStep: [
+          "Lifting points and support equipment used",
+          "Existing leaks or underbody damage before service",
+        ],
+        estimatedMinutes: 15,
         check: "The vehicle is stable and spill control is ready.",
         warning: "Never work beneath a vehicle supported only by a jack.",
       },
@@ -297,6 +396,17 @@ export const installationGuides: InstallationGuide[] = [
           "Follow the authoritative drain, filter replacement, sealing and refill sequence.",
         beginnerDetail:
           "This prototype intentionally omits capacities and torque values because they must match the exact vehicle.",
+        whyItMatters:
+          "The drain, sealing, filter and refill sequence controls whether the engine retains the correct amount of uncontaminated oil.",
+        mistakesToAvoid: [
+          "Guessing tightening values or copying them from a different engine",
+          "Starting the engine before confirming the drain and filter areas are assembled and clean",
+        ],
+        recordAfterStep: [
+          "Authoritative source used for each value",
+          "Measured refill quantity and replaced one-use parts",
+        ],
+        estimatedMinutes: 25,
         check: "All values were taken from a verified source and recorded.",
       },
       {
@@ -306,6 +416,17 @@ export const installationGuides: InstallationGuide[] = [
           "Verify level using the vehicle-specific method, inspect for leaks and record date and mileage.",
         beginnerDetail:
           "Recheck after the specified settling or operating sequence from the official procedure.",
+        whyItMatters:
+          "The final level and leak check catches sealing or filling errors before they become an engine-damage event.",
+        mistakesToAvoid: [
+          "Treating the first level reading as final without following the required temperature and settling sequence",
+          "Leaving contaminated material or used oil without an approved disposal plan",
+        ],
+        recordAfterStep: [
+          "Final level result, warning state and leak-check outcome",
+          "Date, mileage and disposal receipt",
+        ],
+        estimatedMinutes: 15,
         check:
           "Level and sealing are verified, and old fluid is ready for responsible disposal.",
       },
@@ -345,6 +466,11 @@ export const installationGuides: InstallationGuide[] = [
         "Vehicle-specific opening sequence",
         "Cool engine bay and clean working area",
       ],
+      workAreaChecks: [
+        "Engine switched off, key removed and engine bay cool enough to touch safely",
+        "Clean work light and a protected area where the old and new filters can be compared",
+        "No loose leaves, grit, tools or cloths close to the open intake path",
+      ],
       consumables: ["Clean cloth", "Low-pressure vacuum where appropriate"],
       technicalChecks: [
         "Confirm the seal is flat around its complete perimeter.",
@@ -353,6 +479,16 @@ export const installationGuides: InstallationGuide[] = [
       legalChecks: [
         "Use only a filter approved for the vehicle and local road requirements.",
         "Do not remove emissions or intake-monitoring equipment.",
+      ],
+      stopConditions: [
+        "The filter outline, seal height or airflow orientation differs from the confirmed application.",
+        "A hose, sensor, connector, clip or airbox fastener is cracked, seized or already damaged.",
+        "Debris has entered beyond the filter or the airbox cannot close without force.",
+      ],
+      completionRecord: [
+        "Record the filter part number, installation date and mileage.",
+        "Photograph the seated perimeter before closing and every connection disturbed for access.",
+        "After the first drive, record whether idle, warning lights and intake noise remain normal.",
       ],
       recommendedSetting: "DIY suitable",
       recommendation:
@@ -372,6 +508,17 @@ export const installationGuides: InstallationGuide[] = [
           "Confirm the replacement has the same outline, seal position and orientation as the verified original.",
         beginnerDetail:
           "Do this before opening the airbox so an incorrect part can remain clean and returnable.",
+        whyItMatters:
+          "A filter that is slightly wrong can distort, bypass its seal or prevent the airbox from closing evenly.",
+        mistakesToAvoid: [
+          "Comparing only length and width while ignoring seal thickness and orientation",
+          "Removing packaging before the application has been confirmed",
+        ],
+        recordAfterStep: [
+          "Replacement part number and application source",
+          "Side-by-side photo of outline, seal and airflow marking",
+        ],
+        estimatedMinutes: 5,
         check: "Dimensions and sealing edges match.",
       },
       {
@@ -381,6 +528,17 @@ export const installationGuides: InstallationGuide[] = [
           "Release only the fasteners identified by the vehicle-specific procedure.",
         beginnerDetail:
           "Photograph hose and clip positions. Do not strain connected sensors or wiring.",
+        whyItMatters:
+          "Most intake-service mistakes happen around access: a strained sensor lead or loose hose can create faults unrelated to the new filter.",
+        mistakesToAvoid: [
+          "Opening unverified clips or fasteners simply because they are nearby",
+          "Letting the airbox lid hang from a hose, sensor or wiring loom",
+        ],
+        recordAfterStep: [
+          "Photo of every hose, plug and clip disturbed",
+          "Any cracked fastener, hose or connector found before removal",
+        ],
+        estimatedMinutes: 7,
         check: "The lid moves freely without pulling on a cable or hose.",
       },
       {
@@ -390,6 +548,17 @@ export const installationGuides: InstallationGuide[] = [
           "Remove loose debris without pushing it into the intake, then seat the filter evenly in its channel.",
         beginnerDetail:
           "A folded or pinched seal can allow unfiltered air past the element.",
+        whyItMatters:
+          "The filter works only when all intake air passes through the media rather than around a damaged or mis-seated edge.",
+        mistakesToAvoid: [
+          "Using high-pressure air that drives debris deeper into the intake",
+          "Forcing the lid down over a filter that has lifted out of its channel",
+        ],
+        recordAfterStep: [
+          "Clean airbox base before installation",
+          "Photo showing the complete seated seal perimeter",
+        ],
+        estimatedMinutes: 6,
         check: "The seal is flat around its complete perimeter.",
       },
       {
@@ -399,6 +568,17 @@ export const installationGuides: InstallationGuide[] = [
           "Reassemble using the verified sequence and confirm every connection disturbed during access.",
         beginnerDetail:
           "Before starting, look around the engine bay for tools, cloths or disconnected plugs.",
+        whyItMatters:
+          "A final connection and tool check prevents unmetered air, warning lights and loose objects in the engine bay.",
+        mistakesToAvoid: [
+          "Tightening one side fully before the lid is seated evenly",
+          "Starting the engine with a connector unplugged or a cloth left near the intake",
+        ],
+        recordAfterStep: [
+          "Final fastener, hose and connector check",
+          "Idle quality, warning state and intake noise after the first start",
+        ],
+        estimatedMinutes: 7,
         check: "The airbox is closed evenly and the engine bay is clear.",
       },
     ],

@@ -37,6 +37,7 @@ import {
 import { proFeatureLabels } from "@/features/pro/pro-features";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
+import { useLocale } from "next-intl";
 import { useBuildState } from "@/features/builds/use-builds";
 import { VehicleDocuments } from "./vehicle-documents";
 
@@ -62,6 +63,7 @@ export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
 }
 
 function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
+  const locale = useLocale();
   useBuildState(); // Rebuild the Passport when installed work changes in this or another tab.
   const hydrated = useSyncExternalStore(
     () => () => undefined,
@@ -282,7 +284,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
             <p className="mt-4 text-sm text-white/45">
               {passport.vehicle.platform} · {passport.vehicle.engineCode} ·{" "}
               {passport.vehicle.transmission} ·{" "}
-              {passport.vehicle.mileage.toLocaleString("en-US")} km
+              {passport.vehicle.mileage.toLocaleString(locale)} km
             </p>
           </div>
           <div className="no-print flex flex-wrap gap-2">
@@ -467,7 +469,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
                         ? "Expired"
                         : "Revoked"}
                     {link.expires_at
-                      ? ` · expires ${new Date(link.expires_at).toLocaleDateString("en-GB")}`
+                      ? ` · expires ${new Date(link.expires_at).toLocaleDateString(locale)}`
                       : " · no automatic expiry"}
                     {link.record_hash ? " · integrity hash" : " · legacy link"}
                   </p>

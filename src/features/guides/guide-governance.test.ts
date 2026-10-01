@@ -95,8 +95,19 @@ describe("guide governance", () => {
       );
       expect(guide.installationPlan!.costRange.note).toMatch(/planning|vary/i);
       expect(guide.installationPlan!.prerequisites.length).toBeGreaterThan(0);
+      expect(guide.installationPlan!.workAreaChecks.length).toBeGreaterThan(0);
       expect(guide.installationPlan!.technicalChecks.length).toBeGreaterThan(0);
       expect(guide.installationPlan!.legalChecks.length).toBeGreaterThan(0);
+      expect(guide.installationPlan!.stopConditions.length).toBeGreaterThan(0);
+      expect(guide.installationPlan!.completionRecord.length).toBeGreaterThan(
+        0,
+      );
+      for (const step of guide.steps) {
+        expect(step.whyItMatters).toBeTruthy();
+        expect(step.mistakesToAvoid?.length).toBeGreaterThan(0);
+        expect(step.recordAfterStep?.length).toBeGreaterThan(0);
+        expect(step.estimatedMinutes).toBeGreaterThan(0);
+      }
       expect(guide.reviewStatus).not.toBe("verified");
     }
   });

@@ -105,6 +105,57 @@ describe("scheduled data and public Passport database policies", () => {
     ]);
   });
 
+  it("lets an authenticated owner publish, expire and revoke a Passport without exposing private rows", async () => {
+    const shareId = "00000000-0000-4000-8000-000000000024";
+    await asUser(owner);
+    await db.query(
+      `insert into public.vehicle_passports(
+        share_id,user_id,payload,is_public,record_hash,expires_at,revoked_at
+      ) values($1,$2,$3,true,$4,now()+interval '30 days',null)`,
+      [shareId, owner, JSON.stringify({ version: 1 }), "b".repeat(64)],
+    );
+
+    await db.exec("reset role; set role anon");
+    expect(
+      (
+        await db.query(
+          "select share_id from public.vehicle_passports where share_id=$1",
+          [shareId],
+        )
+      ).rows,
+    ).toHaveLength(1);
+
+    await asUser(owner);
+    await db.query(
+      "update public.vehicle_passports set revoked_at=now(),is_public=false where share_id=$1",
+      [shareId],
+    );
+    await db.exec("reset role; set role anon");
+    expect(
+      (
+        await db.query(
+          "select share_id from public.vehicle_passports where share_id=$1",
+          [shareId],
+        )
+      ).rows,
+    ).toHaveLength(0);
+
+    await asUser(owner);
+    await db.query(
+      "update public.vehicle_passports set revoked_at=null,is_public=true,expires_at=now()-interval '1 minute' where share_id=$1",
+      [shareId],
+    );
+    await db.exec("reset role; set role anon");
+    expect(
+      (
+        await db.query(
+          "select share_id from public.vehicle_passports where share_id=$1",
+          [shareId],
+        )
+      ).rows,
+    ).toHaveLength(0);
+  });
+
   async function asUser(id: string) {
     await db.exec("reset role");
     await db.query("select set_config('test.uid',$1,false)", [id]);
