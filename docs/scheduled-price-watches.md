@@ -24,3 +24,41 @@ CapCar keeps the existing browser-side price checks and adds a bounded server pa
 - A result is useful only if the provider returns the same provider item ID. A similarly named listing is not substituted.
 - No email, SMS or push delivery is claimed. The result appears when the user next opens the Garage.
 - The server secret and Supabase secret must never use a `NEXT_PUBLIC_` prefix.
+
+## Production monitoring
+
+The dispatcher and background worker write structured Netlify logs. Successful
+logs contain only the run status, duration and aggregate counts. They never log
+the user ID, search query, provider item ID or the job secret. A worker failure
+is rethrown after logging so Netlify marks the invocation as failed instead of
+showing a misleading success.
+
+Use the `price_watch_runs` table as the durable operational record:
+
+```sql
+select
+  status,
+  watches_checked,
+  results_updated,
+  jsonb_array_length(errors) as error_count,
+  started_at,
+  finished_at
+from public.price_watch_runs
+order by started_at desc
+limit 20;
+```
+
+Expected behavior:
+
+- A published deploy runs at minute 17 every six hours in UTC.
+- A healthy empty run is `completed` with zero checks and proves the scheduler,
+  worker credential and database connection are working.
+- `partial` means at least one watch failed while other due watches continued.
+- `failed`, a Netlify failed invocation or no row after a protected test call
+  requires checking the server-only Supabase URL/key and job-secret scopes.
+- A `running` row older than 20 minutes should be investigated as an interrupted
+  background invocation; do not silently mark it completed.
+
+After a deploy, verify one empty run before asking a user to create a watch.
+Then verify one exact connected offer end to end: subscription sync, due worker
+result, owner-only import and `consumed_at` update on the next Garage visit.

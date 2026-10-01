@@ -15,16 +15,16 @@
       "example": "Αδειοδοτημένο παράδειγμα",
       "directions": "Άνοιγμα οδηγιών",
       "tags": {
-        "skyline": "skyline",
-        "industrial": "industrial",
-        "forest": "forest",
-        "mountain": "mountain",
-        "coastal": "coastal",
-        "architecture": "architecture",
-        "night": "night",
-        "sunrise": "sunrise",
-        "sunset": "sunset",
-        "urban": "urban"
+        "skyline": "ορίζοντας πόλης",
+        "industrial": "βιομηχανικό",
+        "forest": "δάσος",
+        "mountain": "βουνό",
+        "coastal": "παραθαλάσσιο",
+        "architecture": "αρχιτεκτονική",
+        "night": "νύχτα",
+        "sunrise": "ανατολή",
+        "sunset": "ηλιοβασίλεμα",
+        "urban": "αστικό"
       }
     },
     "media": {
@@ -64,7 +64,7 @@
     "categories": {
       "drift_circuit": "Πίστες drift",
       "drag_acceleration": "Χώροι επιτάχυνσης",
-      "track_day": "Track days",
+      "track_day": "Ημέρες πίστας",
       "proving_ground": "Πεδία δοκιμών",
       "scenic_route": "Πανοραμικές διαδρομές",
       "car_photo_spot": "Τοποθεσίες φωτογράφισης αυτοκινήτων",
@@ -204,7 +204,7 @@
       "booking": "Έλεγχος κράτησης",
       "source": "Άνοιγμα επίσημης πηγής",
       "types": {
-        "track_day": "Track day",
+        "track_day": "Ημέρα πίστας",
         "tourist_driving": "Δημόσια οδήγηση",
         "driver_training": "Εκπαίδευση οδηγών",
         "motorsport": "Μηχανοκίνητος αθλητισμός",

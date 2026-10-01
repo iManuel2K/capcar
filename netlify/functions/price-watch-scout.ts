@@ -1,6 +1,7 @@
 import { getPriceWatchEnvironment } from "./_shared/price-watch-scout/environment";
 
 type NetlifyContext = {
+  requestId?: string;
   site: { url: string };
 };
 
@@ -24,6 +25,12 @@ export default async function priceWatchScout(
     throw new Error(
       `Could not start price-watch background job (${response.status})`,
     );
+  console.info("Scheduled price-watch refresh dispatched", {
+    event: "price_watch_run_dispatched",
+    worker: "price-watch-scout",
+    requestId: context.requestId ?? null,
+    responseStatus: response.status,
+  });
   return new Response(null, { status: 202 });
 }
 

@@ -4,6 +4,7 @@ import { RetailUnavailable } from "../../../../src/features/retail/ebay-provider
 import { searchRetailers } from "../../../../src/features/retail/multi-retailer-provider";
 import { retailRequestSchema } from "../../../../src/features/retail/retail-contracts";
 import { getPriceWatchEnvironment } from "./environment";
+import type { PriceWatchRunSummary } from "./monitoring";
 
 const MAX_CHECKS_PER_RUN = 24;
 const CONCURRENCY = 2;
@@ -21,7 +22,9 @@ type Subscription = {
   consecutive_failures: number;
 };
 
-export async function runScheduledPriceWatches(now = new Date()) {
+export async function runScheduledPriceWatches(
+  now = new Date(),
+): Promise<PriceWatchRunSummary> {
   const environment = getPriceWatchEnvironment();
   const client = createClient(
     environment.supabaseUrl,
@@ -62,7 +65,9 @@ export async function runScheduledPriceWatches(now = new Date()) {
       }
     });
 
-    const status = errors.length ? "partial" : "completed";
+    const status: PriceWatchRunSummary["status"] = errors.length
+      ? "partial"
+      : "completed";
     await finishRun(client, runId, status, checked, updated, errors);
     return { status, checked, updated, errors: errors.length };
   } catch (error) {

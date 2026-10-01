@@ -15,16 +15,16 @@
       "example": "Shembull i licencuar",
       "directions": "Hap udhëzimet",
       "tags": {
-        "skyline": "skyline",
-        "industrial": "industrial",
-        "forest": "forest",
-        "mountain": "mountain",
-        "coastal": "coastal",
-        "architecture": "architecture",
-        "night": "night",
-        "sunrise": "sunrise",
-        "sunset": "sunset",
-        "urban": "urban"
+        "skyline": "panoramë urbane",
+        "industrial": "zonë industriale",
+        "forest": "pyll",
+        "mountain": "mal",
+        "coastal": "bregdet",
+        "architecture": "arkitekturë",
+        "night": "natë",
+        "sunrise": "lindje dielli",
+        "sunset": "perëndim dielli",
+        "urban": "qytet"
       }
     },
     "media": {
@@ -64,7 +64,7 @@
     "categories": {
       "drift_circuit": "Pista drift-i",
       "drag_acceleration": "Zona përshpejtimi",
-      "track_day": "Track days",
+      "track_day": "Ditë piste",
       "proving_ground": "Poligone testimi",
       "scenic_route": "Rrugë panoramike",
       "car_photo_spot": "Vende për foto makinash",
@@ -204,10 +204,10 @@
       "booking": "Kontrollo rezervimin",
       "source": "Hap burimin zyrtar",
       "types": {
-        "track_day": "Track day",
+        "track_day": "Ditë piste",
         "tourist_driving": "Ngarje publike",
         "driver_training": "Trajnim drejtimi",
-        "motorsport": "Motorsport",
+        "motorsport": "Sport motorik",
         "meet": "Takim makinash",
         "festival": "Festival automobilistik"
       },
@@ -229,7 +229,7 @@
       "emptyReports": "Nuk ka raporte të komunitetit në pritje.",
       "kinds": {
         "image": "Imazh",
-        "event": "Event",
+        "event": "Ngjarje",
         "place": "Vend"
       },
       "photographer": "Foto · {photographer}",
