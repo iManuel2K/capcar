@@ -78,7 +78,7 @@
       },
       "passport": {
         "title": "Fahrzeugpass",
-        "description": "Eine teilbare Dokumentation von Fahrzeug, abgeschlossenen Arbeiten und Projekthistorie führen."
+        "description": "Eine teilbare Momentaufnahme von Fahrzeug, abgeschlossenen Arbeiten und Projekthistorie mit widerrufbaren Links, optionalem Ablaufdatum und Integritätsprüfung führen."
       },
       "wishlist": {
         "title": "Wunschlisten-Manager",
@@ -104,11 +104,11 @@
       "itemStatus": "In Arbeit",
       "reliability": {
         "title": "Suche und Provider-Zuverlässigkeit",
-        "description": "Händlerantworten, Limits, Fehlerbehebung und ehrliche Ausweichzustände bei Provider-Ausfällen absichern."
+        "description": "Händlersuchen zeigen Timeouts und Wiederholungsfristen, behalten Teilergebnisse und nutzen bei vollständigem Ausfall nur kurzzeitig das Ergebnis exakt derselben Suche."
       },
       "publicPassport": {
         "title": "Öffentliche Passprüfung",
-        "description": "Live-Links, Nicht-verfügbar-Zustände, QR-Prüfungen und die Darstellung für Kontrollen verfeinern."
+        "description": "Öffentliche Momentaufnahmen bieten QR-Zugriff, Widerruf, optionales Ablaufdatum und einen manipulationssichtbaren Datensatz-Hash. Dieser prüft den gespeicherten CapCar-Datensatz, bestätigt aber keine Halterangaben."
       },
       "marketplaceTrust": {
         "title": "Marktplatz-Vertrauen",
@@ -154,7 +154,7 @@
       },
       "connected": {
         "title": "Vernetzte Teile",
-        "description": "Plane Phasen und Abhängigkeiten, vergleiche normalisierte Live-Händler, aktualisiere fällige Preisbeobachtungen automatisch im aktiven Garage-Bereich und importiere verbundene OE-Passformnachweise. Hinweise bei geschlossenem Browser benötigen weiterhin geplante Server-Infrastruktur."
+        "description": "Plane Phasen und Abhängigkeiten, vergleiche normalisierte Live-Händler und importiere verbundene OE-Passformnachweise. Angemeldete Beobachtungen exakter Angebote können nach der Bereitstellung alle sechs Stunden serverseitig geprüft werden; Ergebnisse erscheinen beim nächsten Garage-Besuch. E-Mail- und Push-Hinweise gibt es nicht."
       },
       "marketplace": {
         "title": "Community-Marktplatz",
@@ -358,7 +358,16 @@
     "publishQr": "Link veröffentlichen, um den QR-Code zu aktivieren",
     "generated": "Erstellt am {date} · Nutzereingabe",
     "verifyCritical": "Sicherheitskritische Arbeiten anhand der Originalunterlagen prüfen",
-    "policy": "Police {number}"
+    "policy": "Police {number}",
+    "verificationTitle": "Datensatzprüfung",
+    "integrityVerified": "Link aktiv · Integrität bestätigt",
+    "legacyRecord": "Link aktiv · älterer Datensatz",
+    "integrityNotice": "Dies bestätigt, dass der geteilte CapCar-Datensatz seit der Veröffentlichung nicht verändert wurde. Eigentümerangaben, Teile, Rechnungen oder Arbeitsqualität werden dadurch nicht unabhängig bestätigt.",
+    "recordHash": "Datensatz-Hash",
+    "updated": "Aktualisiert",
+    "expires": "Link gültig bis",
+    "noExpiry": "Kein automatischer Ablauf",
+    "legacy": "Älterer Link"
   },
   "Home": {
     "skip": "Zum Inhalt springen",
@@ -645,7 +654,7 @@
   "PublicStates": {
     "passportEyebrow": "Passport nicht verfügbar",
     "passportTitle": "Dieser Link ist nicht mehr öffentlich.",
-    "passportDescription": "Der Halter hat den Link möglicherweise widerrufen oder der geteilte Datensatz konnte nicht geprüft werden.",
+    "passportDescription": "Der Halter hat den Link möglicherweise widerrufen, er ist abgelaufen oder der geteilte Datensatz konnte nicht geprüft werden.",
     "return": "Zurück zu CapCar",
     "verifiedDescription": "Fordere die Bestätigung eines Fachbetriebs an, verfolge den Status und bewahre das Ergebnis im privaten Fahrzeugdatensatz auf.",
     "loadingCapcar": "CapCar wird geladen",
@@ -761,7 +770,7 @@
       "meta": "Datenschutz",
       "eyebrow": "Datenschutzhinweis · Private Beta",
       "title": "Deine Garagendaten bleiben unter deiner Kontrolle.",
-      "description": "Dieser Hinweis erklärt, was die CapCar-Beta speichert, warum es benötigt wird und wie du es entfernen kannst. Stand: 8. September 2026.",
+      "description": "Dieser Hinweis erklärt, was die CapCar-Beta speichert, warum es benötigt wird und wie du es entfernen kannst. Stand: 30. September 2026.",
       "blocked": "Der öffentliche Start ist gesperrt, bis Betreiber, Adresse und Datenschutzkontakt konfiguriert sind. Eingeladene Tester nutzen die Kontaktdaten ihrer Einladung.",
       "s1t": "1. Verantwortlicher Betreiber",
       "operatorPending": "Betreiberdaten ausstehend",
@@ -770,13 +779,13 @@
       "contactPending": "Kontakt ausstehend",
       "s2t": "2. Von CapCar verarbeitete Daten",
       "s2a": "CapCar speichert Kontodaten aus der Supabase-Anmeldung sowie deine Garageneinträge, darunter Fahrzeugdaten, Wartung, Builds, Kosten, Wunschlisten, Diagnosen, Anleitungsfortschritt und Visualizer-Einstellungen. Für schnelle, offline-tolerante Nutzung wird außerdem ein vollständiger Garagen-Snapshot im Browser gespeichert.",
-      "s2b": "Wenn du einen Fahrzeugpass veröffentlichst, ist der gewählte Datensatz für jeden mit dem nicht erratbaren Link verfügbar, bis du ihn widerrufst oder löschst. In einem geteilten Pass können nur die letzten fünf VIN-Zeichen erscheinen.",
+      "s2b": "Wenn du einen Fahrzeugpass veröffentlichst, ist der gewählte Datensatz für jeden mit dem nicht erratbaren Link bis zum optionalen Ablauf oder bis zum Widerruf beziehungsweise Löschen verfügbar. In einem geteilten Pass können nur die letzten fünf VIN-Zeichen erscheinen.",
       "s3t": "3. Zweck und Rechtsgrundlage",
       "s3": "Konto-, Synchronisations- und Exportverarbeitung ist nötig, um die angeforderte Beta bereitzustellen. Sicherheit, Missbrauchsschutz und kurze Rate-Limit-Datensätze dienen dem berechtigten Interesse an einer zuverlässigen privaten Beta. CapCar verkauft keine Garagendaten.",
       "s4t": "4. Hosting und externe Dienste",
       "s4": "Netlify liefert die Anwendung aus; Supabase stellt Anmeldung und Datenbank bereit. Beim Öffnen einer interaktiven 3D-Ansicht verbindet sich dein Browser mit Sketchfab. Fahrzeug-, Händler- und KI-Adapter bleiben im gekennzeichneten Demo-Modus, sofern die Systemseite keinen aktivierten Anbieter meldet.",
       "s5t": "5. Aufbewahrung und Löschung",
-      "s5": "Garagen-Snapshots und private Datensätze bleiben, bis du Garage oder Konto löschst. Geteilte Pässe bleiben bis zum Widerruf oder Löschen. Rate-Limit-Zustände werden mit neuen Anfragefenstern ersetzt. In Konto kannst du exportieren, Cloud-Daten löschen oder das Konto dauerhaft entfernen.",
+      "s5": "Garagen-Snapshots und private Datensätze bleiben, bis du Garage oder Konto löschst. Abgelaufene oder widerrufene Pässe sind nicht mehr öffentlich, bleiben aber bis zum Löschen des Links oder Kontos gespeichert. Rate-Limit-Zustände werden mit neuen Anfragefenstern ersetzt. In Konto kannst du exportieren, Cloud-Daten löschen oder das Konto dauerhaft entfernen.",
       "s6t": "6. Deine Wahlmöglichkeiten und Rechte",
       "s6": "Du kannst die Garage als JSON oder CSV exportieren, Datensätze berichtigen, öffentliche Links widerrufen und gespeicherte Daten im Konto löschen. Je nach Recht kannst du außerdem Auskunft, Berichtigung, Löschung, Einschränkung, Übertragbarkeit oder Widerspruch über den Datenschutzkontakt verlangen.",
       "s7t": "7. Grenzen der Beta",
@@ -795,7 +804,7 @@
       "s3t": "3. Konten und Aufzeichnungen",
       "s3": "Schütze deine Anmeldung und speichere nur Datensätze, zu denen du berechtigt bist. CapCar bietet Export und Löschung; Originalrechnungen, Werkstattunterlagen und gesetzlich nötige Nachweise musst du selbst aufbewahren.",
       "s4t": "4. Öffentliche Passport-Links",
-      "s4": "Beim Veröffentlichen eines Fahrzeugpasses wird sein Inhalt für jeden mit dem Link sichtbar. Prüfe ihn vorher und widerrufe oder lösche den Link, wenn er nicht mehr verfügbar sein soll. Öffentliche Pässe sind Halterangaben, keine CapCar-Zertifizierung.",
+      "s4": "Beim Veröffentlichen eines Fahrzeugpasses wird sein Inhalt bis zum optionalen Ablauf für jeden mit dem Link sichtbar. Prüfe ihn vorher und widerrufe oder lösche den Link, wenn er nicht mehr verfügbar sein soll. Öffentliche Pässe sind Halterangaben, keine CapCar-Zertifizierung.",
       "s5t": "5. Externe Websites",
       "s5": "Händler-, Quellen- und 3D-Links führen zu unabhängigen Diensten mit eigenen Bedingungen und Datenschutzregeln. Bestätige Preis, Versand, Rückgabe, Echtheit, Passgenauigkeit und Straßenzulassung vor dem Kauf direkt beim Anbieter.",
       "s6t": "6. Änderungen und Verfügbarkeit",

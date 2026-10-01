@@ -1,18 +1,27 @@
 import Link from "next/link";
-import { BadgeCheck, ShieldCheck } from "lucide-react";
+import { BadgeCheck, Clock3, Fingerprint, ShieldCheck } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { PassportIdentityDocument } from "@/components/passport/passport-identity-document";
 import type { VehiclePassportPayload } from "@/features/passport/vehicle-passport";
+import type { PassportIntegrity } from "@/features/passport/passport-integrity";
 
 export async function PublicPassport({
   passport,
   publishedAt,
+  updatedAt,
+  expiresAt,
+  recordHash,
+  integrity,
   liveUrl,
 }: {
   passport: VehiclePassportPayload;
   publishedAt: string;
+  updatedAt: string;
+  expiresAt: string | null;
+  recordHash: string | null;
+  integrity: PassportIntegrity;
   liveUrl: string;
 }) {
   const [t, locale] = await Promise.all([
@@ -42,6 +51,52 @@ export async function PublicPassport({
             date: new Date(publishedAt).toLocaleDateString(locale),
           })}
         </p>
+
+        <section
+          aria-labelledby="passport-verification-title"
+          className="mt-5 grid gap-4 rounded-2xl border border-emerald-300/15 bg-emerald-300/6 p-5 sm:grid-cols-[1fr_auto] sm:items-center"
+        >
+          <div>
+            <p className="flex items-center gap-2 text-xs font-semibold tracking-[0.12em] text-emerald-100/65 uppercase">
+              <ShieldCheck className="size-4" /> {t("verificationTitle")}
+            </p>
+            <h2
+              id="passport-verification-title"
+              className="mt-2 text-xl font-medium text-white/85"
+            >
+              {integrity === "verified"
+                ? t("integrityVerified")
+                : t("legacyRecord")}
+            </h2>
+            <p className="mt-2 max-w-3xl text-xs leading-5 text-white/45">
+              {t("integrityNotice")}
+            </p>
+          </div>
+          <dl className="grid gap-2 text-xs text-white/55 sm:min-w-64">
+            <div className="flex items-center justify-between gap-5">
+              <dt className="flex items-center gap-2">
+                <Fingerprint className="size-3.5" /> {t("recordHash")}
+              </dt>
+              <dd className="font-mono text-white/75">
+                {recordHash ? `${recordHash.slice(0, 12)}…` : t("legacy")}
+              </dd>
+            </div>
+            <div className="flex items-center justify-between gap-5">
+              <dt className="flex items-center gap-2">
+                <Clock3 className="size-3.5" /> {t("updated")}
+              </dt>
+              <dd>{new Date(updatedAt).toLocaleDateString(locale)}</dd>
+            </div>
+            <div className="flex items-center justify-between gap-5">
+              <dt>{t("expires")}</dt>
+              <dd>
+                {expiresAt
+                  ? new Date(expiresAt).toLocaleDateString(locale)
+                  : t("noExpiry")}
+              </dd>
+            </div>
+          </dl>
+        </section>
 
         <section className="mt-5 grid gap-3 sm:grid-cols-5">
           <Metric

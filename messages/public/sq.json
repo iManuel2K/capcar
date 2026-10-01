@@ -78,7 +78,7 @@
       },
       "passport": {
         "title": "Pasaporta e makinës",
-        "description": "Mbaj një regjistër të ndashëm të makinës, punëve të kryera dhe historikut të projektit."
+        "description": "Mbaj një pamje të ndashme të makinës, punëve dhe projektit, me lidhje të anulueshme, skadim opsional dhe kontroll integriteti."
       },
       "wishlist": {
         "title": "Menaxhimi i listës së dëshirave",
@@ -104,11 +104,11 @@
       "itemStatus": "Në punë",
       "reliability": {
         "title": "Besueshmëria e kërkimit dhe ofruesve",
-        "description": "Forco përgjigjet e shitësve, limitet, rikuperimin nga gabimet dhe fallback-et e qarta kur një ofrues mungon."
+        "description": "Kërkimet tregojnë timeout-et dhe afatet e riprovimit, ruajnë rezultate të pjesshme dhe përdorin vetëm një rezultat të fundit nga i njëjti kërkim kur të gjithë ofruesit dështojnë."
       },
       "publicPassport": {
         "title": "Verifikimi i pasaportës publike",
-        "description": "Përmirëso linket live, gjendjet e padisponueshme, kontrollet QR dhe paraqitjen për inspektim."
+        "description": "Pamjet publike mbështesin QR, anulim, skadim opsional dhe hash integriteti. Hash-i kontrollon pamjen e ruajtur nga CapCar; nuk certifikon deklaratat e pronarit."
       },
       "marketplaceTrust": {
         "title": "Besimi në marketplace",
@@ -154,7 +154,7 @@
       },
       "connected": {
         "title": "Pjesë të lidhura",
-        "description": "Planifiko fazat dhe varësitë, krahaso tregtarë aktivë të normalizuar, rifresko automatikisht vëzhgimet e afatizuara ndërsa garazhi është aktiv dhe importo prova të lidhura OE për përputhshmëri. Njoftimet kur shfletuesi është i mbyllur kërkojnë ende infrastrukturë të planifikuar."
+        "description": "Planifiko fazat dhe varësitë, krahaso tregtarë aktivë dhe importo prova OE për përputhshmëri. Vëzhgimet e ofertave të sakta mund të kontrollohen në server çdo gjashtë orë pas konfigurimit dhe rezultatet importohen në vizitën tjetër në Garage. Email dhe push nuk ofrohen."
       },
       "marketplace": {
         "title": "Marketplace i komunitetit",
@@ -358,7 +358,16 @@
     "publishQr": "Publiko lidhjen për të aktivizuar QR",
     "generated": "Krijuar më {date} · Regjistër i përdoruesit",
     "verifyCritical": "Verifiko punët kritike me dokumentet origjinale",
-    "policy": "Polica {number}"
+    "policy": "Polica {number}",
+    "verificationTitle": "Verifikimi i regjistrit",
+    "integrityVerified": "Lidhja aktive · integriteti u konfirmua",
+    "legacyRecord": "Lidhja aktive · regjistër i mëparshëm",
+    "integrityNotice": "Kjo konfirmon se regjistri i ndarë në CapCar nuk ka ndryshuar që nga publikimi. Nuk verifikon në mënyrë të pavarur të dhënat e pronarit, pjesët, faturat ose cilësinë e punës.",
+    "recordHash": "Hash-i i regjistrit",
+    "updated": "Përditësuar",
+    "expires": "Lidhja skadon",
+    "noExpiry": "Pa skadim automatik",
+    "legacy": "I mëparshëm"
   },
   "Home": {
     "skip": "Kalo te përmbajtja",
@@ -645,7 +654,7 @@
   "PublicStates": {
     "passportEyebrow": "Pasaporta nuk është e disponueshme",
     "passportTitle": "Kjo lidhje nuk është më publike.",
-    "passportDescription": "Pronari mund ta ketë anuluar lidhjen ose regjistri i ndarë nuk u verifikua.",
+    "passportDescription": "Pronari mund ta ketë anuluar lidhjen, ajo mund të ketë skaduar ose regjistri i ndarë nuk u verifikua.",
     "return": "Kthehu te CapCar",
     "verifiedDescription": "Kërko konfirmim nga një specialist, ndiq gjendjen dhe ruaj rezultatin në regjistrin privat të automjetit.",
     "loadingCapcar": "Po ngarkohet CapCar",
@@ -761,7 +770,7 @@
       "meta": "Privatësia",
       "eyebrow": "Njoftimi i privatësisë · Beta private",
       "title": "Të dhënat e garazhit mbeten nën kontrollin tënd.",
-      "description": "Ky njoftim shpjegon çfarë ruan beta e CapCar, pse nevojitet dhe si mund ta fshish. Përditësuar më 8 shtator 2026.",
+      "description": "Ky njoftim shpjegon çfarë ruan beta e CapCar, pse nevojitet dhe si mund ta fshish. Përditësuar më 30 shtator 2026.",
       "blocked": "Publikimi bllokohet derisa të caktohen operatori, adresa dhe kontakti i privatësisë.",
       "s1t": "1. Operatori përgjegjës",
       "operatorPending": "Të dhënat e operatorit mungojnë",
@@ -770,13 +779,13 @@
       "contactPending": "Kontakti mungon",
       "s2t": "2. Të dhënat që përpunon CapCar",
       "s2a": "CapCar ruan të dhënat e llogarisë nga Supabase dhe regjistrat e garazhit, përfshirë automjetet, mirëmbajtjen, build-et, kostot, listat, diagnostikën, përparimin e udhëzuesve dhe rregullimet vizuale. Një kopje e plotë ruhet edhe në shfletues për përdorim të shpejtë me tolerancë offline.",
-      "s2b": "Kur publikon një Pasaportë Automjeti, regjistri i zgjedhur është i dukshëm për këdo me lidhjen e paparashikueshme derisa ta anulosh ose fshish. Mund të shfaqen vetëm pesë shenjat e fundit të VIN-it.",
+      "s2b": "Kur publikon një Pasaportë Automjeti, regjistri i zgjedhur është i dukshëm për këdo me lidhjen e paparashikueshme deri në skadimin opsional ose derisa ta anulosh apo fshish. Mund të shfaqen vetëm pesë shenjat e fundit të VIN-it.",
       "s3t": "3. Qëllimi dhe baza ligjore",
       "s3": "Përpunimi i llogarisë, sinkronizimit dhe eksportit nevojitet për shërbimin beta. Siguria, parandalimi i abuzimit dhe kufijtë e shkurtër mbështesin interesin legjitim për një beta të besueshme. CapCar nuk shet të dhënat e garazhit.",
       "s4t": "4. Pritja dhe shërbimet e jashtme",
       "s4": "Netlify shpërndan aplikacionin dhe Supabase ofron identifikimin e databazën. Hapja e pamjes 3D lidh shfletuesin me Sketchfab. Përshtatësit e automjeteve, shitësve dhe AI mbeten në demo të shënuar, përveçse kur faqja System tregon një ofrues aktiv.",
       "s5t": "5. Ruajtja dhe fshirja",
-      "s5": "Regjistrat privatë mbeten derisa të fshish garazhin ose llogarinë. Pasaportat e ndara mbeten deri në anulim ose fshirje. Nga Llogaria mund të eksportosh ose fshish të dhënat dhe llogarinë.",
+      "s5": "Regjistrat privatë mbeten derisa të fshish garazhin ose llogarinë. Pasaportat e skaduara ose të anuluara nuk janë më publike, por ruhen derisa të fshish lidhjen ose llogarinë. Nga Llogaria mund të eksportosh ose fshish të dhënat dhe llogarinë.",
       "s6t": "6. Zgjedhjet dhe të drejtat",
       "s6": "Mund të eksportosh garazhin si JSON ose CSV, të korrigjosh regjistrat, të anulosh lidhjet publike dhe të fshish të dhënat. Sipas ligjit mund të kërkosh qasje, korrigjim, fshirje, kufizim, bartje ose kundërshtim.",
       "s7t": "7. Kufizimet e beta-s",
@@ -795,7 +804,7 @@
       "s3t": "3. Llogaritë dhe regjistrat",
       "s3": "Mbro hyrjen dhe ruaj vetëm regjistra për të cilët ke të drejtë. CapCar ofron eksport dhe fshirje, por faturat, dokumentet e servisit dhe provat ligjore duhet t’i ruash vetë.",
       "s4t": "4. Lidhjet publike të Pasaportës",
-      "s4": "Publikimi e bën përmbajtjen të dukshme për këdo me lidhjen. Kontrolloje para publikimit dhe anuloje ose fshije kur nuk duhet të jetë më aktive. Pasaportat publike janë regjistra të pronarit, jo certifikim CapCar.",
+      "s4": "Publikimi e bën përmbajtjen të dukshme për këdo me lidhjen deri në skadimin opsional. Kontrolloje para publikimit dhe anuloje ose fshije kur nuk duhet të jetë më aktive. Pasaportat publike janë regjistra të pronarit, jo certifikim CapCar.",
       "s5t": "5. Faqet e jashtme",
       "s5": "Lidhjet e shitësve, burimeve dhe 3D çojnë te shërbime të pavarura. Konfirmo çmimin, transportin, kthimin, origjinalitetin, përshtatjen dhe miratimin rrugor me ofruesin.",
       "s6t": "6. Ndryshimet dhe disponueshmëria",
