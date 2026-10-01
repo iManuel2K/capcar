@@ -218,6 +218,7 @@
     "refresh": "Live-Angebote aktualisieren",
     "refreshing": "Live-Angebote werden aktualisiert…",
     "checkedAt": "Angebote geprüft: {time}",
+    "staleOffers": "Letzte erfolgreiche Angebote von {time} · Live-Aktualisierung nicht verfügbar",
     "providerStatus": "Status der Händlerquellen",
     "providerAvailable": "verfügbar",
     "providerUnavailable": "vorübergehend nicht verfügbar",

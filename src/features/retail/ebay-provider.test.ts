@@ -126,6 +126,34 @@ describe("live retailer adapter", () => {
       ),
     ).rejects.toThrow("Browse API access");
   });
+  it("preserves a bounded upstream retry window", async () => {
+    await expect(
+      searchEbay(
+        input,
+        { CAPCAR_EBAY_ACCESS_TOKEN: "test" },
+        vi.fn().mockResolvedValue(
+          new Response("", {
+            status: 429,
+            headers: { "Retry-After": "180" },
+          }),
+        ),
+      ),
+    ).rejects.toMatchObject({
+      kind: "rate_limit",
+      retryAfterSeconds: 180,
+    });
+  });
+  it("classifies provider deadline failures as retryable timeouts", async () => {
+    const timeout = new Error("deadline");
+    timeout.name = "TimeoutError";
+    await expect(
+      searchEbay(
+        input,
+        { CAPCAR_EBAY_ACCESS_TOKEN: "test" },
+        vi.fn().mockRejectedValue(timeout),
+      ),
+    ).rejects.toMatchObject({ kind: "timeout" });
+  });
   it("refreshes a rejected token once and retries the same search", async () => {
     const request = vi
       .fn()

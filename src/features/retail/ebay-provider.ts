@@ -39,7 +39,9 @@ export class RetailUnavailable extends Error {
       | "configuration"
       | "authorization"
       | "rate_limit"
+      | "timeout"
       | "unavailable" = "unavailable",
+    public retryAfterSeconds?: number,
   ) {
     super(message);
   }
@@ -98,9 +100,12 @@ async function mintApplicationToken(
       signal: AbortSignal.any([signal, AbortSignal.timeout(8_000)]),
       redirect: "error",
     });
-  } catch {
+  } catch (error) {
     throw new RetailUnavailable(
-      "eBay authorization could not be reached. Try again shortly.",
+      isTimeoutError(error)
+        ? "eBay authorization took too long. Try again shortly."
+        : "eBay authorization could not be reached. Try again shortly.",
+      isTimeoutError(error) ? "timeout" : "unavailable",
     );
   }
   if (!response.ok)
@@ -113,6 +118,9 @@ async function mintApplicationToken(
         : response.status === 429
           ? "rate_limit"
           : "unavailable",
+      response.status === 429
+        ? parseRetryAfter(response.headers.get("retry-after"))
+        : undefined,
     );
   const parsed = z
     .object({
@@ -219,10 +227,16 @@ export async function searchEbay(
   } catch (error) {
     if (error instanceof RetailUnavailable) throw error;
     throw new RetailUnavailable(
-      "eBay search could not be reached. Try again shortly.",
+      isTimeoutError(error) || deadline.aborted
+        ? "eBay search took too long. Try again shortly."
+        : "eBay search could not be reached. Try again shortly.",
+      isTimeoutError(error) || deadline.aborted ? "timeout" : "unavailable",
     );
   }
   if (!response.ok) {
+    const retryAfterSeconds = parseRetryAfter(
+      response.headers.get("retry-after"),
+    );
     throw new RetailUnavailable(
       response.status === 401 || response.status === 403
         ? "eBay rejected CapCar's Browse API access. Check that the production keyset has Buy API access."
@@ -234,6 +248,7 @@ export async function searchEbay(
         : response.status === 429
           ? "rate_limit"
           : "unavailable",
+      response.status === 429 ? retryAfterSeconds : undefined,
     );
   }
   const parsedPayload = responseSchema.safeParse(
@@ -281,4 +296,20 @@ export async function searchEbay(
       ];
     }),
   };
+}
+
+function isTimeoutError(error: unknown) {
+  return (
+    error instanceof Error &&
+    (error.name === "AbortError" || error.name === "TimeoutError")
+  );
+}
+
+function parseRetryAfter(value: string | null) {
+  if (!value) return 60;
+  const seconds = Number(value);
+  if (Number.isFinite(seconds)) return Math.min(3_600, Math.max(60, seconds));
+  const date = Date.parse(value);
+  if (!Number.isFinite(date)) return 60;
+  return Math.min(3_600, Math.max(60, Math.ceil((date - Date.now()) / 1_000)));
 }

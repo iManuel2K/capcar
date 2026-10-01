@@ -10,6 +10,7 @@ vi.mock("@/features/retail/multi-retailer-provider", () => ({
 }));
 
 import { POST } from "./route";
+import { RetailUnavailable } from "@/features/retail/ebay-provider";
 
 const payload = {
   query: "BMW 328i E90 Automatik",
@@ -68,3 +69,37 @@ it("still rejects a cross-site request before quota or eBay access", async () =>
   expect(mocks.guard).not.toHaveBeenCalled();
   expect(mocks.search).not.toHaveBeenCalled();
 });
+
+it("returns a retryable gateway timeout without substituting demo offers", async () => {
+  vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://capcar-im.netlify.app");
+  mocks.search.mockRejectedValue(
+    new RetailUnavailable("eBay timed out", "timeout"),
+  );
+  const response = await POST(request());
+  expect(response.status).toBe(504);
+  await expect(response.json()).resolves.toMatchObject({
+    code: "retailer_unavailable",
+    reason: "timeout",
+  });
+});
+
+it("preserves the provider retry window when the request allowance is reached", async () => {
+  vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://capcar-im.netlify.app");
+  mocks.search.mockRejectedValue(
+    new RetailUnavailable("Rate limited", "rate_limit", 180),
+  );
+  const response = await POST(request());
+  expect(response.status).toBe(429);
+  expect(response.headers.get("Retry-After")).toBe("180");
+});
+
+function request() {
+  return new Request("https://internal-runtime.test/api/retail/search", {
+    method: "POST",
+    headers: {
+      origin: "https://capcar-im.netlify.app",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+}

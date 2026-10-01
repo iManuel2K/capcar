@@ -138,11 +138,12 @@ export type RetailResponse = {
   items: RetailItem[];
   hasMore: boolean;
   warning: string;
+  freshness?: "live" | "stale";
   providers?: Array<{
     id: "ebay" | "partner";
     label: string;
     status: "available" | "unavailable";
-    code?: "access" | "limit" | "unavailable";
+    code?: "access" | "limit" | "timeout" | "unavailable";
     retryable?: boolean;
   }>;
 };

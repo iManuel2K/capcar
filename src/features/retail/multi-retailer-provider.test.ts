@@ -12,6 +12,7 @@ vi.mock("@/features/retail/partner-retail-provider", () => ({
 
 import { searchRetailers } from "./multi-retailer-provider";
 import { retailRequestSchema } from "./retail-contracts";
+import { RetailUnavailable } from "./ebay-provider";
 
 describe("multi-retailer search", () => {
   const input = retailRequestSchema.parse({
@@ -53,6 +54,38 @@ describe("multi-retailer search", () => {
       "Partner",
       "eBay",
     ]);
+  });
+
+  it("returns only a recent exact-search fallback when every live provider fails", async () => {
+    const exactInput = retailRequestSchema.parse({
+      query: "BMW E90 exact stale fallback 63217252093",
+      market: "DE",
+      destination: "DE",
+    });
+    mocks.ebay.mockResolvedValue(result("ebay", "eBay", 240));
+    mocks.partner.mockResolvedValue(result("partner", "Partner", 210));
+    const live = await searchRetailers(exactInput, {
+      CAPCAR_RETAIL_PARTNER_NAME: "Partner",
+    });
+
+    mocks.ebay.mockRejectedValue(
+      new RetailUnavailable("eBay timed out", "timeout"),
+    );
+    mocks.partner.mockRejectedValue(new Error("Partner unavailable"));
+    const stale = await searchRetailers(exactInput, {
+      CAPCAR_RETAIL_PARTNER_NAME: "Partner",
+    });
+
+    expect(stale.freshness).toBe("stale");
+    expect(stale.items).toEqual(live.items);
+    expect(stale.warning).toContain("last successful listings");
+    expect(stale.providers).toContainEqual({
+      id: "ebay",
+      label: "eBay",
+      status: "unavailable",
+      code: "timeout",
+      retryable: true,
+    });
   });
 });
 
