@@ -1,6 +1,32 @@
 {
   "Roadbook": {
     "search": "Kërko vende në hartë",
+    "fuel": {
+      "filter": "Karburant live",
+      "typeLabel": "Lloji i karburantit",
+      "types": {
+        "all": "Të gjitha",
+        "e5": "E5",
+        "e10": "E10",
+        "diesel": "Naftë"
+      },
+      "detailsLabel": "Detajet e pikës së karburantit",
+      "livePrices": "Çmimet aktuale të karburantit",
+      "germanyOnly": "Çmimet aktuale shfaqen tani kur harta ndodhet mbi Gjermani.",
+      "notConfigured": "Për çmimet aktuale nevojitet çelësi API i Tankerkönig.",
+      "unavailable": "Çmimet aktuale nuk janë përkohësisht të disponueshme. Pjesa tjetër e Roadbook vazhdon të punojë.",
+      "open": "Hapur tani",
+      "closed": "Mbyllur",
+      "statusUnknown": "Orari nuk dihet",
+      "distance": "{distance} km larg",
+      "perLiter": "për litër",
+      "addressUnknown": "Adresa nuk është dhënë",
+      "navigate": "Navigo te pika",
+      "updated": "Çmimet u morën më {date}. Kontrollo çmimin në pompë para furnizimit.",
+      "updatedRecently": "Çmimet u morën së fundmi. Kontrollo çmimin në pompë para furnizimit.",
+      "attribution": "Të dhënat · Tankerkönig / MTS-K",
+      "close": "Mbyll detajet"
+    },
     "photoSpot": {
       "title": "Vend për fotografi",
       "safety": "Ndalo vetëm ku lejohet parkimi. Mos blloko rrugët ose hyrjet dhe mos hy në pronë private pa leje.",

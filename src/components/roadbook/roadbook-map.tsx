@@ -11,6 +11,7 @@ import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 
 import type { RoadbookCenter } from "@/features/roadbook/roadbook-client";
+import type { RoadbookFuelStation } from "@/features/roadbook/roadbook-fuel";
 import {
   recoverRoadbookTiles,
   ROADBOOK_MAP_STYLES,
@@ -77,6 +78,23 @@ function markerElement(
   return element;
 }
 
+function fuelMarkerElement(station: RoadbookFuelStation, selected: boolean) {
+  const element = document.createElement("div");
+  element.className = `roadbook-marker roadbook-marker--fuel${selected ? " is-selected" : ""}`;
+  element.innerHTML =
+    '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"/><path d="M3 22h14"/><path d="M7 6h6v5H7z"/><path d="M16 7h2l2 2v9a2 2 0 0 1-4 0v-4"/></svg>';
+  const preferredPrice =
+    station.prices.e10 ?? station.prices.e5 ?? station.prices.diesel;
+  if (preferredPrice !== undefined) {
+    const badge = document.createElement("span");
+    badge.className = "roadbook-marker__fuel-price";
+    badge.textContent = preferredPrice.toFixed(2);
+    badge.setAttribute("aria-hidden", "true");
+    element.append(badge);
+  }
+  return element;
+}
+
 function radiusFromMap(instance: LeafletMap) {
   return Math.min(
     3500,
@@ -110,12 +128,15 @@ function monitorVectorTiles(
 
 export function RoadbookMap({
   venues,
+  fuelStations,
   events,
   selectedVenue,
+  selectedFuelStation,
   mode,
   center,
   userPosition,
   onSelect,
+  onSelectFuelStation,
   onViewportChange,
   onError,
   onReady,
@@ -125,12 +146,15 @@ export function RoadbookMap({
   upcomingEventsLabel,
 }: {
   venues: RoadbookVenue[];
+  fuelStations: RoadbookFuelStation[];
   events: RoadbookEvent[];
   selectedVenue?: RoadbookVenue;
+  selectedFuelStation?: RoadbookFuelStation;
   mode: RoadbookMapMode;
   center: RoadbookCenter;
   userPosition?: RoadbookCenter;
   onSelect: (venue: RoadbookVenue) => void;
+  onSelectFuelStation: (station: RoadbookFuelStation) => void;
   onViewportChange: (center: RoadbookCenter, radiusKm: number) => void;
   onError: (message: string) => void;
   onReady: () => void;
@@ -151,6 +175,7 @@ export function RoadbookMap({
   const selectedRoute = useRef<Polyline | null>(null);
   const initialCenter = useRef(center);
   const onSelectRef = useRef(onSelect);
+  const onSelectFuelStationRef = useRef(onSelectFuelStation);
   const onViewportChangeRef = useRef(onViewportChange);
   const onErrorRef = useRef(onError);
   const onReadyRef = useRef(onReady);
@@ -161,11 +186,19 @@ export function RoadbookMap({
 
   useEffect(() => {
     onSelectRef.current = onSelect;
+    onSelectFuelStationRef.current = onSelectFuelStation;
     onViewportChangeRef.current = onViewportChange;
     onErrorRef.current = onError;
     onReadyRef.current = onReady;
     onRendererChangeRef.current = onRendererChange;
-  }, [onError, onReady, onRendererChange, onSelect, onViewportChange]);
+  }, [
+    onError,
+    onReady,
+    onRendererChange,
+    onSelect,
+    onSelectFuelStation,
+    onViewportChange,
+  ]);
 
   useEffect(() => {
     if (!leafletContainer.current || map.current) return;
@@ -337,7 +370,7 @@ export function RoadbookMap({
 
     markers.current.forEach((marker) => marker.remove());
     const counts = eventCounts(events);
-    markers.current = venues.map((venue) => {
+    const venueMarkers = venues.map((venue) => {
       const eventCount = counts[venue.id] ?? 0;
       const marker = L.marker([venue.latitude, venue.longitude], {
         icon: L.divIcon({
@@ -358,7 +391,34 @@ export function RoadbookMap({
       marker.on("click", () => onSelectRef.current(venue));
       return marker.addTo(instance);
     });
-  }, [events, selectedVenue?.id, upcomingEventsLabel, venues]);
+    const fuelMarkers = fuelStations.map((station) => {
+      const marker = L.marker([station.latitude, station.longitude], {
+        icon: L.divIcon({
+          className: "roadbook-leaflet-marker-shell",
+          html: fuelMarkerElement(
+            station,
+            station.id === selectedFuelStation?.id,
+          ),
+          iconSize: [43, 43],
+          iconAnchor: [10, 38],
+        }),
+        keyboard: true,
+        title: station.name,
+        alt: station.name,
+        riseOnHover: true,
+      });
+      marker.on("click", () => onSelectFuelStationRef.current(station));
+      return marker.addTo(instance);
+    });
+    markers.current = [...venueMarkers, ...fuelMarkers];
+  }, [
+    events,
+    fuelStations,
+    selectedFuelStation?.id,
+    selectedVenue?.id,
+    upcomingEventsLabel,
+    venues,
+  ]);
 
   useEffect(() => {
     const instance = map.current;
@@ -412,6 +472,16 @@ export function RoadbookMap({
       selectedRoute.current = null;
     }
   }, [selectedVenue]);
+
+  useEffect(() => {
+    if (!selectedFuelStation) return;
+    const instance = map.current;
+    instance?.flyTo(
+      [selectedFuelStation.latitude, selectedFuelStation.longitude],
+      Math.max(instance.getZoom(), 13),
+      { duration: 0.85 },
+    );
+  }, [selectedFuelStation]);
 
   useEffect(() => {
     if (!selectedVenue) return;
