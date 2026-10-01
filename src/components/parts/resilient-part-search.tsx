@@ -415,13 +415,23 @@ export function ResilientPartSearch({
         </div>
       )}
       {current?.data && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#0e2d30]/15 bg-white/20 p-4">
+        <div
+          className={`flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-4 ${current.data.freshness === "stale" ? "border-amber-800/25 bg-amber-100/35" : "border-[#0e2d30]/15 bg-white/20"}`}
+        >
           <p className="text-sm">
             {refreshing
               ? t("refreshing")
-              : t("checkedAt", {
-                  time: new Date(current.data.checkedAt).toLocaleString(locale),
-                })}
+              : current.data.freshness === "stale"
+                ? t("staleOffers", {
+                    time: new Date(current.data.checkedAt).toLocaleString(
+                      locale,
+                    ),
+                  })
+                : t("checkedAt", {
+                    time: new Date(current.data.checkedAt).toLocaleString(
+                      locale,
+                    ),
+                  })}
           </p>
           <button
             type="button"

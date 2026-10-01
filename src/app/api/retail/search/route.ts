@@ -33,10 +33,19 @@ export async function POST(request: Request) {
           reason: error.kind,
         },
         {
-          status: error.kind === "rate_limit" ? 429 : 503,
+          status:
+            error.kind === "rate_limit"
+              ? 429
+              : error.kind === "timeout"
+                ? 504
+                : 503,
           headers: {
             ...headers,
-            ...(error.kind === "rate_limit" ? { "Retry-After": "60" } : {}),
+            ...(error.kind === "rate_limit"
+              ? {
+                  "Retry-After": String(error.retryAfterSeconds ?? 60),
+                }
+              : {}),
           },
         },
       );

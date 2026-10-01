@@ -78,7 +78,7 @@
       },
       "passport": {
         "title": "Vehicle passport",
-        "description": "Keep a shareable record of the car, completed work and project history."
+        "description": "Keep a shareable snapshot of the car, completed work and project history, with revocable links, optional expiry and record-integrity checks."
       },
       "wishlist": {
         "title": "Wishlist manager",
@@ -104,11 +104,11 @@
       "itemStatus": "In progress",
       "reliability": {
         "title": "Search and provider reliability",
-        "description": "Harden retailer responses, rate limits, error recovery and honest fallbacks when a provider is unavailable."
+        "description": "Retail searches now expose provider timeouts and retry windows, preserve partial results and use only a short-lived fallback from the exact same search when every live provider is unavailable."
       },
       "publicPassport": {
         "title": "Public Passport verification",
-        "description": "Refine live links, unavailable states, QR checks and inspection-friendly presentation."
+        "description": "Public snapshots now support QR access, revocation, optional expiry and a tamper-evident record hash. The hash checks CapCar's stored snapshot; it does not certify owner-entered claims."
       },
       "marketplaceTrust": {
         "title": "Marketplace trust",
@@ -154,7 +154,7 @@
       },
       "connected": {
         "title": "Connected parts",
-        "description": "Plan phases and dependencies, compare normalized live retailers, automatically refresh due watches while the garage is active and import connected OE fitment evidence. Closed-browser alerts still require scheduled infrastructure."
+        "description": "Plan phases and dependencies, compare normalized live retailers and import connected OE fitment evidence. Signed-in exact-offer watches can use a bounded six-hour server check after deployment setup; results import on the next Garage visit. Email and push alerts are not available."
       },
       "marketplace": {
         "title": "Community marketplace",
@@ -358,7 +358,16 @@
     "publishQr": "Publish a link to activate the QR",
     "generated": "Generated {date} · User-entered record",
     "verifyCritical": "Verify safety-critical work against original documents",
-    "policy": "Policy {number}"
+    "policy": "Policy {number}",
+    "verificationTitle": "Record verification",
+    "integrityVerified": "Link active · integrity confirmed",
+    "legacyRecord": "Link active · legacy record",
+    "integrityNotice": "This confirms that the shared CapCar payload has not changed since publication. It does not independently verify owner-entered facts, parts, invoices or workmanship.",
+    "recordHash": "Record hash",
+    "updated": "Updated",
+    "expires": "Link expires",
+    "noExpiry": "No automatic expiry",
+    "legacy": "Legacy"
   },
   "Home": {
     "skip": "Skip to content",
@@ -645,7 +654,7 @@
   "PublicStates": {
     "passportEyebrow": "Passport unavailable",
     "passportTitle": "This link is no longer public.",
-    "passportDescription": "The owner may have revoked the link, or the shared record could not be verified.",
+    "passportDescription": "The owner may have revoked the link, it may have expired, or the shared record could not be verified.",
     "return": "Return to CapCar",
     "verifiedDescription": "Request a specialist’s confirmation, follow its status and keep the result in your private vehicle record.",
     "loadingCapcar": "Loading CapCar",
@@ -761,7 +770,7 @@
       "meta": "Privacy",
       "eyebrow": "Privacy notice · Private beta",
       "title": "Your garage data stays under your control.",
-      "description": "This notice explains what the CapCar beta stores, why it is needed and how you can remove it. Last updated 8 September 2026.",
+      "description": "This notice explains what the CapCar beta stores, why it is needed and how you can remove it. Last updated 30 September 2026.",
       "blocked": "Public launch is blocked until the operator, address and privacy contact are configured. Invite-only testers should use the contact details supplied with their invitation.",
       "s1t": "1. Responsible operator",
       "operatorPending": "Operator details pending",
@@ -770,13 +779,13 @@
       "contactPending": "Contact pending",
       "s2t": "2. Data CapCar processes",
       "s2a": "CapCar stores account details supplied through Supabase authentication and the garage records you create, including vehicle details, maintenance, builds, costs, wishlists, diagnostics, guide progress and visualizer settings. A complete garage snapshot is also kept in browser storage for responsive offline-tolerant use.",
-      "s2b": "When you publish a Vehicle Passport, the selected passport record is available to anyone with its unguessable link until you revoke or delete it. Only the final five VIN characters can appear in a shared passport.",
+      "s2b": "When you publish a Vehicle Passport, the selected passport record is available to anyone with its unguessable link until its optional expiry or until you revoke or delete it. Only the final five VIN characters can appear in a shared passport.",
       "s3t": "3. Purpose and legal basis",
       "s3": "Account, synchronization and export processing is necessary to provide the beta service you request. Security, abuse prevention and short rate-limit records support CapCar’s legitimate interest in operating a reliable private beta. CapCar does not sell garage data.",
       "s4t": "4. Hosting and external services",
       "s4": "Netlify delivers the application and Supabase provides authentication and database storage. Opening an interactive 3D view connects your browser to Sketchfab. Vehicle, retailer and AI provider adapters remain in labelled demo mode unless the System page reports an activated external provider.",
       "s5t": "5. Retention and deletion",
-      "s5": "Garage snapshots and private records remain until you delete the garage or account. Shared Passport records remain until revoked or deleted. Per-user API rate-limit state is replaced as new request windows begin. Account controls let you export, delete cloud garage data or permanently delete the account.",
+      "s5": "Garage snapshots and private records remain until you delete the garage or account. Expired or revoked Passport records stop being public but remain stored until you delete the link or account. Per-user API rate-limit state is replaced as new request windows begin. Account controls let you export, delete cloud garage data or permanently delete the account.",
       "s6t": "6. Your choices and rights",
       "s6": "You can export the complete garage as JSON or CSV, correct records in the garage, revoke public links and delete stored data from Account. Depending on applicable law, you may also request access, rectification, erasure, restriction, portability or object to certain processing through the privacy contact above.",
       "s7t": "7. Beta limitations",
@@ -795,7 +804,7 @@
       "s3t": "3. Accounts and records",
       "s3": "Keep your login secure and enter only records you are entitled to store. CapCar provides export and deletion controls, but you remain responsible for retaining original invoices, workshop documents and legally required evidence.",
       "s4t": "4. Public Passport links",
-      "s4": "Publishing a Vehicle Passport makes its contents accessible to anyone who receives the link. Review the record before publishing and revoke or delete the link when it should no longer be available. Public passports are owner-entered records, not CapCar certification.",
+      "s4": "Publishing a Vehicle Passport makes its contents accessible to anyone who receives the link until its optional expiry. Review the record before publishing and revoke or delete the link when it should no longer be available. Public passports are owner-entered records, not CapCar certification.",
       "s5t": "5. External websites",
       "s5": "Merchant, source and 3D links lead to independent services with their own terms and privacy practices. Confirm price, shipping, returns, authenticity, fitment and road approval directly with the relevant provider before purchasing.",
       "s6t": "6. Changes and availability",

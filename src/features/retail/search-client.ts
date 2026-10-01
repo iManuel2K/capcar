@@ -10,6 +10,7 @@ const responseSchema = z.object({
   checkedAt: z.iso.datetime(),
   hasMore: z.boolean(),
   warning: z.string(),
+  freshness: z.enum(["live", "stale"]).optional(),
   items: z
     .array(
       z.object({
@@ -35,7 +36,7 @@ const responseSchema = z.object({
         id: z.enum(["ebay", "partner"]),
         label: z.string().max(80),
         status: z.enum(["available", "unavailable"]),
-        code: z.enum(["access", "limit", "unavailable"]).optional(),
+        code: z.enum(["access", "limit", "timeout", "unavailable"]).optional(),
         retryable: z.boolean().optional(),
       }),
     )

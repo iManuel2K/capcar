@@ -218,6 +218,7 @@
     "refresh": "Përditëso ofertat live",
     "refreshing": "Po përditësohen ofertat live…",
     "checkedAt": "Ofertat u kontrolluan {time}",
+    "staleOffers": "Ofertat e fundit të suksesshme nga {time} · rifreskimi drejtpërdrejt nuk është i disponueshëm",
     "providerStatus": "Gjendja e burimeve të shitësve",
     "providerAvailable": "i disponueshëm",
     "providerUnavailable": "përkohësisht i padisponueshëm",

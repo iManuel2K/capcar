@@ -30,6 +30,10 @@ import {
   savePassportProfile,
   type PassportProfile,
 } from "@/features/passport/vehicle-passport";
+import {
+  createPassportRecordHash,
+  passportExpiry,
+} from "@/features/passport/passport-integrity";
 import { proFeatureLabels } from "@/features/pro/pro-features";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
@@ -40,7 +44,18 @@ type PassportLink = {
   share_id: string;
   is_public: boolean;
   created_at: string;
+  expires_at: string | null;
+  revoked_at: string | null;
+  record_hash: string | null;
 };
+
+function isPassportLinkActive(link: PassportLink, now = Date.now()) {
+  return (
+    link.is_public &&
+    !link.revoked_at &&
+    (!link.expires_at || Date.parse(link.expires_at) > now)
+  );
+}
 
 export function PassportWorkspace({ vehicleId }: { vehicleId: string }) {
   return <VehiclePassportWorkspace key={vehicleId} vehicleId={vehicleId} />;
@@ -61,6 +76,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
   const [, setProfileRevision] = useState(0);
   const [profileMessage, setProfileMessage] = useState("");
   const [linkMessage, setLinkMessage] = useState("");
+  const [expiryDays, setExpiryDays] = useState<30 | 90 | 365 | null>(90);
   const requestGeneration = useRef(0);
   const invalidateRequests = useCallback(() => {
     requestGeneration.current++;
@@ -85,7 +101,9 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
         );
       const { data, error: linksError } = await client
         .from("vehicle_passports")
-        .select("share_id, is_public, created_at")
+        .select(
+          "share_id, is_public, created_at, expires_at, revoked_at, record_hash",
+        )
         .eq("user_id", auth.user.id)
         .contains("payload", { vehicle: { id: vehicleId } })
         .order("created_at", { ascending: false });
@@ -128,6 +146,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
       <div className="py-32 text-center text-white/45">Vehicle not found.</div>
     );
   const title = `${passport.vehicle.productionYear} ${passport.vehicle.make} ${passport.vehicle.model}`;
+  const activeLink = links.find((link) => isPassportLinkActive(link));
 
   async function publish() {
     if (mutationLock.current) return;
@@ -140,14 +159,20 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
       if (authError) throw authError;
       if (!auth.user)
         throw new Error("Sign in before creating a public passport link.");
+      const payload = buildVehiclePassport(vehicleId, window.localStorage);
+      if (!payload) throw new Error("Vehicle passport is no longer available.");
       const shareId = crypto.randomUUID();
+      const recordHash = await createPassportRecordHash(payload);
       const { error: saveError } = await client
         .from("vehicle_passports")
         .insert({
           share_id: shareId,
           user_id: auth.user.id,
-          payload: passport,
+          payload,
           is_public: true,
+          record_hash: recordHash,
+          expires_at: passportExpiry(expiryDays),
+          revoked_at: null,
         });
       if (saveError) throw saveError;
       setShareUrl(`${window.location.origin}/passport/${shareId}`);
@@ -172,7 +197,12 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
     try {
       const { data, error: updateError } = await createClient()
         .from("vehicle_passports")
-        .update({ is_public: isPublic, updated_at: new Date().toISOString() })
+        .update({
+          is_public: isPublic,
+          revoked_at: isPublic ? null : new Date().toISOString(),
+          expires_at: isPublic ? passportExpiry(expiryDays) : undefined,
+          updated_at: new Date().toISOString(),
+        })
         .eq("share_id", shareId)
         .select("share_id")
         .maybeSingle();
@@ -350,8 +380,8 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
         passport={passport}
         liveUrl={
           shareUrl ||
-          (links.find((link) => link.is_public)
-            ? `${window.location.origin}/passport/${links.find((link) => link.is_public)?.share_id}`
+          (activeLink
+            ? `${window.location.origin}/passport/${activeLink.share_id}`
             : undefined)
         }
       />
@@ -381,6 +411,25 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
             <Share2 className="size-4" /> New public link
           </button>
         </div>
+        <label className="mt-5 block max-w-xs text-sm text-white/60">
+          New link validity
+          <select
+            value={expiryDays ?? "none"}
+            onChange={(event) =>
+              setExpiryDays(
+                event.target.value === "none"
+                  ? null
+                  : (Number(event.target.value) as 30 | 90 | 365),
+              )
+            }
+            className="mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-black/20 px-3 text-white"
+          >
+            <option value="30">30 days</option>
+            <option value="90">90 days</option>
+            <option value="365">1 year</option>
+            <option value="none">No automatic expiry</option>
+          </select>
+        </label>
         <button
           type="button"
           disabled={linksLoading || sharing}
@@ -412,11 +461,19 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
                   <p className="mt-1 text-xs text-white/30">
                     Created{" "}
                     {new Date(link.created_at).toLocaleDateString("en-GB")} ·{" "}
-                    {link.is_public ? "Public" : "Revoked"}
+                    {isPassportLinkActive(link)
+                      ? "Public"
+                      : link.is_public && !link.revoked_at
+                        ? "Expired"
+                        : "Revoked"}
+                    {link.expires_at
+                      ? ` · expires ${new Date(link.expires_at).toLocaleDateString("en-GB")}`
+                      : " · no automatic expiry"}
+                    {link.record_hash ? " · integrity hash" : " · legacy link"}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {link.is_public ? (
+                  {isPassportLinkActive(link) ? (
                     <>
                       <button
                         type="button"

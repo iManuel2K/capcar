@@ -218,6 +218,7 @@
     "refresh": "最新の出品に更新",
     "refreshing": "最新の出品を更新中…",
     "checkedAt": "出品確認日時：{time}",
+    "staleOffers": "前回取得できた出品（{time}）· 現在ライブ更新を利用できません",
     "providerStatus": "販売サイトの接続状況",
     "providerAvailable": "利用可能",
     "providerUnavailable": "一時的に利用できません",

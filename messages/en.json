@@ -218,6 +218,7 @@
     "refresh": "Refresh live offers",
     "refreshing": "Refreshing live offers…",
     "checkedAt": "Offers checked {time}",
+    "staleOffers": "Last successful offers from {time} · live refresh unavailable",
     "providerStatus": "Retailer provider status",
     "providerAvailable": "available",
     "providerUnavailable": "temporarily unavailable",
