@@ -5,12 +5,8 @@ type PriceWatchEnvironment = {
   providers: Record<string, string | undefined>;
 };
 
-declare const Netlify: {
-  env: { get(name: string): string | undefined };
-};
-
 function read(name: string) {
-  return Netlify.env.get(name)?.trim();
+  return process.env[name]?.trim();
 }
 
 export function getPriceWatchEnvironment(): PriceWatchEnvironment {

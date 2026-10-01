@@ -5,14 +5,8 @@ type ScoutEnvironment = {
   manualRunSecret?: string;
 };
 
-declare const Netlify: {
-  env: {
-    get(name: string): string | undefined;
-  };
-};
-
 function readEnvironment(name: string) {
-  return Netlify.env.get(name)?.trim();
+  return process.env[name]?.trim();
 }
 
 export function getScoutEnvironment(): ScoutEnvironment {
