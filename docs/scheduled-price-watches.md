@@ -12,7 +12,7 @@ CapCar keeps the existing browser-side price checks and adds a bounded server pa
 
 ## Required production setup
 
-- Apply `20260930203000_scheduled_price_watch_results.sql`.
+- Apply `20261001141619_scheduled_price_watch_results.sql`.
 - Configure server-only `SUPABASE_URL`, `SUPABASE_SECRET_KEY` and a unique `PRICE_WATCH_JOB_SECRET` in Netlify.
 - Configure a live retailer provider. The eBay application credentials are preferred over a static access token.
 - Publish a production deploy. Netlify scheduled functions do not run on previews or local development.

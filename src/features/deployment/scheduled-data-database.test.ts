@@ -24,8 +24,8 @@ describe("scheduled data and public Passport database policies", () => {
     await db.query("insert into auth.users values($1),($2)", [owner, other]);
     for (const file of [
       "20260907160000_create_vehicle_passports.sql",
-      "20260930203000_scheduled_price_watch_results.sql",
-      "20260930210000_public_passport_integrity.sql",
+      "20261001141619_scheduled_price_watch_results.sql",
+      "20261001141634_public_passport_integrity.sql",
     ]) {
       await db.exec(
         readFileSync(
