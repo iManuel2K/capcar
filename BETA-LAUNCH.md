@@ -1,4 +1,4 @@
-# Capcar Beta launch runbook
+# CapCar beta launch runbook
 
 ## Included scope
 
@@ -13,22 +13,21 @@
 
 ## 1. Apply the database changes
 
-Open the Supabase SQL editor for the Capcar project and apply every migration that has not already been recorded, in filename order:
+Use the Supabase migration workflow for the CapCar project and apply every
+unrecorded file in `supabase/migrations` in filename order. Do not rely on a
+copied migration list in this document: the repository directory is the source
+of truth as the beta evolves.
 
-1. `supabase/migrations/20260905130000_create_garage_snapshots.sql`
-2. `supabase/migrations/20260907160000_create_vehicle_passports.sql`
-3. `supabase/migrations/20260907161000_create_affiliate_clicks.sql`
-4. `supabase/migrations/20260908140000_add_beta_api_rate_limits.sql`
-5. `supabase/migrations/20260908141000_add_account_data_lifecycle.sql`
-
-Use the Supabase migration workflow or SQL editor for the target project. Do not paste service-role or database credentials into the browser application. The final two migrations add per-user API protection and authenticated account-deletion functions.
+Do not paste service-role or database credentials into the browser application.
+After applying migrations, run the read-only readiness checks documented beside
+the relevant feature before changing or replaying any migration.
 
 ## 2. Configure authentication
 
 In Supabase Authentication → URL Configuration:
 
-- Site URL: `https://capcar-im.netlify.app`
-- Redirect URL: `https://capcar-im.netlify.app/auth/callback`
+- Site URL: `https://capcar.dev`
+- Redirect URL: `https://capcar.dev/auth/callback`
 - Local redirect URL: `http://localhost:3000/auth/callback`
 
 Keep email confirmation enabled for the beta. Test registration, callback handling, password reset and sign-out with a new address before inviting testers.
@@ -38,8 +37,8 @@ Keep email confirmation enabled for the beta. Test registration, callback handli
 Set these Production environment variables:
 
 ```text
-NEXT_PUBLIC_APP_URL=https://capcar-im.netlify.app
-NEXT_PUBLIC_SITE_URL=https://capcar-im.netlify.app
+NEXT_PUBLIC_APP_URL=https://capcar.dev
+NEXT_PUBLIC_SITE_URL=https://capcar.dev
 NEXT_PUBLIC_DEPLOYMENT_ENV=production
 NEXT_PUBLIC_SUPABASE_URL=<public Supabase project URL>
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<browser-safe publishable key>
@@ -79,7 +78,7 @@ After Netlify reports a successful production deploy:
 
 ```powershell
 Set-Location "E:\capcar"
-pnpm.cmd smoke:production -- https://capcar-im.netlify.app
+pnpm.cmd smoke:production -- https://capcar.dev
 ```
 
 This checks public pages, security headers, health status, provider-status redaction, missing Passport handling and the signed-out garage redirect.
@@ -92,7 +91,7 @@ Use two accounts and a private browser window:
 2. Add a vehicle plus maintenance, expense, wishlist and diagnostic records.
 3. Go offline, edit a record, reconnect and confirm the sync state returns to **Garage synced**.
 4. Sign in as the same user on another browser and verify the cloud garage appears.
-5. Create different changes on both browsers and confirm Capcar asks which garage version to keep.
+5. Create different changes on both browsers and confirm CapCar asks which garage version to keep.
 6. Publish a Vehicle Passport, open it signed out, revoke it and confirm its URL returns 404.
 7. Export account data and validate that malformed restore data is rejected without replacing the garage.
 8. With a disposable account, test **Delete cloud garage data**, then test **Delete account**.

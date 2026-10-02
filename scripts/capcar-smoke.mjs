@@ -23,7 +23,7 @@ function fail(label, detail) {
 async function request(path, options = {}) {
   return fetch(`${baseUrl}${path}`, {
     redirect: options.redirect ?? "follow",
-    headers: { "User-Agent": "Capcar release smoke test" },
+    headers: { "User-Agent": "CapCar release smoke test" },
   });
 }
 
@@ -33,7 +33,7 @@ async function expectPage(path) {
     const body = await response.text();
     if (!response.ok) return fail(path, `HTTP ${response.status}`);
     if (!body.toLowerCase().includes("capcar")) {
-      return fail(path, "response does not contain the Capcar shell");
+      return fail(path, "response does not contain the CapCar shell");
     }
     pass(path);
   } catch (error) {
@@ -41,7 +41,7 @@ async function expectPage(path) {
   }
 }
 
-console.log(`Capcar smoke test: ${baseUrl}`);
+console.log(`CapCar smoke test: ${baseUrl}`);
 
 for (const path of [
   "/",
@@ -196,4 +196,4 @@ if (failures > 0) {
   process.exit(1);
 }
 
-console.log("All Capcar smoke checks passed.");
+console.log("All CapCar smoke checks passed.");
