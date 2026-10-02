@@ -124,7 +124,7 @@
       },
       "localization": {
         "title": "Öffentliche Site in fünf Sprachen",
-        "description": "Englische, deutsche, griechische, albanische und japanische Besucherwege konsistent halten."
+        "description": "Englische, deutsche, griechische, albanische und japanische Besucherwege werden automatisch auf gleiche Schlüssel und gültige ICU-Formate geprüft, damit neue Texte nicht unbemerkt in einer Sprache fehlen."
       }
     },
     "tangible": {
@@ -146,7 +146,7 @@
       },
       "obd": {
         "title": "Native OBD-II-Diagnose",
-        "description": "Scans importieren oder Fehlercodes und Livewerte über ELM327-Serial am Desktop lesen. Hardwareprüfung steht aus; Löschen von Codes nicht verfügbar."
+        "description": "Scans importieren oder das getestete, schreibgeschützte ELM327-Protokoll für Fehlercodes und Livewerte am Desktop nutzen. Adapter- und Fahrzeugkompatibilität benötigen weiterhin echte Hardwaretests; Codes werden nicht gelöscht."
       },
       "verified": {
         "title": "Verifizierte Werkstattstempel",
@@ -166,7 +166,7 @@
       },
       "roadbook": {
         "title": "Roadbook-Fahrkarte",
-        "description": "Entdecke belegte Rundstrecken, kontrollierte Testgelände und Routenkontext auf einer Karte mit vier Ansichten. Speichere Orte im Build und dokumentiere eigene Besuche im Fahrzeugpass."
+        "description": "Entdecke belegte Rundstrecken, Testgelände, Events und Fotospots in neun Kartenstilen. Finde Live-Spritpreise in Deutschland oder nahe OpenStreetMap-Tankstellen weltweit, speichere Orte im Build und Besuche im Fahrzeugpass."
       },
       "photoSpots": {
         "title": "Auto-Fotospots",
@@ -185,6 +185,14 @@
       "ai": {
         "title": "KI-Build-Richtung",
         "description": "Erzeuge sinnvolle Upgrade-Ideen und visuelle Konzepte rund um dein eigenes Fahrzeug."
+      },
+      "tripPlanning": {
+        "title": "Lange Wochenenden mit KI planen",
+        "description": "Frage eine unterstützte KI: „Plane mir ein langes, landschaftlich schönes Wochenende mit [Auto] in [Region].“ CapCar gibt Fahrzeug- und Roadbook-Kontext nur mit Zustimmung weiter; Route, Zufahrt und aktuelle Bedingungen bleiben zu prüfen."
+      },
+      "calendarMail": {
+        "title": "Kalender- und E-Mail-Synchronisierung",
+        "description": "Übertrage ausgewählte Roadbook-Pläne, Buchungen und Eventdetails über freigegebene Kalender- und E-Mail-Verbindungen in einen klaren Reiseplan. Kein Postfachzugriff und keine Termine ohne ausdrückliche Zustimmung."
       },
       "twowheels": {
         "title": "Motorräder und Fahrräder",
