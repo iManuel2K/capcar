@@ -26,6 +26,8 @@ describe("RoadmapPage", () => {
     expect(screen.getByText("Community marketplace")).toBeInTheDocument();
     expect(screen.getByText("Direct merchant checkout")).toBeInTheDocument();
     expect(screen.getByText("Motorcycles and bicycles")).toBeInTheDocument();
-    expect(screen.getAllByText("27").length).toBeGreaterThan(0);
+    expect(screen.getByText("AI scenic weekend planning")).toBeInTheDocument();
+    expect(screen.getByText("Calendar and mail sync")).toBeInTheDocument();
+    expect(screen.getAllByText("31").length).toBeGreaterThan(0);
   });
 });

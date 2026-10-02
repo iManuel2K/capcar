@@ -124,7 +124,7 @@
       },
       "localization": {
         "title": "Faqja publike në pesë gjuhë",
-        "description": "Mbaj të njëtrajtshme rrjedhat publike në anglisht, gjermanisht, greqisht, shqip dhe japonisht."
+        "description": "Rrjedhat publike në anglisht, gjermanisht, greqisht, shqip dhe japonisht kontrollohen automatikisht për barazi çelësash dhe formatim ICU, që teksti i ri të mos mungojë pa u vënë re."
       }
     },
     "tangible": {
@@ -146,7 +146,7 @@
       },
       "obd": {
         "title": "Diagnostikim vendas OBD-II",
-        "description": "Importo skanime ose lexo kode e vlera me ELM327 serial në shfletues desktop të mbështetur. Verifikimi me pajisje mbetet; pa fshirje kodesh."
+        "description": "Importo skanime ose përdor protokollin e testuar ELM327 vetëm për lexim të kodeve dhe vlerave live në desktop. Përputhshmëria e pajisjes dhe makinës kërkon ende test real; fshirja e kodeve mbetet e çaktivizuar."
       },
       "verified": {
         "title": "Vula të verifikuara servisi",
@@ -166,7 +166,7 @@
       },
       "roadbook": {
         "title": "Harta e vozitjes Roadbook",
-        "description": "Zbulo pista me burime, ambiente të kontrolluara testimi dhe kontekst itinerari në një hartë me katër pamje. Ruaj vende në build dhe vizitat e tua në Vehicle Passport."
+        "description": "Zbulo pista, ambiente testimi, evente dhe vende fotografimi në nëntë stile harte. Gjej çmime live në Gjermani ose pika OpenStreetMap pranë në mbarë botën dhe ruaj vendet e vizitat."
       },
       "photoSpots": {
         "title": "Vende për foto makinash",
@@ -185,6 +185,14 @@
       "ai": {
         "title": "Drejtimi i build-it me AI",
         "description": "Gjenero ide të dobishme për përmirësime dhe koncepte vizuale rreth makinës tënde."
+      },
+      "tripPlanning": {
+        "title": "Planifikim fundjave panoramike me AI",
+        "description": "Pyet një AI të mbështetur: “Më planifiko një fundjavë të gjatë panoramike me [makinë] në [rajon].” CapCar jep kontekstin e makinës dhe Roadbook vetëm me miratim; itinerari, hyrja dhe kushtet duhen verifikuar."
+      },
+      "calendarMail": {
+        "title": "Sinkronizim kalendari dhe emaili",
+        "description": "Kthe planet e zgjedhura të Roadbook, rezervimet dhe detajet e eventeve në një itinerar të qartë përmes lidhjeve me leje. Pa hyrje në email ose krijim eventesh pa miratim të qartë."
       },
       "twowheels": {
         "title": "Motoçikleta dhe biçikleta",

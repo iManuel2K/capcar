@@ -1,6 +1,36 @@
 import { describe, expect, it } from "vitest";
 import { decodePid, decodeStoredCodes, Elm327 } from "./elm327";
 describe("ELM327 read-only protocol", () => {
+  it("initializes a serial adapter with only the approved read-only setup sequence", async () => {
+    const commands: string[] = [];
+    let controller!: ReadableStreamDefaultController<Uint8Array>;
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
+    const adapter = new Elm327({
+      readable: new ReadableStream({
+        start(nextController) {
+          controller = nextController;
+        },
+      }),
+      writable: new WritableStream({
+        write(chunk) {
+          const command = decoder.decode(chunk).trim();
+          commands.push(command);
+          controller.enqueue(
+            encoder.encode(command === "ATZ" ? "ELM327 v1.5\r>" : "OK\r>"),
+          );
+        },
+      }),
+      open: async () => {},
+      close: async () => {},
+    });
+
+    await adapter.initialize();
+
+    expect(commands).toEqual(["ATZ", "ATE0", "ATL0", "ATH0", "ATSP0"]);
+    expect(commands).not.toContain("04");
+  });
+
   it("decodes DTC byte pairs and deduplicates ECU replies", () => {
     expect(
       decodeStoredCodes("03\r43 03 01 01 71 04 20\r43 03 01 00 00 00 00"),
