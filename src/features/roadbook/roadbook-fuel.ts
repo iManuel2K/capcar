@@ -4,7 +4,7 @@ export const roadbookFuelTypes = ["all", "e5", "e10", "diesel"] as const;
 export type RoadbookFuelType = (typeof roadbookFuelTypes)[number];
 
 export const roadbookFuelStationSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().min(1),
   name: z.string().min(1),
   brand: z.string().optional(),
   address: z.string(),
@@ -17,27 +17,17 @@ export const roadbookFuelStationSchema = z.object({
     e10: z.number().positive().optional(),
     diesel: z.number().positive().optional(),
   }),
+  source: z.enum(["live_price", "directory"]),
 });
 
 const roadbookFuelResponseSchema = z.object({
   stations: z.array(roadbookFuelStationSchema),
   fetchedAt: z.string().datetime({ offset: true }),
-  provider: z.literal("Tankerkönig / MTS-K"),
+  provider: z.enum(["Tankerkönig / MTS-K", "OpenStreetMap"]),
+  pricing: z.enum(["live", "directory"]),
 });
 
 export type RoadbookFuelStation = z.infer<typeof roadbookFuelStationSchema>;
-
-export function roadbookFuelAvailable(center: {
-  latitude: number;
-  longitude: number;
-}) {
-  return (
-    center.latitude >= 47 &&
-    center.latitude <= 55.2 &&
-    center.longitude >= 5.5 &&
-    center.longitude <= 15.6
-  );
-}
 
 export async function fetchRoadbookFuelStations(input: {
   latitude: number;

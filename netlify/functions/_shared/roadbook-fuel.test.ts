@@ -1,13 +1,16 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  isTankerkonigCoverage,
+  normalizeOverpassResponse,
   normalizeTankerkonigResponse,
+  overpassFuelQuery,
   parseRoadbookFuelQuery,
   tankerkoenigUrl,
 } from "./roadbook-fuel";
 
 describe("Roadbook fuel provider", () => {
-  it("accepts a bounded German nearby search", () => {
+  it("accepts a bounded worldwide nearby search", () => {
     const result = parseRoadbookFuelQuery(
       new URL(
         "https://capcar.dev/api/roadbook/fuel?lat=50.1&lng=8.6&radius=25&type=e10",
@@ -16,11 +19,11 @@ describe("Roadbook fuel provider", () => {
     expect(result.success).toBe(true);
   });
 
-  it("rejects out-of-country or excessive searches", () => {
+  it("rejects invalid coordinates or excessive searches", () => {
     expect(
       parseRoadbookFuelQuery(
         new URL(
-          "https://capcar.dev/api/roadbook/fuel?lat=40&lng=8.6&radius=250&type=all",
+          "https://capcar.dev/api/roadbook/fuel?lat=91&lng=8.6&radius=250&type=all",
         ),
       ).success,
     ).toBe(false);
@@ -54,8 +57,54 @@ describe("Roadbook fuel provider", () => {
         address: "Mainzer Straße 10, 65428 Rüsselsheim",
         prices: { e5: 1.819, e10: undefined, diesel: 1.699 },
         isOpen: true,
+        source: "live_price",
       }),
     ]);
+  });
+
+  it("normalizes worldwide OpenStreetMap station discovery without inventing prices", () => {
+    expect(
+      normalizeOverpassResponse(
+        {
+          elements: [
+            {
+              type: "node",
+              id: 123,
+              lat: 38.72,
+              lon: -9.14,
+              tags: {
+                amenity: "fuel",
+                name: "Atlantic Fuel",
+                brand: "Atlantic",
+                "addr:street": "Rua do Tejo",
+                "addr:housenumber": "4",
+                "addr:city": "Lisboa",
+              },
+            },
+          ],
+        },
+        { latitude: 38.71, longitude: -9.13 },
+      ),
+    ).toEqual([
+      expect.objectContaining({
+        id: "osm-node-123",
+        address: "Rua do Tejo 4, Lisboa",
+        prices: {},
+        source: "directory",
+      }),
+    ]);
+  });
+
+  it("uses the live-price provider only inside its German coverage", () => {
+    expect(isTankerkonigCoverage({ latitude: 50.1, longitude: 8.6 })).toBe(
+      true,
+    );
+    expect(isTankerkonigCoverage({ latitude: 48.86, longitude: 2.35 })).toBe(
+      false,
+    );
+    expect(
+      overpassFuelQuery({ latitude: 48.86, longitude: 2.35, radiusKm: 10 }),
+    ).toContain('nwr["amenity"="fuel"](around:10000,48.86,2.35)');
   });
 
   it("keeps the API key server-side in the provider URL only", () => {
