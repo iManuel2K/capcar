@@ -3,6 +3,7 @@
 import {
   Camera,
   FlagTriangleRight,
+  Fuel,
   Gauge,
   Milestone,
   Mountain,
@@ -27,11 +28,17 @@ export function RoadbookFilterBar({
   onChange,
   label,
   labels,
+  fuelEnabled,
+  onFuelChange,
+  fuelLabel,
 }: {
   selected: RoadbookCategory[];
   onChange: (categories: RoadbookCategory[]) => void;
   label: string;
   labels: Record<RoadbookCategory, string>;
+  fuelEnabled: boolean;
+  onFuelChange: (enabled: boolean) => void;
+  fuelLabel: string;
 }) {
   function toggle(category: RoadbookCategory) {
     onChange(
@@ -65,6 +72,19 @@ export function RoadbookFilterBar({
           </button>
         );
       })}
+      <button
+        type="button"
+        aria-pressed={fuelEnabled}
+        onClick={() => onFuelChange(!fuelEnabled)}
+        className={`inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-[11px] font-medium transition sm:min-h-10 sm:gap-2 sm:rounded-xl sm:px-3 sm:text-xs ${
+          fuelEnabled
+            ? "bg-[#e72d45] text-white shadow-lg"
+            : "bg-white/[0.055] text-white/62 hover:bg-white/10 hover:text-white"
+        }`}
+      >
+        <Fuel aria-hidden="true" className="size-3.5" />
+        {fuelLabel}
+      </button>
     </div>
   );
 }

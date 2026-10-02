@@ -1,6 +1,27 @@
 {
   "Roadbook": {
     "search": "Search places in view",
+    "fuel": {
+      "filter": "Live fuel",
+      "typeLabel": "Fuel type",
+      "types": { "all": "All", "e5": "E5", "e10": "E10", "diesel": "Diesel" },
+      "detailsLabel": "Fuel station details",
+      "livePrices": "Live fuel prices",
+      "germanyOnly": "Live fuel prices are currently available when the map is over Germany.",
+      "notConfigured": "Live fuel prices need the Tankerkönig API key.",
+      "unavailable": "Live fuel prices are temporarily unavailable. The rest of Roadbook still works.",
+      "open": "Open now",
+      "closed": "Closed",
+      "statusUnknown": "Opening status unknown",
+      "distance": "{distance} km away",
+      "perLiter": "per litre",
+      "addressUnknown": "Address not provided",
+      "navigate": "Navigate to station",
+      "updated": "Prices retrieved {date}. Confirm the pump price before filling.",
+      "updatedRecently": "Prices retrieved recently. Confirm the pump price before filling.",
+      "attribution": "Fuel data · Tankerkönig / MTS-K",
+      "close": "Close fuel station details"
+    },
     "photoSpot": {
       "title": "Photo location",
       "safety": "Stop only where parking is permitted. Never block roads or access, enter private property without permission or stop at unsafe roadside locations.",

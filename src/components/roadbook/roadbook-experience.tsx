@@ -11,6 +11,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { RoadbookFilterBar } from "@/components/roadbook/roadbook-filter-bar";
+import { RoadbookFuelDrawer } from "@/components/roadbook/roadbook-fuel-drawer";
 import {
   RoadbookDiscoveryRail,
   type RoadbookDiscoveryPanel,
@@ -47,6 +48,13 @@ import {
   writeRoadbookMapStyle,
 } from "@/features/roadbook/roadbook-map-style";
 import { ROADBOOK_DATA_TIMEOUT_MS } from "@/features/roadbook/roadbook-timeout";
+import {
+  fetchRoadbookFuelStations,
+  roadbookFuelAvailable,
+  roadbookFuelTypes,
+  type RoadbookFuelStation,
+  type RoadbookFuelType,
+} from "@/features/roadbook/roadbook-fuel";
 
 const defaultCenter: RoadbookCenter = { latitude: 50.1, longitude: 10.4 };
 
@@ -58,6 +66,13 @@ export function RoadbookExperience() {
   const [search, setSearch] = useState("");
   const [events, setEvents] = useState<RoadbookEvent[]>([]);
   const [selectedVenue, setSelectedVenue] = useState<RoadbookVenue>();
+  const [fuelStations, setFuelStations] = useState<RoadbookFuelStation[]>([]);
+  const [selectedFuelStation, setSelectedFuelStation] =
+    useState<RoadbookFuelStation>();
+  const [fuelEnabled, setFuelEnabled] = useState(false);
+  const [fuelType, setFuelType] = useState<RoadbookFuelType>("all");
+  const [fuelFetchedAt, setFuelFetchedAt] = useState<string>();
+  const [fuelError, setFuelError] = useState("");
   const [categories, setCategories] = useState<RoadbookCategory[]>([]);
   const [mode, setMode] = useState<RoadbookMapMode>(() =>
     readRoadbookMapStyle(
@@ -81,6 +96,7 @@ export function RoadbookExperience() {
   );
   const fetchSequence = useRef(0);
   const fetchController = useRef<AbortController | null>(null);
+  const fuelFetchController = useRef<AbortController | null>(null);
 
   useEffect(() => {
     const update = () => setVisits(readRoadbookVisits(window.localStorage));
@@ -139,6 +155,52 @@ export function RoadbookExperience() {
       fetchController.current?.abort();
     };
   }, [loadVenues]);
+
+  const loadFuelStations = useCallback(async () => {
+    fuelFetchController.current?.abort();
+    if (!fuelEnabled || !roadbookFuelAvailable(center)) {
+      setFuelStations([]);
+      setFuelError(
+        fuelEnabled && !roadbookFuelAvailable(center)
+          ? t("fuel.germanyOnly")
+          : "",
+      );
+      return;
+    }
+    const controller = new AbortController();
+    fuelFetchController.current = controller;
+    setFuelError("");
+    try {
+      const result = await fetchRoadbookFuelStations({
+        latitude: center.latitude,
+        longitude: center.longitude,
+        radiusKm,
+        fuelType,
+        signal: controller.signal,
+      });
+      setFuelStations(result.stations);
+      setFuelFetchedAt(result.fetchedAt);
+    } catch (caught) {
+      if (controller.signal.aborted) return;
+      const message = caught instanceof Error ? caught.message : "";
+      setFuelStations([]);
+      setFuelError(
+        t(
+          message === "FUEL_DATA_NOT_CONFIGURED"
+            ? "fuel.notConfigured"
+            : "fuel.unavailable",
+        ),
+      );
+    }
+  }, [center, fuelEnabled, fuelType, radiusKm, t]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => void loadFuelStations(), 450);
+    return () => {
+      window.clearTimeout(timer);
+      fuelFetchController.current?.abort();
+    };
+  }, [loadFuelStations]);
 
   useEffect(() => {
     if (mapReady) return;
@@ -223,15 +285,24 @@ export function RoadbookExperience() {
     <div className="relative h-[calc(100dvh-4.5rem)] min-h-[32rem] overflow-hidden bg-[#0b0e0c] text-white sm:h-[calc(100dvh-5rem)] sm:min-h-[38rem]">
       <RoadbookMap
         venues={visibleVenues}
+        fuelStations={fuelStations}
         events={events}
         selectedVenue={selectedVenue}
+        selectedFuelStation={selectedFuelStation}
         mode={mode}
         center={center}
         userPosition={userPosition}
         mapLabel={t("map.label")}
         userLocationLabel={t("map.userLocation")}
         upcomingEventsLabel={upcomingEventsLabel}
-        onSelect={setSelectedVenue}
+        onSelect={(venue) => {
+          setSelectedFuelStation(undefined);
+          setSelectedVenue(venue);
+        }}
+        onSelectFuelStation={(station) => {
+          setSelectedVenue(undefined);
+          setSelectedFuelStation(station);
+        }}
         onViewportChange={updateViewport}
         onError={() => setMapError(t("errors.mapUnavailable"))}
         onReady={() => {
@@ -310,7 +381,7 @@ export function RoadbookExperience() {
 
       <div
         className={`absolute bottom-[5.35rem] z-20 hidden lg:block ${
-          selectedVenue
+          selectedVenue || selectedFuelStation
             ? "right-[28rem] left-5 w-auto translate-x-0"
             : "left-1/2 w-[min(64rem,calc(100%-8rem))] -translate-x-1/2"
         }`}
@@ -329,11 +400,43 @@ export function RoadbookExperience() {
 
       <div className="absolute right-2 bottom-2 left-2 z-20 flex items-end gap-2 sm:right-3 sm:bottom-3 sm:left-3 lg:right-[28rem] lg:left-5">
         <div className="min-w-0 flex-1">
+          {fuelEnabled && (
+            <div
+              className="mb-2 flex w-fit max-w-full [scrollbar-width:none] gap-1 overflow-x-auto rounded-xl border border-white/12 bg-[#09100d]/88 p-1 shadow-2xl backdrop-blur-xl [&::-webkit-scrollbar]:hidden"
+              aria-label={t("fuel.typeLabel")}
+            >
+              {roadbookFuelTypes.map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  aria-pressed={fuelType === type}
+                  onClick={() => setFuelType(type)}
+                  className={`min-h-9 shrink-0 rounded-lg px-3 text-[11px] font-semibold transition ${
+                    fuelType === type
+                      ? "bg-white text-[#101412]"
+                      : "text-white/60 hover:bg-white/8 hover:text-white"
+                  }`}
+                >
+                  {t(`fuel.types.${type}`)}
+                </button>
+              ))}
+            </div>
+          )}
           <RoadbookFilterBar
             selected={categories}
             onChange={setCategories}
             label={t("filtersLabel")}
             labels={filterLabels}
+            fuelEnabled={fuelEnabled}
+            onFuelChange={(enabled) => {
+              setFuelEnabled(enabled);
+              if (!enabled) {
+                setFuelStations([]);
+                setSelectedFuelStation(undefined);
+                setFuelError("");
+              }
+            }}
+            fuelLabel={t("fuel.filter")}
           />
         </div>
         <button
@@ -360,18 +463,20 @@ export function RoadbookExperience() {
           : t("resultCount", { count: visibleVenues.length })}
       </span>
 
-      {(error || mapError) && (
+      {(error || mapError || fuelError) && (
         <div
           role="alert"
           className="absolute top-[21rem] right-3 left-3 z-40 flex items-center justify-between gap-3 rounded-xl border border-red-200/20 bg-[#2d1014]/94 p-3 text-xs text-red-50 shadow-xl sm:top-auto sm:right-auto sm:bottom-20 sm:left-5 sm:max-w-lg"
         >
           <span className="inline-flex items-center gap-2">
-            <AlertTriangle className="size-4 shrink-0" /> {error || mapError}
+            <AlertTriangle className="size-4 shrink-0" />{" "}
+            {error || mapError || fuelError}
           </span>
           <button
             type="button"
             onClick={() => {
               if (mapError) window.location.reload();
+              else if (fuelError) void loadFuelStations();
               else void loadVenues();
             }}
             className="inline-flex min-h-9 shrink-0 items-center gap-1 rounded-lg border border-white/15 px-3 font-semibold"
@@ -423,6 +528,14 @@ export function RoadbookExperience() {
             setVisits(readRoadbookVisits(window.localStorage));
           }}
           onReport={(report) => reportRoadbookVenue(selectedVenue.id, report)}
+        />
+      )}
+
+      {selectedFuelStation && (
+        <RoadbookFuelDrawer
+          station={selectedFuelStation}
+          fetchedAt={fuelFetchedAt}
+          onClose={() => setSelectedFuelStation(undefined)}
         />
       )}
     </div>

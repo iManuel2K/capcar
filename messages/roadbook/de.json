@@ -1,6 +1,27 @@
 {
   "Roadbook": {
     "search": "Orte in der Ansicht suchen",
+    "fuel": {
+      "filter": "Live-Spritpreise",
+      "typeLabel": "Kraftstoffart",
+      "types": { "all": "Alle", "e5": "E5", "e10": "E10", "diesel": "Diesel" },
+      "detailsLabel": "Tankstellendetails",
+      "livePrices": "Aktuelle Spritpreise",
+      "germanyOnly": "Aktuelle Spritpreise sind derzeit verfügbar, wenn die Karte über Deutschland liegt.",
+      "notConfigured": "Für aktuelle Spritpreise fehlt der Tankerkönig-API-Key.",
+      "unavailable": "Aktuelle Spritpreise sind vorübergehend nicht verfügbar. Der restliche Roadbook funktioniert weiterhin.",
+      "open": "Jetzt geöffnet",
+      "closed": "Geschlossen",
+      "statusUnknown": "Öffnungsstatus unbekannt",
+      "distance": "{distance} km entfernt",
+      "perLiter": "pro Liter",
+      "addressUnknown": "Keine Adresse angegeben",
+      "navigate": "Zur Tankstelle navigieren",
+      "updated": "Preise abgerufen am {date}. Preis an der Zapfsäule vor dem Tanken prüfen.",
+      "updatedRecently": "Preise vor Kurzem abgerufen. Preis an der Zapfsäule vor dem Tanken prüfen.",
+      "attribution": "Spritpreisdaten · Tankerkönig / MTS-K",
+      "close": "Tankstellendetails schließen"
+    },
     "photoSpot": {
       "title": "Fotospot",
       "safety": "Halte nur dort, wo Parken erlaubt ist. Blockiere keine Straßen oder Zufahrten und betrete kein Privatgelände ohne Erlaubnis.",
