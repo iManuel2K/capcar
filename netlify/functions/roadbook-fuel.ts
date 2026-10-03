@@ -53,7 +53,7 @@ export default async function roadbookFuel(request: Request) {
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
+  const timeout = setTimeout(() => controller.abort(), 14000);
   try {
     const response = await fetch("https://overpass-api.de/api/interpreter", {
       method: "POST",

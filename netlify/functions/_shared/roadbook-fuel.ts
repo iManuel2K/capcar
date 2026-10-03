@@ -124,7 +124,7 @@ export function overpassFuelQuery(input: {
   radiusKm: number;
 }) {
   const radius = Math.round(input.radiusKm * 1_000);
-  return `[out:json][timeout:8];nwr["amenity"="fuel"](around:${radius},${input.latitude},${input.longitude});out center tags 60;`;
+  return `[out:json][timeout:12];node["amenity"="fuel"](around:${radius},${input.latitude},${input.longitude});out tags 60;`;
 }
 
 export function normalizeOverpassResponse(
