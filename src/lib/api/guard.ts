@@ -27,8 +27,30 @@ export function isSameOriginRequest(
     return false;
   }
 
+  const forwardedHost = request.headers
+    .get("x-forwarded-host")
+    ?.split(",")[0]
+    ?.trim();
+  const host = forwardedHost || request.headers.get("host");
+  const forwardedProtocol = request.headers
+    .get("x-forwarded-proto")
+    ?.split(",")[0]
+    ?.trim();
+  let requestProtocol: string | undefined;
+  try {
+    requestProtocol =
+      forwardedProtocol || new URL(request.url).protocol.slice(0, -1);
+  } catch {
+    requestProtocol = undefined;
+  }
+  const requestHostOrigin =
+    host && ["http", "https"].includes(requestProtocol ?? "")
+      ? `${requestProtocol}://${host}`
+      : undefined;
+
   return [
     request.url,
+    requestHostOrigin,
     environment.NEXT_PUBLIC_SITE_URL,
     environment.URL,
     environment.DEPLOY_PRIME_URL,

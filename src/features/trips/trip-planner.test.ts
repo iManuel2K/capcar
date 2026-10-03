@@ -1,6 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
+  createMapLinks,
   getTripPlannerStatus,
   planScenicTrip,
   tripPlannerRequestSchema,
@@ -17,6 +18,8 @@ const request = tripPlannerRequestSchema.parse({
 });
 
 describe("trip planner", () => {
+  afterEach(() => vi.unstubAllGlobals());
+
   it("builds a bounded multi-day draft", async () => {
     const plan = await planScenicTrip(request, {
       busyDates: ["2026-10-17"],
@@ -34,6 +37,85 @@ describe("trip planner", () => {
       mode: "deterministic",
       configured: true,
     });
+  });
+
+  it("recognizes a configured native OpenAI planner", () => {
+    expect(
+      getTripPlannerStatus({
+        CAPCAR_TRIP_PLANNER_MODE: "openai",
+        OPENAI_API_KEY: "server-secret",
+      }),
+    ).toMatchObject({
+      mode: "openai",
+      configured: true,
+      model: "gpt-5.4-mini",
+    });
+  });
+
+  it("requests a web-grounded structured plan from OpenAI", async () => {
+    const fallback = await planScenicTrip(request);
+    const generated = JSON.parse(JSON.stringify(fallback)) as Record<
+      string,
+      unknown
+    >;
+    for (const key of ["provider", "source", "researchSources", "mapLinks"])
+      delete generated[key];
+    const fetchMock = vi.fn(
+      async (input: RequestInfo | URL, init?: RequestInit) => {
+        expect(input).toBe("https://api.openai.com/v1/responses");
+        const requestBody = JSON.parse(String(init?.body)) as {
+          tools: Array<{ type: string; search_context_size: string }>;
+          text: { format: { strict: boolean } };
+        };
+        expect(requestBody.tools).toEqual([
+          { type: "web_search", search_context_size: "low" },
+        ]);
+        expect(requestBody.text.format.strict).toBe(true);
+        return Response.json({
+          output: [
+            {
+              type: "web_search_call",
+              action: {
+                sources: [
+                  {
+                    title: "Black Forest tourism",
+                    url: "https://example.com/black-forest",
+                  },
+                ],
+              },
+            },
+            {
+              type: "message",
+              content: [
+                { type: "output_text", text: JSON.stringify(generated) },
+              ],
+            },
+          ],
+        });
+      },
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const plan = await planScenicTrip(request, undefined, {
+      CAPCAR_TRIP_PLANNER_MODE: "openai",
+      OPENAI_API_KEY: "server-secret",
+    });
+
+    expect(plan.source).toBe("openai");
+    expect(plan.researchSources).toHaveLength(1);
+    expect(plan.mapLinks.google).toContain("google.com/maps/dir");
+  });
+
+  it("creates encoded route handoffs for all supported maps", () => {
+    const links = createMapLinks("Black Forest", [
+      { mapQuery: "Baden-Baden, Germany" },
+      { mapQuery: "Mummelsee parking" },
+      { mapQuery: "Triberg, Germany" },
+    ]);
+
+    expect(links.google).toContain("Mummelsee+parking");
+    expect(links.apple).toContain("Triberg%2C+Germany");
+    expect(links.openStreetMap).toContain("Black+Forest+scenic+drive");
   });
 
   it("rejects oversized requests", () => {

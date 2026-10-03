@@ -43,6 +43,21 @@ describe("API request protection", () => {
     ).toBe(false);
   });
 
+  it("accepts the browser origin reconstructed from trusted proxy headers", () => {
+    const deployment = "deploy-preview-33--capcar-im.netlify.app";
+    const request = new Request("https://internal-runtime.test/api/tool", {
+      method: "POST",
+      headers: {
+        origin: `https://${deployment}`,
+        host: "internal-runtime.test",
+        "x-forwarded-host": deployment,
+        "x-forwarded-proto": "https",
+      },
+    });
+
+    expect(isSameOriginRequest(request, {})).toBe(true);
+  });
+
   it("requires a syntactically exact browser origin", () => {
     const environment = {
       NEXT_PUBLIC_SITE_URL: "https://capcar-im.netlify.app",
