@@ -23,11 +23,11 @@ export default async function roadbookFuel(request: Request) {
   if (!query.success)
     return Response.json({ error: "INVALID_SEARCH" }, { status: 400 });
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
-  try {
-    const apiKey = process.env.TANKERKOENIG_API_KEY?.trim();
-    if (apiKey && isTankerkonigCoverage(query.data)) {
+  const apiKey = process.env.TANKERKOENIG_API_KEY?.trim();
+  if (apiKey && isTankerkonigCoverage(query.data)) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    try {
       const response = await fetch(tankerkoenigUrl(query.data, apiKey), {
         headers: { Accept: "application/json" },
         signal: controller.signal,
@@ -44,8 +44,17 @@ export default async function roadbookFuel(request: Request) {
           { status: 200, headers: responseHeaders(300) },
         );
       }
+    } catch {
+      // Tankerkönig can report rejected requests with HTTP 200 and `ok: false`.
+      // Keep Roadbook useful by trying the OSM directory next.
+    } finally {
+      clearTimeout(timeout);
     }
+  }
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+  try {
     const response = await fetch("https://overpass-api.de/api/interpreter", {
       method: "POST",
       headers: {
