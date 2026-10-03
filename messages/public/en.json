@@ -124,7 +124,7 @@
       },
       "localization": {
         "title": "Five-language public site",
-        "description": "Keep English, German, Greek, Albanian and Japanese public journeys consistent as CapCar evolves."
+        "description": "English, German, Greek, Albanian and Japanese public journeys share automated key-parity and ICU-format validation so new copy cannot silently disappear in one language."
       }
     },
     "tangible": {
@@ -146,7 +146,7 @@
       },
       "obd": {
         "title": "Native OBD-II diagnostics",
-        "description": "Import scans or read emissions codes and live snapshots through an ELM327 serial adapter in supported desktop browsers. Hardware validation is pending; code clearing is unavailable."
+        "description": "Import scans or use the tested read-only ELM327 protocol for emissions codes and live snapshots in supported desktop browsers. Physical adapter and vehicle compatibility still require real-device validation; code clearing stays unavailable."
       },
       "verified": {
         "title": "Verified shop stamps",
@@ -166,7 +166,7 @@
       },
       "roadbook": {
         "title": "Roadbook driving map",
-        "description": "Explore sourced circuits, controlled test venues and route context on a four-mode map. Save places to a build and keep owner-recorded visits in the Vehicle Passport."
+        "description": "Explore sourced circuits, controlled test venues, events and photo spots in nine visual map styles. Find live fuel prices in Germany or nearby OpenStreetMap fuel stations worldwide, save places to a build and keep visits in the Vehicle Passport."
       },
       "photoSpots": {
         "title": "Car photo spots",
@@ -185,6 +185,14 @@
       "ai": {
         "title": "AI build direction",
         "description": "Generate useful upgrade ideas and visual concepts around the vehicle you own."
+      },
+      "tripPlanning": {
+        "title": "AI scenic weekend planning",
+        "description": "Ask a supported AI: “Plan me a long scenic weekend with [car] in [region].” CapCar will provide selected vehicle and Roadbook context only with the owner's approval, while routes, access and current conditions still require verification."
+      },
+      "calendarMail": {
+        "title": "Calendar and mail sync",
+        "description": "Turn chosen Roadbook plans, bookings and event details into a clearer itinerary through permission-based calendar and email connections. No inbox access or event creation without explicit owner approval."
       },
       "twowheels": {
         "title": "Motorcycles and bicycles",

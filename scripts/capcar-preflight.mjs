@@ -61,12 +61,12 @@ if (
 
 if (failures.length) {
   for (const failure of failures) console.error(`BLOCKED ${failure}`);
-  console.error(`Capcar launch blocked with ${failures.length} issue(s).`);
+  console.error(`CapCar launch blocked with ${failures.length} issue(s).`);
   process.exit(1);
 }
 
 console.log(
-  `Capcar production environment preflight passed (${ebayMode} eBay mode).`,
+  `CapCar production environment preflight passed (${ebayMode} eBay mode).`,
 );
 
 function isHttpsUrl(value) {

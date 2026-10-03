@@ -22,6 +22,8 @@ export function RoadbookFuelDrawer({
     ["e10", station.prices.e10],
     ["diesel", station.prices.diesel],
   ] as const;
+  const hasPrices = prices.some(([, value]) => value !== undefined);
+  const directoryOnly = station.source === "directory";
 
   return (
     <aside
@@ -31,7 +33,7 @@ export function RoadbookFuelDrawer({
       <div className="flex items-start justify-between gap-5 border-b border-white/8 p-5">
         <div>
           <p className="text-[10px] font-semibold tracking-[0.12em] text-[#ff667a] uppercase">
-            {t("fuel.livePrices")}
+            {t(directoryOnly ? "fuel.stationDirectory" : "fuel.livePrices")}
           </p>
           <h2 className="mt-2 text-2xl font-medium tracking-[-0.035em]">
             {station.name}
@@ -54,9 +56,11 @@ export function RoadbookFuelDrawer({
         <div className="flex items-center justify-between gap-3 rounded-2xl border border-white/9 bg-white/[0.035] p-4 text-sm">
           <span className="inline-flex items-center gap-2 text-white/65">
             <Fuel className="size-4 text-[#ff667a]" />
-            {station.isOpen === undefined
-              ? t("fuel.statusUnknown")
-              : t(station.isOpen ? "fuel.open" : "fuel.closed")}
+            {directoryOnly
+              ? t("fuel.directoryOnly")
+              : station.isOpen === undefined
+                ? t("fuel.statusUnknown")
+                : t(station.isOpen ? "fuel.open" : "fuel.closed")}
           </span>
           <span className="text-white/40">
             {t("fuel.distance", {
@@ -67,30 +71,36 @@ export function RoadbookFuelDrawer({
           </span>
         </div>
 
-        <dl className="grid grid-cols-3 gap-2">
-          {prices.map(([fuelType, value]) => (
-            <div
-              key={fuelType}
-              className="rounded-2xl border border-white/9 bg-white/[0.035] p-3 text-center"
-            >
-              <dt className="text-[10px] font-semibold tracking-[0.08em] text-white/42 uppercase">
-                {t(`fuel.types.${fuelType}`)}
-              </dt>
-              <dd className="mt-2 text-lg font-semibold text-white/88">
-                {value === undefined
-                  ? "—"
-                  : new Intl.NumberFormat(locale, {
-                      style: "currency",
-                      currency: "EUR",
-                      minimumFractionDigits: 3,
-                    }).format(value)}
-              </dd>
-              <span className="text-[9px] text-white/32">
-                {t("fuel.perLiter")}
-              </span>
-            </div>
-          ))}
-        </dl>
+        {hasPrices ? (
+          <dl className="grid grid-cols-3 gap-2">
+            {prices.map(([fuelType, value]) => (
+              <div
+                key={fuelType}
+                className="rounded-2xl border border-white/9 bg-white/[0.035] p-3 text-center"
+              >
+                <dt className="text-[10px] font-semibold tracking-[0.08em] text-white/42 uppercase">
+                  {t(`fuel.types.${fuelType}`)}
+                </dt>
+                <dd className="mt-2 text-lg font-semibold text-white/88">
+                  {value === undefined
+                    ? "—"
+                    : new Intl.NumberFormat(locale, {
+                        style: "currency",
+                        currency: "EUR",
+                        minimumFractionDigits: 3,
+                      }).format(value)}
+                </dd>
+                <span className="text-[9px] text-white/32">
+                  {t("fuel.perLiter")}
+                </span>
+              </div>
+            ))}
+          </dl>
+        ) : (
+          <p className="rounded-2xl border border-white/9 bg-white/[0.035] p-4 text-sm leading-6 text-white/55">
+            {t("fuel.noPrices")}
+          </p>
+        )}
 
         <div className="rounded-2xl border border-white/9 bg-white/[0.035] p-4">
           <p className="flex items-start gap-2 text-sm leading-6 text-white/62">
@@ -120,12 +130,16 @@ export function RoadbookFuelDrawer({
               : t("fuel.updatedRecently")}
           </p>
           <a
-            href="https://creativecommons.tankerkoenig.de/"
+            href={
+              directoryOnly
+                ? "https://www.openstreetmap.org/copyright"
+                : "https://creativecommons.tankerkoenig.de/"
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="mt-2 inline-flex min-h-8 items-center gap-1.5 text-[#ff9baa]"
           >
-            {t("fuel.attribution")}
+            {t(directoryOnly ? "fuel.osmAttribution" : "fuel.attribution")}
             <ExternalLink className="size-3" />
           </a>
         </div>

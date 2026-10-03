@@ -3,8 +3,8 @@ import { z } from "zod";
 const fuelTypes = ["all", "e5", "e10", "diesel"] as const;
 
 export const roadbookFuelQuerySchema = z.object({
-  latitude: z.number().min(47).max(55.2),
-  longitude: z.number().min(5.5).max(15.6),
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
   radiusKm: z.number().min(1).max(25),
   fuelType: z.enum(fuelTypes),
 });
@@ -50,7 +50,21 @@ export type RoadbookFuelStation = {
   distanceKm: number;
   isOpen?: boolean;
   prices: { e5?: number; e10?: number; diesel?: number };
+  source: "live_price" | "directory";
 };
+
+const overpassElementSchema = z.object({
+  type: z.enum(["node", "way", "relation"]),
+  id: z.number().int(),
+  lat: z.number().optional(),
+  lon: z.number().optional(),
+  center: z.object({ lat: z.number(), lon: z.number() }).optional(),
+  tags: z.record(z.string(), z.string()).optional(),
+});
+
+const overpassResponseSchema = z.object({
+  elements: z.array(overpassElementSchema),
+});
 
 function availablePrice(value: number | false | null | undefined) {
   return typeof value === "number" ? value : undefined;
@@ -83,12 +97,86 @@ export function normalizeTankerkonigResponse(input: unknown) {
     longitude: station.lng,
     distanceKm: station.dist,
     isOpen: station.isOpen ?? undefined,
+    source: "live_price",
     prices: {
       e5: availablePrice(station.e5),
       e10: availablePrice(station.e10),
       diesel: availablePrice(station.diesel),
     },
   }));
+}
+
+export function isTankerkonigCoverage(input: {
+  latitude: number;
+  longitude: number;
+}) {
+  return (
+    input.latitude >= 47 &&
+    input.latitude <= 55.2 &&
+    input.longitude >= 5.5 &&
+    input.longitude <= 15.6
+  );
+}
+
+export function overpassFuelQuery(input: {
+  latitude: number;
+  longitude: number;
+  radiusKm: number;
+}) {
+  const radius = Math.round(input.radiusKm * 1_000);
+  return `[out:json][timeout:8];nwr["amenity"="fuel"](around:${radius},${input.latitude},${input.longitude});out center tags 60;`;
+}
+
+export function normalizeOverpassResponse(
+  input: unknown,
+  center: { latitude: number; longitude: number },
+) {
+  const parsed = overpassResponseSchema.parse(input);
+  return parsed.elements
+    .flatMap((element): RoadbookFuelStation[] => {
+      const latitude = element.lat ?? element.center?.lat;
+      const longitude = element.lon ?? element.center?.lon;
+      if (latitude === undefined || longitude === undefined) return [];
+      const tags = element.tags ?? {};
+      const name = (tags.name || tags.brand || "Fuel station").trim();
+      const street = [tags["addr:street"], tags["addr:housenumber"]]
+        .filter(Boolean)
+        .join(" ");
+      const locality = [tags["addr:postcode"], tags["addr:city"]]
+        .filter(Boolean)
+        .join(" ");
+      return [
+        {
+          id: `osm-${element.type}-${element.id}`,
+          name,
+          brand: tags.brand?.trim() || undefined,
+          address:
+            tags["addr:full"] || [street, locality].filter(Boolean).join(", "),
+          latitude,
+          longitude,
+          distanceKm: distanceKm(center, { latitude, longitude }),
+          prices: {},
+          source: "directory",
+        },
+      ];
+    })
+    .sort((a, b) => a.distanceKm - b.distanceKm)
+    .slice(0, 40);
+}
+
+function distanceKm(
+  from: { latitude: number; longitude: number },
+  to: { latitude: number; longitude: number },
+) {
+  const radians = (value: number) => (value * Math.PI) / 180;
+  const latitudeDelta = radians(to.latitude - from.latitude);
+  const longitudeDelta = radians(to.longitude - from.longitude);
+  const a =
+    Math.sin(latitudeDelta / 2) ** 2 +
+    Math.cos(radians(from.latitude)) *
+      Math.cos(radians(to.latitude)) *
+      Math.sin(longitudeDelta / 2) ** 2;
+  return 6_371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 export function tankerkoenigUrl(

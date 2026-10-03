@@ -50,7 +50,6 @@ import {
 import { ROADBOOK_DATA_TIMEOUT_MS } from "@/features/roadbook/roadbook-timeout";
 import {
   fetchRoadbookFuelStations,
-  roadbookFuelAvailable,
   roadbookFuelTypes,
   type RoadbookFuelStation,
   type RoadbookFuelType,
@@ -158,13 +157,9 @@ export function RoadbookExperience() {
 
   const loadFuelStations = useCallback(async () => {
     fuelFetchController.current?.abort();
-    if (!fuelEnabled || !roadbookFuelAvailable(center)) {
+    if (!fuelEnabled) {
       setFuelStations([]);
-      setFuelError(
-        fuelEnabled && !roadbookFuelAvailable(center)
-          ? t("fuel.germanyOnly")
-          : "",
-      );
+      setFuelError("");
       return;
     }
     const controller = new AbortController();

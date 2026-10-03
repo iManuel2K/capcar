@@ -2,7 +2,7 @@
   "Roadbook": {
     "search": "Kërko vende në hartë",
     "fuel": {
-      "filter": "Karburant live",
+      "filter": "Pika karburanti",
       "typeLabel": "Lloji i karburantit",
       "types": {
         "all": "Të gjitha",
@@ -12,7 +12,10 @@
       },
       "detailsLabel": "Detajet e pikës së karburantit",
       "livePrices": "Çmimet aktuale të karburantit",
-      "germanyOnly": "Çmimet aktuale shfaqen tani kur harta ndodhet mbi Gjermani.",
+      "stationDirectory": "Pikë karburanti pranë",
+      "directoryOnly": "Drejtoria e pikave",
+      "noPrices": "Kjo pikë vjen nga OpenStreetMap. Çmimet dhe orari live nuk ofrohen; konfirmoji lokalisht para nisjes.",
+      "germanyOnly": "Çmimet live ofrohen në Gjermani; kërkimi i pikave punon në mbarë botën.",
       "notConfigured": "Për çmimet aktuale nevojitet çelësi API i Tankerkönig.",
       "unavailable": "Çmimet aktuale nuk janë përkohësisht të disponueshme. Pjesa tjetër e Roadbook vazhdon të punojë.",
       "open": "Hapur tani",
@@ -25,6 +28,7 @@
       "updated": "Çmimet u morën më {date}. Kontrollo çmimin në pompë para furnizimit.",
       "updatedRecently": "Çmimet u morën së fundmi. Kontrollo çmimin në pompë para furnizimit.",
       "attribution": "Të dhënat · Tankerkönig / MTS-K",
+      "osmAttribution": "Të dhënat e pikave · kontribuesit e OpenStreetMap",
       "close": "Mbyll detajet"
     },
     "photoSpot": {

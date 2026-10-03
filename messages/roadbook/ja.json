@@ -2,7 +2,7 @@
   "Roadbook": {
     "search": "表示中の場所を検索",
     "fuel": {
-      "filter": "燃料価格",
+      "filter": "ガソリンスタンド",
       "typeLabel": "燃料タイプ",
       "types": {
         "all": "すべて",
@@ -12,7 +12,10 @@
       },
       "detailsLabel": "ガソリンスタンド詳細",
       "livePrices": "現在の燃料価格",
-      "germanyOnly": "現在、燃料価格は地図がドイツ上にある場合に利用できます。",
+      "stationDirectory": "近くのガソリンスタンド",
+      "directoryOnly": "スタンド情報",
+      "noPrices": "このスタンドはOpenStreetMapの情報です。価格と営業時間は提供されないため、出発前に現地情報を確認してください。",
+      "germanyOnly": "ライブ価格はドイツで利用でき、スタンド検索は世界中で利用できます。",
       "notConfigured": "燃料価格にはTankerkönig APIキーが必要です。",
       "unavailable": "燃料価格は一時的に利用できません。Roadbookの他の機能は引き続き使用できます。",
       "open": "営業中",
@@ -25,6 +28,7 @@
       "updated": "{date}に価格を取得しました。給油前に店頭価格を確認してください。",
       "updatedRecently": "価格を最近取得しました。給油前に店頭価格を確認してください。",
       "attribution": "燃料データ · Tankerkönig / MTS-K",
+      "osmAttribution": "スタンド情報 · OpenStreetMap contributors",
       "close": "ガソリンスタンド詳細を閉じる"
     },
     "photoSpot": {

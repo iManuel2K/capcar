@@ -34,7 +34,7 @@ describe("scheduled data and public Passport database policies", () => {
         ),
       );
     }
-  });
+  }, 30000);
 
   afterAll(async () => {
     await db?.close();

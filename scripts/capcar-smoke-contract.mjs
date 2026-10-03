@@ -4,7 +4,7 @@ const unavailableMessage = "This link is no longer public.";
 /**
  * Next.js may stream a segment-level notFound() response after its HTTP status
  * has been committed. On adapters such as Netlify, that valid response can be
- * HTTP 200, so require both the private-safe Capcar state and noindex metadata.
+ * HTTP 200, so require both the private-safe CapCar state and noindex metadata.
  */
 export function isMissingPassportResponse({
   status,
