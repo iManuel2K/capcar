@@ -104,7 +104,9 @@ describe("Roadbook fuel provider", () => {
     );
     expect(
       overpassFuelQuery({ latitude: 48.86, longitude: 2.35, radiusKm: 10 }),
-    ).toContain('node["amenity"="fuel"](around:10000,48.86,2.35)');
+    ).toBe(
+      '[out:json][timeout:12];node["amenity"="fuel"](around:10000,48.86,2.35);out body 60;',
+    );
   });
 
   it("keeps the API key server-side in the provider URL only", () => {
