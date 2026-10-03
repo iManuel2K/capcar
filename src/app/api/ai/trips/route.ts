@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     const input = await readJsonRequest(request, tripPlannerRequestSchema);
     const user = await currentUser();
     const planner = getTripPlannerStatus();
-    if (planner.mode === "external" && !user)
+    if (planner.mode !== "deterministic" && !user)
       return NextResponse.json(
         { error: "Sign in to use the connected AI planner." },
         { status: 401, headers: { "Cache-Control": "no-store" } },
