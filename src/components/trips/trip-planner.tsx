@@ -23,6 +23,7 @@ import {
   Trees,
   Utensils,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useState, useSyncExternalStore } from "react";
@@ -208,6 +209,29 @@ function RouteCanvas({ plan }: { plan?: TripPlan }) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function AnimatedRouteDemo() {
+  return (
+    <div className="relative overflow-hidden rounded-2xl bg-[#12383b] shadow-[0_24px_55px_rgba(14,45,48,.18)]">
+      <Image
+        src="/ai/capcar-route-demo.gif"
+        alt="Animated CapCar preview drawing a scenic route and revealing planned stops"
+        width={713}
+        height={470}
+        unoptimized
+        loading="lazy"
+        className="h-auto w-full motion-reduce:hidden"
+      />
+      <Image
+        src="/ai/capcar-route-demo.webp"
+        alt="CapCar scenic route preview with planned stops"
+        width={713}
+        height={470}
+        className="hidden h-auto w-full motion-reduce:block"
+      />
     </div>
   );
 }
@@ -913,8 +937,8 @@ export function TripPlanner() {
               Adventure set. I kept the best road early, put fuel before the
               remote section, and saved the photo stop for softer light.
             </div>
-            <div className="mt-4 overflow-hidden rounded-2xl">
-              <RouteCanvas plan={plan} />
+            <div className="mt-4">
+              <AnimatedRouteDemo />
             </div>
           </div>
         </div>
