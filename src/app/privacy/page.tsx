@@ -40,6 +40,7 @@ export default async function PrivacyPage() {
       <LegalSection title={t("s2t")}>
         <p>{t("s2a")}</p>
         <p>{t("s2b")}</p>
+        <p>{t("s2c")}</p>
       </LegalSection>
 
       <LegalSection title={t("s3t")}>
@@ -48,6 +49,7 @@ export default async function PrivacyPage() {
 
       <LegalSection title={t("s4t")}>
         <p>{t("s4")}</p>
+        <p>{t("s4b")}</p>
       </LegalSection>
 
       <LegalSection title={t("s5t")}>
