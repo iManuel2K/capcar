@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import roadbookFuel from "./roadbook-fuel";
+import roadbookFuel from "../roadbook-fuel";
 
 describe("Roadbook fuel endpoint", () => {
   afterEach(() => {
