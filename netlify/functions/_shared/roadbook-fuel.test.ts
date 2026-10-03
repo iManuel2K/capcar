@@ -104,7 +104,7 @@ describe("Roadbook fuel provider", () => {
     );
     expect(
       overpassFuelQuery({ latitude: 48.86, longitude: 2.35, radiusKm: 10 }),
-    ).toContain('nwr["amenity"="fuel"](around:10000,48.86,2.35)');
+    ).toContain('node["amenity"="fuel"](around:10000,48.86,2.35)');
   });
 
   it("keeps the API key server-side in the provider URL only", () => {
