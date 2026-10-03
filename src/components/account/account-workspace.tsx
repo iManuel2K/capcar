@@ -4,6 +4,7 @@ import { deleteOwnVehicleDocuments } from "@/features/passport/delete-vehicle-do
 
 import {
   AlertTriangle,
+  CalendarDays,
   CheckCircle2,
   Cloud,
   CloudDownload,
@@ -16,6 +17,7 @@ import {
   ShieldAlert,
   Trash2,
 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -330,6 +332,16 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
                   <CloudDownload className="size-4" /> Restore cloud data
                 </button>
               </div>
+              <Link
+                href="/account/connections"
+                className="mt-3 flex min-h-12 items-center justify-between gap-3 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"
+              >
+                <span className="inline-flex items-center gap-2">
+                  <CalendarDays className="size-4" /> Calendar &amp; mail
+                  connections
+                </span>
+                <span aria-hidden="true">→</span>
+              </Link>
             </>
           ) : (
             <>

@@ -14,6 +14,7 @@ const navigation = [
   { label: "how", href: "/#platform" },
   { label: "projects", href: "/#projects" },
   { label: "parts", href: "/parts-search" },
+  { label: "ai", href: "/ai" },
 ] as const;
 
 export function MarketingHeader() {
@@ -106,6 +107,7 @@ export function MarketingHeader() {
                   ["conceptStudio", "/studio"],
                   ["soundStudio", "/sound-studio"],
                   ["roadbook", "/roadbook"],
+                  ["aiPlanner", "/ai"],
                   ["marketplace", "/marketplace"],
                   ["roadmap", "/roadmap"],
                   ["faq", "/#faq"],
@@ -212,6 +214,7 @@ export function MarketingHeader() {
                 ["conceptStudio", "/studio"],
                 ["soundStudio", "/sound-studio"],
                 ["roadbook", "/roadbook"],
+                ["aiPlanner", "/ai"],
                 ["marketplace", "/marketplace"],
                 ["roadmap", "/roadmap"],
                 ["faq", "/#faq"],

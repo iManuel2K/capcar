@@ -4,6 +4,7 @@ export const PUBLIC_SITE_URL = new URL("https://capcar.dev");
 
 export const PUBLIC_INDEXABLE_ROUTES = [
   "",
+  "/ai",
   "/connected-parts",
   "/imprint",
   "/parts-search",
