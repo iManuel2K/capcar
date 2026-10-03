@@ -218,7 +218,7 @@ function AnimatedRouteDemo() {
     <div className="relative overflow-hidden rounded-2xl bg-[#12383b] shadow-[0_24px_55px_rgba(14,45,48,.18)]">
       <Image
         src="/ai/capcar-route-demo.gif"
-        alt="Animated CapCar preview drawing a scenic route and revealing planned stops"
+        alt="Animated CapCar map from Rüsselsheim through Mainz to the scenic Rheingau route"
         width={713}
         height={470}
         unoptimized
@@ -227,7 +227,7 @@ function AnimatedRouteDemo() {
       />
       <Image
         src="/ai/capcar-route-demo.webp"
-        alt="CapCar scenic route preview with planned stops"
+        alt="CapCar map from Rüsselsheim to the Gutenberg Museum, a fuel stop and the Rheingau"
         width={713}
         height={470}
         className="hidden h-auto w-full motion-reduce:block"
@@ -934,8 +934,8 @@ export function TripPlanner() {
               <span className="text-[#405856]">Google · Apple · OSM</span>
             </div>
             <div className="mt-4 ml-auto max-w-sm rounded-2xl rounded-tr-sm bg-[#0e2d30] p-4 text-sm leading-6 text-white">
-              Adventure set. I kept the best road early, put fuel before the
-              remote section, and saved the photo stop for softer light.
+              Adventure set. Gutenberg first, fuel in Mainz-Kastel, then the
+              B42 through the Rheingau to the Niederwalddenkmal.
             </div>
             <div className="mt-4">
               <AnimatedRouteDemo />
