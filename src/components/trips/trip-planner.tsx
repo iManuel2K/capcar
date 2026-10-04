@@ -19,10 +19,12 @@ import {
   Map as MapIcon,
   MapPin,
   MountainSnow,
+  Plus,
   Route,
   Sparkles,
   Trees,
   Utensils,
+  X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -223,10 +225,12 @@ function RouteStopGallery({ route }: { route: TripRoute }) {
 export function TripPlanner() {
   const t = useTranslations("AIPlanner");
   const [vehicle, setVehicle] = useState("2011 BMW E90 318i");
-  const [region, setRegion] = useState("Black Forest");
+  const [inputMode, setInputMode] = useState<"prompt" | "places">("prompt");
   const [prompt, setPrompt] = useState(
     "Plan me a long scenic weekend with my BMW in the Black Forest. I want great roads, quiet photo spots and sensible fuel stops.",
   );
+  const [places, setPlaces] = useState(["", ""]);
+  const [placeModalOpen, setPlaceModalOpen] = useState(false);
   const hydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -268,6 +272,15 @@ export function TripPlanner() {
     return () => controller.abort();
   }, []);
 
+  useEffect(() => {
+    if (!placeModalOpen) return;
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setPlaceModalOpen(false);
+    }
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [placeModalOpen]);
+
   function toggleInterest(value: (typeof interestOptions)[number]) {
     setInterests((current) =>
       current.includes(value)
@@ -278,6 +291,23 @@ export function TripPlanner() {
 
   async function createPlan() {
     if (!effectiveStartDate) return;
+    const selectedPlaces = places.map((place) => place.trim()).filter(Boolean);
+    const effectivePrompt =
+      inputMode === "prompt"
+        ? prompt.trim()
+        : `Plan a scenic trip visiting these places in this order: ${selectedPlaces.join(" → ")}. Keep every named place in the route and include practical parking and safe regrouping stops.`.slice(
+            0,
+            600,
+          );
+    const planningRegion =
+      inputMode === "prompt"
+        ? "Destination from the natural-language request"
+        : selectedPlaces.join(", ").slice(0, 120);
+    if (
+      effectivePrompt.length < 2 ||
+      (inputMode === "places" && selectedPlaces.length < 2)
+    )
+      return;
     setLoading(true);
     setError("");
     setCalendarMessage("");
@@ -286,9 +316,9 @@ export function TripPlanner() {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          prompt,
+          prompt: effectivePrompt,
           vehicle,
-          region,
+          region: planningRegion,
           startDate: effectiveStartDate,
           duration,
           pace,
@@ -306,11 +336,16 @@ export function TripPlanner() {
       setRoute(undefined);
       setRouteError("");
       setRouteLoading(true);
+      const generatedRegion = [
+        ...new Set(body.stops.map((stop) => stop.area.trim()).filter(Boolean)),
+      ]
+        .join(", ")
+        .slice(0, 120);
       void fetch("/api/ai/trips/route-map", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          region: region.trim(),
+          region: generatedRegion || planningRegion,
           startDate: effectiveStartDate,
           stops: body.stops.map(({ day, kind, name, area, mapQuery }) => ({
             day,
@@ -455,15 +490,73 @@ export function TripPlanner() {
               <Sparkles className="size-6 text-[#ff7d75]" />
             </div>
 
-            <label className="mt-7 block text-xs text-[#f5f2e8]/55">
-              Ask CapCar naturally
-              <textarea
-                value={prompt}
-                onChange={(event) => setPrompt(event.target.value)}
-                rows={4}
-                className="mt-2 w-full resize-none rounded-2xl border border-white/12 bg-white/6 px-4 py-3 text-sm leading-6 text-white transition outline-none placeholder:text-white/25 focus:border-[#ff7d75]/60"
-              />
-            </label>
+            <div
+              className="mt-7 grid grid-cols-2 rounded-2xl border border-white/10 bg-black/10 p-1"
+              role="tablist"
+              aria-label="Trip input method"
+            >
+              <button
+                type="button"
+                role="tab"
+                aria-selected={inputMode === "prompt"}
+                onClick={() => setInputMode("prompt")}
+                className={`min-h-11 rounded-xl px-3 text-xs font-semibold transition ${inputMode === "prompt" ? "bg-white text-[#0e2d30] shadow-sm" : "text-white/55 hover:text-white"}`}
+              >
+                Describe with AI
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={inputMode === "places"}
+                onClick={() => {
+                  setInputMode("places");
+                  setPlaceModalOpen(true);
+                }}
+                className={`min-h-11 rounded-xl px-3 text-xs font-semibold transition ${inputMode === "places" ? "bg-white text-[#0e2d30] shadow-sm" : "text-white/55 hover:text-white"}`}
+              >
+                Choose places
+              </button>
+            </div>
+
+            {inputMode === "prompt" ? (
+              <label className="mt-4 block text-xs text-[#f5f2e8]/55">
+                Tell CapCar where you want to go
+                <textarea
+                  value={prompt}
+                  onChange={(event) => setPrompt(event.target.value)}
+                  maxLength={600}
+                  rows={5}
+                  placeholder="I will visit Kosovo with two cars. Plan a route through Pristina and Pejë…"
+                  className="mt-2 w-full resize-none rounded-2xl border border-white/12 bg-white/6 px-4 py-3 text-sm leading-6 text-white transition outline-none placeholder:text-white/25 focus:border-[#ff7d75]/60"
+                />
+                <span className="mt-2 block text-[10px] text-white/35">
+                  Your message is the only destination source in this mode.
+                </span>
+              </label>
+            ) : (
+              <div className="mt-4 rounded-2xl border border-white/12 bg-white/6 p-4">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs text-white/45">Selected route</p>
+                    <p className="mt-1 text-sm leading-6 text-white">
+                      {places.filter((place) => place.trim()).join(" → ") ||
+                        "No places selected"}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setPlaceModalOpen(true)}
+                    className="shrink-0 rounded-full border border-[#ff7d75]/40 px-3 py-2 text-xs font-semibold text-[#ff9b94] transition hover:bg-[#ff766d] hover:text-[#260808]"
+                  >
+                    Edit places
+                  </button>
+                </div>
+                <p className="mt-3 text-[10px] leading-4 text-white/35">
+                  CapCar keeps these places in order and adds useful fuel,
+                  scenery and photo stops around them.
+                </p>
+              </div>
+            )}
 
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <label className="text-xs text-[#f5f2e8]/55">
@@ -471,14 +564,6 @@ export function TripPlanner() {
                 <input
                   value={vehicle}
                   onChange={(event) => setVehicle(event.target.value)}
-                  className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-white/6 px-4 text-sm text-white outline-none focus:border-[#ff7d75]/60"
-                />
-              </label>
-              <label className="text-xs text-[#f5f2e8]/55">
-                {t("region")}
-                <input
-                  value={region}
-                  onChange={(event) => setRegion(event.target.value)}
                   className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-white/6 px-4 text-sm text-white outline-none focus:border-[#ff7d75]/60"
                 />
               </label>
@@ -574,7 +659,9 @@ export function TripPlanner() {
               disabled={
                 loading ||
                 vehicle.trim().length < 2 ||
-                region.trim().length < 2 ||
+                (inputMode === "prompt"
+                  ? prompt.trim().length < 2
+                  : places.filter((place) => place.trim()).length < 2) ||
                 !effectiveStartDate
               }
               onClick={() => void createPlan()}
@@ -996,6 +1083,112 @@ export function TripPlanner() {
           </article>
         </div>
       </section>
+
+      {placeModalOpen && (
+        <div
+          className="fixed inset-0 z-[1000] grid place-items-center bg-[#07191b]/78 p-4 backdrop-blur-sm"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setPlaceModalOpen(false);
+          }}
+        >
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="place-picker-title"
+            className="max-h-[90dvh] w-full max-w-xl overflow-y-auto rounded-[1.75rem] bg-[#f5f2e8] p-5 text-[#0e2d30] shadow-[0_35px_100px_rgba(0,0,0,.4)] sm:p-7"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-semibold tracking-[0.14em] text-[#6d0101] uppercase">
+                  Route places
+                </p>
+                <h2
+                  id="place-picker-title"
+                  className="mt-2 text-2xl font-medium tracking-[-0.03em]"
+                >
+                  Choose the drive in order.
+                </h2>
+              </div>
+              <button
+                type="button"
+                aria-label="Close place picker"
+                onClick={() => setPlaceModalOpen(false)}
+                className="grid size-10 place-items-center rounded-full border border-[#0e2d30]/10 hover:bg-[#0e2d30] hover:text-white"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+
+            <div className="mt-6 space-y-3">
+              {places.map((place, index) => (
+                <label
+                  key={index}
+                  className="grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border border-[#0e2d30]/10 bg-white/55 p-3"
+                >
+                  <span className="grid size-8 place-items-center rounded-full bg-[#0e2d30] text-xs font-semibold text-white">
+                    {index + 1}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[10px] font-semibold tracking-[0.1em] text-[#6d0101] uppercase">
+                      {index === 0
+                        ? "Start"
+                        : index === places.length - 1
+                          ? "Destination"
+                          : "Stop"}
+                    </span>
+                    <input
+                      value={place}
+                      maxLength={90}
+                      autoFocus={index === 0 && !place}
+                      onChange={(event) =>
+                        setPlaces((current) =>
+                          current.map((item, itemIndex) =>
+                            itemIndex === index ? event.target.value : item,
+                          ),
+                        )
+                      }
+                      placeholder="City, landmark or exact place"
+                      className="mt-1 w-full bg-transparent text-sm outline-none placeholder:text-[#405856]/45"
+                    />
+                  </span>
+                  <button
+                    type="button"
+                    aria-label={`Remove place ${index + 1}`}
+                    disabled={places.length <= 2}
+                    onClick={() =>
+                      setPlaces((current) =>
+                        current.filter((_, itemIndex) => itemIndex !== index),
+                      )
+                    }
+                    className="grid size-9 place-items-center rounded-full text-[#405856] hover:bg-red-100 hover:text-[#6d0101] disabled:invisible"
+                  >
+                    <X className="size-4" />
+                  </button>
+                </label>
+              ))}
+            </div>
+
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+              <button
+                type="button"
+                disabled={places.length >= 6}
+                onClick={() => setPlaces((current) => [...current, ""])}
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#0e2d30]/12 px-4 text-xs font-semibold hover:bg-white disabled:opacity-40"
+              >
+                <Plus className="size-4" /> Add another stop
+              </button>
+              <button
+                type="button"
+                disabled={places.filter((place) => place.trim()).length < 2}
+                onClick={() => setPlaceModalOpen(false)}
+                className="min-h-11 rounded-full bg-[#ff766d] px-5 text-xs font-semibold text-[#260808] hover:bg-[#ff8f87] disabled:opacity-40"
+              >
+                Use these places
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
     </main>
   );
 }
