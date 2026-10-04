@@ -14,7 +14,9 @@ import {
   ExternalLink,
   Fuel,
   LoaderCircle,
+  ListTree,
   Mail,
+  Map as MapIcon,
   MapPin,
   MountainSnow,
   Route,
@@ -25,13 +27,26 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+
+import { TripRouteMapLoader } from "@/components/trips/trip-route-map-loader";
 
 import {
   createStopMapLinks,
   type TripPlan,
   type TripStop,
 } from "@/features/trips/trip-planner";
+import {
+  createRoutedMapLinks,
+  type TripRoute,
+} from "@/features/trips/trip-route";
+
+type PlannerConnectionStatus = {
+  configured: boolean;
+  connected: boolean;
+  email?: string;
+  lastSyncedAt?: string | null;
+};
 
 const interestOptions = [
   "roads",
@@ -74,6 +89,7 @@ function MapProviderLinks({
   const providers = [
     { label: "Google Maps", href: links.google },
     { label: "Apple Maps", href: links.apple },
+    { label: "Waze", href: links.waze },
     { label: "OpenStreetMap", href: links.openStreetMap },
   ];
   return (
@@ -152,6 +168,58 @@ function StopCard({ stop }: { stop: TripStop }) {
   );
 }
 
+function RouteStopGallery({ route }: { route: TripRoute }) {
+  return (
+    <section className="mt-5 grid gap-3 md:grid-cols-2">
+      {route.stops.map((stop, index) => (
+        <article
+          key={`${stop.name}-${stop.latitude}-${stop.longitude}`}
+          className="overflow-hidden rounded-2xl border border-[#0e2d30]/10 bg-white/50"
+        >
+          {stop.photo ? (
+            <a
+              href={stop.photo.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="group relative block h-40 overflow-hidden bg-[#0e2d30]/8"
+            >
+              {/* The image is useful location context and always retains Unsplash attribution. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={stop.photo.url}
+                alt={stop.photo.alt}
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.025]"
+              />
+              <span className="absolute right-2 bottom-2 rounded-full bg-black/70 px-2 py-1 text-[9px] text-white/75 backdrop-blur">
+                Representative · {stop.photo.photographer} / Unsplash
+              </span>
+            </a>
+          ) : null}
+          <div className="flex gap-3 p-4">
+            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#0e2d30] text-xs font-semibold text-white">
+              {index + 1}
+            </span>
+            <div className="min-w-0">
+              <p className="text-[10px] font-semibold tracking-[0.12em] text-[#6d0101] uppercase">
+                Day {stop.day} · {stop.kind.replace("_", " ")}
+              </p>
+              <h4 className="mt-1 font-medium">{stop.name}</h4>
+              <p className="mt-1 text-xs text-[#405856]">{stop.mapQuery}</p>
+              {stop.locationAccuracy === "area" && (
+                <p className="mt-1 text-[10px] font-medium text-amber-800">
+                  Approximate area · confirm the exact entrance before leaving
+                </p>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+    </section>
+  );
+}
+
 export function TripPlanner() {
   const t = useTranslations("AIPlanner");
   const [vehicle, setVehicle] = useState("2011 BMW E90 318i");
@@ -173,10 +241,32 @@ export function TripPlanner() {
   >(["roads", "photography", "nature"]);
   const [useConnectedContext, setUseConnectedContext] = useState(true);
   const [plan, setPlan] = useState<TripPlan>();
+  const [planView, setPlanView] = useState<"map" | "details">("map");
+  const [route, setRoute] = useState<TripRoute>();
+  const [routeLoading, setRouteLoading] = useState(false);
+  const [routeError, setRouteError] = useState("");
+  const [connection, setConnection] = useState<PlannerConnectionStatus>();
   const [loading, setLoading] = useState(false);
   const [calendarLoading, setCalendarLoading] = useState(false);
   const [error, setError] = useState("");
   const [calendarMessage, setCalendarMessage] = useState("");
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch("/api/connections/google/status", {
+      signal: controller.signal,
+      cache: "no-store",
+    })
+      .then(async (response) => {
+        if (!response.ok) return undefined;
+        return (await response.json()) as PlannerConnectionStatus;
+      })
+      .then((status) => {
+        if (status) setConnection(status);
+      })
+      .catch(() => undefined);
+    return () => controller.abort();
+  }, []);
 
   function toggleInterest(value: (typeof interestOptions)[number]) {
     setInterests((current) =>
@@ -212,6 +302,44 @@ export function TripPlanner() {
           "error" in body && body.error ? body.error : t("errors.plan"),
         );
       setPlan(body);
+      setPlanView("map");
+      setRoute(undefined);
+      setRouteError("");
+      setRouteLoading(true);
+      void fetch("/api/ai/trips/route-map", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          region: region.trim(),
+          startDate: effectiveStartDate,
+          stops: body.stops.map(({ day, kind, name, area, mapQuery }) => ({
+            day,
+            kind,
+            name,
+            area,
+            mapQuery,
+          })),
+        }),
+      })
+        .then(async (routeResponse) => {
+          const routeBody = (await routeResponse.json()) as
+            TripRoute | { error?: string };
+          if (!routeResponse.ok || !("geometry" in routeBody))
+            throw new Error(
+              "error" in routeBody && routeBody.error
+                ? routeBody.error
+                : "The calculated route is unavailable.",
+            );
+          setRoute(routeBody);
+        })
+        .catch((routeFailure) =>
+          setRouteError(
+            routeFailure instanceof Error
+              ? routeFailure.message
+              : "The calculated route is unavailable.",
+          ),
+        )
+        .finally(() => setRouteLoading(false));
       window.setTimeout(() =>
         document
           .getElementById("capcar-plan")
@@ -426,12 +554,16 @@ export function TripPlanner() {
                   {t("useConnections")}
                 </span>
                 <span className="mt-1 block text-xs leading-5 text-white/40">
-                  {t("connectionHint")}{" "}
+                  {connection?.connected
+                    ? `Connected as ${connection.email ?? "Google account"}. Calendar conflicts and travel-mail metadata can shape this plan.`
+                    : t("connectionHint")}{" "}
                   <Link
                     href="/account/connections"
                     className="text-[#ff9b94] underline underline-offset-2"
                   >
-                    {t("manageConnections")}
+                    {connection?.connected
+                      ? t("manageConnections")
+                      : "Connect Google"}
                   </Link>
                 </span>
               </span>
@@ -480,19 +612,28 @@ export function TripPlanner() {
                       {plan.summary}
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    disabled={calendarLoading}
-                    onClick={() => void addToCalendar()}
-                    className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#0e2d30]/15 px-4 text-sm font-medium transition hover:bg-[#0e2d30] hover:text-[#f5f2e8] disabled:opacity-40"
-                  >
-                    {calendarLoading ? (
-                      <LoaderCircle className="size-4 animate-spin" />
-                    ) : (
-                      <CalendarPlus className="size-4" />
-                    )}
-                    {t("addCalendar")}
-                  </button>
+                  {connection?.connected ? (
+                    <button
+                      type="button"
+                      disabled={calendarLoading}
+                      onClick={() => void addToCalendar()}
+                      className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#0e2d30]/15 px-4 text-sm font-medium transition hover:bg-[#0e2d30] hover:text-[#f5f2e8] disabled:opacity-40"
+                    >
+                      {calendarLoading ? (
+                        <LoaderCircle className="size-4 animate-spin" />
+                      ) : (
+                        <CalendarPlus className="size-4" />
+                      )}
+                      {t("addCalendar")}
+                    </button>
+                  ) : (
+                    <Link
+                      href="/account/connections"
+                      className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#0e2d30]/15 px-4 text-sm font-medium transition hover:bg-[#0e2d30] hover:text-[#f5f2e8]"
+                    >
+                      <CalendarPlus className="size-4" /> Connect calendar
+                    </Link>
+                  )}
                 </div>
 
                 <div className="mt-6 grid grid-cols-3 gap-2">
@@ -516,164 +657,235 @@ export function TripPlanner() {
                   ))}
                 </div>
 
-                <div className="mt-8 flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[10px] font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
-                      The drive
-                    </p>
-                    <h3 className="mt-1 text-2xl font-medium tracking-[-0.03em]">
-                      Day by day
-                    </h3>
-                  </div>
-                  <MapProviderLinks links={plan.mapLinks} compact />
-                </div>
-                <div className="mt-4 space-y-3">
-                  {plan.days.map((day, index) => (
-                    <section
-                      key={day.date}
-                      className="grid gap-4 rounded-2xl border border-[#0e2d30]/10 bg-white/38 p-5 md:grid-cols-[auto_1fr]"
+                <div className="mt-7 flex flex-wrap items-center justify-between gap-3">
+                  <div
+                    className="inline-flex rounded-full border border-[#0e2d30]/10 bg-[#0e2d30]/5 p-1"
+                    role="tablist"
+                    aria-label="Generated plan view"
+                  >
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={planView === "map"}
+                      onClick={() => setPlanView("map")}
+                      className={`inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-xs font-semibold transition ${planView === "map" ? "bg-[#0e2d30] text-white shadow-sm" : "text-[#405856] hover:text-[#0e2d30]"}`}
                     >
-                      <div className="grid size-11 place-items-center rounded-full bg-[#0e2d30] text-sm font-semibold text-[#f5f2e8]">
-                        {index + 1}
-                      </div>
-                      <div>
-                        <div className="flex flex-wrap items-center justify-between gap-2">
-                          <h3 className="text-lg font-medium">{day.title}</h3>
-                          <span className="text-xs text-[#405856]">
-                            {day.date} · {day.distanceKm} km
-                          </span>
-                        </div>
-                        <p className="mt-2 text-sm leading-6 text-[#405856]">
-                          {day.routeIdea}
-                        </p>
-                        <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[10px] text-[#405856]">
-                          {day.waypoints.map((waypoint, waypointIndex) => (
-                            <span key={waypoint} className="contents">
-                              {waypointIndex > 0 && (
-                                <ChevronRight className="size-3 text-[#6d0101]/55" />
-                              )}
-                              <span className="rounded-full bg-[#0e2d30]/5 px-2.5 py-1.5">
-                                {waypoint}
-                              </span>
-                            </span>
-                          ))}
-                        </div>
-                        <div className="mt-4 grid gap-2 text-xs sm:grid-cols-3">
-                          <p className="rounded-xl bg-[#0e2d30]/5 p-3">
-                            <strong className="block text-[#0e2d30]">
-                              {t("drive")}
-                            </strong>
-                            <span className="mt-1 block text-[#405856]">
-                              {day.drivingWindow}
-                            </span>
-                          </p>
-                          <p className="rounded-xl bg-[#0e2d30]/5 p-3">
-                            <strong className="block text-[#0e2d30]">
-                              {t("highlight")}
-                            </strong>
-                            <span className="mt-1 block text-[#405856]">
-                              {day.highlight}
-                            </span>
-                          </p>
-                          <p className="rounded-xl bg-[#0e2d30]/5 p-3">
-                            <strong className="block text-[#0e2d30]">
-                              {t("evening")}
-                            </strong>
-                            <span className="mt-1 block text-[#405856]">
-                              {day.evening}
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </section>
-                  ))}
+                      <MapIcon className="size-4" /> Route map
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={planView === "details"}
+                      onClick={() => setPlanView("details")}
+                      className={`inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-xs font-semibold transition ${planView === "details" ? "bg-[#0e2d30] text-white shadow-sm" : "text-[#405856] hover:text-[#0e2d30]"}`}
+                    >
+                      <ListTree className="size-4" /> Detailed plan
+                    </button>
+                  </div>
+                  <MapProviderLinks
+                    links={
+                      route ? createRoutedMapLinks(route.stops) : plan.mapLinks
+                    }
+                    compact
+                  />
                 </div>
 
-                <section className="mt-8">
-                  <p className="text-[10px] font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
-                    Route intelligence
-                  </p>
-                  <h3 className="mt-1 text-2xl font-medium tracking-[-0.03em]">
-                    Stops worth making
-                  </h3>
-                  <p className="mt-2 max-w-2xl text-sm leading-6 text-[#405856]">
-                    Fuel at the right moment, scenery with somewhere sensible to
-                    stop, and photo locations you can inspect in your preferred
-                    map before the drive.
-                  </p>
-                  <div className="mt-5 grid gap-3 lg:grid-cols-2">
-                    {plan.stops.map((stop) => (
-                      <StopCard
-                        key={`${stop.day}-${stop.kind}-${stop.name}`}
-                        stop={stop}
-                      />
-                    ))}
-                  </div>
-                </section>
-
-                <div className="mt-8 grid gap-5 md:grid-cols-2">
-                  <section className="rounded-2xl bg-[#0e2d30] p-5 text-[#f5f2e8]">
-                    <h3 className="font-medium">{t("checklist")}</h3>
-                    <ul className="mt-4 space-y-3">
-                      {plan.checklist.map((item) => (
-                        <li
-                          key={item}
-                          className="flex gap-2 text-xs leading-5 text-white/55"
-                        >
-                          <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-[#ff7d75]" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                  <section className="rounded-2xl border border-[#0e2d30]/10 p-5">
-                    <h3 className="font-medium">{t("connectedContext")}</h3>
-                    {plan.contextNotes.length ? (
-                      <ul className="mt-4 space-y-3">
-                        {plan.contextNotes.map((note) => (
-                          <li
-                            key={note}
-                            className="flex gap-2 text-xs leading-5 text-[#405856]"
-                          >
-                            <Sparkles className="mt-0.5 size-3.5 shrink-0 text-[#6d0101]" />
-                            {note}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="mt-4 text-xs leading-5 text-[#405856]">
-                        {t("noContext")}
-                      </p>
+                {planView === "map" && (
+                  <div className="mt-5" role="tabpanel">
+                    {routeLoading && (
+                      <div className="grid min-h-[34rem] place-items-center rounded-[1.7rem] bg-[#0e2d30] text-white">
+                        <div className="text-center">
+                          <LoaderCircle className="mx-auto size-7 animate-spin text-[#ff766d]" />
+                          <p className="mt-3 text-sm text-white/55">
+                            Calculating the road between every stop…
+                          </p>
+                        </div>
+                      </div>
                     )}
-                    <Link
-                      href="/account/connections"
-                      className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-[#6d0101] underline underline-offset-2"
-                    >
-                      {t("manageConnections")} <ArrowRight className="size-3" />
-                    </Link>
-                  </section>
-                </div>
-
-                {plan.researchSources.length > 0 && (
-                  <section className="mt-6 rounded-2xl border border-[#0e2d30]/10 bg-white/30 p-5">
-                    <h3 className="text-sm font-medium">
-                      Research used by CapCar AI
-                    </h3>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {plan.researchSources.map((source) => (
-                        <a
-                          key={source.url}
-                          href={source.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex max-w-full items-center gap-1 rounded-full border border-[#0e2d30]/10 bg-white/55 px-3 py-2 text-[10px] text-[#405856] hover:text-[#6d0101]"
+                    {route && <TripRouteMapLoader route={route} />}
+                    {route && <RouteStopGallery route={route} />}
+                    {routeError && !routeLoading && (
+                      <div className="rounded-2xl border border-amber-800/15 bg-amber-100/55 p-5">
+                        <p className="flex gap-2 text-sm text-[#5b4516]">
+                          <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+                          {routeError}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setPlanView("details")}
+                          className="mt-3 text-xs font-semibold text-[#6d0101] underline underline-offset-2"
                         >
-                          <span className="truncate">{source.label}</span>
-                          <ExternalLink className="size-3 shrink-0" />
-                        </a>
+                          Open the detailed plan
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {planView === "details" && (
+                  <div role="tabpanel">
+                    <div className="mt-8">
+                      <div>
+                        <p className="text-[10px] font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
+                          The drive
+                        </p>
+                        <h3 className="mt-1 text-2xl font-medium tracking-[-0.03em]">
+                          Day by day
+                        </h3>
+                      </div>
+                    </div>
+                    <div className="mt-4 space-y-3">
+                      {plan.days.map((day, index) => (
+                        <section
+                          key={day.date}
+                          className="grid gap-4 rounded-2xl border border-[#0e2d30]/10 bg-white/38 p-5 md:grid-cols-[auto_1fr]"
+                        >
+                          <div className="grid size-11 place-items-center rounded-full bg-[#0e2d30] text-sm font-semibold text-[#f5f2e8]">
+                            {index + 1}
+                          </div>
+                          <div>
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <h3 className="text-lg font-medium">
+                                {day.title}
+                              </h3>
+                              <span className="text-xs text-[#405856]">
+                                {day.date} · {day.distanceKm} km
+                              </span>
+                            </div>
+                            <p className="mt-2 text-sm leading-6 text-[#405856]">
+                              {day.routeIdea}
+                            </p>
+                            <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[10px] text-[#405856]">
+                              {day.waypoints.map((waypoint, waypointIndex) => (
+                                <span key={waypoint} className="contents">
+                                  {waypointIndex > 0 && (
+                                    <ChevronRight className="size-3 text-[#6d0101]/55" />
+                                  )}
+                                  <span className="rounded-full bg-[#0e2d30]/5 px-2.5 py-1.5">
+                                    {waypoint}
+                                  </span>
+                                </span>
+                              ))}
+                            </div>
+                            <div className="mt-4 grid gap-2 text-xs sm:grid-cols-3">
+                              <p className="rounded-xl bg-[#0e2d30]/5 p-3">
+                                <strong className="block text-[#0e2d30]">
+                                  {t("drive")}
+                                </strong>
+                                <span className="mt-1 block text-[#405856]">
+                                  {day.drivingWindow}
+                                </span>
+                              </p>
+                              <p className="rounded-xl bg-[#0e2d30]/5 p-3">
+                                <strong className="block text-[#0e2d30]">
+                                  {t("highlight")}
+                                </strong>
+                                <span className="mt-1 block text-[#405856]">
+                                  {day.highlight}
+                                </span>
+                              </p>
+                              <p className="rounded-xl bg-[#0e2d30]/5 p-3">
+                                <strong className="block text-[#0e2d30]">
+                                  {t("evening")}
+                                </strong>
+                                <span className="mt-1 block text-[#405856]">
+                                  {day.evening}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </section>
                       ))}
                     </div>
-                  </section>
+
+                    <section className="mt-8">
+                      <p className="text-[10px] font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
+                        Route intelligence
+                      </p>
+                      <h3 className="mt-1 text-2xl font-medium tracking-[-0.03em]">
+                        Stops worth making
+                      </h3>
+                      <p className="mt-2 max-w-2xl text-sm leading-6 text-[#405856]">
+                        Fuel at the right moment, scenery with somewhere
+                        sensible to stop, and photo locations you can inspect in
+                        your preferred map before the drive.
+                      </p>
+                      <div className="mt-5 grid gap-3 lg:grid-cols-2">
+                        {plan.stops.map((stop) => (
+                          <StopCard
+                            key={`${stop.day}-${stop.kind}-${stop.name}`}
+                            stop={stop}
+                          />
+                        ))}
+                      </div>
+                    </section>
+
+                    <div className="mt-8 grid gap-5 md:grid-cols-2">
+                      <section className="rounded-2xl bg-[#0e2d30] p-5 text-[#f5f2e8]">
+                        <h3 className="font-medium">{t("checklist")}</h3>
+                        <ul className="mt-4 space-y-3">
+                          {plan.checklist.map((item) => (
+                            <li
+                              key={item}
+                              className="flex gap-2 text-xs leading-5 text-white/55"
+                            >
+                              <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-[#ff7d75]" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+                      <section className="rounded-2xl border border-[#0e2d30]/10 p-5">
+                        <h3 className="font-medium">{t("connectedContext")}</h3>
+                        {plan.contextNotes.length ? (
+                          <ul className="mt-4 space-y-3">
+                            {plan.contextNotes.map((note) => (
+                              <li
+                                key={note}
+                                className="flex gap-2 text-xs leading-5 text-[#405856]"
+                              >
+                                <Sparkles className="mt-0.5 size-3.5 shrink-0 text-[#6d0101]" />
+                                {note}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p className="mt-4 text-xs leading-5 text-[#405856]">
+                            {t("noContext")}
+                          </p>
+                        )}
+                        <Link
+                          href="/account/connections"
+                          className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-[#6d0101] underline underline-offset-2"
+                        >
+                          {t("manageConnections")}{" "}
+                          <ArrowRight className="size-3" />
+                        </Link>
+                      </section>
+                    </div>
+
+                    {plan.researchSources.length > 0 && (
+                      <section className="mt-6 rounded-2xl border border-[#0e2d30]/10 bg-white/30 p-5">
+                        <h3 className="text-sm font-medium">
+                          Research used by CapCar AI
+                        </h3>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {plan.researchSources.map((source) => (
+                            <a
+                              key={source.url}
+                              href={source.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex max-w-full items-center gap-1 rounded-full border border-[#0e2d30]/10 bg-white/55 px-3 py-2 text-[10px] text-[#405856] hover:text-[#6d0101]"
+                            >
+                              <span className="truncate">{source.label}</span>
+                              <ExternalLink className="size-3 shrink-0" />
+                            </a>
+                          ))}
+                        </div>
+                      </section>
+                    )}
+                  </div>
                 )}
 
                 <p className="mt-5 flex gap-2 rounded-xl bg-amber-200/45 p-4 text-xs leading-5 text-[#5b4516]">

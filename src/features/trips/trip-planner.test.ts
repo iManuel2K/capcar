@@ -129,6 +129,7 @@ describe("trip planner", () => {
 
     expect(links.google).toContain("Mummelsee+parking");
     expect(links.apple).toContain("Triberg%2C+Germany");
+    expect(links.waze).toContain("Triberg%2C+Germany");
     expect(links.openStreetMap).toContain("Black+Forest+scenic+drive");
   });
 
