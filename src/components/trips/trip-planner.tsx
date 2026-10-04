@@ -17,7 +17,6 @@ import {
   Mail,
   MapPin,
   MountainSnow,
-  Navigation,
   Route,
   Sparkles,
   Trees,
@@ -99,139 +98,60 @@ function MapProviderLinks({
   );
 }
 
-function RouteCanvas({ plan }: { plan?: TripPlan }) {
-  const stops = plan?.stops.slice(0, 5) ?? [];
-  return (
-    <div className="relative min-h-[390px] overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#12383b] text-white shadow-[0_35px_90px_rgba(14,45,48,0.24)] sm:min-h-[470px]">
-      <div className="absolute inset-0 [background-image:radial-gradient(circle_at_20%_20%,rgba(255,118,109,.45),transparent_24%),radial-gradient(circle_at_80%_75%,rgba(232,230,215,.22),transparent_32%),linear-gradient(135deg,transparent_40%,rgba(255,255,255,.04)_40%,rgba(255,255,255,.04)_41%,transparent_41%)] opacity-45" />
-      <div className="absolute inset-0 [background-image:linear-gradient(rgba(255,255,255,.14)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.14)_1px,transparent_1px)] [background-size:54px_54px] opacity-20" />
-      <svg
-        aria-hidden="true"
-        className="absolute inset-x-[9%] top-[23%] h-[55%] w-[82%]"
-        viewBox="0 0 700 300"
-        fill="none"
-      >
-        <path
-          d="M34 232C116 216 112 111 207 127C290 141 282 232 379 206C476 180 420 66 531 79C603 87 624 42 672 32"
-          stroke="rgba(255,255,255,.16)"
-          strokeWidth="18"
-          strokeLinecap="round"
-        />
-        <path
-          d="M34 232C116 216 112 111 207 127C290 141 282 232 379 206C476 180 420 66 531 79C603 87 624 42 672 32"
-          stroke="#ff766d"
-          strokeWidth="4"
-          strokeLinecap="round"
-          strokeDasharray="10 13"
-        />
-      </svg>
-
-      <div className="relative z-10 flex items-start justify-between gap-4 p-6 sm:p-7">
-        <div>
-          <p className="flex items-center gap-2 text-[10px] font-semibold tracking-[0.18em] text-white/45 uppercase">
-            <Sparkles className="size-3.5 text-[#ff938c]" /> CapCar AI
-          </p>
-          <p className="mt-2 max-w-[18rem] text-xl leading-tight font-medium tracking-[-0.03em] sm:text-2xl">
-            {plan ? plan.title : "Your weekend, composed around the drive."}
-          </p>
-        </div>
-        <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/12 bg-white/8">
-          <Navigation className="size-4 text-[#ff938c]" />
-        </span>
-      </div>
-
-      {plan ? (
-        <>
-          <div className="absolute top-[25%] left-[9%] rounded-full border border-white/12 bg-[#0e2d30]/85 px-3 py-1.5 text-[10px] backdrop-blur-md">
-            {plan.days.length} days · {plan.distanceKm} km
-          </div>
-          {stops.map((stop, index) => {
-            const positions = [
-              "left-[10%] top-[64%]",
-              "left-[27%] top-[40%]",
-              "left-[49%] top-[61%]",
-              "left-[68%] top-[30%]",
-              "left-[84%] top-[20%]",
-            ];
-            const Icon = stopIcons[stop.kind];
-            return (
-              <div
-                key={`${stop.day}-${stop.name}`}
-                className={`absolute z-20 -translate-x-1/2 -translate-y-1/2 ${positions[index]}`}
-              >
-                <span className="grid size-9 place-items-center rounded-full border-2 border-[#12383b] bg-[#f5f2e8] text-[#6d0101] shadow-lg">
-                  <Icon className="size-4" />
-                </span>
-                {index < 3 && (
-                  <span className="absolute top-11 left-1/2 w-28 -translate-x-1/2 text-center text-[9px] leading-3 font-medium text-white/70">
-                    {stop.name}
-                  </span>
-                )}
-              </div>
-            );
-          })}
-          <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/10 bg-[#0a282b]/78 p-4 backdrop-blur-xl sm:inset-x-7 sm:bottom-7">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex gap-5 text-xs">
-                <span>
-                  <strong className="block text-lg text-white">
-                    {plan.distanceKm}
-                  </strong>
-                  <span className="text-white/40">km planned</span>
-                </span>
-                <span>
-                  <strong className="block text-lg text-white">
-                    {plan.drivingHours}
-                  </strong>
-                  <span className="text-white/40">drive hours</span>
-                </span>
-                <span>
-                  <strong className="block text-lg text-white">
-                    {plan.stops.length}
-                  </strong>
-                  <span className="text-white/40">smart stops</span>
-                </span>
-              </div>
-              <MapProviderLinks links={plan.mapLinks} />
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="absolute inset-x-6 bottom-7 rounded-2xl border border-white/10 bg-[#0a282b]/78 p-5 backdrop-blur-xl sm:inset-x-8">
-          <div className="flex items-center gap-3 text-sm text-white/80">
-            <span className="grid size-9 place-items-center rounded-full bg-[#ff766d] text-[#260808]">
-              <Route className="size-4" />
-            </span>
-            Scenic roads, fuel, photo spots and a route you can actually open.
-          </div>
-          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/8">
-            <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-[#ff766d] to-[#ffb09f]" />
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
 function AnimatedRouteDemo() {
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-[#12383b] shadow-[0_24px_55px_rgba(14,45,48,.18)]">
+    <div className="relative overflow-hidden rounded-[1.45rem] bg-[#0e2d30] shadow-[0_24px_55px_rgba(14,45,48,.2)]">
       <Image
         src="/ai/capcar-route-demo.gif"
         alt="Animated CapCar map from Rüsselsheim through Mainz to the scenic Rheingau route"
         width={713}
         height={470}
         unoptimized
-        loading="lazy"
-        className="h-auto w-full motion-reduce:hidden"
+        priority
+        className="capcar-route-camera h-auto w-full"
       />
-      <Image
-        src="/ai/capcar-route-demo.webp"
-        alt="CapCar map from Rüsselsheim to the Gutenberg Museum, a fuel stop and the Rheingau"
-        width={713}
-        height={470}
-        className="hidden h-auto w-full motion-reduce:block"
-      />
+    </div>
+  );
+}
+
+function PlannerConversation() {
+  return (
+    <div className="space-y-3">
+      <div className="ml-auto max-w-[92%] rounded-2xl rounded-tr-sm bg-[#0e2d30] px-4 py-3 text-sm leading-6 text-white">
+        <span className="mb-1 block text-[9px] font-semibold tracking-[0.14em] text-white/45 uppercase">
+          Your instruction
+        </span>
+        Plan me a scenic Saturday with my BMW from Rüsselsheim through Mainz.
+        Add culture, a smart fuel stop and one great photo spot.
+      </div>
+      <div className="rounded-2xl border border-[#0e2d30]/10 bg-white/55 p-4">
+        <div className="flex items-center gap-2 text-xs font-medium">
+          <Sparkles className="size-3.5 text-[#6d0101]" /> CapCar AI is
+          composing the drive
+        </div>
+        <ol className="mt-3 grid gap-2 text-[11px] leading-5 text-[#405856] sm:grid-cols-3">
+          {[
+            ["01", "Checks your car, free time and preferences"],
+            ["02", "Places culture and fuel at useful moments"],
+            ["03", "Finds the scenic B42 finish and photo light"],
+          ].map(([number, copy]) => (
+            <li
+              key={number}
+              className="flex gap-2 rounded-xl bg-[#0e2d30]/5 p-2.5"
+            >
+              <span className="font-semibold text-[#6d0101]">{number}</span>
+              <span>{copy}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div className="mr-auto max-w-[94%] rounded-2xl rounded-tl-sm bg-[#fff8ee] px-4 py-3 text-sm leading-6 shadow-sm ring-1 ring-[#0e2d30]/10">
+        <span className="mb-1 block text-[9px] font-semibold tracking-[0.14em] text-[#6d0101] uppercase">
+          Route ready
+        </span>
+        Gutenberg Museum first, fuel in Mainz-Kastel, then the B42 through the
+        Rheingau to the Niederwalddenkmal.
+      </div>
     </div>
   );
 }
@@ -429,7 +349,19 @@ export function TripPlanner() {
                 ))}
               </div>
             </div>
-            <RouteCanvas plan={plan} />
+            <div className="rounded-[2rem] border border-[#0e2d30]/10 bg-[#f5f2e8]/75 p-4 shadow-[0_35px_90px_rgba(14,45,48,.14)] sm:p-6">
+              <div className="mb-4 flex items-center justify-between border-b border-[#0e2d30]/10 pb-4 text-xs">
+                <span className="flex items-center gap-2 font-medium">
+                  <Sparkles className="size-3.5 text-[#6d0101]" /> Your CapCar
+                  AI
+                </span>
+                <span className="text-[#405856]">Google · Apple · OSM</span>
+              </div>
+              <PlannerConversation />
+              <div className="mt-4">
+                <AnimatedRouteDemo />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -926,19 +858,52 @@ export function TripPlanner() {
               Explore Roadbook <ArrowRight className="size-4" />
             </Link>
           </div>
-          <div className="rounded-[2rem] border border-[#0e2d30]/10 bg-[#f5f2e8]/70 p-4 shadow-[0_35px_90px_rgba(14,45,48,.12)] sm:p-7">
+          <div className="rounded-[2rem] border border-[#0e2d30]/10 bg-[#f5f2e8]/70 p-6 shadow-[0_35px_90px_rgba(14,45,48,.12)] sm:p-8">
             <div className="flex items-center justify-between border-b border-[#0e2d30]/10 pb-4 text-xs">
               <span className="flex items-center gap-2 font-medium">
-                <Sparkles className="size-3.5 text-[#6d0101]" /> Your CapCar AI
+                <CheckCircle2 className="size-3.5 text-[#6d0101]" /> Saved to
+                Roadbook
               </span>
-              <span className="text-[#405856]">Google · Apple · OSM</span>
+              <span className="text-[#405856]">Saturday · 57 km</span>
             </div>
-            <div className="mt-4 ml-auto max-w-sm rounded-2xl rounded-tr-sm bg-[#0e2d30] p-4 text-sm leading-6 text-white">
-              Adventure set. Gutenberg first, fuel in Mainz-Kastel, then the
-              B42 through the Rheingau to the Niederwalddenkmal.
+            <div className="mt-6 grid gap-3">
+              {[
+                [CarFront, "Start", "Rüsselsheim · BMW ready"],
+                [MapPin, "Culture", "Gutenberg Museum · Mainz"],
+                [Fuel, "Fuel", "Esso · Mainz-Kastel"],
+                [Camera, "Photo finish", "B42 · Niederwalddenkmal"],
+              ].map(([Icon, label, copy]) => (
+                <div
+                  key={label as string}
+                  className="flex items-center gap-3 rounded-2xl bg-white/45 p-3.5 ring-1 ring-[#0e2d30]/8"
+                >
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#0e2d30] text-[#ff938c]">
+                    <Icon className="size-4" />
+                  </span>
+                  <div>
+                    <p className="text-[9px] font-semibold tracking-[0.14em] text-[#6d0101] uppercase">
+                      {label as string}
+                    </p>
+                    <p className="mt-0.5 text-sm text-[#0e2d30]">
+                      {copy as string}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="mt-4">
-              <AnimatedRouteDemo />
+            <div className="mt-5 flex flex-wrap gap-2 text-[10px] text-[#405856]">
+              {[
+                "Route editable",
+                "Calendar connected",
+                "Open in Google · Apple · OSM",
+              ].map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-[#0e2d30]/10 bg-white/45 px-3 py-2"
+                >
+                  {item}
+                </span>
+              ))}
             </div>
           </div>
         </div>
