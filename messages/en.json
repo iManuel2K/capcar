@@ -516,7 +516,7 @@
     "connected": "Calendar + mail ready",
     "eyebrow": "Ask CapCar AI",
     "title": "Turn a free weekend into a road worth remembering.",
-    "description": "Tell CapCar AI what you drive and where you want to go. Get a calm day-by-day outline, check it against your calendar and travel mail, then add the plan to your calendar. CapCar finds the best route by comparing Google Maps, Apple Maps and Waze, uses Blitzer App for radar notifications and takes the weather into account.",
+    "description": "CapCar finds the best route by comparing Google Maps, Apple Maps and Waze, uses Blitzer App for radar notifications and takes the weather into account.",
     "vehicleContext": "Built around your car",
     "calendarMail": "Permission-based context",
     "ask": "Your prompt",
