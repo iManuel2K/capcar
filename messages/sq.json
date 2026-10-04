@@ -516,7 +516,7 @@
     "connected": "Kalendari + emaili gati",
     "eyebrow": "Pyet CapCar AI",
     "title": "Ktheje një fundjavë të lirë në një rrugë që mbahet mend.",
-    "description": "Tregoji CapCar çfarë makine ke dhe ku dëshiron të shkosh. Merr një plan të qetë për çdo ditë, krahasoje me kalendarin dhe emailet e udhëtimit, pastaj shtoje në Google Calendar.",
+    "description": "CapCar gjen rrugën më të mirë duke krahasuar Google Maps, Apple Maps dhe Waze, përdor BlitzzerApp për njoftimet e radarëve dhe merr parasysh motin.",
     "vehicleContext": "I ndërtuar rreth makinës tënde",
     "calendarMail": "Kontekst vetëm me leje",
     "ask": "Kërkesa jote",

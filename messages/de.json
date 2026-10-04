@@ -516,7 +516,7 @@
     "connected": "Kalender + E-Mail bereit",
     "eyebrow": "CapCar KI fragen",
     "title": "Mach aus einem freien Wochenende eine unvergessliche Strecke.",
-    "description": "Sag CapCar, was du fährst und wohin du möchtest. Du erhältst einen ruhigen Tagesplan, kannst ihn mit Kalender und Reisemails abgleichen und in Google Kalender übernehmen.",
+    "description": "CapCar findet die beste Route, indem es Google Maps, Apple Maps und Waze vergleicht, nutzt BlitzzerApp für Radarwarnungen und berücksichtigt das Wetter.",
     "vehicleContext": "Rund um dein Auto",
     "calendarMail": "Kontext nur mit Freigabe",
     "ask": "Dein Prompt",

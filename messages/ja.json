@@ -516,7 +516,7 @@
     "connected": "カレンダー + メール対応",
     "eyebrow": "CapCar AIに相談",
     "title": "空いた週末を、記憶に残る道へ。",
-    "description": "車と行きたい地域を伝えると、無理のない日程案を作成します。カレンダーや旅行メールと照合し、選んだ計画をGoogleカレンダーへ追加できます。",
+    "description": "CapCarは、Googleマップ、Appleマップ、Wazeを比較して最適なルートを見つけ、レーダー通知にはBlitzzerAppを利用し、天気も考慮します。",
     "vehicleContext": "あなたの車を中心に計画",
     "calendarMail": "許可した情報だけを利用",
     "ask": "プロンプト",
