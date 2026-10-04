@@ -1,0 +1,134 @@
+.trip-route-leaflet {
+  z-index: 0;
+  background: var(--trip-map-canvas, #0e2d30);
+  font-family: inherit;
+}
+
+.leaflet-trip-route-vector-basemap-pane,
+.leaflet-trip-route-vector-basemap-pane canvas,
+.leaflet-trip-route-vector-basemap-pane svg {
+  transition: opacity 220ms ease;
+}
+
+.trip-route-marker-shell {
+  border: 0;
+  background: transparent;
+}
+
+.trip-route-marker {
+  position: relative;
+  display: grid;
+  width: 2.6rem;
+  height: 2.6rem;
+  place-items: center;
+  border: 3px solid #f7f4ee;
+  border-radius: 999px;
+  background: #0e2d30;
+  color: #fff;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 28%);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.trip-route-marker strong {
+  position: absolute;
+  top: calc(100% + 0.38rem);
+  left: 50%;
+  width: max-content;
+  max-width: 12rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgb(14 45 48 / 92%);
+  padding: 0.28rem 0.55rem;
+  color: #fff;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 18%);
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.trip-route-style-rail {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  border-bottom: 1px solid rgb(255 255 255 / 9%);
+  background: #0e2d30;
+  padding: 0.7rem 0.8rem 0.85rem;
+  scrollbar-width: none;
+}
+
+.trip-route-style-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.trip-route-style-rail button {
+  display: inline-flex;
+  min-height: 2.2rem;
+  flex: none;
+  align-items: center;
+  gap: 0.42rem;
+  border: 1px solid rgb(255 255 255 / 13%);
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  color: rgb(255 255 255 / 62%);
+  font-size: 0.68rem;
+  font-weight: 700;
+  transition: 160ms ease;
+}
+
+.trip-route-style-rail button > span {
+  width: 1.35rem;
+  height: 0.62rem;
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--trip-style-land) 0 34%,
+    var(--trip-style-road) 34% 67%,
+    var(--trip-style-water) 67% 100%
+  );
+}
+
+.trip-route-style-rail button:hover,
+.trip-route-style-rail button:focus-visible {
+  border-color: rgb(255 255 255 / 35%);
+  color: #fff;
+  outline: none;
+}
+
+.trip-route-style-rail button.is-selected {
+  border-color: #fff;
+  background: #f7f4ee;
+  color: #0e2d30;
+}
+
+.trip-route-leaflet .leaflet-control-zoom {
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 12%) !important;
+  border-radius: 0.85rem !important;
+  background: rgb(9 16 13 / 88%) !important;
+  box-shadow: 0 12px 35px rgb(0 0 0 / 22%) !important;
+}
+
+.trip-route-leaflet .leaflet-control-zoom a {
+  width: 2.6rem !important;
+  height: 2.6rem !important;
+  border: 0 !important;
+  background: rgb(9 16 13 / 94%) !important;
+  color: white !important;
+  line-height: 2.6rem !important;
+}
+
+.trip-route-leaflet .leaflet-control-attribution {
+  max-width: calc(100% - 1rem);
+  border-radius: 0.5rem 0 0 !important;
+  background: rgb(9 16 13 / 72%) !important;
+  color: rgb(255 255 255 / 56%) !important;
+  font-size: 0.58rem;
+  backdrop-filter: blur(10px);
+}
+
+.trip-route-leaflet .leaflet-control-attribution a {
+  color: inherit !important;
+}
