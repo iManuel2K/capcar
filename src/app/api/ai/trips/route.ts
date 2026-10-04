@@ -51,6 +51,18 @@ export async function POST(request: Request) {
         };
       }
     }
+    if (
+      planner.mode !== "deterministic" &&
+      !user &&
+      input.inputMode === "prompt"
+    )
+      return NextResponse.json(
+        {
+          error:
+            "Sign in for natural-language AI planning, or choose exact places for a route preview.",
+        },
+        { status: 401, headers: { "Cache-Control": "no-store" } },
+      );
     const plan =
       planner.mode !== "deterministic" && !user
         ? {

@@ -301,7 +301,7 @@ export function TripPlanner() {
           );
     const planningRegion =
       inputMode === "prompt"
-        ? "Destination from the natural-language request"
+        ? prompt.trim().slice(0, 120)
         : selectedPlaces.join(", ").slice(0, 120);
     if (
       effectivePrompt.length < 2 ||
@@ -317,6 +317,7 @@ export function TripPlanner() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           prompt: effectivePrompt,
+          inputMode,
           vehicle,
           region: planningRegion,
           startDate: effectiveStartDate,

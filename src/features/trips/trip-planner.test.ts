@@ -66,12 +66,22 @@ describe("trip planner", () => {
         expect(input).toBe("https://api.openai.com/v1/responses");
         const requestBody = JSON.parse(String(init?.body)) as {
           tools: Array<{ type: string; search_context_size: string }>;
+          input: Array<{ role: string; content: string }>;
           text: { format: { strict: boolean } };
         };
         expect(requestBody.tools).toEqual([
           { type: "web_search", search_context_size: "low" },
         ]);
         expect(requestBody.text.format.strict).toBe(true);
+        const userInput = JSON.parse(requestBody.input[1].content) as {
+          request: Record<string, unknown>;
+          destinationInput: { type: string; prompt: string };
+        };
+        expect(userInput.request).not.toHaveProperty("region");
+        expect(userInput.destinationInput).toMatchObject({
+          type: "natural_language",
+          prompt: "Drive from Rüsselsheim through Mainz",
+        });
         return Response.json({
           output: [
             {
@@ -97,10 +107,18 @@ describe("trip planner", () => {
     );
     vi.stubGlobal("fetch", fetchMock);
 
-    const plan = await planScenicTrip(request, undefined, {
-      CAPCAR_TRIP_PLANNER_MODE: "openai",
-      OPENAI_API_KEY: "server-secret",
-    });
+    const plan = await planScenicTrip(
+      {
+        ...request,
+        inputMode: "prompt",
+        prompt: "Drive from Rüsselsheim through Mainz",
+      },
+      undefined,
+      {
+        CAPCAR_TRIP_PLANNER_MODE: "openai",
+        OPENAI_API_KEY: "server-secret",
+      },
+    );
 
     expect(plan.source).toBe("openai");
     expect(plan.researchSources).toHaveLength(1);
@@ -120,6 +138,25 @@ describe("trip planner", () => {
     expect(plan.contextNotes.join(" ")).toContain("temporarily unavailable");
   });
 
+  it("does not fabricate map destinations when prompt-based AI planning fails", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
+
+    await expect(
+      planScenicTripWithFallback(
+        {
+          ...request,
+          inputMode: "prompt",
+          prompt: "Drive from Rüsselsheim through Mainz",
+        },
+        undefined,
+        {
+          CAPCAR_TRIP_PLANNER_MODE: "openai",
+          OPENAI_API_KEY: "server-secret",
+        },
+      ),
+    ).rejects.toThrow("offline");
+  });
+
   it("creates encoded route handoffs for all supported maps", () => {
     const links = createMapLinks("Black Forest", [
       { mapQuery: "Baden-Baden, Germany" },
@@ -130,7 +167,7 @@ describe("trip planner", () => {
     expect(links.google).toContain("Mummelsee+parking");
     expect(links.apple).toContain("Triberg%2C+Germany");
     expect(links.waze).toContain("Triberg%2C+Germany");
-    expect(links.openStreetMap).toContain("Black+Forest+scenic+drive");
+    expect(links.openStreetMap).toContain("Triberg%2C+Germany");
   });
 
   it("rejects oversized requests", () => {
