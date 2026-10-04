@@ -4,6 +4,7 @@ import {
   createMapLinks,
   getTripPlannerStatus,
   planScenicTrip,
+  planScenicTripWithFallback,
   tripPlannerRequestSchema,
 } from "@/features/trips/trip-planner";
 
@@ -104,6 +105,19 @@ describe("trip planner", () => {
     expect(plan.source).toBe("openai");
     expect(plan.researchSources).toHaveLength(1);
     expect(plan.mapLinks.google).toContain("google.com/maps/dir");
+  });
+
+  it("returns a usable route draft when the live planner is unavailable", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
+
+    const plan = await planScenicTripWithFallback(request, undefined, {
+      CAPCAR_TRIP_PLANNER_MODE: "openai",
+      OPENAI_API_KEY: "server-secret",
+    });
+
+    expect(plan.source).toBe("deterministic");
+    expect(plan.days).toHaveLength(3);
+    expect(plan.contextNotes.join(" ")).toContain("temporarily unavailable");
   });
 
   it("creates encoded route handoffs for all supported maps", () => {
