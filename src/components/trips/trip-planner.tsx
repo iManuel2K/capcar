@@ -108,50 +108,8 @@ function AnimatedRouteDemo() {
         height={470}
         unoptimized
         priority
-        className="capcar-route-camera h-auto w-full"
+        className="h-auto w-full"
       />
-    </div>
-  );
-}
-
-function PlannerConversation() {
-  return (
-    <div className="space-y-3">
-      <div className="ml-auto max-w-[92%] rounded-2xl rounded-tr-sm bg-[#0e2d30] px-4 py-3 text-sm leading-6 text-white">
-        <span className="mb-1 block text-[9px] font-semibold tracking-[0.14em] text-white/45 uppercase">
-          Your instruction
-        </span>
-        Plan me a scenic Saturday with my BMW from Rüsselsheim through Mainz.
-        Add culture, a smart fuel stop and one great photo spot.
-      </div>
-      <div className="rounded-2xl border border-[#0e2d30]/10 bg-white/55 p-4">
-        <div className="flex items-center gap-2 text-xs font-medium">
-          <Sparkles className="size-3.5 text-[#6d0101]" /> CapCar AI is
-          composing the drive
-        </div>
-        <ol className="mt-3 grid gap-2 text-[11px] leading-5 text-[#405856] sm:grid-cols-3">
-          {[
-            ["01", "Checks your car, free time and preferences"],
-            ["02", "Places culture and fuel at useful moments"],
-            ["03", "Finds the scenic B42 finish and photo light"],
-          ].map(([number, copy]) => (
-            <li
-              key={number}
-              className="flex gap-2 rounded-xl bg-[#0e2d30]/5 p-2.5"
-            >
-              <span className="font-semibold text-[#6d0101]">{number}</span>
-              <span>{copy}</span>
-            </li>
-          ))}
-        </ol>
-      </div>
-      <div className="mr-auto max-w-[94%] rounded-2xl rounded-tl-sm bg-[#fff8ee] px-4 py-3 text-sm leading-6 shadow-sm ring-1 ring-[#0e2d30]/10">
-        <span className="mb-1 block text-[9px] font-semibold tracking-[0.14em] text-[#6d0101] uppercase">
-          Route ready
-        </span>
-        Gutenberg Museum first, fuel in Mainz-Kastel, then the B42 through the
-        Rheingau to the Niederwalddenkmal.
-      </div>
     </div>
   );
 }
@@ -349,18 +307,8 @@ export function TripPlanner() {
                 ))}
               </div>
             </div>
-            <div className="rounded-[2rem] border border-[#0e2d30]/10 bg-[#f5f2e8]/75 p-4 shadow-[0_35px_90px_rgba(14,45,48,.14)] sm:p-6">
-              <div className="mb-4 flex items-center justify-between border-b border-[#0e2d30]/10 pb-4 text-xs">
-                <span className="flex items-center gap-2 font-medium">
-                  <Sparkles className="size-3.5 text-[#6d0101]" /> Your CapCar
-                  AI
-                </span>
-                <span className="text-[#405856]">Google · Apple · OSM</span>
-              </div>
-              <PlannerConversation />
-              <div className="mt-4">
-                <AnimatedRouteDemo />
-              </div>
+            <div className="overflow-hidden rounded-[2rem] border border-[#0e2d30]/10 shadow-[0_35px_90px_rgba(14,45,48,.14)]">
+              <AnimatedRouteDemo />
             </div>
           </div>
         </div>
@@ -834,78 +782,6 @@ export function TripPlanner() {
               </div>
             )}
           </article>
-        </div>
-      </section>
-
-      <section className="border-t border-[#0e2d30]/10 px-5 py-20 sm:px-8 sm:py-28">
-        <div className="mx-auto grid max-w-[1440px] gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-          <div>
-            <p className="text-xs font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
-              Step 04 · Keep the plan
-            </p>
-            <h2 className="mt-5 max-w-xl text-5xl leading-[0.98] font-medium tracking-[-0.055em] sm:text-6xl">
-              And it all lands in your CapCar Roadbook.
-            </h2>
-            <p className="mt-6 max-w-lg text-lg leading-8 text-[#405856]">
-              Route, days, fuel logic, photo spots and connected context stay
-              together—ready to revisit, adjust and open in the map you already
-              use.
-            </p>
-            <Link
-              href="/roadbook"
-              className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#0e2d30] px-5 py-3 text-sm font-medium text-white"
-            >
-              Explore Roadbook <ArrowRight className="size-4" />
-            </Link>
-          </div>
-          <div className="rounded-[2rem] border border-[#0e2d30]/10 bg-[#f5f2e8]/70 p-6 shadow-[0_35px_90px_rgba(14,45,48,.12)] sm:p-8">
-            <div className="flex items-center justify-between border-b border-[#0e2d30]/10 pb-4 text-xs">
-              <span className="flex items-center gap-2 font-medium">
-                <CheckCircle2 className="size-3.5 text-[#6d0101]" /> Saved to
-                Roadbook
-              </span>
-              <span className="text-[#405856]">Saturday · 57 km</span>
-            </div>
-            <div className="mt-6 grid gap-3">
-              {[
-                [CarFront, "Start", "Rüsselsheim · BMW ready"],
-                [MapPin, "Culture", "Gutenberg Museum · Mainz"],
-                [Fuel, "Fuel", "Esso · Mainz-Kastel"],
-                [Camera, "Photo finish", "B42 · Niederwalddenkmal"],
-              ].map(([Icon, label, copy]) => (
-                <div
-                  key={label as string}
-                  className="flex items-center gap-3 rounded-2xl bg-white/45 p-3.5 ring-1 ring-[#0e2d30]/8"
-                >
-                  <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#0e2d30] text-[#ff938c]">
-                    <Icon className="size-4" />
-                  </span>
-                  <div>
-                    <p className="text-[9px] font-semibold tracking-[0.14em] text-[#6d0101] uppercase">
-                      {label as string}
-                    </p>
-                    <p className="mt-0.5 text-sm text-[#0e2d30]">
-                      {copy as string}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-5 flex flex-wrap gap-2 text-[10px] text-[#405856]">
-              {[
-                "Route editable",
-                "Calendar connected",
-                "Open in Google · Apple · OSM",
-              ].map((item) => (
-                <span
-                  key={item}
-                  className="rounded-full border border-[#0e2d30]/10 bg-white/45 px-3 py-2"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
     </main>

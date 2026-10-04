@@ -650,3 +650,24 @@ export async function planScenicTrip(
     mapLinks: createMapLinks(request.region, response.stops),
   });
 }
+
+export async function planScenicTripWithFallback(
+  request: TripPlannerRequest,
+  context?: ConnectedPlanningContext,
+  environment: TripPlannerEnvironment = process.env,
+): Promise<TripPlan> {
+  const status = getTripPlannerStatus(environment);
+  try {
+    return await planScenicTrip(request, context, environment);
+  } catch (error) {
+    if (status.mode === "deterministic") throw error;
+    const fallback = deterministicPlan(request, context);
+    return {
+      ...fallback,
+      contextNotes: [
+        ...fallback.contextNotes,
+        `${status.providerName} was temporarily unavailable, so CapCar returned a practical route draft instead.`,
+      ],
+    };
+  }
+}

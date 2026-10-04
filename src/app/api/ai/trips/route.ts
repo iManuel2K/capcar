@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import {
   getTripPlannerStatus,
   planScenicTrip,
+  planScenicTripWithFallback,
   tripPlannerRequestSchema,
   type ConnectedPlanningContext,
 } from "@/features/trips/trip-planner";
@@ -29,11 +30,6 @@ export async function POST(request: Request) {
     const input = await readJsonRequest(request, tripPlannerRequestSchema);
     const user = await currentUser();
     const planner = getTripPlannerStatus();
-    if (planner.mode !== "deterministic" && !user)
-      return NextResponse.json(
-        { error: "Sign in to use the connected AI planner." },
-        { status: 401, headers: { "Cache-Control": "no-store" } },
-      );
     if (user) {
       const guard = await guardProductApi("trip-planner", { limit: 10 });
       if (!guard.ok) return guard.response;
@@ -55,7 +51,19 @@ export async function POST(request: Request) {
         };
       }
     }
-    return NextResponse.json(await planScenicTrip(input, context), {
+    const plan =
+      planner.mode !== "deterministic" && !user
+        ? {
+            ...(await planScenicTrip(input, context, {
+              ...process.env,
+              CAPCAR_TRIP_PLANNER_MODE: "deterministic",
+            })),
+            contextNotes: [
+              "Sign in to use live AI research and connected planning. This preview uses CapCar's route composer.",
+            ],
+          }
+        : await planScenicTripWithFallback(input, context);
+    return NextResponse.json(plan, {
       headers: { "Cache-Control": "no-store" },
     });
   } catch (error) {
