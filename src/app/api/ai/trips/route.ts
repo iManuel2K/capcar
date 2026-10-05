@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            "Connect your OpenAI or Claude API key before using CapCar AI.",
+            "Connect your Gemini, OpenAI or Claude API key before using CapCar AI.",
           code: "ai_connection_required",
         },
         { status: 409, headers: { "Cache-Control": "no-store" } },
@@ -53,6 +53,7 @@ export async function POST(request: Request) {
       : {
           ...process.env,
           CAPCAR_TRIP_PLANNER_MODE: "deterministic",
+          GEMINI_API_KEY: undefined,
           OPENAI_API_KEY: undefined,
           ANTHROPIC_API_KEY: undefined,
         };

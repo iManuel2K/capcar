@@ -53,6 +53,69 @@ describe("trip planner", () => {
     });
   });
 
+  it("recognizes a configured Gemini planner", () => {
+    expect(
+      getTripPlannerStatus({
+        CAPCAR_TRIP_PLANNER_MODE: "gemini",
+        GEMINI_API_KEY: "user-secret",
+      }),
+    ).toMatchObject({
+      mode: "gemini",
+      configured: true,
+      model: "gemini-2.5-flash-lite",
+    });
+  });
+
+  it("uses a connected Gemini key for a structured trip plan", async () => {
+    const fallback = await planScenicTrip(request);
+    const generated = JSON.parse(JSON.stringify(fallback)) as Record<
+      string,
+      unknown
+    >;
+    for (const key of ["provider", "source", "researchSources", "mapLinks"])
+      delete generated[key];
+    const fetchMock = vi.fn(
+      async (input: RequestInfo | URL, init?: RequestInit) => {
+        expect(input).toBe(
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent",
+        );
+        expect(new Headers(init?.headers).get("x-goog-api-key")).toBe(
+          "user-gemini-secret",
+        );
+        const requestBody = JSON.parse(String(init?.body)) as {
+          generationConfig: {
+            responseFormat: { text: { mimeType: string; schema: unknown } };
+          };
+        };
+        expect(requestBody.generationConfig.responseFormat.text.mimeType).toBe(
+          "application/json",
+        );
+        expect(
+          requestBody.generationConfig.responseFormat.text.schema,
+        ).toBeTruthy();
+        return Response.json({
+          candidates: [
+            {
+              content: { parts: [{ text: JSON.stringify(generated) }] },
+            },
+          ],
+        });
+      },
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const plan = await planScenicTrip(request, undefined, {
+      CAPCAR_TRIP_PLANNER_MODE: "gemini",
+      CAPCAR_TRIP_PLANNER_PROVIDER_NAME: "Your Gemini",
+      CAPCAR_GEMINI_TRIP_PLANNER_MODEL: "gemini-2.5-flash-lite",
+      GEMINI_API_KEY: "user-gemini-secret",
+    });
+
+    expect(plan.source).toBe("gemini");
+    expect(plan.provider).toBe("Your Gemini");
+    expect(plan.researchSources).toEqual([]);
+  });
+
   it("requests a web-grounded structured plan from OpenAI", async () => {
     const fallback = await planScenicTrip(request);
     const generated = JSON.parse(JSON.stringify(fallback)) as Record<
@@ -232,6 +295,38 @@ describe("trip planner", () => {
     ).rejects.toMatchObject({
       code: "openai_quota",
       status: 402,
+    });
+  });
+
+  it("surfaces a Gemini free-tier limit clearly", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValue(
+          Response.json(
+            { error: { message: "RESOURCE_EXHAUSTED: quota exceeded" } },
+            { status: 429 },
+          ),
+        ),
+    );
+
+    await expect(
+      planScenicTripWithFallback(
+        {
+          ...request,
+          inputMode: "prompt",
+          prompt: "Drive from Rüsselsheim through Mainz",
+        },
+        undefined,
+        {
+          CAPCAR_TRIP_PLANNER_MODE: "gemini",
+          GEMINI_API_KEY: "user-secret",
+        },
+      ),
+    ).rejects.toMatchObject({
+      code: "gemini_rate_limit",
+      status: 429,
     });
   });
 

@@ -6,7 +6,7 @@ import {
   encryptConnectionToken,
 } from "@/features/connections/token-crypto";
 
-export const aiProviderSchema = z.enum(["openai", "anthropic"]);
+export const aiProviderSchema = z.enum(["gemini", "openai", "anthropic"]);
 export type AiProvider = z.infer<typeof aiProviderSchema>;
 
 export const saveAiConnectionSchema = z.object({
@@ -28,6 +28,10 @@ export type AiConnectionRecord = {
 export type AiConnectionEnvironment = Record<string, string | undefined>;
 
 const providerDetails = {
+  gemini: {
+    label: "Gemini",
+    defaultModel: "gemini-2.5-flash-lite",
+  },
   openai: {
     label: "OpenAI",
     defaultModel: "gpt-5.4-mini",
@@ -77,6 +81,11 @@ export function getAiProviderModel(
   provider: AiProvider,
   environment: AiConnectionEnvironment = process.env,
 ) {
+  if (provider === "gemini")
+    return (
+      environment.CAPCAR_GEMINI_TRIP_PLANNER_MODEL ||
+      providerDetails.gemini.defaultModel
+    );
   if (provider === "openai")
     return (
       environment.CAPCAR_TRIP_PLANNER_MODEL ||
@@ -96,10 +105,21 @@ function keyHint(apiKey: string) {
 function providerError(provider: AiProvider, status: number, message: string) {
   const label = providerDetails[provider].label;
   const normalized = message.toLocaleLowerCase();
-  if (status === 401 || /invalid.+key|authentication/.test(normalized))
+  if (
+    status === 401 ||
+    /invalid.+key|api key not valid|authentication/.test(normalized)
+  )
     return new AiConnectionError(
       `${label} rejected this API key. Check the key and try again.`,
       401,
+    );
+  if (
+    provider === "gemini" &&
+    (status === 429 || /quota|rate limit|resource exhausted/.test(normalized))
+  )
+    return new AiConnectionError(
+      "Gemini's free-tier limit has been reached. Wait for the quota window to reset, then try again.",
+      429,
     );
   if (/quota|billing|credit|insufficient_quota/.test(normalized))
     return new AiConnectionError(
@@ -159,20 +179,41 @@ export async function verifyAiConnection(
             max_output_tokens: 32,
           }),
         })
-      : await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: {
-            "anthropic-version": "2023-06-01",
-            "content-type": "application/json",
-            "x-api-key": apiKey,
-          },
-          signal: AbortSignal.timeout(15_000),
-          body: JSON.stringify({
-            model,
-            max_tokens: 8,
-            messages: [{ role: "user", content: "Reply with OK only." }],
-          }),
-        });
+      : provider === "anthropic"
+        ? await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: {
+              "anthropic-version": "2023-06-01",
+              "content-type": "application/json",
+              "x-api-key": apiKey,
+            },
+            signal: AbortSignal.timeout(15_000),
+            body: JSON.stringify({
+              model,
+              max_tokens: 8,
+              messages: [{ role: "user", content: "Reply with OK only." }],
+            }),
+          })
+        : await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+            {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+                "x-goog-api-key": apiKey,
+              },
+              signal: AbortSignal.timeout(15_000),
+              body: JSON.stringify({
+                contents: [
+                  {
+                    role: "user",
+                    parts: [{ text: "Reply with OK only." }],
+                  },
+                ],
+                generationConfig: { maxOutputTokens: 8 },
+              }),
+            },
+          );
   if (!response.ok)
     throw providerError(
       provider,
@@ -255,13 +296,20 @@ export function tripPlannerEnvironmentForConnection(
     ...environment,
     CAPCAR_TRIP_PLANNER_MODE: record.provider,
     CAPCAR_TRIP_PLANNER_PROVIDER_NAME:
-      record.provider === "openai" ? "Your OpenAI" : "Your Claude",
+      record.provider === "gemini"
+        ? "Your Gemini"
+        : record.provider === "openai"
+          ? "Your OpenAI"
+          : "Your Claude",
     CAPCAR_TRIP_PLANNER_CREDENTIAL_OWNER: "user",
+    CAPCAR_GEMINI_TRIP_PLANNER_MODEL:
+      record.provider === "gemini" ? record.model : undefined,
     CAPCAR_TRIP_PLANNER_MODEL:
       record.provider === "openai" ? record.model : undefined,
     CAPCAR_ANTHROPIC_TRIP_PLANNER_MODEL:
       record.provider === "anthropic" ? record.model : undefined,
     OPENAI_API_KEY: record.provider === "openai" ? apiKey : undefined,
     ANTHROPIC_API_KEY: record.provider === "anthropic" ? apiKey : undefined,
+    GEMINI_API_KEY: record.provider === "gemini" ? apiKey : undefined,
   };
 }

@@ -35,10 +35,12 @@ export type ConnectionStatus = {
   permissions?: { calendar: boolean; mailMetadata: boolean };
 };
 
+type AiProvider = "gemini" | "openai" | "anthropic";
+
 export type AiConnectionStatus = {
   configured: boolean;
   connected: boolean;
-  provider?: "openai" | "anthropic";
+  provider?: AiProvider;
   keyHint?: string;
   model?: string;
   verifiedAt?: string;
@@ -58,8 +60,8 @@ export function ConnectionWorkspace({
   const t = useTranslations("Connections");
   const [status, setStatus] = useState(initialStatus);
   const [aiStatus, setAiStatus] = useState(initialAiStatus);
-  const [aiProvider, setAiProvider] = useState<"openai" | "anthropic">(
-    initialAiStatus.provider ?? "openai",
+  const [aiProvider, setAiProvider] = useState<AiProvider>(
+    initialAiStatus.provider ?? "gemini",
   );
   const [apiKey, setApiKey] = useState("");
   const [aiAction, setAiAction] = useState<"connect" | "disconnect">();
@@ -259,9 +261,11 @@ export function ConnectionWorkspace({
               <div className="rounded-2xl border border-white/8 bg-black/10 p-5">
                 <p className="text-xs text-white/30">{t("aiConnectedWith")}</p>
                 <p className="mt-1 font-medium text-white/80">
-                  {aiStatus.provider === "anthropic"
-                    ? t("providerClaude")
-                    : t("providerOpenAi")}
+                  {aiStatus.provider === "gemini"
+                    ? t("providerGemini")
+                    : aiStatus.provider === "anthropic"
+                      ? t("providerClaude")
+                      : t("providerOpenAi")}
                   {aiStatus.keyHint ? (
                     <span className="text-white/40"> · {aiStatus.keyHint}</span>
                   ) : null}
@@ -288,25 +292,34 @@ export function ConnectionWorkspace({
             <div className="mt-6 grid gap-5 lg:grid-cols-[0.75fr_1.25fr]">
               <div>
                 <p className="text-xs text-white/35">{t("chooseProvider")}</p>
-                <div className="mt-2 grid grid-cols-2 gap-2">
-                  {(["openai", "anthropic"] as const).map((provider) => (
-                    <button
-                      key={provider}
-                      type="button"
-                      aria-pressed={aiProvider === provider}
-                      onClick={() => setAiProvider(provider)}
-                      className={
-                        aiProvider === provider
-                          ? "min-h-12 rounded-xl border border-[#e72d45]/55 bg-[#e72d45]/12 px-4 text-sm text-white transition"
-                          : "min-h-12 rounded-xl border border-white/10 px-4 text-sm text-white/40 transition hover:text-white"
-                      }
-                    >
-                      {provider === "openai"
-                        ? t("providerOpenAi")
-                        : t("providerClaude")}
-                    </button>
-                  ))}
+                <div className="mt-2 grid grid-cols-3 gap-2">
+                  {(["gemini", "openai", "anthropic"] as const).map(
+                    (provider) => (
+                      <button
+                        key={provider}
+                        type="button"
+                        aria-pressed={aiProvider === provider}
+                        onClick={() => setAiProvider(provider)}
+                        className={
+                          aiProvider === provider
+                            ? "min-h-12 rounded-xl border border-[#e72d45]/55 bg-[#e72d45]/12 px-4 text-sm text-white transition"
+                            : "min-h-12 rounded-xl border border-white/10 px-4 text-sm text-white/40 transition hover:text-white"
+                        }
+                      >
+                        {provider === "gemini"
+                          ? t("providerGemini")
+                          : provider === "openai"
+                            ? t("providerOpenAi")
+                            : t("providerClaude")}
+                      </button>
+                    ),
+                  )}
                 </div>
+                {aiProvider === "gemini" && (
+                  <p className="mt-2 text-xs text-emerald-200/55">
+                    {t("geminiFreeTier")}
+                  </p>
+                )}
               </div>
               <div>
                 <label htmlFor="ai-api-key" className="text-xs text-white/35">
@@ -347,9 +360,11 @@ export function ConnectionWorkspace({
                   <span>{t("aiPrivate")}</span>
                   <a
                     href={
-                      aiProvider === "openai"
-                        ? "https://platform.openai.com/api-keys"
-                        : "https://console.anthropic.com/settings/keys"
+                      aiProvider === "gemini"
+                        ? "https://aistudio.google.com/app/apikey"
+                        : aiProvider === "openai"
+                          ? "https://platform.openai.com/api-keys"
+                          : "https://console.anthropic.com/settings/keys"
                     }
                     target="_blank"
                     rel="noreferrer"
