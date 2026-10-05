@@ -523,6 +523,36 @@ type OpenAiResponse = {
   error?: { message?: string };
 };
 
+type TripPlannerErrorCode =
+  | "openai_auth"
+  | "openai_model"
+  | "openai_permission"
+  | "openai_quota"
+  | "openai_rate_limit"
+  | "openai_timeout"
+  | "openai_unavailable";
+
+export class TripPlannerServiceError extends Error {
+  constructor(
+    message: string,
+    readonly code: TripPlannerErrorCode,
+    readonly status: number,
+  ) {
+    super(message);
+    this.name = "TripPlannerServiceError";
+  }
+}
+
+class OpenAiResponseError extends Error {
+  constructor(
+    readonly status: number,
+    message: string,
+  ) {
+    super(message);
+    this.name = "OpenAiResponseError";
+  }
+}
+
 const unresolvedLocationPattern =
   /destination from (?:the )?natural[- ]language request|natural[- ]language (?:request|prompt)|user(?:'s)? (?:request|prompt)|specified (?:destination|region)|requested (?:destination|region)/i;
 
@@ -559,6 +589,65 @@ function readOpenAiSources(response: OpenAiResponse) {
   return (sources ?? []).slice(0, 8);
 }
 
+function toTripPlannerServiceError(error: unknown) {
+  const providerMessage =
+    error instanceof Error ? error.message : "OpenAI trip planning failed.";
+  const normalized = providerMessage.toLocaleLowerCase();
+  const providerStatus =
+    error instanceof OpenAiResponseError ? error.status : undefined;
+
+  if (/quota|billing|credit|insufficient_quota/.test(normalized))
+    return new TripPlannerServiceError(
+      "OpenAI API credits are unavailable. Add credits in OpenAI billing, then try again.",
+      "openai_quota",
+      402,
+    );
+  if (
+    providerStatus === 401 ||
+    /invalid api key|incorrect api key/.test(normalized)
+  )
+    return new TripPlannerServiceError(
+      "The OpenAI API key is invalid. Replace OPENAI_API_KEY in Netlify, then try again.",
+      "openai_auth",
+      503,
+    );
+  if (
+    providerStatus === 403 ||
+    /permission|not allowed|forbidden/.test(normalized)
+  )
+    return new TripPlannerServiceError(
+      "The OpenAI key cannot use the Responses API. Enable Responses write permission for this key.",
+      "openai_permission",
+      503,
+    );
+  if (/model.+(?:not found|does not exist|access)/.test(normalized))
+    return new TripPlannerServiceError(
+      "The configured OpenAI model is unavailable to this project. Check CAPCAR_TRIP_PLANNER_MODEL in Netlify.",
+      "openai_model",
+      503,
+    );
+  if (providerStatus === 429 || /rate limit/.test(normalized))
+    return new TripPlannerServiceError(
+      "OpenAI is rate-limiting trip planning. Wait a moment and try again.",
+      "openai_rate_limit",
+      429,
+    );
+  if (
+    error instanceof DOMException &&
+    ["AbortError", "TimeoutError"].includes(error.name)
+  )
+    return new TripPlannerServiceError(
+      "CapCar AI took too long to compose the route. Try again or choose exact places.",
+      "openai_timeout",
+      504,
+    );
+  return new TripPlannerServiceError(
+    "CapCar AI could not compose this route. Try again or choose exact places.",
+    "openai_unavailable",
+    503,
+  );
+}
+
 async function requestOpenAiPlan(
   request: TripPlannerRequest,
   context: ConnectedPlanningContext | undefined,
@@ -587,20 +676,31 @@ async function requestOpenAiPlan(
           prompt: request.prompt,
         };
 
-  async function generate(repairUnresolvedLocations = false) {
+  async function generate({
+    repairUnresolvedLocations = false,
+    useWebSearch = true,
+  }: {
+    repairUnresolvedLocations?: boolean;
+    useWebSearch?: boolean;
+  } = {}) {
+    const toolConfiguration = useWebSearch
+      ? {
+          tools: [{ type: "web_search", search_context_size: "low" }],
+          tool_choice: "auto",
+          include: ["web_search_call.action.sources"],
+        }
+      : {};
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
         authorization: `Bearer ${environment.OPENAI_API_KEY}`,
         "content-type": "application/json",
       },
-      signal: AbortSignal.timeout(35_000),
+      signal: AbortSignal.timeout(useWebSearch ? 28_000 : 25_000),
       body: JSON.stringify({
         model: status.model,
         store: false,
-        tools: [{ type: "web_search", search_context_size: "low" }],
-        tool_choice: "auto",
-        include: ["web_search_call.action.sources"],
+        ...toolConfiguration,
         reasoning: { effort: "low" },
         input: [
           {
@@ -644,28 +744,65 @@ async function requestOpenAiPlan(
     });
     const body = (await response.json()) as OpenAiResponse;
     if (!response.ok)
-      throw new Error(body.error?.message || "OpenAI trip planning failed.");
+      throw new OpenAiResponseError(
+        response.status,
+        body.error?.message || "OpenAI trip planning failed.",
+      );
     const generated = generatedTripPlanSchema.parse(
       JSON.parse(readOpenAiOutput(body)),
     );
     return { body, generated };
   }
 
-  let { body, generated } = await generate();
+  let body: OpenAiResponse;
+  let generated: z.infer<typeof generatedTripPlanSchema>;
+  try {
+    ({ body, generated } = await generate());
+  } catch (error) {
+    if (
+      error instanceof OpenAiResponseError &&
+      [401, 429].includes(error.status)
+    )
+      throw toTripPlannerServiceError(error);
+    try {
+      ({ body, generated } = await generate({ useWebSearch: false }));
+    } catch (fallbackError) {
+      throw toTripPlannerServiceError(fallbackError);
+    }
+  }
   if (hasUnresolvedLocations(generated)) {
-    ({ body, generated } = await generate(true));
+    try {
+      ({ body, generated } = await generate({
+        repairUnresolvedLocations: true,
+        useWebSearch: false,
+      }));
+    } catch (error) {
+      throw toTripPlannerServiceError(error);
+    }
   }
   if (hasUnresolvedLocations(generated))
-    throw new Error("OpenAI returned unresolved trip destinations.");
-  const datesMatch = generated.days.every(
-    (day, index) => day.date === addDays(request.startDate, index),
-  );
-  if (
-    generated.days.length !== request.duration ||
-    !datesMatch ||
-    generated.stops.some((stop) => stop.day > request.duration)
-  )
-    throw new Error("OpenAI returned a trip outside the requested dates.");
+    throw new TripPlannerServiceError(
+      "CapCar AI could not resolve every destination. Add city or country names, or choose exact places.",
+      "openai_unavailable",
+      422,
+    );
+  generated = {
+    ...generated,
+    days: generated.days.map((day, index) => ({
+      ...day,
+      date: addDays(request.startDate, index),
+    })),
+    stops: generated.stops.map((stop) => ({
+      ...stop,
+      day: Math.min(request.duration, Math.max(1, stop.day)),
+    })),
+  };
+  if (generated.days.length !== request.duration)
+    throw new TripPlannerServiceError(
+      "CapCar AI returned an incomplete itinerary. Try again or choose exact places.",
+      "openai_unavailable",
+      503,
+    );
   return tripPlanSchema.parse({
     ...generated,
     provider: status.providerName,

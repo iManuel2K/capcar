@@ -154,7 +154,42 @@ describe("trip planner", () => {
           OPENAI_API_KEY: "server-secret",
         },
       ),
-    ).rejects.toThrow("offline");
+    ).rejects.toThrow("could not compose this route");
+  });
+
+  it("surfaces missing OpenAI credits without exposing provider details", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        Response.json(
+          {
+            error: {
+              message:
+                "You exceeded your current quota. Check billing. insufficient_quota",
+            },
+          },
+          { status: 429 },
+        ),
+      ),
+    );
+
+    await expect(
+      planScenicTripWithFallback(
+        {
+          ...request,
+          inputMode: "prompt",
+          prompt: "Drive from Rüsselsheim through Mainz",
+        },
+        undefined,
+        {
+          CAPCAR_TRIP_PLANNER_MODE: "openai",
+          OPENAI_API_KEY: "server-secret",
+        },
+      ),
+    ).rejects.toMatchObject({
+      code: "openai_quota",
+      status: 402,
+    });
   });
 
   it("creates encoded route handoffs for all supported maps", () => {

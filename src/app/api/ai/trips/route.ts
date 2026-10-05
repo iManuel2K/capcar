@@ -4,6 +4,7 @@ import {
   getTripPlannerStatus,
   planScenicTrip,
   planScenicTripWithFallback,
+  TripPlannerServiceError,
   tripPlannerRequestSchema,
   type ConnectedPlanningContext,
 } from "@/features/trips/trip-planner";
@@ -79,6 +80,15 @@ export async function POST(request: Request) {
       headers: { "Cache-Control": "no-store" },
     });
   } catch (error) {
+    console.error("Trip planning request failed", error);
+    if (error instanceof TripPlannerServiceError)
+      return NextResponse.json(
+        { error: error.message, code: error.code },
+        {
+          status: error.status,
+          headers: { "Cache-Control": "no-store" },
+        },
+      );
     return productApiError(error, "Trip planning request failed.");
   }
 }
