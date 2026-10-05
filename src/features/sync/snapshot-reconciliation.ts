@@ -4,8 +4,7 @@ import {
   type LocalSnapshot,
 } from "@/features/sync/local-snapshot";
 
-export type SnapshotDecision =
-  "empty" | "use-local" | "use-remote" | "conflict";
+export type SnapshotDecision = "empty" | "use-local" | "use-remote";
 
 export function decideInitialSnapshot({
   currentUserId,
@@ -38,5 +37,8 @@ export function decideInitialSnapshot({
     return localChangedAt > remoteUpdatedAt ? "use-local" : "use-remote";
   }
 
-  return "conflict";
+  // The account snapshot is the durable source of truth. If CapCar cannot
+  // prove that this device contains newer changes, restore the cloud version
+  // instead of repeatedly asking the user to choose between two copies.
+  return "use-remote";
 }

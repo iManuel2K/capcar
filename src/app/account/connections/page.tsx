@@ -27,9 +27,11 @@ export const dynamic = "force-dynamic";
 export default async function ConnectionsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ connection?: string }>;
+  searchParams: Promise<{ connection?: string; next?: string }>;
 }) {
-  const { connection } = await searchParams;
+  const { connection, next } = await searchParams;
+  const returnTo =
+    next?.startsWith("/") && !next.startsWith("//") ? next : undefined;
   const setup = getGoogleConnectionStatus();
   let initialStatus: ConnectionStatus = {
     configured: setup.configured,
@@ -88,6 +90,7 @@ export default async function ConnectionsPage({
       connectionResult={connection}
       initialAiStatus={initialAiStatus}
       initialStatus={initialStatus}
+      returnTo={returnTo}
     />
   );
 }

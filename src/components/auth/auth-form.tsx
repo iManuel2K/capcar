@@ -90,13 +90,15 @@ export function AuthForm({
     try {
       const client = createClient();
       if (mode === "login") {
-        const { error: authError } = await client.auth.signInWithPassword({
-          email,
-          password,
-        });
+        const { data, error: authError } = await client.auth.signInWithPassword(
+          {
+            email,
+            password,
+          },
+        );
         if (authError) throw authError;
-        router.replace(safeNext());
-        router.refresh();
+        if (!data.session) throw new Error(t("errors.generic"));
+        window.location.replace(safeNext());
       }
 
       if (mode === "register") {
@@ -110,8 +112,7 @@ export function AuthForm({
         });
         if (authError) throw authError;
         if (data.session) {
-          router.replace("/garage");
-          router.refresh();
+          window.location.replace("/garage");
         } else {
           setMessage(t("messages.created"));
         }

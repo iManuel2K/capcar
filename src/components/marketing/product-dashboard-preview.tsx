@@ -6,10 +6,14 @@ import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowRight,
+  CalendarCheck,
+  CarFront,
   Check,
   CircleHelp,
-  FileText,
+  IdCard,
+  QrCode,
   RotateCcw,
+  ShieldCheck,
 } from "lucide-react";
 import { BuildTransformation } from "./build-transformation";
 import styles from "./launch.module.css";
@@ -390,71 +394,42 @@ export function ProductDashboardPreview() {
             )}
             {view === "history" && (
               <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-                <div className={styles.panel}>
-                  <div className="flex items-center gap-3">
-                    <FileText className="size-6" aria-hidden="true" />
-                    <h3 className="text-2xl">{t("demo.historyTitle")}</h3>
-                  </div>
-                  <p className={`${styles.label} mt-3`}>
-                    {t("demo.historyNote")}
-                  </p>
-                  <ol className="mt-5 space-y-5 border-l border-[#0e2d30]/25 pl-5 text-sm">
-                    <li>
-                      <span className="font-mono text-xs text-[#4b6260]">
-                        01
-                      </span>
-                      <p className="mt-1">{t("demo.entryOne")}</p>
-                    </li>
-                    <li>
-                      <span className="font-mono text-xs text-[#4b6260]">
-                        02
-                      </span>
-                      <p className="mt-1">{t("demo.entryTwo")}</p>
-                    </li>
-                    {planned.map((item, index) => (
-                      <li key={item.modification}>
-                        <span className="font-mono text-xs text-[#4b6260]">
-                          {String(index + 3).padStart(2, "0")}
-                        </span>
-                        <p className="mt-1 font-medium">
-                          {t(`demo.${item.modification}`)} ·{" "}
-                          {currency(item.amount + (item.shipping ?? 0))}
-                          {item.shipping === null ? " + ?" : ""}
-                        </p>
-                        <p className={`${styles.label} mt-1`}>
-                          {t("demo.record")}
-                        </p>
-                        <button
-                          type="button"
-                          className={`${styles.link} mt-1`}
-                          onClick={() =>
-                            setPlanned((items) =>
-                              items.filter(
-                                (entry) =>
-                                  entry.modification !== item.modification,
-                              ),
-                            )
-                          }
-                        >
-                          {t("demo.remove")}
-                        </button>
-                      </li>
-                    ))}
-                  </ol>
-                  {planned.length === 0 && (
-                    <p className="mt-5 text-sm">{t("demo.empty")}</p>
-                  )}
-                  <details className="mt-5 border-t border-[#0e2d30]/20 pt-3">
-                    <summary className="min-h-11 cursor-pointer py-2 text-sm font-medium">
-                      {t("demo.evidence")}
-                    </summary>
-                    <p className={`${styles.label} pb-2`}>
-                      {t("demo.evidenceText")}
-                    </p>
-                  </details>
-                </div>
+                <DemoVehiclePassport plannedCount={planned.length} />
                 <div>
                   {renderBudget()}
+                  {planned.length > 0 && (
+                    <ul className="mt-4 space-y-3">
+                      {planned.map((item) => (
+                        <li
+                          key={item.modification}
+                          className="rounded-xl border border-white/15 p-4 text-sm"
+                        >
+                          <p className="font-medium">
+                            {t(`demo.${item.modification}`)} ·{" "}
+                            {currency(item.amount + (item.shipping ?? 0))}
+                            {item.shipping === null ? " + ?" : ""}
+                          </p>
+                          <p className="mt-1 text-xs text-[#bfcac5]">
+                            {t("demo.record")}
+                          </p>
+                          <button
+                            type="button"
+                            className={`${styles.link} mt-2`}
+                            onClick={() =>
+                              setPlanned((items) =>
+                                items.filter(
+                                  (entry) =>
+                                    entry.modification !== item.modification,
+                                ),
+                              )
+                            }
+                          >
+                            {t("demo.remove")}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   <button
                     className={`${styles.secondary} mt-5`}
                     type="button"
@@ -524,6 +499,114 @@ export function ProductDashboardPreview() {
       </div>
     );
   }
+}
+
+function DemoVehiclePassport({ plannedCount }: { plannedCount: number }) {
+  const t = useTranslations("Launch");
+  return (
+    <article className="overflow-hidden rounded-2xl border border-white/10 bg-[#e8e6d7] text-[#0e2d30] shadow-[0_24px_70px_rgba(0,0,0,.25)]">
+      <div className="grid min-h-[390px] lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="p-5 sm:p-7">
+          <div className="flex items-center justify-between gap-4 border-b border-[#0e2d30]/10 pb-4">
+            <span className="text-[10px] font-semibold tracking-[0.18em]">
+              CAPCAR
+            </span>
+            <span className="rounded-full border border-[#6d0101]/15 bg-[#6d0101]/5 px-3 py-1 text-[9px] font-semibold tracking-[0.12em] text-[#6d0101] uppercase">
+              {t("demo.passport.badge")}
+            </span>
+          </div>
+          <p className="mt-6 text-[10px] font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
+            {t("demo.passport.eyebrow")}
+          </p>
+          <h3 className="mt-2 text-3xl font-medium tracking-[-0.05em] sm:text-4xl">
+            2011 BMW 318i
+          </h3>
+          <p className="mt-2 text-sm text-[#405856]">E90 · N43B20 · Manual</p>
+
+          <dl className="mt-7 grid gap-4 sm:grid-cols-2">
+            <PassportField
+              icon={IdCard}
+              label={t("demo.passport.vin")}
+              value="•••••••••••23860"
+            />
+            <PassportField
+              icon={CarFront}
+              label={t("demo.passport.mileage")}
+              value="132,000 km"
+            />
+            <PassportField
+              icon={CalendarCheck}
+              label={t("demo.passport.inspection")}
+              value="01/09/2027"
+            />
+            <PassportField
+              icon={ShieldCheck}
+              label={t("demo.passport.insurance")}
+              value={t("demo.passport.notRecorded")}
+            />
+          </dl>
+
+          <div className="mt-6 rounded-xl border border-dashed border-[#0e2d30]/15 px-4 py-3 text-xs text-[#405856]">
+            {plannedCount > 0
+              ? t("demo.passport.planned", { count: plannedCount })
+              : t("demo.passport.private")}
+          </div>
+        </div>
+
+        <div className="relative min-h-64 overflow-hidden bg-[#071519]">
+          <Image
+            src="/capcar-hero-bmw-e90.jpeg"
+            alt={t("demo.passport.photoAlt")}
+            fill
+            sizes="(min-width: 1024px) 35vw, 100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#071519] via-transparent to-transparent" />
+          <div className="absolute right-4 bottom-4 left-4 flex items-end justify-between gap-4 text-white">
+            <div>
+              <p className="text-[9px] font-semibold tracking-[0.14em] text-white/50 uppercase">
+                {t("demo.passport.live")}
+              </p>
+              <p className="mt-1 max-w-48 text-xs leading-5 text-white/70">
+                {t("demo.passport.scan")}
+              </p>
+            </div>
+            <span className="grid size-14 shrink-0 place-items-center rounded-xl bg-white text-[#0e2d30]">
+              <QrCode className="size-9" aria-hidden="true" />
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-wrap justify-between gap-2 border-t border-[#0e2d30]/10 px-5 py-3 text-[9px] text-[#405856] sm:px-7">
+        <span>{t("demo.passport.footer")}</span>
+        <span>{t("demo.passport.verify")}</span>
+      </div>
+    </article>
+  );
+}
+
+function PassportField({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: typeof IdCard;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#0e2d30]/6 text-[#6d0101]">
+        <Icon className="size-4" aria-hidden="true" />
+      </span>
+      <div className="min-w-0">
+        <dt className="text-[8px] font-semibold tracking-[0.12em] text-[#405856]/65 uppercase">
+          {label}
+        </dt>
+        <dd className="mt-1 truncate text-xs font-medium">{value}</dd>
+      </div>
+    </div>
+  );
 }
 function Row({ label, value }: { label: string; value: string }) {
   return (

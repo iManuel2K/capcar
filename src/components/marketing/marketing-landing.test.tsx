@@ -33,15 +33,7 @@ describe("the connected homepage example", () => {
     ).toBeInTheDocument();
     expect(screen.queryByText("Verified builder")).not.toBeInTheDocument();
     expect(screen.getByText("Beta · Operational")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Play CapCar in 60 seconds" }),
-    ).toBeInTheDocument();
-    const walkthrough = document.querySelector("video");
-    expect(walkthrough).toHaveAttribute("preload", "none");
-    expect(walkthrough).toHaveAttribute(
-      "poster",
-      "/walkthrough/capcar-walkthrough-poster.webp",
-    );
+    expect(document.querySelector("video")).not.toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "Skip to main content" }),
     ).toHaveAttribute("href", "#main-content");
@@ -71,6 +63,8 @@ describe("the connected homepage example", () => {
       screen.getByRole("button", { name: "Add to the example plan" }),
     ).toBeDisabled();
     fireEvent.click(screen.getByRole("tab", { name: "Vehicle Passport" }));
+    expect(screen.getByText("Digital vehicle passport")).toBeInTheDocument();
+    expect(screen.getAllByText("2011 BMW 318i").length).toBeGreaterThan(0);
     expect(
       screen.getByText("Planned part · Not installed"),
     ).toBeInTheDocument();
@@ -128,7 +122,7 @@ describe("the connected homepage example", () => {
     expect(
       screen.getByRole("tab", { name: "Vehicle Passport" }),
     ).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByText("A record worth keeping.")).toBeInTheDocument();
+    expect(screen.getByText("Digital vehicle passport")).toBeInTheDocument();
   });
 
   it("uses a native comparison range and a working mobile menu", () => {
