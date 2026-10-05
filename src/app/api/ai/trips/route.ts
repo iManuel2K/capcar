@@ -11,6 +11,10 @@ import {
 import { getGoogleConnectionStatus } from "@/features/connections/google-connection";
 import { getGoogleConnection } from "@/features/connections/google-store";
 import {
+  getAiConnection,
+  tripPlannerEnvironmentForConnection,
+} from "@/features/connections/ai-connection";
+import {
   guardProductApi,
   isSameOriginRequest,
   productApiError,
@@ -30,7 +34,18 @@ export async function POST(request: Request) {
   try {
     const input = await readJsonRequest(request, tripPlannerRequestSchema);
     const user = await currentUser();
-    const planner = getTripPlannerStatus();
+    const admin = user ? createAdminClient() : undefined;
+    const aiConnection =
+      user && admin ? await getAiConnection(admin, user.id) : null;
+    const plannerEnvironment = aiConnection
+      ? tripPlannerEnvironmentForConnection(aiConnection)
+      : {
+          ...process.env,
+          CAPCAR_TRIP_PLANNER_MODE: "deterministic",
+          OPENAI_API_KEY: undefined,
+          ANTHROPIC_API_KEY: undefined,
+        };
+    const planner = getTripPlannerStatus(plannerEnvironment);
     if (user) {
       const guard = await guardProductApi("trip-planner", { limit: 10 });
       if (!guard.ok) return guard.response;
@@ -41,10 +56,7 @@ export async function POST(request: Request) {
       user &&
       getGoogleConnectionStatus().configured
     ) {
-      const connection = await getGoogleConnection(
-        createAdminClient(),
-        user.id,
-      );
+      const connection = await getGoogleConnection(admin!, user.id);
       if (connection?.sync_summary) {
         context = {
           busyDates: connection.sync_summary.busyDates ?? [],
@@ -52,17 +64,22 @@ export async function POST(request: Request) {
         };
       }
     }
-    if (
-      planner.mode !== "deterministic" &&
-      !user &&
-      input.inputMode === "prompt"
-    )
+    if (!user && input.inputMode === "prompt")
       return NextResponse.json(
         {
           error:
             "Sign in for natural-language AI planning, or choose exact places for a route preview.",
         },
         { status: 401, headers: { "Cache-Control": "no-store" } },
+      );
+    if (user && !aiConnection && input.inputMode === "prompt")
+      return NextResponse.json(
+        {
+          error:
+            "Connect your OpenAI or Claude API key to plan with your own AI credits.",
+          code: "ai_connection_required",
+        },
+        { status: 409, headers: { "Cache-Control": "no-store" } },
       );
     const plan =
       planner.mode !== "deterministic" && !user
@@ -75,7 +92,7 @@ export async function POST(request: Request) {
               "Sign in to use live AI research and connected planning. This preview uses CapCar's route composer.",
             ],
           }
-        : await planScenicTripWithFallback(input, context);
+        : await planScenicTripWithFallback(input, context, plannerEnvironment);
     return NextResponse.json(plan, {
       headers: { "Cache-Control": "no-store" },
     });

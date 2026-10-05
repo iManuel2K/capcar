@@ -125,6 +125,49 @@ describe("trip planner", () => {
     expect(plan.mapLinks.google).toContain("google.com/maps/dir");
   });
 
+  it("uses a connected Claude key for a structured trip plan", async () => {
+    const fallback = await planScenicTrip(request);
+    const generated = JSON.parse(JSON.stringify(fallback)) as Record<
+      string,
+      unknown
+    >;
+    for (const key of ["provider", "source", "researchSources", "mapLinks"])
+      delete generated[key];
+    const fetchMock = vi.fn(
+      async (input: RequestInfo | URL, init?: RequestInit) => {
+        expect(input).toBe("https://api.anthropic.com/v1/messages");
+        expect(new Headers(init?.headers).get("x-api-key")).toBe(
+          "user-claude-secret",
+        );
+        const requestBody = JSON.parse(String(init?.body)) as {
+          tools: Array<{ name: string; input_schema: unknown }>;
+        };
+        expect(requestBody.tools[0].name).toBe("save_trip_plan");
+        return Response.json({
+          content: [
+            {
+              type: "tool_use",
+              name: "save_trip_plan",
+              input: generated,
+            },
+          ],
+        });
+      },
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const plan = await planScenicTrip(request, undefined, {
+      CAPCAR_TRIP_PLANNER_MODE: "anthropic",
+      CAPCAR_TRIP_PLANNER_PROVIDER_NAME: "Your Claude",
+      CAPCAR_ANTHROPIC_TRIP_PLANNER_MODEL: "claude-sonnet-4-5-20250929",
+      ANTHROPIC_API_KEY: "user-claude-secret",
+    });
+
+    expect(plan.source).toBe("anthropic");
+    expect(plan.provider).toBe("Your Claude");
+    expect(plan.researchSources).toEqual([]);
+  });
+
   it("returns a usable route draft when the live planner is unavailable", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
 

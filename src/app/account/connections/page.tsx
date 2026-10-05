@@ -2,8 +2,14 @@ import type { Metadata } from "next";
 
 import {
   ConnectionWorkspace,
+  type AiConnectionStatus,
   type ConnectionStatus,
 } from "@/components/account/connection-workspace";
+import {
+  connectionStatus,
+  getAiConnection,
+  getAiConnectionSetup,
+} from "@/features/connections/ai-connection";
 import {
   getGoogleConnectionStatus,
   GOOGLE_OAUTH_SCOPES,
@@ -30,9 +36,26 @@ export default async function ConnectionsPage({
     connected: false,
     message: setup.message,
   };
+  const aiSetup = getAiConnectionSetup();
+  let initialAiStatus: AiConnectionStatus = {
+    configured: aiSetup.configured,
+    connected: false,
+  };
+  const user = await currentUser();
+  if (aiSetup.configured && user) {
+    try {
+      initialAiStatus = connectionStatus(
+        await getAiConnection(createAdminClient(), user.id),
+      );
+    } catch {
+      initialAiStatus = {
+        configured: true,
+        connected: false,
+      };
+    }
+  }
   if (setup.configured) {
     try {
-      const user = await currentUser();
       const record = user
         ? await getGoogleConnection(createAdminClient(), user.id)
         : null;
@@ -63,6 +86,7 @@ export default async function ConnectionsPage({
   return (
     <ConnectionWorkspace
       connectionResult={connection}
+      initialAiStatus={initialAiStatus}
       initialStatus={initialStatus}
     />
   );
