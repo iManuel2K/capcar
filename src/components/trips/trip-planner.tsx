@@ -50,6 +50,12 @@ type PlannerConnectionStatus = {
   lastSyncedAt?: string | null;
 };
 
+type AiPlannerConnectionStatus = {
+  configured: boolean;
+  connected: boolean;
+  provider?: "openai" | "anthropic";
+};
+
 const interestOptions = [
   "roads",
   "food",
@@ -250,6 +256,7 @@ export function TripPlanner() {
   const [routeLoading, setRouteLoading] = useState(false);
   const [routeError, setRouteError] = useState("");
   const [connection, setConnection] = useState<PlannerConnectionStatus>();
+  const [aiConnection, setAiConnection] = useState<AiPlannerConnectionStatus>();
   const [loading, setLoading] = useState(false);
   const [calendarLoading, setCalendarLoading] = useState(false);
   const [error, setError] = useState("");
@@ -267,6 +274,18 @@ export function TripPlanner() {
       })
       .then((status) => {
         if (status) setConnection(status);
+      })
+      .catch(() => undefined);
+    void fetch("/api/connections/ai", {
+      signal: controller.signal,
+      cache: "no-store",
+    })
+      .then(async (response) => {
+        if (!response.ok) return undefined;
+        return (await response.json()) as AiPlannerConnectionStatus;
+      })
+      .then((status) => {
+        if (status) setAiConnection(status);
       })
       .catch(() => undefined);
     return () => controller.abort();
@@ -655,6 +674,40 @@ export function TripPlanner() {
               </span>
             </label>
 
+            {aiConnection ? (
+              <div
+                className={
+                  aiConnection.connected
+                    ? "mt-3 flex items-center justify-between gap-3 rounded-2xl border border-emerald-200/15 bg-emerald-200/6 p-4"
+                    : "mt-3 flex items-center justify-between gap-3 rounded-2xl border border-[#ff7d75]/20 bg-[#ff7d75]/8 p-4"
+                }
+              >
+                <div className="flex items-center gap-3">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/8 text-[#ff938c]">
+                    <Sparkles className="size-4" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium">
+                      {aiConnection.connected
+                        ? `${aiConnection.provider === "anthropic" ? "Claude" : "OpenAI"} connected`
+                        : "Connect your AI"}
+                    </p>
+                    <p className="mt-1 text-xs leading-5 text-white/40">
+                      {aiConnection.connected
+                        ? "This plan uses your own API credits."
+                        : "Connect OpenAI or Claude to generate routes with your own credits."}
+                    </p>
+                  </div>
+                </div>
+                <Link
+                  href="/account/connections"
+                  className="shrink-0 text-xs font-semibold text-[#ff9b94] underline underline-offset-2"
+                >
+                  {aiConnection.connected ? "Manage" : "Connect"}
+                </Link>
+              </div>
+            ) : null}
+
             <button
               type="button"
               disabled={
@@ -663,6 +716,9 @@ export function TripPlanner() {
                 (inputMode === "prompt"
                   ? prompt.trim().length < 2
                   : places.filter((place) => place.trim()).length < 2) ||
+                (inputMode === "prompt" &&
+                  aiConnection?.configured === true &&
+                  !aiConnection.connected) ||
                 !effectiveStartDate
               }
               onClick={() => void createPlan()}
@@ -689,7 +745,7 @@ export function TripPlanner() {
                       {plan.provider} ·{" "}
                       {plan.researchSources.length
                         ? "web-grounded"
-                        : plan.source === "openai"
+                        : ["openai", "anthropic"].includes(plan.source)
                           ? "AI composed"
                           : "planning draft"}
                     </p>

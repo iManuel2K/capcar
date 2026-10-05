@@ -4,8 +4,10 @@ import {
   AlertTriangle,
   ArrowLeft,
   ArrowRight,
+  Bot,
   CalendarDays,
   CheckCircle2,
+  KeyRound,
   Link2,
   LoaderCircle,
   Mail,
@@ -33,15 +35,32 @@ export type ConnectionStatus = {
   permissions?: { calendar: boolean; mailMetadata: boolean };
 };
 
+export type AiConnectionStatus = {
+  configured: boolean;
+  connected: boolean;
+  provider?: "openai" | "anthropic";
+  keyHint?: string;
+  model?: string;
+  verifiedAt?: string;
+};
+
 export function ConnectionWorkspace({
   connectionResult,
+  initialAiStatus,
   initialStatus,
 }: {
   connectionResult?: string;
+  initialAiStatus: AiConnectionStatus;
   initialStatus: ConnectionStatus;
 }) {
   const t = useTranslations("Connections");
   const [status, setStatus] = useState(initialStatus);
+  const [aiStatus, setAiStatus] = useState(initialAiStatus);
+  const [aiProvider, setAiProvider] = useState<"openai" | "anthropic">(
+    initialAiStatus.provider ?? "openai",
+  );
+  const [apiKey, setApiKey] = useState("");
+  const [aiAction, setAiAction] = useState<"connect" | "disconnect">();
   const [action, setAction] = useState<"sync" | "disconnect">();
   const [message, setMessage] = useState(() =>
     connectionResult === "connected" ? t("connectedMessage") : "",
@@ -119,6 +138,57 @@ export function ConnectionWorkspace({
     }
   }
 
+  async function connectAi() {
+    if (!apiKey.trim()) return;
+    setAiAction("connect");
+    setError("");
+    setMessage("");
+    try {
+      const response = await fetch("/api/connections/ai", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ provider: aiProvider, apiKey: apiKey.trim() }),
+      });
+      const body = (await response.json()) as AiConnectionStatus & {
+        error?: string;
+      };
+      if (!response.ok) throw new Error(body.error || t("errors.aiConnect"));
+      setAiStatus(body);
+      setApiKey("");
+      setMessage(t("aiConnectedMessage"));
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : t("errors.aiConnect"),
+      );
+    } finally {
+      setAiAction(undefined);
+    }
+  }
+
+  async function disconnectAi() {
+    if (!window.confirm(t("aiDisconnectConfirm"))) return;
+    setAiAction("disconnect");
+    setError("");
+    setMessage("");
+    try {
+      const response = await fetch("/api/connections/ai", {
+        method: "DELETE",
+      });
+      const body = (await response.json()) as AiConnectionStatus & {
+        error?: string;
+      };
+      if (!response.ok) throw new Error(body.error || t("errors.aiDisconnect"));
+      setAiStatus(body);
+      setMessage(t("aiDisconnectedMessage"));
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : t("errors.aiDisconnect"),
+      );
+    } finally {
+      setAiAction(undefined);
+    }
+  }
+
   return (
     <main className="min-h-dvh bg-[#0b0e0c] px-4 py-10 text-[#f4f5f2] sm:px-7 sm:py-16">
       <div className="mx-auto max-w-5xl">
@@ -147,6 +217,148 @@ export function ConnectionWorkspace({
             {t("description")}
           </p>
         </header>
+
+        <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
+          <div className="flex flex-wrap items-start justify-between gap-5">
+            <div className="flex items-start gap-3">
+              <div className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/12">
+                <Bot className="size-5 text-[#ff667a]" />
+              </div>
+              <div>
+                <p className="text-xs text-white/30">{t("aiEyebrow")}</p>
+                <h2 className="mt-1 text-2xl font-medium">{t("aiTitle")}</h2>
+              </div>
+            </div>
+            <span
+              className={
+                aiStatus.connected
+                  ? "rounded-full border border-emerald-300/20 bg-emerald-300/8 px-3 py-1.5 text-[10px] text-emerald-200 uppercase"
+                  : "rounded-full border border-white/10 px-3 py-1.5 text-[10px] text-white/35 uppercase"
+              }
+            >
+              {aiStatus.connected ? t("connected") : t("notConnected")}
+            </span>
+          </div>
+
+          <p className="mt-5 max-w-3xl text-sm leading-6 text-white/40">
+            {t("aiDescription")}
+          </p>
+
+          {!aiStatus.configured ? (
+            <div className="mt-6 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm text-amber-100/75">
+              <p className="flex gap-2">
+                <AlertTriangle className="size-4 shrink-0" />
+                {t("aiSetupRequired")}
+              </p>
+            </div>
+          ) : aiStatus.connected ? (
+            <div className="mt-6 grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
+              <div className="rounded-2xl border border-white/8 bg-black/10 p-5">
+                <p className="text-xs text-white/30">{t("aiConnectedWith")}</p>
+                <p className="mt-1 font-medium text-white/80">
+                  {aiStatus.provider === "anthropic"
+                    ? t("providerClaude")
+                    : t("providerOpenAi")}
+                  {aiStatus.keyHint ? (
+                    <span className="text-white/40"> · {aiStatus.keyHint}</span>
+                  ) : null}
+                </p>
+                <p className="mt-2 text-xs text-white/30">
+                  {t("aiUsesCredits")}
+                </p>
+              </div>
+              <button
+                type="button"
+                disabled={Boolean(aiAction)}
+                onClick={() => void disconnectAi()}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/45 hover:text-white disabled:opacity-40"
+              >
+                {aiAction === "disconnect" ? (
+                  <LoaderCircle className="size-4 animate-spin" />
+                ) : (
+                  <Trash2 className="size-4" />
+                )}
+                {t("disconnect")}
+              </button>
+            </div>
+          ) : (
+            <div className="mt-6 grid gap-5 lg:grid-cols-[0.75fr_1.25fr]">
+              <div>
+                <p className="text-xs text-white/35">{t("chooseProvider")}</p>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  {(["openai", "anthropic"] as const).map((provider) => (
+                    <button
+                      key={provider}
+                      type="button"
+                      aria-pressed={aiProvider === provider}
+                      onClick={() => setAiProvider(provider)}
+                      className={
+                        aiProvider === provider
+                          ? "min-h-12 rounded-xl border border-[#e72d45]/55 bg-[#e72d45]/12 px-4 text-sm text-white transition"
+                          : "min-h-12 rounded-xl border border-white/10 px-4 text-sm text-white/40 transition hover:text-white"
+                      }
+                    >
+                      {provider === "openai"
+                        ? t("providerOpenAi")
+                        : t("providerClaude")}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label htmlFor="ai-api-key" className="text-xs text-white/35">
+                  {t("apiKey")}
+                </label>
+                <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+                  <div className="relative flex-1">
+                    <KeyRound className="absolute top-1/2 left-4 size-4 -translate-y-1/2 text-white/25" />
+                    <input
+                      id="ai-api-key"
+                      type="password"
+                      value={apiKey}
+                      onChange={(event) => setApiKey(event.target.value)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter") void connectAi();
+                      }}
+                      autoComplete="off"
+                      spellCheck={false}
+                      placeholder={t("apiKeyPlaceholder")}
+                      className="min-h-12 w-full rounded-xl border border-white/10 bg-black/20 pr-4 pl-11 text-sm text-white outline-none placeholder:text-white/20 focus:border-[#e72d45]/55"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    disabled={Boolean(aiAction) || apiKey.trim().length < 20}
+                    onClick={() => void connectAi()}
+                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-white disabled:opacity-40"
+                  >
+                    {aiAction === "connect" ? (
+                      <LoaderCircle className="size-4 animate-spin" />
+                    ) : (
+                      <ShieldCheck className="size-4" />
+                    )}
+                    {t("connectAi")}
+                  </button>
+                </div>
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-white/30">
+                  <span>{t("aiPrivate")}</span>
+                  <a
+                    href={
+                      aiProvider === "openai"
+                        ? "https://platform.openai.com/api-keys"
+                        : "https://console.anthropic.com/settings/keys"
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#ff8b9b] hover:text-white"
+                  >
+                    {t("getApiKey")} →
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
 
         <section className="mt-5 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
           <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
