@@ -112,4 +112,15 @@ describe("proxy public Passport guard", () => {
       ).status,
     ).toBe(503);
   });
+
+  it("requires an account before opening CapCar AI", async () => {
+    const response = await proxy(
+      new NextRequest("https://capcar.example/ai?from=header"),
+    );
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "https://capcar.example/login?next=%2Fai%3Ffrom%3Dheader",
+    );
+  });
 });

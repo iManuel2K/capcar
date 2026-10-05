@@ -48,10 +48,12 @@ export function ConnectionWorkspace({
   connectionResult,
   initialAiStatus,
   initialStatus,
+  returnTo,
 }: {
   connectionResult?: string;
   initialAiStatus: AiConnectionStatus;
   initialStatus: ConnectionStatus;
+  returnTo?: string;
 }) {
   const t = useTranslations("Connections");
   const [status, setStatus] = useState(initialStatus);
@@ -156,6 +158,7 @@ export function ConnectionWorkspace({
       setAiStatus(body);
       setApiKey("");
       setMessage(t("aiConnectedMessage"));
+      if (returnTo) window.location.replace(returnTo);
     } catch (caught) {
       setError(
         caught instanceof Error ? caught.message : t("errors.aiConnect"),

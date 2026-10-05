@@ -17,7 +17,6 @@ import { MarketingHero } from "@/components/marketing/marketing-hero";
 import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { VisionRoadmapSection } from "@/components/marketing/vision-roadmap-section";
-import { CapcarStory } from "@/components/marketing/capcar-story";
 
 export function MarketingLanding() {
   const t = useTranslations("Home");
@@ -26,7 +25,6 @@ export function MarketingLanding() {
     <div className="min-h-dvh overflow-hidden bg-[#e8e6d7] text-[#0e2d30]">
       <main id="main-content">
         <MarketingHero />
-        <CapcarStory />
         <ProductDashboardPreview />
         <FitmentSection />
 

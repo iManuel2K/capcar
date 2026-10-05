@@ -228,7 +228,11 @@ function RouteStopGallery({ route }: { route: TripRoute }) {
   );
 }
 
-export function TripPlanner() {
+export function TripPlanner({
+  initialAiConnection,
+}: {
+  initialAiConnection?: AiPlannerConnectionStatus;
+}) {
   const t = useTranslations("AIPlanner");
   const [vehicle, setVehicle] = useState("2011 BMW E90 318i");
   const [inputMode, setInputMode] = useState<"prompt" | "places">("prompt");
@@ -256,7 +260,9 @@ export function TripPlanner() {
   const [routeLoading, setRouteLoading] = useState(false);
   const [routeError, setRouteError] = useState("");
   const [connection, setConnection] = useState<PlannerConnectionStatus>();
-  const [aiConnection, setAiConnection] = useState<AiPlannerConnectionStatus>();
+  const [aiConnection, setAiConnection] = useState<
+    AiPlannerConnectionStatus | undefined
+  >(initialAiConnection);
   const [loading, setLoading] = useState(false);
   const [calendarLoading, setCalendarLoading] = useState(false);
   const [error, setError] = useState("");

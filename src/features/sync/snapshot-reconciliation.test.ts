@@ -32,7 +32,7 @@ describe("snapshot reconciliation", () => {
     ).toBe("use-local");
   });
 
-  it("asks before choosing between two unknown versions", () => {
+  it("uses the cloud copy when neither version has trusted timestamps", () => {
     expect(
       decideInitialSnapshot({
         currentUserId: "user-1",
@@ -40,7 +40,7 @@ describe("snapshot reconciliation", () => {
         local: snapshot({ vehicles: "[1]" }),
         remote: snapshot({ vehicles: "[2]" }),
       }),
-    ).toBe("conflict");
+    ).toBe("use-remote");
   });
 
   it("uses the newest known version", () => {
