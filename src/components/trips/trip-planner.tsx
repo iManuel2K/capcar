@@ -53,7 +53,7 @@ type PlannerConnectionStatus = {
 type AiPlannerConnectionStatus = {
   configured: boolean;
   connected: boolean;
-  provider?: "openai" | "anthropic";
+  provider?: "gemini" | "openai" | "anthropic";
 };
 
 const interestOptions = [
@@ -695,13 +695,19 @@ export function TripPlanner({
                   <div>
                     <p className="text-sm font-medium">
                       {aiConnection.connected
-                        ? `${aiConnection.provider === "anthropic" ? "Claude" : "OpenAI"} connected`
+                        ? `${
+                            aiConnection.provider === "gemini"
+                              ? "Gemini"
+                              : aiConnection.provider === "anthropic"
+                                ? "Claude"
+                                : "OpenAI"
+                          } connected`
                         : "Connect your AI"}
                     </p>
                     <p className="mt-1 text-xs leading-5 text-white/40">
                       {aiConnection.connected
                         ? "This plan uses your own API credits."
-                        : "Connect OpenAI or Claude to generate routes with your own credits."}
+                        : "Connect Gemini, OpenAI or Claude to generate routes with your own provider."}
                     </p>
                   </div>
                 </div>
@@ -751,7 +757,9 @@ export function TripPlanner({
                       {plan.provider} ·{" "}
                       {plan.researchSources.length
                         ? "web-grounded"
-                        : ["openai", "anthropic"].includes(plan.source)
+                        : ["gemini", "openai", "anthropic"].includes(
+                              plan.source,
+                            )
                           ? "AI composed"
                           : "planning draft"}
                     </p>

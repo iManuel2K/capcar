@@ -62,7 +62,13 @@ const mapLinksSchema = z.object({
 
 export const tripPlanSchema = z.object({
   provider: z.string(),
-  source: z.enum(["deterministic", "openai", "anthropic", "external"]),
+  source: z.enum([
+    "deterministic",
+    "gemini",
+    "openai",
+    "anthropic",
+    "external",
+  ]),
   title: z.string().min(1).max(140),
   summary: z.string().min(1).max(700),
   distanceKm: z.number().int().min(0).max(3500),
@@ -99,6 +105,7 @@ export function getTripPlannerStatus(
 ) {
   const requestedMode = environment.CAPCAR_TRIP_PLANNER_MODE;
   const mode =
+    requestedMode === "gemini" ||
     requestedMode === "openai" ||
     requestedMode === "anthropic" ||
     requestedMode === "external"
@@ -108,30 +115,37 @@ export function getTripPlannerStatus(
     mode,
     configured:
       mode === "deterministic" ||
-      (mode === "openai"
-        ? Boolean(environment.OPENAI_API_KEY)
-        : mode === "anthropic"
-          ? Boolean(environment.ANTHROPIC_API_KEY)
-          : Boolean(
-              environment.CAPCAR_TRIP_PLANNER_ENDPOINT &&
-              environment.CAPCAR_TRIP_PLANNER_API_KEY,
-            )),
+      (mode === "gemini"
+        ? Boolean(environment.GEMINI_API_KEY)
+        : mode === "openai"
+          ? Boolean(environment.OPENAI_API_KEY)
+          : mode === "anthropic"
+            ? Boolean(environment.ANTHROPIC_API_KEY)
+            : Boolean(
+                environment.CAPCAR_TRIP_PLANNER_ENDPOINT &&
+                environment.CAPCAR_TRIP_PLANNER_API_KEY,
+              )),
     providerName:
       environment.CAPCAR_TRIP_PLANNER_PROVIDER_NAME ||
-      (mode === "openai"
-        ? "CapCar AI · OpenAI"
-        : mode === "anthropic"
-          ? "CapCar AI · Claude"
-          : mode === "external"
-            ? "External AI planner"
-            : "CapCar route composer"),
+      (mode === "gemini"
+        ? "CapCar AI · Gemini"
+        : mode === "openai"
+          ? "CapCar AI · OpenAI"
+          : mode === "anthropic"
+            ? "CapCar AI · Claude"
+            : mode === "external"
+              ? "External AI planner"
+              : "CapCar route composer"),
     model:
-      mode === "openai"
-        ? environment.CAPCAR_TRIP_PLANNER_MODEL || "gpt-5.4-mini"
-        : mode === "anthropic"
-          ? environment.CAPCAR_ANTHROPIC_TRIP_PLANNER_MODEL ||
-            "claude-sonnet-4-5-20250929"
-          : undefined,
+      mode === "gemini"
+        ? environment.CAPCAR_GEMINI_TRIP_PLANNER_MODEL ||
+          "gemini-2.5-flash-lite"
+        : mode === "openai"
+          ? environment.CAPCAR_TRIP_PLANNER_MODEL || "gpt-5.4-mini"
+          : mode === "anthropic"
+            ? environment.CAPCAR_ANTHROPIC_TRIP_PLANNER_MODEL ||
+              "claude-sonnet-4-5-20250929"
+            : undefined,
   };
 }
 
@@ -533,6 +547,12 @@ type OpenAiResponse = {
 };
 
 type TripPlannerErrorCode =
+  | "gemini_auth"
+  | "gemini_model"
+  | "gemini_permission"
+  | "gemini_rate_limit"
+  | "gemini_timeout"
+  | "gemini_unavailable"
   | "openai_auth"
   | "openai_model"
   | "openai_permission"
@@ -576,6 +596,16 @@ class AnthropicResponseError extends Error {
   ) {
     super(message);
     this.name = "AnthropicResponseError";
+  }
+}
+
+class GeminiResponseError extends Error {
+  constructor(
+    readonly status: number,
+    message: string,
+  ) {
+    super(message);
+    this.name = "GeminiResponseError";
   }
 }
 
@@ -732,6 +762,65 @@ function toAnthropicTripPlannerServiceError(error: unknown, userOwned = false) {
   return new TripPlannerServiceError(
     "CapCar AI could not compose this route with Claude. Try again or choose exact places.",
     "anthropic_unavailable",
+    503,
+  );
+}
+
+function toGeminiTripPlannerServiceError(error: unknown) {
+  const providerMessage =
+    error instanceof Error ? error.message : "Gemini trip planning failed.";
+  const normalized = providerMessage.toLocaleLowerCase();
+  const providerStatus =
+    error instanceof GeminiResponseError ? error.status : undefined;
+
+  if (providerStatus === 400 && /api key|invalid|not valid/.test(normalized))
+    return new TripPlannerServiceError(
+      "Your Gemini API key is invalid. Reconnect Gemini and try again.",
+      "gemini_auth",
+      503,
+    );
+  if (providerStatus === 401)
+    return new TripPlannerServiceError(
+      "Your Gemini API key was rejected. Reconnect Gemini and try again.",
+      "gemini_auth",
+      503,
+    );
+  if (providerStatus === 403 || /permission|forbidden/.test(normalized))
+    return new TripPlannerServiceError(
+      "Your Gemini key cannot use the required model or API. Check the Google AI project permissions.",
+      "gemini_permission",
+      503,
+    );
+  if (
+    providerStatus === 404 ||
+    /model.+(?:not found|does not exist|unsupported)/.test(normalized)
+  )
+    return new TripPlannerServiceError(
+      "The CapCar Gemini model is unavailable to this Google AI project.",
+      "gemini_model",
+      503,
+    );
+  if (
+    providerStatus === 429 ||
+    /quota|rate limit|resource exhausted/.test(normalized)
+  )
+    return new TripPlannerServiceError(
+      "Your Gemini free-tier limit has been reached. Wait for the quota window to reset, then try again.",
+      "gemini_rate_limit",
+      429,
+    );
+  if (
+    error instanceof DOMException &&
+    ["AbortError", "TimeoutError"].includes(error.name)
+  )
+    return new TripPlannerServiceError(
+      "CapCar AI took too long to compose the route. Try again or choose exact places.",
+      "gemini_timeout",
+      504,
+    );
+  return new TripPlannerServiceError(
+    "CapCar AI could not compose this route with Gemini. Try again or choose exact places.",
+    "gemini_unavailable",
     503,
   );
 }
@@ -1045,6 +1134,152 @@ async function requestAnthropicPlan(
   });
 }
 
+type GeminiResponse = {
+  candidates?: Array<{
+    content?: { parts?: Array<{ text?: string }> };
+  }>;
+  error?: { message?: string };
+};
+
+async function requestGeminiPlan(
+  request: TripPlannerRequest,
+  context: ConnectedPlanningContext | undefined,
+  environment: TripPlannerEnvironment,
+) {
+  const status = getTripPlannerStatus(environment);
+  const requestWithoutRegion = {
+    prompt: request.prompt,
+    inputMode: request.inputMode,
+    vehicle: request.vehicle,
+    startDate: request.startDate,
+    duration: request.duration,
+    pace: request.pace,
+    interests: request.interests,
+    useConnectedContext: request.useConnectedContext,
+  };
+  const destinationInput =
+    request.inputMode === "prompt"
+      ? {
+          type: "natural_language" as const,
+          prompt: request.prompt,
+        }
+      : {
+          type: "ordered_places" as const,
+          places: request.region,
+          prompt: request.prompt,
+        };
+
+  async function generate(repairUnresolvedLocations = false) {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model!)}:generateContent`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-goog-api-key": environment.GEMINI_API_KEY!,
+        },
+        signal: AbortSignal.timeout(28_000),
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{ text: tripPlannerSystemPrompt }],
+          },
+          contents: [
+            {
+              role: "user",
+              parts: [
+                {
+                  text: JSON.stringify({
+                    request: requestWithoutRegion,
+                    destinationInput,
+                    connectedContext: context ?? {
+                      busyDates: [],
+                      mailSignals: [],
+                    },
+                    requirements: {
+                      exactDayCount: request.duration,
+                      exactFirstDate: request.startDate,
+                      includeAtLeast: [
+                        "one scenic road",
+                        "one practical fuel stop",
+                        "one legal-minded car photo stop",
+                      ],
+                      language:
+                        "Match the natural language used in the user's prompt when clear; otherwise use English.",
+                      repair: repairUnresolvedLocations
+                        ? "The previous draft contained unresolved destination placeholders. Resolve every stop to a real named place and produce geocoder-ready mapQuery values."
+                        : undefined,
+                    },
+                  }),
+                },
+              ],
+            },
+          ],
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 5000,
+            responseFormat: {
+              text: {
+                mimeType: "application/json",
+                schema: openAiTripPlanJsonSchema,
+              },
+            },
+          },
+        }),
+      },
+    );
+    const body = (await response.json()) as GeminiResponse;
+    if (!response.ok)
+      throw new GeminiResponseError(
+        response.status,
+        body.error?.message || "Gemini trip planning failed.",
+      );
+    const text = body.candidates?.[0]?.content?.parts
+      ?.map((part) => part.text ?? "")
+      .join("")
+      .trim();
+    if (!text) throw new Error("Gemini returned no trip plan.");
+    return generatedTripPlanSchema.parse(JSON.parse(text));
+  }
+
+  let generated: z.infer<typeof generatedTripPlanSchema>;
+  try {
+    generated = await generate();
+    if (hasUnresolvedLocations(generated)) generated = await generate(true);
+  } catch (error) {
+    throw toGeminiTripPlannerServiceError(error);
+  }
+  if (hasUnresolvedLocations(generated))
+    throw new TripPlannerServiceError(
+      "CapCar AI could not resolve every destination. Add city or country names, or choose exact places.",
+      "gemini_unavailable",
+      422,
+    );
+  generated = {
+    ...generated,
+    days: generated.days.map((day, index) => ({
+      ...day,
+      date: addDays(request.startDate, index),
+    })),
+    stops: generated.stops.map((stop) => ({
+      ...stop,
+      day: Math.min(request.duration, Math.max(1, stop.day)),
+    })),
+  };
+  if (generated.days.length !== request.duration)
+    throw new TripPlannerServiceError(
+      "CapCar AI returned an incomplete itinerary. Try again or choose exact places.",
+      "gemini_unavailable",
+      503,
+    );
+  return tripPlanSchema.parse({
+    ...generated,
+    provider: status.providerName,
+    source: "gemini",
+    researchSources: [],
+    mapLinks: createMapLinks(request.region, generated.stops),
+  });
+}
+
 export async function planScenicTrip(
   request: TripPlannerRequest,
   context?: ConnectedPlanningContext,
@@ -1055,6 +1290,8 @@ export async function planScenicTrip(
     return deterministicPlan(request, context);
   if (!status.configured)
     throw new Error(`${status.providerName} is not fully configured.`);
+  if (status.mode === "gemini")
+    return requestGeminiPlan(request, context, environment);
   if (status.mode === "openai")
     return requestOpenAiPlan(request, context, environment);
   if (status.mode === "anthropic")
