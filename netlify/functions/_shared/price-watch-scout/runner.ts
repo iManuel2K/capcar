@@ -34,7 +34,8 @@ export async function runScheduledPriceWatches(
       global: { headers: { "X-Client-Info": "capcar-price-watch/1.0" } },
     },
   );
-  const runId = await startRun(client);
+  const runId = await startRun(client, now);
+  if (!runId) return { status: "completed", checked: 0, updated: 0, errors: 0 };
   const errors: string[] = [];
   let checked = 0;
   let updated = 0;
@@ -200,15 +201,29 @@ function normalizeFailure(error: unknown) {
   };
 }
 
-async function startRun(client: SupabaseClient) {
+export function priceWatchRunKey(now: Date) {
+  const bucketHour = Math.floor(now.getUTCHours() / 6) * 6;
+  return [
+    "price-watch",
+    now.getUTCFullYear(),
+    String(now.getUTCMonth() + 1).padStart(2, "0"),
+    String(now.getUTCDate()).padStart(2, "0"),
+    String(bucketHour).padStart(2, "0"),
+  ].join("-");
+}
+
+async function startRun(client: SupabaseClient, now: Date) {
   const { data, error } = await client
     .from("price_watch_runs")
-    .insert({ status: "running" })
+    .upsert(
+      { status: "running", run_key: priceWatchRunKey(now) },
+      { onConflict: "run_key", ignoreDuplicates: true },
+    )
     .select("id")
-    .single<{ id: string }>();
+    .maybeSingle<{ id: string }>();
   if (error)
     throw new Error(`Could not start price-watch run: ${error.message}`);
-  return data.id;
+  return data?.id ?? null;
 }
 
 async function finishRun(

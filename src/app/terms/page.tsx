@@ -42,6 +42,18 @@ export default async function TermsPage() {
       <LegalSection title={t("s6t")}>
         <p>{t("s6")}</p>
       </LegalSection>
+
+      <LegalSection title={t("s7t")}>
+        <p>{t("s7")}</p>
+      </LegalSection>
+
+      <LegalSection title={t("s8t")}>
+        <p>{t("s8")}</p>
+      </LegalSection>
+
+      <LegalSection title={t("s9t")}>
+        <p>{t("s9")}</p>
+      </LegalSection>
     </LegalShell>
   );
 }
