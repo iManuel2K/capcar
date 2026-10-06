@@ -47,6 +47,7 @@ export function AuthForm({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [confirmedMinimumAge, setConfirmedMinimumAge] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -85,6 +86,10 @@ export function AuthForm({
       setError(t("errors.terms"));
       return;
     }
+    if (mode === "register" && !confirmedMinimumAge) {
+      setError(t("errors.age"));
+      return;
+    }
 
     setLoading(true);
     try {
@@ -106,7 +111,11 @@ export function AuthForm({
           email,
           password,
           options: {
-            data: { display_name: name.trim() },
+            data: {
+              display_name: name.trim(),
+              minimum_age_acknowledged_at: new Date().toISOString(),
+              minimum_age_version: "2026-10-06",
+            },
             emailRedirectTo: callbackUrl("/garage"),
           },
         });
@@ -280,25 +289,42 @@ export function AuthForm({
               )}
 
               {mode === "register" && (
-                <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-white/40">
-                  <input
-                    type="checkbox"
-                    checked={acceptedTerms}
-                    onChange={(event) => setAcceptedTerms(event.target.checked)}
-                    className="mt-0.5 size-4 accent-[#e72d45]"
-                  />
-                  <span>
-                    {t("accept")}{" "}
-                    <Link href="/terms" className="text-white/70 underline">
-                      {t("terms")}
-                    </Link>{" "}
-                    {t("and")}{" "}
-                    <Link href="/privacy" className="text-white/70 underline">
-                      {t("privacy")}
-                    </Link>
-                    .
-                  </span>
-                </label>
+                <div className="space-y-3 rounded-xl border border-white/8 bg-white/[0.025] p-4">
+                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-white/45">
+                    <input
+                      required
+                      type="checkbox"
+                      checked={confirmedMinimumAge}
+                      onChange={(event) =>
+                        setConfirmedMinimumAge(event.target.checked)
+                      }
+                      className="mt-0.5 size-4 shrink-0 accent-[#e72d45]"
+                    />
+                    <span>{t("confirmAge")}</span>
+                  </label>
+                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-white/45">
+                    <input
+                      required
+                      type="checkbox"
+                      checked={acceptedTerms}
+                      onChange={(event) =>
+                        setAcceptedTerms(event.target.checked)
+                      }
+                      className="mt-0.5 size-4 shrink-0 accent-[#e72d45]"
+                    />
+                    <span>
+                      {t("accept")}{" "}
+                      <Link href="/terms" className="text-white/70 underline">
+                        {t("terms")}
+                      </Link>{" "}
+                      {t("and")}{" "}
+                      <Link href="/privacy" className="text-white/70 underline">
+                        {t("privacy")}
+                      </Link>
+                      .
+                    </span>
+                  </label>
+                </div>
               )}
 
               <button
