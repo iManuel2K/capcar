@@ -290,8 +290,8 @@ export function AuthForm({
               )}
 
               {mode === "register" && (
-                <div className="space-y-3 rounded-xl border border-[#0e2d30]/10 bg-white/45 p-4">
-                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-[#405856]">
+                <div className="space-y-3 rounded-xl border border-white/8 bg-white/[0.025] p-4">
+                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-white/45">
                     <input
                       required
                       type="checkbox"
@@ -299,11 +299,11 @@ export function AuthForm({
                       onChange={(event) =>
                         setConfirmedMinimumAge(event.target.checked)
                       }
-                      className="mt-0.5 size-4 shrink-0 accent-[#6d0101]"
+                      className="mt-0.5 size-4 shrink-0 accent-[#e72d45]"
                     />
                     <span>{t("confirmAge")}</span>
                   </label>
-                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-[#405856]">
+                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-white/45">
                     <input
                       required
                       type="checkbox"
@@ -311,21 +311,15 @@ export function AuthForm({
                       onChange={(event) =>
                         setAcceptedTerms(event.target.checked)
                       }
-                      className="mt-0.5 size-4 shrink-0 accent-[#6d0101]"
+                      className="mt-0.5 size-4 shrink-0 accent-[#e72d45]"
                     />
                     <span>
                       {t("accept")}{" "}
-                      <Link
-                        href="/terms"
-                        className="font-medium text-[#0e2d30] underline"
-                      >
+                      <Link href="/terms" className="text-white/70 underline">
                         {t("terms")}
                       </Link>{" "}
                       {t("and")}{" "}
-                      <Link
-                        href="/privacy"
-                        className="font-medium text-[#0e2d30] underline"
-                      >
+                      <Link href="/privacy" className="text-white/70 underline">
                         {t("privacy")}
                       </Link>
                       .
