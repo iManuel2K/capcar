@@ -38,7 +38,7 @@ export function SiteFooter() {
     },
   ];
   return (
-    <footer className="border-t border-[#0e2d30]/20 bg-[#e8e6d7] px-5 py-12 text-[#0e2d30] sm:px-8">
+    <footer className="capcar-editorial-grid border-t border-white/8 bg-[#0b2326] px-5 py-14 text-[#e8e6d7] sm:px-8 sm:py-16">
       <div className="mx-auto grid max-w-[1440px] grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 lg:grid-cols-[2fr_1fr_1fr_1fr]">
         <div className="col-span-2 md:col-span-1">
           <Link
@@ -48,19 +48,19 @@ export function SiteFooter() {
           >
             <CapcarWordmark glow={false} />
           </Link>
-          <p className="mt-4 max-w-xs text-sm leading-7 text-[#4b6260]">
+          <p className="mt-4 max-w-xs text-sm leading-7 text-[#e8e6d7]/55">
             {t("tagline")}
           </p>
           <Link
             href="/register"
-            className="mt-4 inline-flex min-h-11 items-center rounded text-sm font-semibold underline underline-offset-4 focus-visible:outline-2"
+            className="mt-5 inline-flex min-h-11 items-center rounded-full border border-[#e8e6d7]/15 px-4 text-sm font-semibold transition hover:border-[#bf8269]/60 hover:bg-white/5 focus-visible:outline-2"
           >
             {l("start")} →
           </Link>
         </div>
         {groups.map((group) => (
           <nav key={group.title} aria-label={group.title}>
-            <h2 className="mb-3 text-xs font-semibold tracking-widest uppercase">
+            <h2 className="mb-3 text-xs font-semibold tracking-widest text-[#bf8269] uppercase">
               {group.title}
             </h2>
             <ul>
@@ -68,7 +68,7 @@ export function SiteFooter() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="inline-flex min-h-11 items-center rounded text-sm text-[#4b6260] hover:text-[#0e2d30] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                    className="inline-flex min-h-11 items-center rounded text-sm text-[#e8e6d7]/55 transition hover:text-[#e8e6d7] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
                   >
                     {label}
                   </Link>
@@ -78,8 +78,8 @@ export function SiteFooter() {
           </nav>
         ))}
       </div>
-      <div className="mx-auto mt-10 flex max-w-[1440px] flex-wrap items-center justify-between gap-5 border-t border-[#0e2d30]/20 pt-6">
-        <p className="max-w-2xl text-xs leading-6 text-[#4b6260]">
+      <div className="mx-auto mt-10 flex max-w-[1440px] flex-wrap items-center justify-between gap-5 border-t border-white/10 pt-6">
+        <p className="max-w-2xl text-xs leading-6 text-[#e8e6d7]/45">
           {t("safety")}
         </p>
         <LanguageSelector compact />

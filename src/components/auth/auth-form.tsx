@@ -155,13 +155,13 @@ export function AuthForm({
   return (
     <main
       id="main-content"
-      className="relative min-h-[calc(100dvh-4.5rem)] overflow-hidden bg-[#080808] px-4 py-5 text-[#f5f2ed] sm:min-h-[calc(100dvh-5rem)] sm:px-7 sm:py-7"
+      className="capcar-editorial-grid relative min-h-[calc(100dvh-4.5rem)] overflow-hidden bg-[#0b2326] px-4 py-5 text-[#f5f2ed] sm:min-h-[calc(100dvh-5rem)] sm:px-7 sm:py-7"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_17%,rgba(231,45,69,0.2),transparent_27%),radial-gradient(circle_at_18%_88%,rgba(231,45,69,0.1),transparent_24%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_17%,rgba(146,100,77,0.22),transparent_28%),radial-gradient(circle_at_18%_88%,rgba(136,152,141,0.14),transparent_26%)]" />
       <div className="relative mx-auto flex min-h-[calc(100dvh-2.5rem)] max-w-7xl flex-col">
         <div className="grid flex-1 items-center gap-10 py-10 lg:grid-cols-[1fr_0.78fr] lg:py-16">
           <section className="hidden max-w-xl lg:block">
-            <p className="text-xs font-semibold tracking-[0.18em] text-[#ff667a] uppercase">
+            <p className="text-xs font-semibold tracking-[0.18em] text-[#d6aa92] uppercase">
               {t("private")}
             </p>
             <h2 className="mt-6 text-7xl font-medium tracking-[-0.065em] text-balance">
@@ -169,19 +169,20 @@ export function AuthForm({
               <br />
               {t("wholeBuild")}
             </h2>
-            <p className="mt-7 max-w-md text-base leading-7 text-white/42">
+            <p className="mt-7 max-w-md text-base leading-7 text-[#e8e6d7]/58">
               {t("accountDescription")}
             </p>
           </section>
 
-          <section className="mx-auto w-full max-w-md rounded-[2rem] border border-white/10 bg-[#111111]/95 p-6 shadow-2xl shadow-black/40 backdrop-blur sm:p-8">
-            <p className="text-[11px] font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+          <section className="mx-auto w-full max-w-md rounded-[2rem] border border-white/35 bg-[#f5f2e8]/97 p-6 text-[#0e2d30] shadow-[0_35px_100px_rgba(5,3,6,.3)] backdrop-blur sm:p-8">
+            <div className="mb-7 h-1 w-12 rounded-full bg-[#6d0101]" />
+            <p className="text-[11px] font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
               {t(`${mode}.eyebrow`)}
             </p>
             <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em]">
               {t(`${mode}.title`)}
             </h1>
-            <p className="mt-3 text-sm leading-6 text-white/42">
+            <p className="mt-3 text-sm leading-6 text-[#405856]">
               {t(`${mode}.description`)}
             </p>
 
@@ -204,7 +205,7 @@ export function AuthForm({
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     placeholder={t("namePlaceholder")}
-                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/20"
+                    className="w-full bg-transparent text-sm text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
                   />
                 </Field>
               )}
@@ -218,7 +219,7 @@ export function AuthForm({
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     placeholder="you@example.com"
-                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/20"
+                    className="w-full bg-transparent text-sm text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
                   />
                 </Field>
               )}
@@ -234,7 +235,7 @@ export function AuthForm({
                         showPassword ? t("hidePassword") : t("showPassword")
                       }
                       onClick={() => setShowPassword((current) => !current)}
-                      className="text-white/30 hover:text-white"
+                      className="text-[#405856]/55 transition hover:text-[#0e2d30]"
                     >
                       {showPassword ? (
                         <EyeOff className="size-4" />
@@ -254,7 +255,7 @@ export function AuthForm({
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     placeholder={t("passwordPlaceholder")}
-                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/20"
+                    className="w-full bg-transparent text-sm text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
                   />
                 </Field>
               )}
@@ -272,7 +273,7 @@ export function AuthForm({
                     value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
                     placeholder={t("confirmPlaceholder")}
-                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/20"
+                    className="w-full bg-transparent text-sm text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
                   />
                 </Field>
               )}
@@ -281,7 +282,7 @@ export function AuthForm({
                 <div className="flex justify-end">
                   <Link
                     href="/forgot-password"
-                    className="text-xs text-white/45 transition hover:text-white"
+                    className="text-xs text-[#405856] transition hover:text-[#6d0101]"
                   >
                     {t("forgotLink")}
                   </Link>
@@ -289,8 +290,8 @@ export function AuthForm({
               )}
 
               {mode === "register" && (
-                <div className="space-y-3 rounded-xl border border-white/8 bg-white/[0.025] p-4">
-                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-white/45">
+                <div className="space-y-3 rounded-xl border border-[#0e2d30]/10 bg-white/45 p-4">
+                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-[#405856]">
                     <input
                       required
                       type="checkbox"
@@ -298,11 +299,11 @@ export function AuthForm({
                       onChange={(event) =>
                         setConfirmedMinimumAge(event.target.checked)
                       }
-                      className="mt-0.5 size-4 shrink-0 accent-[#e72d45]"
+                      className="mt-0.5 size-4 shrink-0 accent-[#6d0101]"
                     />
                     <span>{t("confirmAge")}</span>
                   </label>
-                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-white/45">
+                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-[#405856]">
                     <input
                       required
                       type="checkbox"
@@ -310,15 +311,21 @@ export function AuthForm({
                       onChange={(event) =>
                         setAcceptedTerms(event.target.checked)
                       }
-                      className="mt-0.5 size-4 shrink-0 accent-[#e72d45]"
+                      className="mt-0.5 size-4 shrink-0 accent-[#6d0101]"
                     />
                     <span>
                       {t("accept")}{" "}
-                      <Link href="/terms" className="text-white/70 underline">
+                      <Link
+                        href="/terms"
+                        className="font-medium text-[#0e2d30] underline"
+                      >
                         {t("terms")}
                       </Link>{" "}
                       {t("and")}{" "}
-                      <Link href="/privacy" className="text-white/70 underline">
+                      <Link
+                        href="/privacy"
+                        className="font-medium text-[#0e2d30] underline"
+                      >
                         {t("privacy")}
                       </Link>
                       .
@@ -330,7 +337,7 @@ export function AuthForm({
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-white transition hover:bg-[#f33d55] disabled:opacity-50"
+                className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#6d0101] px-5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(109,1,1,.18)] transition hover:-translate-y-0.5 hover:bg-[#830705] disabled:opacity-50"
               >
                 {loading ? (
                   <LoaderCircle className="size-4 animate-spin" />
@@ -342,46 +349,46 @@ export function AuthForm({
             </form>
 
             {message && (
-              <p className="mt-5 flex gap-2 rounded-xl border border-emerald-300/15 bg-emerald-300/6 p-4 text-xs leading-5 text-emerald-100/75">
+              <p className="mt-5 flex gap-2 rounded-xl border border-emerald-800/15 bg-emerald-100/70 p-4 text-xs leading-5 text-emerald-950">
                 <CheckCircle2 className="mt-0.5 size-4 shrink-0" /> {message}
               </p>
             )}
             {error && (
               <p
                 role="alert"
-                className="mt-5 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-xs leading-5 text-red-100/75"
+                className="mt-5 rounded-xl border border-red-900/15 bg-red-100/70 p-4 text-xs leading-5 text-red-950"
               >
                 {error}
               </p>
             )}
 
             {mode === "login" && (
-              <p className="mt-7 text-center text-xs text-white/35">
+              <p className="mt-7 text-center text-xs text-[#405856]">
                 {t("newToCapcar")}{" "}
                 <Link
                   href="/register"
-                  className="font-medium text-white/75 hover:text-white"
+                  className="font-medium text-[#0e2d30] hover:text-[#6d0101]"
                 >
                   {t("createAccount")}
                 </Link>
               </p>
             )}
             {mode === "register" && (
-              <p className="mt-7 text-center text-xs text-white/35">
+              <p className="mt-7 text-center text-xs text-[#405856]">
                 {t("haveAccount")}{" "}
                 <Link
                   href="/login"
-                  className="font-medium text-white/75 hover:text-white"
+                  className="font-medium text-[#0e2d30] hover:text-[#6d0101]"
                 >
                   {t("signIn")}
                 </Link>
               </p>
             )}
             {(mode === "forgot" || mode === "reset") && (
-              <p className="mt-7 text-center text-xs text-white/35">
+              <p className="mt-7 text-center text-xs text-[#405856]">
                 <Link
                   href="/login"
-                  className="font-medium text-white/75 hover:text-white"
+                  className="font-medium text-[#0e2d30] hover:text-[#6d0101]"
                 >
                   {t("backToSignIn")}
                 </Link>
@@ -406,8 +413,8 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label className="block rounded-xl border border-white/10 bg-black/20 px-4 py-3 transition focus-within:border-[#e72d45]/60">
-      <span className="mb-2 flex items-center justify-between text-[10px] font-semibold tracking-[0.12em] text-white/30 uppercase">
+    <label className="block rounded-xl border border-[#0e2d30]/12 bg-white/55 px-4 py-3 transition focus-within:border-[#6d0101]/55 focus-within:bg-white">
+      <span className="mb-2 flex items-center justify-between text-[10px] font-semibold tracking-[0.12em] text-[#405856]/70 uppercase">
         <span className="flex items-center gap-2">
           {icon}
           {label}

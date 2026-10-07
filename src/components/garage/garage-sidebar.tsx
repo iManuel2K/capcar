@@ -144,7 +144,7 @@ export function GarageSidebar({
   const moreActive = moreItems.some((item) => isActive(pathname, item));
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-[#0d100e] text-white">
+    <div className="capcar-editorial-grid flex h-full min-h-0 flex-col bg-[#0b2326] text-white">
       <div className="flex h-18 shrink-0 items-center justify-between border-b border-white/7 px-5">
         <Link href="/" onClick={onNavigate} className="rounded-lg">
           <CapcarWordmark />
@@ -159,7 +159,7 @@ export function GarageSidebar({
             <X className="size-4" />
           </button>
         ) : (
-          <span className="rounded-full border border-[#e72d45]/20 bg-[#e72d45]/8 px-2 py-1 text-[9px] font-semibold tracking-[0.08em] text-[#ff8b9a] uppercase">
+          <span className="rounded-full border border-[#bf8269]/25 bg-[#92644d]/12 px-2 py-1 text-[9px] font-semibold tracking-[0.08em] text-[#d6aa92] uppercase">
             {t("beta")}
           </span>
         )}
@@ -176,9 +176,9 @@ export function GarageSidebar({
         </Link>
 
         {vehicleId ? (
-          <div className="mb-5 rounded-2xl border border-white/8 bg-[#141815] p-3">
+          <div className="mb-5 rounded-2xl border border-white/9 bg-white/[0.035] p-3 shadow-[0_12px_32px_rgba(0,0,0,.12)]">
             <div className="flex items-center gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#e72d45]/10 text-[#ff667a]">
+              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#92644d]/14 text-[#d6aa92]">
                 <CarFront className="size-4" />
               </span>
               <div className="min-w-0">
@@ -202,7 +202,7 @@ export function GarageSidebar({
           <Link
             href="/garage/new"
             onClick={onNavigate}
-            className="mb-5 flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-white transition hover:bg-[#f23c53]"
+            className="mb-5 flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6d0101] px-4 text-sm font-semibold text-white shadow-[0_10px_26px_rgba(109,1,1,.22)] transition hover:-translate-y-0.5 hover:bg-[#830705]"
           >
             <Plus className="size-4" /> {t("add")}
           </Link>
@@ -312,10 +312,10 @@ function SidebarLink({
       className={`group relative flex items-center gap-3 rounded-xl px-3 transition ${compact ? "min-h-10 text-xs" : "min-h-11 text-sm"} ${active ? "bg-white/[0.075] text-white" : "text-white/46 hover:bg-white/[0.045] hover:text-white/82"}`}
     >
       {active && (
-        <span className="absolute top-2 bottom-2 left-0 w-0.5 rounded-full bg-[#e72d45]" />
+        <span className="absolute top-2 bottom-2 left-0 w-0.5 rounded-full bg-[#bf8269]" />
       )}
       <Icon
-        className={`size-4 shrink-0 transition ${active ? "text-[#ff667a]" : "text-white/32 group-hover:text-white/65"}`}
+        className={`size-4 shrink-0 transition ${active ? "text-[#d6aa92]" : "text-white/32 group-hover:text-white/65"}`}
       />
       <span className="truncate">{item.label}</span>
     </Link>
@@ -343,7 +343,7 @@ function UtilityLink({
     >
       <Icon className="size-4" /> {label}
       {badge > 0 && (
-        <span className="absolute top-1.5 right-1.5 grid min-w-4 place-items-center rounded-full bg-[#e72d45] px-1 text-[9px] text-white">
+        <span className="absolute top-1.5 right-1.5 grid min-w-4 place-items-center rounded-full bg-[#6d0101] px-1 text-[9px] text-white">
           {Math.min(badge, 9)}
           {badge > 9 ? "+" : ""}
         </span>

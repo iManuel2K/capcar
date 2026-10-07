@@ -69,8 +69,8 @@ export function MarketingHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-[80] border-b border-[#0e2d30]/10 bg-[#e8e6d7]/95 text-[#0e2d30] shadow-[0_10px_35px_rgba(14,45,48,0.05)] backdrop-blur-xl">
-        <div className="mx-auto flex h-18 w-full max-w-[1500px] items-center justify-between gap-5 px-5 sm:h-20 sm:px-8">
+      <header className="sticky top-0 z-[80] border-b border-[#0e2d30]/10 bg-[#ebe9dc]/92 text-[#0e2d30] shadow-[0_12px_40px_rgba(14,45,48,0.055)] backdrop-blur-2xl">
+        <div className="mx-auto flex h-[4.75rem] w-full max-w-[1440px] items-center justify-between gap-5 px-5 sm:h-20 sm:px-8">
           <Link
             href="/"
             aria-label={t("home")}
@@ -81,7 +81,7 @@ export function MarketingHeader() {
 
           <nav
             aria-label={t("main")}
-            className="hidden items-center gap-1 text-sm text-[#0e2d30]/68 xl:flex"
+            className="hidden items-center gap-0.5 rounded-full border border-[#0e2d30]/8 bg-white/20 p-1 text-sm text-[#0e2d30]/68 xl:flex"
           >
             {navigation.map((item) => (
               <Link
@@ -89,7 +89,7 @@ export function MarketingHeader() {
                 aria-current={active(item.href) ? "page" : undefined}
                 className={`inline-flex min-h-11 items-center rounded-full px-3 transition focus-visible:outline-2 focus-visible:outline-offset-2 ${
                   active(item.href)
-                    ? "bg-[#0e2d30]/7 font-medium text-[#0e2d30]"
+                    ? "bg-white/70 font-medium text-[#0e2d30] shadow-[0_2px_12px_rgba(14,45,48,.07)]"
                     : "hover:bg-[#0e2d30]/5 hover:text-[#6d0101]"
                 }`}
                 href={item.href}
@@ -144,7 +144,7 @@ export function MarketingHeader() {
             </Link>
             <Link
               href="/register"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0e2d30] px-4 text-sm font-medium text-[#e8e6d7] transition hover:-translate-y-0.5 hover:bg-[#6d0101]"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-medium text-[#e8e6d7] shadow-[0_10px_25px_rgba(14,45,48,.16)] transition hover:-translate-y-0.5 hover:bg-[#6d0101]"
             >
               {l("start")} <ArrowRight className="size-4" />
             </Link>

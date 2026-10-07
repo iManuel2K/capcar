@@ -60,7 +60,7 @@ export function GarageOverview() {
     return (
       <div className="pb-24 sm:pb-0">
         <div className="mb-10 max-w-2xl">
-          <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+          <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#d6aa92] uppercase">
             Your garage
           </p>
           <h1 className="text-4xl font-medium tracking-[-0.045em] text-balance sm:text-6xl">
@@ -79,10 +79,10 @@ export function GarageOverview() {
           Explore showcase builds{" "}
           <ArrowRight className="size-4" aria-hidden="true" />
         </Link>
-        <section className="grid overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] lg:grid-cols-[1.12fr_0.88fr]">
+        <section className="grid overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b2326] shadow-[0_28px_80px_rgba(0,0,0,.18)] lg:grid-cols-[1.12fr_0.88fr]">
           <VehicleArt label="your future project car" />
           <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12">
-            <span className="grid size-11 place-items-center rounded-2xl bg-[#e72d45] text-[#07101d]">
+            <span className="grid size-11 place-items-center rounded-2xl bg-[#92644d]/16 text-[#d6aa92]">
               <CarFront className="size-5" />
             </span>
             <h2 className="mt-7 text-2xl font-medium tracking-[-0.025em]">
@@ -95,7 +95,7 @@ export function GarageOverview() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/garage/new"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d] transition hover:-translate-y-0.5 hover:bg-[#ff667a]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6d0101] px-5 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(109,1,1,.2)] transition hover:-translate-y-0.5 hover:bg-[#830705]"
               >
                 Add your car <ArrowRight className="size-4" />
               </Link>
@@ -132,7 +132,7 @@ export function GarageOverview() {
       </Link>
       <div className="mb-8 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
         <div>
-          <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+          <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#d6aa92] uppercase">
             Your garage
           </p>
           <h1 className="text-4xl font-medium tracking-[-0.045em] sm:text-6xl">
@@ -143,7 +143,7 @@ export function GarageOverview() {
         </div>
         <Link
           href="/garage/new"
-          className="inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d] sm:self-auto"
+          className="inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-xl bg-[#6d0101] px-4 text-sm font-semibold text-white shadow-[0_10px_26px_rgba(109,1,1,.18)] transition hover:bg-[#830705] sm:self-auto"
         >
           <Plus className="size-4" /> Add vehicle
         </Link>
@@ -182,7 +182,7 @@ export function GarageOverview() {
           <Link
             key={vehicle.id}
             href={`/garage/${vehicle.id}`}
-            className="group min-w-[88%] snap-start overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] transition duration-300 hover:-translate-y-1 hover:border-white/20 sm:min-w-[430px] xl:min-w-[540px]"
+            className="group min-w-[88%] snap-start overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b2326] shadow-[0_22px_60px_rgba(0,0,0,.12)] transition duration-300 hover:-translate-y-1 hover:border-[#bf8269]/30 sm:min-w-[430px] xl:min-w-[540px]"
           >
             <VehicleArt
               label={`${vehicle.productionYear} ${vehicle.make} ${vehicle.model}`}

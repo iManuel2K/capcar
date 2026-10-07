@@ -22,7 +22,7 @@ export function MarketingLanding() {
   const t = useTranslations("Home");
 
   return (
-    <div className="min-h-dvh overflow-hidden bg-[#e8e6d7] text-[#0e2d30]">
+    <div className="min-h-dvh overflow-hidden bg-[#ebe9dc] text-[#0e2d30]">
       <main id="main-content">
         <MarketingHero />
         <ProductDashboardPreview />
@@ -38,7 +38,7 @@ export function MarketingLanding() {
             />
 
             <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 lg:grid-cols-12">
-              <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-7">
+              <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0b2326] p-5 shadow-[0_24px_70px_rgba(0,0,0,.13)] transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-7">
                 <CardLabel icon={CircleGauge}>{t("garage")}</CardLabel>
                 <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
                   {t("garageHeadline")}
@@ -46,7 +46,7 @@ export function MarketingLanding() {
                 <GaragePreview />
               </article>
 
-              <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-5">
+              <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0b2326] p-5 shadow-[0_24px_70px_rgba(0,0,0,.13)] transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-5">
                 <CardLabel icon={Wrench}>{t("maintenance")}</CardLabel>
                 <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
                   {t("maintenanceHeadline")}
@@ -54,7 +54,7 @@ export function MarketingLanding() {
                 <MaintenancePreview />
               </article>
 
-              <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-5">
+              <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0b2326] p-5 shadow-[0_24px_70px_rgba(0,0,0,.13)] transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-5">
                 <CardLabel icon={Layers3}>{t("build")}</CardLabel>
                 <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
                   {t("buildHeadline")}
@@ -62,7 +62,7 @@ export function MarketingLanding() {
                 <BuildPreview />
               </article>
 
-              <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-7">
+              <article className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0b2326] p-5 shadow-[0_24px_70px_rgba(0,0,0,.13)] transition duration-300 hover:-translate-y-1 hover:border-[#92644d]/50 sm:rounded-[2rem] sm:p-8 lg:col-span-7">
                 <CardLabel icon={ShoppingBag}>{t("parts")}</CardLabel>
                 <h3 className="mt-6 text-2xl font-medium tracking-[-0.04em] sm:mt-8 sm:text-3xl">
                   {t("partsHeadline")}
@@ -168,7 +168,7 @@ export function MarketingLanding() {
 
         <section className="bg-[#88988d] px-5 py-5 sm:px-8 sm:py-8">
           <div className="relative mx-auto min-h-[330px] max-w-[1500px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0e2d30] px-6 py-10 text-[#e8e6d7] shadow-[0_30px_90px_rgba(20,34,28,0.18)] sm:min-h-[430px] sm:rounded-[2.5rem] sm:px-12 sm:py-14 lg:px-20">
-            <div className="absolute top-0 right-0 h-full w-1/2 bg-[radial-gradient(circle_at_center,rgba(231,45,69,0.22),transparent_65%)]" />
+            <div className="absolute top-0 right-0 h-full w-1/2 bg-[radial-gradient(circle_at_center,rgba(146,100,77,0.24),transparent_65%)]" />
             <div className="relative z-10 flex min-h-[250px] max-w-4xl flex-col justify-between sm:min-h-[320px]">
               <span className="h-1 w-16 rounded-full bg-[#6d0101]" />
               <div>
