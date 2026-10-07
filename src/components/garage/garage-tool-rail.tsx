@@ -22,7 +22,7 @@ export function GarageToolRail({
 }) {
   return (
     <aside aria-label="Active vehicle tools" className="hidden lg:block">
-      <div className="sticky top-26 rounded-[1.5rem] border border-white/10 bg-[#111411]/92 p-2 shadow-xl backdrop-blur-xl">
+      <div className="sticky top-26 rounded-[1.5rem] border border-white/10 bg-[#0b2326]/94 p-2 shadow-[0_20px_60px_rgba(0,0,0,.22)] backdrop-blur-xl">
         <p className="px-2 pt-1 pb-2 text-[9px] font-semibold tracking-[0.14em] text-white/28 uppercase">
           Car tools
         </p>
@@ -35,7 +35,7 @@ export function GarageToolRail({
                 key={segment}
                 href={href}
                 aria-current={active ? "page" : undefined}
-                className={`group flex min-h-13 items-center gap-3 rounded-xl px-3 text-xs transition duration-200 ${active ? "bg-[#e72d45] text-white" : "text-white/48 hover:bg-white/6 hover:text-white"}`}
+                className={`group flex min-h-13 items-center gap-3 rounded-xl px-3 text-xs transition duration-200 ${active ? "bg-[#6d0101] text-white shadow-[0_8px_24px_rgba(109,1,1,.18)]" : "text-white/48 hover:bg-white/6 hover:text-white"}`}
               >
                 <Icon className="size-4 shrink-0 transition group-hover:scale-110" />
                 <span className="leading-4">{label}</span>

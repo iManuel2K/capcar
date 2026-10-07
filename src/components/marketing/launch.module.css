@@ -43,6 +43,7 @@
   background: #e8e6d7;
   color: #0e2d30;
   border: 1px solid #e8e6d7;
+  box-shadow: 0 12px 35px rgb(5 3 6 / 16%);
 }
 .secondary {
   background: transparent;
@@ -66,7 +67,19 @@
   text-underline-offset: 5px;
 }
 .hero {
-  background: #0b2326;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgb(232 230 215 / 10%);
+  background:
+    linear-gradient(rgb(232 230 215 / 2.8%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(232 230 215 / 2.8%) 1px, transparent 1px),
+    radial-gradient(circle at 88% 10%, rgb(146 100 77 / 17%), transparent 30%),
+    #0b2326;
+  background-size:
+    74px 74px,
+    74px 74px,
+    auto,
+    auto;
   color: #e8e6d7;
 }
 .heroGrid {
@@ -76,21 +89,23 @@
   align-items: center;
   max-width: 1600px;
   margin: auto;
-  padding: 3.5rem 2rem 4rem;
+  padding: 4.5rem 2rem 5rem;
 }
 .heroTitle {
-  font-size: clamp(3rem, 5.5vw, 6rem);
-  line-height: 1.02;
+  max-width: 780px;
+  font-size: clamp(3rem, 5.5vw, 6.2rem);
+  line-height: 0.98;
   font-weight: 500;
   letter-spacing: -0.052em;
   text-wrap: balance;
 }
 .panel {
-  padding: 1.5rem;
+  padding: 1.65rem;
   border: 1px solid rgb(14 45 48 / 18%);
-  border-radius: 1rem;
+  border-radius: 1.35rem;
   background: #f5f2e8;
   color: #0e2d30;
+  box-shadow: 0 22px 70px rgb(5 3 6 / 8%);
 }
 .label {
   font-size: 0.75rem;
@@ -158,7 +173,12 @@
   .tab {
     transition:
       background-color 160ms ease,
-      color 160ms ease;
+      color 160ms ease,
+      transform 160ms ease;
+  }
+  .primary:hover,
+  .secondary:hover {
+    transform: translateY(-2px);
   }
 }
 @media (max-width: 900px) {

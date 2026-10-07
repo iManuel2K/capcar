@@ -49,7 +49,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
   }, [mobileOpen]);
 
   return (
-    <div className="min-h-dvh bg-[#0b0e0c] text-[#f4f5f2] lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]">
+    <div className="capcar-editorial-grid min-h-dvh bg-[#07191b] text-[#f4f5f2] lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]">
       <PriceWatchMonitor />
 
       <aside className="sticky top-0 hidden h-dvh border-r border-white/7 lg:block">
@@ -63,7 +63,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div className="min-w-0">
-        <header className="sticky top-0 z-40 border-b border-white/7 bg-[#0b0e0c]/92 backdrop-blur-xl">
+        <header className="sticky top-0 z-40 border-b border-white/8 bg-[#07191b]/90 shadow-[0_12px_40px_rgba(0,0,0,.12)] backdrop-blur-2xl">
           <div className="mx-auto flex h-18 max-w-[1500px] items-center justify-between gap-4 px-4 sm:px-7">
             <div className="flex items-center gap-3 lg:hidden">
               <button
@@ -72,7 +72,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
                 aria-label={t("open")}
                 aria-expanded={mobileOpen}
                 onClick={() => setMobileOpen(true)}
-                className="grid size-11 place-items-center rounded-xl border border-white/9 bg-white/[0.035] text-white/65"
+                className="grid size-11 place-items-center rounded-xl border border-white/10 bg-white/[0.045] text-white/70 transition hover:bg-white/[0.075]"
               >
                 <Menu className="size-4" />
               </button>
@@ -117,7 +117,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             aria-label={t("closeBackdrop")}
             tabIndex={-1}
             onClick={() => setMobileOpen(false)}
-            className="absolute inset-0 bg-black/62 backdrop-blur-sm"
+            className="absolute inset-0 bg-[#050306]/68 backdrop-blur-sm"
           />
           <div className="absolute inset-y-0 left-0 w-[min(88vw,18rem)] border-r border-white/8 shadow-[28px_0_90px_rgba(0,0,0,.5)]">
             <GarageSidebar

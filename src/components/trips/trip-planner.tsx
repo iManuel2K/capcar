@@ -124,7 +124,7 @@ function MapProviderLinks({
 
 function AnimatedRouteDemo() {
   return (
-    <div className="relative overflow-hidden rounded-[1.45rem] bg-[#0e2d30] shadow-[0_24px_55px_rgba(14,45,48,.2)]">
+    <div className="relative overflow-hidden rounded-[1.6rem] bg-[#0e2d30] shadow-[0_30px_80px_rgba(14,45,48,.24)]">
       <Image
         src="/ai/capcar-route-demo.gif"
         alt="Animated CapCar map from Rüsselsheim through Mainz to the scenic Rheingau route"
@@ -455,12 +455,12 @@ export function TripPlanner({
   }
 
   return (
-    <main className="min-h-dvh overflow-hidden bg-[#e8e6d7] text-[#0e2d30]">
-      <section className="relative border-b border-[#0e2d30]/10 px-5 pt-14 pb-12 sm:px-8 sm:pt-20 sm:pb-20">
-        <div className="pointer-events-none absolute top-[-14rem] right-[-12rem] size-[34rem] rounded-full bg-[#ff766d]/12 blur-3xl" />
+    <main className="min-h-dvh overflow-hidden bg-[#ebe9dc] text-[#0e2d30]">
+      <section className="capcar-paper-grid relative border-b border-[#0e2d30]/10 px-5 pt-14 pb-14 sm:px-8 sm:pt-20 sm:pb-24">
+        <div className="pointer-events-none absolute top-[-14rem] right-[-12rem] size-[34rem] rounded-full bg-[#92644d]/16 blur-3xl" />
         <div className="relative mx-auto max-w-[1440px]">
           <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold tracking-[0.16em] uppercase">
-            <span className="rounded-full bg-[#6d0101] px-3 py-1.5 text-[#fff7ed]">
+            <span className="rounded-full bg-[#6d0101] px-3 py-1.5 text-[#fff7ed] shadow-[0_8px_20px_rgba(109,1,1,.12)]">
               {t("experimental")}
             </span>
             <span className="rounded-full border border-[#0e2d30]/15 px-3 py-1.5">
@@ -470,12 +470,12 @@ export function TripPlanner({
               Google · Apple · OSM
             </span>
           </div>
-          <div className="mt-9 grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+          <div className="mt-10 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
             <div>
               <p className="text-sm font-semibold text-[#6d0101]">
                 {t("eyebrow")}
               </p>
-              <h1 className="mt-4 max-w-4xl text-5xl leading-[0.93] font-medium tracking-[-0.065em] sm:text-7xl lg:text-[6rem]">
+              <h1 className="mt-4 max-w-3xl text-5xl leading-[0.95] font-medium tracking-[-0.06em] sm:text-7xl lg:text-[5.6rem]">
                 {t("title")}
               </h1>
               <p className="mt-7 max-w-xl text-lg leading-8 text-[#405856]">
@@ -489,23 +489,23 @@ export function TripPlanner({
                 ].map(([Icon, label]) => (
                   <div
                     key={label as string}
-                    className="flex items-center gap-2 rounded-2xl border border-[#0e2d30]/10 bg-white/30 px-3 py-3 text-xs text-[#405856]"
+                    className="flex items-center gap-2 rounded-2xl border border-[#0e2d30]/10 bg-white/45 px-3 py-3 text-xs font-medium text-[#405856] shadow-[0_8px_25px_rgba(14,45,48,.045)]"
                   >
                     <Icon className="size-4 text-[#6d0101]" /> {label as string}
                   </div>
                 ))}
               </div>
             </div>
-            <div className="overflow-hidden rounded-[2rem] border border-[#0e2d30]/10 shadow-[0_35px_90px_rgba(14,45,48,.14)]">
+            <div className="overflow-hidden rounded-[2rem] border border-white/55 bg-[#f5f2e8] p-2 shadow-[0_35px_90px_rgba(14,45,48,.16)] sm:p-3">
               <AnimatedRouteDemo />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="px-5 py-10 sm:px-8 sm:py-16">
-        <div className="mx-auto grid max-w-[1440px] gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-          <aside className="h-fit rounded-[2rem] bg-[#0e2d30] p-6 text-[#f5f2e8] shadow-[0_30px_80px_rgba(14,45,48,0.2)] sm:p-8 xl:sticky xl:top-5">
+      <section className="px-5 py-12 sm:px-8 sm:py-20">
+        <div className="mx-auto grid max-w-[1440px] gap-7 xl:grid-cols-[0.88fr_1.12fr]">
+          <aside className="capcar-editorial-grid h-fit rounded-[2rem] border border-white/8 bg-[#0e2d30] p-6 text-[#f5f2e8] shadow-[0_30px_80px_rgba(14,45,48,0.18)] sm:p-8 xl:sticky xl:top-24">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs tracking-[0.14em] text-[#f5f2e8]/45 uppercase">
@@ -747,7 +747,7 @@ export function TripPlanner({
 
           <article
             id="capcar-plan"
-            className="scroll-mt-5 rounded-[2rem] border border-[#0e2d30]/10 bg-[#f5f2e8] p-6 sm:p-8"
+            className="scroll-mt-24 rounded-[2rem] border border-[#0e2d30]/10 bg-[#f5f2e8] p-6 shadow-[0_24px_70px_rgba(14,45,48,.07)] sm:p-8"
           >
             {plan ? (
               <div>
@@ -1052,7 +1052,7 @@ export function TripPlanner({
                 </p>
               </div>
             ) : (
-              <div className="flex min-h-[850px] flex-col justify-between">
+              <div className="flex min-h-[760px] flex-col justify-between">
                 <div>
                   <p className="text-[10px] font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
                     How it flows
@@ -1094,7 +1094,7 @@ export function TripPlanner({
                   ].map(([number, Icon, title, copy]) => (
                     <div
                       key={number as string}
-                      className="grid gap-4 rounded-2xl border border-[#0e2d30]/10 bg-white/35 p-5 sm:grid-cols-[auto_auto_1fr] sm:items-center"
+                      className="grid gap-4 rounded-2xl border border-[#0e2d30]/10 bg-white/45 p-5 shadow-[0_10px_30px_rgba(14,45,48,.035)] sm:grid-cols-[auto_auto_1fr] sm:items-center"
                     >
                       <span className="text-xs font-semibold text-[#6d0101]">
                         {number as string}

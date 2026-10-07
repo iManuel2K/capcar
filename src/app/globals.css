@@ -42,57 +42,63 @@
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: #090909;
-  --foreground: #f3f1ec;
-  --card: #141414;
-  --card-foreground: #f3f1ec;
-  --popover: #141414;
-  --popover-foreground: #f3f1ec;
-  --primary: #e72d45;
+  --radius: 0.875rem;
+  --background: #0b2326;
+  --foreground: #f5f2e8;
+  --card: #123033;
+  --card-foreground: #f5f2e8;
+  --popover: #123033;
+  --popover-foreground: #f5f2e8;
+  --primary: #6d0101;
   --primary-foreground: #ffffff;
-  --secondary: #1d1d1d;
-  --secondary-foreground: #f3f1ec;
-  --muted: #191919;
-  --muted-foreground: #99948e;
-  --accent: #2b1116;
-  --accent-foreground: #fff4f5;
-  --destructive: #ef4444;
+  --secondary: #17383a;
+  --secondary-foreground: #f5f2e8;
+  --muted: #19383a;
+  --muted-foreground: #aab6b1;
+  --accent: #34221e;
+  --accent-foreground: #f5f2e8;
+  --destructive: #b72f3e;
   --border: rgb(255 255 255 / 12%);
   --input: rgb(255 255 255 / 15%);
-  --ring: #e72d45;
-  --chart-1: #e72d45;
-  --chart-2: #ff667a;
-  --chart-3: #a61d31;
-  --chart-4: #f3f1ec;
-  --chart-5: #77736e;
-  --capcar-red: #e72d45;
-  --capcar-red-soft: #ff667a;
-  --capcar-blue: #e72d45;
-  --capcar-blue-strong: #ff667a;
-  --capcar-graphite: #090909;
+  --ring: #bf8269;
+  --chart-1: #6d0101;
+  --chart-2: #92644d;
+  --chart-3: #88988d;
+  --chart-4: #e8e6d7;
+  --chart-5: #9f8c7d;
+  --capcar-cream: #e8e6d7;
+  --capcar-sage: #88988d;
+  --capcar-petrol: #0e2d30;
+  --capcar-oxblood: #6d0101;
+  --capcar-clay: #92644d;
+  --capcar-taupe: #9f8c7d;
+  --capcar-red: #6d0101;
+  --capcar-red-soft: #bf8269;
+  --capcar-blue: #0e2d30;
+  --capcar-blue-strong: #173d40;
+  --capcar-graphite: #050306;
 }
 
 .dark {
-  --background: #090909;
-  --foreground: #f3f1ec;
-  --card: #141414;
-  --card-foreground: #f3f1ec;
-  --popover: #141414;
-  --popover-foreground: #f3f1ec;
-  --primary: #e72d45;
+  --background: #0b2326;
+  --foreground: #f5f2e8;
+  --card: #123033;
+  --card-foreground: #f5f2e8;
+  --popover: #123033;
+  --popover-foreground: #f5f2e8;
+  --primary: #6d0101;
   --primary-foreground: #ffffff;
-  --secondary: #1d1d1d;
-  --secondary-foreground: #f3f1ec;
-  --muted: #191919;
-  --muted-foreground: #99948e;
-  --accent: #2b1116;
-  --accent-foreground: #fff4f5;
-  --destructive: #ef4444;
+  --secondary: #17383a;
+  --secondary-foreground: #f5f2e8;
+  --muted: #19383a;
+  --muted-foreground: #aab6b1;
+  --accent: #34221e;
+  --accent-foreground: #f5f2e8;
+  --destructive: #b72f3e;
   --border: rgb(255 255 255 / 12%);
   --input: rgb(255 255 255 / 15%);
-  --ring: #e72d45;
-  --capcar-blue-strong: #ff667a;
+  --ring: #bf8269;
+  --capcar-blue-strong: #173d40;
 }
 
 @keyframes capcar-hero-drift {
@@ -149,6 +155,20 @@
 
   body {
     @apply bg-background text-foreground;
+    min-width: 320px;
+    font-feature-settings:
+      "kern" 1,
+      "ss01" 1;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  :where(a, button, input, select, textarea, summary) {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :where(a, button, input, select, textarea, summary):focus-visible {
+    outline-color: var(--ring);
   }
 
   input,
@@ -168,8 +188,22 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--capcar-red) 42%, transparent);
+    background: color-mix(in oklab, var(--capcar-clay) 48%, transparent);
   }
+}
+
+.capcar-editorial-grid {
+  background-image:
+    linear-gradient(rgb(232 230 215 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(232 230 215 / 3%) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+.capcar-paper-grid {
+  background-image:
+    linear-gradient(rgb(14 45 48 / 3.5%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(14 45 48 / 3.5%) 1px, transparent 1px);
+  background-size: 72px 72px;
 }
 
 .print-only {
