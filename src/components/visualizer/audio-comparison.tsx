@@ -2,17 +2,21 @@
 import { useEffect, useRef, useState } from "react";
 import { FileDropzone } from "@/components/ui/file-dropzone";
 import { useTranslations } from "next-intl";
+import {
+  AUDIO_ACCEPT,
+  isSupportedAudio,
+  pauseOtherStudioAudio,
+} from "@/features/visualizer/audio-files";
+import { StudioAudio } from "./studio-audio";
 
 type Clip = { url: string; name: string };
 export function AudioComparison() {
   const t = useTranslations("SoundUi");
+  const s = useTranslations("StudioPolish");
   const [clips, setClips] = useState<
     Partial<Record<"stock" | "modified", Clip>>
   >({});
   const [message, setMessage] = useState("");
-  const players = useRef<
-    Partial<Record<"stock" | "modified", HTMLAudioElement | null>>
-  >({});
   const urls = useRef(new Set<string>());
   useEffect(() => {
     const owned = urls.current;
@@ -22,7 +26,7 @@ export function AudioComparison() {
     };
   }, []);
   function clear(side: "stock" | "modified") {
-    players.current[side]?.pause();
+    pauseOtherStudioAudio();
     const clip = clips[side];
     if (clip) {
       URL.revokeObjectURL(clip.url);
@@ -31,14 +35,28 @@ export function AudioComparison() {
     setClips((current) => ({ ...current, [side]: undefined }));
   }
   return (
-    <section className="rounded-2xl border border-current/20 p-5 sm:p-8">
-      <h2 className="text-2xl font-medium">{t("abTitle")}</h2>
-      <p className="mt-3 max-w-2xl text-sm leading-6">{t("abDescription")}</p>
+    <section
+      id="compare"
+      aria-labelledby="audio-comparison-heading"
+      className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-[#0e2d30] p-5 text-[#e8e6d7] sm:p-8"
+    >
+      <p className="mb-3 text-xs font-medium tracking-[.18em] text-[#cfaa96] uppercase">
+        02 / {s("compare")}
+      </p>
+      <h2
+        id="audio-comparison-heading"
+        className="text-3xl font-medium tracking-tight"
+      >
+        {t("abTitle")}
+      </h2>
+      <p className="mt-3 max-w-3xl text-sm leading-6 text-[#e8e6d7]/70">
+        {t("abDescription")}
+      </p>
       <div className="mt-6 grid gap-5 md:grid-cols-2">
         {(["stock", "modified"] as const).map((side) => (
           <div
             key={side}
-            className="min-w-0 rounded-xl border border-current/20 p-4"
+            className="min-w-0 rounded-2xl border border-white/15 bg-[#0b2326] p-4 sm:p-5"
           >
             <div>
               <p className="font-medium">
@@ -49,7 +67,8 @@ export function AudioComparison() {
               <div className="mt-4">
                 <FileDropzone
                   compact
-                  accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4,.mp3,.wav,.ogg,.m4a"
+                  accept={AUDIO_ACCEPT}
+                  tone="studio"
                   label={
                     side === "stock" ? t("chooseStock") : t("chooseModified")
                   }
@@ -60,16 +79,7 @@ export function AudioComparison() {
                   }
                   description={t("dropAudio")}
                   onFile={(file) => {
-                    if (
-                      ![
-                        "audio/mpeg",
-                        "audio/wav",
-                        "audio/x-wav",
-                        "audio/ogg",
-                        "audio/mp4",
-                      ].includes(file.type) ||
-                      file.size > 30 * 1024 * 1024
-                    ) {
+                    if (!isSupportedAudio(file)) {
                       setMessage(t("filePrompt"));
                       return;
                     }
@@ -90,23 +100,13 @@ export function AudioComparison() {
                 <p className="mt-3 truncate text-sm">
                   {clips[side]?.name} · {t("personalUnverified")}
                 </p>
-                <audio
-                  aria-label={t("preview", { side })}
-                  className="mt-4 w-full"
-                  ref={(element) => {
-                    players.current[side] = element;
-                    if (element) element.volume = 0.25;
-                  }}
-                  src={clips[side]?.url}
-                  controls
-                  preload="metadata"
-                  onPlay={() =>
-                    players.current[
-                      side === "stock" ? "modified" : "stock"
-                    ]?.pause()
-                  }
-                  onError={() => setMessage(t("decodeFailed"))}
-                />
+                <div className="mt-4">
+                  <StudioAudio
+                    label={t("preview", { side })}
+                    src={clips[side]!.url}
+                    preload="metadata"
+                  />
+                </div>
                 <button
                   className="mt-3 min-h-11 underline"
                   onClick={() => clear(side)}
@@ -118,7 +118,9 @@ export function AudioComparison() {
           </div>
         ))}
       </div>
-      <p className="mt-4 text-sm leading-6">{t("localOnly")}</p>
+      <p className="mt-4 text-sm leading-6 text-[#e8e6d7]/65">
+        {t("localOnly")}
+      </p>
       <p role="status" className="mt-3 text-sm">
         {message}
       </p>

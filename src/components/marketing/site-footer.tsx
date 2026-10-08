@@ -14,6 +14,7 @@ export function SiteFooter() {
         [t("parts"), "/parts-search"],
         [t("conceptStudio"), "/studio"],
         [t("soundStudio"), "/sound-studio"],
+        [t("movieCars"), "/movie-cars"],
         [t("roadbook"), "/roadbook"],
         [t("aiPlanner"), "/ai"],
         [t("marketplace"), "/marketplace"],
