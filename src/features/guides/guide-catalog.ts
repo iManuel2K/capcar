@@ -1,4 +1,6 @@
 import { dailyCarProblems } from "@/features/problems/daily-car-coverage";
+import { bmwE90Guides } from "@/features/guides/bmw-e90-guides";
+import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 export type GuideDifficulty = "Easy" | "Moderate" | "Advanced";
 export type GuideReviewStatus = "draft" | "reviewed" | "verified";
 export type GuideSource = {
@@ -19,6 +21,35 @@ export type GuideStep = {
   estimatedMinutes?: number;
   check: string;
   warning?: string;
+};
+
+export type GuideCategory =
+  | "Maintenance"
+  | "Engine"
+  | "Electrical"
+  | "Exterior"
+  | "Interior"
+  | "Diagnostics";
+
+export type GuideVideo = {
+  title: string;
+  url: string;
+  embedUrl?: string;
+  source: string;
+  note: string;
+};
+
+export type GuidePhoto = {
+  src: string;
+  alt: string;
+  caption: string;
+};
+
+export type GuideVehicleRule = {
+  makes?: string[];
+  models?: string[];
+  platforms?: string[];
+  engineCodes?: string[];
 };
 
 export type GuideInstallationPlan = {
@@ -54,6 +85,10 @@ export type InstallationGuide = {
   difficulty: GuideDifficulty;
   estimatedMinutes: number;
   tools: string[];
+  category?: GuideCategory;
+  video?: GuideVideo;
+  photos?: GuidePhoto[];
+  vehicleRules?: GuideVehicleRule[];
   safetyChecks: string[];
   installationPlan?: GuideInstallationPlan;
   steps: GuideStep[];
@@ -105,6 +140,7 @@ export const installationGuides: InstallationGuide[] = [
     slug: "demo-e90-rear-lamps",
     partId: "demo-dark-rear-lamps-e90",
     title: "Rear-lamp concept installation",
+    category: "Exterior",
     summary:
       "A non-authoritative workflow prototype for replacing an E90 rear-lamp assembly.",
     reviewStatus: "draft",
@@ -126,6 +162,27 @@ export const installationGuides: InstallationGuide[] = [
     ],
     difficulty: "Moderate",
     estimatedMinutes: 95,
+    vehicleRules: [{ makes: ["BMW"], models: ["318i"], platforms: ["E90"] }],
+    video: {
+      title: "Find a matching E90 rear-lamp walkthrough",
+      url: "https://www.youtube.com/results?search_query=BMW+E90+rear+lamp+replacement",
+      source: "YouTube search",
+      note: "Community reference only. Confirm sedan body style, connector and production split before following any video.",
+    },
+    photos: [
+      {
+        src: "/capcar-bmw-current-rear-night.webp",
+        alt: "BMW E90 rear view at night",
+        caption:
+          "Photograph panel gaps and every light function before removal.",
+      },
+      {
+        src: "/capcar-bmw-current-side.webp",
+        alt: "Black BMW E90 side profile",
+        caption:
+          "Save the finished fit and lighting check to the vehicle timeline.",
+      },
+    ],
     installationPlan: {
       costRange: {
         min: 0,
@@ -273,6 +330,7 @@ export const installationGuides: InstallationGuide[] = [
     slug: "demo-n43-oil-service",
     partId: "demo-n43-service-kit",
     title: "Oil-service planning workflow",
+    category: "Maintenance",
     summary:
       "A planning-only guide that demonstrates preparation, execution gates and post-service verification.",
     reviewStatus: "draft",
@@ -291,6 +349,33 @@ export const installationGuides: InstallationGuide[] = [
     ],
     difficulty: "Moderate",
     estimatedMinutes: 70,
+    vehicleRules: [
+      {
+        makes: ["BMW"],
+        models: ["318i"],
+        platforms: ["E90"],
+        engineCodes: ["N43"],
+      },
+    ],
+    video: {
+      title: "Find a matching N43 oil-service walkthrough",
+      url: "https://www.youtube.com/results?search_query=BMW+E90+N43+oil+service",
+      source: "YouTube search",
+      note: "Community reference only. Confirm the oil approval, capacity, filter and tightening values for the VIN.",
+    },
+    photos: [
+      {
+        src: "/capcar-bmw-current-front-close.webp",
+        alt: "Black BMW E90 front three-quarter view",
+        caption: "Record mileage and the untouched work area before service.",
+      },
+      {
+        src: "/capcar-bmw-current-side.webp",
+        alt: "Black BMW E90 side profile",
+        caption:
+          "Save the final leak check and service record after completion.",
+      },
+    ],
     installationPlan: {
       costRange: {
         min: 90,
@@ -436,6 +521,7 @@ export const installationGuides: InstallationGuide[] = [
     slug: "demo-n43-panel-filter",
     partId: "demo-intake-n43",
     title: "Panel-filter concept installation",
+    category: "Engine",
     summary:
       "A beginner-oriented workflow for checking and replacing a factory-airbox panel filter.",
     reviewStatus: "draft",
@@ -454,6 +540,33 @@ export const installationGuides: InstallationGuide[] = [
     ],
     difficulty: "Easy",
     estimatedMinutes: 25,
+    vehicleRules: [
+      {
+        makes: ["BMW"],
+        models: ["318i"],
+        platforms: ["E90"],
+        engineCodes: ["N43"],
+      },
+    ],
+    video: {
+      title: "BMW E90 air-filter walkthrough",
+      url: "https://www.youtube.com/watch?v=bh-fughufxg",
+      embedUrl: "https://www.youtube-nocookie.com/embed/bh-fughufxg",
+      source: "AUTODOC",
+      note: "Community reference only. Confirm the airbox and filter application for the exact engine before following it.",
+    },
+    photos: [
+      {
+        src: "/capcar-bmw-current-front-close.webp",
+        alt: "Black BMW E90 front three-quarter view",
+        caption: "Photograph every hose and clip disturbed during access.",
+      },
+      {
+        src: "/capcar-bmw-current-side.webp",
+        alt: "Black BMW E90 side profile",
+        caption: "Record idle quality and warning state after the first start.",
+      },
+    ],
     installationPlan: {
       costRange: {
         min: 20,
@@ -583,7 +696,43 @@ export const installationGuides: InstallationGuide[] = [
       },
     ],
   },
+  ...bmwE90Guides,
 ];
+
+function normalized(value: string) {
+  return value.trim().toUpperCase();
+}
+
+export function guideMatchesVehicle(
+  guide: InstallationGuide,
+  vehicle: Pick<Vehicle, "make" | "model" | "platform" | "engineCode">,
+) {
+  if (!guide.vehicleRules?.length) return true;
+
+  return guide.vehicleRules.some((rule) => {
+    const make = normalized(vehicle.make);
+    const model = normalized(vehicle.model);
+    const platform = normalized(vehicle.platform);
+    const engine = normalized(vehicle.engineCode);
+
+    const makeMatches =
+      !rule.makes?.length ||
+      rule.makes.some((candidate) => make === normalized(candidate));
+    const modelMatches =
+      !rule.models?.length ||
+      rule.models.some((candidate) => model.includes(normalized(candidate)));
+    const platformMatches =
+      !rule.platforms?.length ||
+      rule.platforms.some((candidate) => platform === normalized(candidate));
+    const engineMatches =
+      !rule.engineCodes?.length ||
+      rule.engineCodes.some((candidate) =>
+        engine.startsWith(normalized(candidate)),
+      );
+
+    return makeMatches && modelMatches && platformMatches && engineMatches;
+  });
+}
 
 export function findGuideBySlug(slug: string) {
   return installationGuides.find((guide) => guide.slug === slug);
