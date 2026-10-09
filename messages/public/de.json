@@ -623,7 +623,7 @@
     "curatedNotice": "Starte bei niedriger Lautstärke. Aufnahmegeräte und Bedingungen unterscheiden sich; dies sind keine kontrollierten Serien-/Umbau-Vergleiche. Der Umbauzustand ist nicht verifiziert.",
     "audioError": "Audio konnte nicht geladen werden. Lade die Seite neu oder nutze die Quelle darunter.",
     "credits": "Quelle und Credits",
-    "converted": "Original-Ogg unverändert; MP3 von CapCar unter derselben Lizenz konvertiert. Keine Empfehlung impliziert.",
+    "converted": "Wiedergabekopie von CapCar für das Web optimiert und unter derselben Lizenz. Keine Empfehlung impliziert.",
     "archive": "Dein Soundarchiv / Nur lokal",
     "keep": "Bewahre den Charakter.",
     "archiveDescription": "Speichere eigene Aufnahmen mit Fahrzeug, Setup und Quellenberechtigung. Dateien bleiben in diesem Browser, überstehen Neuladen und werden nicht mit der Garage synchronisiert oder exportiert. Browserdaten löschen sie; behalte die Originale.",

@@ -173,7 +173,7 @@ export function CuratedSounds() {
                   {selected.license}
                 </a>
               </p>
-              {selected.fallback && <p>{t("converted")}</p>}
+              <p>{t("converted")}</p>
               <a
                 className="inline-flex min-h-11 items-center underline"
                 target="_blank"
