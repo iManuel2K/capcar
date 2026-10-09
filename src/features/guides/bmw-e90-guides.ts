@@ -597,6 +597,7 @@ function makeStep(
   tuple: GuideSpec["steps"][number],
   index: number,
   minutes: number,
+  stepCount: number,
 ): GuideStep {
   const [title, instruction, check] = tuple;
   return {
@@ -612,7 +613,7 @@ function makeStep(
       "Continuing when access, connectors or condition differ from the guide",
     ],
     recordAfterStep: ["One clear photo and the result of this check"],
-    estimatedMinutes: Math.max(3, Math.round(minutes / tuple.length)),
+    estimatedMinutes: Math.max(3, Math.round(minutes / stepCount)),
     check,
   };
 }
@@ -729,6 +730,6 @@ export const bmwE90Guides: InstallationGuide[] = specs.map((spec) => ({
       "Use this as a concise work plan. Exact repair values and safety steps still come from the matching authoritative procedure.",
   },
   steps: spec.steps.map((step, index) =>
-    makeStep(spec.slug, step, index, spec.minutes),
+    makeStep(spec.slug, step, index, spec.minutes, spec.steps.length),
   ),
 }));
