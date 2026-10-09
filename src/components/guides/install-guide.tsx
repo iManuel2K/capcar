@@ -1,25 +1,39 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useLocale } from "next-intl";
 import {
+  Activity,
   AlertTriangle,
   ArrowLeft,
   ArrowRight,
   Check,
   CheckCircle2,
+  ChevronDown,
   ChevronLeft,
   Clock3,
+  Droplets,
   ExternalLink,
   FileCheck2,
   FileWarning,
+  Gauge,
+  Hand,
+  Images,
   ListChecks,
+  PlayCircle,
+  Puzzle,
+  ScanLine,
   ShieldCheck,
   Wrench,
 } from "lucide-react";
 import { useState, useSyncExternalStore } from "react";
 
-import { findGuideBySlug } from "@/features/guides/guide-catalog";
+import {
+  findGuideBySlug,
+  guideMatchesVehicle,
+  type InstallationGuide,
+} from "@/features/guides/guide-catalog";
 import { problemsForVehicle } from "@/features/problems/problem-catalog";
 import { dailyProblemsForVehicle } from "@/features/problems/daily-car-coverage";
 import { evaluateGuideGovernance } from "@/features/guides/guide-governance";
@@ -85,6 +99,18 @@ export function InstallGuide({
         </Link>
       </div>
     );
+  if (guide.purpose !== "inspection" && !guideMatchesVehicle(guide, vehicle))
+    return (
+      <div className="py-16">
+        <p>This guide does not match the saved vehicle identity.</p>
+        <Link
+          className="mt-4 inline-flex min-h-11 items-center underline"
+          href={`/garage/${vehicleId}/guides`}
+        >
+          View guides for this car
+        </Link>
+      </div>
+    );
 
   const resolvedGuide = guide;
   const current = progress ?? {
@@ -146,14 +172,14 @@ export function InstallGuide({
         href={
           guide.purpose === "inspection"
             ? `/garage/${vehicleId}/known-problems`
-            : `/garage/${vehicleId}/parts/${guide.partId}`
+            : `/garage/${vehicleId}/guides`
         }
         className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
       >
         <ArrowLeft className="size-4" />{" "}
         {guide.purpose === "inspection"
           ? "Known problems & inspection"
-          : "Part details"}
+          : "All guides"}
       </Link>
 
       <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(231,45,69,0.18),transparent_28%),#111111] p-6 sm:p-10">
@@ -209,126 +235,49 @@ export function InstallGuide({
         </div>
       </header>
 
-      <section className="mt-5 grid gap-5 rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:grid-cols-[0.7fr_1.3fr] sm:p-8">
-        <div>
-          <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
-            Trust record
-          </p>
-          <h2 className="mt-2 text-2xl font-medium">
-            Revision {resolvedGuide.revision}
-          </h2>
-          <p className="mt-3 text-sm leading-6 text-white/40">
-            Updated{" "}
-            {new Intl.DateTimeFormat(locale, {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            }).format(new Date(`${resolvedGuide.updatedAt}T00:00:00Z`))}
-            . This guide cannot receive a verified label while its source
-            requirements remain open.
-          </p>
-          <Link
-            href={`/garage/${vehicleId}/guides/${guideSlug}/review`}
-            className="mt-5 inline-flex min-h-11 items-center rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"
-          >
-            Open review workspace
-          </Link>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2">
+      <GuideMediaHub guide={resolvedGuide} planningCost={planningCost} />
+
+      <details className="group mt-5 rounded-2xl border border-white/10 bg-[#111111] p-5">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+          <span className="flex items-center gap-3 text-sm text-white/55">
+            <FileCheck2 className="size-4 text-[#ff667a]" /> Evidence & source
+            record · revision {resolvedGuide.revision}
+          </span>
+          <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
+        </summary>
+        <div className="mt-5 grid gap-3 border-t border-white/8 pt-5 sm:grid-cols-2">
           {resolvedGuide.sources.map((source) => (
             <div
               key={source.label}
-              className="min-w-0 rounded-2xl border border-white/8 bg-black/10 p-4"
+              className="rounded-xl border border-white/8 bg-black/10 p-4"
             >
-              <FileCheck2 className="size-4 text-white/25" />
-              <p className="mt-3 text-sm leading-6 break-words text-white/50">
-                {source.label}
-              </p>
+              <p className="text-sm leading-6 text-white/50">{source.label}</p>
               <p className="mt-2 text-[10px] tracking-[0.12em] text-white/25 uppercase">
                 {source.kind}
-                {source.verifiedAt
-                  ? ` · checked ${new Intl.DateTimeFormat(locale, {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    }).format(new Date(`${source.verifiedAt}T00:00:00Z`))}`
-                  : ""}
               </p>
               {source.url && (
                 <a
                   href={source.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-3 inline-flex min-h-11 items-center gap-2 text-xs text-white/60 underline decoration-white/25 underline-offset-4 hover:text-white"
+                  className="mt-3 inline-flex min-h-10 items-center gap-2 text-xs text-white/60 underline decoration-white/25 underline-offset-4"
                 >
                   Open source <ExternalLink className="size-3.5" />
                 </a>
               )}
             </div>
           ))}
+          <Link
+            href={`/garage/${vehicleId}/guides/${guideSlug}/review`}
+            className="inline-flex min-h-11 items-center text-sm text-white/55 hover:text-white"
+          >
+            Open review workspace <ArrowRight className="ml-2 size-4" />
+          </Link>
         </div>
-      </section>
+      </details>
 
-      <section className="mt-5 grid gap-5 lg:grid-cols-[0.7fr_1.3fr]">
+      <section className="mt-5 grid gap-5 lg:grid-cols-[0.58fr_1.42fr]">
         <aside className="space-y-5">
-          <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-6">
-            <h2 className="flex items-center gap-2 font-medium">
-              <Wrench className="size-4 text-[#ff667a]" /> Tools and preparation
-            </h2>
-            <ul className="mt-5 space-y-3">
-              {guide.tools.map((tool) => (
-                <li key={tool} className="flex gap-2 text-sm text-white/45">
-                  <Check className="mt-0.5 size-4 shrink-0 text-white/25" />
-                  {tool}
-                </li>
-              ))}
-            </ul>
-          </div>
-          {installationPlan && (
-            <div className="rounded-[2rem] border border-[#e72d45]/20 bg-[#e72d45]/[0.045] p-6">
-              <p className="text-[10px] font-semibold tracking-[0.14em] text-[#ff667a] uppercase">
-                Installation Guidance 2.0 · Beta coverage
-              </p>
-              <h2 className="mt-3 text-xl font-medium">
-                {installationPlan.recommendedSetting}
-              </h2>
-              <p className="mt-3 text-sm leading-6 text-white/50">
-                {installationPlan.recommendation}
-              </p>
-              <p className="mt-4 text-xs leading-5 text-white/35">
-                {installationPlan.costRange.note}
-              </p>
-              <PreparationList
-                title="Confirm before starting"
-                items={installationPlan.prerequisites}
-              />
-              <PreparationList
-                title="Work area"
-                items={installationPlan.workAreaChecks}
-              />
-              <PreparationList
-                title="Consumables"
-                items={installationPlan.consumables}
-              />
-              <PreparationList
-                title="Technical checks"
-                items={installationPlan.technicalChecks}
-              />
-              <PreparationList
-                title="Legal and disposal"
-                items={installationPlan.legalChecks}
-              />
-              <PreparationList
-                title="Stop and reassess when"
-                items={installationPlan.stopConditions}
-                tone="warning"
-              />
-              <PreparationList
-                title="Save to the build history"
-                items={installationPlan.completionRecord}
-              />
-            </div>
-          )}
           <div className="rounded-[2rem] border border-amber-300/15 bg-amber-300/6 p-6">
             <h2 className="flex items-center gap-2 font-medium text-amber-100/80">
               <ShieldCheck className="size-4" /> Safety gate
@@ -391,38 +340,42 @@ export function InstallGuide({
           <p className="mt-6 text-lg leading-8 text-white/65">
             {step.instruction}
           </p>
-          {current.mode === "beginner" && (
-            <div className="mt-6 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/7 p-5">
-              <p className="text-xs font-semibold tracking-[0.12em] text-[#9ec2ff] uppercase">
-                Beginner detail
-              </p>
-              <p className="mt-3 text-sm leading-6 text-white/55">
-                {step.beginnerDetail}
-              </p>
-            </div>
-          )}
-          {(step.whyItMatters || step.mistakesToAvoid?.length) && (
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <details className="group mt-6 rounded-2xl border border-white/10 bg-white/[0.025] p-5">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm text-white/55">
+              <span>Need more detail?</span>
+              <ChevronDown className="size-4 transition group-open:rotate-180" />
+            </summary>
+            <div className="mt-5 space-y-5 border-t border-white/8 pt-5">
+              {current.mode === "beginner" && (
+                <div>
+                  <p className="text-xs font-semibold tracking-[0.12em] text-[#ff8898] uppercase">
+                    Beginner note
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-white/50">
+                    {step.beginnerDetail}
+                  </p>
+                </div>
+              )}
               {step.whyItMatters && (
-                <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-5">
-                  <p className="text-xs font-semibold tracking-[0.12em] text-white/40 uppercase">
+                <div>
+                  <p className="text-xs font-semibold tracking-[0.12em] text-white/35 uppercase">
                     Why this matters
                   </p>
-                  <p className="mt-3 text-sm leading-6 text-white/55">
+                  <p className="mt-2 text-sm leading-6 text-white/50">
                     {step.whyItMatters}
                   </p>
                 </div>
               )}
               {Boolean(step.mistakesToAvoid?.length) && (
-                <div className="rounded-2xl border border-amber-300/15 bg-amber-300/[0.045] p-5">
-                  <p className="text-xs font-semibold tracking-[0.12em] text-amber-100/65 uppercase">
-                    Avoid these mistakes
+                <div>
+                  <p className="text-xs font-semibold tracking-[0.12em] text-amber-100/60 uppercase">
+                    Avoid
                   </p>
-                  <ul className="mt-3 space-y-2">
+                  <ul className="mt-2 space-y-2">
                     {step.mistakesToAvoid?.map((mistake) => (
                       <li
                         key={mistake}
-                        className="flex gap-2 text-sm leading-6 text-white/50"
+                        className="flex gap-2 text-sm leading-6 text-white/45"
                       >
                         <AlertTriangle className="mt-1 size-3.5 shrink-0 text-amber-200/60" />
                         <span>{mistake}</span>
@@ -431,8 +384,26 @@ export function InstallGuide({
                   </ul>
                 </div>
               )}
+              {Boolean(step.recordAfterStep?.length) && (
+                <div>
+                  <p className="text-xs font-semibold tracking-[0.12em] text-white/35 uppercase">
+                    Save before continuing
+                  </p>
+                  <ul className="mt-2 space-y-2">
+                    {step.recordAfterStep?.map((record) => (
+                      <li
+                        key={record}
+                        className="flex gap-2 text-sm leading-6 text-white/45"
+                      >
+                        <FileCheck2 className="mt-1 size-3.5 shrink-0 text-white/30" />
+                        <span>{record}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
-          )}
+          </details>
           {step.warning && (
             <div className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6 text-white/50">
               <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-200" />
@@ -444,24 +415,6 @@ export function InstallGuide({
               Confirmation
             </p>
             <p className="mt-3 text-sm leading-6 text-white/60">{step.check}</p>
-            {Boolean(step.recordAfterStep?.length) && (
-              <div className="mt-5 border-t border-white/8 pt-4">
-                <p className="text-xs tracking-[0.12em] text-white/30 uppercase">
-                  Record before continuing
-                </p>
-                <ul className="mt-3 space-y-2">
-                  {step.recordAfterStep?.map((record) => (
-                    <li
-                      key={record}
-                      className="flex gap-2 text-sm leading-6 text-white/50"
-                    >
-                      <FileCheck2 className="mt-1 size-3.5 shrink-0 text-white/30" />
-                      <span>{record}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
           <div className="mt-8 flex items-center justify-between gap-3">
             <button
@@ -496,6 +449,244 @@ export function InstallGuide({
           </div>
         </article>
       </section>
+    </div>
+  );
+}
+
+function GuideMediaHub({
+  guide,
+  planningCost,
+}: {
+  guide: InstallationGuide;
+  planningCost?: Intl.NumberFormat;
+}) {
+  const plan = guide.installationPlan;
+
+  return (
+    <section
+      className="mt-5 grid gap-4 lg:grid-cols-2"
+      aria-label="Optional guide media and preparation"
+    >
+      <details className="group rounded-[1.7rem] border border-white/10 bg-[#111111] p-5 sm:p-6">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+          <span className="flex items-center gap-3">
+            <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/12 text-[#ff667a]">
+              <PlayCircle className="size-5" />
+            </span>
+            <span>
+              <span className="block font-medium">Video walkthrough</span>
+              <span className="mt-1 block text-xs text-white/35">
+                Watch only when you need it
+              </span>
+            </span>
+          </span>
+          <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
+        </summary>
+        <div className="mt-5 border-t border-white/8 pt-5">
+          {guide.video?.embedUrl ? (
+            <div className="overflow-hidden rounded-2xl border border-white/10 bg-black">
+              <iframe
+                src={guide.video.embedUrl}
+                title={guide.video.title}
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="aspect-video w-full"
+              />
+            </div>
+          ) : guide.video?.url ? (
+            <a
+              href={guide.video.url}
+              target="_blank"
+              rel="noreferrer"
+              className="group/video flex aspect-video items-center justify-center rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_center,rgba(231,45,69,0.22),transparent_52%),#090909]"
+            >
+              <span className="grid size-16 place-items-center rounded-full bg-[#e72d45] text-white transition group-hover/video:scale-105">
+                <PlayCircle className="size-7" />
+              </span>
+            </a>
+          ) : (
+            <p className="text-sm text-white/35">
+              Video reference coming soon.
+            </p>
+          )}
+          {guide.video && (
+            <>
+              <div className="mt-4 flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium">{guide.video.title}</p>
+                  <p className="mt-1 text-xs text-white/35">
+                    {guide.video.source}
+                  </p>
+                </div>
+                <a
+                  href={guide.video.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex min-h-10 shrink-0 items-center gap-2 text-xs text-white/55 hover:text-white"
+                >
+                  Open <ExternalLink className="size-3.5" />
+                </a>
+              </div>
+              <p className="mt-4 rounded-xl border border-amber-300/10 bg-amber-300/5 p-3 text-xs leading-5 text-white/35">
+                {guide.video.note}
+              </p>
+            </>
+          )}
+        </div>
+      </details>
+
+      <details className="group rounded-[1.7rem] border border-white/10 bg-[#111111] p-5 sm:p-6">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+          <span className="flex items-center gap-3">
+            <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/12 text-[#ff667a]">
+              <Wrench className="size-5" />
+            </span>
+            <span>
+              <span className="block font-medium">Tools & materials</span>
+              <span className="mt-1 block text-xs text-white/35">
+                {guide.tools.length} items with visual cards
+              </span>
+            </span>
+          </span>
+          <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
+        </summary>
+        <div className="mt-5 grid gap-3 border-t border-white/8 pt-5 sm:grid-cols-2">
+          {guide.tools.map((tool) => (
+            <ToolVisual key={tool} name={tool} />
+          ))}
+        </div>
+      </details>
+
+      <details className="group rounded-[1.7rem] border border-white/10 bg-[#111111] p-5 sm:p-6">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+          <span className="flex items-center gap-3">
+            <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/12 text-[#ff667a]">
+              <Images className="size-5" />
+            </span>
+            <span>
+              <span className="block font-medium">Reference photos</span>
+              <span className="mt-1 block text-xs text-white/35">
+                Before and after reminders
+              </span>
+            </span>
+          </span>
+          <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
+        </summary>
+        <div className="mt-5 grid gap-3 border-t border-white/8 pt-5 sm:grid-cols-2">
+          {(guide.photos ?? []).map((photo) => (
+            <figure
+              key={`${photo.src}-${photo.caption}`}
+              className="overflow-hidden rounded-2xl border border-white/10 bg-black/15"
+            >
+              <div className="relative aspect-[4/3]">
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 40vw"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="p-4 text-xs leading-5 text-white/40">
+                {photo.caption}
+              </figcaption>
+            </figure>
+          ))}
+          {!guide.photos?.length && (
+            <p className="text-sm text-white/35">
+              Reference photos are being prepared for this guide.
+            </p>
+          )}
+        </div>
+      </details>
+
+      <details className="group rounded-[1.7rem] border border-white/10 bg-[#111111] p-5 sm:p-6">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+          <span className="flex items-center gap-3">
+            <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/12 text-[#ff667a]">
+              <ShieldCheck className="size-5" />
+            </span>
+            <span>
+              <span className="block font-medium">Plan & safety detail</span>
+              <span className="mt-1 block text-xs text-white/35">
+                Scope, stop points and record
+              </span>
+            </span>
+          </span>
+          <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
+        </summary>
+        {plan && (
+          <div className="mt-5 border-t border-white/8 pt-5">
+            <div className="rounded-xl border border-[#e72d45]/15 bg-[#e72d45]/5 p-4">
+              <p className="text-sm font-medium">{plan.recommendedSetting}</p>
+              <p className="mt-2 text-xs leading-5 text-white/40">
+                {plan.recommendation}
+              </p>
+              {planningCost && (
+                <p className="mt-3 text-xs text-white/30">
+                  {planningCost.format(plan.costRange.min)}–
+                  {planningCost.format(plan.costRange.max)} planning range
+                </p>
+              )}
+            </div>
+            <PreparationList title="Confirm first" items={plan.prerequisites} />
+            <PreparationList title="Work area" items={plan.workAreaChecks} />
+            <PreparationList
+              title="Technical checks"
+              items={plan.technicalChecks}
+            />
+            <PreparationList
+              title="Stop when"
+              items={plan.stopConditions}
+              tone="warning"
+            />
+            <PreparationList title="Save after" items={plan.completionRecord} />
+          </div>
+        )}
+      </details>
+    </section>
+  );
+}
+
+function ToolVisual({ name }: { name: string }) {
+  const lower = name.toLowerCase();
+  const Icon =
+    lower.includes("scan") || lower.includes("obd")
+      ? ScanLine
+      : lower.includes("gauge") ||
+          lower.includes("pressure") ||
+          lower.includes("tester")
+        ? Gauge
+        : lower.includes("fluid") ||
+            lower.includes("oil") ||
+            lower.includes("funnel")
+          ? Droplets
+          : lower.includes("glove") ||
+              lower.includes("towel") ||
+              lower.includes("cloth")
+            ? Hand
+            : lower.includes("clip") ||
+                lower.includes("tape") ||
+                lower.includes("trim")
+              ? Puzzle
+              : lower.includes("light") ||
+                  lower.includes("camera") ||
+                  lower.includes("mirror")
+                ? Images
+                : lower.includes("multimeter") || lower.includes("voltage")
+                  ? Activity
+                  : Wrench;
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-white/8 bg-black/15">
+      <div className="relative grid h-24 place-items-center overflow-hidden bg-[linear-gradient(135deg,rgba(255,255,255,0.055),transparent_55%)]">
+        <div className="absolute inset-0 [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:20px_20px] opacity-25" />
+        <span className="relative grid size-14 place-items-center rounded-2xl border border-[#ff667a]/20 bg-[#e72d45]/12 text-[#ff8898] shadow-[0_12px_30px_rgba(231,45,69,0.12)]">
+          <Icon className="size-7" strokeWidth={1.6} />
+        </span>
+      </div>
+      <p className="p-3 text-xs leading-5 text-white/55">{name}</p>
     </div>
   );
 }
