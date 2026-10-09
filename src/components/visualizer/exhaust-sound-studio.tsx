@@ -4,6 +4,11 @@ import { FileDropzone } from "@/components/ui/file-dropzone";
 import { AudioComparison } from "./audio-comparison";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 import {
+  AUDIO_ACCEPT,
+  isSupportedAudio,
+  pauseOtherStudioAudio,
+} from "@/features/visualizer/audio-files";
+import {
   recordingsForVehicle,
   soundScenarios,
 } from "@/features/visualizer/exhaust-audio";
@@ -146,12 +151,14 @@ export function ExhaustSoundStudio({ vehicle }: { vehicle: Vehicle }) {
       )}
       {src && (
         <audio
+          data-capcar-audio
           key={src}
           ref={audioRef}
           aria-label="Exhaust recording preview"
           controls
           preload="none"
           src={src}
+          onPlay={(event) => pauseOtherStudioAudio(event.currentTarget)}
           onError={() =>
             setError(
               "Recording could not be played. Check the file format or source.",
@@ -167,15 +174,13 @@ export function ExhaustSoundStudio({ vehicle }: { vehicle: Vehicle }) {
         <div className="mt-3">
           <FileDropzone
             compact
-            accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4,.mp3,.wav,.ogg,.m4a"
+            accept={AUDIO_ACCEPT}
+            tone="studio"
             label="Load personal sound clip"
             inputLabel="Audition your own recording locally"
             description="Drag and drop or choose audio · stays in this tab"
             onFile={(file) => {
-              if (
-                !file.type.startsWith("audio/") ||
-                file.size > 30 * 1024 * 1024
-              ) {
+              if (!isSupportedAudio(file)) {
                 setError("Choose an audio file no larger than 30 MB.");
                 return;
               }

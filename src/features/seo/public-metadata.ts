@@ -7,6 +7,7 @@ export const PUBLIC_INDEXABLE_ROUTES = [
   "/ai",
   "/connected-parts",
   "/imprint",
+  "/movie-cars",
   "/parts-search",
   "/privacy",
   "/roadbook",

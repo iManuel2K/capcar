@@ -106,6 +106,7 @@ export function MarketingHeader() {
                 {[
                   ["conceptStudio", "/studio"],
                   ["soundStudio", "/sound-studio"],
+                  ["movieCars", "/movie-cars"],
                   ["roadbook", "/roadbook"],
                   ["aiPlanner", "/ai"],
                   ["marketplace", "/marketplace"],
@@ -213,6 +214,7 @@ export function MarketingHeader() {
               {[
                 ["conceptStudio", "/studio"],
                 ["soundStudio", "/sound-studio"],
+                ["movieCars", "/movie-cars"],
                 ["roadbook", "/roadbook"],
                 ["aiPlanner", "/ai"],
                 ["marketplace", "/marketplace"],

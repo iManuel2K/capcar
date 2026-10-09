@@ -5,14 +5,23 @@ import { FileDropzone } from "@/components/ui/file-dropzone";
 import { downloadTextFile } from "@/features/export/download";
 import {
   recordingStore,
+  saveRecording,
+  RecordingLimitError,
   type Recording,
 } from "@/features/visualizer/recording-library";
 import { useTranslations } from "next-intl";
+import {
+  AUDIO_ACCEPT,
+  isSupportedAudio,
+  pauseOtherStudioAudio,
+} from "@/features/visualizer/audio-files";
 
 const field =
   "min-h-11 w-full rounded-xl border border-white/25 bg-[#152421] px-3 text-white";
 export function RecordingLibrary() {
   const t = useTranslations("SoundUi");
+  const s = useTranslations("StudioPolish");
+  const unavailableMessage = t("storageUnavailable");
   const enums = useTranslations("SoundEnums");
   const [records, setRecords] = useState<Recording[]>([]);
   const [vehicle, setVehicle] = useState("");
@@ -24,6 +33,9 @@ export function RecordingLibrary() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("");
+  const [storageFailed, setStorageFailed] = useState(false);
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [comparison, setComparison] = useState<[string, string]>(["", ""]);
   const lock = useRef(false);
   useEffect(() => {
@@ -31,29 +43,30 @@ export function RecordingLibrary() {
     recordingStore<Recording[]>((store) => store.getAll())
       .then((items) => {
         if (alive) {
-          setRecords(items);
+          setRecords(
+            items.sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+          );
           setReady(true);
+          setStorageFailed(false);
         }
       })
       .catch(() => {
-        if (alive) setMessage(t("storageUnavailable"));
+        if (alive) {
+          setMessage(unavailableMessage);
+          setStorageFailed(true);
+        }
       });
     return () => {
       alive = false;
     };
-  }, [t]);
+  }, [unavailableMessage, loadAttempt]);
   async function receive(file: File) {
-    if (lock.current || !confirmed || !vehicle.trim()) return;
+    if (lock.current || !ready || !confirmed || !vehicle.trim()) return;
     lock.current = true;
     setBusy(true);
     setMessage("");
     try {
-      if (
-        !/\.(mp3|wav|ogg|m4a)$/i.test(file.name) ||
-        file.size === 0 ||
-        file.size > 30 * 1024 * 1024
-      )
-        throw new Error(t("invalidFile"));
+      if (!isSupportedAudio(file)) throw new Error(t("invalidFile"));
       if (records.length >= 20) throw new Error(t("limit"));
       const record: Recording = {
         id: crypto.randomUUID(),
@@ -65,17 +78,26 @@ export function RecordingLibrary() {
         createdAt: new Date().toISOString(),
         file,
       };
-      await recordingStore((store) => store.put(record), true);
-      setRecords((items) => [...items, record]);
+      await saveRecording(record);
+      setRecords((items) => [record, ...items]);
       setMessage(t("saved"));
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : t("saveFailed"));
+      setMessage(
+        error instanceof RecordingLimitError
+          ? t("limit")
+          : error instanceof Error
+            ? error.message
+            : t("saveFailed"),
+      );
     } finally {
       lock.current = false;
       setBusy(false);
     }
   }
   async function remove(id: string) {
+    if (lock.current) return;
+    lock.current = true;
+    setBusy(true);
     try {
       await recordingStore((store) => store.delete(id), true);
       setRecords((items) => items.filter((item) => item.id !== id));
@@ -83,19 +105,42 @@ export function RecordingLibrary() {
       setMessage(t("removed"));
     } catch {
       setMessage(t("removeFailed"));
+    } finally {
+      lock.current = false;
+      setBusy(false);
     }
   }
+  const matching = records.filter(
+    (item) =>
+      (filter === "all" || item.category === filter) &&
+      `${item.name} ${item.vehicle}`
+        .toLowerCase()
+        .includes(search.trim().toLowerCase()),
+  );
   return (
     <section
-      className="mb-10 rounded-3xl bg-[#0e2d30] p-5 text-[#e8e6d7] sm:p-8"
+      id="archive"
+      className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-[#0e2d30] p-5 text-[#e8e6d7] sm:p-8"
       aria-labelledby="recording-library-title"
     >
-      <p className="text-xs tracking-widest uppercase">{t("archive")}</p>
+      <p className="text-xs font-medium tracking-[.18em] text-[#cfaa96] uppercase">
+        03 / {t("archive")}
+      </p>
       <h2 id="recording-library-title" className="mt-3 text-3xl font-medium">
         {t("keep")}
       </h2>
-      <p className="mt-3 max-w-2xl text-sm leading-6">
+      <p className="mt-3 max-w-3xl text-sm leading-6 text-[#e8e6d7]/70">
         {t("archiveDescription")}
+      </p>
+      <p className="mt-3 text-xs text-[#cfaa96]">
+        {s("archiveCount", {
+          count: records.length,
+          size: (
+            records.reduce((total, item) => total + item.file.size, 0) /
+            1024 /
+            1024
+          ).toFixed(1),
+        })}
       </p>
       <div className="my-6 grid gap-4 sm:grid-cols-2">
         <label className="grid gap-2 text-sm">
@@ -213,12 +258,41 @@ export function RecordingLibrary() {
         </section>
       )}
       <FileDropzone
-        accept=".mp3,.wav,.ogg,.m4a"
+        accept={AUDIO_ACCEPT}
+        tone="studio"
         label={t("add")}
         description={t("addDescription")}
-        disabled={!ready || busy || !confirmed || !vehicle.trim()}
+        disabled={
+          !ready ||
+          busy ||
+          !confirmed ||
+          !vehicle.trim() ||
+          records.length >= 20
+        }
         onFile={receive}
       />
+      {!ready && !storageFailed && (
+        <p role="status" className="mt-3 text-sm">
+          {s("loadingArchive")}
+        </p>
+      )}
+      {storageFailed && (
+        <button
+          type="button"
+          className="mt-3 min-h-11 underline"
+          onClick={() => {
+            setStorageFailed(false);
+            setMessage("");
+            setLoadAttempt((value) => value + 1);
+          }}
+        >
+          {s("retryStorage")}
+        </button>
+      )}
+      {ready && (!confirmed || !vehicle.trim()) && (
+        <p className="mt-3 text-xs text-[#e8e6d7]/65">{s("addHint")}</p>
+      )}
+      {records.length >= 20 && <p className="mt-3 text-sm">{t("limit")}</p>}
       <p role="status" className="my-4 text-sm">
         {busy ? t("saving") : message}
       </p>
@@ -236,20 +310,32 @@ export function RecordingLibrary() {
           ))}
         </select>
       </label>
-      {ready &&
-        !records.some(
-          (item) => filter === "all" || item.category === filter,
-        ) && <p className="mt-5 text-sm">{t("empty")}</p>}
+      <label className="mt-4 block text-sm">
+        {s("searchArchive")}
+        <input
+          type="search"
+          maxLength={160}
+          className={field + " mt-2"}
+          value={search}
+          onChange={(event) => {
+            pauseOtherStudioAudio();
+            setSearch(event.target.value);
+          }}
+        />
+      </label>
+      {ready && !matching.length && (
+        <p className="mt-5 text-sm">
+          {records.length ? s("noArchiveMatches") : t("empty")}
+        </p>
+      )}
       <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {records
-          .filter((item) => filter === "all" || item.category === filter)
-          .map((item) => (
-            <RecordingCard
-              key={item.id}
-              item={item}
-              onRemove={() => void remove(item.id)}
-            />
-          ))}
+        {matching.map((item) => (
+          <RecordingCard
+            key={item.id}
+            item={item}
+            onRemove={busy ? undefined : () => void remove(item.id)}
+          />
+        ))}
       </div>
     </section>
   );
@@ -272,7 +358,11 @@ function RecordingCard({
       player.current.src = objectUrl;
       player.current.volume = 0.25;
     }
-    return () => URL.revokeObjectURL(objectUrl);
+    const audio = player.current;
+    return () => {
+      audio?.pause();
+      URL.revokeObjectURL(objectUrl);
+    };
   }, [item.file]);
   return (
     <article className="min-w-0 rounded-2xl border border-white/20 p-4">
@@ -284,17 +374,14 @@ function RecordingCard({
         · {t("unverified")}
       </p>
       <audio
+        data-capcar-audio
         ref={player}
         controls
         preload="none"
         aria-label={item.name}
-        className="w-full"
+        className="h-11 w-full min-w-0 [color-scheme:dark]"
         onError={() => setFailed(true)}
-        onPlay={() => {
-          document.querySelectorAll("audio").forEach((audio) => {
-            if (audio !== player.current) audio.pause();
-          });
-        }}
+        onPlay={(event) => pauseOtherStudioAudio(event.currentTarget)}
       />
       {failed && (
         <p role="alert" className="mt-3 text-sm">

@@ -1,180 +1,113 @@
 "use client";
 
 import Image from "next/image";
-import { ReferenceConfigurator } from "./reference-configurator";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useState } from "react";
+import { ArrowUpRight, Rotate3D } from "lucide-react";
 import { useTranslations } from "next-intl";
-
-const cars = [
-  {
-    name: "Nissan Skyline R34 GT-R",
-    id: "ff8fb2251dfa4bb9979e7022c5a6666c",
-    creator: "Lexyc16",
-    image: "/showcase/skyline.jpg",
-  },
-  {
-    name: "1975 Porsche 911 Turbo",
-    id: "8568d9d14a994b9cae59499f0dbed21e",
-    creator: "Lionsharp Studios",
-    image: "/showcase/porsche.jpg",
-  },
-  {
-    name: "Brian’s R34 · 2 Fast 2 Furious",
-    id: "c424e4f18c9742d296920f069d139b45",
-    creator: "DRIVER-FIRE",
-    image: "/showcase/brians-r34.jpg",
-  },
-];
+import { iconicCars } from "@/features/visualizer/iconic-cars";
+import { ReferenceConfigurator } from "./reference-configurator";
 
 export function IconicGallery() {
-  const expansion = useTranslations("Expansion");
-  const [configuring, setConfiguring] = useState(false);
   const t = useTranslations("StudioUi");
+  const s = useTranslations("StudioPolish");
   const [selected, setSelected] = useState(0);
-  const [active, setActive] = useState(false);
-  const [attempt, setAttempt] = useState(0);
-  const [loaded, setLoaded] = useState(false);
-  const [unavailable, setUnavailable] = useState(false);
-  const car = cars[selected];
-  useEffect(() => {
-    if (!active || loaded) return;
-    const timer = window.setTimeout(() => {
-      setActive(false);
-      setUnavailable(true);
-    }, 15000);
-    return () => window.clearTimeout(timer);
-  }, [active, loaded, attempt, selected]);
+  const car = iconicCars[selected];
   return (
     <section
       aria-label={t("galleryLabel")}
-      className="overflow-hidden rounded-3xl border border-[#0e2d30]/20 bg-[#101615] text-[#e8e6d7]"
+      className="overflow-hidden rounded-[2rem] border border-[#0e2d30]/15 bg-[#0b2326] text-[#e8e6d7] shadow-[0_24px_70px_rgba(14,45,48,.12)]"
     >
-      <div className="flex gap-3 overflow-x-auto p-4">
-        {cars.map((item, index) => (
+      <div
+        className="grid gap-3 border-b border-white/10 p-4 sm:grid-cols-3 sm:p-6"
+        aria-label={s("chooseCar")}
+      >
+        {iconicCars.map((item, index) => (
           <button
             key={item.id}
             type="button"
-            aria-pressed={index === selected}
-            onClick={() => {
-              setSelected(index);
-              setConfiguring(false);
-              setActive(false);
-              setLoaded(false);
-              setUnavailable(false);
-            }}
-            className={`min-h-12 shrink-0 rounded-xl border px-5 text-sm ${selected === index ? "border-[#e8e6d7] bg-[#e8e6d7] text-[#0e2d30]" : "border-white/25"}`}
+            aria-pressed={selected === index}
+            aria-label={item.name}
+            onClick={() => setSelected(index)}
+            className={`group flex min-w-0 items-center gap-3 rounded-2xl border p-3 text-left transition motion-reduce:transition-none sm:block ${selected === index ? "border-[#cfaa96]/60 bg-[#1c4143]" : "border-white/10 hover:border-white/30 hover:bg-white/5"}`}
           >
-            {item.name}
+            <span className="relative block h-20 w-28 shrink-0 overflow-hidden rounded-xl bg-[#101615] sm:aspect-[16/9] sm:h-auto sm:w-full">
+              <Image
+                src={item.image}
+                alt=""
+                fill
+                sizes="(max-width: 640px) 112px, 360px"
+                className="object-contain"
+              />
+            </span>
+            <span className="block min-w-0 sm:mt-3">
+              <span className="text-[10px] tracking-[.12em] text-[#cfaa96] uppercase">
+                0{index + 1} / {s(item.kind)}
+              </span>
+              <span className="mt-1 block text-sm leading-5 font-medium">
+                {item.name}
+              </span>
+            </span>
           </button>
         ))}
       </div>
-      {configuring ? (
-        <ReferenceConfigurator key={car.id} {...car} />
-      ) : (
-        <div className="relative h-[420px] sm:h-[600px]">
-          {active ? (
-            <iframe
-              key={`${car.id}-${attempt}`}
-              title={`${car.name} ${t("interactive")}`}
-              src={`https://sketchfab.com/models/${car.id}/embed?autostart=1&ui_theme=dark`}
-              allow="fullscreen; xr-spatial-tracking"
-              allowFullScreen
-              onLoad={() => setLoaded(true)}
-              onError={() => {
-                setActive(false);
-                setUnavailable(true);
-              }}
-              className="h-full w-full border-0"
-            />
-          ) : (
-            <>
-              <Image
-                src={car.image}
-                alt={t("previewAlt", { car: car.name })}
-                fill
-                sizes="(max-width: 768px) 100vw, 1200px"
-                className="object-contain"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  setActive(true);
-                  setLoaded(false);
-                  setUnavailable(false);
-                }}
-                className="absolute bottom-6 left-1/2 min-h-12 -translate-x-1/2 rounded-xl bg-[#e8e6d7] px-6 font-semibold whitespace-nowrap text-[#0e2d30]"
-              >
-                {t("explore")}
-              </button>
-            </>
-          )}
-          {active && !loaded && (
-            <p
-              role="status"
-              className="pointer-events-none absolute top-4 left-4 rounded-xl bg-[#101615] px-4 py-3 text-sm"
-            >
-              {t("opening")}
-            </p>
-          )}
-        </div>
-      )}
-      <div className="space-y-3 border-t border-white/15 p-5 text-sm leading-6">
-        <button
-          className="min-h-11 rounded-xl border border-white/30 px-4"
-          onClick={() => {
-            setConfiguring((value) => !value);
-            setActive(false);
-          }}
-        >
-          {configuring ? expansion("close3d") : expansion("configure")}
-        </button>
-        {car.id === "c424e4f18c9742d296920f069d139b45" && (
-          <p>{expansion("fanModel")}</p>
-        )}
-        {unavailable && <p role="status">{t("connectionFailed")}</p>}
-        <p>{t("controls")}</p>
-        {active && (
-          <p>
-            {t("blank")}{" "}
-            <button
-              type="button"
-              className="min-h-11 underline"
-              onClick={() => {
-                setLoaded(false);
-                setAttempt((value) => value + 1);
-              }}
-            >
-              {t("retry")}
-            </button>
-            {" · "}
-            <button
-              type="button"
-              className="min-h-11 underline"
-              onClick={() => setActive(false)}
-            >
-              {t("showPreview")}
-            </button>
+      <div className="flex flex-wrap items-start justify-between gap-4 px-5 py-6 sm:px-8">
+        <div className="max-w-2xl">
+          <p className="text-xs tracking-[.16em] text-[#cfaa96] uppercase">
+            {s(car.kind)}
           </p>
-        )}
-        <p>
-          <a
-            className="underline"
-            href={`https://sketchfab.com/3d-models/${car.id}`}
-            target="_blank"
-            rel="noreferrer"
+          <h2 className="mt-3 text-2xl font-medium tracking-tight sm:text-3xl">
+            {car.name}
+          </h2>
+          <p className="mt-3 text-sm leading-6 text-[#e8e6d7]/70">
+            {s(car.story)}
+          </p>
+        </div>
+        <span className="flex items-center gap-2 rounded-full border border-white/15 px-3 py-2 text-xs text-[#e8e6d7]/70">
+          <Rotate3D aria-hidden="true" className="size-4" />
+          {t("interactive")}
+        </span>
+      </div>
+      <ReferenceConfigurator key={car.id} {...car} openLabel={t("explore")} />
+      <div className="grid gap-6 border-t border-white/10 p-5 sm:p-8 lg:grid-cols-[1fr_auto]">
+        <div className="space-y-3 text-xs leading-6 text-[#e8e6d7]/70">
+          <p>
+            <a
+              href={`https://sketchfab.com/3d-models/${car.id}`}
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-4"
+            >
+              {car.name} {t("by")} {car.creator} ↗
+            </a>
+            {" · "}
+            <a
+              href="https://creativecommons.org/licenses/by/4.0/"
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
+              CC BY 4.0
+            </a>
+          </p>
+          <p>{s("modelNotice")}</p>
+          <p>{s("galleryScope")}</p>
+        </div>
+        <div className="flex flex-wrap items-start gap-3">
+          <Link
+            href="/garage/new"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#e8e6d7] px-5 text-sm font-medium text-[#0e2d30]"
           >
-            {car.name} {t("by")} {car.creator}
-          </a>
-          {" · "}
-          <a
-            className="underline"
-            href="https://creativecommons.org/licenses/by/4.0/"
+            {s("startBuild")}
+            <ArrowUpRight aria-hidden="true" className="size-4" />
+          </Link>
+          <Link
+            href="/studio"
+            className="inline-flex min-h-11 items-center rounded-full border border-white/20 px-5 text-sm"
           >
-            CC BY 4.0
-          </a>
-          . {configuring ? expansion("adapted") : t("unmodified")}
-        </p>
-        <p className="text-xs text-white/60">{t("creatorNotice")}</p>
+            {s("conceptLink")}
+          </Link>
+        </div>
       </div>
     </section>
   );

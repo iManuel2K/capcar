@@ -3,7 +3,7 @@ export const configuratorEnglish = {
   open3d: "Open interactive model",
   loading: "Loading…",
   viewerError:
-    "The 3D connection was blocked or timed out. Try allowing Sketchfab in your browser shields, then reopen the model.",
+    "The 3D viewer could not load or timed out. Try again, or open the original model on Sketchfab.",
   configNote:
     "Make this reference your own: choose a surface, explore a tint and save your camera view. Changes stay on this device. Existing textures remain visible; this is a visual reference, not a parts-fitment simulation.",
   surface: "Surface",
