@@ -16,6 +16,7 @@ export function useSketchfabViewer(id: string) {
     let cancelled = false;
     let viewer: ViewerApi | undefined;
     let ready = false;
+    let timeout: number | undefined;
     const stop = () => {
       try {
         viewer?.stop();
@@ -26,16 +27,19 @@ export function useSketchfabViewer(id: string) {
     const fail = () => {
       if (cancelled) return;
       cancelled = true;
+      window.clearTimeout(timeout);
       stop();
       api.current = null;
       setStatus("error");
     };
-    const timeout = window.setTimeout(() => {
-      if (!ready) fail();
-    }, 20_000);
     void loadSketchfab()
       .then((Constructor) => {
         if (cancelled || !iframe.current) return;
+        // The SDK has its own loading deadline. Give model assets a separate
+        // budget: large textures on a cold connection can take over 20 seconds.
+        timeout = window.setTimeout(() => {
+          if (!ready) fail();
+        }, 60_000);
         new Constructor("1.12.1", iframe.current).init(id, {
           autostart: 1,
           ui_theme: "dark",

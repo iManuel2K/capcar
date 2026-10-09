@@ -83,7 +83,7 @@ describe("iconic reference collection", () => {
     );
     fireEvent.load(container.querySelector("iframe")!);
     expect(screen.queryByLabelText("Surface")).not.toBeInTheDocument();
-    act(() => vi.advanceTimersByTime(20_000));
+    act(() => vi.advanceTimersByTime(60_000));
     expect(container.querySelector("iframe")).toBeNull();
     expect(screen.getByRole("alert")).toHaveTextContent("timed out");
     expect(
@@ -96,6 +96,31 @@ describe("iconic reference collection", () => {
     act(() => events.viewerready());
     act(() => vi.advanceTimersByTime(20_000));
     expect(container.querySelector("iframe")).not.toBeNull();
+    expect(screen.getByLabelText("Surface")).toBeEnabled();
+  });
+  it("allows a slow model to finish without counting SDK loading against it", async () => {
+    vi.useFakeTimers();
+    let resolveSdk!: (value: Awaited<ReturnType<typeof loadSketchfab>>) => void;
+    vi.mocked(loadSketchfab).mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolveSdk = resolve;
+      }),
+    );
+    const { container } = render(<IconicGallery />);
+    await open();
+    act(() => vi.advanceTimersByTime(10_000));
+    await act(async () => {
+      resolveSdk(
+        class {
+          init = init;
+        } as never,
+      );
+    });
+    act(() => vi.advanceTimersByTime(55_000));
+    expect(container.querySelector("iframe")).not.toBeNull();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    act(() => events.viewerready());
+    act(() => vi.advanceTimersByTime(60_000));
     expect(screen.getByLabelText("Surface")).toBeEnabled();
   });
   it("unloads the previous model on selection and supports closing", async () => {
