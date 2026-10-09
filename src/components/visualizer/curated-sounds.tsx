@@ -5,7 +5,7 @@ import { Headphones, Music2, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { soundCatalog } from "@/features/visualizer/sound-catalog";
 import { pauseOtherStudioAudio } from "@/features/visualizer/audio-files";
-import { StudioAudio } from "./studio-audio";
+import { MasterVolume, StudioAudio } from "./studio-audio";
 
 export function CuratedSounds() {
   const t = useTranslations("SoundUi");
@@ -75,7 +75,7 @@ export function CuratedSounds() {
             />
           </label>
           <div className="flex flex-wrap gap-2" aria-label={s("engineFilter")}>
-            {[0, 4, 5, 6].map((count) => (
+            {[0, 2, 3, 4, 5, 6, 8, 10, 12, 16].map((count) => (
               <button
                 type="button"
                 key={count}
@@ -92,10 +92,13 @@ export function CuratedSounds() {
           </div>
         </div>
       </div>
+      <div className="border-b border-white/10 p-4 sm:p-6">
+        <MasterVolume />
+      </div>
       {selected ? (
         <div className="grid lg:grid-cols-[.9fr_1.1fr]">
           <div
-            className="space-y-2 border-b border-white/10 p-4 sm:p-6 lg:border-r lg:border-b-0"
+            className="max-h-[42rem] space-y-2 overflow-y-auto border-b border-white/10 p-4 sm:p-6 lg:border-r lg:border-b-0"
             aria-label={t("includedLabel")}
           >
             {matching.map((sound, index) => (
@@ -131,7 +134,7 @@ export function CuratedSounds() {
               </button>
             ))}
           </div>
-          <article className="flex min-w-0 flex-col justify-center p-5 sm:p-8">
+          <article className="flex min-w-0 flex-col justify-center p-5 sm:p-8 lg:sticky lg:top-24 lg:self-start">
             <div
               aria-hidden="true"
               className="mb-6 flex h-28 items-center justify-center rounded-2xl border border-white/8 bg-[#0b2326]"
@@ -148,8 +151,10 @@ export function CuratedSounds() {
               {selected.detail}
             </p>
             <StudioAudio
-              src={`/sounds/${selected.id}.mp3`}
-              fallback={`/sounds/${selected.id}.ogg`}
+              src={`/sounds/${selected.audio}`}
+              fallback={
+                selected.fallback ? `/sounds/${selected.fallback}` : undefined
+              }
               label={selected.title}
             />
             <p className="mt-3 text-xs text-[#e8e6d7]/65">{s("lowVolume")}</p>
@@ -168,7 +173,7 @@ export function CuratedSounds() {
                   {selected.license}
                 </a>
               </p>
-              <p>{t("converted")}</p>
+              {selected.fallback && <p>{t("converted")}</p>}
               <a
                 className="inline-flex min-h-11 items-center underline"
                 target="_blank"
@@ -245,8 +250,10 @@ export function CuratedSounds() {
                   </select>
                 </label>
                 <StudioAudio
-                  src={`/sounds/${sound.id}.mp3`}
-                  fallback={`/sounds/${sound.id}.ogg`}
+                  src={`/sounds/${sound.audio}`}
+                  fallback={
+                    sound.fallback ? `/sounds/${sound.fallback}` : undefined
+                  }
                   label={`${index === 0 ? "A" : "B"}: ${sound.title}`}
                 />
                 <p className="mt-3 text-xs leading-5 text-[#e8e6d7]/60">

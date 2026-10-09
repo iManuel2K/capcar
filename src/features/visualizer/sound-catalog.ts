@@ -1,4 +1,5 @@
 import { licensedSounds } from "./licensed-sounds";
+import { communitySounds } from "./community-sounds";
 
 export const soundCatalog = [
   {
@@ -13,6 +14,8 @@ export const soundCatalog = [
     licenseUrl: "https://creativecommons.org/licenses/by/3.0/",
     sha1: "78bc28fd606ff23be5f7f86dd18a478581cd395a",
     duration: "2:17",
+    audio: "honda-f20c.mp3",
+    fallback: "honda-f20c.ogg",
   },
   {
     id: "volvo-850-t5",
@@ -26,6 +29,8 @@ export const soundCatalog = [
     licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
     sha1: "703608ad35bbc2890432fd49eea1614063778df3",
     duration: "0:33",
+    audio: "volvo-850-t5.mp3",
+    fallback: "volvo-850-t5.ogg",
   },
   ...licensedSounds.map((sound) => ({
     ...sound,
@@ -37,5 +42,13 @@ export const soundCatalog = [
         : sound.id === "triumph-i6"
           ? "0:11"
           : "0:09",
+    audio: `${sound.id}.mp3`,
+    fallback: `${sound.id}.ogg`,
+  })),
+  ...communitySounds.map((sound) => ({
+    ...sound,
+    titleKey: "",
+    detailKey: "",
+    fallback: undefined,
   })),
 ];

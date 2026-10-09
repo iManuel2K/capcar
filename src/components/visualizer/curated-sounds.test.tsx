@@ -52,7 +52,10 @@ describe("curated listening desk", () => {
     render(<CuratedSounds />);
     const selects = screen.getAllByRole("combobox", { hidden: true });
     expect(
-      within(selects[0]).queryByRole("option", { name: /Volvo/, hidden: true }),
+      within(selects[0]).queryByRole("option", {
+        name: /Volvo 850 T5/,
+        hidden: true,
+      }),
     ).not.toBeInTheDocument();
     expect(
       within(selects[1]).queryByRole("option", { name: /Honda/, hidden: true }),
@@ -71,7 +74,10 @@ describe("curated listening desk", () => {
     const players = Array.from(panel.querySelectorAll("audio"));
     const spies = players.map((audio) => {
       const pause = vi.fn();
-      Object.defineProperty(audio, "pause", { value: pause, configurable: true });
+      Object.defineProperty(audio, "pause", {
+        value: pause,
+        configurable: true,
+      });
       return pause;
     });
     const main = vi.fn();
