@@ -258,7 +258,7 @@
     "open3d": "Hap modelin interaktiv",
     "loading": "Duke ngarkuar…",
     "error": "Ngarkimi dështoi. Provo përsëri.",
-    "viewerError": "Lidhja 3D u bllokua ose skadoi. Lejo Sketchfab te mbrojtja e shfletuesit dhe rihap modelin.",
+    "viewerError": "Pamja 3D nuk u ngarkua ose koha e pritjes mbaroi. Provo sërish ose hap modelin origjinal në Sketchfab.",
     "configNote": "Zgjidh sipërfaqen, provo një ngjyrë dhe ruaj këndin në këtë pajisje. Teksturat mbeten të dukshme. Është referencë pamore, jo simulim përputhshmërie pjesësh.",
     "surface": "Sipërfaqja",
     "tint": "Ngjyra",

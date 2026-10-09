@@ -310,13 +310,23 @@ export function ReferenceConfigurator({
           </div>
         )}
         {active && (
-          <button
-            className="min-h-11 text-sm underline"
-            type="button"
-            onClick={viewer.close}
-          >
-            {t("close3d")}
-          </button>
+          <div className="flex flex-wrap items-center gap-5">
+            <button
+              className="min-h-11 text-sm underline"
+              type="button"
+              onClick={viewer.close}
+            >
+              {t("close3d")}
+            </button>
+            <a
+              href={`https://sketchfab.com/3d-models/${id}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-11 items-center text-sm underline"
+            >
+              {studio("openSource")} ↗
+            </a>
+          </div>
         )}
         <p role="status" className="text-sm">
           {message}

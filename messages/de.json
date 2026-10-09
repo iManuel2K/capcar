@@ -258,7 +258,7 @@
     "open3d": "Interaktives Modell öffnen",
     "loading": "Wird geladen…",
     "error": "Laden fehlgeschlagen. Bitte erneut versuchen.",
-    "viewerError": "Die 3D-Verbindung wurde blockiert oder unterbrochen. Erlaube Sketchfab im Browser-Schutz und öffne das Modell erneut.",
+    "viewerError": "Der 3D-Viewer konnte nicht geladen werden oder hat das Zeitlimit überschritten. Versuche es erneut oder öffne das Originalmodell auf Sketchfab.",
     "configNote": "Wähle eine Oberfläche, probiere einen Farbton und speichere die Kameraperspektive auf diesem Gerät. Texturen bleiben sichtbar. Die Referenz dient der Gestaltung und simuliert keine Teilepassform.",
     "surface": "Oberfläche",
     "tint": "Farbton",
