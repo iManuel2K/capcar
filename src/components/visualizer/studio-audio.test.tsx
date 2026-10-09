@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { StudioAudio } from "./studio-audio";
+import { MasterVolume, StudioAudio } from "./studio-audio";
 
 beforeEach(() =>
   vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => {}),
@@ -17,6 +17,23 @@ describe("studio audio", () => {
     expect(audio.volume).toBe(0.25);
     expect(audio.autoplay).toBe(false);
     expect(audio.preload).toBe("none");
+  });
+  it("uses one radio-style master control for every studio player", () => {
+    const { container } = render(
+      <>
+        <MasterVolume />
+        <StudioAudio src="/one.mp3" label="One" />
+        <StudioAudio src="/two.mp3" label="Two" />
+      </>,
+    );
+    fireEvent.change(screen.getByRole("slider", { name: "Master volume" }), {
+      target: { value: "62" },
+    });
+    for (const audio of container.querySelectorAll("audio"))
+      expect(audio.volume).toBe(0.62);
+    expect(localStorage.getItem("capcar.sound-studio.master-volume")).toBe(
+      "0.62",
+    );
   });
   it("pauses every other CapCar player, but not unrelated media", () => {
     const { container } = render(
