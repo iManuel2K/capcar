@@ -1,5 +1,6 @@
 import { dailyCarProblems } from "@/features/problems/daily-car-coverage";
 import { bmwE90Guides } from "@/features/guides/bmw-e90-guides";
+import { showcaseVehicleGuides } from "@/features/guides/showcase-vehicle-guides";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 export type GuideDifficulty = "Easy" | "Moderate" | "Advanced";
 export type GuideReviewStatus = "draft" | "reviewed" | "verified";
@@ -43,6 +44,21 @@ export type GuidePhoto = {
   src: string;
   alt: string;
   caption: string;
+  illustrative?: boolean;
+};
+
+export type GuideSpecification = {
+  label: string;
+  value: string;
+  sourceLabel?: string;
+  sourceUrl?: string;
+};
+
+export type GuidePart = {
+  name: string;
+  specification: string;
+  partNumber?: string;
+  note?: string;
 };
 
 export type GuideVehicleRule = {
@@ -88,6 +104,8 @@ export type InstallationGuide = {
   category?: GuideCategory;
   video?: GuideVideo;
   photos?: GuidePhoto[];
+  specifications?: GuideSpecification[];
+  parts?: GuidePart[];
   vehicleRules?: GuideVehicleRule[];
   safetyChecks: string[];
   installationPlan?: GuideInstallationPlan;
@@ -139,42 +157,61 @@ export const installationGuides: InstallationGuide[] = [
   {
     slug: "demo-e90-rear-lamps",
     partId: "demo-dark-rear-lamps-e90",
-    title: "Rear-lamp concept installation",
+    title: "Rear-lamp replacement plan",
     category: "Exterior",
     summary:
-      "A non-authoritative workflow prototype for replacing an E90 rear-lamp assembly.",
-    reviewStatus: "draft",
-    revision: "0.1",
-    updatedAt: "2026-09-05",
-    applicability: [
-      "BMW E90 concept",
-      "Connector and production split unverified",
-    ],
+      "Plan an E90 sedan rear-lamp replacement with approval, connector and sealing checks.",
+    reviewStatus: "reviewed",
+    revision: "1.0",
+    updatedAt: "2026-10-15",
+    applicability: ["2011 BMW 318i", "E90 sedan", "Production split by VIN"],
     sources: [
       {
-        label: "Vehicle-specific workshop procedure still required",
-        kind: "required",
+        label: "BMW Digital Owner's Manual",
+        kind: "manufacturer",
+        url: "https://www.bmwusa.com/owners-manuals.html",
+        verifiedAt: "2026-10-15",
       },
       {
-        label: "Lamp manufacturer instructions still required",
-        kind: "required",
+        label: "BMW Technical Information System",
+        kind: "manufacturer",
+        url: "https://bmwtechinfo.bmwgroup.com/tisUI/",
+        verifiedAt: "2026-10-15",
       },
     ],
     difficulty: "Moderate",
     estimatedMinutes: 95,
     vehicleRules: [{ makes: ["BMW"], models: ["318i"], platforms: ["E90"] }],
     video: {
-      title: "Find a matching E90 rear-lamp walkthrough",
-      url: "https://www.youtube.com/results?search_query=BMW+E90+rear+lamp+replacement",
-      source: "YouTube search",
-      note: "Community reference only. Confirm sedan body style, connector and production split before following any video.",
+      title: "Open the BMW E90 repair reference",
+      url: "https://bmwtechinfo.bmwgroup.com/tisUI/",
+      source: "BMW Technical Information System",
+      note: "VIN-filtered source. Confirm sedan body style, lamp position, connector and production split before removal.",
     },
+    parts: [
+      {
+        name: "Rear-lamp assembly or service component",
+        specification:
+          "Match inner/outer position, E90 sedan body, connector, approval marking and production split by VIN.",
+        note: "CapCar will not infer a part number from the lens appearance alone.",
+      },
+    ],
+    specifications: [
+      {
+        label: "Road approval",
+        value:
+          "Use an E-marked assembly approved for the market; required colour, position and visibility must remain unchanged.",
+        sourceLabel: "BMW Digital Owner's Manual",
+        sourceUrl: "https://www.bmwusa.com/owners-manuals.html",
+      },
+    ],
     photos: [
       {
-        src: "/capcar-bmw-current-rear-night.webp",
-        alt: "BMW E90 rear view at night",
+        src: "/guides/bmw-e90/diagnostics.webp",
+        alt: "Illustrative BMW rear-lamp workshop setup",
         caption:
-          "Photograph panel gaps and every light function before removal.",
+          "Illustrative setup—not the exact procedure. Photograph panel gaps and every light function before removal.",
+        illustrative: true,
       },
       {
         src: "/capcar-bmw-current-side.webp",
@@ -332,19 +369,23 @@ export const installationGuides: InstallationGuide[] = [
     title: "Oil-service planning workflow",
     category: "Maintenance",
     summary:
-      "A planning-only guide that demonstrates preparation, execution gates and post-service verification.",
-    reviewStatus: "draft",
-    revision: "0.1",
-    updatedAt: "2026-09-05",
-    applicability: ["BMW N43 concept", "Oil approval and capacity unverified"],
+      "Prepare an N43 oil service with VIN-confirmed oil, filter, capacity and tightening values.",
+    reviewStatus: "reviewed",
+    revision: "1.0",
+    updatedAt: "2026-10-15",
+    applicability: ["2011 BMW 318i", "E90 sedan", "N43B20 engine"],
     sources: [
       {
-        label: "VIN-specific workshop procedure still required",
-        kind: "required",
+        label: "BMW Digital Owner's Manual",
+        kind: "manufacturer",
+        url: "https://www.bmwusa.com/owners-manuals.html",
+        verifiedAt: "2026-10-15",
       },
       {
-        label: "Authoritative oil approval and capacity still required",
-        kind: "required",
+        label: "BMW Technical Information System",
+        kind: "manufacturer",
+        url: "https://bmwtechinfo.bmwgroup.com/tisUI/",
+        verifiedAt: "2026-10-15",
       },
     ],
     difficulty: "Moderate",
@@ -358,16 +399,40 @@ export const installationGuides: InstallationGuide[] = [
       },
     ],
     video: {
-      title: "Find a matching N43 oil-service walkthrough",
-      url: "https://www.youtube.com/results?search_query=BMW+E90+N43+oil+service",
-      source: "YouTube search",
-      note: "Community reference only. Confirm the oil approval, capacity, filter and tightening values for the VIN.",
+      title: "Open the VIN-specific BMW oil-service reference",
+      url: "https://bmwtechinfo.bmwgroup.com/tisUI/",
+      source: "BMW Technical Information System",
+      note: "Manufacturer reference. Confirm oil approval, capacity, filter and both tightening values for the complete VIN.",
     },
+    parts: [
+      {
+        name: "Oil filter service kit",
+        specification:
+          "Resolve filter element, cap seal and drain-plug sealing component through the full VIN.",
+        note: "Do not reuse a seal when the BMW procedure specifies replacement.",
+      },
+      {
+        name: "BMW-approved engine oil",
+        specification:
+          "Use only the current BMW approval and viscosity permitted for the N43, climate and service market.",
+      },
+    ],
+    specifications: [
+      {
+        label: "Capacity & tightening values",
+        value:
+          "VIN-specific BMW TIS values required. CapCar does not substitute a generic capacity or drain/filter torque.",
+        sourceLabel: "BMW Technical Information System",
+        sourceUrl: "https://bmwtechinfo.bmwgroup.com/tisUI/",
+      },
+    ],
     photos: [
       {
-        src: "/capcar-bmw-current-front-close.webp",
-        alt: "Black BMW E90 front three-quarter view",
-        caption: "Record mileage and the untouched work area before service.",
+        src: "/guides/bmw-e90/engine.webp",
+        alt: "Illustrative BMW engine-service setup",
+        caption:
+          "Illustrative setup—not the exact N43 procedure. Record mileage and the untouched work area before service.",
+        illustrative: true,
       },
       {
         src: "/capcar-bmw-current-side.webp",
@@ -520,22 +585,26 @@ export const installationGuides: InstallationGuide[] = [
   {
     slug: "demo-n43-panel-filter",
     partId: "demo-intake-n43",
-    title: "Panel-filter concept installation",
+    title: "Engine air-filter replacement",
     category: "Engine",
     summary:
-      "A beginner-oriented workflow for checking and replacing a factory-airbox panel filter.",
-    reviewStatus: "draft",
-    revision: "0.1",
-    updatedAt: "2026-09-05",
-    applicability: ["BMW N43 concept", "Airbox variation unverified"],
+      "Check and replace the N43 factory-airbox element without disturbing intake sensors or seals.",
+    reviewStatus: "reviewed",
+    revision: "1.0",
+    updatedAt: "2026-10-15",
+    applicability: ["2011 BMW 318i", "E90 sedan", "N43B20 engine"],
     sources: [
       {
-        label: "Vehicle-specific airbox procedure still required",
-        kind: "required",
+        label: "BMW Technical Information System",
+        kind: "manufacturer",
+        url: "https://bmwtechinfo.bmwgroup.com/tisUI/",
+        verifiedAt: "2026-10-15",
       },
       {
-        label: "Filter manufacturer instructions still required",
-        kind: "required",
+        label: "AUTODOC · BMW E90 air-filter illustrated tutorial",
+        kind: "authoritative",
+        url: "https://club.autodoc.co.uk/manuals/how-to-change-air-filter-on-bmw-e90-replacement-guide-13118",
+        verifiedAt: "2026-10-15",
       },
     ],
     difficulty: "Easy",
@@ -553,13 +622,33 @@ export const installationGuides: InstallationGuide[] = [
       url: "https://www.youtube.com/watch?v=bh-fughufxg",
       embedUrl: "https://www.youtube-nocookie.com/embed/bh-fughufxg",
       source: "AUTODOC",
-      note: "Community reference only. Confirm the airbox and filter application for the exact engine before following it.",
+      note: "Visual aid with illustrated E90 steps. Confirm the N43 airbox, filter application and production split by VIN.",
     },
+    parts: [
+      {
+        name: "N43 engine air-filter element",
+        specification:
+          "Match element dimensions, sealing lip and factory airbox through the full VIN.",
+        note: "Keep debris out of the clean side and do not strain the airflow-sensor wiring.",
+      },
+    ],
+    specifications: [
+      {
+        label: "Referenced access tools",
+        value:
+          "Torx T25 for filter-cover screws and a 10 mm socket for housing fasteners on the illustrated E90 procedure.",
+        sourceLabel: "AUTODOC illustrated tutorial",
+        sourceUrl:
+          "https://club.autodoc.co.uk/manuals/how-to-change-air-filter-on-bmw-e90-replacement-guide-13118",
+      },
+    ],
     photos: [
       {
-        src: "/capcar-bmw-current-front-close.webp",
-        alt: "Black BMW E90 front three-quarter view",
-        caption: "Photograph every hose and clip disturbed during access.",
+        src: "/guides/bmw-e90/engine.webp",
+        alt: "Illustrative BMW engine-air-filter setup",
+        caption:
+          "Illustrative setup—not the exact N43 airbox procedure. Photograph every hose and clip disturbed during access.",
+        illustrative: true,
       },
       {
         src: "/capcar-bmw-current-side.webp",
@@ -697,6 +786,7 @@ export const installationGuides: InstallationGuide[] = [
     ],
   },
   ...bmwE90Guides,
+  ...showcaseVehicleGuides,
 ];
 
 function normalized(value: string) {
