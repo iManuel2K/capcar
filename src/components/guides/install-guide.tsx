@@ -21,6 +21,7 @@ import {
   Hand,
   Images,
   ListChecks,
+  PackageSearch,
   PlayCircle,
   Puzzle,
   ScanLine,
@@ -474,9 +475,9 @@ function GuideMediaHub({
               <PlayCircle className="size-5" />
             </span>
             <span>
-              <span className="block font-medium">Video walkthrough</span>
+              <span className="block font-medium">Visual walkthrough</span>
               <span className="mt-1 block text-xs text-white/35">
-                Watch only when you need it
+                Video or illustrated source, on demand
               </span>
             </span>
           </span>
@@ -536,6 +537,73 @@ function GuideMediaHub({
         </div>
       </details>
 
+      {(guide.parts?.length || guide.specifications?.length) && (
+        <details className="group rounded-[1.7rem] border border-white/10 bg-[#111111] p-5 sm:p-6">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+            <span className="flex items-center gap-3">
+              <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/12 text-[#ff667a]">
+                <PackageSearch className="size-5" />
+              </span>
+              <span>
+                <span className="block font-medium">Parts & exact values</span>
+                <span className="mt-1 block text-xs text-white/35">
+                  VIN-aware references before you order
+                </span>
+              </span>
+            </span>
+            <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
+          </summary>
+          <div className="mt-5 space-y-3 border-t border-white/8 pt-5">
+            {guide.specifications?.map((item) => (
+              <div
+                key={`${item.label}-${item.value}`}
+                className="rounded-xl border border-white/8 bg-black/15 p-4"
+              >
+                <p className="text-[10px] tracking-[0.12em] text-white/30 uppercase">
+                  {item.label}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-white/65">
+                  {item.value}
+                </p>
+                {item.sourceLabel && item.sourceUrl && (
+                  <a
+                    href={item.sourceUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-2 inline-flex items-center gap-1.5 text-xs text-[#ff8898] hover:text-white"
+                  >
+                    {item.sourceLabel} <ExternalLink className="size-3" />
+                  </a>
+                )}
+              </div>
+            ))}
+            {guide.parts?.map((part) => (
+              <div
+                key={`${part.name}-${part.specification}`}
+                className="rounded-xl border border-white/8 bg-black/15 p-4"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <p className="text-sm font-medium text-white/70">
+                    {part.name}
+                  </p>
+                  <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] text-white/35">
+                    {part.partNumber ?? "VIN required"}
+                  </span>
+                </div>
+                <p className="mt-2 text-xs leading-5 text-white/45">
+                  {part.specification}
+                </p>
+                {part.note && (
+                  <p className="mt-2 text-xs leading-5 text-amber-100/45">
+                    {part.note}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
+
       <details className="group rounded-[1.7rem] border border-white/10 bg-[#111111] p-5 sm:p-6">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
           <span className="flex items-center gap-3">
@@ -587,6 +655,11 @@ function GuideMediaHub({
                   sizes="(max-width: 640px) 100vw, 40vw"
                   className="object-cover"
                 />
+                {photo.illustrative && (
+                  <span className="absolute top-3 left-3 rounded-full border border-white/15 bg-black/70 px-3 py-1 text-[10px] font-semibold tracking-[0.16em] text-white/70 uppercase backdrop-blur-md">
+                    Illustrative
+                  </span>
+                )}
               </div>
               <figcaption className="p-4 text-xs leading-5 text-white/40">
                 {photo.caption}
