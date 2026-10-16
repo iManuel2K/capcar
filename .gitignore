@@ -49,3 +49,8 @@ supabase/.temp/
 
 # Local Netlify folder
 .netlify
+
+# Local patch and installer artifacts
+/.capcar-installer-backups/
+/payload/
+/changed-files.txt
