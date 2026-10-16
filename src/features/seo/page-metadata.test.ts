@@ -1,18 +1,39 @@
 import { describe, expect, it } from "vitest";
+
 import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
-import { pageMetadata } from "./public-metadata";
+import { locales } from "@/i18n/config";
+
+import { pageMetadata, PUBLIC_INDEXABLE_ROUTES } from "./public-metadata";
 
 describe("route metadata", () => {
-  it("publishes the production sitemap without including private pages", () => {
+  it("publishes public language variants without private pages", () => {
     expect(robots().sitemap).toBe("https://capcar.dev/sitemap.xml");
     const disallow = robots().rules;
     expect(JSON.stringify(disallow)).not.toContain('"/login"');
     expect(JSON.stringify(disallow)).not.toContain('"/system"');
-    const urls = sitemap().map((route) => route.url);
+
+    const entries = sitemap();
+    const urls = entries.map((route) => route.url);
+    expect(entries).toHaveLength(
+      PUBLIC_INDEXABLE_ROUTES.length * (locales.length + 1),
+    );
     expect(urls).toContain("https://capcar.dev/roadbook");
+    expect(urls).toContain("https://capcar.dev/de/roadbook");
+    expect(urls).toContain("https://capcar.dev/ja/roadbook");
+    expect(urls).not.toContain("https://capcar.dev/ai");
     expect(urls).not.toContain("https://capcar.dev/system");
     expect(urls).not.toContain("https://capcar.dev/login");
+
+    for (const entry of entries) {
+      expect(entry.lastModified).toBe("2026-10-16");
+      expect(entry).not.toHaveProperty("changeFrequency");
+      expect(entry).not.toHaveProperty("priority");
+      expect(entry.alternates?.languages?.de).toMatch(/^https:\/\/capcar\.dev\/de/);
+      expect(entry.alternates?.languages?.["x-default"]).toMatch(
+        /^https:\/\/capcar\.dev\//,
+      );
+    }
   });
 
   it("keeps canonical URLs and indexing directives independent", () => {

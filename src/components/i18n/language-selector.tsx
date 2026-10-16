@@ -4,6 +4,7 @@ import { Languages } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useId, useRef, useState } from "react";
 
+import { localizePublicPathname } from "@/features/seo/public-metadata";
 import {
   isAppLocale,
   localeCookie,
@@ -60,6 +61,16 @@ export function LanguageSelector({
     if (!requestedLocale) return;
     document.cookie = `${localeCookie}=${requestedLocale}; Path=/; Max-Age=31536000; SameSite=Lax`;
     document.documentElement.lang = requestedLocale;
+    const localizedPath = localizePublicPathname(
+      window.location.pathname,
+      requestedLocale,
+    );
+    if (localizedPath && localizedPath !== window.location.pathname) {
+      window.location.assign(
+        `${localizedPath}${window.location.search}${window.location.hash}`,
+      );
+      return;
+    }
     window.location.reload();
   }, [requestedLocale]);
 

@@ -344,18 +344,18 @@
       "legal": "Informacione ligjore",
       "main": "Navigimi kryesor"
     },
-    "start": "Fillo një projekt",
+    "start": "Fillo garazhin falas",
     "explore": "Shiko një projekt",
     "hero": {
       "aiLabel": "LIDHJA ME ASISTENTIN",
       "aiProtocol": "MCP · ku mbështetet",
       "status": "Beta · Operational",
       "aiSupport": "Përdor veglat CapCar nga ChatGPT ose Claude aty ku mbështeten lidhjet MCP.",
-      "eyebrow": "Garazhi digjital për projektin tënd",
-      "title": "Ndërto makinën",
-      "accent": "që imagjinon.",
-      "description": "Planifiko ndryshimet, gjej pjesë, eksploro pamjen dhe ruaj historinë e makinës në një garazh.",
-      "note": "Makina jote. Ritmi yt. Puna e radhës në garazh."
+      "eyebrow": "Planifikues për makinat projekt dhe garazh digjital",
+      "title": "Planifiko makinën tënde projekt",
+      "accent": "pa humbur asnjë detaj.",
+      "description": "Mbaj pjesët, kërkimin e përputhshmërisë, kostot, mirëmbajtjen dhe progresin në një garazh digjital privat.",
+      "note": "Fillo falas. Privat si parazgjedhje. Ti e kontrollon garazhin."
     },
     "visual": {
       "current": "Pikënisja",

@@ -12,7 +12,10 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("AIPlanner");
-  return pageMetadata("/ai", t("metaTitle"), t("metaDescription"));
+  return pageMetadata("/ai", t("metaTitle"), t("metaDescription"), {
+    index: false,
+    follow: false,
+  });
 }
 
 export default async function AIPlannerPage() {
