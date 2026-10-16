@@ -1,18 +1,24 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
+import { locales } from "@/i18n/config";
+
 import {
   canonicalMetadata,
+  localizePublicPathname,
+  localizedPublicUrl,
   PUBLIC_INDEXABLE_ROUTES,
   PUBLIC_SITE_URL,
+  publicLanguageAlternates,
 } from "./public-metadata";
 
 describe("public metadata", () => {
-  it("defines unique indexable routes without inventing a standalone FAQ", () => {
+  it("defines unique indexable routes without private or invented pages", () => {
     expect(new Set(PUBLIC_INDEXABLE_ROUTES).size).toBe(
       PUBLIC_INDEXABLE_ROUTES.length,
     );
     expect(PUBLIC_INDEXABLE_ROUTES).not.toContain("/faq");
+    expect(PUBLIC_INDEXABLE_ROUTES).not.toContain("/ai");
     expect(PUBLIC_INDEXABLE_ROUTES).toEqual(
       expect.arrayContaining([
         "",
@@ -25,16 +31,30 @@ describe("public metadata", () => {
     );
   });
 
-  it("creates self-referencing canonical metadata", () => {
+  it("creates self-referencing canonicals and complete language alternates", () => {
     expect(PUBLIC_SITE_URL.href).toBe("https://capcar.dev/");
 
     for (const route of PUBLIC_INDEXABLE_ROUTES) {
       const url = new URL(route || "/", PUBLIC_SITE_URL).toString();
-      expect(canonicalMetadata(route)).toEqual({
-        alternates: { canonical: url },
-        openGraph: { url },
-      });
+      const metadata = canonicalMetadata(route);
+      expect(metadata.alternates?.canonical).toBe(url);
+      expect(metadata.openGraph?.url).toBe(url);
+      expect(metadata.alternates?.languages).toEqual(
+        publicLanguageAlternates(route),
+      );
+      for (const locale of locales) {
+        expect(metadata.alternates?.languages?.[locale]).toBe(
+          localizedPublicUrl(route, locale),
+        );
+      }
     }
+  });
+
+  it("maps the language selector to locale-specific public URLs", () => {
+    expect(localizePublicPathname("/", "de")).toBe("/de");
+    expect(localizePublicPathname("/roadbook", "ja")).toBe("/ja/roadbook");
+    expect(localizePublicPathname("/sq/roadbook", "en")).toBe("/en/roadbook");
+    expect(localizePublicPathname("/garage", "de")).toBeNull();
   });
 
   it("keeps intentional FAQ navigation on the homepage section", () => {
@@ -62,7 +82,7 @@ describe("public metadata", () => {
       const messages = JSON.parse(readFileSync(file, "utf8")) as {
         Metadata: { siteTitle: string };
       };
-      expect(messages.Metadata.siteTitle, file).toMatch(/^CapCar\b/);
+      expect(messages.Metadata.siteTitle, file).toMatch(/CapCar$/);
     }
 
     expect(readFileSync("src/app/layout.tsx", "utf8")).toContain(

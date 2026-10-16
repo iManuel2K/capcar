@@ -344,18 +344,18 @@
       "legal": "Rechtliches",
       "main": "Hauptnavigation"
     },
-    "start": "Build starten",
+    "start": "Kostenlose Garage starten",
     "explore": "Projekt entdecken",
     "hero": {
       "aiLabel": "ASSISTENTEN-VERBINDUNG",
       "aiProtocol": "MCP · wo unterstützt",
       "status": "Beta · Operational",
       "aiSupport": "Nutze CapCar-Werkzeuge in ChatGPT oder Claude, wo MCP-Verbindungen unterstützt werden.",
-      "eyebrow": "Die digitale Garage für dein Autoprojekt",
-      "title": "Bau das Auto,",
-      "accent": "das du dir vorstellst.",
-      "description": "Plane Umbauten, finde Teile, erkunde den Look und halte die Geschichte deines Autos in einer Garage fest.",
-      "note": "Dein Auto. Dein Tempo. Dein nächster Werkstattabend."
+      "eyebrow": "Projektwagen-Planer und digitale Garage",
+      "title": "Plane dein Projektauto",
+      "accent": "ohne den Überblick zu verlieren.",
+      "description": "Verwalte Teile, Passform-Recherche, Kosten, Wartung und Baufortschritt in einer privaten digitalen Garage.",
+      "note": "Kostenlos starten. Standardmäßig privat. Du behältst die Kontrolle."
     },
     "visual": {
       "current": "Ausgangspunkt",

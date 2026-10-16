@@ -7,7 +7,11 @@ import { localeCookie } from "@/i18n/config";
 export default getRequestConfig(async () => {
   const [cookieStore, headerStore] = await Promise.all([cookies(), headers()]);
   const saved = cookieStore.get(localeCookie)?.value;
-  const locale = resolveLocale(saved, headerStore.get("accept-language"));
+  const requested = headerStore.get("x-capcar-locale") ?? saved;
+  const locale = resolveLocale(
+    requested,
+    headerStore.get("accept-language"),
+  );
 
   const [baseMessages, publicMessages, hardeningMessages, roadbookMessages] =
     await Promise.all([

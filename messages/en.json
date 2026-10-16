@@ -344,18 +344,18 @@
       "legal": "Legal",
       "main": "Main navigation"
     },
-    "start": "Start a build",
+    "start": "Start your free garage",
     "explore": "Explore a project",
     "hero": {
       "aiLabel": "ASSISTANT CONNECTION",
       "aiProtocol": "MCP · where supported",
       "status": "Beta · Operational",
       "aiSupport": "Use CapCar tools from ChatGPT or Claude where MCP connections are supported.",
-      "eyebrow": "The digital garage for project cars",
-      "title": "Build the car",
-      "accent": "you imagine.",
-      "description": "Plan the changes, find parts, explore the look—and keep your car’s story in one garage.",
-      "note": "Your car. Your pace. Your next workshop session."
+      "eyebrow": "Project car planner and digital garage",
+      "title": "Plan your project car",
+      "accent": "without losing the details.",
+      "description": "Plan parts, fitment research, costs, maintenance and build progress in one private digital garage.",
+      "note": "Free to start. Private by default. You control your garage."
     },
     "visual": {
       "current": "Starting point",

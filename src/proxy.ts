@@ -1,12 +1,40 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 import { resolveLocale } from "@/i18n/resolve-locale";
-import { localeCookie } from "@/i18n/config";
+import { isAppLocale, localeCookie, type AppLocale } from "@/i18n/config";
 import en from "../messages/hardening/en.json";
 import de from "../messages/hardening/de.json";
 import el from "../messages/hardening/el.json";
 import sq from "../messages/hardening/sq.json";
 import ja from "../messages/hardening/ja.json";
+
+function localeFromPathname(pathname: string): AppLocale | undefined {
+  const candidate = pathname.split("/")[1];
+  return isAppLocale(candidate) ? candidate : undefined;
+}
+
+function passThroughResponse(
+  request: NextRequest,
+  pathLocale?: AppLocale,
+) {
+  const requestHeaders = new Headers(request.headers);
+  if (pathLocale) requestHeaders.set("x-capcar-locale", pathLocale);
+  return NextResponse.next({ request: { headers: requestHeaders } });
+}
+
+function persistPathLocale(
+  response: NextResponse,
+  pathLocale?: AppLocale,
+) {
+  if (pathLocale) {
+    response.cookies.set(localeCookie, pathLocale, {
+      path: "/",
+      maxAge: 31_536_000,
+      sameSite: "lax",
+    });
+  }
+  return response;
+}
 
 function passportUnavailableResponse(
   request: NextRequest,
@@ -66,6 +94,7 @@ function passportUnavailableResponse(
 }
 
 export async function proxy(request: NextRequest) {
+  const pathLocale = localeFromPathname(request.nextUrl.pathname);
   const passportMatch = request.nextUrl.pathname.match(/^\/passport\/([^/]+)$/);
   const passport = passportMatch && passportMatch[1] !== "unavailable";
   if (
@@ -80,15 +109,15 @@ export async function proxy(request: NextRequest) {
   if (!url || !key)
     return passport
       ? passportUnavailableResponse(request, 503)
-      : NextResponse.next({ request });
+      : persistPathLocale(passThroughResponse(request, pathLocale), pathLocale);
 
-  let response = NextResponse.next({ request });
+  let response = passThroughResponse(request, pathLocale);
   const supabase = createServerClient(url, key, {
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll(cookies) {
         cookies.forEach(({ name, value }) => request.cookies.set(name, value));
-        response = NextResponse.next({ request });
+        response = passThroughResponse(request, pathLocale);
         cookies.forEach(({ name, value, options }) =>
           response.cookies.set(name, value, options),
         );
@@ -133,7 +162,7 @@ export async function proxy(request: NextRequest) {
     );
     return NextResponse.redirect(signIn);
   }
-  return response;
+  return persistPathLocale(response, pathLocale);
 }
 
 export const config = {
