@@ -130,6 +130,16 @@ describe("the connected homepage example", () => {
     const slider = screen.getByRole("slider");
     fireEvent.change(slider, { target: { value: "75" } });
     expect(slider).toHaveAttribute("aria-valuetext", "75% concept");
+    expect(slider).toHaveAttribute("dir", "ltr");
+    const comparison = slider.closest("figure");
+    expect(
+      comparison?.querySelector(
+        'div[aria-hidden="true"][style*="clip-path"]',
+      ),
+    ).toHaveStyle({ clipPath: "inset(0 25% 0 0)" });
+    expect(
+      comparison?.querySelector('span[aria-hidden="true"][style*="left"]'),
+    ).toHaveStyle({ left: "75%" });
     fireEvent.click(screen.getByRole("button", { name: "Open navigation" }));
     const drawer = screen.getByRole("dialog", { name: "Mobile navigation" });
     expect(

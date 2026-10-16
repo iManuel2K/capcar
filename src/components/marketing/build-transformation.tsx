@@ -22,7 +22,7 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
         />
         <div
           className="absolute inset-0"
-          style={{ clipPath: `inset(0 0 0 ${100 - reveal}%)` }}
+          style={{ clipPath: `inset(0 ${100 - reveal}% 0 0)` }}
           aria-hidden="true"
         >
           <Image
@@ -36,14 +36,14 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 w-px bg-[#e8e6d7]/75"
-          style={{ left: `${100 - reveal}%` }}
+          style={{ left: `${reveal}%` }}
         />
         <div className="absolute inset-x-0 top-0 flex justify-between gap-3 p-3 text-xs text-white sm:p-4">
           <span className="rounded-md bg-[#071519]/90 px-2 py-1">
-            {t("current")}
+            {t("concept")}
           </span>
           <span className="rounded-md bg-[#071519]/90 px-2 py-1">
-            {t("concept")}
+            {t("current")}
           </span>
         </div>
       </div>
@@ -54,6 +54,7 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
         <input
           id={id}
           type="range"
+          dir="ltr"
           min="0"
           max="100"
           value={reveal}
