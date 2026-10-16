@@ -31,7 +31,7 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
             alt=""
             fill
             sizes="(min-width: 1600px) 880px, (min-width: 900px) 55vw, 100vw"
-          quality={72}
+            quality={72}
             className="object-cover"
           />
         </div>
