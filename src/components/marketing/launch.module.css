@@ -214,3 +214,8 @@
     padding: 1rem;
   }
 }
+
+.deferredSection {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}

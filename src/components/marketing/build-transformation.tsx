@@ -15,7 +15,8 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
           src="/capcar-hero-bmw-garage.png"
           alt={t("alt")}
           fill
-          sizes="(min-width: 900px) 55vw, 100vw"
+          sizes="(min-width: 1600px) 880px, (min-width: 900px) 55vw, 100vw"
+          quality={72}
           loading={eager ? "eager" : "lazy"}
           fetchPriority={eager ? "high" : "auto"}
           className="object-cover"
@@ -29,7 +30,8 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
             src="/capcar-hero-bmw-vision.png"
             alt=""
             fill
-            sizes="(min-width: 900px) 55vw, 100vw"
+            sizes="(min-width: 1600px) 880px, (min-width: 900px) 55vw, 100vw"
+          quality={72}
             className="object-cover"
           />
         </div>

@@ -119,7 +119,7 @@ export function ProductDashboardPreview() {
   return (
     <section
       id="live-demo"
-      className="scroll-mt-6 bg-[#e8e6d7] text-[#0e2d30]"
+      className={`${styles.deferredSection} scroll-mt-6 bg-[#e8e6d7] text-[#0e2d30]`}
       aria-labelledby="demo-title"
     >
       <div className={styles.section}>
@@ -214,7 +214,8 @@ export function ProductDashboardPreview() {
                       src="/capcar-hero-bmw-garage.png"
                       alt={t("visual.alt")}
                       fill
-                      sizes="(min-width: 1024px) 50vw, 100vw"
+                      sizes="(min-width: 1500px) 700px, (min-width: 1024px) 50vw, 100vw"
+                      quality={65}
                       className="object-cover"
                     />
                   </div>
@@ -558,7 +559,8 @@ function DemoVehiclePassport({ plannedCount }: { plannedCount: number }) {
             src="/capcar-hero-bmw-e90.jpeg"
             alt={t("demo.passport.photoAlt")}
             fill
-            sizes="(min-width: 1024px) 35vw, 100vw"
+            sizes="(min-width: 1500px) 450px, (min-width: 1024px) 35vw, 100vw"
+            quality={65}
             className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#071519] via-transparent to-transparent" />

@@ -17,7 +17,7 @@ export default function manifest(): MetadataRoute.Manifest {
         purpose: "any",
       },
       {
-        src: "/capcar-mark-512.png",
+        src: "/capcar-mark.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",

@@ -17,6 +17,7 @@ import { MarketingHero } from "@/components/marketing/marketing-hero";
 import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { VisionRoadmapSection } from "@/components/marketing/vision-roadmap-section";
+import styles from "@/components/marketing/launch.module.css";
 
 export function MarketingLanding() {
   const t = useTranslations("Home");
@@ -28,7 +29,10 @@ export function MarketingLanding() {
         <ProductDashboardPreview />
         <FitmentSection />
 
-        <section id="platform" className="bg-[#050306] text-[#e8e6d7]">
+        <section
+          id="platform"
+          className={`${styles.deferredSection} bg-[#050306] text-[#e8e6d7]`}
+        >
           <div className="mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-32">
             <SectionHeading
               eyebrow={t("platformEyebrow")}
@@ -75,7 +79,7 @@ export function MarketingLanding() {
 
         <section
           aria-label={t("vehicleDetails")}
-          className="border-y border-[#0e2d30]/8 bg-[#88988d] py-5"
+          className={`${styles.deferredSection} border-y border-[#0e2d30]/8 bg-[#88988d] py-5`}
         >
           <div
             tabIndex={0}
@@ -102,7 +106,7 @@ export function MarketingLanding() {
 
         <section
           id="projects"
-          className="mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-36"
+          className={`${styles.deferredSection} mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 sm:py-36`}
         >
           <SectionHeading
             eyebrow={t("projectsEyebrow")}
@@ -166,7 +170,9 @@ export function MarketingLanding() {
 
         <MarketingFaq />
 
-        <section className="bg-[#88988d] px-5 py-5 sm:px-8 sm:py-8">
+        <section
+          className={`${styles.deferredSection} bg-[#88988d] px-5 py-5 sm:px-8 sm:py-8`}
+        >
           <div className="relative mx-auto min-h-[330px] max-w-[1500px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0e2d30] px-6 py-10 text-[#e8e6d7] shadow-[0_30px_90px_rgba(20,34,28,0.18)] sm:min-h-[430px] sm:rounded-[2.5rem] sm:px-12 sm:py-14 lg:px-20">
             <div className="absolute top-0 right-0 h-full w-1/2 bg-[radial-gradient(circle_at_center,rgba(146,100,77,0.24),transparent_65%)]" />
             <div className="relative z-10 flex min-h-[250px] max-w-4xl flex-col justify-between sm:min-h-[320px]">
@@ -205,7 +211,7 @@ function FitmentSection() {
   return (
     <section
       id="fitment"
-      className="border-y border-[#0e2d30]/15 bg-[#88988d] text-[#050306]"
+      className={`${styles.deferredSection} border-y border-[#0e2d30]/15 bg-[#88988d] text-[#050306]`}
     >
       <div className="mx-auto grid max-w-[1500px] gap-10 px-5 py-16 sm:px-8 sm:py-32 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <div>
@@ -372,7 +378,8 @@ function PhotoDetail({
         src={src}
         alt={alt}
         fill
-        sizes="(min-width: 640px) 33vw, 100vw"
+        sizes="(min-width: 1500px) 478px, (min-width: 640px) 33vw, 100vw"
+        quality={65}
         className="object-cover transition duration-700 ease-out group-hover:scale-[1.035]"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/8 to-transparent" />
@@ -411,7 +418,8 @@ function ProjectCard({
         src={image}
         alt={t("projectAlt", { vehicle, name })}
         fill
-        sizes="(min-width: 640px) 50vw, 86vw"
+        sizes="(min-width: 1500px) 718px, (min-width: 640px) 50vw, 86vw"
+        quality={65}
         className="object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.12)_28%,rgba(5,5,5,0.9)_100%)]" />
