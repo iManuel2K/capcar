@@ -16,6 +16,16 @@ export function createScoutDatabase(url: string, secretKey: string) {
   });
 }
 
+export function roadbookScoutPlaceTargets() {
+  return europeanPhotoTargets.map((target) => ({
+    source_key: target.key,
+    region: target.region,
+    country_code: target.countryCode,
+    latitude: target.latitude,
+    longitude: target.longitude,
+  }));
+}
+
 export async function registerScoutCatalog(client: SupabaseClient) {
   const officialSources = roadbookScoutSources.map((source) => ({
     source_key: source.key,
@@ -43,6 +53,12 @@ export async function registerScoutCatalog(client: SupabaseClient) {
     });
   if (error)
     throw new Error(`Could not register scout sources: ${error.message}`);
+
+  const { error: placeError } = await client.rpc("sync_roadbook_scout_places", {
+    p_targets: roadbookScoutPlaceTargets(),
+  });
+  if (placeError)
+    throw new Error(`Could not sync scout places: ${placeError.message}`);
 }
 
 export async function sourceState(client: SupabaseClient, source: ScoutSource) {
