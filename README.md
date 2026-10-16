@@ -52,7 +52,7 @@ Run the complete repository check before opening a pull request:
 pnpm check
 ```
 
-The command covers formatting, linting, type checks, unit tests, production build validation, browser tests, and secret scanning.
+The command runs linting, type checks, unit tests, and a production build.
 
 ## Deployment
 
