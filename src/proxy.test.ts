@@ -134,10 +134,10 @@ describe("proxy public Passport guard", () => {
     );
   });
 
-  it("returns HTTP 404 for missing journal articles and untranslated paths before streaming", async () => {
+  it("returns HTTP 404 for missing journal articles and unsupported locales before streaming", async () => {
     for (const path of [
       "/de/journal/missing",
-      "/en/journal",
+      "/fr/journal",
       "/de/journal/missing/child",
     ]) {
       const response = await proxy(

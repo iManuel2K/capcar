@@ -1,3 +1,4 @@
+import { journalLanguageAlternates } from "@/features/journal/metadata";
 import type { MetadataRoute } from "next";
 
 import {
@@ -8,9 +9,9 @@ import {
   publicLanguageAlternates,
 } from "@/features/seo/public-metadata";
 import {
-  journalArticles,
+  getJournalArticles,
   journalArticlePath,
-  JOURNAL_PATH,
+  journalPath,
 } from "@/features/journal/articles";
 import { locales } from "@/i18n/config";
 
@@ -33,12 +34,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       })),
     ];
   });
-  const journalPages = [
-    JOURNAL_PATH,
-    ...journalArticles.map((article) => journalArticlePath(article.slug)),
-  ].map((path) => ({
-    url: new URL(path, PUBLIC_SITE_URL).toString(),
-    lastModified: "2026-10-17",
-  }));
+  const journalPages = locales.flatMap((locale) => [
+    {
+      url: new URL(journalPath(locale), PUBLIC_SITE_URL).toString(),
+      lastModified: "2026-10-17",
+      alternates: { languages: journalLanguageAlternates() },
+    },
+    ...getJournalArticles(locale).map((article) => ({
+      url: new URL(
+        journalArticlePath(article.slug, locale),
+        PUBLIC_SITE_URL,
+      ).toString(),
+      lastModified: article.published,
+      alternates: { languages: journalLanguageAlternates(article.slug) },
+    })),
+  ]);
   return [...publicPages, ...journalPages];
 }

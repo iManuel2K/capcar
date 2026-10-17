@@ -1,36 +1,42 @@
 import Link from "next/link";
 import { useLocale } from "next-intl";
 import { JournalCards } from "./journal-cards";
-import { journalArticles, JOURNAL_PATH } from "@/features/journal/articles";
+import { getJournalArticles, journalPath } from "@/features/journal/articles";
+
+import { resolveJournalLocale } from "@/features/journal/routes";
+import { journalUI } from "@/features/journal/ui";
 
 export function JournalPreview() {
-  const locale = useLocale();
-  if (locale !== "de") return null;
+  const locale = resolveJournalLocale(useLocale());
+  const ui = journalUI[locale];
   return (
     <section
-      lang="de"
+      lang={locale}
       aria-labelledby="journal-preview-title"
       className="bg-[#ebe9dc] px-5 py-20 text-[#0e2d30] sm:px-8 sm:py-28"
     >
       <div className="mx-auto max-w-6xl">
         <p className="text-xs font-semibold tracking-widest text-[#79503c] uppercase">
-          CapCar Journal
+          CapCar {ui.label}
         </p>
         <div className="mt-4 mb-10 flex flex-wrap items-end justify-between gap-5">
           <h2
             id="journal-preview-title"
             className="max-w-2xl text-4xl font-medium tracking-tight sm:text-5xl"
           >
-            Dein Auto. Dein nächster Schritt.
+            {ui.headline.replace("\n", " ")}
           </h2>
           <Link
-            href={JOURNAL_PATH}
+            href={journalPath(locale)}
             className="inline-flex min-h-11 items-center font-semibold underline underline-offset-4"
           >
-            Alle Artikel →
+            {ui.allArticles} →
           </Link>
         </div>
-        <JournalCards articles={journalArticles.slice(0, 2)} />
+        <JournalCards
+          articles={getJournalArticles(locale).slice(0, 2)}
+          locale={locale}
+        />
       </div>
     </section>
   );
