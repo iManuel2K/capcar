@@ -65,7 +65,13 @@ function formFromVehicle(vehicle?: Vehicle): FormState {
   };
 }
 
-export function AddVehicleForm({ vehicle }: { vehicle?: Vehicle }) {
+export function AddVehicleForm({
+  vehicle,
+  returnTo,
+}: {
+  vehicle?: Vehicle;
+  returnTo?: string;
+}) {
   const router = useRouter();
   const [form, setForm] = useState(() => formFromVehicle(vehicle));
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -108,7 +114,11 @@ export function AddVehicleForm({ vehicle }: { vehicle?: Vehicle }) {
       : saveVehicle(result.data, window.localStorage);
     announceVehicleChange();
     if (!vehicle) trackAnalytics("vehicle_added");
-    router.push(`/garage/${savedVehicle.id}`);
+    if (returnTo?.startsWith("/garage/journal?")) {
+      const destination = new URL(returnTo, window.location.origin);
+      destination.searchParams.set("vehicle", savedVehicle.id);
+      router.push(destination.pathname + destination.search);
+    } else router.push(`/garage/${savedVehicle.id}`);
   }
 
   const previewLabel = `${form.productionYear || "Your"} ${form.make || "vehicle"} ${form.model || "project"}`;

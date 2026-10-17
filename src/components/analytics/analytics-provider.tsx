@@ -55,8 +55,6 @@ export function AnalyticsProvider() {
       const url = new URL(link.href, window.location.origin);
       if (url.origin !== window.location.origin) return;
       const props = { article_slug: current.split("/").at(-1)! };
-      if (url.pathname.startsWith("/downloads/journal/"))
-        trackAnalytics("journal_checklist_downloaded", props);
       if (url.pathname === "/register")
         trackAnalytics("journal_signup_clicked", props);
     }

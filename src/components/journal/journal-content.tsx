@@ -1,9 +1,12 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 // Editorial text only: React escapes content; no HTML or executable Markdown.
 function inline(text: string): ReactNode[] {
   return text
-    .split(/(\*\*[^*]+\*\*|\[[^\]]+\]\(https:\/\/[^\s)]+\))/g)
+    .split(
+      /(\*\*[^*]+\*\*|\[[^\]]+\]\((?:https:\/\/[^\s)]+|\/(?!\/)[a-zA-Z0-9/?=&%#._-]*)\))/g,
+    )
     .map((part, i) => {
       if (part.startsWith("**") && part.endsWith("**")) {
         return (
@@ -12,7 +15,19 @@ function inline(text: string): ReactNode[] {
           </strong>
         );
       }
-      const link = part.match(/^\[([^\]]+)\]\((https:\/\/[^\s)]+)\)$/);
+      const link = part.match(
+        /^\[([^\]]+)\]\(((?:https:\/\/[^\s)]+|\/(?!\/)[a-zA-Z0-9/?=&%#._-]*))\)$/,
+      );
+      if (link?.[2].startsWith("/"))
+        return (
+          <Link
+            key={i}
+            href={link[2]}
+            className="underline decoration-[#92644d]/60 underline-offset-4 hover:text-[#6d0101]"
+          >
+            {link[1]}
+          </Link>
+        );
       return link ? (
         <a
           key={i}

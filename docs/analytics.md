@@ -19,25 +19,26 @@ Revocation blocks future queued captures through `before_send` and opts the SDK 
 
 ## Events
 
-| Event                          | Trigger                                                                              |
-| ------------------------------ | ------------------------------------------------------------------------------------ |
-| `$pageview`                    | Initial consented view and App Router navigation                                     |
-| `journal_article_viewed`       | Known Journal article; includes public article slug                                  |
-| `journal_checklist_downloaded` | Click on a Journal download link (download completion is not confirmed)              |
-| `journal_signup_clicked`       | Click from a Journal article to registration                                         |
-| `signup_submitted`             | Supabase accepts registration request; not proof of confirmed/new account            |
-| `login_completed`              | Password login returns a session                                                     |
-| `vehicle_added`                | User form successfully creates a local vehicle; edits and seeded demos excluded      |
-| `build_item_added`             | User form successfully creates a build item                                          |
-| `guide_opened`                 | Navigation to an individual vehicle guide path; library/review pages excluded        |
-| `trip_plan_created`            | Trip planner receives a successful plan response; not a saved trip or verified route |
+| Event                     | Trigger                                                                              |
+| ------------------------- | ------------------------------------------------------------------------------------ |
+| `$pageview`               | Initial consented view and App Router navigation                                     |
+| `journal_article_viewed`  | Known Journal article; includes public article slug                                  |
+| `journal_action_clicked`  | Continue from an inline checklist into the vehicle workspace                         |
+| `journal_checklist_saved` | Checklist explicitly attached to an owned vehicle                                    |
+| `journal_signup_clicked`  | Click from a Journal article to registration                                         |
+| `signup_submitted`        | Supabase accepts registration request; not proof of confirmed/new account            |
+| `login_completed`         | Password login returns a session                                                     |
+| `vehicle_added`           | User form successfully creates a local vehicle; edits and seeded demos excluded      |
+| `build_item_added`        | User form successfully creates a build item                                          |
+| `guide_opened`            | Navigation to an individual vehicle guide path; library/review pages excluded        |
+| `trip_plan_created`       | Trip planner receives a successful plan response; not a saved trip or verified route |
 
 Events carry normalized page URL/path and selected UI locale. Journal events also carry the public article slug. No past activity is backfilled.
 
 ## Verification
 
 1. In a fresh browser, verify there are no PostHog requests before a choice or after declining.
-2. Allow analytics, navigate to a Journal article and click its download/registration links. Check ingestion requests and PostHog's live events.
+2. Allow analytics, navigate to a Journal article and use its inline checklist and registration links. Check ingestion requests and PostHog's live events.
 3. Open Analytics settings and decline. Verify further actions do not send events.
 4. Repeat with Do Not Track, a private vehicle path, and authentication query parameters.
 5. Build dashboards for Journal conversion, feature adoption and returning browsers. Keep test visits distinct from business conclusions; do not equate registration submissions with confirmed accounts.

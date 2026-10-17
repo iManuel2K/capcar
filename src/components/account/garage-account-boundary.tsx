@@ -106,7 +106,9 @@ export function GarageAccountBoundary({
         if (!data.user) {
           if (!cancelled) {
             setReady(true);
-            router.replace("/login?next=/garage");
+            router.replace(
+              `/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`,
+            );
           }
           return;
         }

@@ -24,3 +24,21 @@ export function getJournalArticles(locale: AppLocale) {
 export function findJournalArticle(slug: string, locale: AppLocale = "de") {
   return getJournalArticles(locale).find((article) => article.slug === slug);
 }
+
+export function relatedJournalArticles(slug: string, locale: AppLocale) {
+  const articles = getJournalArticles(locale).filter(
+    (item) => item.slug !== slug,
+  );
+  const preferred =
+    slug === "guide-to-vehicle-history"
+      ? ["bmw-diy-wartung-dokumentieren", "bmw-wartung-ohne-garage"]
+      : slug === "build-plan-first-job"
+        ? ["bmw-wochenendprojekt-planen", "bmw-wartung-ohne-garage"]
+        : ["build-plan-first-job", "guide-to-vehicle-history"];
+  return preferred
+    .flatMap((id) => {
+      const article = articles.find((item) => item.slug === id);
+      return article ? [article] : [];
+    })
+    .slice(0, 2);
+}

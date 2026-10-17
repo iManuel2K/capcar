@@ -18,18 +18,33 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function AIPlannerPage() {
+export default async function AIPlannerPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ journal?: string; vehicle?: string }>;
+}) {
+  const query = await searchParams;
+  const journalTrip = query.journal === "ruesselsheim-rheingau-tagesausflug";
+  const params = new URLSearchParams();
+  if (journalTrip) {
+    params.set("journal", query.journal!);
+    if (query.vehicle) params.set("vehicle", query.vehicle);
+  }
+  const returnTo = `/ai${params.size ? `?${params}` : ""}`;
   const user = await currentUser();
-  if (!user) redirect("/login?next=/ai");
+  if (!user) redirect(`/login?next=${encodeURIComponent(returnTo)}`);
 
   const aiConnection = await getAiConnection(
     createAdminClient(),
     user.id,
   ).catch(() => null);
-  if (!aiConnection) redirect("/account/connections?next=/ai");
+  if (!aiConnection)
+    redirect(`/account/connections?next=${encodeURIComponent(returnTo)}`);
 
   return (
     <TripPlanner
+      initialJournalTrip={journalTrip}
+      initialVehicleId={journalTrip ? query.vehicle : undefined}
       initialAiConnection={{
         configured: true,
         connected: true,
