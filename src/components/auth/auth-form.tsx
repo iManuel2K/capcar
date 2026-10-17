@@ -1,5 +1,7 @@
 "use client";
 
+import { trackAnalytics } from "@/features/analytics/client";
+
 import {
   ArrowRight,
   CheckCircle2,
@@ -103,6 +105,7 @@ export function AuthForm({
         );
         if (authError) throw authError;
         if (!data.session) throw new Error(t("errors.generic"));
+        trackAnalytics("login_completed");
         window.location.replace(safeNext());
       }
 
@@ -120,6 +123,7 @@ export function AuthForm({
           },
         });
         if (authError) throw authError;
+        trackAnalytics("signup_submitted");
         if (data.session) {
           window.location.replace("/garage");
         } else {

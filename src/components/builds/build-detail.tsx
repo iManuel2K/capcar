@@ -1,5 +1,7 @@
 "use client";
 
+import { trackAnalytics } from "@/features/analytics/client";
+
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -146,6 +148,7 @@ export function BuildDetail({
     }
     try {
       createBuildItem(result.data, window.localStorage);
+      trackAnalytics("build_item_added");
       announceBuildChange();
       setSaveError("");
     } catch {
