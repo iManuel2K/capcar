@@ -113,6 +113,16 @@ describe("proxy public Passport guard", () => {
     ).toBe(503);
   });
 
+  it("keeps worksheet downloads outside the localized journal guard", async () => {
+    const response = await proxy(
+      new NextRequest(
+        "https://capcar.example/downloads/journal/bmw-wochenendprojekt-planen.txt",
+      ),
+    );
+    expect(response.status).toBe(200);
+    expect(response.headers.get("x-robots-tag")).toBeNull();
+  });
+
   it("requires an account before opening CapCar AI", async () => {
     const response = await proxy(
       new NextRequest("https://capcar.example/ai?from=header"),

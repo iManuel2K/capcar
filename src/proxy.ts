@@ -92,7 +92,7 @@ export async function proxy(request: NextRequest) {
   const pathLocale = localeFromPathname(request.nextUrl.pathname);
   // Reject invalid journal paths before streamed layouts can commit HTTP 200.
   const journal = request.nextUrl.pathname.match(
-    /^\/([^/]+)\/journal(?:\/(.*))?$/,
+    /^\/([a-z]{2})\/journal(?:\/(.*))?$/,
   );
   if (
     journal &&
