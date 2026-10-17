@@ -90,6 +90,15 @@ function passportUnavailableResponse(
 }
 
 export async function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname === "/journal") {
+    const locale = resolveLocale(
+      request.cookies.get(localeCookie)?.value,
+      request.headers.get("accept-language"),
+    );
+    const destination = request.nextUrl.clone();
+    destination.pathname = journalPath(locale);
+    return NextResponse.redirect(destination);
+  }
   const pathLocale = localeFromPathname(request.nextUrl.pathname);
   // Reject invalid journal paths before streamed layouts can commit HTTP 200.
   const journal = request.nextUrl.pathname.match(
