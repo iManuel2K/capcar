@@ -1,5 +1,6 @@
 "use client";
 
+import { useVehicles } from "@/features/vehicles/use-vehicles";
 import { trackAnalytics } from "@/features/analytics/client";
 
 import {
@@ -232,16 +233,43 @@ function RouteStopGallery({ route }: { route: TripRoute }) {
 
 export function TripPlanner({
   initialAiConnection,
+  initialJournalTrip = false,
+  initialVehicleId,
 }: {
   initialAiConnection?: AiPlannerConnectionStatus;
+  initialJournalTrip?: boolean;
+  initialVehicleId?: string;
 }) {
   const t = useTranslations("AIPlanner");
-  const [vehicle, setVehicle] = useState("2011 BMW E90 318i");
-  const [inputMode, setInputMode] = useState<"prompt" | "places">("prompt");
+  const { vehicles } = useVehicles();
+  const selectedVehicle = vehicles.find((item) => item.id === initialVehicleId);
+  const [vehicleInput, setVehicle] = useState(
+    initialVehicleId ? "" : "2011 BMW E90 318i",
+  );
+  const vehicle =
+    vehicleInput ||
+    (selectedVehicle
+      ? `${selectedVehicle.productionYear} ${selectedVehicle.make} ${selectedVehicle.model}`
+      : initialVehicleId
+        ? ""
+        : "2011 BMW E90 318i");
+  const [inputMode, setInputMode] = useState<"prompt" | "places">(
+    initialJournalTrip ? "places" : "prompt",
+  );
   const [prompt, setPrompt] = useState(
     "Plan me a long scenic weekend with my BMW in the Black Forest. I want great roads, quiet photo spots and sensible fuel stops.",
   );
-  const [places, setPlaces] = useState(["", ""]);
+  const [places, setPlaces] = useState(
+    initialJournalTrip
+      ? [
+          "Rüsselsheim am Main",
+          "Schloss Biebrich, Wiesbaden",
+          "Eltville am Rhein",
+          "Niederwalddenkmal, Rüdesheim",
+          "Rüsselsheim am Main",
+        ]
+      : ["", ""],
+  );
   const [placeModalOpen, setPlaceModalOpen] = useState(false);
   const hydrated = useSyncExternalStore(
     () => () => undefined,
@@ -250,7 +278,7 @@ export function TripPlanner({
   );
   const [startDate, setStartDate] = useState("");
   const effectiveStartDate = startDate || (hydrated ? upcomingFriday() : "");
-  const [duration, setDuration] = useState(3);
+  const [duration, setDuration] = useState(initialJournalTrip ? 1 : 3);
   const [pace, setPace] = useState<"scenic" | "balanced" | "driving">("scenic");
   const [interests, setInterests] = useState<
     Array<(typeof interestOptions)[number]>

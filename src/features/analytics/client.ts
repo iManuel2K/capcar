@@ -1,3 +1,4 @@
+import { isJournalSlug } from "@/features/journal/routes";
 import type { PostHog } from "posthog-js/dist/module.no-external";
 
 export const ANALYTICS_CONSENT_KEY = "capcar.analytics-consent.v1";
@@ -6,7 +7,8 @@ export const ANALYTICS_SETTINGS_EVENT = "capcar:analytics-settings";
 export type AnalyticsEvent =
   | "$pageview"
   | "journal_article_viewed"
-  | "journal_checklist_downloaded"
+  | "journal_action_clicked"
+  | "journal_checklist_saved"
   | "journal_signup_clicked"
   | "signup_submitted"
   | "login_completed"
@@ -47,13 +49,7 @@ export function analyticsPath(pathname: string) {
     ? parts.shift()
     : undefined;
   if (parts[0] === "journal") {
-    const articles = [
-      "bmw-wochenendprojekt-planen",
-      "bmw-wartung-ohne-garage",
-      "bmw-diy-wartung-dokumentieren",
-      "ruesselsheim-rheingau-tagesausflug",
-    ];
-    return `/${locale ? `${locale}/` : ""}journal${articles.includes(parts[1]) ? `/${parts[1]}` : ""}`;
+    return `/${locale ? `${locale}/` : ""}journal${isJournalSlug(parts[1]) ? `/${parts[1]}` : ""}`;
   }
   const safeRoots = [
     "garage",

@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { render, screen, cleanup } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import sitemap from "@/app/sitemap";
@@ -15,13 +15,13 @@ import { journalLanguageAlternates } from "./metadata";
 afterEach(cleanup);
 
 describe("the multilingual ownership journal", () => {
-  it("publishes every translated article and worksheet with matching canonicals and language alternates", async () => {
+  it("publishes every translated article and in-app checklist with matching canonicals and language alternates", async () => {
     const entries = sitemap().filter((item) => item.url.includes("/journal"));
-    expect(entries).toHaveLength(25);
-    expect(generateStaticParams()).toHaveLength(20);
+    expect(entries).toHaveLength(35);
+    expect(generateStaticParams()).toHaveLength(30);
     for (const locale of locales) {
       const articles = getJournalArticles(locale);
-      expect(articles).toHaveLength(4);
+      expect(articles).toHaveLength(6);
       for (const article of articles) {
         const metadata = await generateMetadata({
           params: Promise.resolve({ locale, articleSlug: article.slug }),
@@ -36,13 +36,11 @@ describe("the multilingual ownership journal", () => {
           entries.some((entry) => entry.url === metadata.alternates?.canonical),
         ).toBe(true);
         expect(existsSync(`public${article.image}`)).toBe(true);
-        const download = readFileSync(
-          `public/downloads/journal/${locale}/${article.download}`,
-          "utf8",
+        expect(article.body).toContain(
+          `/garage/journal?article=${article.slug}&locale=${locale}`,
         );
-        expect(download).toContain(article.title);
-        expect(download).toContain(journalArticlePath(article.slug, locale));
-        expect(download).not.toContain("### Instagram");
+        expect(article).not.toHaveProperty("download");
+        expect(article).not.toHaveProperty("template");
         expect(article.body.match(/^## /gm)?.length).toBe(
           getJournalArticles("de")
             .find((item) => item.slug === article.slug)
@@ -105,7 +103,7 @@ describe("the multilingual ownership journal", () => {
     const { container } = render(
       <JournalContent
         text={
-          "## Quelle\n\n[Besucherinformation](https://www.eltville.de/)\n\n<script>alert(1)</script>\n\n| Feld | Eintrag |\n| --- | --- |\n| Kilometerstand | |"
+          "[Open CapCar](/garage/journal?article=build-plan-first-job&locale=en)\n\n[Unsafe](//evil.example)\n\n## Quelle\n\n[Besucherinformation](https://www.eltville.de/)\n\n<script>alert(1)</script>\n\n| Feld | Eintrag |\n| --- | --- |\n| Kilometerstand | |"
         }
       />,
     );
@@ -115,6 +113,13 @@ describe("the multilingual ownership journal", () => {
     expect(
       screen.getByRole("columnheader", { name: "Feld" }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Open CapCar" })).toHaveAttribute(
+      "href",
+      "/garage/journal?article=build-plan-first-job&locale=en",
+    );
+    expect(
+      screen.queryByRole("link", { name: "Unsafe" }),
+    ).not.toBeInTheDocument();
     expect(container.querySelector("script")).toBeNull();
     expect(screen.getByText("<script>alert(1)</script>")).toBeInTheDocument();
   });

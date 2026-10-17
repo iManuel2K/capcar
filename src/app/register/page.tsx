@@ -1,3 +1,4 @@
+import { safeAuthNext } from "@/features/auth/next-path";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { pageMetadata } from "@/features/seo/public-metadata";
@@ -15,6 +16,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 export const dynamic = "force-dynamic";
 
-export default function RegisterPage() {
-  return <AuthForm mode="register" configured={getAuthStatus().configured} />;
+export default async function RegisterPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const query = await searchParams;
+  return (
+    <AuthForm
+      mode="register"
+      configured={getAuthStatus().configured}
+      nextPath={safeAuthNext(query.next)}
+    />
+  );
 }

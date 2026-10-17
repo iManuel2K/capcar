@@ -1,3 +1,7 @@
+import {
+  JOURNAL_CHECKLIST_KEY,
+  JOURNAL_CHECKLIST_EVENT,
+} from "@/features/journal/checklists";
 import { z } from "zod";
 
 import {
@@ -63,6 +67,7 @@ import {
 } from "@/features/roadbook/roadbook-storage";
 
 export const snapshotKeys = [
+  JOURNAL_CHECKLIST_KEY,
   VEHICLE_STORAGE_KEY,
   MAINTENANCE_STORAGE_KEY,
   BUILD_STORAGE_KEY,
@@ -82,6 +87,7 @@ export const snapshotKeys = [
 ] as const;
 
 export const garageStorageEvents = [
+  JOURNAL_CHECKLIST_EVENT,
   PASSPORT_PROFILE_STORAGE_EVENT,
   VEHICLE_STORAGE_EVENT,
   MAINTENANCE_STORAGE_EVENT,

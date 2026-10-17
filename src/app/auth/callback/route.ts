@@ -1,3 +1,4 @@
+import { safeAuthNext } from "@/features/auth/next-path";
 import { NextResponse } from "next/server";
 
 import { getAuthStatus } from "@/features/auth/auth-config";
@@ -6,10 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const requestedNext = url.searchParams.get("next");
-  const next =
-    requestedNext?.startsWith("/") && !requestedNext.startsWith("//")
-      ? requestedNext
-      : "/garage";
+  const next = safeAuthNext(requestedNext);
   const destination = new URL(next, url.origin);
   const code = url.searchParams.get("code");
   if (!getAuthStatus().configured || !code) {

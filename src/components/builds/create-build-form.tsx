@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  readJournalChecklists,
+  type JournalChecklistRecord,
+} from "@/features/journal/checklists";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -22,7 +26,38 @@ import {
   buildStages,
 } from "@/features/builds/build-schema";
 
-export function CreateBuildForm({ vehicleId }: { vehicleId: string }) {
+export function CreateBuildForm({
+  vehicleId,
+  journalSlug,
+}: {
+  vehicleId: string;
+  journalSlug?: string;
+}) {
+  const hydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+  if (!hydrated)
+    return (
+      <div className="min-h-[600px] animate-pulse rounded-[2rem] bg-white/[0.04]" />
+    );
+  const record = journalSlug
+    ? readJournalChecklists(localStorage).find(
+        (item) =>
+          item.articleSlug === journalSlug && item.vehicleId === vehicleId,
+      )
+    : undefined;
+  return <BuildFormFields vehicleId={vehicleId} journalRecord={record} />;
+}
+
+function BuildFormFields({
+  vehicleId,
+  journalRecord,
+}: {
+  vehicleId: string;
+  journalRecord?: JournalChecklistRecord;
+}) {
   const hydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -32,11 +67,13 @@ export function CreateBuildForm({ vehicleId }: { vehicleId: string }) {
   const { vehicles } = useVehicles();
   const vehicle = vehicles.find((candidate) => candidate.id === vehicleId);
   const [form, setForm] = useState({
-    name: "",
+    name: journalRecord?.title.slice(0, 60) ?? "",
     goal: "",
-    description: "",
+    description: journalRecord
+      ? (journalRecord.notes || journalRecord.title).slice(0, 500)
+      : "",
     budget: "",
-    modification: "",
+    modification: journalRecord?.title.slice(0, 100) ?? "",
     stage: "appearance",
     estimate: "",
   });

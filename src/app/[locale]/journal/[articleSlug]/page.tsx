@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Download } from "lucide-react";
+import { JournalChecklist } from "@/components/journal/journal-checklist";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { JournalContent } from "@/components/journal/journal-content";
 import { JournalCards } from "@/components/journal/journal-cards";
 import {
   findJournalArticle,
   getJournalArticles,
+  relatedJournalArticles,
   journalArticlePath,
   journalPath,
 } from "@/features/journal/articles";
@@ -134,42 +135,7 @@ export default async function JournalArticlePage({ params }: Props) {
           </div>
           <div className="mx-auto max-w-3xl">
             <JournalContent text={article.body} />
-            <section
-              aria-labelledby="worksheet-title"
-              className="mt-12 rounded-3xl border border-[#0e2d30]/15 bg-[#f5f2e8] p-5 sm:p-8"
-            >
-              <p className="text-xs font-semibold tracking-widest text-[#79503c] uppercase">
-                {ui.free}
-              </p>
-              <h2
-                id="worksheet-title"
-                className="mt-3 mb-5 text-2xl font-medium tracking-tight"
-              >
-                {ui.worksheet}
-              </h2>
-              <JournalContent text={article.template} />
-              <a
-                href={`/downloads/journal/${locale}/${article.download}`}
-                download
-                className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-semibold text-[#e8e6d7] transition hover:bg-[#6d0101]"
-              >
-                <Download className="size-4" aria-hidden="true" />
-                {ui.download}
-              </a>
-              <p className="mt-3 text-sm text-[#0e2d30]/65">
-                {ui.downloadNote}
-              </p>
-            </section>
-            <aside className="mt-10 rounded-3xl bg-[#0e2d30] p-6 text-[#e8e6d7] sm:p-8">
-              <h2 className="text-2xl font-medium">{ui.ctaTitle}</h2>
-              <p className="mt-3 leading-7 text-[#e8e6d7]/80">{ui.ctaBody}</p>
-              <Link
-                href={`/register?utm_source=journal&utm_medium=article&utm_campaign=ownership_series&utm_content=${article.slug}`}
-                className="mt-5 inline-flex min-h-12 items-center rounded-full bg-[#e8e6d7] px-5 text-sm font-semibold text-[#0e2d30]"
-              >
-                {ui.cta} →
-              </Link>
-            </aside>
+            <JournalChecklist slug={article.slug} locale={locale} />
           </div>
           <section aria-labelledby="related-title" className="mt-20">
             <h2
@@ -180,9 +146,7 @@ export default async function JournalArticlePage({ params }: Props) {
             </h2>
             <JournalCards
               locale={locale}
-              articles={getJournalArticles(locale)
-                .filter((item) => item.slug !== article.slug)
-                .slice(0, 2)}
+              articles={relatedJournalArticles(article.slug, locale)}
             />
           </section>
         </article>

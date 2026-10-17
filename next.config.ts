@@ -9,6 +9,26 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  async redirects() {
+    const slugs = [
+      "bmw-wochenendprojekt-planen",
+      "bmw-wartung-ohne-garage",
+      "bmw-diy-wartung-dokumentieren",
+      "ruesselsheim-rheingau-tagesausflug",
+    ];
+    return slugs.flatMap((slug) => [
+      {
+        source: `/downloads/journal/${slug}.txt`,
+        destination: `/de/journal/${slug}#checklist`,
+        permanent: true,
+      },
+      ...["en", "de", "el", "sq", "ja"].map((locale) => ({
+        source: `/downloads/journal/${locale}/${slug}.txt`,
+        destination: `/${locale}/journal/${slug}#checklist`,
+        permanent: true,
+      })),
+    ]);
+  },
   async headers() {
     const contentSecurityPolicy = [
       "default-src 'self'",
