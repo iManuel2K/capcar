@@ -18,8 +18,7 @@ describe("route metadata", () => {
     const urls = entries.map((route) => route.url);
     expect(entries).toHaveLength(
       PUBLIC_INDEXABLE_ROUTES.length * (locales.length + 1) +
-        journalArticles.length +
-        1,
+        (journalArticles.length + 1) * locales.length,
     );
     expect(urls).toContain("https://capcar.dev/roadbook");
     expect(urls).toContain("https://capcar.dev/de/roadbook");
@@ -34,9 +33,9 @@ describe("route metadata", () => {
       expect(entry).not.toHaveProperty("changeFrequency");
       expect(entry).not.toHaveProperty("priority");
       if (isJournal) {
-        expect(entry.url).toMatch(/^https:\/\/capcar\.dev\/de\/journal/);
-        expect(entry.alternates).toBeUndefined();
-        continue;
+        expect(entry.url).toMatch(
+          /^https:\/\/capcar\.dev\/(en|de|el|sq|ja)\/journal/,
+        );
       }
       expect(entry.alternates?.languages?.de).toMatch(
         /^https:\/\/capcar\.dev\/de/,

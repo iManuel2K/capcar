@@ -1,13 +1,26 @@
 import articles from "./articles.json";
+import en from "./translations/en.json";
+import el from "./translations/el.json";
+import sq from "./translations/sq.json";
+import ja from "./translations/ja.json";
+import type { AppLocale } from "@/i18n/config";
+
+export { journalArticlePath, journalPath } from "./routes";
 
 export const journalArticles = articles;
 export type JournalArticle = (typeof articles)[number];
-export const JOURNAL_PATH = "/de/journal";
+const translations: Record<AppLocale, JournalArticle[]> = {
+  de: articles,
+  en,
+  el,
+  sq,
+  ja,
+};
 
-export function findJournalArticle(slug: string) {
-  return journalArticles.find((article) => article.slug === slug);
+export function getJournalArticles(locale: AppLocale) {
+  return translations[locale];
 }
 
-export function journalArticlePath(slug: string) {
-  return `${JOURNAL_PATH}/${slug}`;
+export function findJournalArticle(slug: string, locale: AppLocale = "de") {
+  return getJournalArticles(locale).find((article) => article.slug === slug);
 }

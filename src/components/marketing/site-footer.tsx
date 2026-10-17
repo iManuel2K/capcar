@@ -1,10 +1,14 @@
 "use client";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { LanguageSelector } from "@/components/i18n/language-selector";
+import { journalPath, resolveJournalLocale } from "@/features/journal/routes";
+import { journalUI } from "@/features/journal/ui";
 
 export function SiteFooter() {
+  const journalLocale = resolveJournalLocale(useLocale());
+  const journal = journalUI[journalLocale];
   const t = useTranslations("Footer");
   const l = useTranslations("Launch");
   const groups = [
@@ -26,7 +30,7 @@ export function SiteFooter() {
         [l("nav.how"), "/#platform"],
         [l("nav.projects"), "/#projects"],
         [t("roadmap"), "/roadmap"],
-        ["Journal (DE)", "/de/journal"],
+        [journal.label, journalPath(journalLocale)],
         [t("faq"), "/#faq"],
       ],
     },

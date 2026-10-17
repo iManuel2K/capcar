@@ -2,46 +2,102 @@ import { readFileSync, existsSync } from "node:fs";
 import { render, screen, cleanup } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import sitemap from "@/app/sitemap";
-import { generateMetadata } from "@/app/[locale]/journal/[articleSlug]/page";
+import {
+  generateMetadata,
+  generateStaticParams,
+} from "@/app/[locale]/journal/[articleSlug]/page";
 import { JournalContent } from "@/components/journal/journal-content";
-import { journalArticles, journalArticlePath } from "./articles";
+import { getJournalArticles, journalArticlePath } from "./articles";
+import { locales } from "@/i18n/config";
+import { localizePublicPathname } from "@/features/seo/public-metadata";
+import { journalLanguageAlternates } from "./metadata";
 
 afterEach(cleanup);
 
-describe("the public German ownership journal", () => {
-  it("publishes only existing German articles in search, with self-referencing metadata", async () => {
+describe("the multilingual ownership journal", () => {
+  it("publishes every translated article and worksheet with matching canonicals and language alternates", async () => {
     const entries = sitemap().filter((item) => item.url.includes("/journal"));
-    expect(entries).toHaveLength(5);
-    for (const article of journalArticles) {
-      const metadata = await generateMetadata({
-        params: Promise.resolve({ locale: "de", articleSlug: article.slug }),
-      });
-      expect(metadata.alternates?.canonical).toBe(
-        `https://capcar.dev${journalArticlePath(article.slug)}`,
-      );
-      expect(metadata.alternates?.languages).toBeUndefined();
-      expect(
-        entries.some((entry) => entry.url === metadata.alternates?.canonical),
-      ).toBe(true);
-      expect(existsSync(`public${article.image}`)).toBe(true);
-      const download = readFileSync(
-        `public/downloads/journal/${article.download}`,
-        "utf8",
-      );
-      expect(download).toContain(article.title);
-      expect(download).not.toContain("### Instagram");
-      expect(article.body).not.toContain("Redaktionsnotizen");
+    expect(entries).toHaveLength(25);
+    expect(generateStaticParams()).toHaveLength(20);
+    for (const locale of locales) {
+      const articles = getJournalArticles(locale);
+      expect(articles).toHaveLength(4);
+      for (const article of articles) {
+        const metadata = await generateMetadata({
+          params: Promise.resolve({ locale, articleSlug: article.slug }),
+        });
+        expect(metadata.alternates?.canonical).toBe(
+          `https://capcar.dev${journalArticlePath(article.slug, locale)}`,
+        );
+        expect(metadata.alternates?.languages).toEqual(
+          journalLanguageAlternates(article.slug),
+        );
+        expect(
+          entries.some((entry) => entry.url === metadata.alternates?.canonical),
+        ).toBe(true);
+        expect(existsSync(`public${article.image}`)).toBe(true);
+        const download = readFileSync(
+          `public/downloads/journal/${locale}/${article.download}`,
+          "utf8",
+        );
+        expect(download).toContain(article.title);
+        expect(download).toContain(journalArticlePath(article.slug, locale));
+        expect(download).not.toContain("### Instagram");
+        expect(article.body.match(/^## /gm)?.length).toBe(
+          getJournalArticles("de")
+            .find((item) => item.slug === article.slug)
+            ?.body.match(/^## /gm)?.length,
+        );
+        if (locale !== "de")
+          expect(article.title).not.toBe(
+            getJournalArticles("de").find((item) => item.slug === article.slug)
+              ?.title,
+          );
+      }
     }
   });
 
-  it("rejects nonexistent articles and untranslated language paths", async () => {
+  it("keeps the article identity when switching between any supported languages", () => {
+    for (const source of locales)
+      for (const target of locales) {
+        expect(localizePublicPathname(`/${source}/journal`, target)).toBe(
+          `/${target}/journal`,
+        );
+        for (const article of getJournalArticles(source)) {
+          expect(
+            localizePublicPathname(
+              journalArticlePath(article.slug, source),
+              target,
+            ),
+          ).toBe(journalArticlePath(article.slug, target));
+        }
+      }
+    expect(localizePublicPathname("/journal/missing", "de")).toBeNull();
+  });
+
+  it("rejects missing articles and unsupported locales", async () => {
     for (const params of [
       { locale: "de", articleSlug: "does-not-exist" },
-      { locale: "en", articleSlug: journalArticles[0].slug },
+      { locale: "fr", articleSlug: getJournalArticles("en")[0].slug },
     ]) {
       await expect(
         generateMetadata({ params: Promise.resolve(params) }),
       ).rejects.toThrow();
+    }
+  });
+
+  it("preserves official sources and the example-budget distinction across translations", () => {
+    for (const locale of locales) {
+      const route = getJournalArticles(locale)[3];
+      for (const source of [
+        "https://tourismus.wiesbaden.de/",
+        "https://www.eltville.de/",
+        "https://www.schloesser-hessen.de/",
+      ])
+        expect(route.body).toContain(source);
+      expect(route.body).toMatch(/52[,.]20/);
+      expect(route.body).toMatch(/22[,.]20/);
+      expect(route.body).toContain("2026");
     }
   });
 

@@ -6,13 +6,22 @@ import {
   type JournalArticle,
 } from "@/features/journal/articles";
 
-export function JournalCards({ articles }: { articles: JournalArticle[] }) {
+import type { AppLocale } from "@/i18n/config";
+import { journalUI, journalReadingTime } from "@/features/journal/ui";
+
+export function JournalCards({
+  articles,
+  locale,
+}: {
+  articles: JournalArticle[];
+  locale: AppLocale;
+}) {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       {articles.map((article) => (
         <Link
           key={article.slug}
-          href={journalArticlePath(article.slug)}
+          href={journalArticlePath(article.slug, locale)}
           className="group overflow-hidden rounded-[1.5rem] border border-[#0e2d30]/15 bg-[#f5f2e8] transition hover:border-[#92644d] focus-visible:outline-2 focus-visible:outline-offset-4"
         >
           <div className="relative aspect-[16/9] overflow-hidden bg-[#0e2d30]">
@@ -26,7 +35,7 @@ export function JournalCards({ articles }: { articles: JournalArticle[] }) {
           </div>
           <div className="p-6 sm:p-8">
             <p className="text-xs font-semibold tracking-widest text-[#79503c] uppercase">
-              {article.category} · {article.minutes} Min.
+              {article.category} · {journalReadingTime(locale, article.minutes)}
             </p>
             <h2 className="mt-4 flex items-start justify-between gap-4 text-2xl leading-tight font-medium tracking-tight">
               {article.title}
@@ -39,7 +48,7 @@ export function JournalCards({ articles }: { articles: JournalArticle[] }) {
               {article.description}
             </p>
             <p className="mt-6 text-sm font-semibold">
-              Artikel und Vorlage ansehen →
+              {journalUI[locale].readArticle} →
             </p>
           </div>
         </Link>

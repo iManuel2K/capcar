@@ -8,35 +8,43 @@ import { JournalContent } from "@/components/journal/journal-content";
 import { JournalCards } from "@/components/journal/journal-cards";
 import {
   findJournalArticle,
-  journalArticles,
+  getJournalArticles,
   journalArticlePath,
-  JOURNAL_PATH,
+  journalPath,
 } from "@/features/journal/articles";
-import { pageMetadata, PUBLIC_SITE_URL } from "@/features/seo/public-metadata";
+import { PUBLIC_SITE_URL } from "@/features/seo/public-metadata";
+
+import { isAppLocale, locales } from "@/i18n/config";
+import { journalMetadata } from "@/features/journal/metadata";
+import { journalUI, journalReadingTime } from "@/features/journal/ui";
 
 type Props = { params: Promise<{ locale: string; articleSlug: string }> };
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return journalArticles.map((article) => ({
-    locale: "de",
-    articleSlug: article.slug,
-  }));
+  return locales.flatMap((locale) =>
+    getJournalArticles(locale).map((article) => ({
+      locale,
+      articleSlug: article.slug,
+    })),
+  );
 }
 async function resolveArticle(params: Props["params"]) {
   const { locale, articleSlug } = await params;
-  const article = findJournalArticle(articleSlug);
-  if (locale !== "de" || !article) notFound();
-  return article;
+  if (!isAppLocale(locale)) notFound();
+  const article = findJournalArticle(articleSlug, locale);
+  if (!article) notFound();
+  return { article, locale };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = await resolveArticle(params);
-  const base = pageMetadata(
-    journalArticlePath(article.slug),
+  const { article, locale } = await resolveArticle(params);
+  const base = journalMetadata(
+    locale,
     article.seoTitle,
     article.description,
+    article.slug,
   );
   const image = new URL(article.image, PUBLIC_SITE_URL).toString();
   return {
@@ -44,7 +52,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       ...base.openGraph,
       type: "article",
-      locale: "de_DE",
+      locale: {
+        en: "en_GB",
+        de: "de_DE",
+        el: "el_GR",
+        sq: "sq_AL",
+        ja: "ja_JP",
+      }[locale],
       publishedTime: article.published,
       images: [{ url: image, alt: "CapCar BMW Journal" }],
     },
@@ -53,14 +67,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function JournalArticlePage({ params }: Props) {
-  const article = await resolveArticle(params);
-  const path = journalArticlePath(article.slug);
+  const { article, locale } = await resolveArticle(params);
+  const path = journalArticlePath(article.slug, locale);
+  const ui = journalUI[locale];
   const schema = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: article.title,
     description: article.description,
-    inLanguage: "de",
+    inLanguage: locale,
     datePublished: article.published,
     image: new URL(article.image, PUBLIC_SITE_URL).toString(),
     author: { "@type": "Organization", name: "CapCar" },
@@ -69,7 +84,11 @@ export default async function JournalArticlePage({ params }: Props) {
   };
   return (
     <>
-      <main id="main-content" lang="de" className="bg-[#ebe9dc] text-[#0e2d30]">
+      <main
+        id="main-content"
+        lang={locale}
+        className="bg-[#ebe9dc] text-[#0e2d30]"
+      >
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -78,14 +97,14 @@ export default async function JournalArticlePage({ params }: Props) {
         />
         <article className="mx-auto max-w-6xl px-5 pt-10 pb-16 sm:px-8 sm:pt-16">
           <Link
-            href={JOURNAL_PATH}
+            href={journalPath(locale)}
             className="inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4"
           >
-            ← Alle Artikel
+            ← {ui.allArticles}
           </Link>
           <header className="max-w-4xl py-8 sm:py-12">
             <p className="text-xs font-semibold tracking-widest text-[#79503c] uppercase">
-              {article.category} · {article.minutes} Min. Lesezeit
+              {article.category} · {journalReadingTime(locale, article.minutes)}
             </p>
             <h1 className="mt-5 text-4xl leading-[1.08] font-medium tracking-[-.045em] sm:text-6xl">
               {article.title}
@@ -94,8 +113,13 @@ export default async function JournalArticlePage({ params }: Props) {
               {article.description}
             </p>
             <p className="mt-4 text-sm text-[#0e2d30]/65">
-              CapCar Redaktion ·{" "}
-              <time dateTime={article.published}>17. Oktober 2026</time>
+              {ui.editorial} ·{" "}
+              <time dateTime={article.published}>
+                {new Intl.DateTimeFormat(locale, {
+                  dateStyle: "long",
+                  timeZone: "UTC",
+                }).format(new Date(`${article.published}T00:00:00Z`))}
+              </time>
             </p>
           </header>
           <div className="relative mb-12 aspect-[16/8] overflow-hidden rounded-3xl bg-[#0e2d30]">
@@ -115,39 +139,35 @@ export default async function JournalArticlePage({ params }: Props) {
               className="mt-12 rounded-3xl border border-[#0e2d30]/15 bg-[#f5f2e8] p-5 sm:p-8"
             >
               <p className="text-xs font-semibold tracking-widest text-[#79503c] uppercase">
-                Zum Mitnehmen · Kostenlos
+                {ui.free}
               </p>
               <h2
                 id="worksheet-title"
                 className="mt-3 mb-5 text-2xl font-medium tracking-tight"
               >
-                Deine Vorlage für den nächsten Schritt
+                {ui.worksheet}
               </h2>
               <JournalContent text={article.template} />
               <a
-                href={`/downloads/journal/${article.download}`}
+                href={`/downloads/journal/${locale}/${article.download}`}
                 download
                 className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-semibold text-[#e8e6d7] transition hover:bg-[#6d0101]"
               >
                 <Download className="size-4" aria-hidden="true" />
-                Vorlage herunterladen (.txt)
+                {ui.download}
               </a>
               <p className="mt-3 text-sm text-[#0e2d30]/65">
-                Ohne Anmeldung. In deinem Texteditor ausfüllen oder ausdrucken.
+                {ui.downloadNote}
               </p>
             </section>
             <aside className="mt-10 rounded-3xl bg-[#0e2d30] p-6 text-[#e8e6d7] sm:p-8">
-              <h2 className="text-2xl font-medium">
-                Dein Auto verdient einen klaren Plan.
-              </h2>
-              <p className="mt-3 leading-7 text-[#e8e6d7]/80">
-                Lerne CapCar kennen und starte mit deinem Fahrzeug.
-              </p>
+              <h2 className="text-2xl font-medium">{ui.ctaTitle}</h2>
+              <p className="mt-3 leading-7 text-[#e8e6d7]/80">{ui.ctaBody}</p>
               <Link
                 href={`/register?utm_source=journal&utm_medium=article&utm_campaign=ownership_series&utm_content=${article.slug}`}
                 className="mt-5 inline-flex min-h-12 items-center rounded-full bg-[#e8e6d7] px-5 text-sm font-semibold text-[#0e2d30]"
               >
-                Mit CapCar starten →
+                {ui.cta} →
               </Link>
             </aside>
           </div>
@@ -156,10 +176,11 @@ export default async function JournalArticlePage({ params }: Props) {
               id="related-title"
               className="mb-8 text-3xl font-medium tracking-tight"
             >
-              Dein nächster Artikel
+              {ui.related}
             </h2>
             <JournalCards
-              articles={journalArticles
+              locale={locale}
+              articles={getJournalArticles(locale)
                 .filter((item) => item.slug !== article.slug)
                 .slice(0, 2)}
             />
