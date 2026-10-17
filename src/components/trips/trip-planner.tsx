@@ -1,5 +1,7 @@
 "use client";
 
+import { trackAnalytics } from "@/features/analytics/client";
+
 import {
   AlertTriangle,
   ArrowRight,
@@ -357,6 +359,7 @@ export function TripPlanner({
         throw new Error(
           "error" in body && body.error ? body.error : t("errors.plan"),
         );
+      trackAnalytics("trip_plan_created");
       setPlan(body);
       setPlanView("map");
       setRoute(undefined);

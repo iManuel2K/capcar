@@ -1,4 +1,5 @@
 "use client";
+import { AnalyticsSettingsButton } from "@/components/analytics/analytics-provider";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
@@ -88,6 +89,7 @@ export function SiteFooter() {
         <p className="max-w-2xl text-xs leading-6 text-[#e8e6d7]/45">
           {t("safety")}
         </p>
+        <AnalyticsSettingsButton />
         <LanguageSelector compact />
       </div>
     </footer>

@@ -1,5 +1,7 @@
 "use client";
 
+import { trackAnalytics } from "@/features/analytics/client";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, Info, LockKeyhole } from "lucide-react";
@@ -105,6 +107,7 @@ export function AddVehicleForm({ vehicle }: { vehicle?: Vehicle }) {
       ? updateVehicle(vehicle.id, result.data, window.localStorage)
       : saveVehicle(result.data, window.localStorage);
     announceVehicleChange();
+    if (!vehicle) trackAnalytics("vehicle_added");
     router.push(`/garage/${savedVehicle.id}`);
   }
 
