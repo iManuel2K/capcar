@@ -7,25 +7,20 @@ import de from "../messages/hardening/de.json";
 import el from "../messages/hardening/el.json";
 import sq from "../messages/hardening/sq.json";
 import ja from "../messages/hardening/ja.json";
+import { findJournalArticle } from "@/features/journal/articles";
 
 function localeFromPathname(pathname: string): AppLocale | undefined {
   const candidate = pathname.split("/")[1];
   return isAppLocale(candidate) ? candidate : undefined;
 }
 
-function passThroughResponse(
-  request: NextRequest,
-  pathLocale?: AppLocale,
-) {
+function passThroughResponse(request: NextRequest, pathLocale?: AppLocale) {
   const requestHeaders = new Headers(request.headers);
   if (pathLocale) requestHeaders.set("x-capcar-locale", pathLocale);
   return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
-function persistPathLocale(
-  response: NextResponse,
-  pathLocale?: AppLocale,
-) {
+function persistPathLocale(response: NextResponse, pathLocale?: AppLocale) {
   if (pathLocale) {
     response.cookies.set(localeCookie, pathLocale, {
       path: "/",
@@ -95,6 +90,25 @@ function passportUnavailableResponse(
 
 export async function proxy(request: NextRequest) {
   const pathLocale = localeFromPathname(request.nextUrl.pathname);
+  // Reject invalid journal paths before streamed layouts can commit HTTP 200.
+  const journal = request.nextUrl.pathname.match(
+    /^\/([^/]+)\/journal(?:\/(.*))?$/,
+  );
+  if (
+    journal &&
+    (journal[1] !== "de" || (journal[2] && !findJournalArticle(journal[2])))
+  ) {
+    return new NextResponse(
+      '<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><title>Artikel nicht gefunden · CapCar</title></head><body style="margin:0;background:#ebe9dc;color:#0e2d30;font-family:Arial,sans-serif"><main style="max-width:42rem;margin:15vh auto;padding:2rem"><p>CapCar Journal</p><h1>Dieser Artikel ist nicht verfügbar.</h1><p>Unsere aktuellen Artikel findest du im deutschsprachigen Journal.</p><a href="/de/journal" style="color:inherit">Zum Journal →</a></main></body></html>',
+      {
+        status: 404,
+        headers: {
+          "content-type": "text/html; charset=utf-8",
+          "x-robots-tag": "noindex, follow",
+        },
+      },
+    );
+  }
   const passportMatch = request.nextUrl.pathname.match(/^\/passport\/([^/]+)$/);
   const passport = passportMatch && passportMatch[1] !== "unavailable";
   if (

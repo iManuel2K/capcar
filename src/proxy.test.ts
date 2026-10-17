@@ -123,4 +123,19 @@ describe("proxy public Passport guard", () => {
       "https://capcar.example/login?next=%2Fai%3Ffrom%3Dheader",
     );
   });
+
+  it("returns HTTP 404 for missing journal articles and untranslated paths before streaming", async () => {
+    for (const path of [
+      "/de/journal/missing",
+      "/en/journal",
+      "/de/journal/missing/child",
+    ]) {
+      const response = await proxy(
+        new NextRequest(`https://capcar.example${path}`),
+      );
+      expect(response.status).toBe(404);
+      expect(response.headers.get("x-robots-tag")).toContain("noindex");
+    }
+    expect(supabaseMocks.authGetUser).not.toHaveBeenCalled();
+  });
 });
