@@ -1,0 +1,172 @@
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Download } from "lucide-react";
+import { SiteFooter } from "@/components/marketing/site-footer";
+import { JournalContent } from "@/components/journal/journal-content";
+import { JournalCards } from "@/components/journal/journal-cards";
+import {
+  findJournalArticle,
+  journalArticles,
+  journalArticlePath,
+  JOURNAL_PATH,
+} from "@/features/journal/articles";
+import { pageMetadata, PUBLIC_SITE_URL } from "@/features/seo/public-metadata";
+
+type Props = { params: Promise<{ locale: string; articleSlug: string }> };
+
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return journalArticles.map((article) => ({
+    locale: "de",
+    articleSlug: article.slug,
+  }));
+}
+async function resolveArticle(params: Props["params"]) {
+  const { locale, articleSlug } = await params;
+  const article = findJournalArticle(articleSlug);
+  if (locale !== "de" || !article) notFound();
+  return article;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const article = await resolveArticle(params);
+  const base = pageMetadata(
+    journalArticlePath(article.slug),
+    article.seoTitle,
+    article.description,
+  );
+  const image = new URL(article.image, PUBLIC_SITE_URL).toString();
+  return {
+    ...base,
+    openGraph: {
+      ...base.openGraph,
+      type: "article",
+      locale: "de_DE",
+      publishedTime: article.published,
+      images: [{ url: image, alt: "CapCar BMW Journal" }],
+    },
+    twitter: { ...base.twitter, images: [image] },
+  };
+}
+
+export default async function JournalArticlePage({ params }: Props) {
+  const article = await resolveArticle(params);
+  const path = journalArticlePath(article.slug);
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.description,
+    inLanguage: "de",
+    datePublished: article.published,
+    image: new URL(article.image, PUBLIC_SITE_URL).toString(),
+    author: { "@type": "Organization", name: "CapCar" },
+    publisher: { "@type": "Organization", name: "CapCar" },
+    mainEntityOfPage: new URL(path, PUBLIC_SITE_URL).toString(),
+  };
+  return (
+    <>
+      <main id="main-content" lang="de" className="bg-[#ebe9dc] text-[#0e2d30]">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema).replace(/</g, "\\u003c"),
+          }}
+        />
+        <article className="mx-auto max-w-6xl px-5 pt-10 pb-16 sm:px-8 sm:pt-16">
+          <Link
+            href={JOURNAL_PATH}
+            className="inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4"
+          >
+            ← Alle Artikel
+          </Link>
+          <header className="max-w-4xl py-8 sm:py-12">
+            <p className="text-xs font-semibold tracking-widest text-[#79503c] uppercase">
+              {article.category} · {article.minutes} Min. Lesezeit
+            </p>
+            <h1 className="mt-5 text-4xl leading-[1.08] font-medium tracking-[-.045em] sm:text-6xl">
+              {article.title}
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#0e2d30]/75">
+              {article.description}
+            </p>
+            <p className="mt-4 text-sm text-[#0e2d30]/65">
+              CapCar Redaktion ·{" "}
+              <time dateTime={article.published}>17. Oktober 2026</time>
+            </p>
+          </header>
+          <div className="relative mb-12 aspect-[16/8] overflow-hidden rounded-3xl bg-[#0e2d30]">
+            <Image
+              src={article.image}
+              alt=""
+              fill
+              sizes="(max-width: 1152px) 100vw, 1152px"
+              className="object-cover"
+              priority
+            />
+          </div>
+          <div className="mx-auto max-w-3xl">
+            <JournalContent text={article.body} />
+            <section
+              aria-labelledby="worksheet-title"
+              className="mt-12 rounded-3xl border border-[#0e2d30]/15 bg-[#f5f2e8] p-5 sm:p-8"
+            >
+              <p className="text-xs font-semibold tracking-widest text-[#79503c] uppercase">
+                Zum Mitnehmen · Kostenlos
+              </p>
+              <h2
+                id="worksheet-title"
+                className="mt-3 mb-5 text-2xl font-medium tracking-tight"
+              >
+                Deine Vorlage für den nächsten Schritt
+              </h2>
+              <JournalContent text={article.template} />
+              <a
+                href={`/downloads/journal/${article.download}`}
+                download
+                className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-semibold text-[#e8e6d7] transition hover:bg-[#6d0101]"
+              >
+                <Download className="size-4" aria-hidden="true" />
+                Vorlage herunterladen (.txt)
+              </a>
+              <p className="mt-3 text-sm text-[#0e2d30]/65">
+                Ohne Anmeldung. In deinem Texteditor ausfüllen oder ausdrucken.
+              </p>
+            </section>
+            <aside className="mt-10 rounded-3xl bg-[#0e2d30] p-6 text-[#e8e6d7] sm:p-8">
+              <h2 className="text-2xl font-medium">
+                Dein Auto verdient einen klaren Plan.
+              </h2>
+              <p className="mt-3 leading-7 text-[#e8e6d7]/80">
+                Lerne CapCar kennen und starte mit deinem Fahrzeug.
+              </p>
+              <Link
+                href={`/register?utm_source=journal&utm_medium=article&utm_campaign=ownership_series&utm_content=${article.slug}`}
+                className="mt-5 inline-flex min-h-12 items-center rounded-full bg-[#e8e6d7] px-5 text-sm font-semibold text-[#0e2d30]"
+              >
+                Mit CapCar starten →
+              </Link>
+            </aside>
+          </div>
+          <section aria-labelledby="related-title" className="mt-20">
+            <h2
+              id="related-title"
+              className="mb-8 text-3xl font-medium tracking-tight"
+            >
+              Dein nächster Artikel
+            </h2>
+            <JournalCards
+              articles={journalArticles
+                .filter((item) => item.slug !== article.slug)
+                .slice(0, 2)}
+            />
+          </section>
+        </article>
+      </main>
+      <SiteFooter />
+    </>
+  );
+}

@@ -112,6 +112,7 @@ export function MarketingHeader() {
                   ["marketplace", "/marketplace"],
                   ["roadmap", "/roadmap"],
                   ["faq", "/#faq"],
+                  ["journal", "/de/journal"],
                 ].map(([label, href]) => (
                   <Link
                     key={href}
@@ -124,7 +125,7 @@ export function MarketingHeader() {
                         : "hover:bg-[#0e2d30]/6"
                     }`}
                   >
-                    {footer(label)}
+                    {label === "journal" ? "Journal (DE)" : footer(label)}
                   </Link>
                 ))}
               </div>
@@ -220,6 +221,7 @@ export function MarketingHeader() {
                 ["marketplace", "/marketplace"],
                 ["roadmap", "/roadmap"],
                 ["faq", "/#faq"],
+                ["journal", "/de/journal"],
               ].map(([label, href]) => (
                 <Link
                   key={href}
@@ -227,7 +229,7 @@ export function MarketingHeader() {
                   onClick={() => setMenuOpen(false)}
                   className="flex min-h-12 items-center justify-between border-b border-[#0e2d30]/10 text-base focus-visible:outline-2"
                 >
-                  {footer(label)}
+                  {label === "journal" ? "Journal (DE)" : footer(label)}
                   <ChevronRight className="size-4" aria-hidden="true" />
                 </Link>
               ))}

@@ -113,6 +113,16 @@ describe("proxy public Passport guard", () => {
     ).toBe(503);
   });
 
+  it("keeps worksheet downloads outside the localized journal guard", async () => {
+    const response = await proxy(
+      new NextRequest(
+        "https://capcar.example/downloads/journal/bmw-wochenendprojekt-planen.txt",
+      ),
+    );
+    expect(response.status).toBe(200);
+    expect(response.headers.get("x-robots-tag")).toBeNull();
+  });
+
   it("requires an account before opening CapCar AI", async () => {
     const response = await proxy(
       new NextRequest("https://capcar.example/ai?from=header"),
@@ -122,5 +132,20 @@ describe("proxy public Passport guard", () => {
     expect(response.headers.get("location")).toBe(
       "https://capcar.example/login?next=%2Fai%3Ffrom%3Dheader",
     );
+  });
+
+  it("returns HTTP 404 for missing journal articles and untranslated paths before streaming", async () => {
+    for (const path of [
+      "/de/journal/missing",
+      "/en/journal",
+      "/de/journal/missing/child",
+    ]) {
+      const response = await proxy(
+        new NextRequest(`https://capcar.example${path}`),
+      );
+      expect(response.status).toBe(404);
+      expect(response.headers.get("x-robots-tag")).toContain("noindex");
+    }
+    expect(supabaseMocks.authGetUser).not.toHaveBeenCalled();
   });
 });

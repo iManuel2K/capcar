@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { FitmentLookup } from "@/components/marketing/fitment-lookup";
+import { JournalPreview } from "@/components/journal/journal-preview";
 import { MarketingFaq } from "@/components/marketing/marketing-faq";
 import { MarketingHero } from "@/components/marketing/marketing-hero";
 import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
@@ -168,6 +169,7 @@ export function MarketingLanding() {
 
         <VisionRoadmapSection />
 
+        <JournalPreview />
         <MarketingFaq />
 
         <section

@@ -26,6 +26,7 @@ export function SiteFooter() {
         [l("nav.how"), "/#platform"],
         [l("nav.projects"), "/#projects"],
         [t("roadmap"), "/roadmap"],
+        ["Journal (DE)", "/de/journal"],
         [t("faq"), "/#faq"],
       ],
     },
