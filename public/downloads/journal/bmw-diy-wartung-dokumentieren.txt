@@ -1,0 +1,21 @@
+CAPCAR · „Service gemacht“ ist ein Anfang. Diese Angaben machen ihn nützlich.
+
+Eintrag in die Fahrzeughistorie
+
+| Feld | Eintrag |
+
+Fahrzeug / interne Bezeichnung: ______________________________
+Datum und Kilometerstand: ______________________________
+Anlass / eigene Beobachtung: ______________________________
+Bestätigte Diagnose, falls vorhanden: ______________________________
+Tatsächlich ausgeführte Arbeit: ______________________________
+Ausgeführt durch: selbst / Werkstatt: ______________________________
+Teile: Hersteller und Artikelnummer: ______________________________
+Anleitung / technische Quelle: ______________________________
+Rechnungen, Bilder und Berichte: ______________________________
+Kosten, getrennt nach Teilen und Arbeit: ______________________________
+Abschlussprüfung und Ergebnis: ______________________________
+Offene Punkte / nächster Schritt: ______________________________
+Beispiel zur Struktur, keine echte Reparatur: „Innenraumfilter ersetzt; Datum und Kilometerstand laut eigenem Fahrzeug; Teilnummer laut Rechnung; Eigenarbeit nach passender Anleitung; Ergebnis und offene Punkte separat erfasst.“
+
+https://capcar.dev/de/journal/bmw-diy-wartung-dokumentieren

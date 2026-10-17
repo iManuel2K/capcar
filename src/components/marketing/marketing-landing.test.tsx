@@ -26,7 +26,7 @@ describe("the connected homepage example", () => {
   it("makes the product and its capability limits clear", () => {
     renderPage();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Build the car you imagine.",
+      "Plan your project car without losing the details.",
     );
     expect(
       screen.getByText(/Interactive example · Illustrative data/),
@@ -39,7 +39,7 @@ describe("the connected homepage example", () => {
     ).toHaveAttribute("href", "#main-content");
     const actions = screen.getByTestId("hero-actions");
     expect(
-      within(actions).getByRole("link", { name: /Start a build/ }),
+      within(actions).getByRole("link", { name: /Start your free garage/ }),
     ).toHaveAttribute("href", "/register");
     expect(
       within(actions).getByRole("link", { name: "Explore a project" }),
@@ -133,9 +133,7 @@ describe("the connected homepage example", () => {
     expect(slider).toHaveAttribute("dir", "ltr");
     const comparison = slider.closest("figure");
     expect(
-      comparison?.querySelector(
-        'div[aria-hidden="true"][style*="clip-path"]',
-      ),
+      comparison?.querySelector('div[aria-hidden="true"][style*="clip-path"]'),
     ).toHaveStyle({ clipPath: "inset(0 25% 0 0)" });
     expect(
       comparison?.querySelector('span[aria-hidden="true"][style*="left"]'),

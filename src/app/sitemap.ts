@@ -7,10 +7,15 @@ import {
   localizedPublicUrl,
   publicLanguageAlternates,
 } from "@/features/seo/public-metadata";
+import {
+  journalArticles,
+  journalArticlePath,
+  JOURNAL_PATH,
+} from "@/features/journal/articles";
 import { locales } from "@/i18n/config";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return PUBLIC_INDEXABLE_ROUTES.flatMap((route) => {
+  const publicPages = PUBLIC_INDEXABLE_ROUTES.flatMap((route) => {
     const alternates = { languages: publicLanguageAlternates(route) };
     const shared = {
       lastModified: PUBLIC_CONTENT_LAST_MODIFIED,
@@ -28,4 +33,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       })),
     ];
   });
+  const journalPages = [
+    JOURNAL_PATH,
+    ...journalArticles.map((article) => journalArticlePath(article.slug)),
+  ].map((path) => ({
+    url: new URL(path, PUBLIC_SITE_URL).toString(),
+    lastModified: "2026-10-17",
+  }));
+  return [...publicPages, ...journalPages];
 }

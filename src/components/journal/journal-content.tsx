@@ -1,0 +1,92 @@
+import type { ReactNode } from "react";
+
+// Editorial text only: React escapes content; no HTML or executable Markdown.
+function inline(text: string): ReactNode[] {
+  return text
+    .split(/(\*\*[^*]+\*\*|\[[^\]]+\]\(https:\/\/[^\s)]+\))/g)
+    .map((part, i) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return (
+          <strong key={i} className="font-semibold text-[#0e2d30]">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      const link = part.match(/^\[([^\]]+)\]\((https:\/\/[^\s)]+)\)$/);
+      return link ? (
+        <a
+          key={i}
+          href={link[2]}
+          className="underline decoration-[#92644d]/60 underline-offset-4 hover:text-[#6d0101]"
+        >
+          {link[1]}
+        </a>
+      ) : (
+        part
+      );
+    });
+}
+
+export function JournalContent({ text }: { text: string }) {
+  return (
+    <div className="space-y-6 text-base leading-8 text-[#0e2d30]/80 sm:text-lg">
+      {text.split(/\n\s*\n/).map((block, index) => {
+        if (block.startsWith("## "))
+          return (
+            <h2
+              key={index}
+              id={`section-${index}`}
+              className="scroll-mt-28 pt-6 text-2xl font-medium tracking-tight text-[#0e2d30] sm:text-3xl"
+            >
+              {block.slice(3)}
+            </h2>
+          );
+        if (block.startsWith("|")) {
+          const rows = block
+            .split("\n")
+            .filter((row) => row.startsWith("|") && !/^\|[\s:|-]+\|$/.test(row))
+            .map((row) =>
+              row
+                .split("|")
+                .slice(1, -1)
+                .map((cell) => cell.trim()),
+            );
+          return (
+            <div
+              key={index}
+              className="overflow-x-auto rounded-2xl border border-[#0e2d30]/15"
+            >
+              <table className="w-full min-w-[460px] text-left text-sm">
+                <thead className="bg-[#0e2d30]/5">
+                  <tr>
+                    {rows[0].map((cell, i) => (
+                      <th
+                        key={i}
+                        scope="col"
+                        className="px-5 py-3 font-semibold"
+                      >
+                        {inline(cell)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.slice(1).map((row, i) => (
+                    <tr key={i} className="border-t border-[#0e2d30]/10">
+                      {row.map((cell, j) => (
+                        <td key={j} className="h-14 px-5 py-3">
+                          {inline(cell)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+        }
+        return <p key={index}>{inline(block)}</p>;
+      })}
+    </div>
+  );
+}

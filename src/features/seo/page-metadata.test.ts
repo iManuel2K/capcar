@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
+import { journalArticles } from "@/features/journal/articles";
 import { locales } from "@/i18n/config";
 
 import { pageMetadata, PUBLIC_INDEXABLE_ROUTES } from "./public-metadata";
@@ -16,7 +17,9 @@ describe("route metadata", () => {
     const entries = sitemap();
     const urls = entries.map((route) => route.url);
     expect(entries).toHaveLength(
-      PUBLIC_INDEXABLE_ROUTES.length * (locales.length + 1),
+      PUBLIC_INDEXABLE_ROUTES.length * (locales.length + 1) +
+        journalArticles.length +
+        1,
     );
     expect(urls).toContain("https://capcar.dev/roadbook");
     expect(urls).toContain("https://capcar.dev/de/roadbook");
@@ -26,10 +29,18 @@ describe("route metadata", () => {
     expect(urls).not.toContain("https://capcar.dev/login");
 
     for (const entry of entries) {
-      expect(entry.lastModified).toBe("2026-10-16");
+      const isJournal = entry.url.includes("/journal");
+      expect(entry.lastModified).toBe(isJournal ? "2026-10-17" : "2026-10-16");
       expect(entry).not.toHaveProperty("changeFrequency");
       expect(entry).not.toHaveProperty("priority");
-      expect(entry.alternates?.languages?.de).toMatch(/^https:\/\/capcar\.dev\/de/);
+      if (isJournal) {
+        expect(entry.url).toMatch(/^https:\/\/capcar\.dev\/de\/journal/);
+        expect(entry.alternates).toBeUndefined();
+        continue;
+      }
+      expect(entry.alternates?.languages?.de).toMatch(
+        /^https:\/\/capcar\.dev\/de/,
+      );
       expect(entry.alternates?.languages?.["x-default"]).toMatch(
         /^https:\/\/capcar\.dev\//,
       );
