@@ -35,4 +35,24 @@ describe("vehicleInputSchema", () => {
 
     expect(result.success).toBe(false);
   });
+
+  it.each([1955, 1967, 1986, 1990, 1999])(
+    "accepts a classic vehicle from %i",
+    (productionYear) => {
+      expect(
+        vehicleInputSchema.parse({ ...validVehicle, productionYear })
+          .productionYear,
+      ).toBe(productionYear);
+    },
+  );
+
+  it.each(["", 0, 1885, 1990.5, 2028])(
+    "rejects invalid production year %s",
+    (productionYear) => {
+      expect(
+        vehicleInputSchema.safeParse({ ...validVehicle, productionYear })
+          .success,
+      ).toBe(false);
+    },
+  );
 });

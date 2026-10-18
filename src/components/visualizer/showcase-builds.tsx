@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { conceptPresets } from "@/features/visualizer/concept-studio";
-import { ConceptStudio } from "./concept-studio";
+import { GenericConceptStudio } from "./generic-concept-studio";
 import { IconicGallery } from "./iconic-gallery";
 import { useTranslations } from "next-intl";
 
@@ -55,7 +55,7 @@ export function ShowcaseBuilds() {
           </button>
         ))}
       </div>
-      <ConceptStudio
+      <GenericConceptStudio
         key={preset.name}
         initialConcept={preset.value}
         storageKey="capcar.visual-direction.v1"

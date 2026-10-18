@@ -1,292 +1,305 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useState } from "react";
+import Link from "next/link";
 import {
-  conceptSchema,
-  conceptPresets,
-  defaultConcept,
-  paints,
-  type Concept,
-} from "@/features/visualizer/concept-studio";
-import type { createConceptRenderer } from "./concept-renderer";
+  carModels,
+  getCarModel,
+} from "@/features/visualizer/car-model-catalog";
+import { InteractiveCarModel, studioButton } from "./interactive-car-model";
 
-const button =
-  "min-h-11 rounded-full border border-[#0e2d30]/30 px-4 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6d0101] disabled:opacity-40";
+const paintColors = [
+  { name: "Alpine white", value: "#e8e6d7" },
+  { name: "Carbon black", value: "#191e20" },
+  { name: "Racing red", value: "#a92029" },
+  { name: "Deep green", value: "#174d41" },
+  { name: "Estoril blue", value: "#2e64a6" },
+] as const;
+const storageKey = "capcar.car-studio.v1";
 
-export interface ConceptStudioProps {
-  initialConcept?: Concept;
-  storageKey?: string;
-}
-
-export function ConceptStudio({
-  initialConcept = defaultConcept,
-  storageKey = "capcar.visual-direction.v1",
-}: ConceptStudioProps) {
-  const [value, setValue] = useState<Concept>(() => ({ ...initialConcept }));
-  const [storageMessage, setStorageMessage] = useState("");
-  const [active, setActive] = useState(false);
-  const [status, setStatus] = useState(
-    "Choose a direction, then load the interactive model.",
+export function ConceptStudio() {
+  const [modelId, setModelId] = useState("bmw-m3-e30");
+  const [paint, setPaint] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [make, setMake] = useState("all");
+  const [message, setMessage] = useState("");
+  const model = getCarModel(modelId) ?? carModels[0];
+  const makes = useMemo(
+    () => [...new Set(carModels.map((car) => car.make))].sort(),
+    [],
   );
-  const [attempt, setAttempt] = useState(0);
-  const host = useRef<HTMLDivElement>(null);
-  const runtime = useRef<ReturnType<typeof createConceptRenderer> | null>(null);
-  const latest = useRef(value);
-  useEffect(() => {
-    latest.current = value;
-    runtime.current?.update(value);
-  }, [value]);
-  useEffect(() => {
-    if (!active || !host.current) return;
-    let cancelled = false;
-    const fail = () => {
-      if (!cancelled)
-        setStatus(
-          "3D is unavailable. Stop 3D and retry, or keep exploring the configuration below.",
-        );
-    };
-    setStatus("Loading concept model…");
-    import("./concept-renderer")
-      .then(async ({ createConceptRenderer }) => {
-        if (cancelled || !host.current) return;
-        runtime.current = createConceptRenderer(host.current, fail);
-        await runtime.current.load(latest.current);
-        if (!cancelled) {
-          runtime.current?.update(latest.current);
-          setStatus("Model ready. Drag to orbit, or use the camera buttons.");
-        }
-      })
-      .catch(fail);
-    return () => {
-      cancelled = true;
-      runtime.current?.dispose();
-      runtime.current = null;
-    };
-  }, [active, value.model, attempt]);
+  const visible = carModels.filter(
+    (car) =>
+      (make === "all" || car.make === make) &&
+      `${car.name} ${car.make} ${car.model} ${car.platforms.join(" ")}`
+        .toLowerCase()
+        .includes(search.trim().toLowerCase()),
+  );
   return (
     <div className="overflow-hidden rounded-3xl border border-[#0e2d30]/20 bg-[#f3f1e7] text-[#0e2d30]">
-      <div className="grid lg:grid-cols-[1.5fr_1fr]">
-        <div className="min-w-0 p-5 sm:p-8">
-          <p className="text-xs font-semibold tracking-widest uppercase">
-            Concept lab · stylized 3D
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#0e2d30]/15 px-5 py-4 sm:px-7">
+        <p className="text-xs font-semibold tracking-[0.18em] uppercase">
+          The free model collection{" "}
+          <span className="ml-2 rounded-full bg-[#0e2d30] px-2 py-1 text-[#f3f1e7]">
+            25
+          </span>
+        </p>
+        <span className="text-xs">
+          No account · No subscription · Same models in your garage
+        </span>
+      </div>
+      <label className="mx-5 mt-5 block text-sm font-semibold lg:hidden">
+        Choose a car
+        <select
+          className="mt-2 min-h-12 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3"
+          value={model.id}
+          onChange={(event) => {
+            setModelId(event.target.value);
+            setPaint(null);
+            setMessage("");
+          }}
+        >
+          {makes.map((brand) => (
+            <optgroup label={brand} key={brand}>
+              {carModels
+                .filter((car) => car.make === brand)
+                .map((car) => (
+                  <option key={car.id} value={car.id}>
+                    {car.name}
+                  </option>
+                ))}
+            </optgroup>
+          ))}
+        </select>
+      </label>
+      <div className="grid lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="min-w-0 p-5 sm:p-7">
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="mb-1 text-xs tracking-widest uppercase">
+                {model.make}
+              </p>
+              <h2 className="text-2xl font-medium tracking-tight sm:text-3xl">
+                {model.name}
+              </h2>
+            </div>
+            <span className="rounded-full border border-[#0e2d30]/20 px-3 py-1.5 text-xs">
+              {model.platforms.length
+                ? model.platforms.join(" / ")
+                : "Reference model"}
+            </span>
+          </div>
+          <InteractiveCarModel modelId={model.id} paint={paint} />
+          <div className="mt-6 border-t border-[#0e2d30]/15 pt-5">
+            <h3 className="text-sm font-semibold">
+              {model.paintMaterials.length
+                ? "Try a paint direction"
+                : "Original model finish"}
+            </h3>
+            {model.paintMaterials.length > 0 ? (
+              <fieldset className="mt-3">
+                <legend className="sr-only">Body paint preview</legend>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    className={studioButton}
+                    aria-pressed={paint === null}
+                    onClick={() => setPaint(null)}
+                  >
+                    Original
+                  </button>
+                  {paintColors.map((color) => (
+                    <button
+                      type="button"
+                      key={color.name}
+                      className={`${studioButton} ${paint === color.value ? "ring-2 ring-[#0e2d30]" : ""}`}
+                      aria-pressed={paint === color.value}
+                      onClick={() => setPaint(color.value)}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="size-4 rounded-full border border-black/20"
+                        style={{ backgroundColor: color.value }}
+                      />
+                      {color.name}
+                    </button>
+                  ))}
+                </div>
+                <p className="mt-3 text-xs leading-5">
+                  Color previews affect mapped body materials only, not real
+                  paint or wrap accuracy.
+                </p>
+              </fieldset>
+            ) : (
+              <p className="mt-2 text-sm leading-6">
+                This model keeps its creator’s original finish. Rotate it and
+                inspect the details; paint preview is not available for this
+                asset.
+              </p>
+            )}
+            <p className="mt-4 text-xs leading-6">
+              {model.notes} These are independent artist models, not
+              manufacturer CAD, fitment checks or exact replicas of your
+              vehicle. Parts, wheels and ride height are not editable in these
+              25 models.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <button
+                type="button"
+                className={studioButton}
+                onClick={() => {
+                  try {
+                    localStorage.setItem(
+                      storageKey,
+                      JSON.stringify({ modelId: model.id, paint }),
+                    );
+                    setMessage(
+                      "Direction saved on this device. Garage builds have their own saved configuration.",
+                    );
+                  } catch {
+                    setMessage(
+                      "Saving is unavailable on this device. You can still explore every model.",
+                    );
+                  }
+                }}
+              >
+                Save direction
+              </button>
+              <button
+                type="button"
+                className={studioButton}
+                onClick={() => {
+                  try {
+                    const saved: unknown = JSON.parse(
+                      localStorage.getItem(storageKey) ?? "null",
+                    );
+                    if (
+                      !saved ||
+                      typeof saved !== "object" ||
+                      !("modelId" in saved) ||
+                      typeof saved.modelId !== "string" ||
+                      !getCarModel(saved.modelId)
+                    )
+                      throw new Error("Invalid saved model");
+                    const color = "paint" in saved ? saved.paint : null;
+                    if (
+                      color !== null &&
+                      (typeof color !== "string" ||
+                        !/^#[\da-f]{6}$/i.test(color))
+                    )
+                      throw new Error("Invalid paint");
+                    setModelId(saved.modelId);
+                    setPaint(color);
+                    setMessage("Your saved direction is restored.");
+                  } catch {
+                    setMessage(
+                      "No valid saved direction found on this device.",
+                    );
+                  }
+                }}
+              >
+                Restore direction
+              </button>
+              <Link
+                href="/garage"
+                className={`${studioButton} border-transparent bg-[#0e2d30] text-[#f3f1e7] hover:bg-[#19464a]`}
+              >
+                Use in your garage <span aria-hidden="true">↗</span>
+              </Link>
+            </div>
+            {message && (
+              <p role="status" className="mt-3 text-xs leading-5">
+                {message}
+              </p>
+            )}
+          </div>
+        </div>
+        <aside
+          aria-label="Choose a car model"
+          className="border-t border-[#0e2d30]/15 bg-[#e8e6d7]/45 p-5 sm:p-7 lg:border-t-0 lg:border-l"
+        >
+          <h3 className="text-xl font-medium tracking-tight">
+            Pick your next icon.
+          </h3>
+          <p className="mt-2 text-sm leading-6">
+            Find a car, load it, make it your reference.
+          </p>
+          <label className="mt-5 block text-xs font-semibold">
+            Search cars
+            <input
+              type="search"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Supra, E30, Skyline…"
+              className="mt-2 min-h-11 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+            />
+          </label>
+          <label className="mt-3 block text-xs font-semibold">
+            Manufacturer
+            <select
+              value={make}
+              onChange={(event) => setMake(event.target.value)}
+              className="mt-2 min-h-11 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              <option value="all">All manufacturers</option>
+              {makes.map((brand) => (
+                <option key={brand} value={brand}>
+                  {brand}
+                </option>
+              ))}
+            </select>
+          </label>
+          <p aria-live="polite" className="mt-4 text-xs">
+            {visible.length} of {carModels.length} cars
           </p>
           <div
-            ref={host}
-            className="relative my-5 h-64 overflow-hidden rounded-2xl bg-[#dfdfd2] sm:h-96"
+            className="mt-3 max-h-[560px] space-y-2 overflow-y-auto pr-1"
+            tabIndex={0}
+            aria-label="Car model collection"
           >
-            {!active && (
-              <div className="flex h-full flex-col items-center justify-center gap-4 px-5 text-center">
-                <p className="text-3xl font-medium tracking-tight">
-                  Your next direction.
-                </p>
-                <p className="max-w-xs text-sm">
-                  Two original generic silhouettes. No vehicle data or account
-                  required.
-                </p>
-                <button className={button} onClick={() => setActive(true)}>
-                  Load interactive 3D
+            {visible.map((car) => (
+              <button
+                type="button"
+                key={car.id}
+                aria-pressed={car.id === model.id}
+                onClick={() => {
+                  setModelId(car.id);
+                  setPaint(null);
+                  setMessage("");
+                }}
+                className={`flex min-h-16 w-full items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left focus-visible:outline-2 focus-visible:outline-offset-2 ${car.id === model.id ? "border-[#0e2d30] bg-[#0e2d30] text-[#f3f1e7]" : "border-[#0e2d30]/15 bg-[#f3f1e7] hover:border-[#0e2d30]/50"}`}
+              >
+                <span>
+                  <span className="block text-[10px] tracking-widest uppercase">
+                    {car.make}
+                  </span>
+                  <span className="mt-1 block text-sm font-medium">
+                    {car.name.replace(`${car.make} `, "")}
+                  </span>
+                </span>
+                <span aria-hidden="true">
+                  {car.id === model.id ? "●" : "↗"}
+                </span>
+              </button>
+            ))}
+            {visible.length === 0 && (
+              <div className="py-8 text-sm leading-6">
+                <p>No cars match those filters.</p>
+                <button
+                  type="button"
+                  className={`${studioButton} mt-3`}
+                  onClick={() => {
+                    setMake("all");
+                    setSearch("");
+                  }}
+                >
+                  Clear filters
                 </button>
               </div>
             )}
           </div>
-          <p role="status" className="min-h-12 text-sm leading-6">
-            {status}
-          </p>
-          {active && (
-            <div className="mt-3 flex flex-wrap gap-2">
-              <button
-                className={button}
-                onClick={() => runtime.current?.zoom("in")}
-              >
-                Zoom in
-              </button>
-              <button
-                className={button}
-                onClick={() => runtime.current?.zoom("out")}
-              >
-                Zoom out
-              </button>
-              {(["front", "side", "rear"] as const).map((view) => (
-                <button
-                  key={view}
-                  className={button}
-                  onClick={() => runtime.current?.camera(view)}
-                >
-                  {view[0].toUpperCase() + view.slice(1)} view
-                </button>
-              ))}
-              <button
-                className={button}
-                onClick={() => {
-                  setActive(false);
-                  setStatus(
-                    "3D stopped. Your configuration is kept until you leave this page.",
-                  );
-                }}
-              >
-                Stop 3D
-              </button>
-              <button
-                className={button}
-                onClick={() => setAttempt((n) => n + 1)}
-              >
-                Retry
-              </button>
-            </div>
-          )}
-        </div>
-        <div className="space-y-6 border-t border-[#0e2d30]/15 p-5 sm:p-8 lg:border-t-0 lg:border-l">
-          <label className="block text-sm font-semibold">
-            Silhouette
-            <select
-              className="mt-2 block min-h-12 w-full rounded-xl border border-[#0e2d30]/30 bg-transparent px-3"
-              value={value.model}
-              onChange={(event) =>
-                setValue({
-                  ...value,
-                  model: event.target.value as Concept["model"],
-                  spoiler: event.target.value === "sedan-sports",
-                })
-              }
-            >
-              <option value="sedan-sports">Sports sedan</option>
-              <option value="hatchback-sports">Sports hatchback</option>
-            </select>
-          </label>
-          <fieldset>
-            <legend className="mb-3 text-sm font-semibold">Body paint</legend>
-            <div className="flex flex-wrap gap-2">
-              {Object.entries(paints).map(([name, color]) => (
-                <button
-                  key={name}
-                  aria-pressed={value.paint === name}
-                  className={`${button} ${value.paint === name ? "ring-2 ring-[#0e2d30]" : ""}`}
-                  onClick={() =>
-                    setValue({ ...value, paint: name as Concept["paint"] })
-                  }
-                >
-                  <span
-                    aria-hidden="true"
-                    style={{ backgroundColor: color }}
-                    className="mr-2 inline-block size-3 rounded-full border border-black/30"
-                  />
-                  {name}
-                </button>
-              ))}
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend className="mb-3 text-sm font-semibold">
-              Ride height · visual only
-            </legend>
-            <div className="flex gap-2">
-              {(["stock", "sport"] as const).map((stance) => (
-                <button
-                  key={stance}
-                  className={`${button} ${value.stance === stance ? "bg-[#0e2d30] text-[#e8e6d7]" : ""}`}
-                  aria-pressed={value.stance === stance}
-                  onClick={() => setValue({ ...value, stance })}
-                >
-                  {stance}
-                </button>
-              ))}
-            </div>
-          </fieldset>
-          <label className="flex min-h-11 items-center gap-3 text-sm">
-            <input
-              type="checkbox"
-              className="size-5 accent-[#0e2d30]"
-              checked={value.spoiler}
-              disabled={value.model !== "sedan-sports"}
-              onChange={(event) =>
-                setValue({ ...value, spoiler: event.target.checked })
-              }
-            />
-            Rear spoiler · sedan only
-          </label>
-          <button
-            className={button}
-            onClick={() => setValue({ ...initialConcept })}
-          >
-            Reset configuration
-          </button>
-          <div className="flex flex-wrap gap-2">
-            <button
-              className={button}
-              onClick={() => {
-                try {
-                  localStorage.setItem(storageKey, JSON.stringify(value));
-                  setStorageMessage("Direction saved on this device.");
-                } catch {
-                  setStorageMessage("Direction could not be saved.");
-                }
-              }}
-            >
-              Save direction
-            </button>
-            <button
-              className={button}
-              onClick={() => {
-                try {
-                  const parsed = conceptSchema.safeParse(
-                    JSON.parse(localStorage.getItem(storageKey) ?? "null"),
-                  );
-                  if (!parsed.success) throw new Error("invalid concept");
-                  setValue(parsed.data);
-                  setStorageMessage("Saved direction restored.");
-                } catch {
-                  setStorageMessage("Saved direction could not be read.");
-                }
-              }}
-            >
-              Restore direction
-            </button>
-          </div>
-          {storageMessage && (
-            <p role="status" className="text-xs leading-5">
-              {storageMessage}
-            </p>
-          )}
-          <p className="text-xs leading-6">
-            Session-only exploration. Paint, body height and the sedan spoiler
-            are supported. Wheels, brakes, interiors and real-world fitment are
-            not configurable here.
-          </p>
-        </div>
+        </aside>
       </div>
-      <div className="border-t border-[#0e2d30]/15 p-5 sm:p-8">
-        <h3 className="text-xl font-medium">Cinema-inspired directions</h3>
-        <p className="mt-2 text-sm leading-6">
-          Original themes, not film-car replicas. No studio or manufacturer
-          affiliation.
-        </p>
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
-          {conceptPresets.map((preset) => (
-            <button
-              key={preset.name}
-              className="rounded-2xl border border-[#0e2d30]/25 p-5 text-left focus-visible:outline-2 focus-visible:outline-offset-4"
-              onClick={() => setValue({ ...preset.value })}
-            >
-              <span className="block font-semibold">{preset.name}</span>
-              <span className="mt-2 block text-sm leading-6">
-                {preset.description}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
-      <p className="border-t border-[#0e2d30]/15 px-5 py-4 text-xs leading-6 sm:px-8">
-        Models:{" "}
-        <a className="underline" href="https://kenney.nl/assets/car-kit">
-          Kenney Car Kit
-        </a>{" "}
-        ·{" "}
-        <a className="underline" href="/models/concepts/LICENSE.txt">
-          CC0 license
-        </a>
-        . Stylized concepts are not dimensional, engineering or installation
-        guidance.
-      </p>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import {
   ArrowLeft,
   Armchair,
@@ -30,6 +31,7 @@ import {
   discOptions,
   trimOptions,
   interiorOptions,
+  studioModelIds,
 } from "@/features/visualizer/build-visual-schema";
 import { useBuildState } from "@/features/builds/use-builds";
 import {
@@ -48,6 +50,35 @@ import {
 import { useBuildVisuals } from "@/features/visualizer/use-build-visuals";
 import { vehicleReferenceFor } from "@/features/visualizer/vehicle-reference-catalog";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
+import {
+  carModels,
+  matchCarModel,
+} from "@/features/visualizer/car-model-catalog";
+
+const InteractiveCarModel = dynamic(
+  () =>
+    import("@/components/visualizer/interactive-car-model").then(
+      (module) => module.InteractiveCarModel,
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="flex min-h-80 items-center justify-center rounded-[2rem] border border-white/10 bg-[#111111] text-sm text-white/70"
+        role="status"
+      >
+        Preparing model viewer…
+      </div>
+    ),
+  },
+);
+
+const modelPaints: Record<BuildVisual["paint"], string> = {
+  "factory-black": "#242a2d",
+  "alpine-white": "#dddcd4",
+  "estoril-blue": "#2870c6",
+  "deep-green": "#31594c",
+};
 
 const optionLabels: Record<string, string> = {
   "factory-black": "Factory black",
@@ -83,7 +114,7 @@ export function BuildVisualizer({
     "concept",
   );
   const [view, setView] = useState<
-    "auto" | "photo" | "exterior" | "reference" | "interior"
+    "auto" | "model" | "photo" | "exterior" | "reference" | "interior"
   >("auto");
   const vehicle = vehicles.find((candidate) => candidate.id === vehicleId);
   const build = state.builds.find(
@@ -106,11 +137,23 @@ export function BuildVisualizer({
     );
 
   const reference = vehicleReferenceFor(vehicle.platform);
+  const matchedModel = matchCarModel(vehicle);
+  const selectedModel =
+    carModels.find((model) => model.id === visual.studioModelId) ??
+    matchedModel;
+  const isVehicleModel = selectedModel?.id === matchedModel?.id;
+  const canPreviewModelPaint = Boolean(selectedModel?.paintMaterials.length);
   const viewOptions = reference
-    ? (["photo", "exterior", "reference", "interior"] as const)
-    : (["photo", "exterior", "interior"] as const);
+    ? (["model", "photo", "exterior", "reference", "interior"] as const)
+    : (["model", "photo", "exterior", "interior"] as const);
   const activeView =
-    view === "auto" ? (reference ? "reference" : "photo") : view;
+    view === "auto"
+      ? selectedModel
+        ? "model"
+        : reference
+          ? "reference"
+          : "photo"
+      : view;
 
   function updateVisual(changes: Partial<BuildVisual>) {
     setPreviewMode("concept");
@@ -162,13 +205,7 @@ export function BuildVisualizer({
       </header>
 
       <section className="relative mt-5">
-        <div
-          className={`z-20 flex flex-wrap gap-3 ${
-            activeView === "reference"
-              ? "absolute top-16 left-4 rounded-2xl bg-[#090909]/88 p-2 shadow-xl backdrop-blur-xl"
-              : "mb-3"
-          }`}
-        >
+        <div className="mb-3 flex flex-wrap gap-3">
           <div className="inline-flex flex-wrap rounded-xl border border-white/10 bg-[#111111] p-1">
             {viewOptions.map((candidate) => (
               <button
@@ -180,35 +217,85 @@ export function BuildVisualizer({
               >
                 {candidate === "exterior" || candidate === "photo" ? (
                   <CarFront className="size-3.5" />
-                ) : candidate === "reference" ? (
+                ) : candidate === "reference" || candidate === "model" ? (
                   <Rotate3D className="size-3.5" />
                 ) : (
                   <Armchair className="size-3.5" />
                 )}
-                {candidate === "reference"
-                  ? "3D reference"
-                  : candidate === "exterior"
-                    ? "Stylized concept"
-                    : candidate}
+                {candidate === "model"
+                  ? "3D model"
+                  : candidate === "reference"
+                    ? "3D reference"
+                    : candidate === "exterior"
+                      ? "Stylized concept"
+                      : candidate}
               </button>
             ))}
           </div>
-          {activeView !== "reference" && activeView !== "photo" && (
-            <div className="inline-flex rounded-xl border border-white/10 bg-[#111111] p-1">
-              {(["current", "concept"] as const).map((mode) => (
-                <button
-                  key={mode}
-                  type="button"
-                  onClick={() => setPreviewMode(mode)}
-                  className={`rounded-lg px-4 py-2 text-xs capitalize ${previewMode === mode ? "bg-[#e72d45] font-semibold text-[#07101d]" : "text-white/40"}`}
-                >
-                  {mode === "current" ? "Current baseline" : "Dream concept"}
-                </button>
-              ))}
-            </div>
-          )}
+          {activeView !== "reference" &&
+            activeView !== "photo" &&
+            (activeView !== "model" || canPreviewModelPaint) && (
+              <div className="inline-flex rounded-xl border border-white/10 bg-[#111111] p-1">
+                {(["current", "concept"] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => setPreviewMode(mode)}
+                    aria-pressed={previewMode === mode}
+                    className={`rounded-lg px-4 py-2 text-xs capitalize ${previewMode === mode ? "bg-[#e72d45] font-semibold text-[#07101d]" : "text-white/40"}`}
+                  >
+                    {activeView === "model"
+                      ? mode === "current"
+                        ? "Original model"
+                        : "Paint preview"
+                      : mode === "current"
+                        ? "Current baseline"
+                        : "Dream concept"}
+                  </button>
+                ))}
+              </div>
+            )}
         </div>
-        {activeView === "reference" && reference ? (
+        {activeView === "model" ? (
+          selectedModel ? (
+            <div className="space-y-3">
+              <div className="rounded-[2rem] border border-white/10 bg-[#f3f1e7] p-3 text-[#0e2d30] sm:p-5">
+                <InteractiveCarModel
+                  key={selectedModel.id}
+                  modelId={selectedModel.id}
+                  paint={
+                    canPreviewModelPaint
+                      ? previewMode === "current"
+                        ? null
+                        : modelPaints[visual.paint]
+                      : undefined
+                  }
+                  label={selectedModel.name}
+                />
+              </div>
+              <p className="px-1 text-sm leading-6 text-white/70">
+                {isVehicleModel
+                  ? `${selectedModel.name} · Matched to your vehicle generation. Model details may differ from your exact trim.`
+                  : `${selectedModel.name} · A reference you selected, not a model of your own vehicle.`}{" "}
+                {canPreviewModelPaint
+                  ? "Paint is a material preview; verify parts and clearance separately."
+                  : "Original materials are preserved; verify parts and clearance separately."}
+              </p>
+            </div>
+          ) : (
+            <div className="rounded-[2rem] border border-white/10 bg-[#0b2528] p-7 sm:p-10">
+              <Rotate3D className="size-8 text-[#ff667a]" />
+              <h2 className="mt-4 text-2xl font-medium">
+                Choose a model to explore.
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/75">
+                Your exact vehicle generation is not in the free model library
+                yet. Choose one of the 25 cars below as an explicit visual
+                reference, or use your vehicle photo and stylized concept.
+              </p>
+            </div>
+          )
+        ) : activeView === "reference" && reference ? (
           <div className="space-y-3">
             <ReferenceConfigurator
               english
@@ -222,21 +309,14 @@ export function BuildVisualizer({
                   ? visual.reference
                   : undefined
               }
-              onSaveConfiguration={(configuration) => {
-                saveBuildVisual(
-                  {
-                    ...visual,
-                    vehicleId,
-                    buildId,
-                    reference: {
-                      ...configuration,
-                      modelUid: reference.modelUid,
-                    },
+              onSaveConfiguration={(configuration) =>
+                updateVisual({
+                  reference: {
+                    ...configuration,
+                    modelUid: reference.modelUid,
                   },
-                  window.localStorage,
-                );
-                announceBuildVisualChange();
-              }}
+                })
+              }
             />
             <p className="px-4 text-xs text-white/65">
               <a
@@ -267,9 +347,11 @@ export function BuildVisualizer({
             <div className="p-6">
               <h2 className="text-xl font-medium">Start with your car.</h2>
               <p className="mt-2 text-sm leading-6 text-white/70">
-                {reference
-                  ? "Your vehicle image and the 3D reference are separate views. A reference model may differ from your exact trim."
-                  : "No realistic 3D reference is currently mapped to this vehicle. Your plan still works; the stylized concept is available as an optional illustration."}
+                {selectedModel
+                  ? "Your vehicle photo and the interactive model are separate views. Open 3D model to explore your saved model reference."
+                  : reference
+                    ? "Your vehicle image and the 3D reference are separate views. A reference model may differ from your exact trim."
+                    : "No realistic 3D reference is currently mapped to this vehicle. Your plan still works; the stylized concept is available as an optional illustration."}
               </p>
             </div>
           </div>
@@ -301,9 +383,11 @@ export function BuildVisualizer({
                 Visual configuration
               </p>
               <h2 className="mt-2 text-2xl font-medium">
-                {activeView === "reference"
-                  ? "Explore the base car"
-                  : "Shape the concept"}
+                {activeView === "model"
+                  ? "Your model reference"
+                  : activeView === "reference"
+                    ? "Explore the base car"
+                    : "Shape the concept"}
               </h2>
             </div>
             <span className="inline-flex items-center gap-2 text-xs text-emerald-200/70">
@@ -311,11 +395,82 @@ export function BuildVisualizer({
             </span>
           </div>
           <div className="mt-7 space-y-7">
-            {activeView === "reference" ? (
+            {activeView === "model" ? (
+              <>
+                <div>
+                  <label
+                    htmlFor="garage-studio-model"
+                    className="block text-sm font-medium text-white/85"
+                  >
+                    Free model library
+                  </label>
+                  <select
+                    id="garage-studio-model"
+                    value={visual.studioModelId ?? ""}
+                    onChange={(event) => {
+                      updateVisual({
+                        studioModelId: studioModelIds.find(
+                          (id) => id === event.target.value,
+                        ),
+                      });
+                      setView("model");
+                    }}
+                    className="mt-3 min-h-12 w-full rounded-xl border border-white/20 bg-[#171717] px-4 text-sm text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff667a]"
+                  >
+                    <option value="">
+                      {matchedModel
+                        ? `Vehicle match · ${matchedModel.name}`
+                        : "Choose a reference model"}
+                    </option>
+                    {carModels.map((model) => (
+                      <option key={model.id} value={model.id}>
+                        {model.name}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="mt-3 text-sm leading-6 text-white/65">
+                    All 25 models are free. Your selection is saved with this
+                    build. Choosing another car changes only the visual
+                    reference.
+                  </p>
+                </div>
+                {canPreviewModelPaint ? (
+                  <>
+                    <OptionGroup
+                      label="Paint preview"
+                      icon={Paintbrush}
+                      options={visualPaints}
+                      value={visual.paint}
+                      onChange={(paint) => updateVisual({ paint })}
+                    />
+                  </>
+                ) : selectedModel ? (
+                  <p className="rounded-xl border border-white/10 p-4 text-sm leading-6 text-white/70">
+                    This model keeps its original materials. Use Stylized
+                    concept to explore paint, wheels and stance on an
+                    illustrative body.
+                  </p>
+                ) : null}
+              </>
+            ) : activeView === "photo" ? (
+              <div className="text-sm leading-6 text-white/75">
+                <p>
+                  Keep your vehicle photo as the starting point, or choose a
+                  free interactive model to explore a direction.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setView("model")}
+                  className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 px-4 font-medium text-white"
+                >
+                  <Rotate3D className="size-4" /> Browse 25 free models
+                </button>
+              </div>
+            ) : activeView === "reference" ? (
               <div className="rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/55">
-                The embedded E90 loads immediately from Sketchfab. Use it to
-                inspect the base body and cabin; switch to Exterior or Interior
-                to save CapCar concept choices.
+                This external model is an additional body and cabin reference.
+                Use its own controls to save material tints, or open 3D model
+                for CapCar’s free model library and saved paint previews.
               </div>
             ) : (
               <>

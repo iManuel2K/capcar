@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const minimumProductionYear = 1886;
+
 export const bodyStyles = [
   "Sedan",
   "Touring",
@@ -31,7 +33,7 @@ export const vehicleInputSchema = z.object({
   productionYear: z.coerce
     .number()
     .int()
-    .min(2000, "CapCar currently supports vehicles from 2000")
+    .min(minimumProductionYear, "Enter a production year from 1886 onwards")
     .max(2027, "Check the production year"),
   platform: z
     .string()

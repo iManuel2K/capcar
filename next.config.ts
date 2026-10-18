@@ -44,7 +44,7 @@ const nextConfig: NextConfig = {
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://images.unsplash.com https://*.sketchfab.com https://*.supabase.co https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://tiles.openfreemap.org",
       "font-src 'self' data:",
-      "connect-src 'self' https://*.supabase.co https://*.sketchfab.com https://tiles.openfreemap.org https://us.i.posthog.com",
+      "connect-src 'self' blob: https://*.supabase.co https://*.sketchfab.com https://tiles.openfreemap.org https://us.i.posthog.com",
       "frame-src https://sketchfab.com https://*.sketchfab.com https://www.youtube-nocookie.com",
       "media-src 'self' blob: https://*.sketchfab.com",
       "worker-src 'self' blob:",

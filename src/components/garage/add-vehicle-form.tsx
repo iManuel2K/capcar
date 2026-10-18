@@ -10,6 +10,7 @@ import { useState } from "react";
 import { VehicleArt } from "@/components/garage/vehicle-art";
 import {
   bodyStyles,
+  minimumProductionYear,
   transmissions,
   type Vehicle,
   vehicleInputSchema,
@@ -189,6 +190,10 @@ export function AddVehicleForm({
               >
                 <input
                   id="productionYear"
+                  type="number"
+                  min={minimumProductionYear}
+                  max={2027}
+                  step={1}
                   className={inputClass}
                   inputMode="numeric"
                   placeholder="2011"

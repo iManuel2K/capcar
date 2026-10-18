@@ -16,7 +16,10 @@ export default async function StudioPage() {
   const t = await getTranslations("StudioPage");
   const s = await getTranslations("StudioPolish");
   return (
-    <main className="min-h-dvh bg-[#e8e6d7] px-5 py-8 text-[#0e2d30] sm:px-8">
+    <main
+      id="main-content"
+      className="min-h-dvh bg-[#e8e6d7] px-5 py-8 text-[#0e2d30] sm:px-8"
+    >
       <div className="mx-auto max-w-6xl">
         <p className="mt-4 text-xs font-semibold tracking-widest uppercase">
           CapCar / {t("eyebrow")}

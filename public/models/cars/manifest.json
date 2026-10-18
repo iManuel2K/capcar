@@ -1,0 +1,3149 @@
+{
+  "version": 1,
+  "sourceRepository": "https://github.com/pedrosoandre/carros",
+  "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+  "transformation": "Meshopt decoded offline; geometry, material definitions and original asset metadata retained. Embedded opaque color/emissive textures optimized to JPEG quality 82 (maximum 1024px); alpha and material-data maps remain PNG. Material-data textures larger than 256KiB resized to maximum 512px. Smaller original encodings retained. BufferViews compacted into one self-contained GLB.",
+  "textureOptimizer": {
+    "library": "sharp",
+    "versions": {
+      "aom": "3.14.1",
+      "archive": "3.8.9",
+      "cairo": "1.18.4",
+      "cgif": "0.5.3",
+      "exif": "0.6.26",
+      "expat": "2.8.3",
+      "ffi": "3.8.0",
+      "fontconfig": "2.18.3",
+      "freetype": "2.14.3",
+      "fribidi": "1.0.16",
+      "glib": "2.89.4",
+      "harfbuzz": "14.3.1",
+      "heif": "1.23.2",
+      "highway": "1.4.0",
+      "imagequant": "2.4.1",
+      "lcms": "2.19.1",
+      "mozjpeg": "0826579",
+      "pango": "1.58.2",
+      "pixman": "0.46.4",
+      "png": "1.6.58",
+      "proxy-libintl": "0.5",
+      "rsvg": "2.62.91",
+      "tiff": "4.7.2",
+      "uhdr": "2.0.2",
+      "vips": "8.18.6",
+      "webp": "1.6.0",
+      "xml2": "2.15.3",
+      "zlib-ng": "2.3.3",
+      "sharp": "0.35.4"
+    },
+    "opaqueColorJpegQuality": 82,
+    "colorMaximumPixels": 1024,
+    "largeDataTextureThresholdBytes": 262144,
+    "largeDataMaximumPixels": 512,
+    "normalAndMaterialDataEncoding": "lossless PNG",
+    "alphaEncoding": "PNG"
+  },
+  "models": [
+    {
+      "id": "audi-r8",
+      "file": "audi-r8.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/audi-r8.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 4776028,
+      "rawSha256": "627004f3b68fe3ab2917159d7798c22d125f32f1c6d5eb064c0f68947a02f20e",
+      "finalBytes": 3715692,
+      "finalSha256": "43844c0fb401097e080356462472bf4ea750175e38df5fa60ec0eb0f44ec2847",
+      "decodedBufferViews": 204,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 132782,
+          "finalBytes": 48413,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 1,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture"
+          ],
+          "originalBytes": 198947,
+          "finalBytes": 196014,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 603974,
+          "finalBytes": 186248,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 3,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 9902,
+          "finalBytes": 7524,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 4,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture"
+          ],
+          "originalBytes": 137207,
+          "finalBytes": 133875,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 5,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 829595,
+          "finalBytes": 253928,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 6,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 107548,
+          "finalBytes": 28581,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 7,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture"
+          ],
+          "originalBytes": 118466,
+          "finalBytes": 115817,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 8,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 582704,
+          "finalBytes": 152238,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 9,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 249753,
+          "finalBytes": 64707,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 10,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 556452,
+          "finalBytes": 148475,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        }
+      ],
+      "credit": {
+        "author": "wallon",
+        "authorUrl": "https://sketchfab.com/realwallon",
+        "license": "CC Attribution",
+        "sourceName": "Audi R8",
+        "sourceUrl": "https://sketchfab.com/3d-models/none-e17e438f076f4427a58d93aa779edaed"
+      },
+      "paint": {
+        "materials": [
+          "body"
+        ],
+        "textured": false,
+        "confidence": "média"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 94,
+      "materials": [
+        "material",
+        "tire",
+        "calipers",
+        "chrome",
+        "white_lights",
+        "red_lights",
+        "black",
+        "glass",
+        "pure_black",
+        "carbon_fiber",
+        "body",
+        "matte_black",
+        "secondary",
+        "license_plate"
+      ],
+      "textures": 11,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "audi-tt",
+      "file": "audi-tt.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/audi-tt.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 1123224,
+      "rawSha256": "26f659935f925c8b06b280e348edca1c3b65436d335b249fe6dc29cbe7eb0468",
+      "finalBytes": 1122528,
+      "finalSha256": "22db4a8e44c6ce48c56e243bcad3aeed1a34023a02e771ee0c9d78e7b98ee449",
+      "decodedBufferViews": 0,
+      "optimizedTextures": [],
+      "credit": {
+        "author": "razor24",
+        "authorUrl": "https://sketchfab.com/razor24",
+        "license": "CC Attribution",
+        "sourceName": "2015 Audi TT Convertible",
+        "sourceUrl": "https://sketchfab.com/3d-models/80cc29628e1b407d8e14d5ae0710f6fe"
+      },
+      "paint": {
+        "materials": [
+          "metal"
+        ],
+        "textured": false,
+        "confidence": "alta"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 49,
+      "materials": [
+        "rearlights_white",
+        "blinker_lamps",
+        "front_lamps",
+        "brakelights_red",
+        "black_plastic",
+        "glass",
+        "metal",
+        "interior",
+        "panel",
+        "chrome",
+        "sits_leather",
+        "wheel_rubber",
+        "brakes",
+        "metal_dark",
+        "varnish",
+        "mirror_left"
+      ],
+      "textures": 0,
+      "extensionsUsed": [],
+      "extensionsRequired": [],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "bmw-m3-e30",
+      "file": "bmw-m3-e30.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/bmw-m3-e30.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 9952032,
+      "rawSha256": "35cad98e89e6f1e54ccd238a3df049d29f20ecec3fc0aa2a85e0ad6c2663d330",
+      "finalBytes": 4600692,
+      "finalSha256": "78d85bdcb96f1ea139e6fb968dcdc83fb00c855f9d73d3cda3aefba25f1dca2f",
+      "decodedBufferViews": 93,
+      "optimizedTextures": [
+        {
+          "image": 1,
+          "roles": [
+            "emissiveTexture"
+          ],
+          "originalBytes": 50348,
+          "finalBytes": 20707,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 145358,
+          "finalBytes": 64571,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 4,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 123224,
+          "finalBytes": 70314,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 5,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1184973,
+          "finalBytes": 397306,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 6,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 371602,
+          "finalBytes": 55045,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 7,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 549877,
+          "finalBytes": 197952,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 8,
+          "roles": [
+            "normalTexture",
+            "extensions.KHR_materials_clearcoat.clearcoatNormalTexture"
+          ],
+          "originalBytes": 590907,
+          "finalBytes": 218959,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 9,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 205179,
+          "finalBytes": 35394,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 10,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 979719,
+          "finalBytes": 282195,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 11,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1065255,
+          "finalBytes": 314036,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 12,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 352995,
+          "finalBytes": 44844,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 13,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 255695,
+          "finalBytes": 251250,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 14,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 411021,
+          "finalBytes": 147310,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 15,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 693529,
+          "finalBytes": 85864,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 16,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 930441,
+          "finalBytes": 300613,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 17,
+          "roles": [
+            "normalTexture",
+            "extensions.KHR_materials_clearcoat.clearcoatNormalTexture"
+          ],
+          "originalBytes": 983119,
+          "finalBytes": 282200,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        }
+      ],
+      "credit": {
+        "author": "Martin Trafas",
+        "authorUrl": "https://sketchfab.com/TinoD2",
+        "license": "CC Attribution",
+        "sourceName": "[FREE] BMW M3 E30",
+        "sourceUrl": "https://sketchfab.com/3d-models/none-ac3c7013434e403e8faff87948caf422"
+      },
+      "paint": null,
+      "missingPaintMaterials": [],
+      "meshes": 30,
+      "materials": [
+        "BMW_E30_M3_PAINT",
+        "BMW_E30_M3_PLASTIC",
+        "BMW_E30_M3_CHROME",
+        "BMW_E30_M3_WINDOWS",
+        "BMW_E30_M3_BLACKOUT",
+        "BMW_E30_M3_SIDE_MIRROR",
+        "BMW_E30_M3_TAILLIGHT_REFLECTOR",
+        "BMW_E30_M3_HEADLIGHT_REFLECTOR",
+        "BMW_E30_M3_EMBLEMS",
+        "BMW_E30_M3_LENS",
+        "BMW_E30_M3_RIM",
+        "BMW_E30_M3_TIRE",
+        "Brake_Disc",
+        "Brembo_Calipers",
+        "Logo_Plane"
+      ],
+      "textures": 18,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_emissive_strength",
+        "KHR_materials_transmission",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "bmw-e36-m3",
+      "file": "bmw-e36-m3.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/bmw-e36-m3.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 2543508,
+      "rawSha256": "120b7514ea3f2a920a3b2849de866599e4557acbb0f218731c1e0fd4d623fd8d",
+      "finalBytes": 2224104,
+      "finalSha256": "f994914025babada83bdf9bc23ddf980438ee06fb5889b96cecb8455fa6d3d44",
+      "decodedBufferViews": 42,
+      "optimizedTextures": [
+        {
+          "image": 1,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 209224,
+          "finalBytes": 208584,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 53959,
+          "finalBytes": 27491,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 4,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 46790,
+          "finalBytes": 19803,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 6,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 194854,
+          "finalBytes": 55315,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 7,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture"
+          ],
+          "originalBytes": 185304,
+          "finalBytes": 181540,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 8,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 840609,
+          "finalBytes": 118127,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        }
+      ],
+      "credit": {
+        "author": "Martin Trafas",
+        "authorUrl": "https://sketchfab.com/TinoD2",
+        "license": "CC Attribution",
+        "sourceName": "BMW E36 M3",
+        "sourceUrl": "https://sketchfab.com/3d-models/none-762b90efd3dc413cb61c3e3c8097b8ac"
+      },
+      "paint": {
+        "materials": [
+          "CarPaint"
+        ],
+        "textured": false,
+        "confidence": "média"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 17,
+      "materials": [
+        "CarPaint",
+        "Cover",
+        "Exhaust",
+        "HeadLights",
+        "LicencePlate",
+        "Light",
+        "MainColor.001",
+        "Mirror",
+        "Plastic",
+        "RearLights",
+        "Scene",
+        "SeconadryColor.001",
+        "Textures.001",
+        "Tire.001",
+        "Windows"
+      ],
+      "textures": 9,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "bmw-320i",
+      "file": "bmw-320i.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/bmw-320i.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 1300148,
+      "rawSha256": "a1764d5ab2148790c50f9ca13a76ce8ed08a91295238772f2012603dad9da026",
+      "finalBytes": 766576,
+      "finalSha256": "52b016764b75d5d3e4cb4cebae5e0aff92c2c7a06549138d8792e405beb748d4",
+      "decodedBufferViews": 0,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture",
+            "pbrMetallicRoughness.baseColorTexture",
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 618275,
+          "finalBytes": 85837,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        }
+      ],
+      "credit": {
+        "author": "rifdanzz",
+        "authorUrl": "https://sketchfab.com/rifdanzz",
+        "license": "CC Attribution",
+        "sourceName": "BMW 320i E90 Low Polly",
+        "sourceUrl": "https://sketchfab.com/3d-models/28f0bc2f0083417a8e521150529034d6"
+      },
+      "paint": {
+        "materials": [
+          "material_0"
+        ],
+        "textured": false,
+        "confidence": "alta"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 49,
+      "materials": [
+        "Text__0",
+        "Material.005",
+        "velg",
+        "Material.001",
+        "Material.004",
+        "Material.009",
+        "material_0",
+        "Material.008",
+        "Material.002",
+        "Material.006",
+        "glass"
+      ],
+      "textures": 1,
+      "extensionsUsed": [],
+      "extensionsRequired": [],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "volkswagen-beetle",
+      "file": "volkswagen-beetle.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/volkswagen-beetle.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 5085596,
+      "rawSha256": "575314d4c6de953aac4e18a0cd08787a1e18ee634d647b7613e18becfaa12b80",
+      "finalBytes": 1819396,
+      "finalSha256": "4c884625c672601b5a976d01d3ff0371230bca7c51e39acbd5416fa0bce7394c",
+      "decodedBufferViews": 155,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 1495871,
+          "finalBytes": 251574,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 1,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 1509841,
+          "finalBytes": 451255,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1378025,
+          "finalBytes": 410279,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 3,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 140780,
+          "finalBytes": 40871,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 4,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 203306,
+          "finalBytes": 197216,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 5,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 110903,
+          "finalBytes": 105030,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        }
+      ],
+      "credit": {
+        "author": "aleksey.matveenko",
+        "authorUrl": "https://sketchfab.com/aleksey.matveenko",
+        "license": "CC Attribution",
+        "sourceName": "1963 Volkswagen Beetle",
+        "sourceUrl": "https://sketchfab.com/3d-models/none-f03e5ba5e81b4562958645fe27565f3a"
+      },
+      "paint": null,
+      "missingPaintMaterials": [],
+      "meshes": 39,
+      "materials": [
+        "lambert1",
+        "lambert3"
+      ],
+      "textures": 6,
+      "extensionsUsed": [
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "mercedes-benz-190",
+      "file": "mercedes-benz-190.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/mercedes-benz-190.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 398424,
+      "rawSha256": "8e557dd28f7dd37a80f935119296a5425c286d861e3baad6a28c2eea5347fdc9",
+      "finalBytes": 195152,
+      "finalSha256": "75e4e7c552812d161bc1c67faa741c1b1a3e87645ecac5fc38c2e0e216d20340",
+      "decodedBufferViews": 17,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 344850,
+          "finalBytes": 110557,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        }
+      ],
+      "credit": {
+        "author": "wallon",
+        "authorUrl": "https://sketchfab.com/realwallon",
+        "license": "CC Attribution",
+        "sourceName": "Mercedes Benz 190",
+        "sourceUrl": "https://sketchfab.com/3d-models/none-f379fc4d8efb4754abbab933b4c94e3d"
+      },
+      "paint": null,
+      "missingPaintMaterials": [],
+      "meshes": 8,
+      "materials": [
+        "material"
+      ],
+      "textures": 1,
+      "extensionsUsed": [
+        "KHR_materials_unlit",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "mercedes-300sl",
+      "file": "mercedes-300sl.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/mercedes-300sl.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 612220,
+      "rawSha256": "9ebef95205d209d809e3bc2c24f6906fb58df0ba3f067bd618c369fde41ab3a3",
+      "finalBytes": 877072,
+      "finalSha256": "c8b1f3ab8945745d833ea01be38ca924380883ace4ec0a52120e49ab5d1b1188",
+      "decodedBufferViews": 39,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 238630,
+          "finalBytes": 238146,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 1,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 99923,
+          "finalBytes": 23438,
+          "originalWidth": 256,
+          "originalHeight": 256,
+          "width": 256,
+          "height": 256,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 24506,
+          "finalBytes": 7903,
+          "originalWidth": 256,
+          "originalHeight": 128,
+          "width": 256,
+          "height": 128,
+          "originalMimeType": "image/jpeg",
+          "mimeType": "image/jpeg"
+        }
+      ],
+      "credit": {
+        "author": "Lexyc16",
+        "authorUrl": "https://sketchfab.com/Lexyc16",
+        "license": "CC Attribution",
+        "sourceName": "Mercedes-Benz 300 SL Gullwing",
+        "sourceUrl": "https://sketchfab.com/3d-models/505241c829c540a4921533000736904e"
+      },
+      "paint": {
+        "materials": [
+          "main_color"
+        ],
+        "textured": false,
+        "confidence": "alta"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 17,
+      "materials": [
+        "material",
+        "Material",
+        "Material.001",
+        "Material.002",
+        "Material.003",
+        "Material.004",
+        "Material.005",
+        "Material.006",
+        "Material.007",
+        "black",
+        "chrome",
+        "main_color",
+        "mid-chrome",
+        "tire"
+      ],
+      "textures": 3,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_transmission",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "mercedes-gclass",
+      "file": "mercedes-gclass.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/mercedes-gclass.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 581768,
+      "rawSha256": "5d7650132ccb47436d2694a5b84a375ef414cd89ab3e26ac2a6f9f487e0b27a4",
+      "finalBytes": 581184,
+      "finalSha256": "800da76feb984b79bd2810a61c3ead78a50385ce96ef1fbbae67ab8920502c74",
+      "decodedBufferViews": 0,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 18027,
+          "finalBytes": 18014,
+          "originalWidth": 128,
+          "originalHeight": 128,
+          "width": 128,
+          "height": 128,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        }
+      ],
+      "credit": {
+        "author": "Lexyc16",
+        "authorUrl": "https://sketchfab.com/Lexyc16",
+        "license": "CC Attribution",
+        "sourceName": "Mercedes Benz G-class W263",
+        "sourceUrl": "https://sketchfab.com/3d-models/1a2a52b16cad4e618af347461817895c"
+      },
+      "paint": {
+        "materials": [
+          "Material.001"
+        ],
+        "textured": false,
+        "confidence": "alta"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 22,
+      "materials": [
+        "Material.001",
+        "Material.002",
+        "Material.004",
+        "Material.003",
+        "Material.005",
+        "Material.009",
+        "Material.012",
+        "Material.013",
+        "Material.014",
+        "Material.015",
+        "Material.006",
+        "Material.007",
+        "Material.008"
+      ],
+      "textures": 1,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_specular",
+        "KHR_materials_transmission",
+        "KHR_materials_emissive_strength"
+      ],
+      "extensionsRequired": [],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "porsche-911",
+      "file": "porsche-911.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/porsche-911.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 2383144,
+      "rawSha256": "e740fcaa7b63b372dea8c7c404d2b6093da0e2ca0bf004bf9bc34ca8717ae156",
+      "finalBytes": 1121852,
+      "finalSha256": "1915c62eec8018fde48a06c9720f6f261b1e7cdece7a6f7ee371d8f4d83d04fa",
+      "decodedBufferViews": 54,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 796521,
+          "finalBytes": 180888,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 1,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1012135,
+          "finalBytes": 309104,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 36328,
+          "finalBytes": 11682,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/jpeg",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 3,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 108984,
+          "finalBytes": 31360,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/jpeg",
+          "mimeType": "image/jpeg"
+        }
+      ],
+      "credit": {
+        "author": "Lexyc16",
+        "authorUrl": "https://sketchfab.com/Lexyc16",
+        "license": "CC Attribution",
+        "sourceName": "Porsche 911 (930) Turbo 1975",
+        "sourceUrl": "https://sketchfab.com/3d-models/de1ffd344c41481892511f7fd332c136"
+      },
+      "paint": {
+        "materials": [
+          "Material.002"
+        ],
+        "textured": false,
+        "confidence": "alta"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 32,
+      "materials": [
+        "Material.002",
+        "Material.007",
+        "Material.013",
+        "Material.001",
+        "Material.003",
+        "Material.006",
+        "Material.011",
+        "Material.012",
+        "Material.009",
+        "Material.010",
+        "Material.014",
+        "Material.005",
+        "Material.008"
+      ],
+      "textures": 5,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_transmission",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "porsche-911-carrera",
+      "file": "porsche-911-carrera.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/porsche-911-carrera.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 4223360,
+      "rawSha256": "0322d245fd7d362bc89cce5e4bba282cc445bbf98eba800b4e7cfb0e5c710677",
+      "finalBytes": 5478552,
+      "finalSha256": "2a42adc0a486c375fee31019364487832d3f95a1d1e7e388e1ca576820ee94c2",
+      "decodedBufferViews": 111,
+      "optimizedTextures": [
+        {
+          "image": 1,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 156022,
+          "finalBytes": 154851,
+          "originalWidth": 1024,
+          "originalHeight": 256,
+          "width": 1024,
+          "height": 256,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 46995,
+          "finalBytes": 46687,
+          "originalWidth": 1024,
+          "originalHeight": 256,
+          "width": 1024,
+          "height": 256,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 5,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 503349,
+          "finalBytes": 165242,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 6,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 519206,
+          "finalBytes": 518975,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 7,
+          "roles": [
+            "emissiveTexture"
+          ],
+          "originalBytes": 72392,
+          "finalBytes": 26975,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 9,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 328457,
+          "finalBytes": 94329,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        }
+      ],
+      "credit": {
+        "author": "Lionsharp Studios",
+        "authorUrl": "https://sketchfab.com/lionsharp",
+        "license": "CC Attribution-ShareAlike",
+        "sourceName": "(FREE) Porsche 911 Carrera 4S",
+        "sourceUrl": "https://sketchfab.com/3d-models/none-d01b254483794de3819786d93e0e1ebf"
+      },
+      "paint": {
+        "materials": [
+          "paint"
+        ],
+        "textured": false,
+        "confidence": "média"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 45,
+      "materials": [
+        "full_black",
+        "coat",
+        "plastic",
+        "silver",
+        "paint",
+        "license",
+        "logo",
+        "rubber",
+        "Material.001",
+        "window",
+        "tex_shiny",
+        "glass",
+        "lights",
+        "Material"
+      ],
+      "textures": 10,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_transmission",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "mazda-rx-7-fc",
+      "file": "mazda-rx-7-fc.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/mazda-rx-7-fc.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 2313444,
+      "rawSha256": "ce644c715c9aeaef72203954c10c804d8f9ff1ec69242aa047498ffcd9b336e2",
+      "finalBytes": 1131928,
+      "finalSha256": "f0a507bda07b6a78c1ff20a85f9129a81349c77a18945e794c6952596da2a87a",
+      "decodedBufferViews": 54,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture",
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 796521,
+          "finalBytes": 180888,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 1,
+          "roles": [
+            "normalTexture",
+            "normalTexture"
+          ],
+          "originalBytes": 1012135,
+          "finalBytes": 309104,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture",
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 44829,
+          "finalBytes": 14948,
+          "originalWidth": 256,
+          "originalHeight": 256,
+          "width": 256,
+          "height": 256,
+          "originalMimeType": "image/jpeg",
+          "mimeType": "image/jpeg"
+        }
+      ],
+      "credit": {
+        "author": "Lexyc16",
+        "authorUrl": "https://sketchfab.com/Lexyc16",
+        "license": "CC Attribution",
+        "sourceName": "Mazda RX-7 FC",
+        "sourceUrl": "https://sketchfab.com/3d-models/none-8ac0df459f514950ab83ac37109a06ab"
+      },
+      "paint": null,
+      "missingPaintMaterials": [],
+      "meshes": 22,
+      "materials": [
+        "Material.001",
+        "Material",
+        "Material.002",
+        "Material.004",
+        "Material.011",
+        "Material.012",
+        "Material.015",
+        "Material.021",
+        "Material.013",
+        "Material.014",
+        "Material.005",
+        "Material.006",
+        "Material.010"
+      ],
+      "textures": 6,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_transmission",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "mazda-rx-7-fd",
+      "file": "mazda-rx-7-fd.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/mazda-rx-7-fd.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 3941268,
+      "rawSha256": "0f8d7e8eb24796482b0a29970f94d60920bdcdf526d4ca7cfe7a8786f7360653",
+      "finalBytes": 1333848,
+      "finalSha256": "5de0e318e186f1bb0c0c33aacf7387b726755735d11aa3145e7d91b122d435dc",
+      "decodedBufferViews": 50,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 44807,
+          "finalBytes": 14931,
+          "originalWidth": 256,
+          "originalHeight": 256,
+          "width": 256,
+          "height": 256,
+          "originalMimeType": "image/jpeg",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 796521,
+          "finalBytes": 180888,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 3,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1012135,
+          "finalBytes": 309104,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 4,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 662389,
+          "finalBytes": 101080,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 5,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1095385,
+          "finalBytes": 273487,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        }
+      ],
+      "credit": {
+        "author": "Lexyc16",
+        "authorUrl": "https://sketchfab.com/Lexyc16",
+        "license": "CC Attribution",
+        "sourceName": "Mazda RX-7 FD",
+        "sourceUrl": "https://sketchfab.com/3d-models/none-d35ff630df614771b82e7b2f59035b1e"
+      },
+      "paint": null,
+      "missingPaintMaterials": [],
+      "meshes": 20,
+      "materials": [
+        "Material.007",
+        "Material.006",
+        "Material.009",
+        "Material.002",
+        "Material.003",
+        "Material.008",
+        "Material.016",
+        "Material.017",
+        "Material.018",
+        "Material.019",
+        "Material",
+        "Material.001",
+        "Material.005",
+        "Material.011",
+        "Material.014",
+        "Material.015"
+      ],
+      "textures": 6,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_emissive_strength",
+        "KHR_materials_specular",
+        "KHR_materials_transmission",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "toyota-supra-mk",
+      "file": "toyota-supra-mk.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/toyota-supra-mk.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 10697472,
+      "rawSha256": "976d994f3e2755218f6d91381000fb1b980fb166380c44bf12d3d3dbdb759a39",
+      "finalBytes": 5146544,
+      "finalSha256": "604ced0db89d466041d1f23aaf30abf50fad49dd177882466c642bbc5affe37e",
+      "decodedBufferViews": 66,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 127304,
+          "finalBytes": 19229,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 276388,
+          "finalBytes": 276341,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 5,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 315943,
+          "finalBytes": 93912,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 9,
+          "roles": [
+            "emissiveTexture"
+          ],
+          "originalBytes": 12637,
+          "finalBytes": 4820,
+          "originalWidth": 256,
+          "originalHeight": 256,
+          "width": 256,
+          "height": 256,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 11,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 327262,
+          "finalBytes": 129134,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 12,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 694193,
+          "finalBytes": 208047,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 13,
+          "roles": [
+            "extensions.KHR_materials_clearcoat.clearcoatRoughnessTexture"
+          ],
+          "originalBytes": 493489,
+          "finalBytes": 185123,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 14,
+          "roles": [
+            "extensions.KHR_materials_clearcoat.clearcoatNormalTexture"
+          ],
+          "originalBytes": 693488,
+          "finalBytes": 208095,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 15,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 489657,
+          "finalBytes": 54967,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 16,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 1067604,
+          "finalBytes": 304128,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 17,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 522376,
+          "finalBytes": 141873,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 18,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 477549,
+          "finalBytes": 87697,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 19,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 854049,
+          "finalBytes": 250834,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 20,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1119124,
+          "finalBytes": 300962,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 22,
+          "roles": [
+            "emissiveTexture",
+            "emissiveTexture"
+          ],
+          "originalBytes": 87157,
+          "finalBytes": 51385,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 23,
+          "roles": [
+            "normalTexture",
+            "normalTexture"
+          ],
+          "originalBytes": 584232,
+          "finalBytes": 179771,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 24,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 621210,
+          "finalBytes": 43904,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 25,
+          "roles": [
+            "extensions.KHR_materials_clearcoat.clearcoatRoughnessTexture"
+          ],
+          "originalBytes": 289190,
+          "finalBytes": 121700,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        }
+      ],
+      "credit": {
+        "author": "Martin Trafas",
+        "authorUrl": "https://sketchfab.com/TinoD2",
+        "license": "CC Attribution",
+        "sourceName": "Toyota Supra MK IV (1994)",
+        "sourceUrl": "https://sketchfab.com/3d-models/none-eb9bb1eb41db431cb078088ae1ce45f8"
+      },
+      "paint": null,
+      "missingPaintMaterials": [],
+      "meshes": 20,
+      "materials": [
+        "TOYOTA_SUPRA_BRAKES",
+        "TOYOTA_SUPRA_BRAKE_LIGHT",
+        "TOYOTA_SUPRA_CAR_PAINT",
+        "TOYOTA_SUPRA_EMBLEM.002",
+        "TOYOTA_SUPRA_HEADLIGHT_BASE_CHROME",
+        "TOYOTA_SUPRA_HEADLIGHT_BASE_PLASTIC",
+        "TOYOTA_SUPRA_LIGHT_GLASS",
+        "TOYOTA_SUPRA_MAIN_LIGHT",
+        "TOYOTA_SUPRA_MIRROR.002",
+        "TOYOTA_SUPRA_REVERSE_LIGHT",
+        "TOYOTA_SUPRA_RIM",
+        "TOYOTA_SUPRA_SHADOW.002",
+        "TOYOTA_SUPRA_TEXTURES.002",
+        "TOYOTA_SUPRA_TIRE",
+        "TOYOTA_SUPRA_TURNSIGNAL_LEFT",
+        "TOYOTA_SUPRA_TURNSIGNAL_RIGHT",
+        "TOYOTA_SUPRA_WINDOWS.002"
+      ],
+      "textures": 26,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "toyota-ae86",
+      "file": "toyota-ae86.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/toyota-ae86.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 1520588,
+      "rawSha256": "cb8ec8e32fdb46d54b5bc7e4a8b2b0be57a68c06ef96c49ca004300fd1055d3c",
+      "finalBytes": 1213648,
+      "finalSha256": "928df68cbd0f725d8f10fbded00c3c4b5ebcf20378abcc2dc055481a894f5925",
+      "decodedBufferViews": 0,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture",
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 270504,
+          "finalBytes": 34822,
+          "originalWidth": 1024,
+          "originalHeight": 512,
+          "width": 1024,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 1,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 90373,
+          "finalBytes": 19671,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/jpeg",
+          "mimeType": "image/jpeg"
+        }
+      ],
+      "credit": {
+        "author": "Lexyc16",
+        "authorUrl": "https://sketchfab.com/Lexyc16",
+        "license": "CC Attribution",
+        "sourceName": "Toyota Corolla AE86 Trueno",
+        "sourceUrl": "https://sketchfab.com/3d-models/fe02fba6302e450ea8424591493341ea"
+      },
+      "paint": {
+        "materials": [
+          "Material.002"
+        ],
+        "textured": false,
+        "confidence": "alta"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 28,
+      "materials": [
+        "Material.001",
+        "Material.002",
+        "Material.006",
+        "Material.007",
+        "Material.005",
+        "Material.011",
+        "Material.012",
+        "Material.013",
+        "Material.014",
+        "Material.003",
+        "Material.004",
+        "Material.020",
+        "fpostersmallwall_textureproduct750x1000",
+        "Material.010",
+        "tofu_shop.002",
+        "Material.034"
+      ],
+      "textures": 3,
+      "extensionsUsed": [
+        "KHR_materials_specular",
+        "KHR_materials_emissive_strength"
+      ],
+      "extensionsRequired": [],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "nissan-gt-r",
+      "file": "nissan-gt-r.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/nissan-gt-r.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 3018480,
+      "rawSha256": "8a2d19a8cc334eafcb7011b54f55705341d200264e1dc0c3991fcc06f553d021",
+      "finalBytes": 1278372,
+      "finalSha256": "7935c2a9aa44e933102d5ac4f1ac1892e9b9773740c1f82280540e56dbeaeb4d",
+      "decodedBufferViews": 37,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 179366,
+          "finalBytes": 179079,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 1,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture",
+            "emissiveTexture"
+          ],
+          "originalBytes": 140642,
+          "finalBytes": 48421,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 662389,
+          "finalBytes": 101080,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 3,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 796521,
+          "finalBytes": 180888,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 4,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1012135,
+          "finalBytes": 309104,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 5,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 29991,
+          "finalBytes": 12710,
+          "originalWidth": 512,
+          "originalHeight": 256,
+          "width": 512,
+          "height": 256,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        }
+      ],
+      "credit": {
+        "author": "Lexyc16",
+        "authorUrl": "https://sketchfab.com/Lexyc16",
+        "license": "CC Attribution",
+        "sourceName": "Nissan Skyline R34 GT-R",
+        "sourceUrl": "https://sketchfab.com/3d-models/ff8fb2251dfa4bb9979e7022c5a6666c"
+      },
+      "paint": {
+        "materials": [
+          "Material.001"
+        ],
+        "textured": false,
+        "confidence": "alta"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 15,
+      "materials": [
+        "Material",
+        "Material.001",
+        "Material.002",
+        "Material.003",
+        "Material.004",
+        "Material.005",
+        "Material.006",
+        "Material.008",
+        "Material.009",
+        "Material.010",
+        "Material.011",
+        "Material.012",
+        "Material.013",
+        "Material.015",
+        "Material.032"
+      ],
+      "textures": 6,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_transmission",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "nissan-s14",
+      "file": "nissan-s14.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/nissan-s14.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 1117472,
+      "rawSha256": "0096b5a88d285d881d3b2cd1777edf865a547461876b7b28c08802bdc02775f6",
+      "finalBytes": 919488,
+      "finalSha256": "976605221de1d05fc6119962f10c10c535217fa45f6209b3339b8f87cef74af6",
+      "decodedBufferViews": 0,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "occlusionTexture",
+            "pbrMetallicRoughness.metallicRoughnessTexture"
+          ],
+          "originalBytes": 289904,
+          "finalBytes": 115325,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 1,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 41597,
+          "finalBytes": 18824,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        }
+      ],
+      "credit": {
+        "author": "Lexyc16",
+        "authorUrl": "https://sketchfab.com/Lexyc16",
+        "license": "CC Attribution",
+        "sourceName": "Nissan 200SX Silvia S14",
+        "sourceUrl": "https://sketchfab.com/3d-models/f2a917a924734a89a020e7f970e55e7c"
+      },
+      "paint": {
+        "materials": [
+          "Material.003"
+        ],
+        "textured": false,
+        "confidence": "alta"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 32,
+      "materials": [
+        "Material.003",
+        "Material.004",
+        "Material.005",
+        "Material.015",
+        "Material.017",
+        "Material.026",
+        "Material.002",
+        "Material.007",
+        "Material.008",
+        "Material.009",
+        "Material.010",
+        "Material.011",
+        "Material.012",
+        "Material.021",
+        "Material.022",
+        "Material.006",
+        "Material.020"
+      ],
+      "textures": 2,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_transmission"
+      ],
+      "extensionsRequired": [],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "nissan-proto",
+      "file": "nissan-proto.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/nissan-proto.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 649144,
+      "rawSha256": "4d93ca9750f4a50852f29628deeca691a5e7fed48dacaf7ddfa4b814642574f3",
+      "finalBytes": 660736,
+      "finalSha256": "c785d4fa7c58f4da72653925bcc389383873ebf292e5705800d01a38b4e1cadb",
+      "decodedBufferViews": 32,
+      "optimizedTextures": [
+        {
+          "image": 1,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 123721,
+          "finalBytes": 39922,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/jpeg",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 239066,
+          "finalBytes": 33982,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        }
+      ],
+      "credit": {
+        "author": "Lexyc16",
+        "authorUrl": "https://sketchfab.com/Lexyc16",
+        "license": "CC Attribution",
+        "sourceName": "Nissan Z Proto",
+        "sourceUrl": "https://sketchfab.com/3d-models/none-db9a5f7ae9d84a0fb01cac96afe3e69c"
+      },
+      "paint": null,
+      "missingPaintMaterials": [],
+      "meshes": 14,
+      "materials": [
+        "4909024830658970136_1",
+        "Material.001",
+        "Material.002",
+        "Material.003",
+        "Material.004",
+        "Material.005",
+        "Material.006",
+        "Material.007",
+        "Material.008",
+        "Material.009",
+        "Material.010",
+        "Material.011",
+        "Material.012"
+      ],
+      "textures": 3,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_emissive_strength",
+        "KHR_materials_specular",
+        "KHR_materials_transmission",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "ford-mustang",
+      "file": "ford-mustang.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/ford-mustang.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 2004500,
+      "rawSha256": "0a0632a2da8429c416d0500a96a790a6efdced04da48713e5489c9305640ac28",
+      "finalBytes": 4262028,
+      "finalSha256": "1b8cb4179d0588349c20c7a0bef2b70b56d2e7c9607db52344847a1bed8b1712",
+      "decodedBufferViews": 233,
+      "optimizedTextures": [],
+      "credit": {
+        "author": "Jiaxing",
+        "authorUrl": "https://sketchfab.com/saitoyang",
+        "license": "CC Attribution",
+        "sourceName": "Ford Mustang Shelby GT500",
+        "sourceUrl": "https://sketchfab.com/3d-models/0eaa7a16796540f29461ddae05ecdeb3"
+      },
+      "paint": {
+        "materials": [
+          "carpaint"
+        ],
+        "textured": false,
+        "confidence": "alta"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 116,
+      "materials": [
+        "carpaint",
+        "glossblack",
+        "leather",
+        "rearlight",
+        "orange",
+        "mirror",
+        "tinted_glass",
+        "light",
+        "plate",
+        "seat",
+        "white_gloss",
+        "roll",
+        "lambert1",
+        "tire",
+        "brake"
+      ],
+      "textures": 0,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "honda-civic",
+      "file": "honda-civic.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/honda-civic.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 331484,
+      "rawSha256": "b7f985bcb06d98291561392b1c8b8e355a62d536752a4084b756328c183a6725",
+      "finalBytes": 250560,
+      "finalSha256": "4536580acde5bff0f8a824271dcdac84fbd3f8383d7566fec801bf1fcb2d664f",
+      "decodedBufferViews": 69,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture",
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 204787,
+          "finalBytes": 35813,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        }
+      ],
+      "credit": {
+        "author": "rifdanzz",
+        "authorUrl": "https://sketchfab.com/rifdanzz",
+        "license": "CC Attribution",
+        "sourceName": "1991 Honda Civic EG6",
+        "sourceUrl": "https://sketchfab.com/3d-models/f81da34570b145deb463fa091604d251"
+      },
+      "paint": {
+        "materials": [
+          "Car_Paint"
+        ],
+        "textured": false,
+        "confidence": "alta"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 39,
+      "materials": [
+        "Material.005",
+        "velg",
+        "Material.003",
+        "Car_Paint",
+        "Material.002",
+        "Material.004",
+        "lampu",
+        "Window_Glass",
+        "tepian",
+        "Material.001",
+        "plate"
+      ],
+      "textures": 1,
+      "extensionsUsed": [
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "honda-nsx",
+      "file": "honda-nsx.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/honda-nsx.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 3097524,
+      "rawSha256": "23c6ffa73b82a686a83239b3560ca3b1be22836629798c2cd99a5f492e37487e",
+      "finalBytes": 1012988,
+      "finalSha256": "83ac17daf7666b1d55038043e457d657c7e94bdc9d7c1e2c682ca1e630b97a8f",
+      "decodedBufferViews": 58,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture",
+            "emissiveTexture"
+          ],
+          "originalBytes": 543135,
+          "finalBytes": 113660,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/jpeg",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 1,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 662389,
+          "finalBytes": 101080,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1095385,
+          "finalBytes": 273487,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 3,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 597302,
+          "finalBytes": 114435,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/jpeg",
+          "mimeType": "image/jpeg"
+        }
+      ],
+      "credit": {
+        "author": "Lexyc16",
+        "authorUrl": "https://sketchfab.com/Lexyc16",
+        "license": "CC Attribution",
+        "sourceName": "Honda NSX 1990",
+        "sourceUrl": "https://sketchfab.com/3d-models/1cc15628a00a4739a6b6c01128927c8d"
+      },
+      "paint": {
+        "materials": [
+          "Material.003"
+        ],
+        "textured": false,
+        "confidence": "alta"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 38,
+      "materials": [
+        "material_0",
+        "Material.003",
+        "Material.004",
+        "Material.005",
+        "Material.006",
+        "Material.009",
+        "Material.010",
+        "Material.007",
+        "Material.002",
+        "Material.008",
+        "Material.013",
+        "Material.011",
+        "Material.018",
+        "Material.021",
+        "Material.023",
+        "Material.001",
+        "Material.017",
+        "Material.016",
+        "Material.012",
+        "Material.014"
+      ],
+      "textures": 4,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_transmission",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "mini-cooper",
+      "file": "mini-cooper.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/mini-cooper.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 7894604,
+      "rawSha256": "900cdc45768c5d8cb3231c0d8d17d3e20f46d957eff4ab39ef57f5bd3705e739",
+      "finalBytes": 3845304,
+      "finalSha256": "ff20b4121adaf0bcc4f8d8eff0eb3cc798bda4113769fb8872b33e671149d4fa",
+      "decodedBufferViews": 108,
+      "optimizedTextures": [
+        {
+          "image": 1,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 1391974,
+          "finalBytes": 388256,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 3,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 666182,
+          "finalBytes": 184433,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 4,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 790961,
+          "finalBytes": 100298,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 5,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 365738,
+          "finalBytes": 133130,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 6,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 556070,
+          "finalBytes": 84444,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 7,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 706988,
+          "finalBytes": 272790,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 8,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 279996,
+          "finalBytes": 104499,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 9,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 202652,
+          "finalBytes": 40726,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 10,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 442031,
+          "finalBytes": 53062,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 12,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 354215,
+          "finalBytes": 119303,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        }
+      ],
+      "credit": {
+        "author": "cenobyte",
+        "authorUrl": "https://sketchfab.com/cenobyte",
+        "license": "CC Attribution",
+        "sourceName": "Mini Cooper S",
+        "sourceUrl": "https://sketchfab.com/3d-models/b262744901a04cda823f17289d1a4847"
+      },
+      "paint": null,
+      "missingPaintMaterials": [],
+      "meshes": 28,
+      "materials": [
+        "material",
+        "Interior",
+        "material_2",
+        "Tread",
+        "Disk_Brake"
+      ],
+      "textures": 13,
+      "extensionsUsed": [
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "subaru-impreza",
+      "file": "subaru-impreza.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/subaru-impreza.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 669040,
+      "rawSha256": "de862ee6809ce35a1adadbf8350be239b89561e35f0f0f67b963bc5c3c236cab",
+      "finalBytes": 1158668,
+      "finalSha256": "90887941964658c5edc2224b719e114944c2ee835aa8bc6f55cb7b3ceb907553",
+      "decodedBufferViews": 175,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "normalTexture",
+            "normalTexture",
+            "normalTexture",
+            "normalTexture"
+          ],
+          "originalBytes": 149946,
+          "finalBytes": 142319,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        }
+      ],
+      "credit": {
+        "author": "MAC ULT ARTS",
+        "authorUrl": "https://sketchfab.com/MACULTARTS",
+        "license": "CC Attribution",
+        "sourceName": "Subaru Impreza WRX STi 2004 Custom",
+        "sourceUrl": "https://sketchfab.com/3d-models/08296bc950364621b6174a3078bb19e0"
+      },
+      "paint": {
+        "materials": [
+          "Car_Paint"
+        ],
+        "textured": false,
+        "confidence": "alta"
+      },
+      "missingPaintMaterials": [],
+      "meshes": 80,
+      "materials": [
+        "Matte_Shiny",
+        "Chrome",
+        "Exhaust",
+        "Bottom",
+        "Matte_Rough",
+        "Tow_Hook",
+        "Chrome_Rough",
+        "Car_Paint",
+        "Chrome_Textured",
+        "Clear",
+        "Dark_Chrome",
+        "Horns",
+        "Cooler",
+        "Grill",
+        "Turn_Signals",
+        "Reflector",
+        "Clear_Side_Signal_Glass",
+        "Window",
+        "material",
+        "Tire",
+        "material_20"
+      ],
+      "textures": 1,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_transmission",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "datsun-280z",
+      "file": "datsun-280z.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/datsun-280z.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 11204916,
+      "rawSha256": "3100985ae11c1927cb2244ce6556e917db08798850daff36196fbd872332b260",
+      "finalBytes": 4918336,
+      "finalSha256": "4f6292d6ee58b9d24a7f4d27b6fd02d4e671c1c7a5ef98e7fb9f4af66b09062f",
+      "decodedBufferViews": 61,
+      "optimizedTextures": [
+        {
+          "image": 0,
+          "roles": [
+            "emissiveTexture"
+          ],
+          "originalBytes": 13823,
+          "finalBytes": 6669,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 1,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 403585,
+          "finalBytes": 51914,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 2,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 530428,
+          "finalBytes": 159922,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 3,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1002510,
+          "finalBytes": 296793,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 5,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 463610,
+          "finalBytes": 147078,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 6,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 1015081,
+          "finalBytes": 280934,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 7,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1111623,
+          "finalBytes": 285700,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 9,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 50830,
+          "finalBytes": 39413,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 10,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1072195,
+          "finalBytes": 352367,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 12,
+          "roles": [
+            "emissiveTexture"
+          ],
+          "originalBytes": 49381,
+          "finalBytes": 6973,
+          "originalWidth": 512,
+          "originalHeight": 512,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 13,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 25231,
+          "finalBytes": 19400,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 15,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 564371,
+          "finalBytes": 176161,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 16,
+          "roles": [
+            "emissiveTexture"
+          ],
+          "originalBytes": 103590,
+          "finalBytes": 24552,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 17,
+          "roles": [
+            "pbrMetallicRoughness.baseColorTexture"
+          ],
+          "originalBytes": 73231,
+          "finalBytes": 32543,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 1024,
+          "height": 1024,
+          "originalMimeType": "image/png",
+          "mimeType": "image/jpeg"
+        },
+        {
+          "image": 18,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 299893,
+          "finalBytes": 95897,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 19,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 408222,
+          "finalBytes": 138902,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 21,
+          "roles": [
+            "extensions.KHR_materials_clearcoat.clearcoatNormalTexture"
+          ],
+          "originalBytes": 397421,
+          "finalBytes": 135936,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 22,
+          "roles": [
+            "pbrMetallicRoughness.metallicRoughnessTexture",
+            "occlusionTexture"
+          ],
+          "originalBytes": 607248,
+          "finalBytes": 202462,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        },
+        {
+          "image": 23,
+          "roles": [
+            "normalTexture"
+          ],
+          "originalBytes": 1529626,
+          "finalBytes": 418914,
+          "originalWidth": 1024,
+          "originalHeight": 1024,
+          "width": 512,
+          "height": 512,
+          "originalMimeType": "image/png",
+          "mimeType": "image/png"
+        }
+      ],
+      "credit": {
+        "author": "Martin Trafas",
+        "authorUrl": "https://sketchfab.com/TinoD2",
+        "license": "CC Attribution",
+        "sourceName": "[FREE] Datsun 280Z",
+        "sourceUrl": "https://sketchfab.com/3d-models/none-0789ab2ece9442de94b3c41595e0ecbd"
+      },
+      "paint": null,
+      "missingPaintMaterials": [],
+      "meshes": 18,
+      "materials": [
+        "280z_Blackout",
+        "280z_Brake_lamp",
+        "280z_Brakes",
+        "280z_CarPaint",
+        "280z_Carbon",
+        "280z_Chrome",
+        "280z_Headlight_lamp",
+        "280z_Lens",
+        "280z_Plastic",
+        "280z_Reverse_lamp",
+        "280z_Textures",
+        "280z_Turnsignal_lamp",
+        "280z_Windows",
+        "SSR_Rim",
+        "SSR_Tire"
+      ],
+      "textures": 24,
+      "extensionsUsed": [
+        "KHR_materials_clearcoat",
+        "KHR_materials_transmission",
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    },
+    {
+      "id": "lamborghini-countach-lp500s",
+      "file": "lamborghini-countach-lp500s.glb",
+      "sourceUrl": "https://raw.githubusercontent.com/pedrosoandre/carros/0a56de377f02f2574d781f6920fed08d6423ec2f/assets/lamborghini-countach-lp500s.glb",
+      "sourceCommit": "0a56de377f02f2574d781f6920fed08d6423ec2f",
+      "rawBytes": 684556,
+      "rawSha256": "af5341d7598ea9b9bbf7c9794cbf8e0b62b6e31ea26483366218daba89fdd2fd",
+      "finalBytes": 1439752,
+      "finalSha256": "00e54505f55fcc3453f49af1ffcb0102ca7652e2fc148396de60afdbcf43a676",
+      "decodedBufferViews": 49,
+      "optimizedTextures": [],
+      "credit": {
+        "author": "SDC PERFORMANCE™️",
+        "authorUrl": "https://sketchfab.com/Lambo_SC04",
+        "license": "CC Attribution",
+        "sourceName": "Lamborghini Countach lp500s - Special 500k views",
+        "sourceUrl": "https://sketchfab.com/3d-models/none-32e9ee8d129e4c2992e1753b4fc3094c"
+      },
+      "paint": null,
+      "missingPaintMaterials": [],
+      "meshes": 24,
+      "materials": [
+        "CARO",
+        "GLASS",
+        "CHROME",
+        "Black",
+        "Material.001",
+        "Material.003",
+        "Material.004",
+        "Material.005",
+        "Material.006",
+        "Material.008",
+        "Material.009",
+        "Material.007",
+        "Material.011",
+        "Material.012",
+        "Material.013",
+        "Material.014",
+        "Material.016",
+        "Material.017"
+      ],
+      "textures": 0,
+      "extensionsUsed": [
+        "KHR_mesh_quantization"
+      ],
+      "extensionsRequired": [
+        "KHR_mesh_quantization"
+      ],
+      "optionalUnknownExtensions": []
+    }
+  ]
+}

@@ -16,6 +16,35 @@ export const rearAeroOptions = ["none", "lip", "ducktail", "wing"] as const;
 export const caliperColors = ["silver", "red", "blue", "yellow"] as const;
 export const discOptions = ["standard", "large", "slotted"] as const;
 export const trimOptions = ["stock", "sport"] as const;
+// Keep stored model references constrained to the self-hosted studio library.
+// This schema deliberately does not import the rendering catalog.
+export const studioModelIds = [
+  "audi-r8",
+  "audi-tt",
+  "bmw-m3-e30",
+  "bmw-e36-m3",
+  "bmw-320i",
+  "volkswagen-beetle",
+  "mercedes-benz-190",
+  "mercedes-300sl",
+  "mercedes-gclass",
+  "porsche-911",
+  "porsche-911-carrera",
+  "mazda-rx-7-fc",
+  "mazda-rx-7-fd",
+  "toyota-supra-mk",
+  "toyota-ae86",
+  "nissan-gt-r",
+  "nissan-s14",
+  "nissan-proto",
+  "ford-mustang",
+  "honda-civic",
+  "honda-nsx",
+  "mini-cooper",
+  "subaru-impreza",
+  "datsun-280z",
+  "lamborghini-countach-lp500s",
+] as const;
 export const interiorOptions = {
   seatStyle: ["standard", "sport"],
   upholstery: ["black", "tan", "red"],
@@ -45,6 +74,7 @@ export type ReferenceConfiguration = z.infer<
 export const buildVisualSchema = z.object({
   vehicleId: z.string().min(1),
   buildId: z.string().min(1),
+  studioModelId: z.enum(studioModelIds).optional(),
   reference: referenceConfigurationSchema
     .extend({ modelUid: z.string().regex(/^[a-f0-9]{32}$/) })
     .optional(),

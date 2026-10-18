@@ -6,7 +6,7 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ConceptStudio } from "./concept-studio";
+import { GenericConceptStudio as ConceptStudio } from "./generic-concept-studio";
 
 const renderer = vi.hoisted(() => ({
   load: vi.fn().mockResolvedValue(undefined),
