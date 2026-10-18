@@ -1,6 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useLocale } from "next-intl";
+import { checklistUI } from "@/features/journal/checklist-ui";
+import { isAppLocale } from "@/i18n/config";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
@@ -45,6 +48,8 @@ import {
 
 export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
   const router = useRouter();
+  const locale = useLocale();
+  const journal = checklistUI[isAppLocale(locale) ? locale : "en"];
   const [deleteOpen, setDeleteOpen] = useState(false);
   const { vehicles, isReady } = useVehicles();
   const vehicle = vehicles.find((candidate) => candidate.id === vehicleId);
@@ -320,6 +325,11 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
             href={`/garage/${vehicleId}/guides`}
             icon={BookOpenCheck}
             label="Guides"
+          />
+          <ProfileLink
+            href={`/garage/${vehicleId}/journal`}
+            icon={ClipboardList}
+            label={journal.heading}
           />
           <ProfileLink
             href={`/garage/${vehicleId}/data-sources`}

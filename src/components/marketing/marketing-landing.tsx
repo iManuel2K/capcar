@@ -15,6 +15,7 @@ import {
   DeferredFitmentLookup,
   DeferredProductDashboardPreview,
 } from "@/components/marketing/deferred-marketing-demos";
+import { JournalPreview } from "@/components/journal/journal-preview";
 import { MarketingFaq } from "@/components/marketing/marketing-faq";
 import { MarketingHero } from "@/components/marketing/marketing-hero";
 import { SiteFooter } from "@/components/marketing/site-footer";
@@ -176,6 +177,7 @@ export function MarketingLanding() {
 
         <VisionRoadmapSection />
 
+        <JournalPreview />
         <MarketingFaq />
 
         <section

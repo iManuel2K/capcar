@@ -50,7 +50,7 @@ describe("the connected homepage example", () => {
     ).toHaveAttribute("href", "#main-content");
     const actions = screen.getByTestId("hero-actions");
     expect(
-      within(actions).getByRole("link", { name: "Start your free garage" }),
+      within(actions).getByRole("link", { name: /Start your free garage/ }),
     ).toHaveAttribute("href", "/register");
     expect(
       within(actions).getByRole("link", { name: "Explore a project" }),

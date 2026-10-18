@@ -7,6 +7,8 @@ import de from "../messages/hardening/de.json";
 import el from "../messages/hardening/el.json";
 import sq from "../messages/hardening/sq.json";
 import ja from "../messages/hardening/ja.json";
+import { isJournalSlug, journalPath } from "@/features/journal/routes";
+import { journalUI } from "@/features/journal/ui";
 
 function localeFromPathname(pathname: string): AppLocale | undefined {
   const candidate = pathname.split("/")[1];
@@ -88,7 +90,37 @@ function passportUnavailableResponse(
 }
 
 export async function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname === "/journal") {
+    const locale = resolveLocale(
+      request.cookies.get(localeCookie)?.value,
+      request.headers.get("accept-language"),
+    );
+    const destination = request.nextUrl.clone();
+    destination.pathname = journalPath(locale);
+    return NextResponse.redirect(destination);
+  }
   const pathLocale = localeFromPathname(request.nextUrl.pathname);
+  // Reject invalid journal paths before streamed layouts can commit HTTP 200.
+  const journal = request.nextUrl.pathname.match(
+    /^\/([a-z]{2})\/journal(?:\/(.*))?$/,
+  );
+  if (
+    journal &&
+    (!isAppLocale(journal[1]) || (journal[2] && !isJournalSlug(journal[2])))
+  ) {
+    const locale = isAppLocale(journal[1]) ? journal[1] : "en";
+    const ui = journalUI[locale];
+    return new NextResponse(
+      `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><title>${ui.missingTitle} · CapCar</title></head><body style="margin:0;background:#ebe9dc;color:#0e2d30;font-family:Arial,sans-serif"><main style="max-width:42rem;margin:15vh auto;padding:2rem"><p>CapCar ${ui.label}</p><h1>${ui.missingTitle}</h1><p>${ui.missingBody}</p><a href="${journalPath(locale)}" style="color:inherit">${ui.allArticles} →</a></main></body></html>`,
+      {
+        status: 404,
+        headers: {
+          "content-type": "text/html; charset=utf-8",
+          "x-robots-tag": "noindex, follow",
+        },
+      },
+    );
+  }
   const passportMatch = request.nextUrl.pathname.match(/^\/passport\/([^/]+)$/);
   const passport = passportMatch && passportMatch[1] !== "unavailable";
   if (

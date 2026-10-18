@@ -137,6 +137,16 @@ describe("proxy public Passport guard", () => {
     ).toBe(503);
   });
 
+  it("keeps worksheet downloads outside the localized journal guard", async () => {
+    const response = await proxy(
+      new NextRequest(
+        "https://capcar.example/downloads/journal/bmw-wochenendprojekt-planen.txt",
+      ),
+    );
+    expect(response.status).toBe(200);
+    expect(response.headers.get("x-robots-tag")).toBeNull();
+  });
+
   it("requires an account before opening CapCar AI", async () => {
     const response = await proxy(
       new NextRequest("https://capcar.example/ai?from=header"),
@@ -146,5 +156,41 @@ describe("proxy public Passport guard", () => {
     expect(response.headers.get("location")).toBe(
       "https://capcar.example/login?next=%2Fai%3Ffrom%3Dheader",
     );
+  });
+
+  it("redirects the Journal entry to the selected language and preserves campaign parameters", async () => {
+    const japanese = await proxy(
+      new NextRequest("https://capcar.example/journal?utm_source=instagram", {
+        headers: { "accept-language": "ja" },
+      }),
+    );
+    expect(japanese.status).toBe(307);
+    expect(japanese.headers.get("location")).toBe(
+      "https://capcar.example/ja/journal?utm_source=instagram",
+    );
+    const albanian = await proxy(
+      new NextRequest("https://capcar.example/journal", {
+        headers: { cookie: "capcar_locale=sq", "accept-language": "en" },
+      }),
+    );
+    expect(albanian.headers.get("location")).toBe(
+      "https://capcar.example/sq/journal",
+    );
+    expect(supabaseMocks.authGetUser).not.toHaveBeenCalled();
+  });
+
+  it("returns HTTP 404 for missing journal articles and unsupported locales before streaming", async () => {
+    for (const path of [
+      "/de/journal/missing",
+      "/fr/journal",
+      "/de/journal/missing/child",
+    ]) {
+      const response = await proxy(
+        new NextRequest(`https://capcar.example${path}`),
+      );
+      expect(response.status).toBe(404);
+      expect(response.headers.get("x-robots-tag")).toContain("noindex");
+    }
+    expect(supabaseMocks.authGetUser).not.toHaveBeenCalled();
   });
 });

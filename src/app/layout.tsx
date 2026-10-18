@@ -1,3 +1,4 @@
+import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -36,6 +37,7 @@ export default async function RootLayout({
     <html lang={locale} data-scroll-behavior="smooth">
       <body className="min-h-dvh font-sans antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <AnalyticsProvider />
           <SkipToContent />
           <SiteHeader />
           {children}

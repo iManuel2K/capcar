@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowRight, ChevronDown, ChevronRight, Menu, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { LanguageSelector } from "@/components/i18n/language-selector";
+import { journalPath, resolveJournalLocale } from "@/features/journal/routes";
+import { journalUI } from "@/features/journal/ui";
 import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 
 const navigation = [
@@ -17,6 +19,8 @@ const navigation = [
 ] as const;
 
 export function MarketingHeader() {
+  const journalLocale = resolveJournalLocale(useLocale());
+  const journal = journalUI[journalLocale];
   const pathname = usePathname() ?? "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const t = useTranslations("Navigation");
@@ -111,6 +115,7 @@ export function MarketingHeader() {
                   ["marketplace", "/marketplace"],
                   ["roadmap", "/roadmap"],
                   ["faq", "/#faq"],
+                  ["journal", journalPath(journalLocale)],
                 ].map(([label, href]) => (
                   <Link
                     key={href}
@@ -123,7 +128,7 @@ export function MarketingHeader() {
                         : "hover:bg-[#0e2d30]/6"
                     }`}
                   >
-                    {footer(label)}
+                    {label === "journal" ? journal.label : footer(label)}
                   </Link>
                 ))}
               </div>
@@ -219,6 +224,7 @@ export function MarketingHeader() {
                 ["marketplace", "/marketplace"],
                 ["roadmap", "/roadmap"],
                 ["faq", "/#faq"],
+                ["journal", journalPath(journalLocale)],
               ].map(([label, href]) => (
                 <Link
                   key={href}
@@ -226,7 +232,7 @@ export function MarketingHeader() {
                   onClick={() => setMenuOpen(false)}
                   className="flex min-h-12 items-center justify-between border-b border-[#0e2d30]/10 text-base focus-visible:outline-2"
                 >
-                  {footer(label)}
+                  {label === "journal" ? journal.label : footer(label)}
                   <ChevronRight className="size-4" aria-hidden="true" />
                 </Link>
               ))}

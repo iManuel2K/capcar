@@ -1,3 +1,7 @@
+import { AnalyticsSettingsButton } from "@/components/analytics/analytics-provider";
+import { analyticsUI } from "@/features/analytics/ui";
+import { isAppLocale } from "@/i18n/config";
+import { getLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
@@ -14,6 +18,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PrivacyPage() {
   const t = await getTranslations("LegalDocs.privacy");
   const legal = getLegalConfiguration();
+  const locale = await getLocale();
+  const analytics = analyticsUI[isAppLocale(locale) ? locale : "en"];
 
   return (
     <LegalShell
@@ -64,6 +70,11 @@ export default async function PrivacyPage() {
 
       <LegalSection title={t("s7t")}>
         <p>{t("s7")}</p>
+      </LegalSection>
+
+      <LegalSection title={analytics.title}>
+        <p>{analytics.notice}</p>
+        <AnalyticsSettingsButton />
       </LegalSection>
 
       <LegalSection title={t("s8t")}>

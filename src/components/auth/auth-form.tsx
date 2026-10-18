@@ -1,5 +1,8 @@
 "use client";
 
+import { safeAuthNext } from "@/features/auth/next-path";
+import { trackAnalytics } from "@/features/analytics/client";
+
 import {
   ArrowRight,
   CheckCircle2,
@@ -13,17 +16,22 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { FormEvent, useEffect, useState } from "react";
+import {
+  cloneElement,
+  FormEvent,
+  isValidElement,
+  type ReactElement,
+  useEffect,
+  useId,
+  useState,
+} from "react";
 
 import { createClient } from "@/lib/supabase/client";
 
 type AuthMode = "login" | "register" | "forgot" | "reset";
 
 function safeNext() {
-  const requested = new URLSearchParams(window.location.search).get("next");
-  return requested?.startsWith("/") && !requested.startsWith("//")
-    ? requested
-    : "/garage";
+  return safeAuthNext(new URLSearchParams(window.location.search).get("next"));
 }
 
 function callbackUrl(next: string) {
@@ -35,9 +43,11 @@ function callbackUrl(next: string) {
 export function AuthForm({
   mode,
   configured,
+  nextPath = "/garage",
 }: {
   mode: AuthMode;
   configured: boolean;
+  nextPath?: string;
 }) {
   const t = useTranslations("Auth");
   const router = useRouter();
@@ -103,6 +113,7 @@ export function AuthForm({
         );
         if (authError) throw authError;
         if (!data.session) throw new Error(t("errors.generic"));
+        trackAnalytics("login_completed");
         window.location.replace(safeNext());
       }
 
@@ -116,12 +127,13 @@ export function AuthForm({
               minimum_age_acknowledged_at: new Date().toISOString(),
               minimum_age_version: "2026-10-06",
             },
-            emailRedirectTo: callbackUrl("/garage"),
+            emailRedirectTo: callbackUrl(safeNext()),
           },
         });
         if (authError) throw authError;
+        trackAnalytics("signup_submitted");
         if (data.session) {
-          window.location.replace("/garage");
+          window.location.replace(safeNext());
         } else {
           setMessage(t("messages.created"));
         }
@@ -291,7 +303,7 @@ export function AuthForm({
 
               {mode === "register" && (
                 <div className="space-y-3 rounded-xl border border-white/8 bg-white/[0.025] p-4">
-                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-white/45">
+                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-[#405856]">
                     <input
                       required
                       type="checkbox"
@@ -303,7 +315,7 @@ export function AuthForm({
                     />
                     <span>{t("confirmAge")}</span>
                   </label>
-                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-white/45">
+                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-[#405856]">
                     <input
                       required
                       type="checkbox"
@@ -315,11 +327,14 @@ export function AuthForm({
                     />
                     <span>
                       {t("accept")}{" "}
-                      <Link href="/terms" className="text-white/70 underline">
+                      <Link href="/terms" className="text-[#0e2d30] underline">
                         {t("terms")}
                       </Link>{" "}
                       {t("and")}{" "}
-                      <Link href="/privacy" className="text-white/70 underline">
+                      <Link
+                        href="/privacy"
+                        className="text-[#0e2d30] underline"
+                      >
                         {t("privacy")}
                       </Link>
                       .
@@ -360,7 +375,7 @@ export function AuthForm({
               <p className="mt-7 text-center text-xs text-[#405856]">
                 {t("newToCapcar")}{" "}
                 <Link
-                  href="/register"
+                  href={`/register?next=${encodeURIComponent(safeAuthNext(nextPath))}`}
                   className="font-medium text-[#0e2d30] hover:text-[#6d0101]"
                 >
                   {t("createAccount")}
@@ -371,7 +386,7 @@ export function AuthForm({
               <p className="mt-7 text-center text-xs text-[#405856]">
                 {t("haveAccount")}{" "}
                 <Link
-                  href="/login"
+                  href={`/login?next=${encodeURIComponent(safeAuthNext(nextPath))}`}
                   className="font-medium text-[#0e2d30] hover:text-[#6d0101]"
                 >
                   {t("signIn")}
@@ -381,7 +396,7 @@ export function AuthForm({
             {(mode === "forgot" || mode === "reset") && (
               <p className="mt-7 text-center text-xs text-[#405856]">
                 <Link
-                  href="/login"
+                  href={`/login?next=${encodeURIComponent(safeAuthNext(nextPath))}`}
                   className="font-medium text-[#0e2d30] hover:text-[#6d0101]"
                 >
                   {t("backToSignIn")}
@@ -406,16 +421,21 @@ function Field({
   action?: React.ReactNode;
   children: React.ReactNode;
 }) {
+  const fieldId = useId();
   return (
-    <label className="block rounded-xl border border-[#0e2d30]/12 bg-white/55 px-4 py-3 transition focus-within:border-[#6d0101]/55 focus-within:bg-white">
+    <div className="block rounded-xl border border-[#0e2d30]/12 bg-white/55 px-4 py-3 transition focus-within:border-[#6d0101]/55 focus-within:bg-white">
       <span className="mb-2 flex items-center justify-between text-[10px] font-semibold tracking-[0.12em] text-[#405856]/70 uppercase">
-        <span className="flex items-center gap-2">
+        <label htmlFor={fieldId} className="flex items-center gap-2">
           {icon}
           {label}
-        </span>
+        </label>
         {action}
       </span>
-      {children}
-    </label>
+      {isValidElement(children)
+        ? cloneElement(children as ReactElement<{ id?: string }>, {
+            id: fieldId,
+          })
+        : children}
+    </div>
   );
 }

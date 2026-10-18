@@ -1,5 +1,7 @@
 "use client";
 
+import { trackAnalytics } from "@/features/analytics/client";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, Info, LockKeyhole } from "lucide-react";
@@ -63,7 +65,13 @@ function formFromVehicle(vehicle?: Vehicle): FormState {
   };
 }
 
-export function AddVehicleForm({ vehicle }: { vehicle?: Vehicle }) {
+export function AddVehicleForm({
+  vehicle,
+  returnTo,
+}: {
+  vehicle?: Vehicle;
+  returnTo?: string;
+}) {
   const router = useRouter();
   const [form, setForm] = useState(() => formFromVehicle(vehicle));
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -105,7 +113,12 @@ export function AddVehicleForm({ vehicle }: { vehicle?: Vehicle }) {
       ? updateVehicle(vehicle.id, result.data, window.localStorage)
       : saveVehicle(result.data, window.localStorage);
     announceVehicleChange();
-    router.push(`/garage/${savedVehicle.id}`);
+    if (!vehicle) trackAnalytics("vehicle_added");
+    if (returnTo?.startsWith("/garage/journal?")) {
+      const destination = new URL(returnTo, window.location.origin);
+      destination.searchParams.set("vehicle", savedVehicle.id);
+      router.push(destination.pathname + destination.search);
+    } else router.push(`/garage/${savedVehicle.id}`);
   }
 
   const previewLabel = `${form.productionYear || "Your"} ${form.make || "vehicle"} ${form.model || "project"}`;

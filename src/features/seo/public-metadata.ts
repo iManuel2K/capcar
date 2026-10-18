@@ -1,10 +1,7 @@
+import { isJournalRoute } from "@/features/journal/routes";
 import type { Metadata } from "next";
 
-import {
-  isAppLocale,
-  type AppLocale,
-  locales,
-} from "@/i18n/config";
+import { isAppLocale, type AppLocale, locales } from "@/i18n/config";
 
 export const PUBLIC_SITE_URL = new URL("https://capcar.dev");
 export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-10-16";
@@ -43,7 +40,10 @@ export function localizedPublicUrl(
   route: PublicIndexableRoute,
   locale: AppLocale,
 ) {
-  return new URL(localizedPublicPath(route, locale), PUBLIC_SITE_URL).toString();
+  return new URL(
+    localizedPublicPath(route, locale),
+    PUBLIC_SITE_URL,
+  ).toString();
 }
 
 export function publicLanguageAlternates(route: PublicIndexableRoute) {
@@ -60,11 +60,10 @@ export function localizePublicPathname(
   locale: AppLocale,
 ): string | null {
   const segments = pathname.split(/[?#]/, 1)[0].split("/").filter(Boolean);
-  const routeSegments = isAppLocale(segments[0])
-    ? segments.slice(1)
-    : segments;
+  const routeSegments = isAppLocale(segments[0]) ? segments.slice(1) : segments;
   const route = routeSegments.length ? `/${routeSegments.join("/")}` : "";
 
+  if (isJournalRoute(route)) return `/${locale}${route}`;
   return isPublicIndexableRoute(route)
     ? localizedPublicPath(route, locale)
     : null;
@@ -126,4 +125,3 @@ export function pageMetadata(
     ...(robots ? { robots } : {}),
   };
 }
-
