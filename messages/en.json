@@ -355,7 +355,13 @@
       "title": "Plan your project car",
       "accent": "without losing the details.",
       "description": "Plan parts, fitment research, costs, maintenance and build progress in one private digital garage.",
-      "note": "Free to start. Private by default. You control your garage."
+      "note": "Free during beta. No credit card required. Your garage is private by default.",
+      "flowLabel": "The CapCar workflow",
+      "flow": {
+        "car": "Add your car",
+        "plan": "Plan the next change",
+        "record": "Record the build"
+      }
     },
     "visual": {
       "current": "Starting point",
@@ -432,6 +438,7 @@
       "entryTwo": "Maintenance review · Service date not recorded",
       "empty": "Choose an example part to see it appear here.",
       "session": "Example changes last while this page is open. Your own build starts in your private garage.",
+      "save": "Save your own build",
       "realSearch": "Search live listings",
       "visualText": "Explore the overall direction. This concept does not render the selected listing or prove its fitment."
     },
@@ -523,6 +530,10 @@
       "seven": {
         "question": "Do I need a modified car to start?",
         "answer": "No. Start with the car you have and the next thing you want to maintain, improve or document."
+      },
+      "eight": {
+        "question": "Is CapCar free?",
+        "answer": "Yes. CapCar is free during beta, and no payment card is required. If paid plans are introduced later, available features and prices will be shown before you choose one."
       }
     }
   },

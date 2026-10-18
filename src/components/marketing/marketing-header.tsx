@@ -14,7 +14,6 @@ const navigation = [
   { label: "how", href: "/#platform" },
   { label: "projects", href: "/#projects" },
   { label: "parts", href: "/parts-search" },
-  { label: "ai", href: "/ai" },
 ] as const;
 
 export function MarketingHeader() {

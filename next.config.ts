@@ -6,6 +6,10 @@ const isDevelopment = process.env.NODE_ENV === "development";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  compress: true,
+  images: {
+    qualities: [65, 72, 75],
+  },
   turbopack: {
     root: process.cwd(),
   },

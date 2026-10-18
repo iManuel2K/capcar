@@ -54,3 +54,6 @@ supabase/.temp/
 /.capcar-installer-backups/
 /payload/
 /changed-files.txt
+
+# Generated browser verification reports and screenshots
+/artifacts/

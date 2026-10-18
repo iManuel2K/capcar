@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { BuildTransformation } from "./build-transformation";
 import styles from "./launch.module.css";
@@ -36,6 +36,23 @@ export function MarketingHero() {
           <p className="mt-5 text-xs leading-5 text-[#bfcac5]">
             {t("hero.note")}
           </p>
+          <ol
+            aria-label={t("hero.flowLabel")}
+            className="mt-5 grid max-w-xl gap-2 text-xs text-[#d9e2de] sm:grid-cols-3"
+          >
+            {["car", "plan", "record"].map((step) => (
+              <li
+                key={step}
+                className="flex min-h-11 items-center gap-2 rounded-xl border border-white/12 bg-white/[0.035] px-3 py-2.5"
+              >
+                <Check
+                  aria-hidden="true"
+                  className="size-3.5 shrink-0 text-[#6bd2ae]"
+                />
+                {t(`hero.flow.${step}`)}
+              </li>
+            ))}
+          </ol>
           <div
             className="mt-7 max-w-lg overflow-hidden rounded-2xl border border-white/14 bg-black/10"
             aria-label={t("hero.aiLabel")}

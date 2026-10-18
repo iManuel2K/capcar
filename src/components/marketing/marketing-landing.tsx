@@ -11,22 +11,30 @@ import {
   Wrench,
 } from "lucide-react";
 
-import { FitmentLookup } from "@/components/marketing/fitment-lookup";
+import {
+  DeferredFitmentLookup,
+  DeferredProductDashboardPreview,
+} from "@/components/marketing/deferred-marketing-demos";
 import { MarketingFaq } from "@/components/marketing/marketing-faq";
 import { MarketingHero } from "@/components/marketing/marketing-hero";
-import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { VisionRoadmapSection } from "@/components/marketing/vision-roadmap-section";
 import styles from "@/components/marketing/launch.module.css";
 
 export function MarketingLanding() {
   const t = useTranslations("Home");
+  const launch = useTranslations("Launch");
 
   return (
     <div className="min-h-dvh overflow-hidden bg-[#ebe9dc] text-[#0e2d30]">
       <main id="main-content">
         <MarketingHero />
-        <ProductDashboardPreview />
+        <DeferredProductDashboardPreview
+          eyebrow={launch("demo.eyebrow")}
+          title={launch("demo.title")}
+          description={launch("demo.description")}
+          action={launch("demo.save")}
+        />
         <FitmentSection />
 
         <section
@@ -195,6 +203,9 @@ export function MarketingLanding() {
                     {t("liveDemo")}
                   </a>
                 </div>
+                <p className="mt-4 text-xs leading-5 text-white/55">
+                  {t("ctaNote")}
+                </p>
               </div>
             </div>
           </div>
@@ -215,13 +226,13 @@ function FitmentSection() {
     >
       <div className="mx-auto grid max-w-[1500px] gap-10 px-5 py-16 sm:px-8 sm:py-32 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <div>
-          <p className="text-xs font-semibold tracking-[0.2em] text-[#0e2d30]/68 uppercase">
+          <p className="text-xs font-semibold tracking-[0.2em] text-[#0e2d30] uppercase">
             {t("fitment")}
           </p>
           <h2 className="mt-4 text-4xl leading-[0.92] font-medium tracking-[-0.055em] sm:mt-5 sm:text-7xl">
             {t("fitmentTitle")}
           </h2>
-          <p className="mt-6 max-w-md text-base leading-7 text-[#0e2d30]/72">
+          <p className="mt-6 max-w-md text-base leading-7 text-[#0e2d30]">
             {t("fitmentDescription")}
           </p>
           <Link
@@ -231,7 +242,7 @@ function FitmentSection() {
             {t("startCar")} <ArrowRight className="size-4" />
           </Link>
         </div>
-        <FitmentLookup />
+        <DeferredFitmentLookup />
       </div>
     </section>
   );
@@ -261,7 +272,7 @@ function SectionHeading({
         </h2>
       </div>
       <p
-        className={`text-base leading-7 lg:justify-self-end ${tone === "dark" ? "text-white/42" : "text-[#0e2d30]/55"}`}
+        className={`text-base leading-7 lg:justify-self-end ${tone === "dark" ? "text-white/70" : "text-[#405856]"}`}
       >
         {description}
       </p>
@@ -289,7 +300,7 @@ function GaragePreview() {
     <div className="mt-9 rounded-2xl border border-white/8 bg-[#050306] p-5">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs text-white/34">PROJECT 318</p>
+          <p className="text-xs text-white/70">PROJECT 318</p>
           <p className="mt-2 text-xl font-medium">2011 BMW 318i</p>
         </div>
         <span className="rounded-full border border-[#6d0101]/30 bg-[#6d0101]/10 px-3 py-1.5 text-xs text-[#bf8269]">
@@ -351,12 +362,12 @@ function PartsPreview() {
     <div className="mt-9 grid gap-3 sm:grid-cols-2">
       <div className="rounded-2xl border border-white/8 bg-[#050306] p-5">
         <BadgeCheck className="size-5 text-emerald-300" />
-        <p className="mt-8 text-xs text-white/34">{t("vehicleMatch")}</p>
+        <p className="mt-8 text-xs text-white/70">{t("vehicleMatch")}</p>
         <p className="mt-2 font-medium">E90 · 2011 · Sedan</p>
       </div>
       <div className="rounded-2xl border border-white/8 bg-[#050306] p-5">
         <Euro className="size-5 text-[#bf8269]" />
-        <p className="mt-8 text-xs text-white/34">{t("deliveredFrom")}</p>
+        <p className="mt-8 text-xs text-white/70">{t("deliveredFrom")}</p>
         <p className="mt-2 font-medium">€248</p>
       </div>
     </div>
@@ -474,7 +485,7 @@ function ProjectMetric({ label, value }: { label: string; value: string }) {
 function PreviewStat({ label, value }: { label: string; value: string }) {
   return (
     <div className="px-4 first:pl-0 last:pr-0">
-      <p className="text-[10px] tracking-[0.11em] text-white/30 uppercase">
+      <p className="text-[10px] tracking-[0.11em] text-white/70 uppercase">
         {label}
       </p>
       <p className="mt-2 text-sm font-medium">{value}</p>

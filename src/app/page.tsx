@@ -8,6 +8,10 @@ import {
   PUBLIC_SITE_URL,
 } from "@/features/seo/public-metadata";
 
+// The canonical homepage is the cacheable English landing page. Localized
+// marketing pages live under their explicit locale-prefixed URLs.
+export const dynamic = "force-static";
+
 export async function generateMetadata(): Promise<Metadata> {
   const [metadata, launch] = await Promise.all([
     getTranslations("Metadata"),

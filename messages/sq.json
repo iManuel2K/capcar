@@ -355,7 +355,13 @@
       "title": "Planifiko makinën tënde projekt",
       "accent": "pa humbur asnjë detaj.",
       "description": "Mbaj pjesët, kërkimin e përputhshmërisë, kostot, mirëmbajtjen dhe progresin në një garazh digjital privat.",
-      "note": "Fillo falas. Privat si parazgjedhje. Ti e kontrollon garazhin."
+      "note": "Falas gjatë beta-s. Nuk kërkohet kartë krediti. Garazhi yt është privat si parazgjedhje.",
+      "flowLabel": "Rrjedha e CapCar",
+      "flow": {
+        "car": "Shto makinën tënde",
+        "plan": "Planifiko ndryshimin tjetër",
+        "record": "Dokumento projektin"
+      }
     },
     "visual": {
       "current": "Pikënisja",
@@ -432,6 +438,7 @@
       "entryTwo": "Rishikim mirëmbajtjeje · Data e shërbimit mungon",
       "empty": "Zgjidh një pjesë shembull që të shfaqet këtu.",
       "session": "Ndryshimet e shembullit zgjasin sa është hapur faqja. Projekti yt fillon në garazhin privat.",
+      "save": "Ruaj projektin tënd",
       "realSearch": "Kërko oferta reale",
       "visualText": "Eksploro drejtimin e përgjithshëm. Koncepti nuk paraqet ofertën e zgjedhur dhe nuk provon përshtatjen."
     },
@@ -523,6 +530,10 @@
       "seven": {
         "question": "A duhet makinë e modifikuar për të filluar?",
         "answer": "Jo. Fillo me makinën që ke dhe atë që dëshiron të mirëmbash, përmirësosh ose dokumentosh."
+      },
+      "eight": {
+        "question": "A është CapCar falas?",
+        "answer": "Po. CapCar është falas gjatë beta-s dhe nuk kërkohet kartë pagese. Nëse më vonë shtohen plane me pagesë, funksionet dhe çmimet do të shfaqen para se të zgjedhësh."
       }
     }
   },

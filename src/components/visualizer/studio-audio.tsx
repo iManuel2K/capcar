@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { Pause, Play, RotateCcw, RotateCw, Volume2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { pauseOtherStudioAudio } from "@/features/visualizer/audio-files";
@@ -13,6 +13,8 @@ type Props = {
   fallback?: string;
   label: string;
   preload?: "none" | "metadata";
+  audioRef?: RefObject<HTMLAudioElement | null>;
+  onPlaybackChange?: (playing: boolean) => void;
 };
 
 function initialVolume() {
@@ -112,7 +114,14 @@ function time(value: number) {
   return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, "0")}`;
 }
 
-function AudioSession({ src, fallback, label, preload = "none" }: Props) {
+function AudioSession({
+  src,
+  fallback,
+  label,
+  preload = "none",
+  audioRef,
+  onPlaybackChange,
+}: Props) {
   const t = useTranslations("SoundUi");
   const studio = useTranslations("StudioPolish");
   const player = useRef<HTMLAudioElement>(null);
@@ -164,16 +173,26 @@ function AudioSession({ src, fallback, label, preload = "none" }: Props) {
       <audio
         key={retry}
         data-capcar-audio
-        ref={player}
+        ref={(node) => {
+          player.current = node;
+          if (audioRef) audioRef.current = node;
+        }}
         aria-label={label}
         preload={preload}
         src={useFallback ? fallback : src}
         onPlay={(event) => {
           pauseOtherStudioAudio(event.currentTarget);
           setPlaying(true);
+          onPlaybackChange?.(true);
         }}
-        onPause={() => setPlaying(false)}
-        onEnded={() => setPlaying(false)}
+        onPause={() => {
+          setPlaying(false);
+          onPlaybackChange?.(false);
+        }}
+        onEnded={() => {
+          setPlaying(false);
+          onPlaybackChange?.(false);
+        }}
         onTimeUpdate={(event) => setCurrent(event.currentTarget.currentTime)}
         onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
         onError={() => {
@@ -226,7 +245,7 @@ function AudioSession({ src, fallback, label, preload = "none" }: Props) {
             }}
             className="h-1.5 w-full cursor-pointer accent-[#cfaa96]"
           />
-          <div className="mt-1 flex justify-between font-mono text-[10px] text-[#e8e6d7]/45 tabular-nums">
+          <div className="mt-1 flex justify-between font-mono text-[10px] text-[#e8e6d7]/75 tabular-nums">
             <span>{time(current)}</span>
             <span>{time(duration)}</span>
           </div>

@@ -27,6 +27,30 @@ vi.mock("@supabase/ssr", () => ({
 }));
 
 import { proxy } from "@/proxy";
+import { unstable_doesMiddlewareMatch } from "next/experimental/testing/server";
+import { config } from "@/proxy";
+
+it("serves public sound and social assets without session middleware while protecting workspace routes", () => {
+  for (const url of [
+    "/sounds/honda-f20c.mp3",
+    "/sounds/example.ogg",
+    "/social/capcar-sound-studio-share.png",
+  ]) {
+    expect(unstable_doesMiddlewareMatch({ config, nextConfig: {}, url })).toBe(
+      false,
+    );
+  }
+  for (const url of [
+    "/garage",
+    "/account",
+    "/ai",
+    "/passport/00000000-0000-4000-8000-000000000001",
+  ]) {
+    expect(unstable_doesMiddlewareMatch({ config, nextConfig: {}, url })).toBe(
+      true,
+    );
+  }
+});
 
 describe("proxy public Passport guard", () => {
   beforeEach(() => {

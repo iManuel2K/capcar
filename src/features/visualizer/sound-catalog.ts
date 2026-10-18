@@ -1,7 +1,9 @@
 import { licensedSounds } from "./licensed-sounds";
 import { communitySounds } from "./community-sounds";
+import expandedSounds from "./expanded-sounds.json";
+import durations from "./sound-durations.json";
 
-export const soundCatalog = [
+const recordings = [
   {
     id: "honda-f20c",
     cylinders: 4,
@@ -51,4 +53,131 @@ export const soundCatalog = [
     detailKey: "",
     fallback: undefined,
   })),
+  ...expandedSounds.map((sound) => ({
+    ...sound,
+    titleKey: "",
+    detailKey: "",
+    audio: `${sound.id}.mp3`,
+    fallback: sound.audio,
+  })),
 ];
+
+const makes = [
+  "Alfa Romeo",
+  "Aston Martin",
+  "Auto Union",
+  "Auto-Union",
+  "AVS Shadow",
+  "De Tomaso",
+  "Mercedes-Benz",
+  "Volkswagen",
+  "Chevrolet",
+  "Koenigsegg",
+  "Lamborghini",
+  "Land Rover",
+  "Nissan",
+  "Porsche",
+  "Peugeot",
+  "Renault",
+  "Toyota",
+  "Triumph",
+  "Chrysler",
+  "Vauxhall",
+  "Bugatti",
+  "Bentley",
+  "Ferrari",
+  "Maserati",
+  "McLaren",
+  "Ginetta",
+  "Farbio",
+  "Morgan",
+  "Spyker",
+  "Pagani",
+  "Honda",
+  "Volvo",
+  "Lexus",
+  "Lotus",
+  "Jaguar",
+  "Audi",
+  "BMW",
+  "Ford",
+  "Opel",
+  "Abarth",
+  "Alpine",
+  "Sauber",
+  "Cooper",
+  "Ecosse",
+  "Matra",
+  "March",
+  "Brabham",
+  "Tyrrell",
+  "Williams",
+  "Surtees",
+  "Talbot",
+  "Lola",
+  "Skoda",
+  "Škoda",
+  "AC",
+  "RUF",
+  "KTM",
+  "Berta",
+  "Stanton",
+  "Tesla",
+  "Tramontana",
+  "Citroen",
+  "CD-Panhard",
+  "Ariel",
+  "Huron",
+  "Iso",
+  "Issigonis",
+  "Ligier",
+  "Mercer",
+  "Mitsubishi",
+  "Mercedes",
+  "Dodge",
+];
+const raceFiles =
+  /GT2|LMS|Quattro S1|RS200|911R \(1967\)|997 GT3|Cobra \(1964\)/;
+
+export const soundCatalog = recordings.map((sound) => ({
+  ...sound,
+  title: sound.title
+    .replace(/^Son stratus 2L$/, "Dodge Stratus · 2.0L")
+    .replace(/^Zero car /, "")
+    .replace(/ recorded2010| Jyväskylän Talviralli 2023 Kuohu/g, "")
+    .replace(/-descent$/, " · deceleration")
+    .replace(/ static$/, " · stationary"),
+  audio: `${sound.id}.mp3`,
+  fallback: sound.fallback ?? sound.audio,
+  duration: (() => {
+    const seconds = (durations as Record<string, number>)[sound.id];
+    return seconds
+      ? `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`
+      : sound.duration;
+  })(),
+  make:
+    makes
+      .find((make) =>
+        sound.title
+          .replace(/^Son stratus 2L$/, "Dodge Stratus")
+          .replace(/^Zero car /, "")
+          .replace(/^\d{4} /, "")
+          .replaceAll("-", " ")
+          .toLowerCase()
+          .startsWith(make.replaceAll("-", " ").toLowerCase()),
+      )
+      ?.replace("Auto-Union", "Auto Union")
+      .replace("Škoda", "Skoda") ?? "Other",
+  category: (/Talviralli/.test(sound.file)
+    ? "motorsport"
+    : "category" in sound
+      ? sound.category
+      : raceFiles.test(sound.file)
+        ? "motorsport"
+        : "road") as "road" | "motorsport",
+}));
+export type CatalogSound = (typeof soundCatalog)[number];
+
+export function soundSource(sound: CatalogSound) {
+  return `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(sound.file)}`;
+}

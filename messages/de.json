@@ -355,7 +355,13 @@
       "title": "Plane dein Projektauto",
       "accent": "ohne den Überblick zu verlieren.",
       "description": "Verwalte Teile, Passform-Recherche, Kosten, Wartung und Baufortschritt in einer privaten digitalen Garage.",
-      "note": "Kostenlos starten. Standardmäßig privat. Du behältst die Kontrolle."
+      "note": "Während der Beta kostenlos. Keine Kreditkarte nötig. Deine Garage ist standardmäßig privat.",
+      "flowLabel": "Der CapCar-Ablauf",
+      "flow": {
+        "car": "Auto hinzufügen",
+        "plan": "Nächste Änderung planen",
+        "record": "Projekt dokumentieren"
+      }
     },
     "visual": {
       "current": "Ausgangspunkt",
@@ -432,6 +438,7 @@
       "entryTwo": "Wartung geprüft · Servicedatum nicht erfasst",
       "empty": "Wähle ein Beispielteil, damit es hier erscheint.",
       "session": "Beispieländerungen gelten, solange diese Seite geöffnet ist. Dein eigener Build beginnt in deiner privaten Garage.",
+      "save": "Eigenes Projekt speichern",
       "realSearch": "Live-Angebote suchen",
       "visualText": "Erkunde die Gesamtrichtung. Das Konzept zeigt nicht das gewählte Angebot und bestätigt keine Passform."
     },
@@ -523,6 +530,10 @@
       "seven": {
         "question": "Brauche ich ein umgebautes Auto zum Start?",
         "answer": "Nein. Starte mit deinem Auto und der nächsten Wartung, Verbesserung oder Aufzeichnung."
+      },
+      "eight": {
+        "question": "Ist CapCar kostenlos?",
+        "answer": "Ja. CapCar ist während der Beta kostenlos und es ist keine Kreditkarte erforderlich. Falls später kostenpflichtige Tarife eingeführt werden, werden Funktionen und Preise angezeigt, bevor du dich entscheidest."
       }
     }
   },

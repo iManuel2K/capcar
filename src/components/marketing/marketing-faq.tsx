@@ -10,6 +10,7 @@ const questions = [
   "five",
   "six",
   "seven",
+  "eight",
 ] as const;
 export function MarketingFaq() {
   const t = useTranslations("Launch.faq");

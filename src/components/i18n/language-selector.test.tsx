@@ -9,7 +9,9 @@ describe("LanguageSelector", () => {
   it("opens a compact, accessible locale menu", () => {
     render(<LanguageSelector compact />);
 
-    const trigger = screen.getByRole("button", { name: "Language: English" });
+    const trigger = screen.getByRole("button", {
+      name: "EN — Language: English",
+    });
     expect(trigger).toHaveAttribute("aria-expanded", "false");
 
     fireEvent.click(trigger);
@@ -31,13 +33,17 @@ describe("LanguageSelector", () => {
 
   it("closes with Escape", () => {
     render(<LanguageSelector />);
-    fireEvent.click(screen.getByRole("button", { name: "Language: English" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "English — Language: English" }),
+    );
     fireEvent.keyDown(window, { key: "Escape" });
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
   it("moves focus with arrows and returns it to the trigger on Escape", () => {
     render(<LanguageSelector compact />);
-    const trigger = screen.getByRole("button", { name: "Language: English" });
+    const trigger = screen.getByRole("button", {
+      name: "EN — Language: English",
+    });
     fireEvent.keyDown(trigger, { key: "ArrowDown" });
     expect(
       screen.getByRole("menuitemradio", { name: "English" }),

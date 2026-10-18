@@ -70,25 +70,25 @@ export function FitmentLookup() {
       <div className="border-b border-white/8 p-5 sm:p-6">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-[10px] tracking-[0.14em] text-white/34 uppercase">
+            <p className="text-[10px] tracking-[0.14em] text-white/70 uppercase">
               {t("vehicleLookup")}
             </p>
             <p className="mt-2 font-medium">{t("checkSetup")}</p>
           </div>
-          <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] text-white/38">
+          <span className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-[10px] text-white/70">
             {t("demoData")}
           </span>
         </div>
 
         <form onSubmit={lookup} className="mt-5 flex gap-2">
           <label className="flex min-h-12 flex-1 items-center gap-3 rounded-xl border border-white/10 bg-black/28 px-4 focus-within:border-white/30">
-            <Search className="size-4 text-white/30" />
+            <Search className="size-4 text-white/65" />
             <span className="sr-only">{t("vin")}</span>
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value.toUpperCase())}
               placeholder={t("vin")}
-              className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/22"
+              className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/60"
             />
           </label>
           <button
@@ -115,7 +115,7 @@ export function FitmentLookup() {
           </span>
           <div>
             <p className="font-medium">2011 BMW 318i</p>
-            <p className="mt-1 text-xs text-white/35">
+            <p className="mt-1 text-xs text-white/70">
               E90 · Sedan · N43B20 · EU
             </p>
           </div>
@@ -124,7 +124,7 @@ export function FitmentLookup() {
 
         <div className="grid gap-px bg-white/8 sm:grid-cols-[0.9fr_1.1fr]">
           <div className="bg-[#0e2d30] p-4 sm:p-5">
-            <p className="px-2 text-[10px] tracking-[0.13em] text-white/28 uppercase">
+            <p className="px-2 text-[10px] tracking-[0.13em] text-white/70 uppercase">
               {t("selectPart")}
             </p>
             <div className="mt-3 space-y-1.5">
@@ -136,12 +136,12 @@ export function FitmentLookup() {
                   className={`w-full rounded-xl px-3 py-3 text-left transition ${
                     activePart === index
                       ? "bg-white text-black"
-                      : "text-white/52 hover:bg-white/[0.05] hover:text-white"
+                      : "text-white/70 hover:bg-white/[0.05] hover:text-white"
                   }`}
                 >
                   <span className="block text-xs font-medium">{part.name}</span>
                   <span
-                    className={`mt-1 block text-[10px] ${activePart === index ? "text-black/48" : "text-white/26"}`}
+                    className={`mt-1 block text-[10px] ${activePart === index ? "text-black/70" : "text-white/70"}`}
                   >
                     {part.detail}
                   </span>
@@ -202,8 +202,8 @@ function FitmentResult({
       </span>
       <div className="mt-auto pt-10">
         <p className="text-xl font-medium tracking-[-0.025em]">{name}</p>
-        <p className="mt-2 text-xs text-white/35">{detail}</p>
-        <p className="mt-5 border-t border-white/8 pt-5 text-sm leading-6 text-white/48">
+        <p className="mt-2 text-xs text-white/70">{detail}</p>
+        <p className="mt-5 border-t border-white/12 pt-5 text-sm leading-6 text-white/75">
           {styles[tone].copy}
         </p>
       </div>

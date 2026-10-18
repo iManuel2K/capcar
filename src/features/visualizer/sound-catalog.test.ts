@@ -8,12 +8,16 @@ describe("licensed listening catalog", () => {
     expect(new Set(soundCatalog.map((item) => item.id)).size).toBe(
       soundCatalog.length,
     );
-    expect(soundCatalog).toHaveLength(50);
+    expect(soundCatalog).toHaveLength(150);
+    const hashes = new Set<string>();
     for (const item of soundCatalog) {
       const original = readFileSync(
         `public/sounds/${item.fallback ?? item.audio}`,
       );
-      expect(original.subarray(0, 4).toString()).toBe("OggS");
+      expect(["OggS", "RIFF"]).toContain(original.subarray(0, 4).toString());
+      const hash = createHash("sha1").update(original).digest("hex");
+      expect(hashes.has(hash)).toBe(false);
+      hashes.add(hash);
       if ("sha1" in item)
         expect(createHash("sha1").update(original).digest("hex")).toBe(
           item.sha1,
@@ -21,6 +25,11 @@ describe("licensed listening catalog", () => {
       expect(original.length).toBeGreaterThan(1000);
       expect(item.author).toBeTruthy();
       expect(item.licenseUrl).toMatch(/^https:\/\//);
+      const mp3 = readFileSync(`public/sounds/${item.audio}`);
+      expect(mp3.length).toBeGreaterThan(1000);
+      expect(item.audio).toMatch(/\.mp3$/);
+      expect(item.duration).toMatch(/^\d+:\d{2}$/);
+      expect(item.make, item.title).not.toBe("Other");
     }
   });
 });

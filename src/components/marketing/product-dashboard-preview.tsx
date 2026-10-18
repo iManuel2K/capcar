@@ -447,7 +447,7 @@ export function ProductDashboardPreview() {
               {t("demo.session")}
             </p>
             <Link href="/register" className={styles.primary}>
-              {t("start")}
+              {t("demo.save")}
               <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </div>

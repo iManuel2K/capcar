@@ -13,19 +13,13 @@ function localeFromPathname(pathname: string): AppLocale | undefined {
   return isAppLocale(candidate) ? candidate : undefined;
 }
 
-function passThroughResponse(
-  request: NextRequest,
-  pathLocale?: AppLocale,
-) {
+function passThroughResponse(request: NextRequest, pathLocale?: AppLocale) {
   const requestHeaders = new Headers(request.headers);
   if (pathLocale) requestHeaders.set("x-capcar-locale", pathLocale);
   return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
-function persistPathLocale(
-  response: NextResponse,
-  pathLocale?: AppLocale,
-) {
+function persistPathLocale(response: NextResponse, pathLocale?: AppLocale) {
   if (pathLocale) {
     response.cookies.set(localeCookie, pathLocale, {
       path: "/",
@@ -111,6 +105,15 @@ export async function proxy(request: NextRequest) {
       ? passportUnavailableResponse(request, 503)
       : persistPathLocale(passThroughResponse(request, pathLocale), pathLocale);
 
+  const publicHomepage =
+    request.nextUrl.pathname === "/" ||
+    /^\/(en|de|el|sq|ja)\/?$/.test(request.nextUrl.pathname);
+  if (publicHomepage)
+    return persistPathLocale(
+      passThroughResponse(request, pathLocale),
+      pathLocale,
+    );
+
   let response = passThroughResponse(request, pathLocale);
   const supabase = createServerClient(url, key, {
     cookies: {
@@ -167,6 +170,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|icon.svg|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|sounds/|social/|favicon.ico|icon.svg|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

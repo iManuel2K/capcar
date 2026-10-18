@@ -30,6 +30,9 @@ export function LanguageSelector({
   >(null);
   const root = useRef<HTMLDivElement>(null);
   const activeLocale = isAppLocale(locale) ? locale : "en";
+  const visibleLocaleLabel = compact
+    ? activeLocale.toUpperCase()
+    : localeLabels[activeLocale];
 
   useEffect(() => {
     if (!open) return;
@@ -94,7 +97,7 @@ export function LanguageSelector({
       <button
         ref={trigger}
         type="button"
-        aria-label={`${t("label")}: ${localeLabels[activeLocale]}`}
+        aria-label={`${visibleLocaleLabel} — ${t("label")}: ${localeLabels[activeLocale]}`}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={open ? menuId : undefined}

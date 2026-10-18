@@ -1,33 +1,56 @@
 import { SiteFooter } from "@/components/marketing/site-footer";
-import { AudioComparison } from "@/components/visualizer/audio-comparison";
-import { RecordingLibrary } from "@/components/visualizer/recording-library";
+import { SoundStudioArchive } from "@/components/visualizer/sound-studio-archive";
 import { CuratedSounds } from "@/components/visualizer/curated-sounds";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/features/seo/public-metadata";
 import Link from "next/link";
 import { Headphones, ShieldCheck, ArrowUpRight } from "lucide-react";
+import { soundDeskCopy } from "@/features/visualizer/sound-desk-copy";
+import { soundCatalog } from "@/features/visualizer/sound-catalog";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("SoundPage");
   const description = await getTranslations("PageMeta");
-  return pageMetadata("/sound-studio", t("title"), description("sound-studio"));
+  const meta = pageMetadata(
+    "/sound-studio",
+    t("title"),
+    description("sound-studio"),
+  );
+  return {
+    ...meta,
+    openGraph: {
+      ...meta.openGraph,
+      images: [
+        {
+          url: "/social/capcar-sound-studio-share.png",
+          width: 1200,
+          height: 630,
+          alt: "CapCar Sound Studio · real recordings and A/B comparison",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: ["/social/capcar-sound-studio-share.png"],
+    },
+  };
 }
 export default async function Page() {
-  const t = await getTranslations("SoundPage");
+  const c = soundDeskCopy(await getLocale());
   const s = await getTranslations("StudioPolish");
   return (
     <div className="capcar-paper-grid min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
-      <main className="px-5 pt-10 pb-16 sm:px-8 sm:pt-16">
+      <main id="main-content" className="px-4 pt-10 pb-16 sm:px-8 sm:pt-16">
         <div className="mx-auto max-w-6xl">
           <header className="mb-10 sm:mb-14">
             <p className="text-xs font-semibold tracking-[.2em] text-[#6d0101] uppercase">
               CapCar / {s("soundStudio")}
             </p>
             <h1 className="mt-5 max-w-3xl text-5xl leading-[1.02] font-medium tracking-[-.055em] sm:text-7xl">
-              {t("title")}
+              {c.title}
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[#0e2d30]/75">
-              {s("soundDescription")}
+              {c.intro}
             </p>
             <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-xs text-[#0e2d30]/70">
               <span className="flex items-center gap-2">
@@ -38,14 +61,17 @@ export default async function Page() {
                 <ShieldCheck aria-hidden="true" className="size-4" />
                 {s("privateFiles")}
               </span>
+              <span>
+                {soundCatalog.length} {c.results} · {c.headphone}
+              </span>
             </div>
             <nav
               aria-label={s("studioSections")}
               className="mt-8 flex flex-wrap gap-2"
             >
               {[
-                ["listen", "01"],
-                ["compare", "02"],
+                ["compare", "01"],
+                ["listen", "02"],
                 ["archive", "03"],
               ].map(([id, number]) => (
                 <a
@@ -61,8 +87,7 @@ export default async function Page() {
           </header>
           <div className="space-y-6 sm:space-y-8">
             <CuratedSounds />
-            <AudioComparison />
-            <RecordingLibrary />
+            <SoundStudioArchive />
           </div>
           <div className="mt-10 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#0e2d30]/15 bg-white/20 p-6">
             <p className="max-w-2xl text-sm leading-6">

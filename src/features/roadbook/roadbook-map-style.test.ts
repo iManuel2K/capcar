@@ -143,6 +143,11 @@ describe("Roadbook map styles", () => {
     const offenders = files.filter((file) => {
       if (
         !file ||
+        // Runtime-reference checks apply to source/configuration, not media.
+        // Decoding the sound library as UTF-8 needlessly scans megabytes of audio.
+        !/\.(?:[cm]?[jt]sx?|json|css|html|md|toml|ya?ml|txt|sql|svg)$/i.test(
+          file,
+        ) ||
         file === "pnpm-lock.yaml" ||
         file === "src/features/roadbook/roadbook-map-style.test.ts"
       )

@@ -91,13 +91,13 @@ export function VisionRoadmapSection() {
               key={column.id}
               className={`rounded-[1.6rem] border border-white/10 p-6 sm:p-7 ${column.id === "hardening" ? "bg-[#1d494b]" : column.id === "tangible" ? "bg-[#183f42]" : "bg-[#153b3e]"}`}
             >
-              <p className="text-[11px] font-semibold tracking-[0.14em] text-[#bf8269] uppercase">
+              <p className="text-[11px] font-semibold tracking-[0.14em] text-[#f0b69d] uppercase">
                 {t(`${column.id}.label`)}
               </p>
               <h3 className="mt-3 text-2xl font-medium tracking-[-0.035em]">
                 {t(`${column.id}.title`)}
               </h3>
-              <p className="mt-2 text-xs text-white/32">
+              <p className="mt-2 text-xs text-white/70">
                 {t("milestoneCount", { count: column.items.length })}
               </p>
               <ul className="mt-6 space-y-3">
@@ -107,7 +107,7 @@ export function VisionRoadmapSection() {
                     className="flex items-center gap-3 text-sm text-white/58"
                   >
                     <span
-                      className={`grid size-5 shrink-0 place-items-center rounded-full ${column.active ? "bg-[#6d0101]/20 text-[#bf8269]" : "bg-white/6 text-white/35"}`}
+                      className={`grid size-5 shrink-0 place-items-center rounded-full ${column.active ? "bg-[#6d0101]/20 text-[#f0b69d]" : "bg-white/10 text-white/70"}`}
                     >
                       {column.active ? (
                         <Check aria-hidden="true" className="size-3" />

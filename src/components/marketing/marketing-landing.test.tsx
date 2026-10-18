@@ -8,6 +8,7 @@ import {
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { MarketingLanding } from "./marketing-landing";
 import { MarketingHeader } from "./marketing-header";
+import { ProductDashboardPreview } from "./product-dashboard-preview";
 import { SkipToContent } from "@/components/ui/skip-to-content";
 
 beforeEach(() => window.history.replaceState(null, "", "/"));
@@ -23,31 +24,44 @@ describe("the connected homepage example", () => {
       </>,
     );
 
-  it("makes the product and its capability limits clear", () => {
+  const renderInteractiveDemo = () => render(<ProductDashboardPreview />);
+
+  it("makes the product and its capability limits clear", async () => {
     renderPage();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Build the car you imagine.",
+      "Plan your project car without losing the details.",
     );
     expect(
-      screen.getByText(/Interactive example · Illustrative data/),
+      await screen.findByText(/Interactive example · Illustrative data/),
     ).toBeInTheDocument();
     expect(screen.queryByText("Verified builder")).not.toBeInTheDocument();
     expect(screen.getByText("Beta · Operational")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Free during beta. No credit card required. Your garage is private by default.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("list", { name: "The CapCar workflow" }),
+    ).toHaveTextContent("Add your carPlan the next changeRecord the build");
     expect(document.querySelector("video")).not.toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "Skip to main content" }),
     ).toHaveAttribute("href", "#main-content");
     const actions = screen.getByTestId("hero-actions");
     expect(
-      within(actions).getByRole("link", { name: /Start a build/ }),
+      within(actions).getByRole("link", { name: "Start your free garage" }),
     ).toHaveAttribute("href", "/register");
     expect(
       within(actions).getByRole("link", { name: "Explore a project" }),
     ).toHaveAttribute("href", "#live-demo");
+    expect(
+      screen.getByRole("link", { name: "Save your own build" }),
+    ).toHaveAttribute("href", "/register");
   });
 
   it("connects the chosen part, estimated budget and planned passport record", () => {
-    renderPage();
+    renderInteractiveDemo();
     fireEvent.click(
       screen.getByRole("button", { name: /Compare example offers/ }),
     );
@@ -78,7 +92,7 @@ describe("the connected homepage example", () => {
   });
 
   it("does not present an incomplete price as a final budget balance", () => {
-    renderPage();
+    renderInteractiveDemo();
     fireEvent.click(screen.getByRole("tab", { name: "Parts comparison" }));
     fireEvent.click(
       screen.getByRole("button", { name: "Select this example" }),
@@ -93,7 +107,7 @@ describe("the connected homepage example", () => {
   });
 
   it("supports keyboard tabs and replaces one modification instead of duplicating it", () => {
-    renderPage();
+    renderInteractiveDemo();
     const plan = screen.getByRole("tab", { name: "Build plan" });
     fireEvent.keyDown(plan, { key: "ArrowRight" });
     expect(screen.getByRole("tab", { name: "Parts comparison" })).toHaveFocus();
@@ -118,7 +132,7 @@ describe("the connected homepage example", () => {
 
   it("opens a direct view from a section link", () => {
     window.history.replaceState(null, "", "#demo-history");
-    renderPage();
+    renderInteractiveDemo();
     expect(
       screen.getByRole("tab", { name: "Vehicle Passport" }),
     ).toHaveAttribute("aria-selected", "true");
@@ -133,9 +147,7 @@ describe("the connected homepage example", () => {
     expect(slider).toHaveAttribute("dir", "ltr");
     const comparison = slider.closest("figure");
     expect(
-      comparison?.querySelector(
-        'div[aria-hidden="true"][style*="clip-path"]',
-      ),
+      comparison?.querySelector('div[aria-hidden="true"][style*="clip-path"]'),
     ).toHaveStyle({ clipPath: "inset(0 25% 0 0)" });
     expect(
       comparison?.querySelector('span[aria-hidden="true"][style*="left"]'),
