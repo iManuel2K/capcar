@@ -1,6 +1,9 @@
 "use client";
 
 import { trackAnalytics } from "@/features/analytics/client";
+import { activateGarage } from "@/features/onboarding/activation";
+import { useGarageCopy } from "@/features/onboarding/use-garage-copy";
+import { actualItemCost } from "@/features/builds/build-costs";
 
 import Link from "next/link";
 import {
@@ -9,24 +12,19 @@ import {
   CircleGauge,
   Eye,
   Gauge,
-  Layers3,
   Plus,
   ShieldCheck,
-  Sparkles,
-  WalletCards,
   Wrench,
   X,
 } from "lucide-react";
 import { useState, useSyncExternalStore } from "react";
 
 import {
-  getConnectedBuildMetrics,
   phaseForItem,
   planningForBuild,
 } from "@/features/builds/build-planning";
 import {
   buildItemInputSchema,
-  buildItemStatuses,
   buildPriorities,
   buildStages,
   buildStatuses,
@@ -44,6 +42,7 @@ import { useVehicles } from "@/features/vehicles/use-vehicles";
 import { BuildJourneyPanel } from "./build-journey-panel";
 import { BuildWorkbench } from "./build-workbench";
 import { ConnectedBuildPlanner } from "./connected-build-planner";
+import { BuildStoryPanel, BuildTaskCompletion } from "./build-story-panel";
 
 const stageContent: Record<
   BuildStage,
@@ -82,6 +81,7 @@ export function BuildDetail({
   vehicleId: string;
   buildId: string;
 }) {
+  const copy = useGarageCopy();
   const hydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -124,7 +124,6 @@ export function BuildDetail({
     );
 
   const planning = planningForBuild(build);
-  const metrics = getConnectedBuildMetrics(build, items, planning);
 
   function submitItem(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -149,6 +148,7 @@ export function BuildDetail({
     try {
       createBuildItem(result.data, window.localStorage);
       trackAnalytics("build_item_added");
+      activateGarage(vehicleId, "modification");
       announceBuildChange();
       setSaveError("");
     } catch {
@@ -247,31 +247,14 @@ export function BuildDetail({
         </p>
       )}
       <BuildJourneyPanel build={build} items={items} />
-      <ConnectedBuildPlanner build={build} items={items} />
-      <BuildWorkbench vehicle={vehicle} buildId={buildId} />
-      <section className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard
-          label="Budget"
-          value={formatEuro(build.budget)}
-          icon={WalletCards}
-        />
-        <MetricCard
-          label="Forecast"
-          value={formatEuro(metrics.forecast)}
-          icon={Layers3}
-        />
-        <MetricCard
-          label="Paid"
-          value={formatEuro(metrics.paid)}
-          icon={Check}
-        />
-        <MetricCard
-          label="Remaining"
-          value={formatEuro(metrics.remaining)}
-          icon={Sparkles}
-          warning={metrics.remaining < 0}
-        />
-      </section>
+      <BuildStoryPanel build={build} items={items} />
+      <details className="mt-5 rounded-2xl border border-white/15 p-5">
+        <summary className="cursor-pointer py-2 text-sm text-white/80">
+          {copy.optional}
+        </summary>
+        <ConnectedBuildPlanner build={build} items={items} />
+        <BuildWorkbench vehicle={vehicle} buildId={buildId} />
+      </details>
 
       <section className="mt-5 grid gap-4 sm:grid-cols-2">
         <Link
@@ -295,36 +278,6 @@ export function BuildDetail({
             Surface fitment gaps, dependencies and part interactions.
           </p>
         </Link>
-      </section>
-
-      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-7">
-        <div className="flex items-center justify-between gap-5">
-          <div>
-            <p className="text-xs tracking-[0.12em] text-white/30 uppercase">
-              Overall progress
-            </p>
-            <p className="mt-2 text-xl font-medium">
-              {metrics.progress}% installed
-            </p>
-          </div>
-          <span className="text-sm text-white/35">
-            {items.filter((item) => item.status === "installed").length} /{" "}
-            {items.length} items
-          </span>
-        </div>
-        <div
-          role="progressbar"
-          aria-label="Installed modifications"
-          aria-valuenow={metrics.progress}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          className="mt-5 h-2 overflow-hidden rounded-full bg-white/8"
-        >
-          <div
-            className="h-full rounded-full bg-[#e72d45] transition-all"
-            style={{ width: `${metrics.progress}%` }}
-          />
-        </div>
       </section>
 
       <div className="mt-5 flex items-center justify-between gap-5">
@@ -497,7 +450,16 @@ export function BuildDetail({
                             </p>
                           )}
                           <p className="mt-3 text-sm text-white/55">
-                            {formatEuro(item.estimatedCost)}
+                            {copy.planned}:{" "}
+                            {item.estimatedCostKnown === false
+                              ? copy.moneyUnknown
+                              : formatEuro(item.estimatedCost)}
+                          </p>
+                          <p className="mt-2 text-sm text-white/65">
+                            {copy.actual}:{" "}
+                            {actualItemCost(item) === undefined
+                              ? copy.moneyUnknown
+                              : formatEuro(actualItemCost(item)!)}
                           </p>
                           {item.selectedOfferId && (
                             <p className="mt-2 text-xs text-[#c98f72]">
@@ -525,23 +487,12 @@ export function BuildDetail({
                             </Link>
                           )}
                         </div>
-                        <select
-                          aria-label={`Status for ${item.title}`}
-                          disabled={Boolean(item.workbench?.purchase)}
-                          value={item.status}
-                          onChange={(event) =>
-                            changeItemStatus(
-                              item.id,
-                              event.target.value as BuildItemStatus,
-                            )
-                          }
-                          className="min-h-10 rounded-xl border border-white/10 bg-[#0d0d0d] px-3 text-xs text-white/65 capitalize outline-none"
-                        >
-                          {buildItemStatuses.map((status) => (
-                            <option key={status}>{status}</option>
-                          ))}
-                        </select>
                       </div>
+                      <BuildTaskCompletion
+                        vehicleId={vehicleId}
+                        item={item}
+                        onStatusChange={changeItemStatus}
+                      />
                     </div>
                   ))}
                   {stageItems.length === 0 && (
@@ -590,33 +541,6 @@ function Field({
       {children}
       {error && <span className="mt-1.5 block text-red-300">{error}</span>}
     </label>
-  );
-}
-function MetricCard({
-  label,
-  value,
-  icon: Icon,
-  warning = false,
-}: {
-  label: string;
-  value: string;
-  icon: typeof WalletCards;
-  warning?: boolean;
-}) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-[#111111] p-5">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-white/40">{label}</p>
-        <Icon
-          className={`size-4 ${warning ? "text-red-200" : "text-[#ff667a]"}`}
-        />
-      </div>
-      <p
-        className={`mt-8 text-3xl font-medium tracking-[-0.035em] ${warning ? "text-red-200" : ""}`}
-      >
-        {value}
-      </p>
-    </div>
   );
 }
 function formatEuro(value: number) {

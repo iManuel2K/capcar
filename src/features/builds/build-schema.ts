@@ -2,6 +2,23 @@ import { z } from "zod";
 import { workbenchSchema } from "./build-workbench-schema";
 import { buildPlanningSchema } from "./build-planning-schema";
 import { safeRetailUrl } from "@/features/retail/retail-contracts";
+import { passportPhotoSchema } from "@/features/passport/passport-photo";
+
+export const buildCompletionSchema = z.object({
+  completedOn: z.iso.date(),
+  note: z.string().trim().max(300).optional(),
+  actualCost: z
+    .number()
+    .finite()
+    .min(0)
+    .max(1_000_000)
+    .multipleOf(0.01)
+    .optional(),
+  accounting: z.enum(["include", "already-recorded"]).default("include"),
+  beforePhoto: passportPhotoSchema.optional(),
+  afterPhoto: passportPhotoSchema.optional(),
+  updatedAt: z.iso.datetime(),
+});
 
 export const buildGoals = [
   "OEM+ daily",
@@ -33,7 +50,7 @@ export const buildInputSchema = z.object({
   budget: z.coerce
     .number()
     .int()
-    .min(100, "Budget must be at least €100")
+    .min(0, "Budget cannot be negative")
     .max(1_000_000),
   status: z.enum(buildStatuses).default("planning"),
 });
@@ -42,10 +59,13 @@ export const buildSchema = buildInputSchema.extend({
   id: z.string().min(1),
   createdAt: z.string().datetime(),
   planning: buildPlanningSchema.optional(),
+  onboardingId: z.string().uuid().optional(),
 });
 
 export const buildItemInputSchema = z.object({
   workbench: workbenchSchema.optional(),
+  completion: buildCompletionSchema.optional(),
+  kind: z.enum(["maintenance", "modification"]).optional(),
   buildId: z.string().min(1),
   title: z.string().trim().min(2, "Enter the modification").max(100),
   note: z.string().trim().max(300).optional(),
@@ -53,6 +73,7 @@ export const buildItemInputSchema = z.object({
   stage: z.enum(buildStages, { error: "Select a build stage" }),
   priority: z.enum(buildPriorities),
   estimatedCost: z.coerce.number().int().min(0).max(1_000_000),
+  estimatedCostKnown: z.boolean().optional(),
   status: z.enum(buildItemStatuses).default("planned"),
   selectedOfferId: z.string().min(1).optional(),
   selectedOfferUrl: z.string().max(2048).refine(safeRetailUrl).optional(),

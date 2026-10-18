@@ -85,10 +85,12 @@ export function createStarterBuild(
   input: BuildInput,
   first: Omit<BuildItemInput, "buildId">,
   storage: WritableStorage,
+  options?: { onboardingId?: string },
 ) {
   const now = new Date().toISOString();
   const build = buildSchema.parse({
     ...buildInputSchema.parse(input),
+    onboardingId: options?.onboardingId,
     id: crypto.randomUUID(),
     createdAt: now,
   });
@@ -250,6 +252,7 @@ export function updateBuildItemPlanning(
   const updated = buildItemSchema.parse({
     ...item,
     ...input,
+    estimatedCostKnown: true,
     updatedAt: new Date().toISOString(),
   });
   const nextItems = state.items.map((entry) =>

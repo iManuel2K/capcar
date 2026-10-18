@@ -2,6 +2,7 @@ export type GarageOverviewData = {
   name: string;
   specs: string;
   mileage: number;
+  mileageLabel?: string;
   budget: number;
   plannedCost: number;
   nextAction: string;
@@ -37,7 +38,7 @@ export function GarageOverviewGrid({ data }: { data: GarageOverviewData }) {
         <div>
           <dt className="text-xs text-white/65">Odometer</dt>
           <dd className="mt-1 text-xl font-medium">
-            {number.format(data.mileage)} km
+            {data.mileageLabel ?? `${number.format(data.mileage)} km`}
           </dd>
         </div>
         <div>

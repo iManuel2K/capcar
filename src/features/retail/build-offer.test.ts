@@ -56,7 +56,7 @@ describe("select a live offer for a planned modification", () => {
       id: item.id,
       selectedOfferUrl: offer.url,
       deliveredPrice: 229.75,
-      estimatedCost: 230,
+      estimatedCost: 300,
       note: item.note,
       status: "planned",
     });

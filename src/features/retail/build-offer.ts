@@ -79,7 +79,6 @@ export function selectBuildOffer(
     selectedOfferUrl: offer.url,
     merchantName: item.retailer ?? "Retailer",
     deliveredPrice: total,
-    estimatedCost: Math.ceil(total),
     offerSelectedAt: checkedAt,
     updatedAt: new Date().toISOString(),
   });

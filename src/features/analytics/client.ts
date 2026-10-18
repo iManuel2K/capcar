@@ -15,7 +15,21 @@ export type AnalyticsEvent =
   | "vehicle_added"
   | "build_item_added"
   | "guide_opened"
-  | "trip_plan_created";
+  | "trip_plan_created"
+  | "onboarding_started"
+  | "onboarding_step_viewed"
+  | "onboarding_step_completed"
+  | "onboarding_interrupted"
+  | "onboarding_auth_requested"
+  | "onboarding_skipped"
+  | "onboarding_activated"
+  | "first_useful_action_completed"
+  | "build_task_completed"
+  | "build_task_reopened"
+  | "build_progress_updated"
+  | "build_timeline_viewed"
+  | "build_share_card_created"
+  | "build_share_requested";
 
 type Properties = Record<string, string>;
 let client: PostHog | undefined;
@@ -124,7 +138,34 @@ const allowedProperties = new Set([
   "utm_campaign",
   "utm_content",
   "article_slug",
+  "step",
+  "goal",
+  "elapsed_seconds",
+  "progress_bucket",
+  "action_type",
 ]);
+
+export function safeJourneyProperties(properties: Record<string, unknown>) {
+  const enums: Record<string, string[]> = {
+    step: ["car", "goal", "action", "save"],
+    goal: ["maintain", "modify", "drives"],
+    action_type: ["maintenance", "modification", "drive"],
+    progress_bucket: ["0", "25", "50", "75", "100"],
+  };
+  return Object.fromEntries(
+    Object.entries(properties).filter(([key, value]) => {
+      if (key in enums)
+        return typeof value === "string" && enums[key].includes(value);
+      if (key === "elapsed_seconds")
+        return (
+          typeof value === "string" &&
+          /^\d{1,6}$/.test(value) &&
+          Number(value) <= 604800
+        );
+      return allowedProperties.has(key);
+    }),
+  );
+}
 
 async function getClient() {
   if (client) return client;
@@ -149,11 +190,7 @@ async function getClient() {
         save_campaign_params: false,
         before_send: (event) => {
           if (!event || !analyticsAllowed()) return null;
-          event.properties = Object.fromEntries(
-            Object.entries(event.properties).filter(([key]) =>
-              allowedProperties.has(key),
-            ),
-          );
+          event.properties = safeJourneyProperties(event.properties);
           return event;
         },
       });
@@ -182,7 +219,10 @@ export function trackAnalytics(
       }
       if (posthog.has_opted_out_capturing())
         posthog.opt_in_capturing({ captureEventName: false });
-      posthog.capture(event, { ...context, ...properties });
+      posthog.capture(
+        event,
+        safeJourneyProperties({ ...context, ...properties }),
+      );
     })
     .catch(() => {
       /* Analytics must never interrupt the app. */

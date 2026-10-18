@@ -11,6 +11,7 @@ import { GarageSidebar } from "@/components/garage/garage-sidebar";
 import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 import { useNotifications } from "@/features/notifications/use-notifications";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
+import { LanguageSelector } from "@/components/i18n/language-selector";
 
 export function GarageShell({ children }: { children: React.ReactNode }) {
   const t = useTranslations("GarageNav");
@@ -47,6 +48,19 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
       document.body.style.overflow = previousOverflow;
     };
   }, [mobileOpen]);
+
+  if (pathname === "/garage/new")
+    return (
+      <div className="capcar-editorial-grid min-h-dvh bg-[#07191b] text-[#f4f5f2]">
+        <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
+          <CapcarWordmark />
+          <LanguageSelector />
+        </header>
+        <main id="main-content" className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+          {children}
+        </main>
+      </div>
+    );
 
   return (
     <div className="capcar-editorial-grid min-h-dvh bg-[#07191b] text-[#f4f5f2] lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]">

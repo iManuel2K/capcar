@@ -26,7 +26,7 @@ export function MarketingHero() {
           </h1>
           <p className={`${styles.body} mt-6`}>{t("hero.description")}</p>
           <div className="mt-7 flex flex-wrap gap-3" data-testid="hero-actions">
-            <Link href="/register" className={styles.primary}>
+            <Link href="/garage/new" className={styles.primary}>
               {t("start")} <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
             <a href="#live-demo" className={styles.secondary}>

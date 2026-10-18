@@ -12,7 +12,10 @@ import {
   ScanLine,
   type LucideIcon,
 } from "lucide-react";
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { trackAnalytics } from "@/features/analytics/client";
+import { CompletionPhotos } from "@/components/builds/build-story-panel";
+import { useGarageCopy } from "@/features/onboarding/use-garage-copy";
 
 import {
   timelineCategories,
@@ -46,6 +49,10 @@ const categoryContent: Record<
 };
 
 export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
+  const copy = useGarageCopy();
+  useEffect(() => {
+    trackAnalytics("build_timeline_viewed");
+  }, []);
   const hydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -182,6 +189,20 @@ export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
                         </span>
                       )}
                     </div>
+                    {event.completion && (
+                      <div className="mt-3">
+                        <p className="text-xs text-[#d6aa92]">{copy.private}</p>
+                        {event.completion.note && (
+                          <p className="mt-3 text-sm whitespace-pre-wrap text-white/75">
+                            {event.completion.note}
+                          </p>
+                        )}
+                        <CompletionPhotos
+                          beforePhoto={event.completion.beforePhoto}
+                          afterPhoto={event.completion.afterPhoto}
+                        />
+                      </div>
+                    )}
                   </div>
                 </article>
               );

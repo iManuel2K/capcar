@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { passportPhotoSchema } from "@/features/passport/passport-photo";
 
 export const minimumProductionYear = 1886;
 
@@ -10,9 +11,10 @@ export const bodyStyles = [
   "Hatchback",
   "Pickup",
   "SUV",
+  "Unknown",
 ] as const;
 
-export const transmissions = ["Manual", "Automatic"] as const;
+export const transmissions = ["Manual", "Automatic", "Unknown"] as const;
 
 const optionalVin = z.preprocess(
   (value) => {
@@ -29,7 +31,7 @@ const optionalVin = z.preprocess(
 
 export const vehicleInputSchema = z.object({
   make: z.string().trim().min(2, "Enter the vehicle make").max(40),
-  model: z.string().trim().min(2, "Enter the vehicle model").max(40),
+  model: z.string().trim().min(1, "Enter the vehicle model").max(40),
   productionYear: z.coerce
     .number()
     .int()
@@ -58,6 +60,11 @@ export const vehicleInputSchema = z.object({
   nickname: z.string().trim().max(40).optional(),
   imageUrl: z.string().trim().startsWith("/").optional(),
   demoProject: z.boolean().optional(),
+  mileageKnown: z.boolean().optional(),
+  garageGoal: z.enum(["maintain", "modify", "drives"]).optional(),
+  onboardingId: z.string().uuid().optional(),
+  // Private owner photo. Passport exports never pick this up implicitly.
+  photoDataUrl: passportPhotoSchema.optional(),
   vin: optionalVin,
 });
 

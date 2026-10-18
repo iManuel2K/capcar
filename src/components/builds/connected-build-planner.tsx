@@ -11,6 +11,7 @@ import {
   Wrench,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useGarageCopy } from "@/features/onboarding/use-garage-copy";
 
 import {
   dependencyBlockers,
@@ -48,6 +49,7 @@ export function ConnectedBuildPlanner({
   build: Build;
   items: BuildItem[];
 }) {
+  const copy = useGarageCopy();
   const planning = planningForBuild(build);
   const metrics = getConnectedBuildMetrics(build, items, planning);
   const [message, setMessage] = useState("");
@@ -253,7 +255,7 @@ export function ConnectedBuildPlanner({
               className={input}
               name="budget"
               type="number"
-              min="100"
+              min="0"
               max="1000000"
               step="1"
               defaultValue={build.budget}
@@ -284,8 +286,8 @@ export function ConnectedBuildPlanner({
         <PlannerMetric label="Forecast" value={money(metrics.forecast)} />
         <PlannerMetric
           label="Remaining"
-          value={money(metrics.remaining)}
-          warning={metrics.remaining < 0}
+          value={build.budget === 0 ? copy.unknown : money(metrics.remaining)}
+          warning={build.budget > 0 && metrics.remaining < 0}
         />
         <PlannerMetric
           label="Installed"

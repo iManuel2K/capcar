@@ -185,7 +185,8 @@ export async function proxy(request: NextRequest) {
     request.nextUrl.pathname === "/account" ||
     request.nextUrl.pathname.startsWith("/account/") ||
     request.nextUrl.pathname === "/garage" ||
-    request.nextUrl.pathname.startsWith("/garage/") ||
+    (request.nextUrl.pathname.startsWith("/garage/") &&
+      request.nextUrl.pathname !== "/garage/new") ||
     request.nextUrl.pathname === "/notifications";
   if (protectedRoute && !data.user) {
     const signIn = request.nextUrl.clone();

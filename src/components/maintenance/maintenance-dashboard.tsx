@@ -1,4 +1,5 @@
 "use client";
+import { activateGarage } from "@/features/onboarding/activation";
 
 import Link from "next/link";
 import { MaintenanceRepairPlans } from "@/components/diagnostics/repair-plan";
@@ -176,6 +177,7 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
       window.localStorage,
     );
     announceMaintenanceChange();
+    activateGarage(vehicleId, "maintenance");
     setActiveTaskKey(undefined);
     setSavedTask(task.key);
   }

@@ -95,7 +95,13 @@ export function AddVehicleForm({
     event.preventDefault();
     setSubmitting(true);
 
-    const result = vehicleInputSchema.safeParse(form);
+    const result = vehicleInputSchema.safeParse({
+      ...vehicle,
+      ...form,
+      ...(vehicle?.mileageKnown === false && form.mileage !== "0"
+        ? { mileageKnown: true }
+        : {}),
+    });
     if (!result.success) {
       const nextErrors: Record<string, string> = {};
       for (const issue of result.error.issues) {

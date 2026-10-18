@@ -1,4 +1,5 @@
 import type { Build, BuildItem } from "./build-schema";
+import { actualItemCost } from "./build-costs";
 import {
   buildPlanningSchema,
   type BuildPhase,
@@ -42,8 +43,8 @@ export function hasDependencyCycle(items: BuildItem[]) {
 }
 
 function itemForecast(item: BuildItem) {
-  const purchase = item.workbench?.purchase;
-  if (purchase) return Math.max(0, purchase.amount - purchase.refunded);
+  const actual = actualItemCost(item);
+  if (actual !== undefined) return actual;
   return item.deliveredPrice ?? item.estimatedCost;
 }
 
@@ -86,11 +87,7 @@ export function getConnectedBuildMetrics(
     0,
   );
   const paid = relevant.reduce(
-    (sum, item) =>
-      sum +
-      (item.workbench?.purchase
-        ? item.workbench.purchase.amount - item.workbench.purchase.refunded
-        : 0),
+    (sum, item) => sum + (actualItemCost(item) ?? 0),
     0,
   );
   const forecast = relevant.reduce((sum, item) => sum + itemForecast(item), 0);
@@ -142,12 +139,7 @@ export function getConnectedBuildMetrics(
           0,
         ),
         paid: phaseItems.reduce(
-          (sum, item) =>
-            sum +
-            (item.workbench?.purchase
-              ? item.workbench.purchase.amount -
-                item.workbench.purchase.refunded
-              : 0),
+          (sum, item) => sum + (actualItemCost(item) ?? 0),
           0,
         ),
         forecast: phaseForecast,

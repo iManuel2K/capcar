@@ -6,6 +6,8 @@ import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { PassportIdentityDocument } from "@/components/passport/passport-identity-document";
 import type { VehiclePassportPayload } from "@/features/passport/vehicle-passport";
 import type { PassportIntegrity } from "@/features/passport/passport-integrity";
+import { garageCopy } from "@/features/onboarding/copy";
+import { isAppLocale } from "@/i18n/config";
 
 export async function PublicPassport({
   passport,
@@ -29,6 +31,7 @@ export async function PublicPassport({
     getLocale(),
   ]);
   const title = `${passport.vehicle.productionYear} ${passport.vehicle.make} ${passport.vehicle.model}`;
+  const copy = garageCopy[isAppLocale(locale) ? locale : "en"];
 
   return (
     <main className="min-h-dvh bg-[#0b0e0c] px-4 py-5 text-[#f4f5f2] sm:px-7 sm:py-8">
@@ -132,7 +135,7 @@ export async function PublicPassport({
             empty={t("noBuild")}
             rows={passport.modifications.map((item) => ({
               title: item.title,
-              detail: `${formatLabel(item.status)}${item.installedAt ? ` ${item.installedAt}` : ""} · ${item.costBasis === "paid-net-of-refunds" ? "paid, net of refunds" : "estimated"} ${formatEuro(item.cost)} · ${item.verification}`,
+              detail: `${formatLabel(item.status)}${item.installedAt ? ` ${item.installedAt}` : ""} · ${item.costBasis === "owner-recorded-actual" ? copy.actual : item.costBasis === "paid-net-of-refunds" ? "paid, net of refunds" : "estimated"} ${formatEuro(item.cost)} · ${item.verification}`,
             }))}
           />
           <RecordSection

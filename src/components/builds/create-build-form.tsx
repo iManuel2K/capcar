@@ -1,4 +1,5 @@
 "use client";
+import { activateGarage } from "@/features/onboarding/activation";
 
 import {
   readJournalChecklists,
@@ -143,6 +144,7 @@ function BuildFormFields({
         window.localStorage,
       );
       announceBuildChange();
+      activateGarage(vehicleId, "modification");
       router.push(`/garage/${vehicleId}/builds/${build.id}`);
     } catch {
       setErrors({

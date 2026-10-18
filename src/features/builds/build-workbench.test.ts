@@ -193,7 +193,7 @@ describe("retailer comparison and exact fitment evidence", () => {
         selectWorkbenchQuote(state, item, quote.id, vehicle),
       );
     expect(readBuildState(localStorage).items[0]).toMatchObject({
-      estimatedCost: 210,
+      estimatedCost: 300,
       deliveredPrice: 210,
       merchantName: quote.retailer,
     });

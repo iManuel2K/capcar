@@ -148,7 +148,7 @@ export function MarketingHeader() {
               {t("signIn")}
             </Link>
             <Link
-              href="/register"
+              href="/garage/new"
               className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-medium text-[#e8e6d7] shadow-[0_10px_25px_rgba(14,45,48,.16)] transition hover:-translate-y-0.5 hover:bg-[#6d0101]"
             >
               {l("start")} <ArrowRight className="size-4" />
@@ -254,7 +254,7 @@ export function MarketingHeader() {
                 {t("signIn")}
               </Link>
               <Link
-                href="/register"
+                href="/garage/new"
                 onClick={() => setMenuOpen(false)}
                 className="mt-2 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-semibold text-[#e8e6d7]"
               >

@@ -61,7 +61,11 @@ export function PassportIdentityDocument({
             <DataPoint
               icon={CarFront}
               label={t("recordedMileage")}
-              value={`${passport.vehicle.mileage.toLocaleString(locale)} km`}
+              value={
+                passport.vehicle.mileageKnown === false
+                  ? t("notRecorded")
+                  : `${passport.vehicle.mileage.toLocaleString(locale)} km`
+              }
             />
             <DataPoint
               icon={CalendarCheck}

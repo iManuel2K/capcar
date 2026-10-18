@@ -6,6 +6,7 @@ import {
   costStateSchema,
 } from "@/features/costs/cost-schema";
 import { readBuildState } from "@/features/builds/build-storage";
+import { accountedItemCost } from "@/features/builds/build-costs";
 
 export const COST_STORAGE_KEY = "capcar.costs.v1";
 export const COST_STORAGE_EVENT = "capcar:costs-changed";
@@ -19,14 +20,9 @@ export function readCostState(storage: ReadableStorage): CostState {
   const builds = readBuildState(storage);
   const linked = builds.items.flatMap((item) => {
     const purchase = item.workbench?.purchase;
+    const actual = accountedItemCost(item);
     const build = builds.builds.find((entry) => entry.id === item.buildId);
-    if (
-      !purchase ||
-      !build ||
-      purchase.accounting !== "include" ||
-      purchase.amount === purchase.refunded
-    )
-      return [];
+    if (!build || actual === undefined || actual <= 0) return [];
     return [
       costEntrySchema.parse({
         id: `build-purchase-${item.id}`,
@@ -34,10 +30,10 @@ export function readCostState(storage: ReadableStorage): CostState {
         sourceBuildId: build.id,
         sourceBuildItemId: item.id,
         label: item.title.slice(0, 120),
-        category: "parts",
-        amount: Math.round((purchase.amount - purchase.refunded) * 100) / 100,
-        occurredOn: purchase.orderedAt,
-        createdAt: purchase.updatedAt,
+        category: item.kind === "maintenance" ? "maintenance" : "parts",
+        amount: actual,
+        occurredOn: purchase?.orderedAt ?? item.completion!.completedOn,
+        createdAt: item.completion?.updatedAt ?? purchase!.updatedAt,
         note: "Linked build purchase · net of recorded refunds. Edit in the build workflow.",
       }),
     ];

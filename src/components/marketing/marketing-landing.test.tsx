@@ -51,7 +51,7 @@ describe("the connected homepage example", () => {
     const actions = screen.getByTestId("hero-actions");
     expect(
       within(actions).getByRole("link", { name: /Start your free garage/ }),
-    ).toHaveAttribute("href", "/register");
+    ).toHaveAttribute("href", "/garage/new");
     expect(
       within(actions).getByRole("link", { name: "Explore a project" }),
     ).toHaveAttribute("href", "#live-demo");

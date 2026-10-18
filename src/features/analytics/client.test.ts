@@ -16,6 +16,7 @@ import {
   analyticsPath,
   setAnalyticsConsent,
   trackAnalytics,
+  safeJourneyProperties,
 } from "./client";
 
 beforeEach(() => {
@@ -36,6 +37,36 @@ beforeEach(() => {
 });
 
 describe("privacy-preserving analytics", () => {
+  it("allows only enumerated journey properties and bounded elapsed time, never free-text or vehicle identifiers", () => {
+    expect(
+      safeJourneyProperties({
+        step: "action",
+        goal: "maintain",
+        elapsed_seconds: "42",
+        progress_bucket: "50",
+        action_type: "maintenance",
+        vin: "WBA123",
+        note: "private",
+        vehicleId: "secret",
+        title: "home",
+      }),
+    ).toEqual({
+      step: "action",
+      goal: "maintain",
+      elapsed_seconds: "42",
+      progress_bucket: "50",
+      action_type: "maintenance",
+    });
+    expect(
+      safeJourneyProperties({
+        step: "VIN123",
+        goal: "private goal",
+        elapsed_seconds: "999999999",
+        progress_bucket: "secret",
+        action_type: "note",
+      }),
+    ).toEqual({});
+  });
   it("does not load the SDK or send events before consent, after refusal, or with Do Not Track", async () => {
     trackAnalytics("$pageview");
     setAnalyticsConsent(false);

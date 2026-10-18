@@ -67,6 +67,21 @@ export function evaluateFitment(
   part: CatalogPart,
   vehicle: FitmentVehicle,
 ): FitmentResult {
+  if (
+    vehicle.platform === "UNKNOWN" ||
+    (vehicle.engineCode === "UNKNOWN" &&
+      part.fitmentRules.some((rule) => rule.engineCodes?.length)) ||
+    (vehicle.bodyStyle === "Unknown" &&
+      part.fitmentRules.some((rule) => rule.bodyStyles?.length))
+  )
+    return {
+      status: "unverified",
+      label: "Vehicle details needed",
+      checks: [],
+      conditions: [
+        "Confirm the exact vehicle variant before checking fitment.",
+      ],
+    };
   if (part.fitmentRules.length === 0)
     return {
       status: "unverified",

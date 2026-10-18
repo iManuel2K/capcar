@@ -26,7 +26,7 @@ export default async function RegisterPage({
     <AuthForm
       mode="register"
       configured={getAuthStatus().configured}
-      nextPath={safeAuthNext(query.next)}
+      nextPath={safeAuthNext(query.next, "/garage/new")}
     />
   );
 }

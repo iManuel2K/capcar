@@ -14,6 +14,7 @@ import {
 import { useRef } from "react";
 
 import { VehicleOverviewSummary } from "./vehicle-overview-summary";
+import { GarageGoalPanel } from "./garage-goal-panel";
 import { VehicleArt } from "@/components/garage/vehicle-art";
 import { isProject318Vehicle } from "@/components/garage/vehicle-photo-gallery";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
@@ -28,7 +29,9 @@ export function GarageOverview() {
   const reelRef = useRef<HTMLDivElement>(null);
 
   function loadDemo() {
-    const existingDemo = vehicles.find((vehicle) => vehicle.model === "318i");
+    const existingDemo = vehicles.find(
+      (vehicle) => vehicle.model === "318i" && vehicle.demoProject,
+    );
     if (existingDemo) {
       router.push(`/garage/${existingDemo.id}`);
       return;
@@ -46,6 +49,7 @@ export function GarageOverview() {
         mileage: 148200,
         color: "Space Grey",
         nickname: "Project 318",
+        demoProject: true,
         imageUrl: "/capcar-bmw-current-side.webp",
       },
       window.localStorage,
@@ -123,6 +127,7 @@ export function GarageOverview() {
 
   return (
     <div className="pb-24 sm:pb-0">
+      {vehicles[0]?.garageGoal && <GarageGoalPanel vehicle={vehicles[0]} />}
       <Link
         href="/studio"
         className="mb-6 flex min-h-14 items-center justify-between rounded-2xl border border-white/15 px-5 text-sm text-white/80 hover:bg-white/5"
@@ -191,9 +196,10 @@ export function GarageOverview() {
                 isProject318Vehicle(vehicle) ? "Current vehicle" : undefined
               }
               imageUrl={
-                isProject318Vehicle(vehicle)
+                vehicle.photoDataUrl ??
+                (isProject318Vehicle(vehicle) && !vehicle.onboardingId
                   ? "/capcar-bmw-current-side.webp"
-                  : vehicle.imageUrl
+                  : vehicle.imageUrl)
               }
             />
             <VehicleOverviewSummary vehicle={vehicle} />

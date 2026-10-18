@@ -30,8 +30,11 @@ import { createClient } from "@/lib/supabase/client";
 
 type AuthMode = "login" | "register" | "forgot" | "reset";
 
-function safeNext() {
-  return safeAuthNext(new URLSearchParams(window.location.search).get("next"));
+function safeNext(fallback = "/garage") {
+  return safeAuthNext(
+    new URLSearchParams(window.location.search).get("next"),
+    fallback,
+  );
 }
 
 function callbackUrl(next: string) {
@@ -67,9 +70,9 @@ export function AuthForm({
     void createClient()
       .auth.getUser()
       .then(({ data }) => {
-        if (data.user) router.replace(safeNext());
+        if (data.user) router.replace(safeNext(nextPath));
       });
-  }, [configured, mode, router]);
+  }, [configured, mode, router, nextPath]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -114,7 +117,7 @@ export function AuthForm({
         if (authError) throw authError;
         if (!data.session) throw new Error(t("errors.generic"));
         trackAnalytics("login_completed");
-        window.location.replace(safeNext());
+        window.location.replace(safeNext(nextPath));
       }
 
       if (mode === "register") {
@@ -127,13 +130,13 @@ export function AuthForm({
               minimum_age_acknowledged_at: new Date().toISOString(),
               minimum_age_version: "2026-10-06",
             },
-            emailRedirectTo: callbackUrl(safeNext()),
+            emailRedirectTo: callbackUrl(safeNext(nextPath)),
           },
         });
         if (authError) throw authError;
         trackAnalytics("signup_submitted");
         if (data.session) {
-          window.location.replace(safeNext());
+          window.location.replace(safeNext(nextPath));
         } else {
           setMessage(t("messages.created"));
         }

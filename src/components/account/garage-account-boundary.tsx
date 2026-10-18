@@ -7,8 +7,15 @@ import {
   LoaderCircle,
   RefreshCw,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  createContext,
+  useContext,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import {
   applyLocalSnapshot,
@@ -16,6 +23,7 @@ import {
   collectLocalSnapshot,
   garageStorageEvents,
   localSnapshotSchema,
+  snapshotKeys,
 } from "@/features/sync/local-snapshot";
 import { decideInitialSnapshot } from "@/features/sync/snapshot-reconciliation";
 import {
@@ -26,6 +34,8 @@ import {
 import { createClient } from "@/lib/supabase/client";
 
 export const ACTIVE_GARAGE_USER_KEY = "capcar.active-garage-user.v1";
+const GarageAccountContext = createContext({ configured: false, userId: "" });
+export const useGarageAccount = () => useContext(GarageAccountContext);
 
 type SyncState =
   "loading" | "synced" | "saving" | "unsaved" | "offline" | "error";
@@ -47,6 +57,7 @@ export function GarageAccountBoundary({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const allowGuest = usePathname() === "/garage/new";
   const [ready, setReady] = useState(!configured);
   const [userId, setUserId] = useState("");
   const [error, setError] = useState("");
@@ -102,13 +113,15 @@ export function GarageAccountBoundary({
       try {
         const client = createClient();
         const { data, error: authError } = await client.auth.getUser();
-        if (authError) throw authError;
         if (!data.user) {
+          if (authError && authError.name !== "AuthSessionMissingError")
+            throw authError;
           if (!cancelled) {
             setReady(true);
-            router.replace(
-              `/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`,
-            );
+            if (!allowGuest)
+              router.replace(
+                `/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`,
+              );
           }
           return;
         }
@@ -189,7 +202,7 @@ export function GarageAccountBoundary({
     return () => {
       cancelled = true;
     };
-  }, [configured, router, upload]);
+  }, [configured, router, upload, allowGuest]);
 
   useEffect(() => {
     if (!configured || !ready || !userId) return;
@@ -203,7 +216,7 @@ export function GarageAccountBoundary({
     }
 
     function handleStorage(event: StorageEvent) {
-      if (event.key && !event.key.startsWith("capcar.")) return;
+      if (event.key && !snapshotKeys.some((key) => key === event.key)) return;
       scheduleUpload();
     }
 
@@ -253,8 +266,8 @@ export function GarageAccountBoundary({
   }
 
   return (
-    <>
-      {configured && (
+    <GarageAccountContext.Provider value={{ configured, userId }}>
+      {configured && userId && (
         <div
           aria-live="polite"
           className={`mx-auto mb-4 flex max-w-7xl items-center gap-2 rounded-xl border px-4 py-3 text-xs ${syncState === "error" ? "border-red-300/15 bg-red-300/6 text-red-100/70" : syncState === "offline" || syncState === "unsaved" ? "border-amber-300/15 bg-amber-300/6 text-amber-100/70" : "border-white/8 bg-white/[0.025] text-white/40"}`}
@@ -273,8 +286,14 @@ export function GarageAccountBoundary({
           )}
         </div>
       )}
-      {children}
-    </>
+      {!configured || userId || (allowGuest && !error) ? (
+        children
+      ) : (
+        <p role="alert" className="p-6 text-white/70">
+          {error || "Please sign in to open your private garage."}
+        </p>
+      )}
+    </GarageAccountContext.Provider>
   );
 }
 

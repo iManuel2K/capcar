@@ -10,6 +10,7 @@ import { findVehicle } from "@/features/vehicles/vehicle-storage";
 import { findCatalogPart } from "@/features/parts/part-catalog";
 import { evaluateFitment } from "@/features/parts/fitment";
 import { readRoadbookVisits } from "@/features/roadbook/roadbook-storage";
+import { actualItemCost } from "@/features/builds/build-costs";
 
 type ReadableStorage = Pick<Storage, "getItem">;
 
@@ -45,6 +46,7 @@ export const vehiclePassportSchema = z.object({
     engineCode: z.string().min(1),
     transmission: z.string().min(1),
     mileage: z.number().nonnegative(),
+    mileageKnown: z.boolean().optional(),
     vin: z.string().length(17).optional(),
     vinLastFive: z.string().max(5).optional(),
     imageUrl: z
@@ -77,7 +79,9 @@ export const vehiclePassportSchema = z.object({
       title: z.string().min(1),
       status: z.string().min(1),
       cost: z.number().nonnegative(),
-      costBasis: z.enum(["estimate", "paid-net-of-refunds"]).optional(),
+      costBasis: z
+        .enum(["estimate", "paid-net-of-refunds", "owner-recorded-actual"])
+        .optional(),
       orderedAt: z.iso.date().optional(),
       deliveredAt: z.iso.date().optional(),
       installedAt: z.iso.date().optional(),
@@ -202,6 +206,7 @@ export function buildVehiclePassport(
       engineCode: vehicle.engineCode,
       transmission: vehicle.transmission,
       mileage: vehicle.mileage,
+      ...(vehicle.mileageKnown === false ? { mileageKnown: false } : {}),
       vin: profile?.includeFullVin ? vehicle.vin : undefined,
       vinLastFive: vehicle.vin?.slice(-5),
       imageUrl:
@@ -244,25 +249,30 @@ export function buildVehiclePassport(
         return {
           title: item.title,
           status: item.status,
-          cost: item.workbench?.purchase
-            ? Math.round(
-                (item.workbench.purchase.amount -
-                  item.workbench.purchase.refunded) *
-                  100,
-              ) / 100
-            : (item.deliveredPrice ?? item.estimatedCost),
-          costBasis: item.workbench?.purchase
-            ? "paid-net-of-refunds"
-            : "estimate",
+          cost:
+            actualItemCost(item) ?? item.deliveredPrice ?? item.estimatedCost,
+          costBasis:
+            item.status === "installed" &&
+            item.completion?.actualCost !== undefined
+              ? "owner-recorded-actual"
+              : actualItemCost(item) !== undefined
+                ? "paid-net-of-refunds"
+                : "estimate",
           orderedAt: item.workbench?.purchase?.orderedAt,
           deliveredAt: item.workbench?.purchase?.deliveredAt,
-          installedAt: item.workbench?.purchase?.installedAt,
+          installedAt:
+            item.status === "installed"
+              ? (item.completion?.completedOn ??
+                item.workbench?.purchase?.installedAt)
+              : undefined,
           installationMileage: item.workbench?.purchase?.mileage,
           selectedMerchant: item.merchantName,
           fitment,
           verification:
             item.status === "installed"
-              ? "Owner-recorded installation"
+              ? item.kind === "maintenance"
+                ? "Owner-recorded maintenance"
+                : "Owner-recorded installation"
               : "Planning record",
         };
       }),

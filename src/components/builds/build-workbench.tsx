@@ -1,4 +1,6 @@
 "use client";
+import { trackAnalytics } from "@/features/analytics/client";
+import { trackBuildProgress } from "@/features/builds/build-analytics";
 
 import Link from "next/link";
 import { useId, useState, type ReactNode } from "react";
@@ -127,7 +129,7 @@ function ItemWorkbench({
   const id = useId();
   function save(update: (state: Workbench, item: BuildItem) => Workbench) {
     try {
-      updateWorkbench(
+      const updated = updateWorkbench(
         vehicle.id,
         item.buildId,
         item.id,
@@ -135,6 +137,17 @@ function ItemWorkbench({
         update,
       );
       announceBuildChange();
+      if (
+        updated.status !== item.status &&
+        (updated.status === "installed" || item.status === "installed")
+      ) {
+        trackAnalytics(
+          updated.status === "installed"
+            ? "build_task_completed"
+            : "build_task_reopened",
+        );
+        trackBuildProgress(item.buildId);
+      }
       setError("");
       setMessage("Saved to this build.");
       return true;

@@ -4,8 +4,10 @@ import { useMaintenanceTasks } from "@/features/maintenance/use-maintenance-task
 import { getMaintenanceStatus } from "@/features/maintenance/maintenance-status";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 import { GarageOverviewGrid } from "./garage-overview-grid";
+import { useGarageCopy } from "@/features/onboarding/use-garage-copy";
 
 export function VehicleOverviewSummary({ vehicle }: { vehicle: Vehicle }) {
+  const copy = useGarageCopy();
   const { builds, items } = useBuildState();
   const tasks = useMaintenanceTasks(vehicle.id);
   const ownBuilds = builds.filter((build) => build.vehicleId === vehicle.id);
@@ -36,6 +38,7 @@ export function VehicleOverviewSummary({ vehicle }: { vehicle: Vehicle }) {
         name: `${vehicle.make} ${vehicle.platform} ${vehicle.model}`,
         specs: `${vehicle.productionYear} · ${vehicle.engineCode} · ${vehicle.transmission}`,
         mileage: vehicle.mileage,
+        mileageLabel: vehicle.mileageKnown === false ? copy.unknown : undefined,
         budget: ownBuilds.reduce((sum, build) => sum + build.budget, 0),
         plannedCost: items
           .filter((item) => ids.has(item.buildId))
@@ -43,7 +46,12 @@ export function VehicleOverviewSummary({ vehicle }: { vehicle: Vehicle }) {
             (sum, item) => sum + (item.deliveredPrice ?? item.estimatedCost),
             0,
           ),
-        nextAction: next?.title ?? "Review service history",
+        nextAction:
+          vehicle.garageGoal === "drives"
+            ? copy.planDrive
+            : vehicle.garageGoal === "modify"
+              ? copy.modifyAction
+              : (next?.title ?? "Review service history"),
         serviceDue:
           status === "unknown"
             ? "Log the last service to establish the next interval."

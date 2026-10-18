@@ -213,6 +213,39 @@ export function updateWorkbench(
     );
   const updated = buildItemSchema.parse({
     ...item,
+    // Clearing a dated installation is an explicit undo. Other workbench edits
+    // keep the owner's completion story and do not silently reopen the task.
+    completion:
+      item.workbench?.purchase?.installedAt && !workbench.purchase?.installedAt
+        ? undefined
+        : item.completion
+          ? {
+              ...item.completion,
+              completedOn:
+                workbench.purchase?.installedAt &&
+                workbench.purchase.installedAt !==
+                  item.workbench?.purchase?.installedAt
+                  ? workbench.purchase.installedAt
+                  : item.completion.completedOn,
+              // Preserve installation/labour extras while reconciling a corrected
+              // purchase or refund against the one linked total.
+              actualCost:
+                item.completion.actualCost !== undefined &&
+                item.workbench?.purchase &&
+                workbench.purchase
+                  ? Math.round(
+                      Math.max(
+                        0,
+                        item.completion.actualCost +
+                          workbench.purchase.amount -
+                          workbench.purchase.refunded -
+                          (item.workbench.purchase.amount -
+                            item.workbench.purchase.refunded),
+                      ) * 100,
+                    ) / 100
+                  : item.completion.actualCost,
+            }
+          : undefined,
     workbench,
     ...(quote && total !== null
       ? {
@@ -220,12 +253,19 @@ export function updateWorkbench(
           selectedOfferUrl: safeRetailUrl(quote.url) ? quote.url : undefined,
           merchantName: quote.retailer,
           deliveredPrice: total,
-          estimatedCost: Math.ceil(total),
           offerSelectedAt: quote.observedAt,
         }
       : {}),
     ...(workbench.purchase
-      ? { status: workbench.purchase.installedAt ? "installed" : "ordered" }
+      ? {
+          status:
+            workbench.purchase.installedAt ||
+            (item.status === "installed" &&
+              item.completion &&
+              !item.workbench?.purchase?.installedAt)
+              ? "installed"
+              : "ordered",
+        }
       : {}),
     updatedAt: new Date().toISOString(),
   });

@@ -11,6 +11,7 @@ import { readTuningPlans } from "@/features/tuning/tuning-storage";
 import { readDiagnostics } from "@/features/diagnostics/diagnostic-storage";
 import { readInstallStamps } from "@/features/specialists/install-stamp-storage";
 import { readRoadbookVisits } from "@/features/roadbook/roadbook-storage";
+import { actualItemCost } from "@/features/builds/build-costs";
 
 export const timelineCategories = [
   "vehicle",
@@ -29,6 +30,7 @@ export type VehicleTimelineEvent = {
   detail: string;
   occurredAt: string;
   value?: string;
+  completion?: { beforePhoto?: string; afterPhoto?: string; note?: string };
 };
 
 type ReadableStorage = Pick<Storage, "getItem">;
@@ -203,16 +205,20 @@ export function buildVehicleTimeline(
     if (item.status === "installed") {
       events.push({
         id: `installed-${item.id}`,
-        category: "installation",
-        title: `Installed · ${item.title}`,
+        category: item.kind === "maintenance" ? "maintenance" : "installation",
+        title: `${item.kind === "maintenance" ? "Maintenance recorded" : "Installed"} · ${item.title}`,
         detail:
           "Build item marked installed. Technical verification remains the owner's responsibility.",
-        occurredAt: purchase?.installedAt
-          ? `${purchase.installedAt}T12:00:00.000Z`
-          : (item.updatedAt ?? item.createdAt),
-        value: purchase
-          ? `${formatEuro(purchase.amount - purchase.refunded)} paid · ${purchase.mileage ?? "unknown"} km`
-          : `${formatEuro(item.deliveredPrice ?? item.estimatedCost)} estimate`,
+        completion: item.completion,
+        occurredAt: item.completion
+          ? `${item.completion.completedOn}T12:00:00.000Z`
+          : purchase?.installedAt
+            ? `${purchase.installedAt}T12:00:00.000Z`
+            : (item.updatedAt ?? item.createdAt),
+        value:
+          actualItemCost(item) !== undefined
+            ? `${formatEuro(actualItemCost(item)!)} actual`
+            : `${formatEuro(item.deliveredPrice ?? item.estimatedCost)} estimate`,
       });
     } else if (!item.selectedOfferId && !purchase) {
       events.push({

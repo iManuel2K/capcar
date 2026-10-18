@@ -36,6 +36,8 @@ import {
 } from "lucide-react";
 
 import { VehicleArt } from "@/components/garage/vehicle-art";
+import { GarageGoalPanel } from "./garage-goal-panel";
+import { useGarageCopy } from "@/features/onboarding/use-garage-copy";
 import {
   isProject318Vehicle,
   VehiclePhotoGallery,
@@ -47,6 +49,7 @@ import {
 } from "@/features/vehicles/vehicle-storage";
 
 export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
+  const c = useGarageCopy();
   const router = useRouter();
   const locale = useLocale();
   const journal = checklistUI[isAppLocale(locale) ? locale : "en"];
@@ -92,6 +95,7 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
 
   return (
     <div className="pb-24 sm:pb-0">
+      <GarageGoalPanel vehicle={vehicle} />
       <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/garage"
@@ -136,7 +140,9 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
             <div className="mt-9 flex items-center gap-5">
               <div>
                 <p className="text-3xl font-medium tracking-[-0.035em]">
-                  {vehicle.mileage.toLocaleString("en-US")}
+                  {vehicle.mileageKnown === false
+                    ? c.unknown
+                    : vehicle.mileage.toLocaleString("en-US")}
                 </p>
                 <p className="mt-1 text-xs tracking-[0.12em] text-white/30 uppercase">
                   kilometres
@@ -154,10 +160,15 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
             </div>
           </div>
           <div className="p-3 sm:p-5">
-            {isProject318Vehicle(vehicle) ? (
+            {isProject318Vehicle(vehicle) &&
+            !vehicle.onboardingId &&
+            !vehicle.photoDataUrl ? (
               <VehiclePhotoGallery label={title} />
             ) : (
-              <VehicleArt imageUrl={vehicle.imageUrl} label={title} />
+              <VehicleArt
+                imageUrl={vehicle.photoDataUrl ?? vehicle.imageUrl}
+                label={title}
+              />
             )}
           </div>
         </div>
