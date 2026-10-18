@@ -15,7 +15,10 @@ export default async function MovieCarsPage() {
   const t = await getTranslations("StudioPolish");
   return (
     <div className="capcar-paper-grid min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
-      <main className="mx-auto max-w-[1280px] px-5 pt-10 pb-16 sm:px-8 sm:pt-16">
+      <main
+        id="main-content"
+        className="mx-auto max-w-[1280px] px-5 pt-10 pb-16 sm:px-8 sm:pt-16"
+      >
         <header className="mb-10 sm:mb-14">
           <p className="text-xs font-semibold tracking-[.2em] text-[#6d0101] uppercase">
             CapCar / {t("movieCars")}
@@ -25,9 +28,6 @@ export default async function MovieCarsPage() {
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-[#0e2d30]/75">
             {t("movieDescription")}
-          </p>
-          <p className="mt-4 max-w-2xl text-xs leading-6 text-[#0e2d30]/65">
-            {t("galleryScope")}
           </p>
         </header>
         <IconicGallery />

@@ -1,5 +1,9 @@
 # Sound Studio and Movie Cars — beta handoff
 
+Historical handoff. The current Movie Cars gallery and its media provenance are
+documented in [movie-cars-media.md](./movie-cars-media.md); the earlier movie
+reference descriptions below no longer describe the active gallery.
+
 ## Pages
 
 - `/sound-studio`: five local, attributed real engine recordings; searchable listening desk; two distinct catalogue samples for A/B; personal stock/modified uploads; browser-local archive with metadata, audio and JSON downloads.

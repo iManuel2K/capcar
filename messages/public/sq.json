@@ -39,7 +39,7 @@
     "recordingAdvice": "Regjistro vetëm kur je parkuar në mënyrë të sigurt dhe me leje. Mbaj të njëjtin pozicion mikrofoni dhe kushte gjatë krahasimit.",
     "movieCars": "Makina ikonike të filmave",
     "movieTitle": "Makinat që ndezën pasionin.",
-    "movieDescription": "Eksploro homazhin e R34 të Brian-it krahas ikonave të dizajnit automobilistik. Shiko hollësitë në 3D, provo një nuancë sipërfaqeje dhe ruaj një pamje për projektin tënd të ardhshëm.",
+    "movieDescription": "Skyline i Brian-it. DeLorean i Doc-ut. KITT. Rizbulo makinat përmes pamjeve nga filmat dhe serialet e tyre, pastaj eksploro referenca të pavarura 3D.",
     "filmReference": "Referencë filmi nga fansat",
     "designReference": "Referencë dizajni automobilistik",
     "chooseCar": "Zgjidh një referencë makine",
@@ -47,7 +47,7 @@
     "skylineStory": "Studio përmasat, qëndrimin këndor dhe detajet dalluese të R34. Kjo është referencë dizajni, jo kopje e një makine filmi.",
     "porscheStory": "Një prani ndryshe: silueta e lakuar dhe pjesa e pasme e gjerë e 911 Turbo. Eksploro modelin si frymëzim dizajni, jo si kopje filmi.",
     "modelNotice": "Modeli dhe parapamja i atribuohen krijuesit më sipër. Nuancat janë ndryshime të përkohshme në shikues; modeli origjinal mbetet i pandryshuar. Emrat identifikojnë referenca të pavarura, jo miratim nga prodhuesit ose studiot e filmit.",
-    "galleryScope": "Koleksioni përfshin një referencë makine filmi nga fansat dhe dy referenca dizajni. Më shumë makina filmash kërkojnë modele të përshtatshme dhe shqyrtim të të drejtave.",
+    "galleryScope": "Pamjet e filmave dhe serialeve u përkasin mbajtësve përkatës të të drejtave. Referencat e pavarura 3D nuk nënkuptojnë partneritet me studio ose automjete autentike xhirimi.",
     "startBuild": "Planifiko projektin tënd",
     "conceptLink": "Hap Concept Studio",
     "materialsUnavailable": "Kontrollet e sipërfaqeve nuk janë të disponueshme për këtë model. Mund ta eksplorosh ende në 3D.",
@@ -60,6 +60,46 @@
     "planTitle": "Bëje tënden.",
     "planText": "Merr frymëzimin në Garage. Verifiko çdo pjesë me automjetin tënd real para blerjes ose montimit.",
     "soundInvitation": "Çdo makinë ka karakter. Dëgjo edhe anën tjetër të tij."
+  },
+  "MovieGallery": {
+    "collection": "Koleksioni i ekranit",
+    "film": "Film",
+    "television": "Televizion",
+    "screenImage": "Nga ekrani",
+    "watchScene": "Shiko skenën origjinale",
+    "exploreModel": "Eksploro referencën 3D",
+    "closeModel": "Mbyll referencën 3D",
+    "imageSource": "Burimi origjinal i pamjes",
+    "imageNotice": "Pamjet e filmave / serialeve © të mbajtësve përkatës të të drejtave.",
+    "whyItStays": "Pse e mbajmë mend",
+    "designNotes": "Firma vizuale",
+    "modelHeading": "Një vështrim më nga afër në 3D",
+    "baseModel": "Referenca 3D është një Skyline R34 bazë, pa grafikën argjendi dhe blu të makinës së Brian-it në film.",
+    "fanModel": "Interpretim i pavarur i makinës së ekranit nga një krijues.",
+    "modelNotice": "Nuk është automjet i verifikuar xhirimi ose provë përshtatshmërie. Modeli ngarkohet vetëm kur e kërkon.",
+    "modelSource": "Modeli 3D",
+    "buildInvitation": "Merr frymëzimin dhe ndërto historinë tënde. Kontrollo pjesët me automjetin tënd real.",
+    "skyline": {
+      "title": "Skyline i Brian-it",
+      "hook": "Argjend. Blu. Miami natën.",
+      "story": "Gara hapëse e vendosi R34 në garazhin e ëndrrave të një brezi. Karroceria argjendi dhe grafika blu u bënë po aq të paharrueshme sa kërcimi mbi urë.",
+      "details": "Karroceri argjendi · grafikë anësore blu · aerodinamikë e theksuar · siluetë e dallueshme R34",
+      "imageAlt": "Skyline argjendi dhe blu i Brian-it duke kërcyer urën në pamjen e filmit 2 Fast 2 Furious nga Universal Pictures"
+    },
+    "delorean": {
+      "title": "DeLorean i Doc-ut",
+      "hook": "Çelik inox. Dyer gullwing. 88 mph.",
+      "story": "Një makinë sportive e pazakontë u bë makinë kohe dhe personazh më vete. Prova e parë në parking e bëri DeLorean-in të paharrueshëm.",
+      "details": "Sipërfaqe inox · dyer gullwing · kabllo të dukshme · pajisje të makinës së kohës",
+      "imageAlt": "Makina e kohës DeLorean në parapamjen e Back to the Future nga Universal Pictures"
+    },
+    "kitt": {
+      "title": "KITT",
+      "hook": "Një Trans Am i zi. Një dritë e kuqe në lëvizje.",
+      "story": "Knight Rider i dha heroit një partner me katër rrota dhe personalitet. Silueta e zezë dhe skaneri i kuq tregonin historinë para se KITT të fliste.",
+      "details": "Karroceri e zezë me shkëlqim · hundë e ulët · skaner i kuq · linja të pastra futuriste",
+      "imageAlt": "KITT në parapamjen zyrtare të hyrjes së Knight Rider"
+    }
   },
   "PageMeta": {
     "sound-studio": "Dëgjo regjistrime të licencuara të motorëve realë dhe ruaj arkivin lokal të tingujve me kontekst automjeti e konfigurimi.",

@@ -22,6 +22,7 @@ export function ReferenceConfigurator({
   savedConfiguration,
   onSaveConfiguration,
   openLabel,
+  imageUnoptimized = false,
 }: {
   id: string;
   image: string;
@@ -31,6 +32,7 @@ export function ReferenceConfigurator({
   savedConfiguration?: ReferenceConfiguration;
   onSaveConfiguration?: (configuration: ReferenceConfiguration) => void;
   openLabel?: string;
+  imageUnoptimized?: boolean;
 }) {
   const translated = useTranslations("Expansion");
   const studio = useTranslations("StudioPolish");
@@ -142,6 +144,7 @@ export function ReferenceConfigurator({
           <>
             <Image
               src={image}
+              unoptimized={imageUnoptimized}
               alt={name}
               fill
               sizes="(max-width: 768px) 100vw, 1100px"

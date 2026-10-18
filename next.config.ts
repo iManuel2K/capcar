@@ -42,7 +42,7 @@ const nextConfig: NextConfig = {
       "form-action 'self'",
       `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://static.sketchfab.com`,
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://images.unsplash.com https://*.sketchfab.com https://*.supabase.co https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://tiles.openfreemap.org",
+      "img-src 'self' data: blob: https://i.ytimg.com https://images.contentstack.io https://images.unsplash.com https://*.sketchfab.com https://*.supabase.co https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://tiles.openfreemap.org",
       "font-src 'self' data:",
       "connect-src 'self' blob: https://*.supabase.co https://*.sketchfab.com https://tiles.openfreemap.org https://us.i.posthog.com",
       "frame-src https://sketchfab.com https://*.sketchfab.com https://www.youtube-nocookie.com",

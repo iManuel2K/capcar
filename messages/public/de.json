@@ -39,7 +39,7 @@
     "recordingAdvice": "Nur sicher geparkt und mit Erlaubnis aufnehmen. Für Vergleiche Mikrofonposition und Bedingungen gleich halten.",
     "movieCars": "Ikonische Filmautos",
     "movieTitle": "Die Autos, mit denen die Leidenschaft begann.",
-    "movieDescription": "Entdecke Brians R34 als Film-Hommage neben Ikonen des Automobildesigns. Schau in 3D genauer hin, teste eine Oberflächentönung und speichere eine Ansicht als Inspiration für dein nächstes Projekt.",
+    "movieDescription": "Brians Skyline. Docs DeLorean. KITT. Entdecke die Autos mit Bildern aus ihren Filmen und Serien neu und erkunde die Details in unabhängigen 3D-Referenzen.",
     "filmReference": "Filmreferenz von Fans",
     "designReference": "Referenz für Automobildesign",
     "chooseCar": "Fahrzeugreferenz wählen",
@@ -47,7 +47,7 @@
     "skylineStory": "Studiere die Proportionen, die kantige Haltung und die markanten Details des R34. Eine Designreferenz, keine Nachbildung eines Filmautos.",
     "porscheStory": "Ein anderer Auftritt: die geschwungene Silhouette und das breite Heck des 911 Turbo. Entdecke das Modell als Designinspiration, nicht als Filmnachbildung.",
     "modelNotice": "Modell und Vorschaubild sind oben dem Urheber zugeordnet. Tönungen sind vorübergehende Änderungen im Viewer; das Originalmodell bleibt unverändert. Namen kennzeichnen unabhängige Referenzen, keine Empfehlung durch Hersteller oder Filmstudios.",
-    "galleryScope": "Die Sammlung enthält derzeit eine von Fans erstellte Filmauto-Referenz und zwei Designreferenzen. Weitere Filmautos benötigen geeignete Modelle und eine Rechteprüfung.",
+    "galleryScope": "Film- und Serienbilder gehören ihren jeweiligen Rechteinhabern. Die unabhängigen 3D-Referenzen bedeuten weder eine Studiopartnerschaft noch bestätigte Filmfahrzeuge.",
     "startBuild": "Dein Projekt planen",
     "conceptLink": "Concept Studio öffnen",
     "materialsUnavailable": "Die Oberflächensteuerung ist für dieses Modell nicht verfügbar. Du kannst es weiterhin in 3D ansehen.",
@@ -60,6 +60,46 @@
     "planTitle": "Dein eigenes Projekt.",
     "planText": "Nimm die Inspiration mit in deine Garage. Prüfe jedes Teil anhand deines tatsächlichen Fahrzeugs vor Kauf oder Einbau.",
     "soundInvitation": "Jedes Auto hat Charakter. Entdecke auch seinen Klang."
+  },
+  "MovieGallery": {
+    "collection": "Die Leinwand-Sammlung",
+    "film": "Film",
+    "television": "Fernsehen",
+    "screenImage": "Aus Film und Serie",
+    "watchScene": "Originalszene ansehen",
+    "exploreModel": "3D-Referenz erkunden",
+    "closeModel": "3D-Referenz schließen",
+    "imageSource": "Original-Bildquelle",
+    "imageNotice": "Film- und Serienbilder © der jeweiligen Rechteinhaber.",
+    "whyItStays": "Warum wir uns erinnern",
+    "designNotes": "Die visuelle Handschrift",
+    "modelHeading": "Genauer hinsehen in 3D",
+    "baseModel": "Die 3D-Referenz zeigt einen normalen Skyline R34 ohne Brians silberblaue Film-Grafiken.",
+    "fanModel": "Eine unabhängige Interpretation des Filmautos durch einen Künstler.",
+    "modelNotice": "Kein bestätigtes Filmfahrzeug und kein Passformnachweis. Das Modell lädt erst auf deinen Wunsch.",
+    "modelSource": "3D-Modell",
+    "buildInvitation": "Nimm die Inspiration mit und gestalte deine eigene Geschichte. Prüfe Teile immer an deinem tatsächlichen Fahrzeug.",
+    "skyline": {
+      "title": "Brians Skyline",
+      "hook": "Silber. Blau. Miami bei Nacht.",
+      "story": "Das Eröffnungsrennen brachte den R34 in die Traumgarage einer Generation. Silberne Karosserie und elektrische blaue Grafiken machten ihn so unvergesslich wie den Sprung über die Brücke.",
+      "details": "Silberne Karosserie · blaue Seitengrafiken · markante Aerodynamik · unverwechselbare R34-Silhouette",
+      "imageAlt": "Brians silberblauer Skyline beim Brückensprung im Filmbild von Universal Pictures aus 2 Fast 2 Furious"
+    },
+    "delorean": {
+      "title": "Docs DeLorean",
+      "hook": "Edelstahl. Flügeltüren. 88 mph.",
+      "story": "Ein ungewöhnlicher Sportwagen wurde zur Zeitmaschine – und zu einer eigenen Figur. Schon der erste Test auf dem Einkaufszentrum-Parkplatz machte den DeLorean unvergesslich.",
+      "details": "Edelstahloberfläche · Flügeltüren · sichtbare Kabel · Zeitmaschinen-Technik",
+      "imageAlt": "DeLorean-Zeitmaschine im Clip-Vorschaubild von Universal Pictures zu Zurück in die Zukunft"
+    },
+    "kitt": {
+      "title": "KITT",
+      "hook": "Ein schwarzer Trans Am. Ein rotes Lauflicht.",
+      "story": "Knight Rider gab seinem Helden einen Partner auf vier Rädern mit Persönlichkeit. Schwarze Silhouette und roter Scanner erzählten schon eine Geschichte, bevor KITT sprach.",
+      "details": "Schwarzer Hochglanz · flache Front · roter Scanner · klare futuristische Linien",
+      "imageAlt": "KITT im offiziellen Knight-Rider-Vorschaubild des Serienvorspanns"
+    }
   },
   "PageMeta": {
     "sound-studio": "Höre lizenzierte echte Motoraufnahmen und verwalte dein lokales Soundarchiv mit Fahrzeug- und Setup-Kontext.",

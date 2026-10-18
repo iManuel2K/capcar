@@ -39,7 +39,7 @@
     "recordingAdvice": "Record only while safely parked, with permission. Keep microphone position and conditions consistent when comparing takes.",
     "movieCars": "Iconic Movie Cars",
     "movieTitle": "The cars that started the obsession.",
-    "movieDescription": "Explore Brian’s R34 film tribute alongside automotive design icons. Look closer in 3D, try a surface tint and save a view that inspires your next build.",
+    "movieDescription": "Brian’s Skyline. Doc’s DeLorean. KITT. Rediscover the cars through imagery from their films and shows, then explore the details in independent 3D references.",
     "filmReference": "Fan-made film reference",
     "designReference": "Automotive design reference",
     "chooseCar": "Choose a car reference",
@@ -47,7 +47,7 @@
     "skylineStory": "Study the R34’s proportions, squared-off stance and distinctive details. This is an automotive design reference, not a film-car replica.",
     "porscheStory": "A different kind of presence: the 911 Turbo’s curved silhouette and broad rear. Explore the creator’s model as design inspiration, not a movie replica.",
     "modelNotice": "Creator model and preview credited above. Surface tints are temporary viewer adaptations; the original model is unchanged. Names identify independent references, not manufacturer or film-studio endorsements.",
-    "galleryScope": "This collection currently includes one fan-made movie-car reference and two automotive design references. More film cars need suitable models and rights review.",
+    "galleryScope": "Film and television imagery belongs to its respective rights holders. Artist-made 3D references are separate and do not imply a studio partnership or screen-used authenticity.",
     "startBuild": "Plan your own build",
     "conceptLink": "Open Concept Studio",
     "materialsUnavailable": "Surface controls are unavailable for this model. You can still explore it in 3D.",
@@ -60,6 +60,46 @@
     "planTitle": "Make it your own.",
     "planText": "Take the inspiration into your Garage. Check every part against your actual vehicle before buying or fitting it.",
     "soundInvitation": "Every car has a character. Hear another side of it."
+  },
+  "MovieGallery": {
+    "collection": "The screen collection",
+    "film": "Film",
+    "television": "Television",
+    "screenImage": "From the screen",
+    "watchScene": "Watch original scene",
+    "exploreModel": "Explore 3D reference",
+    "closeModel": "Close 3D reference",
+    "imageSource": "Original imagery",
+    "imageNotice": "Film / TV imagery © its respective rights holders.",
+    "whyItStays": "Why we remember it",
+    "designNotes": "The visual signature",
+    "modelHeading": "A closer look in 3D",
+    "baseModel": "The 3D reference is a base Skyline R34. Brian’s silver-and-blue movie graphics are not included.",
+    "fanModel": "An independent artist’s interpretation of the screen car.",
+    "modelNotice": "Not a verified screen-used vehicle or fitment proof. The model loads only when you request it.",
+    "modelSource": "3D model",
+    "buildInvitation": "Take the inspiration, build your own story. Check real parts against your actual vehicle.",
+    "skyline": {
+      "title": "Brian’s Skyline",
+      "hook": "Silver. Blue. Miami after dark.",
+      "story": "The opening race put the R34 in a generation’s dream garage. Its silver body and electric-blue graphics made the car as memorable as the bridge jump.",
+      "details": "Silver bodywork · blue side graphics · purposeful aero · unmistakable R34 silhouette",
+      "imageAlt": "Brian’s silver-and-blue Skyline jumping the bridge in Universal Pictures’ 2 Fast 2 Furious film still"
+    },
+    "delorean": {
+      "title": "Doc’s DeLorean",
+      "hook": "Stainless steel. Gullwing doors. 88 mph.",
+      "story": "An unlikely sports car became a time machine—and a character in its own right. That first test in the mall parking lot made the DeLorean impossible to forget.",
+      "details": "Stainless-steel finish · gullwing doors · exposed cabling · time-machine hardware",
+      "imageAlt": "DeLorean time machine in Universal Pictures’ Back to the Future clip preview"
+    },
+    "kitt": {
+      "title": "KITT",
+      "hook": "One black Trans Am. One moving red light.",
+      "story": "Knight Rider gave its hero a partner with four wheels and a personality. The black silhouette and red scanner did the storytelling before KITT said a word.",
+      "details": "Gloss-black body · low nose · red scanner · clean, futuristic lines",
+      "imageAlt": "KITT in the Knight Rider Official opening-credits preview"
+    }
   },
   "PageMeta": {
     "sound-studio": "Listen to licensed real-engine recordings and keep your own local sound archive with vehicle and setup context.",
