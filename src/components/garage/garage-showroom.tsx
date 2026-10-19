@@ -176,7 +176,7 @@ export function GarageShowroom({
           </Link>
         )}
       </div>
-      <div className="mb-4 flex items-center justify-between gap-3">
+      <div className={styles.collectionBar}>
         <p className={styles.collectionLabel}>{c.collection}</p>
         <div className={styles.controls}>
           {vehicles.length > 1 && (
@@ -242,6 +242,49 @@ export function GarageShowroom({
           onSwipe={(direction) => select(index + direction)}
         />
         <div
+          ref={rail}
+          className={styles.rail}
+          role="group"
+          aria-label={c.collection}
+        >
+          {vehicles.map((vehicle, position) => (
+            <button
+              key={vehicle.id}
+              data-vehicle-index={position}
+              type="button"
+              className={styles.car}
+              aria-pressed={vehicle.id === selected.id}
+              aria-label={`${vehicle.productionYear} ${vehicle.make} ${vehicle.model}`}
+              onClick={() => select(position)}
+              onKeyDown={(event) => navigate(event, position)}
+            >
+              <div className={styles.thumb}>
+                {showroomPhoto(vehicle) ? (
+                  <Image
+                    src={showroomPhoto(vehicle)!}
+                    alt=""
+                    fill
+                    sizes="208px"
+                    className="object-contain"
+                  />
+                ) : (
+                  <span className="grid h-full place-items-center text-[#d6aa92]">
+                    <CarFront className="size-14" />
+                  </span>
+                )}
+              </div>
+              <div className={styles.carLabel}>
+                <p className="text-sm font-medium">
+                  {vehicle.make} {vehicle.model}
+                </p>
+                <p className={styles.carYear}>
+                  {vehicle.productionYear} · {vehicle.platform}
+                </p>
+              </div>
+            </button>
+          ))}
+        </div>
+        <div
           key={`details-${selected.id}`}
           className={`${styles.details} ${styles.arrival}`}
           onPointerDown={() => setPlaying(false)}
@@ -295,49 +338,6 @@ export function GarageShowroom({
           )}
         </div>
       </section>
-      <div
-        ref={rail}
-        className={styles.rail}
-        role="group"
-        aria-label={c.collection}
-      >
-        {vehicles.map((vehicle, position) => (
-          <button
-            key={vehicle.id}
-            data-vehicle-index={position}
-            type="button"
-            className={styles.car}
-            aria-pressed={vehicle.id === selected.id}
-            aria-label={`${vehicle.productionYear} ${vehicle.make} ${vehicle.model}`}
-            onClick={() => select(position)}
-            onKeyDown={(event) => navigate(event, position)}
-          >
-            <div className={styles.thumb}>
-              {showroomPhoto(vehicle) ? (
-                <Image
-                  src={showroomPhoto(vehicle)!}
-                  alt=""
-                  fill
-                  sizes="208px"
-                  className="object-contain"
-                />
-              ) : (
-                <span className="grid h-full place-items-center text-[#d6aa92]">
-                  <CarFront className="size-14" />
-                </span>
-              )}
-            </div>
-            <div className={styles.carLabel}>
-              <p className="text-sm font-medium">
-                {vehicle.make} {vehicle.model}
-              </p>
-              <p className={styles.carYear}>
-                {vehicle.productionYear} · {vehicle.platform}
-              </p>
-            </div>
-          </button>
-        ))}
-      </div>
       {!readOnly && selected.garageGoal && (
         <div className={styles.darkContent}>
           <GarageGoalPanel key={`goal-${selected.id}`} vehicle={selected} />

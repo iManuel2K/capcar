@@ -141,9 +141,9 @@ export function VehicleRadar({
             <polygon
               key={vehicle.id}
               points={radarPolygon(profile)}
-              fill="#b96742"
+              fill="var(--rust, #d6aa92)"
               fillOpacity=".22"
-              stroke="#9d4b30"
+              stroke="var(--rust, #d6aa92)"
               strokeWidth="2"
               strokeLinejoin="round"
               className={styles.radarShape}
@@ -151,7 +151,13 @@ export function VehicleRadar({
             {profileMetrics.map((metric, index) => {
               const [x, y] = radarPoint(index, profile[metric]);
               return (
-                <circle key={metric} cx={x} cy={y} r="3.6" fill="#9d4b30">
+                <circle
+                  key={metric}
+                  cx={x}
+                  cy={y}
+                  r="3.6"
+                  fill="var(--rust, #d6aa92)"
+                >
                   <title>
                     {c.metrics[metric]}: {profile[metric]}/10
                   </title>
