@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowRight, Check, Wrench } from "lucide-react";
+import { ArrowRight, Check, Layers3, MapPinned, Wrench } from "lucide-react";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
 import type { AppLocale } from "@/i18n/config";
 import { HomepageLink } from "./homepage-link";
@@ -22,6 +22,18 @@ export function MarketingHero({ locale = "en" }: { locale?: AppLocale }) {
             {c.headline}
           </h1>
           <p className={styles.description}>{c.description}</p>
+          <ul className={styles.capabilities} aria-label={c.usesTitle}>
+            {[
+              { label: c.maintain, icon: Wrench },
+              { label: c.build, icon: Layers3 },
+              { label: c.drives, icon: MapPinned },
+            ].map(({ label, icon: Icon }) => (
+              <li key={label}>
+                <Icon size={16} aria-hidden="true" />
+                <span>{label}</span>
+              </li>
+            ))}
+          </ul>
           <div className={styles.actions} data-testid="hero-actions">
             <HomepageLink
               href="/garage/new"
@@ -46,17 +58,17 @@ export function MarketingHero({ locale = "en" }: { locale?: AppLocale }) {
           </figcaption>
           <div className={styles.car}>
             <Image
-              src="/capcar-bmw-current-side.webp"
+              src="/garage/cutouts/bmw-318i.webp"
               alt={c.photo}
               fill
               sizes="(min-width: 1440px) 650px, (min-width: 761px) 48vw, 100vw"
               quality={75}
               preload
             />
-            <div className={styles.carTitle}>
-              <p>2011 · E90</p>
-              <h2>BMW 318i</h2>
-            </div>
+          </div>
+          <div className={styles.carTitle}>
+            <p>2011 · E90</p>
+            <h2>BMW 318i</h2>
           </div>
           <div className={styles.dashboard}>
             <div className={styles.dashboardHead}>

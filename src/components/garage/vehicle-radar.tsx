@@ -74,7 +74,7 @@ export function VehicleRadar({
         </span>
       </div>
       <svg
-        viewBox="-28 -10 376 352"
+        viewBox="-42 -10 404 352"
         role="img"
         aria-labelledby={`${id}-chart-title ${id}-description`}
         className={styles.radarSvg}
@@ -126,7 +126,7 @@ export function VehicleRadar({
               {profile && (
                 <text
                   x={lx}
-                  y={ly + 14}
+                  y={ly + 18}
                   textAnchor="middle"
                   className={styles.axisScore}
                 >

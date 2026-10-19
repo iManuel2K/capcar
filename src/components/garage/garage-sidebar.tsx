@@ -146,7 +146,11 @@ export function GarageSidebar({
   return (
     <div className="capcar-editorial-grid flex h-full min-h-0 flex-col bg-[#0b2326] text-white">
       <div className="flex h-18 shrink-0 items-center justify-between border-b border-white/7 px-5">
-        <Link href="/" onClick={onNavigate} className="rounded-lg">
+        <Link
+          href="/"
+          onClick={onNavigate}
+          className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4"
+        >
           <CapcarWordmark />
         </Link>
         {onClose ? (
@@ -154,12 +158,12 @@ export function GarageSidebar({
             type="button"
             aria-label={t("close")}
             onClick={onClose}
-            className="grid size-10 place-items-center rounded-xl border border-white/8 text-white/48 transition hover:bg-white/6 hover:text-white"
+            className="grid size-11 place-items-center rounded-xl border border-white/8 text-[#aab6b1] transition hover:bg-white/6 hover:text-white"
           >
             <X className="size-4" />
           </button>
         ) : (
-          <span className="rounded-full border border-[#bf8269]/25 bg-[#92644d]/12 px-2 py-1 text-[9px] font-semibold tracking-[0.08em] text-[#d6aa92] uppercase">
+          <span className="rounded-full border border-[#bf8269]/25 bg-[#92644d]/12 px-2 py-1 text-xs font-semibold tracking-[0.08em] text-[#d6aa92] uppercase">
             {t("beta")}
           </span>
         )}
@@ -169,6 +173,7 @@ export function GarageSidebar({
         <Link
           href="/garage"
           onClick={onNavigate}
+          aria-current={pathname === "/garage" ? "page" : undefined}
           className="mb-3 flex min-h-11 items-center gap-3 rounded-xl border border-white/8 bg-white/[0.025] px-3 text-sm text-white/62 transition hover:bg-white/6 hover:text-white"
         >
           <House className="size-4" />
@@ -182,10 +187,10 @@ export function GarageSidebar({
                 <CarFront className="size-4" />
               </span>
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-white/88">
+                <p className="text-sm font-semibold break-words text-white/88">
                   {vehicleLabel ?? t("activeVehicle")}
                 </p>
-                <p className="mt-0.5 truncate text-[11px] text-white/34">
+                <p className="mt-0.5 text-xs break-words text-[#aab6b1]">
                   {vehicleMeta ?? t("vehicleWorkspace")}
                 </p>
               </div>
@@ -193,7 +198,7 @@ export function GarageSidebar({
             <Link
               href="/garage/new"
               onClick={onNavigate}
-              className="mt-3 flex min-h-9 items-center justify-center gap-2 rounded-lg border border-white/8 text-[11px] font-semibold text-white/45 transition hover:bg-white/5 hover:text-white"
+              className="mt-3 flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/8 text-xs font-semibold text-[#aab6b1] transition hover:bg-white/5 hover:text-white"
             >
               <Plus className="size-3.5" /> {t("add")}
             </Link>
@@ -210,7 +215,7 @@ export function GarageSidebar({
 
         {vehicleId && (
           <>
-            <p className="px-3 pb-2 text-[9px] font-semibold tracking-[0.16em] text-white/25 uppercase">
+            <p className="px-3 pb-2 text-xs font-semibold tracking-[0.16em] text-[#aab6b1] uppercase">
               {t("core")}
             </p>
             <nav aria-label={t("vehicleNavigation")} className="grid gap-1">
@@ -229,18 +234,20 @@ export function GarageSidebar({
               open={moreActive || undefined}
               className="group mt-3"
             >
-              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-xl px-3 text-xs font-semibold text-white/38 transition hover:bg-white/5 hover:text-white/70 [&::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-xl px-3 text-xs font-semibold text-[#aab6b1] transition hover:bg-white/5 hover:text-white/70 [&::-webkit-details-marker]:hidden">
                 <span>{t("more")}</span>
                 <ChevronDown className="size-3.5 transition group-open:rotate-180" />
               </summary>
-              <nav className="mt-1 grid gap-1 border-l border-white/8 pl-2">
+              <nav
+                aria-label={t("more")}
+                className="mt-1 grid gap-1 border-l border-white/8 pl-2"
+              >
                 {moreItems.map((item) => (
                   <SidebarLink
                     key={item.href}
                     item={item}
                     active={isActive(pathname, item)}
                     onNavigate={onNavigate}
-                    compact
                   />
                 ))}
               </nav>
@@ -249,7 +256,7 @@ export function GarageSidebar({
         )}
 
         <div className="mt-5 border-t border-white/7 pt-4">
-          <p className="px-3 pb-2 text-[9px] font-semibold tracking-[0.16em] text-white/25 uppercase">
+          <p className="px-3 pb-2 text-xs font-semibold tracking-[0.16em] text-[#aab6b1] uppercase">
             {t("explore")}
           </p>
           <SidebarLink
@@ -266,6 +273,7 @@ export function GarageSidebar({
             href="/notifications"
             icon={Bell}
             label={t("notificationsShort")}
+            accessibleLabel={t("notifications", { count: unread })}
             badge={unread}
             onNavigate={onNavigate}
           />
@@ -277,10 +285,10 @@ export function GarageSidebar({
           />
         </div>
         <div className="mt-2 flex items-center justify-between rounded-xl border border-white/7 px-3 py-2">
-          <span className="text-[10px] font-semibold tracking-[0.1em] text-white/28 uppercase">
+          <span className="text-xs font-semibold tracking-[0.1em] text-[#aab6b1] uppercase">
             {t("language")}
           </span>
-          <LanguageSelector compact direction="up" />
+          <LanguageSelector compact direction="up" align="end" />
         </div>
       </div>
     </div>
@@ -296,12 +304,10 @@ function SidebarLink({
   item,
   active,
   onNavigate,
-  compact = false,
 }: {
   item: SidebarItem;
   active: boolean;
   onNavigate?: () => void;
-  compact?: boolean;
 }) {
   const Icon = item.icon;
   return (
@@ -309,15 +315,16 @@ function SidebarLink({
       href={item.href}
       onClick={onNavigate}
       aria-current={active ? "page" : undefined}
-      className={`group relative flex items-center gap-3 rounded-xl px-3 transition ${compact ? "min-h-10 text-xs" : "min-h-11 text-sm"} ${active ? "bg-white/[0.075] text-white" : "text-white/46 hover:bg-white/[0.045] hover:text-white/82"}`}
+      className={`group relative flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm transition ${active ? "bg-white/[0.075] text-white" : "text-[#aab6b1] hover:bg-white/[0.045] hover:text-white/82"}`}
     >
       {active && (
         <span className="absolute top-2 bottom-2 left-0 w-0.5 rounded-full bg-[#bf8269]" />
       )}
       <Icon
-        className={`size-4 shrink-0 transition ${active ? "text-[#d6aa92]" : "text-white/32 group-hover:text-white/65"}`}
+        aria-hidden="true"
+        className={`size-4 shrink-0 transition ${active ? "text-[#d6aa92]" : "text-[#aab6b1] group-hover:text-white/65"}`}
       />
-      <span className="truncate">{item.label}</span>
+      <span className="min-w-0 leading-5 break-words">{item.label}</span>
     </Link>
   );
 }
@@ -326,12 +333,14 @@ function UtilityLink({
   href,
   icon: Icon,
   label,
+  accessibleLabel,
   badge = 0,
   onNavigate,
 }: {
   href: string;
   icon: LucideIcon;
   label: string;
+  accessibleLabel?: string;
   badge?: number;
   onNavigate?: () => void;
 }) {
@@ -339,11 +348,12 @@ function UtilityLink({
     <Link
       href={href}
       onClick={onNavigate}
-      className="relative flex min-h-11 items-center justify-center gap-2 rounded-xl text-[11px] font-semibold text-white/42 transition hover:bg-white/5 hover:text-white"
+      aria-label={accessibleLabel}
+      className="relative flex min-h-11 items-center justify-center gap-2 rounded-xl text-xs font-semibold text-[#aab6b1] transition hover:bg-white/5 hover:text-white"
     >
-      <Icon className="size-4" /> {label}
+      <Icon aria-hidden="true" className="size-4" /> {label}
       {badge > 0 && (
-        <span className="absolute top-1.5 right-1.5 grid min-w-4 place-items-center rounded-full bg-[#6d0101] px-1 text-[9px] text-white">
+        <span className="absolute top-1.5 right-1.5 grid min-w-4 place-items-center rounded-full bg-[#6d0101] px-1 text-xs text-white">
           {Math.min(badge, 9)}
           {badge > 9 ? "+" : ""}
         </span>

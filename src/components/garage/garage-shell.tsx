@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -15,6 +16,7 @@ import { LanguageSelector } from "@/components/i18n/language-selector";
 
 export function GarageShell({ children }: { children: React.ReactNode }) {
   const t = useTranslations("GarageNav");
+  const navigation = useTranslations("Navigation");
   const pathname = usePathname();
   const notifications = useNotifications();
   const { vehicles } = useVehicles();
@@ -53,7 +55,9 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
     return (
       <div className="capcar-editorial-grid min-h-dvh bg-[#07191b] text-[#f4f5f2]">
         <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
-          <CapcarWordmark />
+          <Link href="/" aria-label={navigation("home")} className="rounded-lg">
+            <CapcarWordmark />
+          </Link>
           <LanguageSelector />
         </header>
         <main id="main-content" className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
@@ -85,6 +89,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
                 type="button"
                 aria-label={t("open")}
                 aria-expanded={mobileOpen}
+                aria-controls="mobile-garage-navigation"
                 onClick={() => setMobileOpen(true)}
                 className="grid size-11 place-items-center rounded-xl border border-white/10 bg-white/[0.045] text-white/70 transition hover:bg-white/[0.075]"
               >
@@ -94,7 +99,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             </div>
 
             <div className="hidden min-w-0 lg:block">
-              <p className="text-[9px] font-semibold tracking-[0.15em] text-white/28 uppercase">
+              <p className="text-xs font-semibold tracking-[0.15em] text-[#aab6b1] uppercase">
                 {vehicleId ? t("vehicleWorkspace") : t("garage")}
               </p>
               <p className="mt-0.5 truncate text-sm font-semibold text-white/72">
@@ -105,13 +110,17 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             <div className="hidden w-full max-w-sm xl:block">
               <GlobalPartsSearch theme="dark" />
             </div>
-            <span className="ml-auto hidden text-[10px] tracking-[0.12em] text-white/24 uppercase sm:inline lg:hidden">
+            <span className="ml-auto hidden text-xs tracking-[0.12em] text-[#aab6b1] uppercase sm:inline lg:hidden">
               {vehicleLabel ?? t("garage")}
             </span>
           </div>
         </header>
 
-        <main className="mx-auto max-w-[1500px] px-4 py-7 pb-12 sm:px-7 sm:py-10">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="mx-auto max-w-[1500px] px-4 py-7 pb-12 sm:px-7 sm:py-10"
+        >
           <div className="capcar-page-enter min-w-0">{children}</div>
         </main>
       </div>
@@ -133,7 +142,10 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             onClick={() => setMobileOpen(false)}
             className="absolute inset-0 bg-[#050306]/68 backdrop-blur-sm"
           />
-          <div className="absolute inset-y-0 left-0 w-[min(88vw,18rem)] border-r border-white/8 shadow-[28px_0_90px_rgba(0,0,0,.5)]">
+          <div
+            id="mobile-garage-navigation"
+            className="absolute inset-y-0 left-0 w-[min(88vw,18rem)] border-r border-white/8 shadow-[28px_0_90px_rgba(0,0,0,.5)]"
+          >
             <GarageSidebar
               pathname={pathname}
               vehicleId={vehicleId}

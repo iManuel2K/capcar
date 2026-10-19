@@ -76,7 +76,7 @@ export function MarketingHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-[80] border-b border-[#0e2d30]/10 bg-[#ebe9dc]/92 text-[#0e2d30] shadow-[0_12px_40px_rgba(14,45,48,0.055)] backdrop-blur-2xl">
+      <header className="sticky top-0 z-[80] border-b border-[#0e2d30]/10 bg-[#ebe9dc]/92 text-[#0e2d30] shadow-[0_12px_40px_rgba(14,45,48,0.055)] backdrop-blur-2xl [--ring:#6d0101]">
         <div className="mx-auto flex h-[4.75rem] w-full max-w-[1440px] items-center justify-between gap-5 px-5 sm:h-20 sm:px-8">
           <Link
             href="/"
@@ -193,7 +193,7 @@ export function MarketingHeader() {
           />
           <div
             id="mobile-marketing-navigation"
-            className="absolute top-0 right-0 flex h-full w-[min(92%,24rem)] flex-col overflow-y-auto overscroll-contain rounded-l-[1.75rem] bg-[#e8e6d7] p-5 text-[#0e2d30] shadow-[-30px_0_90px_rgba(5,3,6,0.24)]"
+            className="absolute top-0 right-0 flex h-full w-[min(92%,24rem)] flex-col overflow-y-auto overscroll-contain rounded-l-[1.75rem] bg-[#e8e6d7] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] text-[#0e2d30] shadow-[-30px_0_90px_rgba(5,3,6,0.24)]"
           >
             <div className="flex items-center justify-between border-b border-[#0e2d30]/10 pb-5">
               <CapcarWordmark glow={false} />
@@ -213,6 +213,7 @@ export function MarketingHeader() {
                 <Link
                   key={item.label}
                   href={item.href}
+                  aria-current={active(item.href) ? "page" : undefined}
                   onClick={() => setMenuOpen(false)}
                   className="flex min-h-15 items-center justify-between border-b border-[#0e2d30]/10 text-lg font-medium tracking-[-0.02em]"
                 >
@@ -220,27 +221,36 @@ export function MarketingHeader() {
                   <ChevronRight className="size-4 text-[#0e2d30]/45" />
                 </Link>
               ))}
-              {[
-                ["conceptStudio", "/studio"],
-                ["soundStudio", "/sound-studio"],
-                ["movieCars", "/movie-cars"],
-                ["roadbook", "/roadbook"],
-                ["aiPlanner", "/ai"],
-                ["marketplace", "/marketplace"],
-                ["roadmap", "/roadmap"],
-                ["faq", "/#faq"],
-                ["journal", journalPath(journalLocale)],
-              ].map(([label, href]) => (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={() => setMenuOpen(false)}
-                  className="flex min-h-12 items-center justify-between border-b border-[#0e2d30]/10 text-base focus-visible:outline-2"
-                >
-                  {label === "journal" ? journal.label : footer(label)}
-                  <ChevronRight className="size-4" aria-hidden="true" />
-                </Link>
-              ))}
+              <details className="mt-2">
+                <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between text-base font-medium [&::-webkit-details-marker]:hidden">
+                  {l("nav.explore")}
+                  <ChevronDown className="size-4" aria-hidden="true" />
+                </summary>
+                <div className="pl-3">
+                  {" "}
+                  {[
+                    ["conceptStudio", "/studio"],
+                    ["soundStudio", "/sound-studio"],
+                    ["movieCars", "/movie-cars"],
+                    ["roadbook", "/roadbook"],
+                    ["aiPlanner", "/ai"],
+                    ["marketplace", "/marketplace"],
+                    ["roadmap", "/roadmap"],
+                    ["faq", "/#faq"],
+                    ["journal", journalPath(journalLocale)],
+                  ].map(([label, href]) => (
+                    <Link
+                      key={href}
+                      href={href}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex min-h-12 items-center justify-between border-b border-[#0e2d30]/10 text-base focus-visible:outline-2"
+                    >
+                      {label === "journal" ? journal.label : footer(label)}
+                      <ChevronRight className="size-4" aria-hidden="true" />
+                    </Link>
+                  ))}
+                </div>
+              </details>
             </nav>
 
             <div className="mt-6">

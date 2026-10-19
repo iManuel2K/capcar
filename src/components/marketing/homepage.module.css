@@ -15,7 +15,7 @@
   padding: 88px 32px;
 }
 .eyebrow {
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 650;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -119,22 +119,21 @@
   justify-content: space-between;
   gap: 12px;
   border-bottom: 1px solid #ffffff20;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: #d1dad2;
 }
 .car {
   position: relative;
   aspect-ratio: 16/9;
-  background: #182b2c;
+  background: transparent;
 }
 .car img {
-  object-fit: cover;
+  object-fit: contain;
+  padding: 12px;
 }
 .carTitle {
-  position: absolute;
-  inset: auto 0 0;
-  padding: 44px 24px 18px;
-  background: linear-gradient(transparent, #081b20ed);
+  padding: 0 24px 16px;
+  background: transparent;
   color: #fff;
 }
 .carTitle p {
@@ -157,7 +156,7 @@
   font-size: 0.85rem;
 }
 .badge {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   border: 1px solid #78938b;
   border-radius: 999px;
   padding: 4px 9px;
@@ -196,7 +195,7 @@
   flex-shrink: 0;
 }
 .next p {
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   color: #b7cbc2;
 }
 .next strong {
@@ -258,7 +257,7 @@
 }
 .mini > p:first-child {
   color: #526965;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   margin: 0 0 20px;
 }
 .miniRow {
@@ -272,7 +271,7 @@
 }
 .miniRow span {
   color: #526965;
-  font-size: 0.73rem;
+  font-size: 0.8rem;
   text-align: right;
 }
 .mini .stats dt {
@@ -343,7 +342,7 @@
 }
 .number {
   font-family: monospace;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: #84553f;
 }
 .step svg {
@@ -358,7 +357,7 @@
   line-height: 1.4;
 }
 .step p {
-  font-size: 0.8rem;
+  font-size: 1rem;
   line-height: 1.8;
   color: #435e59;
   margin-top: 12px;
@@ -391,7 +390,7 @@
 }
 .tool p {
   max-width: 52em;
-  font-size: 0.85rem;
+  font-size: 1rem;
   line-height: 1.8;
   color: #526965;
 }
@@ -498,7 +497,7 @@
     max-width: 15em;
   }
   .description {
-    font-size: 0.9rem;
+    font-size: 1rem;
     line-height: 1.65;
   }
   .actions {
@@ -516,7 +515,7 @@
     margin-top: 10px;
   }
   .hero .fine {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
   }
   .previewTop {
     padding: 14px 18px;
@@ -537,7 +536,7 @@
     font-size: 1.75rem;
   }
   .use p {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   .use .fine {
     font-size: 0.75rem;
@@ -564,5 +563,40 @@
   }
   .tool h3 {
     padding-top: 1px;
+  }
+}
+
+.capabilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-top: 24px;
+  list-style: none;
+  padding: 0;
+}
+.capabilities li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #e2d3c7;
+}
+.capabilities svg {
+  flex-shrink: 0;
+  color: #d6aa92;
+}
+@media (max-width: 760px) {
+  .hero .primary {
+    width: 100%;
+  }
+  .hero .actions {
+    align-items: stretch;
+  }
+  .hero .secondary {
+    align-self: flex-start;
+  }
+  .capabilities {
+    gap: 10px 16px;
   }
 }

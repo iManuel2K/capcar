@@ -177,6 +177,15 @@ describe("the connected homepage example", () => {
     expect(
       within(drawer).getByRole("link", { name: "Find parts" }),
     ).toHaveAttribute("href", "/parts-search");
+    const explore = within(drawer).getByText("Explore", {
+      selector: "summary",
+    });
+    expect(explore.closest("details")).not.toHaveAttribute("open");
+    fireEvent.click(explore);
+    expect(explore.closest("details")).toHaveAttribute("open");
+    expect(
+      within(drawer).getByRole("link", { name: "Roadbook" }),
+    ).toHaveAttribute("href", "/roadbook");
     fireEvent.click(
       within(drawer).getByRole("button", { name: "Close navigation" }),
     );

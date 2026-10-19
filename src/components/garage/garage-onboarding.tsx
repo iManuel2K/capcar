@@ -2,6 +2,14 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { ZodError } from "zod";
+import { useLocale } from "next-intl";
+import { isAppLocale } from "@/i18n/config";
+import {
+  setupFields,
+  validationCopy,
+  type SetupField,
+} from "@/features/onboarding/validation-copy";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
   ArrowLeft,
@@ -90,6 +98,9 @@ function OnboardingFlow({
   resumeId?: string;
 }) {
   const c = useGarageCopy();
+  const requestedLocale = useLocale();
+  const validation =
+    validationCopy[isAppLocale(requestedLocale) ? requestedLocale : "en"];
   const { configured, userId } = useGarageAccount();
   const { vehicles } = useVehicles();
   const [draft, setDraft] = useState<OnboardingDraft>(() => {
@@ -128,6 +139,39 @@ function OnboardingFlow({
   });
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<
+    Partial<Record<SetupField, string>>
+  >({});
+  const [validationAttempt, setValidationAttempt] = useState(0);
+  const errorSummary = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (validationAttempt) errorSummary.current?.focus();
+  }, [validationAttempt]);
+  function invalid(fields: SetupField[]) {
+    setError("");
+    setFieldErrors(
+      Object.fromEntries(
+        fields.map((field) => [field, validation.fields[field]]),
+      ),
+    );
+    setValidationAttempt((value) => value + 1);
+  }
+  function focusField(field: SetupField) {
+    const element = document.getElementById(`setup-${field}`);
+    const details = element?.closest("details");
+    if (details) details.open = true;
+    element?.focus();
+  }
+  function fieldFeedback(field: SetupField) {
+    return fieldErrors[field] ? (
+      <span
+        id={`setup-${field}-error`}
+        className="mt-2 block text-sm leading-6 text-red-100"
+      >
+        {fieldErrors[field]}
+      </span>
+    ) : null;
+  }
   const [busy, setBusy] = useState(false);
   const [example, setExample] = useState(false);
   const [savedPath, setSavedPath] = useState("");
@@ -203,6 +247,11 @@ function OnboardingFlow({
     const next = { ...draft, ...values };
     setDraft(next);
     setError("");
+    setFieldErrors((current) =>
+      Object.fromEntries(
+        Object.entries(current).filter(([field]) => !(field in values)),
+      ),
+    );
     try {
       localStorage.setItem(draftKey(userId || null), JSON.stringify(next));
     } catch {
@@ -213,8 +262,16 @@ function OnboardingFlow({
     if (draft.step === "car" && !draft.existingVehicleId) {
       try {
         onboardingVehicleInput(draft);
-      } catch {
-        setError(c.carError);
+      } catch (failure) {
+        const fields =
+          failure instanceof ZodError
+            ? failure.issues
+                .map((issue) => issue.path[0])
+                .filter((field): field is SetupField =>
+                  setupFields.includes(field as SetupField),
+                )
+            : ["make" as const];
+        invalid([...new Set(fields)]);
         return;
       }
     }
@@ -222,12 +279,22 @@ function OnboardingFlow({
       draft.step === "action" &&
       !skip &&
       (draft.title.trim().length < 2 ||
+        draft.title.trim().length > 100 ||
         (draft.estimate !== "" &&
           (!/^\d+$/.test(draft.estimate) || Number(draft.estimate) > 1000000)))
     ) {
-      setError(c.actionError);
+      const fields: SetupField[] = [];
+      if (draft.title.trim().length < 2 || draft.title.trim().length > 100)
+        fields.push("title");
+      if (
+        draft.estimate !== "" &&
+        (!/^\d+$/.test(draft.estimate) || Number(draft.estimate) > 1000000)
+      )
+        fields.push("estimate");
+      invalid(fields);
       return;
     }
+    setFieldErrors({});
     trackAnalytics(skip ? "onboarding_skipped" : "onboarding_step_completed", {
       step: draft.step,
       ...(draft.goal ? { goal: draft.goal } : {}),
@@ -364,7 +431,10 @@ function OnboardingFlow({
         </section>
       ) : (
         <>
-          <ol aria-label={c.title} className="mb-8 grid grid-cols-4 gap-2">
+          <ol
+            aria-label={c.title}
+            className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4"
+          >
             {steps.map((step, index) => (
               <li
                 key={step}
@@ -395,7 +465,7 @@ function OnboardingFlow({
                       ? c.firstTitle
                       : c.ready}
               </h1>
-              <p className="mt-4 text-sm leading-6 text-white/70">
+              <p className="mt-4 text-base leading-7 text-white/75">
                 {draft.step === "car"
                   ? c.intro
                   : draft.step === "goal"
@@ -404,8 +474,38 @@ function OnboardingFlow({
                       ? c.firstHint
                       : c.readyHint}
               </p>
+              {Object.keys(fieldErrors).length > 0 && (
+                <div
+                  ref={errorSummary}
+                  role="alert"
+                  tabIndex={-1}
+                  aria-labelledby="setup-error-heading"
+                  className="mt-6 rounded-xl border border-red-200/40 bg-red-200/5 p-4 focus:outline-2 focus:outline-offset-4 focus:outline-red-200"
+                >
+                  <h2 id="setup-error-heading" className="font-medium">
+                    {validation.errorTitle}
+                  </h2>
+                  <ul className="mt-2 space-y-1">
+                    {Object.entries(fieldErrors).map(([field, message]) => (
+                      <li key={field}>
+                        <a
+                          className="inline-flex min-h-11 items-center text-sm text-red-100 underline underline-offset-4"
+                          href={`#setup-${field}`}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            focusField(field as SetupField);
+                          }}
+                        >
+                          {message}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               {draft.step === "car" && (
                 <form
+                  noValidate
                   className="mt-6 space-y-5"
                   onSubmit={(event) => {
                     event.preventDefault();
@@ -462,6 +562,14 @@ function OnboardingFlow({
                         className="grid max-h-64 gap-2 overflow-y-auto rounded-2xl border border-white/10 p-2 sm:grid-cols-2"
                         aria-label={c.search}
                       >
+                        {matches.length === 0 && (
+                          <p
+                            role="status"
+                            className="p-4 text-sm leading-6 text-white/75 sm:col-span-2"
+                          >
+                            {validation.noMatches}
+                          </p>
+                        )}
                         {matches.map((car) => (
                           <button
                             type="button"
@@ -520,6 +628,12 @@ function OnboardingFlow({
                               {c[field === "productionYear" ? "year" : field]}
                               <input
                                 id={`setup-${field}`}
+                                aria-invalid={Boolean(fieldErrors[field])}
+                                aria-describedby={
+                                  fieldErrors[field]
+                                    ? `setup-${field}-error`
+                                    : undefined
+                                }
                                 required
                                 maxLength={field === "productionYear" ? 4 : 40}
                                 inputMode={
@@ -533,6 +647,7 @@ function OnboardingFlow({
                                   update({ [field]: event.target.value })
                                 }
                               />
+                              {fieldFeedback(field)}
                             </label>
                           ),
                         )}
@@ -550,6 +665,13 @@ function OnboardingFlow({
                               <label className="text-sm" key={field}>
                                 {c[field === "engineCode" ? "engine" : field]}
                                 <input
+                                  id={`setup-${field}`}
+                                  aria-invalid={Boolean(fieldErrors[field])}
+                                  aria-describedby={
+                                    fieldErrors[field]
+                                      ? `setup-${field}-error`
+                                      : undefined
+                                  }
                                   maxLength={
                                     field === "mileage"
                                       ? 7
@@ -566,6 +688,7 @@ function OnboardingFlow({
                                     update({ [field]: event.target.value })
                                   }
                                 />
+                                {fieldFeedback(field)}
                               </label>
                             ),
                           )}
@@ -672,6 +795,7 @@ function OnboardingFlow({
               )}
               {draft.step === "action" && (
                 <form
+                  noValidate
                   className="mt-7 space-y-5"
                   onSubmit={(event) => {
                     event.preventDefault();
@@ -685,6 +809,11 @@ function OnboardingFlow({
                         ? c.modification
                         : c.drive}
                     <input
+                      id="setup-title"
+                      aria-invalid={Boolean(fieldErrors.title)}
+                      aria-describedby={
+                        fieldErrors.title ? "setup-title-error" : undefined
+                      }
                       className={input}
                       required
                       minLength={2}
@@ -695,11 +824,20 @@ function OnboardingFlow({
                         update({ title: event.target.value })
                       }
                     />
+                    {fieldFeedback("title")}
                   </label>
                   {draft.goal !== "drives" && (
                     <label className="block text-sm">
                       {c.estimate}
                       <input
+                        id="setup-estimate"
+                        maxLength={12}
+                        aria-invalid={Boolean(fieldErrors.estimate)}
+                        aria-describedby={
+                          fieldErrors.estimate
+                            ? "setup-estimate-error"
+                            : undefined
+                        }
                         className={input}
                         inputMode="numeric"
                         value={draft.estimate}
@@ -707,6 +845,7 @@ function OnboardingFlow({
                           update({ estimate: event.target.value })
                         }
                       />
+                      {fieldFeedback("estimate")}
                     </label>
                   )}
                   <p className="text-xs leading-5 text-white/60">
@@ -802,6 +941,7 @@ function OnboardingFlow({
                     setDraft(emptyOnboardingDraft());
                     setQuery("");
                     setError("");
+                    setFieldErrors({});
                   }}
                 >
                   {c.restart}
