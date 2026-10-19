@@ -174,7 +174,30 @@ async function ready() {
   throw new Error("App did not start\n" + log.slice(-3000));
 }
 async function selectCar(page, goal, manual = false) {
-  await page.goto(`${base}/garage/new`);
+  // Start from the real homepage and carry use-case intent into the draft.
+  await page.goto(base);
+  await page
+    .getByRole("heading", {
+      level: 1,
+      name: "Your car. Every idea, job and journey in one place.",
+    })
+    .waitFor();
+  if (goal === "drives") {
+    await page
+      .getByTestId("hero-actions")
+      .getByRole("link", { name: "Create your garage", exact: true })
+      .click();
+  } else {
+    await page
+      .getByRole("link", {
+        name:
+          goal === "maintain"
+            ? "Plan a maintenance task"
+            : "Start a build plan",
+        exact: true,
+      })
+      .click();
+  }
   await page
     .getByRole("heading", { name: "Start with your car.", exact: true })
     .waitFor();
@@ -184,6 +207,18 @@ async function selectCar(page, goal, manual = false) {
   } else await page.getByRole("button", { name: /BMW 318i/ }).click();
   await page.getByLabel("Production year", { exact: true }).fill("2011");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
+  if (goal !== "drives")
+    assert.equal(
+      await page
+        .getByRole("button", {
+          name: new RegExp(
+            goal === "maintain" ? "Maintain my car" : "Modify my car",
+          ),
+        })
+        .getAttribute("aria-pressed"),
+      "true",
+      "Homepage goal intent is preselected",
+    );
   await page
     .getByRole("button", {
       name: new RegExp(

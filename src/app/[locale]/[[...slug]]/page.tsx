@@ -103,12 +103,12 @@ export default async function LocalizedPublicPage({
   params,
   searchParams,
 }: LocalizedPublicPageProps) {
-  const { route } = await resolveLocalizedRoute(params);
+  const { route, locale } = await resolveLocalizedRoute(params);
   const query = searchParams as Promise<{ q?: string | string[] }>;
 
   switch (route) {
     case "":
-      return <HomePage />;
+      return <HomePage locale={locale} />;
     case "/connected-parts":
       return <ConnectedPartsPage searchParams={query} />;
     case "/imprint":

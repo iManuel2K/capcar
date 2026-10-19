@@ -1,90 +1,97 @@
-import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { BuildTransformation } from "./build-transformation";
-import styles from "./launch.module.css";
+import Image from "next/image";
+import { ArrowRight, Check, Wrench } from "lucide-react";
+import { homepageCopy } from "@/features/marketing/homepage-copy";
+import type { AppLocale } from "@/i18n/config";
+import { HomepageLink } from "./homepage-link";
+import styles from "./homepage.module.css";
 
-export function MarketingHero() {
-  const t = useTranslations("Launch");
+export function MarketingHero({ locale = "en" }: { locale?: AppLocale }) {
+  const c = homepageCopy[locale] ?? homepageCopy.en;
+  const euro = (value: number) =>
+    new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: "EUR",
+      maximumFractionDigits: 0,
+    }).format(value);
   return (
-    <section className={styles.hero} aria-labelledby="hero-title">
-      <div className={styles.heroGrid}>
+    <section className={styles.hero} aria-labelledby="homepage-title">
+      <div className={styles.heroInner}>
         <div>
-          <div className="flex flex-wrap items-center gap-3">
-            <p className={styles.eyebrow}>{t("hero.eyebrow")}</p>
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#d6aa92]/35 bg-[#d6aa92]/8 px-3 py-1.5 text-[10px] font-semibold tracking-[0.13em] text-[#f0c0a8] uppercase">
-              <span
-                aria-hidden="true"
-                className="size-1.5 rounded-full bg-[#6bd2ae] shadow-[0_0_0_4px_rgba(107,210,174,.12)]"
-              />
-              {t("hero.status")}
-            </span>
-          </div>
-          <h1 id="hero-title" className={`${styles.heroTitle} mt-5`}>
-            {t("hero.title")}{" "}
-            <span className="block text-[#d6aa92]">{t("hero.accent")}</span>
+          <p className={styles.eyebrow}>{c.eyebrow}</p>
+          <h1 id="homepage-title" className={styles.headline}>
+            {c.headline}
           </h1>
-          <p className={`${styles.body} mt-6`}>{t("hero.description")}</p>
-          <div className="mt-7 flex flex-wrap gap-3" data-testid="hero-actions">
-            <Link href="/garage/new" className={styles.primary}>
-              {t("start")} <ArrowRight className="size-4" aria-hidden="true" />
-            </Link>
-            <a href="#live-demo" className={styles.secondary}>
-              {t("explore")}
-            </a>
+          <p className={styles.description}>{c.description}</p>
+          <div className={styles.actions} data-testid="hero-actions">
+            <HomepageLink
+              href="/garage/new"
+              placement="hero"
+              className={styles.primary}
+            >
+              {c.create}
+              <ArrowRight size={16} aria-hidden="true" />
+            </HomepageLink>
+            <HomepageLink href="#live-demo" demo className={styles.secondary}>
+              {c.explore}
+              <ArrowRight size={15} aria-hidden="true" />
+            </HomepageLink>
           </div>
-          <p className="mt-5 text-xs leading-5 text-[#bfcac5]">
-            {t("hero.note")}
-          </p>
-          <ol
-            aria-label={t("hero.flowLabel")}
-            className="mt-5 grid max-w-xl gap-2 text-xs text-[#d9e2de] sm:grid-cols-3"
-          >
-            {["car", "plan", "record"].map((step) => (
-              <li
-                key={step}
-                className="flex min-h-11 items-center gap-2 rounded-xl border border-white/12 bg-white/[0.035] px-3 py-2.5"
-              >
-                <Check
-                  aria-hidden="true"
-                  className="size-3.5 shrink-0 text-[#6bd2ae]"
-                />
-                {t(`hero.flow.${step}`)}
-              </li>
-            ))}
-          </ol>
-          <div
-            className="mt-7 max-w-lg overflow-hidden rounded-2xl border border-white/14 bg-black/10"
-            aria-label={t("hero.aiLabel")}
-          >
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
-              <p className="text-[10px] font-semibold tracking-[0.17em] text-[#d6aa92] uppercase">
-                {t("hero.aiLabel")}
-              </p>
-              <span className="font-mono text-[9px] tracking-[0.14em] text-white/35 uppercase">
-                {t("hero.aiProtocol")}
-              </span>
-            </div>
-            <div className="grid gap-3 px-4 py-4 sm:grid-cols-[auto_1fr] sm:items-center">
-              <div
-                className="flex items-center gap-2"
-                aria-label="ChatGPT and Claude"
-              >
-                <span className="rounded-md border border-white/20 bg-white/5 px-2.5 py-1.5 font-mono text-[10px] font-semibold text-[#f5f0e8]">
-                  ChatGPT
-                </span>
-                <span aria-hidden="true" className="h-px w-3 bg-[#d6aa92]/60" />
-                <span className="rounded-md border border-white/20 bg-white/5 px-2.5 py-1.5 font-mono text-[10px] font-semibold text-[#f5f0e8]">
-                  Claude
-                </span>
-              </div>
-              <p className="text-xs leading-5 text-[#bfcac5]">
-                {t("hero.aiSupport")}
-              </p>
-            </div>
-          </div>
+          <p className={styles.support}>{c.support}</p>
+          <p className={styles.fine}>{c.account}</p>
         </div>
-        <BuildTransformation eager />
+        <figure className={styles.preview} aria-label={c.sample}>
+          <figcaption className={styles.previewTop}>
+            <span>CAPCAR / BMW 318i</span>
+            <span>{c.sample}</span>
+          </figcaption>
+          <div className={styles.car}>
+            <Image
+              src="/capcar-bmw-current-side.webp"
+              alt={c.photo}
+              fill
+              sizes="(min-width: 1440px) 650px, (min-width: 761px) 48vw, 100vw"
+              quality={75}
+              preload
+            />
+            <div className={styles.carTitle}>
+              <p>2011 · E90</p>
+              <h2>BMW 318i</h2>
+            </div>
+          </div>
+          <div className={styles.dashboard}>
+            <div className={styles.dashboardHead}>
+              <strong>{c.project}</strong>
+              <span className={styles.badge}>{c.active}</span>
+            </div>
+            <dl className={styles.stats}>
+              <div>
+                <dt>{c.budget}</dt>
+                <dd>{euro(300)}</dd>
+              </div>
+              <div>
+                <dt>{c.planned}</dt>
+                <dd>{euro(30)}</dd>
+              </div>
+              <div>
+                <dt>{c.actual}</dt>
+                <dd>{euro(28)}</dd>
+              </div>
+            </dl>
+            <div className={styles.next}>
+              <span>
+                <Wrench size={15} aria-hidden="true" />
+              </span>
+              <div>
+                <p>{c.next}</p>
+                <strong>{c.task}</strong>
+              </div>
+            </div>
+            <p className="mt-4 flex items-center gap-2 text-xs text-[#b7cbc2]">
+              <Check size={13} aria-hidden="true" />
+              {c.progress}
+            </p>
+          </div>
+        </figure>
       </div>
     </section>
   );

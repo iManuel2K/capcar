@@ -28,6 +28,17 @@ beforeEach(() => {
   mocks.track.mockClear();
 });
 describe("garage onboarding UI", () => {
+  it("seeds a homepage goal only for a fresh draft and preserves an interrupted choice", () => {
+    const view = render(<GarageOnboarding initialGoal="modify" />);
+    expect(JSON.parse(localStorage.getItem(draftKey(null))!).goal).toBe(
+      "modify",
+    );
+    view.unmount();
+    render(<GarageOnboarding initialGoal="maintain" />);
+    expect(JSON.parse(localStorage.getItem(draftKey(null))!).goal).toBe(
+      "modify",
+    );
+  });
   it("shows an example before asking for personal information without adding sample vehicles", () => {
     render(<GarageOnboarding />);
     fireEvent.click(

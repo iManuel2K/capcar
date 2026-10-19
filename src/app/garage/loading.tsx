@@ -1,5 +1,8 @@
 import { getTranslations } from "next-intl/server";
 
+// Keep the workspace skeleton scoped to the garage. A root loading boundary
+// hides streamed public content until JavaScript runs, even on the static home.
+
 export default async function Loading() {
   const t = await getTranslations("PublicStates");
   return (

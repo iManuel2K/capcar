@@ -6,6 +6,9 @@ export const ANALYTICS_CONSENT_EVENT = "capcar:analytics-consent";
 export const ANALYTICS_SETTINGS_EVENT = "capcar:analytics-settings";
 export type AnalyticsEvent =
   | "$pageview"
+  | "homepage_primary_cta_clicked"
+  | "homepage_use_case_clicked"
+  | "homepage_demo_engaged"
   | "journal_article_viewed"
   | "journal_action_clicked"
   | "journal_checklist_saved"
@@ -143,10 +146,25 @@ const allowedProperties = new Set([
   "elapsed_seconds",
   "progress_bucket",
   "action_type",
+  "placement",
+  "use_case",
+  "demo_action",
 ]);
 
 export function safeJourneyProperties(properties: Record<string, unknown>) {
   const enums: Record<string, string[]> = {
+    placement: ["hero", "header", "demo", "final", "footer"],
+    use_case: ["maintain", "modify", "drives"],
+    demo_action: [
+      "open",
+      "plan",
+      "parts",
+      "visual",
+      "history",
+      "add",
+      "remove",
+      "reset",
+    ],
     step: ["car", "goal", "action", "save"],
     goal: ["maintain", "modify", "drives"],
     action_type: ["maintenance", "modification", "drive"],

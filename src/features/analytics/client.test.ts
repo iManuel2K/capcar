@@ -37,6 +37,28 @@ beforeEach(() => {
 });
 
 describe("privacy-preserving analytics", () => {
+  it("allows only fixed homepage placements and actions, never content or destinations", () => {
+    expect(
+      safeJourneyProperties({
+        placement: "hero",
+        use_case: "maintain",
+        demo_action: "parts",
+        href: "/garage/private",
+        vehicle: "secret",
+      }),
+    ).toEqual({
+      placement: "hero",
+      use_case: "maintain",
+      demo_action: "parts",
+    });
+    expect(
+      safeJourneyProperties({
+        placement: "private note",
+        use_case: "VIN",
+        demo_action: "user content",
+      }),
+    ).toEqual({});
+  });
   it("allows only enumerated journey properties and bounded elapsed time, never free-text or vehicle identifiers", () => {
     expect(
       safeJourneyProperties({

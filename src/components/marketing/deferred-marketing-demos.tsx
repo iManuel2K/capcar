@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import { HomepageLink } from "./homepage-link";
+import styles from "./homepage.module.css";
 import { useEffect, useRef, useState } from "react";
 
 const ProductDashboardPreview = dynamic(
@@ -70,7 +71,7 @@ export function DeferredProductDashboardPreview({
         <section
           id="live-demo"
           aria-labelledby="deferred-demo-title"
-          className="scroll-mt-6 bg-[#e8e6d7] px-5 py-16 text-[#0e2d30] sm:px-8 sm:py-24"
+          className="scroll-mt-24 bg-[#e8e6d7] px-5 py-16 text-[#0e2d30] sm:px-8 sm:py-24"
         >
           <div className="mx-auto max-w-[1440px]">
             <p className="text-xs font-semibold tracking-[0.15em] text-[#80533e] uppercase">
@@ -85,12 +86,13 @@ export function DeferredProductDashboardPreview({
             <p className="mt-5 max-w-2xl text-base leading-7 text-[#405856]">
               {description}
             </p>
-            <Link
-              href="/register"
-              className="mt-7 inline-flex min-h-12 items-center rounded-full bg-[#0e2d30] px-5 text-sm font-semibold text-[#f5f2e8]"
+            <HomepageLink
+              href="/garage/new"
+              placement="demo"
+              className={`${styles.primary} mt-7`}
             >
               {action}
-            </Link>
+            </HomepageLink>
             <div
               aria-hidden="true"
               className="mt-10 min-h-[390px] animate-pulse rounded-[1.6rem] bg-[#0b2326]/12 motion-reduce:animate-none"

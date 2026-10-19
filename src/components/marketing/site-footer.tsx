@@ -6,6 +6,9 @@ import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { LanguageSelector } from "@/components/i18n/language-selector";
 import { journalPath, resolveJournalLocale } from "@/features/journal/routes";
 import { journalUI } from "@/features/journal/ui";
+import { HomepageLink } from "./homepage-link";
+import { homepageCopy } from "@/features/marketing/homepage-copy";
+import styles from "./homepage.module.css";
 
 export function SiteFooter() {
   const journalLocale = resolveJournalLocale(useLocale());
@@ -58,12 +61,13 @@ export function SiteFooter() {
           <p className="mt-4 max-w-xs text-sm leading-7 text-[#e8e6d7]/55">
             {t("tagline")}
           </p>
-          <Link
-            href="/register"
-            className="mt-5 inline-flex min-h-11 items-center rounded-full border border-[#e8e6d7]/15 px-4 text-sm font-semibold transition hover:border-[#bf8269]/60 hover:bg-white/5 focus-visible:outline-2"
+          <HomepageLink
+            href="/garage/new"
+            placement="footer"
+            className={`${styles.primary} mt-5`}
           >
-            {l("start")} →
-          </Link>
+            {homepageCopy[journalLocale].create} →
+          </HomepageLink>
         </div>
         {groups.map((group) => (
           <nav key={group.title} aria-label={group.title}>

@@ -10,6 +10,7 @@ import { MarketingLanding } from "./marketing-landing";
 import { MarketingHeader } from "./marketing-header";
 import { ProductDashboardPreview } from "./product-dashboard-preview";
 import { SkipToContent } from "@/components/ui/skip-to-content";
+import { BuildTransformation } from "./build-transformation";
 
 beforeEach(() => window.history.replaceState(null, "", "/"));
 afterEach(cleanup);
@@ -29,35 +30,53 @@ describe("the connected homepage example", () => {
   it("makes the product and its capability limits clear", async () => {
     renderPage();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Plan your project car without losing the details.",
+      "Your car. Every idea, job and journey in one place.",
     );
     expect(
       await screen.findByText(/Interactive example · Illustrative data/),
     ).toBeInTheDocument();
     expect(screen.queryByText("Verified builder")).not.toBeInTheDocument();
-    expect(screen.getByText("Beta · Operational")).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "Free during beta. No credit card required. Your garage is private by default.",
-      ),
+      screen.getAllByText(
+        "Explore without an account. Create one when you’re ready to save your own car.",
+      ).length,
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getByRole("heading", { name: "Maintain your car" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("list", { name: "The CapCar workflow" }),
-    ).toHaveTextContent("Add your carPlan the next changeRecord the build");
+      screen.getByRole("heading", { name: "Plan your build" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Find your next drive" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /Plan a maintenance task/ }),
+    ).toHaveAttribute("href", "/garage/new?goal=maintain");
+    expect(
+      screen.getByRole("link", { name: /Start a build plan/ }),
+    ).toHaveAttribute("href", "/garage/new?goal=modify");
+    expect(
+      screen.getByText(
+        /AI trip planning requires an account and a connected AI service/,
+      ),
+    ).toBeInTheDocument();
     expect(document.querySelector("video")).not.toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "Skip to main content" }),
     ).toHaveAttribute("href", "#main-content");
     const actions = screen.getByTestId("hero-actions");
     expect(
-      within(actions).getByRole("link", { name: /Start your free garage/ }),
+      within(actions).getByRole("link", { name: /Create your garage/ }),
     ).toHaveAttribute("href", "/garage/new");
     expect(
-      within(actions).getByRole("link", { name: "Explore a project" }),
+      within(actions).getByRole("link", { name: /Explore an example garage/ }),
     ).toHaveAttribute("href", "#live-demo");
     expect(
-      screen.getByRole("link", { name: "Save your own build" }),
-    ).toHaveAttribute("href", "/register");
+      screen
+        .getAllByRole("link", { name: /Create your garage/ })
+        .every((link) => link.getAttribute("href") === "/garage/new"),
+    ).toBe(true);
   });
 
   it("connects the chosen part, estimated budget and planned passport record", () => {
@@ -83,12 +102,12 @@ describe("the connected homepage example", () => {
       screen.getByText("Planned part · Not installed"),
     ).toBeInTheDocument();
     expect(screen.getByText("Rear lighting · €225")).toBeInTheDocument();
-    expect(screen.getByText("€1,295")).toBeInTheDocument();
+    expect(screen.getByText("€47")).toBeInTheDocument();
     fireEvent.click(
       screen.getByRole("button", { name: "Remove from the example" }),
     );
     expect(screen.queryByText("Rear lighting · €225")).not.toBeInTheDocument();
-    expect(screen.getByText("€1,520")).toBeInTheDocument();
+    expect(screen.getByText("€272")).toBeInTheDocument();
   });
 
   it("does not present an incomplete price as a final budget balance", () => {
@@ -102,7 +121,7 @@ describe("the connected homepage example", () => {
     );
     fireEvent.click(screen.getByRole("tab", { name: "Vehicle Passport" }));
     expect(screen.getByText("€195 + ?")).toBeInTheDocument();
-    expect(screen.queryByText("€1,325")).not.toBeInTheDocument();
+    expect(screen.queryByText("€77")).not.toBeInTheDocument();
     expect(screen.getByText("Shipping: Not provided")).toBeInTheDocument();
   });
 
@@ -141,6 +160,7 @@ describe("the connected homepage example", () => {
 
   it("uses a native comparison range and a working mobile menu", () => {
     renderPage();
+    render(<BuildTransformation />);
     const slider = screen.getByRole("slider");
     fireEvent.change(slider, { target: { value: "75" } });
     expect(slider).toHaveAttribute("aria-valuetext", "75% concept");

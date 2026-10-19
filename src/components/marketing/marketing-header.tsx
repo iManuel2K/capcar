@@ -11,6 +11,9 @@ import { LanguageSelector } from "@/components/i18n/language-selector";
 import { journalPath, resolveJournalLocale } from "@/features/journal/routes";
 import { journalUI } from "@/features/journal/ui";
 import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
+import { HomepageLink } from "./homepage-link";
+import styles from "./homepage.module.css";
+import { homepageCopy } from "@/features/marketing/homepage-copy";
 
 const navigation = [
   { label: "how", href: "/#platform" },
@@ -21,6 +24,7 @@ const navigation = [
 export function MarketingHeader() {
   const journalLocale = resolveJournalLocale(useLocale());
   const journal = journalUI[journalLocale];
+  const home = homepageCopy[journalLocale];
   const pathname = usePathname() ?? "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const t = useTranslations("Navigation");
@@ -147,12 +151,13 @@ export function MarketingHeader() {
             >
               {t("signIn")}
             </Link>
-            <Link
+            <HomepageLink
               href="/garage/new"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-medium text-[#e8e6d7] shadow-[0_10px_25px_rgba(14,45,48,.16)] transition hover:-translate-y-0.5 hover:bg-[#6d0101]"
+              placement="header"
+              className={styles.primary}
             >
-              {l("start")} <ArrowRight className="size-4" />
-            </Link>
+              {home.create} <ArrowRight className="size-4" aria-hidden="true" />
+            </HomepageLink>
           </div>
 
           <button
@@ -253,13 +258,15 @@ export function MarketingHeader() {
               >
                 {t("signIn")}
               </Link>
-              <Link
+              <HomepageLink
                 href="/garage/new"
+                placement="header"
                 onClick={() => setMenuOpen(false)}
-                className="mt-2 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-semibold text-[#e8e6d7]"
+                className={`${styles.primary} mt-2 w-full`}
               >
-                {l("start")} <ArrowRight className="size-4" />
-              </Link>
+                {home.create}{" "}
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </HomepageLink>
               <div className="mt-4">
                 <LanguageSelector direction="up" />
               </div>

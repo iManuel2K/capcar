@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import type { AppLocale } from "@/i18n/config";
 import { getTranslations } from "next-intl/server";
 
 import { MarketingLanding } from "@/components/marketing/marketing-landing";
@@ -51,11 +53,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function Home() {
+export default function Home({ locale = "en" }: { locale?: AppLocale } = {}) {
   return (
     <>
-      <CapCarStructuredData />
-      <MarketingLanding />
+      <Suspense fallback={null}>
+        <CapCarStructuredData />
+      </Suspense>
+      <MarketingLanding locale={locale} />
     </>
   );
 }

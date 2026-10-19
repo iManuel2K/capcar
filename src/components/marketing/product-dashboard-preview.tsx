@@ -16,6 +16,11 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { BuildTransformation } from "./build-transformation";
+import { trackAnalytics } from "@/features/analytics/client";
+import { HomepageLink } from "./homepage-link";
+import homepageStyles from "./homepage.module.css";
+import { homepageCopy } from "@/features/marketing/homepage-copy";
+import type { AppLocale } from "@/i18n/config";
 import styles from "./launch.module.css";
 
 const views = ["plan", "parts", "visual", "history"] as const;
@@ -47,6 +52,7 @@ type PlannedItem = {
 export function ProductDashboardPreview() {
   const t = useTranslations("Launch");
   const locale = useLocale();
+  const home = homepageCopy[locale as AppLocale] ?? homepageCopy.en;
   const id = useId();
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const [view, setView] = useState<View>("plan");
@@ -61,8 +67,8 @@ export function ProductDashboardPreview() {
       currency: "EUR",
       maximumFractionDigits: 0,
     }).format(amount);
-  const spent = 1480;
-  const budget = 3000;
+  const spent = 28;
+  const budget = 300;
   const plannedTotal = planned.reduce(
     (sum, item) => sum + item.amount + (item.shipping ?? 0),
     0,
@@ -83,6 +89,7 @@ export function ProductDashboardPreview() {
   }, []);
 
   function selectView(next: View) {
+    trackAnalytics("homepage_demo_engaged", { demo_action: next });
     setView(next);
     window.history.replaceState(null, "", `#demo-${next}`);
   }
@@ -104,6 +111,7 @@ export function ProductDashboardPreview() {
   }
 
   function addPart() {
+    trackAnalytics("homepage_demo_engaged", { demo_action: "add" });
     setPlanned((items) => [
       ...items.filter((item) => item.modification !== modification),
       {
@@ -119,7 +127,7 @@ export function ProductDashboardPreview() {
   return (
     <section
       id="live-demo"
-      className={`${styles.deferredSection} scroll-mt-6 bg-[#e8e6d7] text-[#0e2d30]`}
+      className={`${styles.deferredSection} scroll-mt-24 bg-[#e8e6d7] text-[#0e2d30]`}
       aria-labelledby="demo-title"
     >
       <div className={styles.section}>
@@ -128,16 +136,19 @@ export function ProductDashboardPreview() {
         </p>
         <div className="mt-3 grid gap-5 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <h2 id="demo-title" className={styles.title}>
-            {t("demo.title")}
+            {home.demoTitle}
           </h2>
           <p className="max-w-xl text-base leading-7 text-[#4b6260]">
-            {t("demo.description")}
+            {home.demoText}
           </p>
         </div>
+        <p className="mt-4 max-w-3xl text-xs leading-6 text-[#4b6260]">
+          {home.demoHint}
+        </p>
         <div className="relative mt-8 overflow-hidden rounded-2xl border border-[#0e2d30]/20 bg-[#0b2326] text-[#e8e6d7]">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 px-5 py-4 sm:px-7">
             <div>
-              <p className="text-lg font-medium">Project Streetline</p>
+              <p className="text-lg font-medium">{home.project}</p>
               <p className="mt-1 font-mono text-xs text-[#bfcac5]">
                 BMW E90 318i · 2011
               </p>
@@ -146,6 +157,9 @@ export function ProductDashboardPreview() {
               type="button"
               className="inline-flex min-h-11 items-center gap-2 rounded-lg px-2 text-xs focus-visible:outline-2"
               onClick={() => {
+                trackAnalytics("homepage_demo_engaged", {
+                  demo_action: "reset",
+                });
                 setPlanned([]);
                 setGoal("oem");
                 setModification("lights");
@@ -416,14 +430,17 @@ export function ProductDashboardPreview() {
                           <button
                             type="button"
                             className={`${styles.link} mt-2`}
-                            onClick={() =>
+                            onClick={() => {
+                              trackAnalytics("homepage_demo_engaged", {
+                                demo_action: "remove",
+                              });
                               setPlanned((items) =>
                                 items.filter(
                                   (entry) =>
                                     entry.modification !== item.modification,
                                 ),
-                              )
-                            }
+                              );
+                            }}
                           >
                             {t("demo.remove")}
                           </button>
@@ -446,10 +463,14 @@ export function ProductDashboardPreview() {
             <p className="max-w-2xl text-xs leading-5 text-[#bfcac5]">
               {t("demo.session")}
             </p>
-            <Link href="/register" className={styles.primary}>
-              {t("demo.save")}
+            <HomepageLink
+              href="/garage/new"
+              placement="demo"
+              className={homepageStyles.primary}
+            >
+              {home.create}
               <ArrowRight className="size-4" aria-hidden="true" />
-            </Link>
+            </HomepageLink>
           </div>
         </div>
       </div>

@@ -23,6 +23,7 @@ import {
   readOnboardingDraft,
   saveOnboarding,
   type OnboardingDraft,
+  type GarageGoal,
 } from "@/features/onboarding/onboarding";
 import {
   garageCarCatalog,
@@ -42,10 +43,12 @@ const primary = `${garageButton.replace("text-white", "text-[#102e30]").replace(
 const steps = ["car", "goal", "action", "save"] as const;
 const subscribe = () => () => undefined;
 export function GarageOnboarding({
+  initialGoal,
   returnTo,
   initialVehicleId,
   resumeId,
 }: {
+  initialGoal?: GarageGoal;
   returnTo?: string;
   initialVehicleId?: string;
   resumeId?: string;
@@ -57,6 +60,7 @@ export function GarageOnboarding({
   );
   return hydrated ? (
     <OnboardingFlow
+      initialGoal={initialGoal}
       returnTo={returnTo}
       initialVehicleId={initialVehicleId}
       resumeId={resumeId}
@@ -67,10 +71,12 @@ export function GarageOnboarding({
 }
 
 function OnboardingFlow({
+  initialGoal,
   returnTo,
   initialVehicleId,
   resumeId,
 }: {
+  initialGoal?: GarageGoal;
   returnTo?: string;
   initialVehicleId?: string;
   resumeId?: string;
@@ -94,7 +100,8 @@ function OnboardingFlow({
     } catch {
       /* Storage errors are shown when saving. */
     }
-    const initial = emptyOnboardingDraft();
+    // Only seed a new draft. Restored progress and explicit auth handoffs win.
+    const initial = { ...emptyOnboardingDraft(), goal: initialGoal };
     const vehicle =
       (userId || !configured) &&
       vehicles.find((entry) => entry.id === initialVehicleId);
