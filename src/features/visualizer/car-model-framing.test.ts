@@ -10,7 +10,7 @@ describe("whole-car camera framing", () => {
         [2.2, 2.6, 4.8],
       ]) {
         const [width, height, length] = size;
-        for (const elevation of [0.12, 0.33, 1.2]) {
+        for (const elevation of [0.12, 0.33, 1.2, 1.4]) {
           const radius = Math.hypot(width, length) / 2;
           const distance = carCameraDistance({
             aspect,

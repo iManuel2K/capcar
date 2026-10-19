@@ -80,7 +80,17 @@ export function createCarModelRenderer(
   let loadedCar: CarModel | undefined;
   const painted = new Map<THREE.MeshStandardMaterial, THREE.Color>();
   function render() {
-    if (!disposed) renderer.render(scene, camera);
+    if (disposed) return;
+    if (options.transparent) {
+      // Keep the whole car inside the floating stage even after a high-angle drag.
+      const offset = camera.position.clone().sub(controls.target);
+      const minimum = fitDistance(Math.PI / 2 - controls.getPolarAngle());
+      if (offset.length() < minimum) {
+        offset.setLength(minimum);
+        camera.position.copy(controls.target).add(offset);
+      }
+    }
+    renderer.render(scene, camera);
   }
   controls.addEventListener("change", render);
   let rotationRequested = false;
