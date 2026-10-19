@@ -8,6 +8,7 @@ import { CapCarStructuredData } from "@/components/seo/capcar-structured-data";
 import {
   canonicalMetadata,
   PUBLIC_SITE_URL,
+  PUBLIC_SITE_NAME,
 } from "@/features/seo/public-metadata";
 
 // The canonical homepage is the cacheable English landing page. Localized
@@ -36,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url: canonical,
       type: "website",
-      siteName: "CapCar",
+      siteName: PUBLIC_SITE_NAME,
       images: [
         {
           url: shareImage,

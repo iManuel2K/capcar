@@ -3,6 +3,7 @@ import type { MetadataRoute } from "next";
 
 import {
   PUBLIC_CONTENT_LAST_MODIFIED,
+  HOMEPAGE_LAST_MODIFIED,
   PUBLIC_INDEXABLE_ROUTES,
   PUBLIC_SITE_URL,
   localizedPublicUrl,
@@ -19,7 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const publicPages = PUBLIC_INDEXABLE_ROUTES.flatMap((route) => {
     const alternates = { languages: publicLanguageAlternates(route) };
     const shared = {
-      lastModified: PUBLIC_CONTENT_LAST_MODIFIED,
+      lastModified:
+        route === "" ? HOMEPAGE_LAST_MODIFIED : PUBLIC_CONTENT_LAST_MODIFIED,
       alternates,
     };
 

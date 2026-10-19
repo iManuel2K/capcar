@@ -29,7 +29,12 @@ describe("route metadata", () => {
 
     for (const entry of entries) {
       const isJournal = entry.url.includes("/journal");
-      expect(entry.lastModified).toBe(isJournal ? "2026-10-17" : "2026-10-16");
+      const isHomepage = /^https:\/\/capcar\.dev\/(?:en|de|el|sq|ja)?$/.test(
+        entry.url,
+      );
+      expect(entry.lastModified).toBe(
+        isJournal ? "2026-10-17" : isHomepage ? "2026-10-19" : "2026-10-16",
+      );
       expect(entry).not.toHaveProperty("changeFrequency");
       expect(entry).not.toHaveProperty("priority");
       if (isJournal) {

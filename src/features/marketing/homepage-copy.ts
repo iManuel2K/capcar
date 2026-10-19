@@ -1,7 +1,7 @@
 import type { AppLocale } from "@/i18n/config";
 
 const en = {
-  eyebrow: "A home for the car you own",
+  eyebrow: "CapCar — Digital Garage",
   headline: "Your car. Every idea, job and journey in one place.",
   description:
     "Plan upgrades, track costs, follow DIY guides and keep your car’s history together. Find your next drive when you’re ready to get out.",
@@ -102,7 +102,7 @@ export type HomepageCopy = { [K in keyof typeof en]: string };
 export const homepageCopy: Record<AppLocale, HomepageCopy> = {
   en,
   de: {
-    eyebrow: "Ein Zuhause für dein Auto",
+    eyebrow: "CapCar — Digitale Garage",
     headline: "Dein Auto. Jede Idee, jede Arbeit, jede Fahrt an einem Ort.",
     description:
       "Plane Umbauten, behalte Kosten im Blick, nutze DIY-Anleitungen und sammle die Geschichte deines Autos. Und wenn du losfahren willst, finde deine nächste Tour.",
@@ -201,7 +201,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Trage das Wichtigste ein, wähle dein Ziel und speichere eine erste Aufgabe oder Ausflugsidee. Den Rest kannst du später ergänzen.",
   },
   el: {
-    eyebrow: "Ένας χώρος για το αυτοκίνητό σου",
+    eyebrow: "CapCar — Ψηφιακό γκαράζ",
     headline:
       "Το αυτοκίνητό σου. Κάθε ιδέα, εργασία και διαδρομή σε ένα μέρος.",
     description:
@@ -302,7 +302,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Πρόσθεσε τα βασικά, διάλεξε στόχο και αποθήκευσε μια πρώτη εργασία ή ιδέα διαδρομής. Τα υπόλοιπα συμπληρώνονται αργότερα.",
   },
   sq: {
-    eyebrow: "Një vend për makinën tënde",
+    eyebrow: "CapCar — Garazh digjital",
     headline: "Makina jote. Çdo ide, punë dhe udhëtim në një vend.",
     description:
       "Planifiko përmirësime, ndiq kostot, përdor udhëzues DIY dhe mbaj bashkë historikun e makinës. Gjej rrugën e radhës kur të jesh gati për të dalë.",
@@ -400,7 +400,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Shto të dhënat bazë, zgjidh synimin dhe ruaj një detyrë ose ide udhëtimi. Pjesën tjetër mund ta plotësosh më vonë.",
   },
   ja: {
-    eyebrow: "今の愛車に、ひとつの居場所を",
+    eyebrow: "CapCar — デジタルガレージ",
     headline: "愛車のアイデアも、整備も、ドライブも。すべてひとつに。",
     description:
       "カスタムを計画し、費用を記録し、DIYガイドを参考に。愛車の履歴をまとめて残せます。走りに出たくなったら、次のドライブを見つけましょう。",

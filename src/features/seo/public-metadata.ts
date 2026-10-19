@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { isAppLocale, type AppLocale, locales } from "@/i18n/config";
 
 export const PUBLIC_SITE_URL = new URL("https://capcar.dev");
+export const PUBLIC_SITE_NAME = "CapCar — Digital Garage";
+export const HOMEPAGE_LAST_MODIFIED = "2026-10-19";
 export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-10-16";
 
 export const PUBLIC_INDEXABLE_ROUTES = [
@@ -120,7 +122,13 @@ export function pageMetadata(
         ? { languages: publicLanguageAlternates(publicRoute) }
         : {}),
     },
-    openGraph: { title, description, url, siteName: "CapCar", type: "website" },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: PUBLIC_SITE_NAME,
+      type: "website",
+    },
     twitter: { card: "summary_large_image", title, description },
     ...(robots ? { robots } : {}),
   };

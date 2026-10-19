@@ -1,21 +1,36 @@
 import type { AppLocale } from "@/i18n/config";
 
-import { PUBLIC_SITE_URL, localizedPublicUrl } from "./public-metadata";
+import {
+  PUBLIC_SITE_URL,
+  PUBLIC_SITE_NAME,
+  localizedPublicUrl,
+} from "./public-metadata";
 
 export function buildCapCarStructuredData(
   description: string,
   locale: AppLocale,
 ) {
   const organizationId = new URL("/#organization", PUBLIC_SITE_URL).toString();
+  const websiteId = new URL("/#website", PUBLIC_SITE_URL).toString();
   const applicationId = new URL("/#application", PUBLIC_SITE_URL).toString();
 
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
+        "@type": "WebSite",
+        "@id": websiteId,
+        name: PUBLIC_SITE_NAME,
+        alternateName: ["CapCar", "capcar.dev"],
+        url: PUBLIC_SITE_URL.toString(),
+        description,
+        publisher: { "@id": organizationId },
+      },
+      {
         "@type": "Organization",
         "@id": organizationId,
         name: "CapCar",
+        alternateName: PUBLIC_SITE_NAME,
         url: PUBLIC_SITE_URL.toString(),
         logo: new URL("/capcar-mark-192.png", PUBLIC_SITE_URL).toString(),
       },
@@ -23,6 +38,7 @@ export function buildCapCarStructuredData(
         "@type": "SoftwareApplication",
         "@id": applicationId,
         name: "CapCar",
+        alternateName: PUBLIC_SITE_NAME,
         url: localizedPublicUrl("", locale),
         description,
         applicationCategory: "LifestyleApplication",
