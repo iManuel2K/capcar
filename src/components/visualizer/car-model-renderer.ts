@@ -6,7 +6,7 @@ import type { CarModel } from "@/features/visualizer/car-model-catalog";
 
 export type CarCamera = "perspective" | "front" | "side" | "rear";
 
-/** One on-demand canvas. No animation loop, external requests or model cache. */
+/** One on-demand canvas. Animation runs only while explicitly rotating. */
 export function createCarModelRenderer(host: HTMLElement, onError: () => void) {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
@@ -75,6 +75,53 @@ export function createCarModelRenderer(host: HTMLElement, onError: () => void) {
     if (!disposed) renderer.render(scene, camera);
   }
   controls.addEventListener("change", render);
+  let rotationRequested = false;
+  let rotationFrame = 0;
+  let lastRotationTime = 0;
+  let dragging = false;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  function stopRotationFrame() {
+    cancelAnimationFrame(rotationFrame);
+    rotationFrame = 0;
+    lastRotationTime = 0;
+  }
+  function animateRotation(time: number) {
+    rotationFrame = 0;
+    if (
+      disposed ||
+      !rotationRequested ||
+      document.hidden ||
+      reducedMotion.matches
+    )
+      return;
+    const delta = lastRotationTime
+      ? Math.min((time - lastRotationTime) / 1000, 0.05)
+      : 0;
+    if (!lastRotationTime || time - lastRotationTime >= 1000 / 30) {
+      if (!dragging) controls.update(delta);
+      lastRotationTime = time;
+    }
+    rotationFrame = requestAnimationFrame(animateRotation);
+  }
+  function syncRotation() {
+    stopRotationFrame();
+    controls.autoRotate = rotationRequested && !reducedMotion.matches;
+    controls.autoRotateSpeed = 0.8;
+    if (controls.autoRotate && !document.hidden && !disposed)
+      rotationFrame = requestAnimationFrame(animateRotation);
+  }
+  const beginDrag = () => {
+    dragging = true;
+  };
+  const endDrag = () => {
+    dragging = false;
+    lastRotationTime = 0;
+  };
+  controls.addEventListener("start", beginDrag);
+  controls.addEventListener("end", endDrag);
+  document.addEventListener("visibilitychange", syncRotation);
+  reducedMotion.addEventListener("change", syncRotation);
+
   const resize = () => {
     const { width, height } = host.getBoundingClientRect();
     renderer.setSize(Math.max(width, 1), Math.max(height, 1));
@@ -232,6 +279,10 @@ export function createCarModelRenderer(host: HTMLElement, onError: () => void) {
       render();
     },
     camera: setCamera,
+    rotation(enabled: boolean) {
+      rotationRequested = enabled;
+      syncRotation();
+    },
     zoom(direction: "in" | "out") {
       const offset = camera.position.clone().sub(controls.target);
       offset.setLength(
@@ -288,6 +339,11 @@ export function createCarModelRenderer(host: HTMLElement, onError: () => void) {
     },
     dispose() {
       disposed = true;
+      stopRotationFrame();
+      document.removeEventListener("visibilitychange", syncRotation);
+      reducedMotion.removeEventListener("change", syncRotation);
+      controls.removeEventListener("start", beginDrag);
+      controls.removeEventListener("end", endDrag);
       request?.abort();
       observer.disconnect();
       controls.dispose();

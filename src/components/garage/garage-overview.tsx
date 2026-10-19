@@ -2,21 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  ArrowRight,
-  CarFront,
-  ChevronLeft,
-  ChevronRight,
-  Database,
-  Plus,
-  ShieldCheck,
-} from "lucide-react";
-import { useRef } from "react";
+import { ArrowRight, CarFront, Database, ShieldCheck } from "lucide-react";
 
-import { VehicleOverviewSummary } from "./vehicle-overview-summary";
-import { GarageGoalPanel } from "./garage-goal-panel";
+import { GarageShowroom } from "./garage-showroom";
 import { VehicleArt } from "@/components/garage/vehicle-art";
-import { isProject318Vehicle } from "@/components/garage/vehicle-photo-gallery";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 import {
   announceVehicleChange,
@@ -26,7 +15,6 @@ import {
 export function GarageOverview() {
   const { vehicles, isReady } = useVehicles();
   const router = useRouter();
-  const reelRef = useRef<HTMLDivElement>(null);
 
   function loadDemo() {
     const existingDemo = vehicles.find(
@@ -127,85 +115,7 @@ export function GarageOverview() {
 
   return (
     <div className="pb-24 sm:pb-0">
-      {vehicles[0]?.garageGoal && <GarageGoalPanel vehicle={vehicles[0]} />}
-      <Link
-        href="/studio"
-        className="mb-6 flex min-h-14 items-center justify-between rounded-2xl border border-white/15 px-5 text-sm text-white/80 hover:bg-white/5"
-      >
-        Explore the CapCar showcase collection{" "}
-        <ArrowRight className="size-4" aria-hidden="true" />
-      </Link>
-      <div className="mb-8 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-        <div>
-          <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#d6aa92] uppercase">
-            Your garage
-          </p>
-          <h1 className="text-4xl font-medium tracking-[-0.045em] sm:text-6xl">
-            {vehicles.length === 1
-              ? "One car. One story."
-              : `${vehicles.length} cars. One garage.`}
-          </h1>
-        </div>
-        <Link
-          href="/garage/new"
-          className="inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-xl bg-[#6d0101] px-4 text-sm font-semibold text-white shadow-[0_10px_26px_rgba(109,1,1,.18)] transition hover:bg-[#830705] sm:self-auto"
-        >
-          <Plus className="size-4" /> Add vehicle
-        </Link>
-        {vehicles.length > 1 && (
-          <div className="flex gap-2">
-            <button
-              type="button"
-              aria-label="Previous vehicle"
-              onClick={() =>
-                reelRef.current?.scrollBy({ left: -520, behavior: "smooth" })
-              }
-              className="grid size-11 place-items-center rounded-full border border-white/10 text-white/55 transition hover:border-white/25 hover:text-white"
-            >
-              <ChevronLeft className="size-4" />
-            </button>
-            <button
-              type="button"
-              aria-label="Next vehicle"
-              onClick={() =>
-                reelRef.current?.scrollBy({ left: 520, behavior: "smooth" })
-              }
-              className="grid size-11 place-items-center rounded-full border border-white/10 text-white/55 transition hover:border-white/25 hover:text-white"
-            >
-              <ChevronRight className="size-4" />
-            </button>
-          </div>
-        )}
-      </div>
-
-      <div
-        ref={reelRef}
-        aria-label="Vehicle collection"
-        className="flex snap-x snap-mandatory [scrollbar-color:rgba(255,255,255,0.18)_transparent] gap-5 overflow-x-auto pb-4"
-      >
-        {vehicles.map((vehicle) => (
-          <Link
-            key={vehicle.id}
-            href={`/garage/${vehicle.id}`}
-            className="group min-w-[88%] snap-start overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b2326] shadow-[0_22px_60px_rgba(0,0,0,.12)] transition duration-300 hover:-translate-y-1 hover:border-[#bf8269]/30 sm:min-w-[430px] xl:min-w-[540px]"
-          >
-            <VehicleArt
-              label={`${vehicle.productionYear} ${vehicle.make} ${vehicle.model}`}
-              compact
-              badge={
-                isProject318Vehicle(vehicle) ? "Current vehicle" : undefined
-              }
-              imageUrl={
-                vehicle.photoDataUrl ??
-                (isProject318Vehicle(vehicle) && !vehicle.onboardingId
-                  ? "/capcar-bmw-current-side.webp"
-                  : vehicle.imageUrl)
-              }
-            />
-            <VehicleOverviewSummary vehicle={vehicle} />
-          </Link>
-        ))}
-      </div>
+      <GarageShowroom vehicles={vehicles} />
     </div>
   );
 }
