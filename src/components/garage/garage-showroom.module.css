@@ -14,7 +14,7 @@
 }
 .eyebrow {
   color: var(--rust);
-  font-size: 11px;
+  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.19em;
   margin-bottom: 10px;
@@ -34,7 +34,7 @@
   line-height: 1.7;
 }
 .collectionLabel {
-  font-size: 11px;
+  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -125,7 +125,7 @@
 .neighbour > span:last-child {
   display: block;
   margin-top: 12px;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
 }
 .mode {
@@ -160,7 +160,7 @@
   margin: 10px auto;
   max-width: 650px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.7;
   text-align: center;
 }
@@ -201,7 +201,7 @@
 }
 .identity p {
   color: var(--rust);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
@@ -278,7 +278,7 @@
 }
 .carYear {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 4px;
 }
 .arrival {
@@ -329,30 +329,30 @@
   flex-wrap: wrap;
 }
 .profileHeader h3 {
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-weight: 600;
 }
 .profileHeader span {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--rust);
 }
 .radarSvg {
   display: block;
   width: 100%;
-  max-width: 355px;
+  max-width: 400px;
   margin: 4px auto;
   color: var(--ink);
   overflow: visible;
 }
 .axisLabel {
   font-family: Arial, sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   fill: var(--muted);
 }
 .axisScore {
-  font-size: 9px;
+  font-size: 11px;
   fill: var(--rust);
   font-family: Arial, sans-serif;
 }
@@ -362,7 +362,7 @@
   transition: all 0.2s ease;
 }
 .profileHint {
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.65;
   color: var(--muted);
   margin-top: 8px;
@@ -378,7 +378,7 @@
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 8px 16px;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--ink);
 }
 .ratingActions button:hover {
@@ -515,10 +515,10 @@
     transform: rotate(7deg);
   }
   .neighbour > span:last-child {
-    font-size: 9px;
+    font-size: 11px;
   }
   .play {
-    font-size: 10px;
+    font-size: 12px;
     padding: 8px 10px;
   }
   .collectionBar {
@@ -566,7 +566,7 @@
   border-color: var(--line);
   color: var(--ink);
   background: transparent;
-  font-size: 11px;
+  font-size: 13px;
 }
 .visual [data-presentation="floating"] button:hover {
   background: var(--hover);

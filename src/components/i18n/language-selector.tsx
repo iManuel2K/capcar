@@ -15,9 +15,11 @@ import {
 export function LanguageSelector({
   compact = false,
   direction = "down",
+  align,
 }: {
   compact?: boolean;
   direction?: "up" | "down";
+  align?: "start" | "end";
 }) {
   const locale = useLocale();
   const t = useTranslations("Language");
@@ -109,11 +111,11 @@ export function LanguageSelector({
         }}
         disabled={pending}
         onClick={() => setOpen((current) => !current)}
-        className={`relative inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-current/15 bg-current/[0.035] transition hover:-translate-y-0.5 hover:bg-current/[0.07] focus-visible:ring-2 focus-visible:ring-[#6d0101] focus-visible:outline-none disabled:opacity-55 ${compact ? "size-11" : "min-w-32 px-3"}`}
+        className={`relative inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-current/15 bg-current/[0.035] transition hover:-translate-y-0.5 hover:bg-current/[0.07] focus-visible:ring-2 focus-visible:ring-[#6d0101] focus-visible:outline-none disabled:opacity-55 ${compact ? "min-w-16 px-3" : "min-w-32 px-3"}`}
       >
         <Languages aria-hidden="true" className="size-4 shrink-0" />
         {compact ? (
-          <span className="absolute -right-1 -bottom-1 rounded-md border border-[#0e2d30]/10 bg-[#e8e6d7] px-1 py-0.5 text-[9px] leading-none font-bold text-[#0e2d30] uppercase shadow-sm">
+          <span className="text-xs font-semibold uppercase">
             {activeLocale}
           </span>
         ) : (
@@ -146,7 +148,7 @@ export function LanguageSelector({
             buttons[next]?.focus();
           }}
           aria-label={t("label")}
-          className={`absolute z-[80] flex w-max gap-1 rounded-xl border border-[#0e2d30]/12 bg-[#f3eee2] p-1.5 text-[#0e2d30] shadow-[0_18px_50px_rgba(5,3,6,0.2)] ${direction === "up" ? "bottom-[calc(100%+0.55rem)] left-0" : "top-[calc(100%+0.55rem)] right-0"}`}
+          className={`absolute z-[80] flex w-max gap-1 rounded-xl border border-[#0e2d30]/12 bg-[#f3eee2] p-1.5 text-[#0e2d30] shadow-[0_18px_50px_rgba(5,3,6,0.2)] ${direction === "up" ? "bottom-[calc(100%+0.55rem)]" : "top-[calc(100%+0.55rem)]"} ${(align ?? (direction === "up" ? "start" : "end")) === "end" ? "right-0" : "left-0"}`}
         >
           {locales.map((option) => (
             <button

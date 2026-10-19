@@ -151,6 +151,7 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
   }
 
   body {
@@ -168,7 +169,16 @@
   }
 
   :where(a, button, input, select, textarea, summary):focus-visible {
-    outline-color: var(--ring);
+    outline: 2px solid var(--ring);
+    outline-offset: 4px;
+  }
+
+  :where(h1, h2, h3, p, label) {
+    overflow-wrap: anywhere;
+  }
+
+  :where(input[id], select[id], textarea[id], [tabindex="-1"][id]) {
+    scroll-margin-top: 6rem;
   }
 
   input,
@@ -253,5 +263,11 @@
   .passport-print p,
   .passport-print span {
     color: #333333 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
   }
 }
