@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
   ArrowLeft,
@@ -30,10 +31,19 @@ import {
   garageCarCoverage,
 } from "@/features/vehicles/garage-car-catalog";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
-import { announceVehicleChange } from "@/features/vehicles/vehicle-storage";
+import {
+  announceVehicleChange,
+  getShowcaseVehicles,
+} from "@/features/vehicles/vehicle-storage";
 import { announceBuildChange } from "@/features/builds/build-storage";
 import { trackAnalytics } from "@/features/analytics/client";
 import { preparePassportPhoto } from "@/features/passport/passport-photo";
+
+const GarageShowroomPreview = dynamic(
+  () => import("./garage-showroom").then((module) => module.GarageShowroom),
+  { ssr: false },
+);
+const exampleVehicles = getShowcaseVehicles();
 
 const input =
   "mt-2 min-h-12 w-full rounded-xl border border-white/20 bg-[#0a2022] px-4 text-base text-white outline-none focus-visible:border-[#d6aa92] focus-visible:ring-2 focus-visible:ring-[#d6aa92]/30";
@@ -333,19 +343,9 @@ function OnboardingFlow({
         </button>
       </div>
       {example ? (
-        <section className="rounded-3xl border border-[#d6aa92]/30 bg-[#102d30] p-6 sm:p-10">
-          <p className="text-sm text-[#d6aa92]">{c.exampleHint}</p>
-          <h1 className="mt-4 text-3xl">{c.exampleTitle}</h1>
-          <div className="mt-6">
-            <VehicleArt
-              compact
-              imageUrl="/capcar-bmw-current-side.webp"
-              label="Project 318"
-              badge={c.exampleTitle}
-            />
-          </div>
-          <h2 className="mt-6 text-xl">{c.exampleTask}</h2>
-          <p className="mt-3 text-white/70">{c.exampleDescription}</p>
+        <section aria-label={c.exampleTitle}>
+          <p className="mb-5 text-sm text-[#d6aa92]">{c.exampleHint}</p>
+          <GarageShowroomPreview vehicles={exampleVehicles} readOnly />
           <Link className={`${primary} mt-6`} href="/#live-demo">
             {c.exampleOpen}
             <ArrowRight className="size-4" />

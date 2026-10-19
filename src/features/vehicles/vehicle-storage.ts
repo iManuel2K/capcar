@@ -157,6 +157,13 @@ export function removeVehicle(vehicleId: string, storage: WritableStorage) {
   return true;
 }
 
+/** In-memory public examples. Never reads or seeds account storage. */
+export function getShowcaseVehicles(): Vehicle[] {
+  return showcaseVehicles.map(({ input, id, createdAt }) =>
+    vehicleSchema.parse({ ...input, id, createdAt }),
+  );
+}
+
 export function seedShowcaseGarage(storage: WritableStorage) {
   if (storage.getItem(SHOWCASE_GARAGE_KEY)) return false;
 
