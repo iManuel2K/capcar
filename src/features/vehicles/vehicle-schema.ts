@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { vehicleProfileSchema } from "./vehicle-profile";
 import { passportPhotoSchema } from "@/features/passport/passport-photo";
 
 export const minimumProductionYear = 1886;
@@ -66,6 +67,8 @@ export const vehicleInputSchema = z.object({
   // Private owner photo. Passport exports never pick this up implicitly.
   photoDataUrl: passportPhotoSchema.optional(),
   vin: optionalVin,
+  // Invalid optional ratings must never hide an otherwise valid vehicle.
+  profileRatings: vehicleProfileSchema.optional().catch(undefined),
 });
 
 export const vehicleSchema = vehicleInputSchema.extend({

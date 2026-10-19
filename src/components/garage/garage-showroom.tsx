@@ -11,7 +11,7 @@ import {
   ChevronRight,
   Plus,
 } from "lucide-react";
-import { useRef, useState, type KeyboardEvent } from "react";
+import { useId, useRef, useState, type KeyboardEvent } from "react";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 import {
   carModels,
@@ -21,6 +21,8 @@ import { showroomCopy } from "@/features/garage/showroom-copy";
 import { isAppLocale } from "@/i18n/config";
 import { VehicleArt } from "./vehicle-art";
 import { isProject318Vehicle } from "./vehicle-photo-gallery";
+import { VehicleRadar } from "./vehicle-radar";
+import { profileCopy } from "@/features/garage/profile-copy";
 import { VehicleOverviewSummary } from "./vehicle-overview-summary";
 import { GarageGoalPanel } from "./garage-goal-panel";
 import styles from "./garage-showroom.module.css";
@@ -43,9 +45,17 @@ function photo(vehicle: Vehicle) {
 const linkClass =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-medium transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d6aa92]";
 
-export function GarageShowroom({ vehicles }: { vehicles: Vehicle[] }) {
+export function GarageShowroom({
+  vehicles,
+  readOnly = false,
+}: {
+  vehicles: Vehicle[];
+  readOnly?: boolean;
+}) {
   const requestedLocale = useLocale();
   const c = showroomCopy[isAppLocale(requestedLocale) ? requestedLocale : "en"];
+  const profileText =
+    profileCopy[isAppLocale(requestedLocale) ? requestedLocale : "en"];
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const rail = useRef<HTMLDivElement>(null);
   const index = Math.max(
@@ -90,21 +100,21 @@ export function GarageShowroom({ vehicles }: { vehicles: Vehicle[] }) {
     <div className={styles.showroom}>
       <div className="mb-7 flex flex-wrap items-end justify-between gap-5">
         <div>
-          <p className="mb-3 text-xs font-semibold tracking-[.16em] text-[#d6aa92] uppercase">
+          <p className={styles.eyebrow}>
             {c.garage} · {vehicles.length}
           </p>
-          <h1 className="text-4xl font-medium tracking-[-.045em] text-balance sm:text-6xl">
-            {c.title}
-          </h1>
-          <p className="mt-4 text-sm leading-6 text-white/60">{c.hint}</p>
+          <h1 className={styles.headline}>{c.title}</h1>
+          <p className={styles.intro}>{c.hint}</p>
         </div>
-        <Link href="/garage/new" className={`${linkClass} bg-[#6d0101]`}>
-          <Plus className="size-4" />
-          {c.add}
-        </Link>
+        {!readOnly && (
+          <Link href="/garage/new" className={`${linkClass} ${styles.action}`}>
+            <Plus className="size-4" />
+            {c.add}
+          </Link>
+        )}
       </div>
       <div className="mb-4 flex items-center justify-between gap-3">
-        <p className="text-sm text-white/60">{c.collection}</p>
+        <p className={styles.collectionLabel}>{c.collection}</p>
         <div className={styles.controls}>
           <span
             className="mr-2 font-mono text-xs text-[#d6aa92]"
@@ -147,25 +157,50 @@ export function GarageShowroom({ vehicles }: { vehicles: Vehicle[] }) {
           <p className="sr-only" role="status" aria-live="polite">
             {selected.productionYear} {selected.make} {selected.model}
           </p>
-          <VehicleOverviewSummary vehicle={selected} />
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Link
-              className={`${linkClass} w-full border-transparent bg-[#ede9d8] text-[#102e30] hover:bg-white`}
-              href={`/garage/${selected.id}`}
-            >
-              {c.open}
-              <ArrowRight className="size-4" />
-            </Link>
-            <Link className={linkClass} href={`/garage/${selected.id}/builds`}>
-              {c.build}
-            </Link>
-            <Link
-              className={linkClass}
-              href={`/garage/${selected.id}/maintenance`}
-            >
-              {c.maintenance}
-            </Link>
+          <div className={styles.identity}>
+            <p>
+              {selected.make} / {selected.productionYear}
+            </p>
+            <h2>{selected.model}</h2>
+            <span>
+              {selected.platform} · {selected.transmission}
+            </span>
           </div>
+          <VehicleRadar
+            key={`profile-${selected.id}`}
+            vehicle={selected}
+            readOnly={readOnly}
+          />
+          {!readOnly && (
+            <>
+              {" "}
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link
+                  className={`${linkClass} ${styles.action} ${styles.primaryAction}`}
+                  href={`/garage/${selected.id}`}
+                >
+                  {c.open}
+                  <ArrowRight className="size-4" />
+                </Link>
+                <Link
+                  className={`${linkClass} ${styles.action}`}
+                  href={`/garage/${selected.id}/builds`}
+                >
+                  {c.build}
+                </Link>
+                <Link
+                  className={`${linkClass} ${styles.action}`}
+                  href={`/garage/${selected.id}/maintenance`}
+                >
+                  {c.maintenance}
+                </Link>
+              </div>
+              <details className={styles.workshop}>
+                <summary>{profileText.workshop}</summary>
+                <VehicleOverviewSummary vehicle={selected} />
+              </details>
+            </>
+          )}
         </div>
       </section>
       <div
@@ -194,24 +229,23 @@ export function GarageShowroom({ vehicles }: { vehicles: Vehicle[] }) {
                 </span>
               )}
             </div>
-            <div className="p-4">
+            <div className={styles.carLabel}>
               <p className="text-sm font-medium">
                 {vehicle.make} {vehicle.model}
               </p>
-              <p className="mt-1 text-xs text-white/55">
+              <p className={styles.carYear}>
                 {vehicle.productionYear} · {vehicle.platform}
               </p>
             </div>
           </button>
         ))}
       </div>
-      {selected.garageGoal && (
-        <GarageGoalPanel key={`goal-${selected.id}`} vehicle={selected} />
+      {!readOnly && selected.garageGoal && (
+        <div className={styles.darkContent}>
+          <GarageGoalPanel key={`goal-${selected.id}`} vehicle={selected} />
+        </div>
       )}
-      <Link
-        href="/studio"
-        className="mt-3 inline-flex min-h-11 items-center gap-3 text-sm text-white/65 underline underline-offset-4"
-      >
+      <Link href="/studio" className={styles.studioLink}>
         {c.studio}
         <ArrowRight className="size-4" />
       </Link>
@@ -227,6 +261,7 @@ function SelectedVehicle({
   copy: (typeof showroomCopy)["en"];
   onSwipe: (direction: number) => void;
 }) {
+  const orbitId = useId();
   const [mode, setMode] = useState<"photo" | "model">("photo");
   const [referenceId, setReferenceId] = useState(
     () => matchCarModel(vehicle)?.id ?? "",
@@ -234,6 +269,30 @@ function SelectedVehicle({
   const touch = useRef<{ x: number; y: number } | null>(null);
   return (
     <div className={`${styles.visual} ${styles.arrival}`}>
+      <svg
+        className={styles.orbitText}
+        viewBox="0 0 400 400"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <defs>
+          <path
+            id={orbitId}
+            d="M 200,200 m -170,0 a 170,170 0 1,1 340,0 a 170,170 0 1,1 -340,0"
+          />
+        </defs>
+        <text>
+          <textPath
+            href={`#${orbitId}`}
+            textLength="1065"
+            lengthAdjust="spacing"
+          >
+            {`${vehicle.make} · ${vehicle.model} · ${vehicle.productionYear} · `.repeat(
+              3,
+            )}
+          </textPath>
+        </text>
+      </svg>
       <div
         className={styles.mode}
         role="group"
@@ -258,6 +317,17 @@ function SelectedVehicle({
         <>
           <div
             className={styles.photo}
+            onPointerMove={(event) => {
+              if (event.pointerType !== "mouse") return;
+              const bounds = event.currentTarget.getBoundingClientRect();
+              event.currentTarget.style.setProperty(
+                "--tilt",
+                `${((event.clientX - bounds.left) / bounds.width - 0.5) * 5}deg`,
+              );
+            }}
+            onPointerLeave={(event) =>
+              event.currentTarget.style.setProperty("--tilt", "0deg")
+            }
             onTouchStart={(event) => {
               const point = event.touches[0];
               touch.current = point
@@ -287,14 +357,14 @@ function SelectedVehicle({
               badge={c.selected}
             />
           </div>
-          <p className="mt-3 text-xs leading-5 text-white/50">{c.photoHint}</p>
+          <p className={styles.visualHint}>{c.photoHint}</p>
         </>
       ) : (
         <>
           {!matchCarModel(vehicle) && (
-            <p className="mb-4 text-sm leading-6 text-white/70">{c.noModel}</p>
+            <p className={styles.visualHint}>{c.noModel}</p>
           )}
-          <label className="mb-4 block text-xs text-white/70">
+          <label className={styles.referenceLabel}>
             {c.reference}
             <select
               className="mt-2 min-h-11 w-full rounded-xl border border-white/20 bg-[#102629] px-3 text-sm text-white"
@@ -320,9 +390,7 @@ function SelectedVehicle({
               />
             </div>
           )}
-          <p className="mt-3 text-xs leading-5 text-white/55">
-            {c.referenceHint}
-          </p>
+          <p className={styles.visualHint}>{c.referenceHint}</p>
         </>
       )}
     </div>

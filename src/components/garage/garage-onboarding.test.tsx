@@ -45,7 +45,7 @@ describe("garage onboarding UI", () => {
       screen.getByRole("button", { name: "Explore example garage" }),
     );
     expect(
-      screen.getByRole("heading", { name: "Example garage · Project 318" }),
+      screen.getByRole("region", { name: "Example garage" }),
     ).toBeInTheDocument();
     expect(localStorage.getItem("capcar.vehicles.v1")).toBeNull();
     expect(

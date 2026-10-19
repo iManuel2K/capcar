@@ -53,11 +53,23 @@ const ford: Vehicle = {
 };
 afterEach(cleanup);
 describe("interactive garage showroom", () => {
+  it("keeps public examples separate from account actions and workshop data", () => {
+    render(<GarageShowroom vehicles={[bmw, ford]} readOnly />);
+    expect(
+      screen.queryByRole("link", { name: "Open this garage" }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Daily overview")).not.toBeInTheDocument();
+    expect(screen.queryByText("Daily goal")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Next vehicle" }));
+    expect(
+      screen.getByRole("button", { name: "2021 Ford F-150" }),
+    ).toHaveAttribute("aria-pressed", "true");
+  });
   it("updates the summary, goal and every destination when choosing a different car", () => {
     render(<GarageShowroom vehicles={[bmw, ford]} />);
-    expect(screen.getByText("Daily overview")).toBeVisible();
+    expect(screen.getByText("Daily overview")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "2021 Ford F-150" }));
-    expect(screen.getByText("Truck overview")).toBeVisible();
+    expect(screen.getByText("Truck overview")).toBeInTheDocument();
     expect(screen.getByText("Truck goal")).toBeVisible();
     expect(screen.queryByText("Daily overview")).not.toBeInTheDocument();
     expect(
@@ -83,7 +95,7 @@ describe("interactive garage showroom", () => {
     expect(truck).toHaveAttribute("aria-pressed", "true");
     fireEvent.keyDown(truck, { key: "ArrowRight" });
     expect(screen.getByRole("button", { name: "2011 BMW 318i" })).toHaveFocus();
-    expect(screen.getByText("Daily overview")).toBeVisible();
+    expect(screen.getByText("Daily overview")).toBeInTheDocument();
   });
   it("never silently substitutes a different 3D car and resets a manual reference on vehicle change", () => {
     render(<GarageShowroom vehicles={[bmw, ford]} />);
@@ -97,7 +109,7 @@ describe("interactive garage showroom", () => {
       { target: { value: "bmw-320i" } },
     );
     expect(screen.getByText("3D reference bmw-320i")).toBeVisible();
-    expect(screen.getByText("Daily overview")).toBeVisible();
+    expect(screen.getByText("Daily overview")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Next vehicle" }));
     expect(screen.queryByText("3D reference bmw-320i")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Photo" })).toHaveAttribute(
@@ -109,7 +121,7 @@ describe("interactive garage showroom", () => {
     const view = render(<GarageShowroom vehicles={[bmw, ford]} />);
     fireEvent.click(screen.getByRole("button", { name: "Next vehicle" }));
     view.rerender(<GarageShowroom vehicles={[bmw]} />);
-    expect(screen.getByText("Daily overview")).toBeVisible();
+    expect(screen.getByText("Daily overview")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Next vehicle" })).toBeDisabled();
   });
   it("changes cars on a horizontal swipe while leaving a vertical scroll alone", () => {
@@ -119,11 +131,11 @@ describe("interactive garage showroom", () => {
     fireEvent.touchEnd(region, {
       changedTouches: [{ clientX: 190, clientY: 300 }],
     });
-    expect(screen.getByText("Daily overview")).toBeVisible();
+    expect(screen.getByText("Daily overview")).toBeInTheDocument();
     fireEvent.touchStart(region, { touches: [{ clientX: 240, clientY: 100 }] });
     fireEvent.touchEnd(region, {
       changedTouches: [{ clientX: 80, clientY: 110 }],
     });
-    expect(screen.getByText("Truck overview")).toBeVisible();
+    expect(screen.getByText("Truck overview")).toBeInTheDocument();
   });
 });

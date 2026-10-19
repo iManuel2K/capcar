@@ -34,7 +34,7 @@ const en = {
   skip: "Skip for now",
   cancel: "Cancel",
   example: "Explore example garage",
-  exampleTitle: "Example garage · Project 318",
+  exampleTitle: "Example garage",
   exampleHint:
     "Illustrative data, not a customer's car. Nothing is added to your garage.",
   exampleTask: "Oil service → suspension plan → recorded progress",
@@ -196,7 +196,7 @@ const de: Copy = {
   skip: "Vorerst überspringen",
   cancel: "Abbrechen",
   example: "Beispielgarage ansehen",
-  exampleTitle: "Beispielgarage · Project 318",
+  exampleTitle: "Beispielgarage",
   exampleHint:
     "Illustrative Daten, kein Kundenauto. Deiner Garage wird nichts hinzugefügt.",
   exampleTask: "Ölservice → Fahrwerksplan → dokumentierter Fortschritt",
@@ -361,7 +361,7 @@ const el: Copy = {
   skip: "Παράλειψη προς το παρόν",
   cancel: "Ακύρωση",
   example: "Δες ένα ενδεικτικό γκαράζ",
-  exampleTitle: "Ενδεικτικό γκαράζ · Project 318",
+  exampleTitle: "Ενδεικτικό γκαράζ",
   exampleHint:
     "Ενδεικτικά δεδομένα, όχι αυτοκίνητο πελάτη. Δεν προστίθεται τίποτα στο γκαράζ σου.",
   exampleTask: "Σέρβις λαδιών → σχέδιο ανάρτησης → καταγεγραμμένη πρόοδος",
@@ -527,7 +527,7 @@ const sq: Copy = {
   skip: "Kalo për tani",
   cancel: "Anulo",
   example: "Eksploro garazhin shembull",
-  exampleTitle: "Garazh shembull · Project 318",
+  exampleTitle: "Garazh shembull",
   exampleHint:
     "Të dhëna ilustruese, jo makinë klienti. Asgjë nuk shtohet në garazhin tënd.",
   exampleTask: "Servis vaji → plan pezullimi → progres i regjistruar",
@@ -687,7 +687,7 @@ const ja: Copy = {
   skip: "今はスキップ",
   cancel: "キャンセル",
   example: "サンプルガレージを見る",
-  exampleTitle: "サンプルガレージ · Project 318",
+  exampleTitle: "サンプルガレージ",
   exampleHint:
     "説明用データで、お客様の車ではありません。あなたのガレージには何も追加されません。",
   exampleTask: "オイル整備 → サスペンション計画 → 進捗の記録",
