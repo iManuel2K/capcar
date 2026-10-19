@@ -1,13 +1,16 @@
 .showroom {
-  --paper: #f4eee3;
-  --ink: #17383a;
-  --rust: #9d4b30;
+  --paper: #0c2426;
+  --ink: #eeebe4;
+  --rust: #d6aa92;
+  --muted: #a7b7b2;
+  --line: #ffffff24;
+  --hover: #ffffff09;
   color: var(--ink);
-  background: var(--paper);
-  padding: clamp(20px, 3vw, 44px);
-  border-radius: 2rem;
+  background: transparent;
+  padding: 12px 0;
+  border-radius: 0;
   isolation: isolate;
-  overflow: hidden;
+  min-width: 0;
 }
 .eyebrow {
   color: var(--rust);
@@ -17,15 +20,16 @@
   margin-bottom: 10px;
 }
 .headline {
-  font:
-    400 clamp(34px, 4vw, 62px)/1.04 Georgia,
-    serif;
+  font-family: inherit;
+  font-size: clamp(30px, 3.8vw, 48px);
+  font-weight: 500;
+  line-height: 1.12;
   letter-spacing: -0.045em;
   text-wrap: balance;
 }
 .intro {
   margin-top: 14px;
-  color: #596b68;
+  color: var(--muted);
   font-size: 13px;
   line-height: 1.7;
 }
@@ -35,7 +39,7 @@
   letter-spacing: 0.1em;
 }
 .stage {
-  border-top: 1px solid #17383a25;
+  border-top: 1px solid var(--line);
 }
 .visual {
   position: relative;
@@ -43,7 +47,7 @@
 }
 .floatingViewport {
   position: relative;
-  min-height: clamp(360px, 33vw, 490px);
+  min-height: clamp(300px, 30vw, 440px);
   padding: 20px 0;
   display: grid;
   place-items: center;
@@ -68,13 +72,13 @@
 }
 .photo img {
   object-fit: contain;
-  filter: drop-shadow(0 22px 14px #17383a20);
+  filter: drop-shadow(0 16px 18px #00000030);
   transition: transform 0.6s ease;
 }
 .emptyCar {
   width: 100%;
   height: 100%;
-  color: #516a64;
+  color: var(--muted);
 }
 .neighbour {
   position: absolute;
@@ -111,7 +115,7 @@
 }
 .neighbourImage img {
   object-fit: contain;
-  filter: drop-shadow(0 14px 9px #17383a20);
+  filter: drop-shadow(0 10px 12px #00000020);
 }
 .neighbourImage svg {
   width: 70%;
@@ -122,7 +126,7 @@
   display: block;
   margin-top: 12px;
   font-size: 10px;
-  color: #596b68;
+  color: var(--muted);
 }
 .mode {
   display: flex;
@@ -133,16 +137,18 @@
 }
 .mode button,
 .play {
-  border: 1px solid #17383a40;
-  border-radius: 999px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
   min-height: 44px;
   padding: 10px 17px;
+  background: transparent;
   font-size: 12px;
 }
 .mode button[aria-pressed="true"],
 .play[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--hover);
+  color: var(--rust);
+  border-color: var(--rust);
 }
 .mode button:focus-visible,
 .play:focus-visible,
@@ -153,7 +159,7 @@
 .visualHint {
   margin: 10px auto;
   max-width: 650px;
-  color: #596b68;
+  color: var(--muted);
   font-size: 11px;
   line-height: 1.7;
   text-align: center;
@@ -171,7 +177,7 @@
 }
 .referenceLabel {
   display: block;
-  color: #596b68;
+  color: var(--muted);
   font-size: 12px;
 }
 .referenceSelect {
@@ -179,16 +185,16 @@
   width: 100%;
   min-height: 44px;
   margin-top: 8px;
-  border: 1px solid #17383a40;
+  border: 1px solid var(--line);
   border-radius: 12px;
   padding: 8px 12px;
-  background: var(--paper);
+  background: #10292b;
   color: var(--ink);
 }
 .details {
   display: grid;
-  gap: 18px 40px;
-  border-top: 1px solid #17383a25;
+  gap: 18px 56px;
+  border-top: 1px solid var(--line);
   padding-top: 28px;
   margin-top: 24px;
   min-width: 0;
@@ -200,15 +206,16 @@
   text-transform: uppercase;
 }
 .identity h2 {
-  font:
-    400 clamp(44px, 5vw, 74px)/1.05 Georgia,
-    serif;
+  font-family: inherit;
+  font-size: clamp(38px, 5vw, 64px);
+  font-weight: 500;
+  line-height: 1.05;
   letter-spacing: -0.05em;
   margin: 10px 0;
   overflow-wrap: anywhere;
 }
 .identity > span {
-  color: #596b68;
+  color: var(--muted);
   font-size: 12px;
 }
 .controls {
@@ -224,11 +231,11 @@
   place-items: center;
   width: 44px;
   height: 44px;
-  border: 1px solid #17383a40;
+  border: 1px solid var(--line);
   border-radius: 50%;
 }
 .arrow:hover {
-  background: #e5d6c4;
+  background: var(--hover);
 }
 .arrow:disabled {
   opacity: 0.3;
@@ -239,10 +246,12 @@
   overflow-x: auto;
   padding: 24px 4px;
   scrollbar-width: thin;
-  scrollbar-color: #9d4b3050 transparent;
+  scrollbar-color: var(--line) transparent;
 }
 .car {
-  flex: 0 0 155px;
+  flex: 0 0 auto;
+  min-width: 130px;
+  padding: 0 12px;
   text-align: center;
   background: transparent;
   border-bottom: 1px solid transparent;
@@ -259,8 +268,7 @@
   outline-offset: 3px;
 }
 .thumb {
-  position: relative;
-  height: 90px;
+  display: none;
 }
 .thumb img {
   object-fit: contain;
@@ -269,7 +277,7 @@
   padding: 10px 0;
 }
 .carYear {
-  color: #66716b;
+  color: var(--muted);
   font-size: 10px;
   margin-top: 4px;
 }
@@ -277,22 +285,22 @@
   animation: arrive 0.65s cubic-bezier(0.16, 0.7, 0.2, 1) both;
 }
 .action {
-  border-color: #17383a55 !important;
+  border-color: var(--line) !important;
   color: var(--ink);
   font-size: 12px;
 }
 .action:hover {
-  background: #e7d8c5;
+  background: var(--hover);
 }
 .primaryAction {
   width: 100%;
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--ink) !important;
+  background: var(--rust);
+  color: #102629;
+  border-color: var(--rust) !important;
 }
 .primaryAction:hover {
-  background: #285458;
-  color: white;
+  background: #e8bea7;
+  color: #102629;
 }
 .studioLink {
   display: inline-flex;
@@ -310,7 +318,7 @@
 }
 .radar {
   margin-top: 24px;
-  border-top: 1px solid #17383a25;
+  border-top: 1px solid var(--line);
   padding-top: 16px;
 }
 .profileHeader {
@@ -328,7 +336,7 @@
 }
 .profileHeader span {
   font-size: 10px;
-  color: #80533e;
+  color: var(--rust);
 }
 .radarSvg {
   display: block;
@@ -341,11 +349,11 @@
 .axisLabel {
   font-family: Arial, sans-serif;
   font-size: 11px;
-  fill: #38554f;
+  fill: var(--muted);
 }
 .axisScore {
   font-size: 9px;
-  fill: #80533e;
+  fill: var(--rust);
   font-family: Arial, sans-serif;
 }
 .radarShape {
@@ -356,7 +364,7 @@
 .profileHint {
   font-size: 11px;
   line-height: 1.65;
-  color: #65736b;
+  color: var(--muted);
   margin-top: 8px;
 }
 .ratingActions {
@@ -367,14 +375,14 @@
 }
 .ratingActions button {
   min-height: 44px;
-  border: 1px solid #17383a55;
+  border: 1px solid var(--line);
   border-radius: 999px;
   padding: 8px 16px;
   font-size: 11px;
   color: var(--ink);
 }
 .ratingActions button:hover {
-  background: #e6d3bc;
+  background: var(--hover);
 }
 .ratingActions button:focus-visible {
   outline: 2px solid var(--rust);
@@ -403,7 +411,7 @@
 }
 .workshop {
   margin-top: 24px;
-  border-top: 1px solid #17383a25;
+  border-top: 1px solid var(--line);
   padding-top: 12px;
 }
 .workshop summary {
@@ -424,13 +432,13 @@
 }
 .workshop section p,
 .workshop section dt {
-  color: #566a64;
+  color: var(--muted);
 }
 .workshop section dd {
   color: var(--ink);
 }
 .workshop section [class*="border"] {
-  border-color: #17383a25;
+  border-color: var(--line);
 }
 
 @keyframes arrive {
@@ -480,8 +488,8 @@
 }
 @media (max-width: 600px) {
   .showroom {
-    border-radius: 1.3rem;
-    padding: 20px 16px;
+    border-radius: 0;
+    padding: 4px 0;
   }
   .floatingViewport {
     min-height: 370px;
@@ -513,14 +521,19 @@
     font-size: 10px;
     padding: 8px 10px;
   }
+  .collectionBar {
+    flex-wrap: wrap;
+  }
   .collectionLabel {
-    max-width: 90px;
+    flex-basis: 100%;
   }
   .controls {
-    gap: 5px;
+    gap: 8px;
+    width: 100%;
+    justify-content: flex-end;
   }
   .car {
-    flex-basis: 130px;
+    min-width: 120px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -534,4 +547,33 @@
   .radarShape {
     transition: none;
   }
+}
+
+.collectionBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.visual [data-presentation="floating"] {
+  color: var(--ink);
+}
+.visual [data-presentation="floating"] p {
+  color: var(--muted);
+}
+.visual [data-presentation="floating"] button {
+  border-color: var(--line);
+  color: var(--ink);
+  background: transparent;
+  font-size: 11px;
+}
+.visual [data-presentation="floating"] button:hover {
+  background: var(--hover);
+}
+.visual [data-presentation="floating"] button:focus-visible {
+  outline-color: var(--rust);
+}
+.visual [data-presentation="floating"] a {
+  color: var(--muted);
 }
