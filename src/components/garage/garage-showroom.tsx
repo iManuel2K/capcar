@@ -71,13 +71,22 @@ export function GarageShowroom({
       `[data-vehicle-index="${(nextIndex + vehicles.length) % vehicles.length}"]`,
     );
     if (focus) button?.focus({ preventScroll: true });
-    button?.scrollIntoView?.({
-      block: "nearest",
-      inline: "nearest",
-      behavior: window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
-        ? "instant"
-        : "smooth",
-    });
+    const strip = rail.current;
+    if (button && strip) {
+      const stripBounds = strip.getBoundingClientRect();
+      const itemBounds = button.getBoundingClientRect();
+      strip.scrollTo?.({
+        left:
+          strip.scrollLeft +
+          itemBounds.left -
+          stripBounds.left -
+          (strip.clientWidth - button.offsetWidth) / 2,
+        behavior: window.matchMedia?.("(prefers-reduced-motion: reduce)")
+          .matches
+          ? "instant"
+          : "smooth",
+      });
+    }
   }
   function navigate(event: KeyboardEvent, position: number) {
     const next =

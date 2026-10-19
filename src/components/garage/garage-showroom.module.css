@@ -499,3 +499,10 @@
     transform: none !important;
   }
 }
+
+.photo > div > div[class~="top-5"] {
+  left: 50%;
+  top: 30px;
+  transform: translateX(-50%);
+  width: max-content;
+}
