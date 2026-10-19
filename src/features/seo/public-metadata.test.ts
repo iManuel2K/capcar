@@ -82,7 +82,7 @@ describe("public metadata", () => {
       const messages = JSON.parse(readFileSync(file, "utf8")) as {
         Metadata: { siteTitle: string };
       };
-      expect(messages.Metadata.siteTitle, file).toMatch(/CapCar$/);
+      expect(messages.Metadata.siteTitle, file).toMatch(/^CapCar — /);
     }
 
     expect(readFileSync("src/app/layout.tsx", "utf8")).toContain(
