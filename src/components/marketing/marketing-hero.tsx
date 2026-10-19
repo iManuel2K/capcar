@@ -59,7 +59,7 @@ export function MarketingHero({ locale = "en" }: { locale?: AppLocale }) {
           <div className={styles.car}>
             <Image
               src="/garage/cutouts/bmw-318i.webp"
-              alt={c.photo}
+              alt="BMW 318i · E90 · 2011"
               fill
               sizes="(min-width: 1440px) 650px, (min-width: 761px) 48vw, 100vw"
               quality={75}
