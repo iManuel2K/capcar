@@ -32,6 +32,33 @@ export const neutralProfile: VehicleProfile = {
 };
 // Fictional showcase values demonstrate the chart. They are not road-test data.
 const examples: Record<string, VehicleProfile> = {
+  "showroom-bmw-m3-e30": {
+    performance: 7,
+    comfort: 5,
+    speed: 7,
+    handling: 9,
+    efficiency: 5,
+    customization: 9,
+    practicality: 5,
+  },
+  "showroom-nissan-gt-r": {
+    performance: 9,
+    comfort: 6,
+    speed: 9,
+    handling: 8,
+    efficiency: 4,
+    customization: 10,
+    practicality: 5,
+  },
+  "showroom-toyota-supra-mk": {
+    performance: 9,
+    comfort: 6,
+    speed: 9,
+    handling: 7,
+    efficiency: 4,
+    customization: 10,
+    practicality: 4,
+  },
   "demo-bmw-318i-e90": {
     performance: 5,
     comfort: 7,

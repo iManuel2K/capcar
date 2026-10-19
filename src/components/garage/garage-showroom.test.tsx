@@ -1,7 +1,13 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
-import { GarageShowroom } from "./garage-showroom";
+import { GarageShowroom, showroomPhoto } from "./garage-showroom";
 
 vi.mock("next/image", () => ({
   default: ({ src, alt }: { src: string; alt: string }) => (
@@ -51,8 +57,63 @@ const ford: Vehicle = {
   nickname: "Truck",
   garageGoal: "maintain",
 };
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.useRealTimers();
+});
 describe("interactive garage showroom", () => {
+  it("uses cutouts only for the known example photos and preserves owner uploads", () => {
+    expect(
+      showroomPhoto({ ...bmw, imageUrl: "/capcar-bmw-current-side.webp" }),
+    ).toBe("/garage/cutouts/bmw-318i.webp");
+    expect(
+      showroomPhoto({
+        ...bmw,
+        photoDataUrl: "data:image/webp;base64,private",
+        imageUrl: "/capcar-bmw-current-side.webp",
+      }),
+    ).toBe("data:image/webp;base64,private");
+  });
+  it("cycles only after play and stops when selecting a car or editing ratings", () => {
+    vi.useFakeTimers();
+    render(<GarageShowroom vehicles={[bmw, ford]} />);
+    act(() => {
+      vi.advanceTimersByTime(7000);
+    });
+    expect(screen.getByText("Daily overview")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Play showroom" }));
+    act(() => {
+      vi.advanceTimersByTime(6500);
+    });
+    expect(screen.getByText("Truck overview")).toBeInTheDocument();
+    fireEvent.focus(screen.getByRole("button", { name: "Rate your car" }));
+    expect(
+      screen.getByRole("button", { name: "Play showroom" }),
+    ).toHaveAttribute("aria-pressed", "false");
+    act(() => {
+      vi.advanceTimersByTime(13000);
+    });
+    expect(screen.getByText("Truck overview")).toBeInTheDocument();
+  });
+  it("opens a matching model directly without substituting another trim", () => {
+    render(
+      <GarageShowroom
+        vehicles={[
+          {
+            ...bmw,
+            model: "M3",
+            platform: "E30",
+            bodyStyle: "Coupe",
+            productionYear: 1990,
+          },
+        ]}
+      />,
+    );
+    expect(screen.getByText("3D reference bmw-m3-e30")).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: "Rotate in 3D" }),
+    ).toHaveAttribute("aria-pressed", "true");
+  });
   it("keeps public examples separate from account actions and workshop data", () => {
     render(<GarageShowroom vehicles={[bmw, ford]} readOnly />);
     expect(

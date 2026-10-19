@@ -76,3 +76,7 @@ and the corresponding license when redistributing a model.
 Original model geometry, textures and creator credit remain owned by the credited
 creators. CapCar's catalog labels describe only the represented reference and do
 not change the asset license.
+
+## Floating garage preview derivatives (2026-10-19)
+
+The floating garage also uses transparent, AI-assisted background-removal derivatives of the BMW M3 E30 (Martin Trafas), Nissan Skyline GT-R R34 (Lexyc16), and Toyota Supra A80 (Martin Trafas) preview screenshots. These illustrative images retain the original models' CC BY 4.0 attribution; their source links and processing details are in `/garage/cutouts/README.md`. Live 3D model geometry is unchanged.

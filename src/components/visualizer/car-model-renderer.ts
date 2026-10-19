@@ -2,18 +2,26 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { carCameraDistance } from "@/features/visualizer/car-model-framing";
 import type { CarModel } from "@/features/visualizer/car-model-catalog";
 
 export type CarCamera = "perspective" | "front" | "side" | "rear";
 
 /** One on-demand canvas. Animation runs only while explicitly rotating. */
-export function createCarModelRenderer(host: HTMLElement, onError: () => void) {
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
+export function createCarModelRenderer(
+  host: HTMLElement,
+  onError: () => void,
+  options: { transparent?: boolean } = {},
+) {
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: !!options.transparent,
+  });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.1;
-  renderer.setClearColor(0xe2e4da);
+  renderer.setClearColor(0xe2e4da, options.transparent ? 0 : 1);
   renderer.domElement.setAttribute("role", "img");
   renderer.domElement.setAttribute(
     "aria-label",
@@ -72,7 +80,17 @@ export function createCarModelRenderer(host: HTMLElement, onError: () => void) {
   let loadedCar: CarModel | undefined;
   const painted = new Map<THREE.MeshStandardMaterial, THREE.Color>();
   function render() {
-    if (!disposed) renderer.render(scene, camera);
+    if (disposed) return;
+    if (options.transparent) {
+      // Keep the whole car inside the floating stage even after a high-angle drag.
+      const offset = camera.position.clone().sub(controls.target);
+      const minimum = fitDistance(Math.PI / 2 - controls.getPolarAngle());
+      if (offset.length() < minimum) {
+        offset.setLength(minimum);
+        camera.position.copy(controls.target).add(offset);
+      }
+    }
+    renderer.render(scene, camera);
   }
   controls.addEventListener("change", render);
   let rotationRequested = false;
@@ -122,11 +140,20 @@ export function createCarModelRenderer(host: HTMLElement, onError: () => void) {
   document.addEventListener("visibilitychange", syncRotation);
   reducedMotion.addEventListener("change", syncRotation);
 
+  let framingRadius = 2.6;
+  let framingHalfHeight = 0.9;
   const resize = () => {
     const { width, height } = host.getBoundingClientRect();
     renderer.setSize(Math.max(width, 1), Math.max(height, 1));
     camera.aspect = Math.max(width, 1) / Math.max(height, 1);
     camera.updateProjectionMatrix();
+    const offset = camera.position.clone().sub(controls.target);
+    const minimum = fitDistance(Math.PI / 2 - controls.getPolarAngle());
+    if (offset.length() < minimum) {
+      offset.setLength(minimum);
+      camera.position.copy(controls.target).add(offset);
+      controls.update();
+    }
     render();
   };
   const observer = new ResizeObserver(resize);
@@ -163,12 +190,33 @@ export function createCarModelRenderer(host: HTMLElement, onError: () => void) {
     });
     materials.forEach((material) => material.dispose());
   }
+  function fitDistance(elevation = 0.33) {
+    return carCameraDistance({
+      aspect: camera.aspect,
+      fov: camera.fov,
+      radius: framingRadius,
+      halfHeight: framingHalfHeight,
+      elevation,
+    });
+  }
   function setCamera(view: CarCamera) {
-    const distance = camera.aspect < 1 ? 9 : 7;
-    if (view === "front") camera.position.set(0, 1.5, distance);
-    else if (view === "rear") camera.position.set(0, 1.5, -distance);
-    else if (view === "side") camera.position.set(distance + 0.5, 1.5, 0);
-    else camera.position.set(distance * 0.65, 2.8, distance * 0.65);
+    const elevation = view === "perspective" ? 0.33 : 0.12;
+    const distance = fitDistance(elevation);
+    const direction =
+      view === "front"
+        ? new THREE.Vector3(0, Math.sin(elevation), Math.cos(elevation))
+        : view === "rear"
+          ? new THREE.Vector3(0, Math.sin(elevation), -Math.cos(elevation))
+          : view === "side"
+            ? new THREE.Vector3(Math.cos(elevation), Math.sin(elevation), 0)
+            : new THREE.Vector3(
+                Math.cos(elevation) / Math.SQRT2,
+                Math.sin(elevation),
+                Math.cos(elevation) / Math.SQRT2,
+              );
+    camera.position
+      .copy(controls.target)
+      .add(direction.multiplyScalar(distance));
     controls.update();
     render();
   }
@@ -242,6 +290,10 @@ export function createCarModelRenderer(host: HTMLElement, onError: () => void) {
         const box = new THREE.Box3().setFromObject(wrapper, true);
         const center = box.getCenter(new THREE.Vector3());
         wrapper.position.set(-center.x, -box.min.y, -center.z);
+        const fittedSize = box.getSize(new THREE.Vector3());
+        framingRadius = Math.hypot(fittedSize.x, fittedSize.z) / 2;
+        framingHalfHeight = fittedSize.y / 2;
+        controls.target.set(0, framingHalfHeight, 0);
         if (model) {
           scene.remove(model);
           release(model);

@@ -2,188 +2,219 @@
   --paper: #f4eee3;
   --ink: #17383a;
   --rust: #9d4b30;
-  perspective: 1400px;
   color: var(--ink);
   background: var(--paper);
-  padding: clamp(20px, 3vw, 48px);
+  padding: clamp(20px, 3vw, 44px);
   border-radius: 2rem;
   isolation: isolate;
   overflow: hidden;
 }
 .eyebrow {
-  margin-bottom: 12px;
   color: var(--rust);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.19em;
-  font-weight: 600;
+  margin-bottom: 10px;
 }
 .headline {
-  max-width: 850px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(36px, 4.3vw, 70px);
-  line-height: 1.03;
-  letter-spacing: -0.055em;
-  font-weight: 400;
+  font:
+    400 clamp(34px, 4vw, 62px)/1.04 Georgia,
+    serif;
+  letter-spacing: -0.045em;
   text-wrap: balance;
 }
 .intro {
-  margin-top: 18px;
-  font-size: 14px;
-  line-height: 1.7;
+  margin-top: 14px;
   color: #596b68;
+  font-size: 13px;
+  line-height: 1.7;
 }
 .collectionLabel {
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-size: 11px;
   text-transform: uppercase;
-  color: #586c68;
+  letter-spacing: 0.1em;
 }
 .stage {
-  display: grid;
-  gap: 2rem;
-  position: relative;
-  align-items: start;
-  padding: 1.25rem 0 1.75rem;
   border-top: 1px solid #17383a25;
-  border-bottom: 1px solid #17383a25;
 }
 .visual {
-  min-width: 0;
   position: relative;
-  padding: 1rem 0.5rem 0;
+  min-width: 0;
 }
-.visual::before {
-  content: "";
-  position: absolute;
-  top: 20%;
-  left: -20%;
-  width: 125%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #e6d3bc;
-  z-index: -1;
+.floatingViewport {
+  position: relative;
+  min-height: clamp(360px, 33vw, 490px);
+  padding: 20px 0;
+  display: grid;
+  place-items: center;
 }
-.visual::after {
-  content: "";
-  position: absolute;
-  top: 28%;
-  left: 12%;
-  width: 86%;
-  aspect-ratio: 1;
-  border: 1px solid #9d4b3035;
-  border-radius: 50%;
-  z-index: -1;
+.heroCar {
+  width: 60%;
+  max-width: 790px;
+  z-index: 2;
+  min-width: 0;
 }
 .photo {
+  position: relative;
+  aspect-ratio: 16 / 9;
   touch-action: pan-y;
-  padding: 1.4rem 0.6rem;
-  perspective: 1000px;
+  cursor: grab;
 }
-.photo > div {
-  min-height: 360px;
-  border: 7px solid #fffaf0;
-  border-radius: 46% 46% 22px 22px;
-  box-shadow: 0 28px 45px #21333226;
-  transform: rotate(-3deg) rotateY(var(--tilt, 0deg));
-  transition: transform 0.45s ease-out;
+.photo:hover img {
+  transform: translateY(-6px) rotate(-1deg);
 }
-.arrival {
-  animation: arrive 0.65s cubic-bezier(0.16, 0.7, 0.2, 1) both;
+.photo:active {
+  cursor: grabbing;
+}
+.photo img {
+  object-fit: contain;
+  filter: drop-shadow(0 22px 14px #17383a20);
+  transition: transform 0.6s ease;
+}
+.emptyCar {
+  width: 100%;
+  height: 100%;
+  color: #516a64;
+}
+.neighbour {
+  position: absolute;
+  width: 18%;
+  top: 42%;
+  transform: translateY(-50%);
+  min-height: 110px;
+  z-index: 3;
+  cursor: pointer;
+  background: transparent;
+  text-align: center;
+  transition: transform 0.5s ease;
+}
+.previousCar {
+  left: 0;
+  transform: translateY(-50%) rotate(-9deg);
+}
+.nextCar {
+  right: 0;
+  transform: translateY(-50%) rotate(9deg);
+}
+.neighbour:hover {
+  transform: translateY(-58%) rotate(0);
+}
+.neighbour:focus-visible {
+  outline: 2px solid var(--rust);
+  outline-offset: 5px;
+  border-radius: 8px;
+}
+.neighbourImage {
+  position: relative;
+  display: block;
+  aspect-ratio: 16/10;
+}
+.neighbourImage img {
+  object-fit: contain;
+  filter: drop-shadow(0 14px 9px #17383a20);
+}
+.neighbourImage svg {
+  width: 70%;
+  height: 100%;
+  margin: auto;
+}
+.neighbour > span:last-child {
+  display: block;
+  margin-top: 12px;
+  font-size: 10px;
+  color: #596b68;
+}
+.mode {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+}
+.mode button,
+.play {
+  border: 1px solid #17383a40;
+  border-radius: 999px;
+  min-height: 44px;
+  padding: 10px 17px;
+  font-size: 12px;
+}
+.mode button[aria-pressed="true"],
+.play[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.mode button:focus-visible,
+.play:focus-visible,
+.arrow:focus-visible {
+  outline: 2px solid var(--rust);
+  outline-offset: 4px;
+}
+.visualHint {
+  margin: 10px auto;
+  max-width: 650px;
+  color: #596b68;
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+}
+.referencePicker {
+  max-width: 560px;
+  margin: 12px auto 22px;
+  font-size: 12px;
+}
+.referencePicker summary {
+  cursor: pointer;
+  min-height: 44px;
+  align-content: center;
+  text-align: center;
+}
+.referenceLabel {
+  display: block;
+  color: #596b68;
+  font-size: 12px;
+}
+.referenceSelect {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 8px;
+  border: 1px solid #17383a40;
+  border-radius: 12px;
+  padding: 8px 12px;
+  background: var(--paper);
+  color: var(--ink);
 }
 .details {
+  display: grid;
+  gap: 18px 40px;
+  border-top: 1px solid #17383a25;
+  padding-top: 28px;
+  margin-top: 24px;
   min-width: 0;
-  position: relative;
 }
 .identity p {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.19em;
   color: var(--rust);
-  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 .identity h2 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(44px, 4.5vw, 76px);
-  line-height: 1.02;
-  letter-spacing: -0.055em;
-  font-weight: 400;
+  font:
+    400 clamp(44px, 5vw, 74px)/1.05 Georgia,
+    serif;
+  letter-spacing: -0.05em;
   margin: 10px 0;
-  text-wrap: balance;
   overflow-wrap: anywhere;
 }
 .identity > span {
-  font-size: 12px;
   color: #596b68;
-}
-.rail {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  padding: 1.8rem 0.6rem;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
-  scrollbar-color: #9d4b3050 transparent;
-}
-.car {
-  flex: 0 0 190px;
-  scroll-snap-align: center;
-  overflow: hidden;
-  border: 1px solid #17383a26;
-  border-radius: 1.2rem;
-  background: #faf6ee;
-  text-align: left;
-  transform: scale(0.94) rotate(-4deg);
-  transform-origin: center;
-  transition:
-    transform 0.4s,
-    border-color 0.4s,
-    background 0.4s;
-}
-.car:nth-child(even) {
-  transform: scale(0.94) rotate(4deg);
-}
-.car:hover {
-  transform: translateY(-5px) scale(0.98) rotate(0);
-  border-color: var(--rust);
-}
-.car[aria-pressed="true"] {
-  transform: translateY(-8px) scale(1) rotate(0);
-  border-color: var(--rust);
-  background: #fffaf1;
-  box-shadow: 0 12px 24px #603d2026;
-}
-.car:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 4px;
-}
-.thumb {
-  position: relative;
-  height: 110px;
-  overflow: hidden;
-  background: #193a3c;
-}
-.thumb img {
-  object-fit: cover;
-  transition: transform 0.5s;
-}
-.car[aria-pressed="true"] .thumb img {
-  transform: scale(1.05);
-}
-.carLabel {
-  padding: 14px;
-  color: var(--ink);
-}
-.carYear {
-  margin-top: 5px;
-  font-size: 11px;
-  color: #66716b;
+  font-size: 12px;
 }
 .controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: var(--ink);
+  gap: 8px;
 }
 .controls > span {
   color: var(--rust);
@@ -193,52 +224,57 @@
   place-items: center;
   width: 44px;
   height: 44px;
-  border: 1px solid #17383a50;
+  border: 1px solid #17383a40;
   border-radius: 50%;
-  transition: background 0.2s;
 }
 .arrow:hover {
   background: #e5d6c4;
 }
-.arrow:focus-visible {
-  outline: 2px solid var(--rust);
-  outline-offset: 3px;
-}
 .arrow:disabled {
   opacity: 0.3;
-  cursor: default;
 }
-.mode {
+.rail {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 24px 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #9d4b3050 transparent;
 }
-.mode button {
-  min-height: 44px;
-  padding: 0.65rem 1.1rem;
-  border-radius: 999px;
-  border: 1px solid #17383a40;
-  font-size: 0.8rem;
-  background: #f9f4ea;
-  color: var(--ink);
+.car {
+  flex: 0 0 155px;
+  text-align: center;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: transform 0.3s;
 }
-.mode button[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--ink);
+.car:hover {
+  transform: translateY(-4px);
 }
-.mode button:focus-visible {
+.car[aria-pressed="true"] {
+  border-color: var(--rust);
+}
+.car:focus-visible {
   outline: 2px solid var(--rust);
   outline-offset: 3px;
 }
-.visualHint,
-.referenceLabel {
-  display: block;
-  margin: 12px 0;
-  font-size: 12px;
-  line-height: 1.7;
-  color: #596b68;
+.thumb {
+  position: relative;
+  height: 90px;
+}
+.thumb img {
+  object-fit: contain;
+}
+.carLabel {
+  padding: 10px 0;
+}
+.carYear {
+  color: #66716b;
+  font-size: 10px;
+  margin-top: 4px;
+}
+.arrival {
+  animation: arrive 0.65s cubic-bezier(0.16, 0.7, 0.2, 1) both;
 }
 .action {
   border-color: #17383a55 !important;
@@ -396,14 +432,24 @@
 .workshop section [class*="border"] {
   border-color: #17383a25;
 }
+
 @keyframes arrive {
   from {
     opacity: 0;
-    transform: translateY(22px) rotate(0.5deg);
+    transform: translateX(30px) scale(0.94);
   }
   to {
     opacity: 1;
     transform: none;
+  }
+}
+@keyframes floatCar {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1deg);
   }
 }
 @keyframes drawProfile {
@@ -416,93 +462,76 @@
     transform: scale(1);
   }
 }
-@media (min-width: 1100px) {
-  .stage {
-    grid-template-columns: minmax(0, 1.25fr) minmax(290px, 1fr);
-    gap: clamp(24px, 3vw, 55px);
-    padding-top: 2rem;
+@media (min-width: 850px) {
+  .details {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
   }
-  .visual {
-    position: sticky;
-    top: 24px;
+  .details > .radar {
+    grid-column: 2;
+    grid-row: 1 / span 4;
+    border-top: 0;
+    margin-top: 0;
+    padding-top: 0;
   }
-  .photo > div {
-    min-height: 490px;
+  .details > :not(.radar) {
+    grid-column: 1;
   }
 }
 @media (max-width: 600px) {
   .showroom {
     border-radius: 1.3rem;
+    padding: 20px 16px;
   }
-  .photo > div {
-    min-height: 290px;
+  .floatingViewport {
+    min-height: 370px;
+    padding-bottom: 145px;
+    align-items: start;
+    padding-top: 20px;
+  }
+  .heroCar {
+    width: 100%;
+  }
+  .neighbour {
+    top: auto;
+    bottom: 0;
+    width: 30%;
+    transform: none;
+  }
+  .previousCar {
+    left: 5%;
+    transform: rotate(-7deg);
+  }
+  .nextCar {
+    right: 5%;
+    transform: rotate(7deg);
+  }
+  .neighbour > span:last-child {
+    font-size: 9px;
+  }
+  .play {
+    font-size: 10px;
+    padding: 8px 10px;
+  }
+  .collectionLabel {
+    max-width: 90px;
+  }
+  .controls {
+    gap: 5px;
   }
   .car {
-    flex-basis: 155px;
-  }
-  .thumb {
-    height: 90px;
-  }
-  .rail {
-    gap: 0.7rem;
-  }
-  .identity h2 {
-    font-size: 52px;
-  }
-  .visual::before {
-    left: -24%;
-    width: 130%;
-  }
-  .stage {
-    gap: 1.8rem;
+    flex-basis: 130px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .arrival,
+  .photo img,
   .radarShape {
     animation: none;
   }
   .car,
-  .thumb img,
-  .arrow,
-  .photo > div,
+  .neighbour,
   .radarShape {
     transition: none;
-    transform: none !important;
   }
-}
-@media (hover: none) {
-  .photo > div {
-    transform: rotate(-2deg);
-  }
-}
-
-.orbitText {
-  position: absolute;
-  left: -12%;
-  top: 15%;
-  width: 119%;
-  z-index: -1;
-  fill: #9d4b3038;
-  pointer-events: none;
-  transition: transform 1s ease-out;
-  font-family: Georgia, serif;
-  font-size: 23px;
-  text-transform: uppercase;
-}
-.visual:hover .orbitText {
-  transform: rotate(9deg);
-}
-@media (prefers-reduced-motion: reduce) {
-  .orbitText {
-    transition: none !important;
-    transform: none !important;
-  }
-}
-
-.photo > div > div[class~="top-5"] {
-  left: 50%;
-  top: 30px;
-  transform: translateX(-50%);
-  width: max-content;
 }
