@@ -6,6 +6,7 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { createCarModelRenderer } from "./car-model-renderer";
 import { InteractiveCarModel } from "./interactive-car-model";
 
 const runtime = vi.hoisted(() => ({
@@ -18,7 +19,7 @@ const runtime = vi.hoisted(() => ({
   rotation: vi.fn(),
 }));
 vi.mock("./car-model-renderer", () => ({
-  createCarModelRenderer: () => runtime,
+  createCarModelRenderer: vi.fn(() => runtime),
 }));
 vi.mock("next/image", () => ({
   default: ({ alt, src }: { alt: string; src: string }) => (
@@ -33,6 +34,31 @@ afterEach(() => {
 });
 
 describe("shared free car viewer", () => {
+  it("keeps a whole-car preview on floating-viewer failure without badges over the car", async () => {
+    runtime.load.mockRejectedValueOnce(new Error("GPU unavailable"));
+    const { container } = render(
+      <InteractiveCarModel
+        modelId="bmw-m3-e30"
+        autoStart
+        autoRotate
+        presentation="floating"
+      />,
+    );
+    await waitFor(() =>
+      expect(screen.getByRole("status")).toHaveTextContent("3D is unavailable"),
+    );
+    expect(screen.getByRole("img", { name: /3D model preview/ })).toBeVisible();
+    expect(screen.queryByText("Free 3D model")).not.toBeInTheDocument();
+    expect(
+      container.querySelector('[data-presentation="floating"]'),
+    ).toBeInTheDocument();
+    expect(createCarModelRenderer).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.any(Function),
+      { transparent: true },
+    );
+    expect(screen.getByRole("link", { name: "Original model" })).toBeVisible();
+  });
   it("does not initialize or fetch 3D until explicitly loaded", () => {
     render(<InteractiveCarModel modelId="bmw-m3-e30" />);
     expect(runtime.load).not.toHaveBeenCalled();
@@ -95,7 +121,9 @@ describe("shared free car viewer", () => {
     await waitFor(() =>
       expect(screen.getByRole("status")).toHaveTextContent("Model ready"),
     );
-    expect(runtime.rotation).toHaveBeenLastCalledWith(true);
+    await waitFor(() =>
+      expect(runtime.rotation).toHaveBeenLastCalledWith(true),
+    );
     fireEvent.click(screen.getByRole("button", { name: "Pause rotation" }));
     expect(runtime.rotation).toHaveBeenLastCalledWith(false);
     fireEvent.click(screen.getByRole("button", { name: "Auto rotate" }));

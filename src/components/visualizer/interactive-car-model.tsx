@@ -13,8 +13,10 @@ export interface InteractiveCarModelProps {
   modelId: string;
   autoStart?: boolean;
   autoRotate?: boolean;
+  presentation?: "studio" | "floating";
   paint?: string | null;
   label?: string;
+  posterUrl?: string;
 }
 export const studioButton =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#0e2d30]/25 px-4 py-2 text-sm font-medium transition hover:bg-[#0e2d30]/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6d0101] disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none";
@@ -23,8 +25,10 @@ export function InteractiveCarModel({
   modelId,
   paint,
   label,
+  posterUrl,
   autoStart = false,
   autoRotate = false,
+  presentation = "studio",
 }: InteractiveCarModelProps) {
   const model = getCarModel(modelId);
   if (!model)
@@ -39,8 +43,10 @@ export function InteractiveCarModel({
       model={model}
       paint={paint}
       label={label}
+      posterUrl={posterUrl}
       autoStart={autoStart}
       autoRotate={autoRotate}
+      presentation={presentation}
     />
   );
 }
@@ -49,14 +55,18 @@ function ModelViewer({
   model,
   paint,
   label,
+  posterUrl,
   autoStart,
   autoRotate,
+  presentation,
 }: {
   model: CarModel;
   autoStart: boolean;
   autoRotate: boolean;
+  presentation: "studio" | "floating";
   paint?: string | null;
   label?: string;
+  posterUrl?: string;
 }) {
   const locale = useLocale();
   const rotationLabels: Record<string, [string, string]> = {
@@ -103,7 +113,9 @@ function ModelViewer({
     import("./car-model-renderer")
       .then(async ({ createCarModelRenderer }) => {
         if (cancelled || !host.current) return;
-        viewer = createCarModelRenderer(host.current, fail);
+        viewer = createCarModelRenderer(host.current, fail, {
+          transparent: presentation === "floating",
+        });
         runtime.current = viewer;
         await viewer.load(model);
         if (!cancelled && !failed) {
@@ -117,8 +129,9 @@ function ModelViewer({
       viewer?.dispose();
       if (runtime.current === viewer) runtime.current = null;
     };
-  }, [active, model, attempt]);
+  }, [active, model, attempt, presentation]);
   const ready = phase === "ready";
+  const floating = presentation === "floating";
   useEffect(() => {
     runtime.current?.rotation?.(ready && rotating);
   }, [ready, rotating]);
@@ -127,11 +140,18 @@ function ModelViewer({
       aria-label={label ?? `${model.name} interactive model`}
       data-model-id={model.id}
       data-model-state={phase}
+      data-presentation={presentation}
     >
-      <div className="relative isolate aspect-[4/3] overflow-hidden rounded-2xl bg-[#e2e4da] sm:aspect-[16/10]">
-        {!active && (
+      <div
+        className={
+          floating
+            ? "relative isolate aspect-[16/9]"
+            : "relative isolate aspect-[4/3] overflow-hidden rounded-2xl bg-[#e2e4da] sm:aspect-[16/10]"
+        }
+      >
+        {(!active || (floating && !ready)) && (
           <Image
-            src={`/models/cars/previews/${model.id}.webp`}
+            src={posterUrl ?? `/models/cars/previews/${model.id}.webp`}
             alt={`${model.name} 3D model preview`}
             unoptimized
             fill
@@ -155,7 +175,7 @@ function ModelViewer({
             </button>
           </div>
         )}
-        {active && !ready && (
+        {active && !ready && !floating && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#e2e4da]/90 p-6 text-center">
             <p className="max-w-xs text-sm leading-6">
               {phase === "error"
@@ -164,9 +184,11 @@ function ModelViewer({
             </p>
           </div>
         )}
-        <span className="pointer-events-none absolute top-4 left-4 rounded-full bg-[#f3f1e7]/95 px-3 py-1.5 text-[10px] font-semibold tracking-widest uppercase">
-          {ready ? "Drag to rotate · 360°" : "Free 3D model"}
-        </span>
+        {!floating && (
+          <span className="pointer-events-none absolute top-4 left-4 rounded-full bg-[#f3f1e7]/95 px-3 py-1.5 text-[10px] font-semibold tracking-widest uppercase">
+            {ready ? "Drag to rotate · 360°" : "Free 3D model"}
+          </span>
+        )}
       </div>
       <p
         role="status"
@@ -212,56 +234,61 @@ function ModelViewer({
           >
             {rotationLabel[rotating ? 1 : 0]}
           </button>
-          <button
-            type="button"
-            className={studioButton}
-            disabled={!ready}
-            onClick={() => runtime.current?.zoom("in")}
-          >
-            Zoom in
-          </button>
-          <button
-            type="button"
-            className={studioButton}
-            disabled={!ready}
-            onClick={() => runtime.current?.zoom("out")}
-          >
-            Zoom out
-          </button>
-          <button
-            type="button"
-            className={studioButton}
-            disabled={!ready}
-            onClick={() => {
-              try {
-                const url = runtime.current?.snapshot();
-                if (!url) throw new Error("No image available");
-                const link = document.createElement("a");
-                link.href = url;
-                link.download = `capcar-${model.id}.png`;
-                link.click();
-                setExportMessage(
-                  "Image downloaded. Keep the model credit when sharing.",
-                );
-              } catch {
-                setExportMessage(
-                  "Image could not be saved. Try your device’s screenshot tool.",
-                );
-              }
-            }}
-          >
-            Save image
-          </button>
-          <button
-            type="button"
-            className={studioButton}
-            onClick={() => {
-              setActive(false);
-              setPhase("idle");
-            }}
-          >
-            Stop 3D
-          </button>
+          {!floating && (
+            <>
+              {" "}
+              <button
+                type="button"
+                className={studioButton}
+                disabled={!ready}
+                onClick={() => runtime.current?.zoom("in")}
+              >
+                Zoom in
+              </button>
+              <button
+                type="button"
+                className={studioButton}
+                disabled={!ready}
+                onClick={() => runtime.current?.zoom("out")}
+              >
+                Zoom out
+              </button>
+              <button
+                type="button"
+                className={studioButton}
+                disabled={!ready}
+                onClick={() => {
+                  try {
+                    const url = runtime.current?.snapshot();
+                    if (!url) throw new Error("No image available");
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download = `capcar-${model.id}.png`;
+                    link.click();
+                    setExportMessage(
+                      "Image downloaded. Keep the model credit when sharing.",
+                    );
+                  } catch {
+                    setExportMessage(
+                      "Image could not be saved. Try your device’s screenshot tool.",
+                    );
+                  }
+                }}
+              >
+                Save image
+              </button>
+              <button
+                type="button"
+                className={studioButton}
+                onClick={() => {
+                  setActive(false);
+                  setPhase("idle");
+                }}
+              >
+                Stop 3D
+              </button>
+            </>
+          )}
           {phase === "error" && (
             <button
               type="button"

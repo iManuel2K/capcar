@@ -30,11 +30,9 @@ import {
   garageCarCatalog,
   garageCarCoverage,
 } from "@/features/vehicles/garage-car-catalog";
+import { getShowroomExamples } from "@/features/garage/showroom-examples";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
-import {
-  announceVehicleChange,
-  getShowcaseVehicles,
-} from "@/features/vehicles/vehicle-storage";
+import { announceVehicleChange } from "@/features/vehicles/vehicle-storage";
 import { announceBuildChange } from "@/features/builds/build-storage";
 import { trackAnalytics } from "@/features/analytics/client";
 import { preparePassportPhoto } from "@/features/passport/passport-photo";
@@ -43,7 +41,7 @@ const GarageShowroomPreview = dynamic(
   () => import("./garage-showroom").then((module) => module.GarageShowroom),
   { ssr: false },
 );
-const exampleVehicles = getShowcaseVehicles();
+const exampleVehicles = getShowroomExamples();
 
 const input =
   "mt-2 min-h-12 w-full rounded-xl border border-white/20 bg-[#0a2022] px-4 text-base text-white outline-none focus-visible:border-[#d6aa92] focus-visible:ring-2 focus-visible:ring-[#d6aa92]/30";

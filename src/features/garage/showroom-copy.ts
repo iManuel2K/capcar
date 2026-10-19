@@ -21,6 +21,9 @@ const en = {
   photoHint: "Swipe or use the arrows to choose your car.",
   studio: "Explore the showcase",
   garage: "Your garage",
+  play: "Play showroom",
+  pause: "Pause showroom",
+  modelHint: "Drag the car to rotate. Use the arrows to change cars.",
 };
 type Copy = Record<keyof typeof en, string>;
 export const showroomCopy: Record<AppLocale, Copy> = {
@@ -46,6 +49,10 @@ export const showroomCopy: Record<AppLocale, Copy> = {
     photoHint: "Wische oder nutze die Pfeile, um dein Auto auszuwählen.",
     studio: "Showcase entdecken",
     garage: "Deine Garage",
+    play: "Showroom starten",
+    pause: "Showroom pausieren",
+    modelHint:
+      "Ziehe das Auto zum Drehen. Mit den Pfeilen wechselst du das Fahrzeug.",
   },
   el: {
     title: "Το αυτοκίνητό σου στο επίκεντρο.",
@@ -68,6 +75,9 @@ export const showroomCopy: Record<AppLocale, Copy> = {
     photoHint: "Σύρε ή χρησιμοποίησε τα βέλη για να επιλέξεις αυτοκίνητο.",
     studio: "Δες τη συλλογή",
     garage: "Το γκαράζ σου",
+    play: "Έναρξη παρουσίασης",
+    pause: "Παύση παρουσίασης",
+    modelHint: "Σύρε το αυτοκίνητο για περιστροφή. Άλλαξε όχημα με τα βέλη.",
   },
   sq: {
     title: "Makina jote në qendër.",
@@ -90,6 +100,9 @@ export const showroomCopy: Record<AppLocale, Copy> = {
     photoHint: "Rrëshqit ose përdor shigjetat për të zgjedhur makinën.",
     studio: "Shiko koleksionin",
     garage: "Garazhi yt",
+    play: "Nis prezantimin",
+    pause: "Ndalo prezantimin",
+    modelHint: "Tërhiq makinën për ta rrotulluar. Ndrysho makinën me shigjeta.",
   },
   ja: {
     title: "愛車を、主役に。",
@@ -112,5 +125,8 @@ export const showroomCopy: Record<AppLocale, Copy> = {
     photoHint: "スワイプまたは矢印で車を選択できます。",
     studio: "ショーケースを見る",
     garage: "マイガレージ",
+    play: "ショールームを再生",
+    pause: "ショールームを一時停止",
+    modelHint: "車をドラッグして回転。矢印で車を切り替えます。",
   },
 };
