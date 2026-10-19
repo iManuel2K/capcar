@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useLocale } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import {
   getCarModel,
@@ -10,6 +11,8 @@ import type { createCarModelRenderer } from "./car-model-renderer";
 
 export interface InteractiveCarModelProps {
   modelId: string;
+  autoStart?: boolean;
+  autoRotate?: boolean;
   paint?: string | null;
   label?: string;
 }
@@ -20,6 +23,8 @@ export function InteractiveCarModel({
   modelId,
   paint,
   label,
+  autoStart = false,
+  autoRotate = false,
 }: InteractiveCarModelProps) {
   const model = getCarModel(modelId);
   if (!model)
@@ -29,7 +34,14 @@ export function InteractiveCarModel({
       </p>
     );
   return (
-    <ModelViewer key={model.id} model={model} paint={paint} label={label} />
+    <ModelViewer
+      key={model.id}
+      model={model}
+      paint={paint}
+      label={label}
+      autoStart={autoStart}
+      autoRotate={autoRotate}
+    />
   );
 }
 
@@ -37,12 +49,33 @@ function ModelViewer({
   model,
   paint,
   label,
+  autoStart,
+  autoRotate,
 }: {
   model: CarModel;
+  autoStart: boolean;
+  autoRotate: boolean;
   paint?: string | null;
   label?: string;
 }) {
-  const [active, setActive] = useState(false);
+  const locale = useLocale();
+  const rotationLabels: Record<string, [string, string]> = {
+    en: ["Auto rotate", "Pause rotation"],
+    de: ["Automatisch drehen", "Drehung pausieren"],
+    el: ["Αυτόματη περιστροφή", "Παύση περιστροφής"],
+    sq: ["Rrotullo automatikisht", "Ndalo rrotullimin"],
+    ja: ["自動回転", "回転を一時停止"],
+  };
+  const rotationLabel = rotationLabels[locale] ?? rotationLabels.en;
+  const [active, setActive] = useState(autoStart);
+  const [rotating, setRotating] = useState(
+    () =>
+      autoRotate &&
+      !(
+        typeof window !== "undefined" &&
+        window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+      ),
+  );
   const [phase, setPhase] = useState<"idle" | "loading" | "ready" | "error">(
     "idle",
   );
@@ -86,6 +119,9 @@ function ModelViewer({
     };
   }, [active, model, attempt]);
   const ready = phase === "ready";
+  useEffect(() => {
+    runtime.current?.rotation?.(ready && rotating);
+  }, [ready, rotating]);
   return (
     <section
       aria-label={label ?? `${model.name} interactive model`}
@@ -156,13 +192,26 @@ function ModelViewer({
               className={studioButton}
               key={view}
               disabled={!ready}
-              onClick={() => runtime.current?.camera(view)}
+              onClick={() => {
+                setRotating(false);
+                runtime.current?.rotation?.(false);
+                runtime.current?.camera(view);
+              }}
             >
               {view === "perspective"
                 ? "Reset view"
                 : `${view[0].toUpperCase()}${view.slice(1)} view`}
             </button>
           ))}
+          <button
+            type="button"
+            className={studioButton}
+            disabled={!ready}
+            aria-pressed={rotating}
+            onClick={() => setRotating((value) => !value)}
+          >
+            {rotationLabel[rotating ? 1 : 0]}
+          </button>
           <button
             type="button"
             className={studioButton}

@@ -15,6 +15,7 @@ const runtime = vi.hoisted(() => ({
   camera: vi.fn(),
   zoom: vi.fn(),
   snapshot: vi.fn(),
+  rotation: vi.fn(),
 }));
 vi.mock("./car-model-renderer", () => ({
   createCarModelRenderer: () => runtime,
@@ -88,6 +89,20 @@ describe("shared free car viewer", () => {
     await waitFor(() =>
       expect(screen.getByRole("status")).toHaveTextContent("Model ready"),
     );
+  });
+  it("starts rotating after an explicit garage launch and stops when a fixed camera is chosen", async () => {
+    render(<InteractiveCarModel modelId="bmw-m3-e30" autoStart autoRotate />);
+    await waitFor(() =>
+      expect(screen.getByRole("status")).toHaveTextContent("Model ready"),
+    );
+    expect(runtime.rotation).toHaveBeenLastCalledWith(true);
+    fireEvent.click(screen.getByRole("button", { name: "Pause rotation" }));
+    expect(runtime.rotation).toHaveBeenLastCalledWith(false);
+    fireEvent.click(screen.getByRole("button", { name: "Auto rotate" }));
+    expect(runtime.rotation).toHaveBeenLastCalledWith(true);
+    fireEvent.click(screen.getByRole("button", { name: "Front view" }));
+    expect(runtime.rotation).toHaveBeenLastCalledWith(false);
+    expect(runtime.camera).toHaveBeenLastCalledWith("front");
   });
   it("rejects unknown model IDs before creating any renderer", () => {
     render(<InteractiveCarModel modelId="../../private" />);

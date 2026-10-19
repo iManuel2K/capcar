@@ -1,0 +1,173 @@
+.showroom {
+  perspective: 1400px;
+}
+.stage {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #ffffff1a;
+  border-radius: 2rem;
+  background: linear-gradient(135deg, #143538, #091e20);
+  overflow: hidden;
+}
+.visual {
+  min-width: 0;
+  position: relative;
+}
+.photo {
+  touch-action: pan-y;
+}
+.photo > div {
+  min-height: 350px;
+}
+.arrival {
+  animation: arrive 0.48s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.details {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.rail {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 1.2rem 0.6rem 1.8rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: #d6aa924d transparent;
+}
+.car {
+  flex: 0 0 208px;
+  scroll-snap-align: center;
+  overflow: hidden;
+  border: 1px solid #ffffff1f;
+  border-radius: 1.3rem;
+  background: #0b2326;
+  text-align: left;
+  transform: scale(0.95) rotateY(-4deg);
+  transform-origin: center;
+  transition:
+    transform 0.35s,
+    border-color 0.35s,
+    background 0.35s;
+}
+.car:hover {
+  transform: translateY(-4px) scale(0.98);
+  border-color: #d6aa9280;
+}
+.car[aria-pressed="true"] {
+  transform: translateY(-5px) scale(1) rotateY(0);
+  border-color: #d6aa92;
+  background: #183638;
+  box-shadow: 0 12px 30px #0003;
+}
+.car:focus-visible {
+  outline: 2px solid #efece0;
+  outline-offset: 4px;
+}
+.thumb {
+  position: relative;
+  height: 112px;
+  overflow: hidden;
+  background: #102b2e;
+}
+.thumb img {
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+.car[aria-pressed="true"] .thumb img {
+  transform: scale(1.05);
+}
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.arrow {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #ffffff26;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+.arrow:hover {
+  background: #ffffff14;
+}
+.arrow:focus-visible {
+  outline: 2px solid #d6aa92;
+  outline-offset: 3px;
+}
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.mode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.mode button {
+  min-height: 44px;
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid #ffffff26;
+  font-size: 0.8rem;
+}
+.mode button[aria-pressed="true"] {
+  background: #ede9d8;
+  color: #102e30;
+  border-color: #ede9d8;
+}
+.mode button:focus-visible {
+  outline: 2px solid #d6aa92;
+  outline-offset: 3px;
+}
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateX(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (min-width: 1100px) {
+  .stage {
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 1fr);
+    padding: 1.5rem;
+  }
+  .photo > div {
+    min-height: 470px;
+  }
+}
+@media (max-width: 600px) {
+  .photo > div {
+    min-height: 280px;
+  }
+  .car {
+    flex-basis: 166px;
+  }
+  .thumb {
+    height: 90px;
+  }
+  .rail {
+    gap: 0.65rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .arrival {
+    animation: none;
+  }
+  .car,
+  .thumb img,
+  .arrow {
+    transition: none;
+    transform: none !important;
+  }
+}
