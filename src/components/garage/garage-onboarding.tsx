@@ -248,9 +248,11 @@ function OnboardingFlow({
     setDraft(next);
     setError("");
     setFieldErrors((current) =>
-      Object.fromEntries(
-        Object.entries(current).filter(([field]) => !(field in values)),
-      ),
+      "step" in values || "existingVehicleId" in values
+        ? {}
+        : Object.fromEntries(
+            Object.entries(current).filter(([field]) => !(field in values)),
+          ),
     );
     try {
       localStorage.setItem(draftKey(userId || null), JSON.stringify(next));

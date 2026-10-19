@@ -122,6 +122,16 @@ describe("garage onboarding UI", () => {
       "aria-invalid",
       "false",
     );
+    fireEvent.click(screen.getByRole("button", { name: "Back" }));
+    expect(
+      screen.queryByRole("alert", { name: "Check these details" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "What brings you here?" }),
+    ).toBeInTheDocument();
+    expect(JSON.parse(localStorage.getItem(draftKey(null))!).title).toBe(
+      "Suspension plan",
+    );
   });
   it("seeds a homepage goal only for a fresh draft and preserves an interrupted choice", () => {
     const view = render(<GarageOnboarding initialGoal="modify" />);
