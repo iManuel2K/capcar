@@ -1,5 +1,9 @@
 "use client";
 
+import { useLocale } from "next-intl";
+import { isAppLocale } from "@/i18n/config";
+import { buildProgressCopy } from "@/features/builds/build-progress-copy";
+import styles from "./build-progress.module.css";
 import { trackAnalytics } from "@/features/analytics/client";
 import { activateGarage } from "@/features/onboarding/activation";
 import { useGarageCopy } from "@/features/onboarding/use-garage-copy";
@@ -82,6 +86,8 @@ export function BuildDetail({
   buildId: string;
 }) {
   const copy = useGarageCopy();
+  const locale = useLocale();
+  const progressCopy = buildProgressCopy[isAppLocale(locale) ? locale : "en"];
   const hydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -219,18 +225,24 @@ export function BuildDetail({
             </p>
           </div>
           <div>
-            <p className="mb-3 text-xs tracking-[0.12em] text-white/30 uppercase">
+            <p className="mb-3 text-xs tracking-[0.12em] text-white/65 uppercase">
               Build status
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div
+              className={styles.statuses}
+              role="group"
+              aria-label="Build status"
+            >
               {buildStatuses.map((status) => (
                 <button
                   key={status}
                   type="button"
                   onClick={() => changeBuildStatus(status)}
-                  className={`rounded-full border px-3.5 py-2 text-xs capitalize ${build.status === status ? "border-[#e72d45]/50 bg-[#e72d45]/12 text-[#bad1ff]" : "border-white/10 text-white/40"}`}
+                  className={styles.status}
+                  data-status={status}
+                  aria-pressed={build.status === status}
                 >
-                  {status.replace("_", " ")}
+                  {progressCopy.statuses[status]}
                 </button>
               ))}
             </div>

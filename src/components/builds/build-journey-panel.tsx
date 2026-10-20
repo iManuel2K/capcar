@@ -1,5 +1,9 @@
 "use client";
 import Link from "next/link";
+import { useLocale } from "next-intl";
+import { isAppLocale } from "@/i18n/config";
+import { buildProgressCopy } from "@/features/builds/build-progress-copy";
+import styles from "./build-progress.module.css";
 import { Check, ArrowRight } from "lucide-react";
 import type { Build, BuildItem } from "@/features/builds/build-schema";
 import { getBuildJourney } from "@/features/builds/build-journey";
@@ -13,6 +17,8 @@ export function BuildJourneyPanel({
   build: Build;
   items: BuildItem[];
 }) {
+  const locale = useLocale();
+  const copy = buildProgressCopy[isAppLocale(locale) ? locale : "en"];
   const visuals = useBuildVisuals();
   const visual = visuals.find(
     (item) => item.buildId === build.id && item.vehicleId === build.vehicleId,
@@ -29,22 +35,30 @@ export function BuildJourneyPanel({
       aria-label="Connected build journey"
       className="mt-5 rounded-[2rem] border border-[#b7cec3]/20 bg-[#0b2528] p-5 text-[#eee7d8] sm:p-8"
     >
-      <ol className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+      <ol className={styles.steps} aria-label={copy.label}>
         {journey.steps.map((step, index) => (
           <li
             key={step.label}
-            className="flex items-center gap-2 text-xs sm:text-sm"
+            className={styles.step}
+            aria-current={index === journey.currentStep ? "step" : undefined}
+            data-done={step.done}
+            data-passed={index < journey.currentStep}
           >
-            <span
-              className={`grid size-7 shrink-0 place-items-center rounded-full border ${step.done ? "border-[#89cbb0] text-[#89cbb0]" : "border-white/30 text-white/60"}`}
-            >
-              {step.done ? (
-                <Check aria-label="Complete" className="size-4" />
-              ) : (
-                index + 1
-              )}
+            <span className={styles.number} aria-hidden="true">
+              {index + 1}
             </span>
-            {step.label}
+            <div className={styles.stepText}>
+              <span className={styles.label}>
+                <span className="sr-only">{index + 1}. </span>
+                {copy.steps[index]}
+                {step.done && (
+                  <Check className={styles.check} aria-label={copy.complete} />
+                )}
+              </span>
+              {index === journey.currentStep && (
+                <span className={styles.current}>{copy.current}</span>
+              )}
+            </div>
           </li>
         ))}
       </ol>
