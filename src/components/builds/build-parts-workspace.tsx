@@ -77,7 +77,7 @@ export function BuildPartsWorkspace({
             <select
               value={selected.id}
               onChange={(event) => setSelectedId(event.target.value)}
-              className="mt-2 min-h-12 w-full rounded-xl border border-white/20 bg-[#111] px-4"
+              className="[&_option]:bg-card [&_option]:text-foreground mt-2 min-h-12 w-full rounded-xl border border-white/20 bg-transparent px-4"
             >
               {items.map((item) => (
                 <option key={item.id} value={item.id}>
@@ -86,8 +86,9 @@ export function BuildPartsWorkspace({
               ))}
             </select>
           </label>
-          <div className="rounded-[2rem] bg-[#eee7d8] p-4 text-[#0e2d30] sm:p-7">
+          <div className="text-foreground bg-transparent">
             <ResilientPartSearch
+              appearance="garage"
               key={selected.id}
               initialQuery={`${vehicle.make} ${vehicle.platform} ${selected.title}`}
               vehicle={{
@@ -235,7 +236,7 @@ function BuildOfferResults({
       {error && (
         <p
           role="alert"
-          className="rounded-xl border border-red-800/30 p-3 text-red-900"
+          className="rounded-xl border border-red-300/40 p-3 text-red-200"
         >
           {error}
         </p>
@@ -304,7 +305,7 @@ function BuildOfferResults({
         {result.items.map((item) => (
           <article
             key={item.id}
-            className="min-w-0 rounded-2xl border border-current/20 bg-white/40 p-5"
+            className="min-w-0 rounded-2xl border border-current/20 bg-transparent p-5"
           >
             <label className="mb-3 flex min-h-11 items-center gap-3 text-sm">
               <input

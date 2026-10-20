@@ -1,0 +1,18 @@
+/* Opt-in dark garage appearance; public light search pages keep their defaults. */
+.garage {
+  color-scheme: dark;
+  --parts-text: var(--foreground);
+  --parts-border: rgb(245 242 232 / 22%);
+  --parts-field: transparent;
+  --parts-surface: transparent;
+  --parts-focus: var(--capcar-red-soft);
+  --parts-error: #f3b4b9;
+  --parts-loading: rgb(245 242 232 / 8%);
+  --parts-stale: transparent;
+  --parts-available: transparent;
+  --parts-unavailable: transparent;
+}
+.garage option {
+  background: var(--card);
+  color: var(--foreground);
+}
