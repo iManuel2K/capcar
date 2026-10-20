@@ -28,6 +28,7 @@ import {
 const evidenceLabels: Record<ProblemEvidence, string> = {
   "inspection-data": "Inspection data",
   "technical-bulletin": "Technical bulletin",
+  "safety-recall": "Safety recall · verify VIN",
 };
 
 export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
@@ -155,11 +156,13 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                           </p>
                         </div>
                         <span
-                          className={`rounded-full px-3 py-1.5 text-xs ${problem.severity === "service-soon" ? "bg-amber-300/10 text-amber-100/70" : "bg-[#e72d45]/10 text-[#a9c7ff]"}`}
+                          className={`rounded-full px-3 py-1.5 text-xs ${problem.severity === "check-recall" ? "bg-amber-300/10 text-amber-100" : problem.severity === "service-soon" ? "bg-amber-300/10 text-amber-100/70" : "bg-[#e72d45]/10 text-[#a9c7ff]"}`}
                         >
-                          {problem.severity === "service-soon"
-                            ? "Inspect if symptoms appear"
-                            : "Monitor"}
+                          {problem.severity === "check-recall"
+                            ? "Check required · verify VIN"
+                            : problem.severity === "service-soon"
+                              ? "Inspect if symptoms appear"
+                              : "Monitor"}
                         </span>
                       </div>
                       <div className="mt-6 grid gap-5 sm:grid-cols-2">
@@ -196,9 +199,9 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                       </a>
                       {dailyProblem?.requiresVariantConfirmation && (
                         <p className="mt-4 text-sm text-amber-200">
-                          Candidate reference only: confirm the fuel type and
-                          engine variant in the stated scope before applying
-                          this record.
+                          Candidate reference only: confirm the engine,
+                          transmission, production details and equipment in the
+                          stated scope before applying this record.
                         </p>
                       )}
                       {dailyProblem &&
@@ -281,9 +284,9 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
         <p className="mt-4 text-sm leading-6 text-white/70">
           Existing BMW E9x records plus {dailyCarProblems.length} new
           model-specific references: Golf VII, Fiesta 2008–2017, Auris 2013–2019
-          and Mazda 3 2013–2019. Four native inspection checklists are available
-          when the vehicle identity matches. These are not complete repair
-          manuals.
+          Mazda 3 2013–2019 and Ford F-150 P702 2021. Native inspection
+          checklists are available when the vehicle identity matches. These are
+          not complete repair manuals.
         </p>
         <p className="mt-3 text-sm text-white/70">
           The following research queue covers daily drivers and enthusiast

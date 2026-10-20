@@ -122,14 +122,14 @@ export const installationGuides: InstallationGuide[] = [
       "Native inspection preparation checklist. Record symptoms, collect evidence and plan the next professional check; completion is not a diagnosis or repair certification.",
     reviewStatus: "draft",
     revision: "1.0",
-    updatedAt: "2026-09-14",
+    updatedAt: problem.reviewedAt,
     applicability: [problem.applicability],
     sources: [
       {
         label: problem.sourceLabel,
         kind: "authoritative",
         url: problem.sourceUrl,
-        verifiedAt: "2026-09-14",
+        verifiedAt: problem.reviewedAt,
       },
     ],
     difficulty: "Easy",
