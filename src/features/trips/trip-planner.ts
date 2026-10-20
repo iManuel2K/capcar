@@ -773,11 +773,22 @@ function toGeminiTripPlannerServiceError(error: unknown) {
   const providerStatus =
     error instanceof GeminiResponseError ? error.status : undefined;
 
-  if (providerStatus === 400 && /api key|invalid|not valid/.test(normalized))
+  if (
+    providerStatus === 400 &&
+    /api[ _-]?key[^.\n]*(?:invalid|not valid|expired)|(?:invalid|expired)[^.\n]*api[ _-]?key/.test(
+      normalized,
+    )
+  )
     return new TripPlannerServiceError(
       "Your Gemini API key is invalid. Reconnect Gemini and try again.",
       "gemini_auth",
       503,
+    );
+  if (providerStatus === 400)
+    return new TripPlannerServiceError(
+      "CapCar sent a request Gemini could not accept. This does not mean your API key is invalid.",
+      "gemini_request",
+      422,
     );
   if (providerStatus === 401)
     return new TripPlannerServiceError(
@@ -1217,12 +1228,8 @@ async function requestGeminiPlan(
           generationConfig: {
             temperature: 0.3,
             maxOutputTokens: 5000,
-            responseFormat: {
-              text: {
-                mimeType: "application/json",
-                schema: openAiTripPlanJsonSchema,
-              },
-            },
+            responseMimeType: "application/json",
+            responseJsonSchema: openAiTripPlanJsonSchema,
           },
         }),
       },
