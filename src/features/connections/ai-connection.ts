@@ -46,6 +46,7 @@ export class AiConnectionError extends Error {
   constructor(
     message: string,
     readonly status: number,
+    readonly providerStatus?: number,
   ) {
     super(message);
     this.name = "AiConnectionError";
@@ -113,12 +114,34 @@ function providerError(provider: AiProvider, status: number, message: string) {
       `${label} rejected this API key. Check the key and try again.`,
       401,
     );
+  if (provider === "gemini" && status === 404)
+    return new AiConnectionError(
+      "The configured Gemini model is unavailable for this key. CapCar needs a supported Gemini model before you can connect.",
+      422,
+      status,
+    );
+  if (provider === "gemini" && status === 400)
+    return new AiConnectionError(
+      /location|region|country/.test(normalized)
+        ? "Gemini is unavailable from this deployment's region or for this account. Check Google AI Studio availability and billing."
+        : /precondition|billing/.test(normalized)
+          ? "Gemini requires account or billing setup. Check this key's project in Google AI Studio."
+          : "Gemini rejected the verification request. Check the key's project and API setup in Google AI Studio.",
+      422,
+      status,
+    );
+  if (provider === "gemini" && status >= 500)
+    return new AiConnectionError(
+      "Gemini is temporarily unavailable. Wait a moment, then reconnect. Your key has not been saved.",
+      503,
+      status,
+    );
   if (
     provider === "gemini" &&
     (status === 429 || /quota|rate limit|resource exhausted/.test(normalized))
   )
     return new AiConnectionError(
-      "Gemini's free-tier limit has been reached. Wait for the quota window to reset, then try again.",
+      "Gemini's quota or rate limit has been reached. Check your project's limits in Google AI Studio, then try again.",
       429,
     );
   if (/quota|billing|credit|insufficient_quota/.test(normalized))
