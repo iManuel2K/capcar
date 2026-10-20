@@ -246,3 +246,30 @@ describe("automatic road-time matrix integration", () => {
     expect(route.stops).toHaveLength(5);
   });
 });
+
+describe("route ordering fallback and complete itineraries", () => {
+  afterEach(() => vi.restoreAllMocks());
+  it.each([5, 9, 18])("keeps all %s visits when matrix data is unavailable", async count => {
+    let index = 0;
+    vi.spyOn(globalThis, "fetch").mockImplementation(async input => {
+      const url = input.toString();
+      if (url.startsWith("https://api.geoapify.com/")) {
+        const point = [8 + index++ / 100, 50];
+        return Response.json({ features: [{ geometry: { coordinates: point } }] });
+      }
+      if (url.includes("/table/v1/driving/")) return new Response(null, { status: 503 });
+      if (url.includes("/route/v1/driving/")) {
+        const coordinates = new URL(url).pathname.split("/driving/")[1].split(";").map(pair => pair.split(",").map(Number));
+        return Response.json({ code: "Ok", routes: [{ distance: 20000, duration: 2000, geometry: { coordinates } }] });
+      }
+      throw new Error("Optional enrichment unavailable");
+    });
+    const route = await createTripRoute({
+      region: "Rheingau", preserveStopOrder: false,
+      stops: Array.from({ length: count }, (_, i) => ({ day: 1, kind: "photo" as const, name: "Visit " + i, mapQuery: "Place " + i })),
+    }, { GEOAPIFY_API_KEY: "test-key" });
+    expect(route.stops).toHaveLength(count);
+    expect(route.ordering?.status).toBe("unavailable");
+    expect(route.stops.map(stop => stop.sourceIndex)).toEqual(Array.from({ length: count }, (_, i) => i));
+  });
+});
