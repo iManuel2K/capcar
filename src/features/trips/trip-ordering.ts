@@ -3,7 +3,7 @@ import type { TripRoute } from "@/features/trips/trip-route";
 
 export function preserveExplicitStopOrder(inputMode: "prompt" | "places", prompt: string) {
   return inputMode === "places" ||
-    /\b(?:then|after that|in (?:this|that|the specified|exact) order|danach|dann|reihenfolge|nacheinander|pastaj)\b|→|->|μετά|σειρά|順|それから/i.test(prompt);
+    /\b(?:then|after that|do not reorder|don.t reorder|keep (?:the|this|my) order|preserve (?:the|this|my) order|in (?:this|that|the specified|exact) order|danach|dann|reihenfolge|nacheinander|pastaj)\b|→|->|μετά|σειρά|順|それから/i.test(prompt);
 }
 
 // Bounded local improvement over directed road durations. Never move endpoints,
