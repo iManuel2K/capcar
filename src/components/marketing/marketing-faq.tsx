@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import styles from "./launch.module.css";
+import homepageStyles from "./homepage.module.css";
 const questions = [
   "one",
   "two",
@@ -38,7 +39,7 @@ export function MarketingFaq() {
           {questions.map((key) => (
             <details
               key={key}
-              className="group border-t border-[#0e2d30]/20 last:border-b"
+              className={`group border-t border-[#0e2d30]/20 last:border-b ${homepageStyles.faqItem}`}
             >
               <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-5 py-4 text-base font-medium marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 [&::-webkit-details-marker]:hidden">
                 {t(`${key}.question`)}

@@ -41,25 +41,27 @@ describe("the connected homepage example", () => {
       ).length,
     ).toBeGreaterThan(0);
     expect(
-      screen.getByRole("heading", { name: "Maintain your car" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "Plan your build" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "Find your next drive" }),
+      screen.getByRole("tabpanel", { name: "Maintain your car" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /Plan a maintenance task/ }),
     ).toHaveAttribute("href", "/garage/new?goal=maintain");
+    fireEvent.click(screen.getByRole("tab", { name: "Plan your build" }));
+    expect(
+      screen.getByRole("heading", { name: "Plan your build" }),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /Start a build plan/ }),
     ).toHaveAttribute("href", "/garage/new?goal=modify");
+    fireEvent.click(screen.getByRole("tab", { name: "Find your next drive" }));
+    expect(
+      screen.getByRole("heading", { name: "Find your next drive" }),
+    ).toBeInTheDocument();
     expect(
       screen.getByText(
         /AI trip planning requires an account and a connected AI service/,
       ),
-    ).toBeInTheDocument();
+    ).toBeVisible();
     expect(document.querySelector("video")).not.toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "Skip to main content" }),
@@ -76,6 +78,30 @@ describe("the connected homepage example", () => {
         .getAllByRole("link", { name: /Create your garage/ })
         .every((link) => link.getAttribute("href") === "/garage/new"),
     ).toBe(true);
+  });
+
+  it("moves through use cases by keyboard without exposing inactive panel controls", () => {
+    renderPage();
+    const maintain = screen.getByRole("tab", { name: "Maintain your car" });
+    fireEvent.keyDown(maintain, { key: "End" });
+    const drives = screen.getByRole("tab", { name: "Find your next drive" });
+    expect(drives).toHaveFocus();
+    expect(drives).toHaveAttribute("aria-selected", "true");
+    expect(
+      screen.queryByRole("link", { name: /Plan a maintenance task/ }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("tabpanel")).toHaveAccessibleName(
+      "Find your next drive",
+    );
+    fireEvent.keyDown(drives, { key: "ArrowRight" });
+    expect(maintain).toHaveFocus();
+    expect(screen.getByRole("tabpanel")).toHaveAccessibleName(
+      "Maintain your car",
+    );
+    fireEvent.keyDown(maintain, { key: "ArrowLeft" });
+    expect(drives).toHaveFocus();
+    fireEvent.keyDown(drives, { key: "Home" });
+    expect(maintain).toHaveFocus();
   });
 
   it("connects the chosen part, estimated budget and planned passport record", () => {
@@ -160,6 +186,12 @@ describe("the connected homepage example", () => {
   it("uses a native comparison range and a working mobile menu", () => {
     renderPage();
     const slider = screen.getByRole("slider");
+    fireEvent.click(screen.getByRole("button", { name: "Concept direction" }));
+    expect(slider).toHaveValue("100");
+    fireEvent.click(screen.getByRole("button", { name: "Starting point" }));
+    expect(slider).toHaveValue("0");
+    fireEvent.click(screen.getByRole("button", { name: "50 / 50" }));
+    expect(slider).toHaveValue("50");
     fireEvent.change(slider, { target: { value: "75" } });
     expect(slider).toHaveAttribute("aria-valuetext", "75% concept");
     expect(slider).toHaveAttribute("dir", "ltr");

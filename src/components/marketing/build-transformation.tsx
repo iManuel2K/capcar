@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useId, useState } from "react";
 import { useTranslations } from "next-intl";
+import styles from "./homepage.module.css";
 
 export function BuildTransformation({ eager = false }: { eager?: boolean }) {
   const t = useTranslations("Launch.visual");
@@ -10,9 +11,25 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
   const id = useId();
   return (
     <figure className="min-w-0">
-      <div className="mb-3 flex flex-wrap justify-between gap-3 text-xs">
-        <span>{t("concept")}</span>
-        <span>{t("current")}</span>
+      <div
+        className={styles.comparisonPresets}
+        role="group"
+        aria-label={t("label")}
+      >
+        {[
+          { value: 0, label: t("current") },
+          { value: 50, label: "50 / 50" },
+          { value: 100, label: t("concept") },
+        ].map((preset) => (
+          <button
+            key={preset.value}
+            type="button"
+            aria-pressed={reveal === preset.value}
+            onClick={() => setReveal(preset.value)}
+          >
+            {preset.label}
+          </button>
+        ))}
       </div>
       <div className="relative aspect-video overflow-hidden rounded-xl bg-[#071519]">
         <Image
