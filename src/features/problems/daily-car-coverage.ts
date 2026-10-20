@@ -132,6 +132,100 @@ export const dailyCarProblems: DailyCarProblem[] = [
       "Keep the measured test results and fitted part reference in the Passport document library. Record a follow-up observation after the repair.",
     ],
   },
+  {
+    id: "f150-2021-transmission-shift",
+    title: "Investigate harsh or delayed gear changes",
+    system: "Transmission",
+    evidence: "technical-bulletin",
+    severity: "service-soon",
+    make: "Ford",
+    models: ["F-150", "F150", "F 150"],
+    platforms: ["P702"],
+    years: [2021, 2021],
+    requiresVariantConfirmation: true,
+    applicability:
+      "Certain 2021 Ford F-150 P702 vehicles with a 10R80 or 10R80 MHT automatic transmission. Confirm transmission and build details; this is a candidate reference, not a diagnosis.",
+    symptoms: [
+      "Harsh gear changes",
+      "Delayed engagement into Drive or Reverse",
+      "Transmission warning or stored diagnostic codes",
+    ],
+    nextCheck:
+      "Record when the symptom occurs and arrange a workshop diagnosis using the current Ford procedure for the exact transmission. Do not buy a transmission or reset adaptations on the basis of this reference alone.",
+    sourceLabel:
+      "Ford technical bulletin · 10R80 / 10R80 MHT shift concerns · NHTSA archive",
+    sourceUrl: "https://static.nhtsa.gov/odi/tsbs/2023/MC-10241447-0001.pdf",
+    reviewedAt: "2026-10-20",
+    inspectionSteps: [
+      "Confirm the vehicle year, P702 generation and exact automatic transmission from the vehicle documents or a Ford workshop.",
+      "Record mileage, whether the vehicle is cold or warm, the affected gear change and any warning messages. Do not provoke a fault in traffic.",
+      "Keep any existing diagnostic report, including exact codes and conditions. A code or harsh shift alone does not establish which component failed.",
+      "Arrange a qualified transmission diagnosis against the current Ford bulletin and workshop procedure. If drive engagement or control is unsafe, stop safely and arrange assistance.",
+      "Save the diagnosis and an itemised quote in the garage. Compare parts only after the required repair and exact references are confirmed.",
+    ],
+  },
+  {
+    id: "f150-2021-parking-brake-23s35",
+    title: "Check parking-brake wiring recall — 23S35",
+    system: "Brakes",
+    evidence: "safety-recall",
+    severity: "check-recall",
+    make: "Ford",
+    models: ["F-150", "F150", "F 150"],
+    platforms: ["P702"],
+    years: [2021, 2021],
+    requiresVariantConfirmation: true,
+    applicability:
+      "Certain 2021 Ford F-150 P702 vehicles covered by recall 23S35. Eligibility depends on the VIN and equipment; this does not mean your vehicle has an open recall.",
+    symptoms: [
+      "Parking-brake warning messages",
+      "Unexpected electric parking-brake activation",
+      "An affected vehicle may have no prior symptoms",
+    ],
+    nextCheck:
+      "Ask Ford to check recall 23S35 against the VIN and confirm whether the repair is outstanding. Rear-axle harness chafing can damage parking-brake wiring and cause unintended brake application while driving. Check eligibility even without symptoms.",
+    sourceLabel: "Ford safety recall 23S35 · NHTSA 23V509",
+    sourceUrl: "https://static.nhtsa.gov/odi/rcl/2023/RCRN-23V509-0597.pdf",
+    reviewedAt: "2026-10-20",
+    inspectionSteps: [
+      "Locate the VIN privately in the vehicle documents and review any existing recall-completion paperwork.",
+      "Ask Ford or an authorised dealer whether recall 23S35 applies to this VIN and whether the required repair is still outstanding.",
+      "Record any parking-brake warning, unexpected brake application or related workshop report. Do not drive to reproduce the fault.",
+      "Arrange the prescribed dealer action if affected. Do not crawl under an unsupported truck or alter the rear-axle wiring yourself. If unintended braking occurs, stop safely and arrange assistance.",
+      "Save the dealer's recall-completion document in the vehicle history. Mark the check complete only after eligibility or the required action is documented.",
+    ],
+  },
+  {
+    id: "f150-2021-wiper-motor-22s12",
+    title: "Check windshield-wiper motor recall — 22S12",
+    system: "Visibility",
+    evidence: "safety-recall",
+    severity: "check-recall",
+    make: "Ford",
+    models: ["F-150", "F150", "F 150"],
+    platforms: ["P702"],
+    years: [2021, 2021],
+    requiresVariantConfirmation: true,
+    applicability:
+      "Certain 2021 Ford F-150 P702 vehicles covered by recall 22S12. Confirm VIN, production details and current recall history with Ford; other wiper campaigns may also apply.",
+    symptoms: [
+      "Front windshield wipers fail to operate",
+      "Reduced visibility when the wipers are needed",
+      "Recall eligibility may exist before a failure occurs",
+    ],
+    nextCheck:
+      "Ask Ford to check the VIN for wiper-motor recall 22S12 and any related campaigns, including repair history. A failed wiper motor requires proper diagnosis; do not assume a replacement motor is needed from the model year alone.",
+    sourceLabel: "Ford safety recall 22S12 · NHTSA 22V142 · Supplement 2",
+    sourceUrl: "https://static.nhtsa.gov/odi/rcl/2022/RCMN-22V142-7517.pdf",
+    reviewedAt: "2026-10-20",
+    inspectionSteps: [
+      "Review vehicle documents for the VIN, production date and any earlier wiper-motor recall repairs.",
+      "Ask Ford or an authorised dealer to check recall 22S12 and any related or subsequent wiper campaigns for the exact VIN.",
+      "If checking operation while parked, follow the handbook and keep hands clear of the wipers. Record any failure or warning; do not disassemble the mechanism.",
+      "Arrange the prescribed dealer inspection or repair if affected. Do not drive where visibility requires functioning wipers when they are inoperative.",
+      "Save the dealer's findings and recall-completion document in the vehicle history, including whether the vehicle was unaffected or already repaired.",
+    ],
+  },
 ];
 
 // Editorial intake list only: no dates, failure claims or sales positions are

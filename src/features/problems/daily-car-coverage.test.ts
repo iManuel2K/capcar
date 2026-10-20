@@ -38,6 +38,39 @@ describe("source-scoped daily-car coverage", () => {
       }),
     ).toHaveLength(0);
   });
+  it("adds three sourced F-150 records only for the documented identity and year", () => {
+    const truck = {
+      make: "Ford",
+      model: "F-150",
+      platform: "P702",
+      productionYear: 2021,
+      engineCode: "UNKNOWN",
+    };
+    const records = dailyProblemsForVehicle(truck);
+    expect(records.map((record) => record.id)).toEqual([
+      "f150-2021-transmission-shift",
+      "f150-2021-parking-brake-23s35",
+      "f150-2021-wiper-motor-22s12",
+    ]);
+    expect(
+      records.filter((record) => record.evidence === "safety-recall"),
+    ).toHaveLength(2);
+    expect(records.every((record) => record.requiresVariantConfirmation)).toBe(
+      true,
+    );
+    expect(dailyProblemsForVehicle({ ...truck, model: "F150" })).toHaveLength(
+      3,
+    );
+    for (const patch of [
+      { productionYear: 2020 },
+      { productionYear: 2022 },
+      { platform: "P552" },
+      { make: "Toyota" },
+      { model: "Ranger" },
+    ]) {
+      expect(dailyProblemsForVehicle({ ...truck, ...patch })).toHaveLength(0);
+    }
+  });
   it("provides five native preparation steps and a source for each new reference", () => {
     for (const problem of dailyCarProblems) {
       const guide = findGuideBySlug(`inspection-${problem.id}`)!;
