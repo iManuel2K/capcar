@@ -1,10 +1,13 @@
 import { z } from "zod";
 
+import { orderStopsByTravelTime } from "@/features/trips/trip-ordering";
+
 import { tripStopKinds } from "@/features/trips/trip-planner";
 
 export const tripRouteRequestSchema = z.object({
   region: z.string().trim().min(2).max(120),
   startDate: z.iso.date().optional(),
+  preserveStopOrder: z.boolean().optional(),
   stops: z
     .array(
       z.object({
@@ -28,6 +31,7 @@ const routePhotoSchema = z.object({
 });
 
 const routedStopSchema = tripRouteRequestSchema.shape.stops.element.extend({
+  sourceIndex: z.number().int().min(0).max(17).optional(),
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
   locationAccuracy: z.enum(["place", "area"]),
@@ -43,7 +47,11 @@ export const tripRouteSchema = z.object({
   }),
   distanceKm: z.number().positive(),
   durationMinutes: z.number().positive(),
-  stops: z.array(routedStopSchema).min(2).max(10),
+  stops: z.array(routedStopSchema).min(2).max(18),
+  ordering: z.object({
+    status: z.enum(["optimized", "unchanged", "unavailable", "preserved"]),
+    provider: z.string().optional(),
+  }).optional(),
   bounds: z.tuple([
     z.tuple([z.number(), z.number()]),
     z.tuple([z.number(), z.number()]),
@@ -89,7 +97,7 @@ export function createRoutedMapLinks(
   google.searchParams.set("origin", origin);
   google.searchParams.set("destination", destination);
   google.searchParams.set("travelmode", "driving");
-  const waypoints = points.slice(1, -1).slice(0, 3);
+  const waypoints = points.slice(1, -1).slice(0, 9);
   if (waypoints.length)
     google.searchParams.set("waypoints", waypoints.join("|"));
 
@@ -114,27 +122,7 @@ export function createRoutedMapLinks(
   };
 }
 
-function selectRouteStops(stops: TripRouteRequest["stops"]) {
-  const unique = stops.filter(
-    (stop, index, values) =>
-      values.findIndex(
-        (candidate) =>
-          candidate.mapQuery.toLocaleLowerCase() ===
-          stop.mapQuery.toLocaleLowerCase(),
-      ) === index,
-  );
-  if (unique.length <= 8) return unique;
-  const selected = [unique[0]];
-  for (let index = 1; index < 7; index += 1) {
-    selected.push(unique[Math.round((index * (unique.length - 1)) / 7)]);
-  }
-  selected.push(unique.at(-1)!);
-  return selected.filter(
-    (stop, index, values) =>
-      values.findIndex((candidate) => candidate.mapQuery === stop.mapQuery) ===
-      index,
-  );
-}
+// Keep every visit, including a repeated starting point at the end of a loop.
 
 async function fetchJson(input: string | URL, init: RequestInit = {}) {
   const response = await fetch(input, {
@@ -197,13 +185,13 @@ async function geocodeStops(
   request: TripRouteRequest,
   environment: RouteEnvironment,
 ) {
-  const stops = selectRouteStops(request.stops);
+  const stops = request.stops;
   const geocode = environment.GEOAPIFY_API_KEY
     ? (query: string) =>
         geocodeWithGeoapify(query, environment.GEOAPIFY_API_KEY!)
     : geocodeWithNominatim;
   const routed = [];
-  for (const stop of stops) {
+  for (const [sourceIndex, stop] of stops.entries()) {
     const detailedQueries = [
       stop.mapQuery,
       stop.area ? `${stop.mapQuery}, ${stop.area}` : undefined,
@@ -228,6 +216,7 @@ async function geocodeStops(
         const locationAccuracy = areaQueries.includes(query) ? "area" : "place";
         routed.push({
           ...stop,
+          sourceIndex,
           ...point,
           locationAccuracy,
           resolvedQuery: query,
@@ -312,6 +301,34 @@ async function routeWithOsrm(stops: Array<GeocodedPoint>) {
     distanceMeters: route.distance,
     durationSeconds: route.duration,
   };
+}
+
+async function roadDurationMatrix(stops: Array<GeocodedPoint>, environment: RouteEnvironment) {
+  const coordinates = stops.map(stop => [stop.longitude, stop.latitude]);
+  const osrm = async () => {
+    const url = new URL("https://router.project-osrm.org/table/v1/driving/" +
+      coordinates.map(point => point.join(",")).join(";"));
+    url.searchParams.set("annotations", "duration");
+    const body = await fetchJson(url) as { code?: string; durations?: Array<Array<number | null>> };
+    if (body.code !== "Ok") throw new Error("Road-time matrix unavailable.");
+    return { durations: body.durations, provider: "OSRM" };
+  };
+  const ors = async () => {
+    const body = await fetchJson("https://api.openrouteservice.org/v2/matrix/driving-car", {
+      method: "POST",
+      headers: { authorization: environment.OPENROUTESERVICE_API_KEY!, "content-type": "application/json" },
+      body: JSON.stringify({ locations: coordinates, metrics: ["duration"] }),
+    }) as { durations?: Array<Array<number | null>> };
+    if (!body.durations) throw new Error("Road-time matrix unavailable.");
+    return { durations: body.durations, provider: "OpenRouteService" };
+  };
+  const result = environment.OPENROUTESERVICE_API_KEY ? await ors().catch(osrm) : await osrm();
+  if (!result.durations || result.durations.length !== stops.length ||
+      result.durations.some(row => !Array.isArray(row) || row.length !== stops.length ||
+        row.some(value => value !== null && (typeof value !== "number" || !Number.isFinite(value) || value < 0)))) {
+    throw new Error("Invalid road-time matrix.");
+  }
+  return { durations: result.durations, provider: result.provider };
 }
 
 function unsplashReferral(value: string) {
@@ -441,7 +458,21 @@ export async function createTripRoute(
   environment: RouteEnvironment = process.env,
 ): Promise<TripRoute> {
   const request = tripRouteRequestSchema.parse(input);
-  const stops = await geocodeStops(request, environment);
+  let stops = await geocodeStops(request, environment);
+  let ordering: NonNullable<TripRoute["ordering"]> = { status: "preserved" };
+  // Opt in only for AI-generated suggestions. Missing geocodes must never cause
+  // a supposedly synchronized itinerary to lose a stop.
+  if (request.preserveStopOrder === false && stops.length === request.stops.length && stops.length >= 4) {
+    try {
+      const matrix = await roadDurationMatrix(stops, environment);
+      const ordered = orderStopsByTravelTime(stops, matrix.durations);
+      const changed = ordered.some((stop, index) => stop.sourceIndex !== stops[index].sourceIndex);
+      ordering = { status: changed ? "optimized" : "unchanged", provider: matrix.provider };
+      stops = ordered;
+    } catch {
+      ordering = { status: "unavailable" };
+    }
+  }
   const route = environment.OPENROUTESERVICE_API_KEY
     ? await routeWithOpenRouteService(
         stops,
@@ -476,6 +507,7 @@ export async function createTripRoute(
   );
   return tripRouteSchema.parse({
     provider: route.provider,
+    ordering,
     geometry: { type: "LineString", coordinates: route.coordinates },
     distanceKm: Number((route.distanceMeters / 1000).toFixed(1)),
     durationMinutes: Math.max(1, Math.round(route.durationSeconds / 60)),

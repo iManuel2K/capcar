@@ -1,5 +1,7 @@
 "use client";
 
+import { alignTripPlanWithRoute, preserveExplicitStopOrder } from "@/features/trips/trip-ordering";
+
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 import { trackAnalytics } from "@/features/analytics/client";
 
@@ -403,6 +405,7 @@ export function TripPlanner({
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           region: generatedRegion || planningRegion,
+          preserveStopOrder: preserveExplicitStopOrder(inputMode, prompt),
           startDate: effectiveStartDate,
           stops: body.stops.map(({ day, kind, name, area, mapQuery }) => ({
             day,
@@ -423,6 +426,7 @@ export function TripPlanner({
                 : "The calculated route is unavailable.",
             );
           setRoute(routeBody);
+          setPlan(current => current === body ? alignTripPlanWithRoute(current, routeBody) : current);
         })
         .catch((routeFailure) =>
           setRouteError(
@@ -463,7 +467,7 @@ export function TripPlanner({
                 `${day.title} (${day.distanceKm} km): ${day.routeIdea} Highlight: ${day.highlight}.`,
             ),
             "",
-            `Route: ${plan.mapLinks.google}`,
+            `Route: ${route ? createRoutedMapLinks(route.stops).google : plan.mapLinks.google}`,
             plan.verificationNote,
           ].join("\n"),
           startDate: plan.days[0].date,
