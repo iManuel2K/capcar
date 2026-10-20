@@ -169,7 +169,7 @@ export function GarageSidebar({
         )}
       </div>
 
-      <div className="min-h-0 flex-1 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,.12)_transparent] overflow-y-auto px-3 py-4">
+      <div className="min-h-0 flex-1 overflow-y-auto px-3 py-4">
         <Link
           href="/garage"
           onClick={onNavigate}
