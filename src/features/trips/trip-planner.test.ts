@@ -62,7 +62,7 @@ describe("trip planner", () => {
     ).toMatchObject({
       mode: "gemini",
       configured: true,
-      model: "gemini-2.5-flash-lite",
+      model: "gemini-3.5-flash-lite",
     });
   });
 
@@ -77,7 +77,7 @@ describe("trip planner", () => {
     const fetchMock = vi.fn(
       async (input: RequestInfo | URL, init?: RequestInit) => {
         expect(input).toBe(
-          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent",
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
         );
         expect(new Headers(init?.headers).get("x-goog-api-key")).toBe(
           "user-gemini-secret",
@@ -107,7 +107,7 @@ describe("trip planner", () => {
     const plan = await planScenicTrip(request, undefined, {
       CAPCAR_TRIP_PLANNER_MODE: "gemini",
       CAPCAR_TRIP_PLANNER_PROVIDER_NAME: "Your Gemini",
-      CAPCAR_GEMINI_TRIP_PLANNER_MODEL: "gemini-2.5-flash-lite",
+      CAPCAR_GEMINI_TRIP_PLANNER_MODEL: "gemini-3.5-flash-lite",
       GEMINI_API_KEY: "user-gemini-secret",
     });
 

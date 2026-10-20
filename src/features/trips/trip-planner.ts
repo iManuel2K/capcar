@@ -139,7 +139,7 @@ export function getTripPlannerStatus(
     model:
       mode === "gemini"
         ? environment.CAPCAR_GEMINI_TRIP_PLANNER_MODEL ||
-          "gemini-2.5-flash-lite"
+          "gemini-3.5-flash-lite"
         : mode === "openai"
           ? environment.CAPCAR_TRIP_PLANNER_MODEL || "gpt-5.4-mini"
           : mode === "anthropic"

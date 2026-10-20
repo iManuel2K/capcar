@@ -30,7 +30,7 @@ export type AiConnectionEnvironment = Record<string, string | undefined>;
 const providerDetails = {
   gemini: {
     label: "Gemini",
-    defaultModel: "gemini-2.5-flash-lite",
+    defaultModel: "gemini-3.5-flash-lite",
   },
   openai: {
     label: "OpenAI",

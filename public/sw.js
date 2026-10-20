@@ -1,10 +1,10 @@
-const CACHE_NAME = "capcar-public-v3";
+const CACHE_NAME = "capcar-public-v4";
 const PUBLIC_SHELL = [
   "/",
   "/roadmap",
   "/icon.svg",
   "/capcar-mark-192.png",
-  "/capcar-mark-512.png",
+  "/capcar-mark.png",
 ];
 const PRIVATE_PREFIXES = [
   "/ai",
