@@ -94,10 +94,26 @@ export const knownProblems: KnownProblem[] = [
 ];
 
 export function problemsForVehicle(
-  vehicle: Pick<Vehicle, "platform" | "engineCode">,
+  vehicle: Pick<Vehicle, "platform" | "engineCode"> &
+    Partial<Pick<Vehicle, "make" | "productionYear">>,
 ) {
   const platform = vehicle.platform.trim().toUpperCase();
   const engine = vehicle.engineCode.trim().toUpperCase();
+  if (vehicle.make && vehicle.make.trim().toUpperCase() !== "BMW") return [];
+  const years: Record<string, [number, number]> = {
+    E90: [2005, 2012],
+    E91: [2005, 2013],
+    E92: [2006, 2013],
+    E93: [2007, 2013],
+  };
+  const range = years[platform];
+  if (
+    vehicle.productionYear &&
+    (!range ||
+      vehicle.productionYear < range[0] ||
+      vehicle.productionYear > range[1])
+  )
+    return [];
   return knownProblems.filter((problem) => {
     if (!problem.platforms.includes(platform)) return false;
     if (!problem.engineCodes) return true;

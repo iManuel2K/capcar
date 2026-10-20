@@ -12,6 +12,10 @@ import {
   Wrench,
 } from "lucide-react";
 import { useState, useSyncExternalStore } from "react";
+import { useLocale } from "next-intl";
+import type { AppLocale } from "@/i18n/config";
+import { problemSourceCopy } from "@/features/problems/problem-source-copy";
+import { OfficialProblemRecords } from "./official-problem-records";
 
 import {
   hasEngineSpecificCoverage,
@@ -20,7 +24,6 @@ import {
 } from "@/features/problems/problem-catalog";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 import {
-  coverageResearchQueue,
   dailyCarProblems,
   dailyProblemsForVehicle,
 } from "@/features/problems/daily-car-coverage";
@@ -32,6 +35,7 @@ const evidenceLabels: Record<ProblemEvidence, string> = {
 };
 
 export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
+  const c = problemSourceCopy[useLocale() as AppLocale] ?? problemSourceCopy.en;
   const hydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -46,7 +50,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
     );
   if (!vehicle)
     return (
-      <div className="py-32 text-center text-white/45">Vehicle not found.</div>
+      <div className="py-32 text-center text-white/75">Vehicle not found.</div>
     );
 
   const problems = [
@@ -69,7 +73,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
     <div className="pb-24 sm:pb-0">
       <Link
         href={`/garage/${vehicleId}`}
-        className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
+        className="mb-7 inline-flex items-center gap-2 text-sm text-white/75 hover:text-white"
       >
         <ArrowLeft className="size-4" /> Vehicle overview
       </Link>
@@ -83,7 +87,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
             <h1 className="mt-3 text-4xl font-medium tracking-[-0.045em] sm:text-5xl">
               Know what to watch.
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-white/50">
+            <p className="mt-4 max-w-2xl text-base leading-7 text-white/75">
               Evidence matched to your {vehicle.productionYear} {vehicle.make}{" "}
               {vehicle.model}, {vehicle.platform} and confirmed engine details.
               This is inspection guidance—not a diagnosis or a prediction that
@@ -91,11 +95,17 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
             </p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/[0.025] px-5 py-4">
-            <p className="text-xs text-white/35 uppercase">Matched records</p>
+            <p className="text-xs text-white/70 uppercase">{c.local}</p>
             <p className="mt-1 text-3xl font-medium">{problems.length}</p>
           </div>
         </div>
       </header>
+      <OfficialProblemRecords
+        key={`${vehicle.make}:${vehicle.model}:${vehicle.platform}:${vehicle.productionYear}`}
+        vehicle={vehicle}
+      />
+      <h2 className="mt-8 text-2xl font-medium">{c.local}</h2>
+      <p className="mt-3 text-sm leading-7 text-white/75">{c.localNote}</p>
 
       {engineUnknown && hasEngineSpecificCoverage(vehicle.platform) && (
         <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6 text-amber-50/70">
@@ -120,7 +130,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                     type="button"
                     onClick={() => setSystem(candidate)}
                     aria-pressed={system === candidate}
-                    className={`rounded-xl border px-3.5 py-2 text-sm ${system === candidate ? "border-[#e72d45]/45 bg-[#e72d45]/12 text-[#bad1ff]" : "border-white/10 text-white/50"}`}
+                    className={`rounded-xl border px-3.5 py-2 text-sm ${system === candidate ? "border-[#e72d45]/45 bg-[#e72d45]/12 text-[#bad1ff]" : "border-white/10 text-white/75"}`}
                   >
                     {candidate}
                   </button>
@@ -140,7 +150,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
                           <div className="flex flex-wrap gap-2 text-xs">
-                            <span className="rounded-full bg-white/6 px-2.5 py-1 text-white/50">
+                            <span className="rounded-full bg-white/6 px-2.5 py-1 text-white/75">
                               {problem.system}
                             </span>
                             <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-300/8 px-2.5 py-1 text-emerald-100/65">
@@ -151,7 +161,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                           <h2 className="mt-4 text-2xl font-medium tracking-tight">
                             {problem.title}
                           </h2>
-                          <p className="mt-2 text-sm text-white/35">
+                          <p className="mt-2 text-sm text-white/75">
                             Applies to: {problem.applicability}
                           </p>
                         </div>
@@ -167,10 +177,10 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                       </div>
                       <div className="mt-6 grid gap-5 sm:grid-cols-2">
                         <div>
-                          <p className="text-xs tracking-wider text-white/30 uppercase">
+                          <p className="text-xs tracking-wider text-white/75 uppercase">
                             Possible symptoms
                           </p>
-                          <ul className="mt-3 space-y-2 text-sm leading-6 text-white/55">
+                          <ul className="mt-3 space-y-2 text-sm leading-6 text-white/75">
                             {problem.symptoms.map((symptom) => (
                               <li key={symptom} className="flex gap-2">
                                 <span className="mt-2 size-1.5 shrink-0 rounded-full bg-white/25" />
@@ -180,10 +190,10 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                           </ul>
                         </div>
                         <div>
-                          <p className="text-xs tracking-wider text-white/30 uppercase">
+                          <p className="text-xs tracking-wider text-white/75 uppercase">
                             Next check
                           </p>
-                          <p className="mt-3 text-sm leading-6 text-white/55">
+                          <p className="mt-3 text-sm leading-6 text-white/75">
                             {problem.nextCheck}
                           </p>
                         </div>
@@ -226,13 +236,12 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
             </>
           ) : (
             <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-8 text-center">
-              <Database className="mx-auto size-6 text-white/30" />
+              <Database className="mx-auto size-6 text-white/75" />
               <h2 className="mt-4 text-2xl font-medium">
                 Coverage is being verified.
               </h2>
-              <p className="mx-auto mt-3 max-w-lg leading-7 text-white/45">
-                No source-reviewed records match this exact platform yet. That
-                does not mean the vehicle has no known issues.
+              <p className="mx-auto mt-3 max-w-lg leading-7 text-white/75">
+                {c.localEmpty}
               </p>
             </div>
           )}
@@ -242,7 +251,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
           <div className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6">
             <ShieldCheck className="size-5 text-emerald-200" />
             <h2 className="mt-4 text-lg font-medium">Check safety recalls</h2>
-            <p className="mt-3 text-sm leading-6 text-white/45">
+            <p className="mt-3 text-sm leading-6 text-white/75">
               Search official recall records by make and model. Confirm whether
               your exact vehicle is affected with the manufacturer or an
               authorized workshop.
@@ -263,13 +272,13 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
             <div className="mt-4 grid gap-2">
               <Link
                 href={`/garage/${vehicleId}/maintenance`}
-                className="rounded-xl border border-white/10 px-4 py-3 text-sm text-white/55 hover:text-white"
+                className="rounded-xl border border-white/10 px-4 py-3 text-sm text-white/75 hover:text-white"
               >
                 Open maintenance
               </Link>
               <Link
                 href={`/garage/${vehicleId}/parts`}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm text-white/55 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm text-white/75 hover:text-white"
               >
                 <Search className="size-3.5" /> Research parts after diagnosis
               </Link>
@@ -277,29 +286,6 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
           </div>
         </aside>
       </section>
-      <details className="mt-6 rounded-2xl border border-white/20 p-5">
-        <summary className="cursor-pointer font-medium">
-          2006–2026 daily-car coverage · what is actually available
-        </summary>
-        <p className="mt-4 text-sm leading-6 text-white/70">
-          Existing BMW E9x records plus {dailyCarProblems.length} new
-          model-specific references: Golf VII, Fiesta 2008–2017, Auris 2013–2019
-          Mazda 3 2013–2019 and Ford F-150 P702 2021. Native inspection
-          checklists are available when the vehicle identity matches. These are
-          not complete repair manuals.
-        </p>
-        <p className="mt-3 text-sm text-white/70">
-          The following research queue covers daily drivers and enthusiast
-          requests. It is not a sales ranking, completed coverage or a claim
-          that all model years are supported. Newer cars, including 2026
-          variants, require separate sources.
-        </p>
-        <ul className="mt-4 grid gap-2 text-sm text-white/70 sm:grid-cols-2">
-          {coverageResearchQueue.map((name) => (
-            <li key={name}>{name} · further research required</li>
-          ))}
-        </ul>
-      </details>
     </div>
   );
 }
