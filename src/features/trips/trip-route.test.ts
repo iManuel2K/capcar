@@ -140,3 +140,79 @@ describe("calculated trip routes", () => {
     );
   });
 });
+
+describe("OpenRouteService GeoJSON routing", () => {
+  afterEach(() => vi.restoreAllMocks());
+  it.each([false, true])(
+    "returns road geometry when primary failure is %s",
+    async (primaryFails) => {
+      let index = 0;
+      const points = [
+        [8.41, 49.99],
+        [8.27, 50.0],
+      ];
+      const fallback = vi.fn();
+      vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
+        const url = input.toString();
+        if (url.startsWith("https://api.geoapify.com/")) {
+          return Response.json({
+            features: [{ geometry: { coordinates: points[index++] } }],
+          });
+        }
+        if (url.startsWith("https://api.openrouteservice.org/")) {
+          expect(new Headers(init?.headers).get("accept")).toBe(
+            "application/geo+json",
+          );
+          if (primaryFails) return new Response(null, { status: 406 });
+          return Response.json({
+            features: [
+              {
+                geometry: { coordinates: points },
+                properties: { summary: { distance: 18000, duration: 1600 } },
+              },
+            ],
+          });
+        }
+        if (url.startsWith("https://router.project-osrm.org/")) {
+          fallback();
+          expect(url).toContain("8.41,49.99;8.27,50");
+          return Response.json({
+            code: "Ok",
+            routes: [
+              {
+                distance: 18000,
+                duration: 1600,
+                geometry: { coordinates: points },
+              },
+            ],
+          });
+        }
+        throw new Error("Optional enrichment unavailable");
+      });
+      const route = await createTripRoute(
+        {
+          region: "Mainz",
+          startDate: "2026-10-20",
+          stops: [
+            {
+              day: 1,
+              kind: "culture",
+              name: "Rüsselsheim",
+              mapQuery: "Rüsselsheim",
+            },
+            { day: 1, kind: "culture", name: "Mainz", mapQuery: "Mainz" },
+          ],
+        },
+        {
+          GEOAPIFY_API_KEY: "geo-test",
+          OPENROUTESERVICE_API_KEY: "route-test",
+        },
+      );
+      expect(route.geometry.coordinates).toEqual(points);
+      expect(route.provider).toContain(
+        primaryFails ? "OSRM" : "OpenRouteService",
+      );
+      expect(fallback).toHaveBeenCalledTimes(primaryFails ? 1 : 0);
+    },
+  );
+});

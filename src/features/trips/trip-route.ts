@@ -253,6 +253,7 @@ async function routeWithOpenRouteService(
       method: "POST",
       headers: {
         authorization: apiKey,
+        accept: "application/geo+json",
         "content-type": "application/json",
       },
       body: JSON.stringify({
@@ -445,7 +446,7 @@ export async function createTripRoute(
     ? await routeWithOpenRouteService(
         stops,
         environment.OPENROUTESERVICE_API_KEY,
-      )
+      ).catch(() => routeWithOsrm(stops))
     : await routeWithOsrm(stops);
   const photoIndexes = stops
     .map((stop, index) => ({ stop, index }))
