@@ -10,8 +10,20 @@ import { PlatformOverview } from "./platform-overview";
 import { platformCopy } from "@/features/marketing/platform-copy";
 import { locales } from "@/i18n/config";
 import sitemap from "@/app/sitemap";
+import styles from "./platform.module.css";
 afterEach(cleanup);
 describe("platform exploration", () => {
+  it("keeps platform heading styles out of the shared footer", () => {
+    render(<PlatformOverview />);
+    const main = screen.getByRole("main");
+    expect(main).toHaveClass(styles.page);
+    const footer = screen.getByRole("contentinfo");
+    expect(footer.closest(`.${styles.page}`)).toBeNull();
+    expect(within(footer).getAllByRole("heading", { level: 2 })).toHaveLength(3);
+    for (const heading of within(footer).getAllByRole("heading", { level: 2 })) {
+      expect(heading).toHaveClass("text-xs", "font-semibold", "tracking-widest");
+    }
+  });
   it("connects tool selection to its preview and real destination", () => {
     render(<PlatformOverview />);
     expect(screen.getAllByRole("tab")).toHaveLength(6);

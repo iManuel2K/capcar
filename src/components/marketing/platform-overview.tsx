@@ -71,8 +71,8 @@ export function PlatformOverview({ locale = "en" }: { locale?: AppLocale }) {
     { title: c.history, text: c.historyText, icon: History },
   ];
   return (
-    <div className={styles.page}>
-      <main id="main-content" tabIndex={-1}>
+    <div>
+      <main id="main-content" tabIndex={-1} className={styles.page}>
         <section className={styles.hero} aria-labelledby="platform-heading">
           <div className={styles.heroInner}>
             <div>
