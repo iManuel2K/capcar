@@ -1,6 +1,11 @@
 "use client";
 
-import { alignTripPlanWithRoute, preserveExplicitStopOrder } from "@/features/trips/trip-ordering";
+import {
+  alignTripPlanWithRoute,
+  preserveExplicitStopOrder,
+} from "@/features/trips/trip-ordering";
+
+import { TripNavigationLinks } from "@/components/trips/trip-navigation-links";
 
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 import { trackAnalytics } from "@/features/analytics/client";
@@ -426,7 +431,11 @@ export function TripPlanner({
                 : "The calculated route is unavailable.",
             );
           setRoute(routeBody);
-          setPlan(current => current === body ? alignTripPlanWithRoute(current, routeBody) : current);
+          setPlan((current) =>
+            current === body
+              ? alignTripPlanWithRoute(current, routeBody)
+              : current,
+          );
         })
         .catch((routeFailure) =>
           setRouteError(
@@ -875,12 +884,7 @@ export function TripPlanner({
                       <ListTree className="size-4" /> Detailed plan
                     </button>
                   </div>
-                  <MapProviderLinks
-                    links={
-                      route ? createRoutedMapLinks(route.stops) : plan.mapLinks
-                    }
-                    compact
-                  />
+                  {route && <TripNavigationLinks route={route} />}
                 </div>
 
                 {planView === "map" && (
