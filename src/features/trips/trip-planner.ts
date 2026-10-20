@@ -547,6 +547,7 @@ type OpenAiResponse = {
 };
 
 type TripPlannerErrorCode =
+  | "gemini_request"
   | "gemini_auth"
   | "gemini_model"
   | "gemini_permission"
