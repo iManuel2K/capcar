@@ -12,7 +12,7 @@ describe("automatic trip stop ordering", () => {
     const input = stops();
     const ordered = orderStopsByTravelTime(input, matrix);
     expect(ordered.map(stop => stop.id)).toEqual([0, 2, 1, 3, 4]);
-    expect(new Set(ordered)).toHaveLength(input.length);
+    expect(new Set(ordered).size).toBe(input.length);
     expect(input.map(stop => stop.id)).toEqual([0, 1, 2, 3, 4]);
   });
   it("keeps overnight stays and day boundaries fixed", () => {
@@ -41,7 +41,7 @@ describe("automatic trip stop ordering", () => {
       expect(cost(ordered)).toBeLessThanOrEqual(cost(input));
       expect(ordered[0]).toBe(input[0]);
       expect(ordered.at(-1)).toBe(input.at(-1));
-      expect(new Set(ordered)).toHaveLength(size);
+      expect(new Set(ordered).size).toBe(size);
     }
   });
   it("preserves manual places and explicit language sequences", () => {
