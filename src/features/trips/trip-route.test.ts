@@ -2,6 +2,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   createRoutedMapLinks,
+  createRoutedNavigationLegs,
+  createRoutedNavigationSections,
   createTripRoute,
 } from "@/features/trips/trip-route";
 
@@ -219,57 +221,172 @@ describe("OpenRouteService GeoJSON routing", () => {
 
 describe("automatic road-time matrix integration", () => {
   afterEach(() => vi.restoreAllMocks());
-  it.each([false, true])("orders automatic suggestions but preserves explicit order: %s", async (preserveStopOrder) => {
-    const positions = [0, 2, 1, 3, 4];
-    const points = positions.map(position => [8 + position / 10, 50]);
-    const matrix = positions.map(a => positions.map(b => Math.abs(a - b) * 100));
-    let geocodeIndex = 0;
-    let matrixCalls = 0;
-    vi.spyOn(globalThis, "fetch").mockImplementation(async input => {
-      const url = input.toString();
-      if (url.startsWith("https://api.geoapify.com/")) return Response.json({ features: [{ geometry: { coordinates: points[geocodeIndex++] } }] });
-      if (url.includes("/table/v1/driving/")) { matrixCalls += 1; return Response.json({ code: "Ok", durations: matrix }); }
-      if (url.includes("/route/v1/driving/")) {
-        const coordinates = new URL(url).pathname.split("/driving/")[1].split(";").map(pair => pair.split(",").map(Number));
-        return Response.json({ code: "Ok", routes: [{ distance: 10000, duration: 1000, geometry: { coordinates } }] });
-      }
-      throw new Error("Optional enrichment unavailable");
-    });
-    const route = await createTripRoute({
-      region: "Black Forest", preserveStopOrder,
-      stops: positions.map((_, index) => ({ day: 1, kind: "photo" as const, name: "Stop " + index, mapQuery: index === 4 ? "Place 0" : "Place " + index })),
-    }, { GEOAPIFY_API_KEY: "test-key" });
-    expect(route.stops.map(stop => stop.sourceIndex)).toEqual(preserveStopOrder ? [0, 1, 2, 3, 4] : [0, 2, 1, 3, 4]);
-    expect(route.geometry.coordinates).toEqual(route.stops.map(stop => [stop.longitude, stop.latitude]));
-    expect(route.ordering?.status).toBe(preserveStopOrder ? "preserved" : "optimized");
-    expect(matrixCalls).toBe(preserveStopOrder ? 0 : 1);
-    expect(route.stops).toHaveLength(5);
-  });
+  it.each([false, true])(
+    "orders automatic suggestions but preserves explicit order: %s",
+    async (preserveStopOrder) => {
+      const positions = [0, 2, 1, 3, 4];
+      const points = positions.map((position) => [8 + position / 10, 50]);
+      const matrix = positions.map((a) =>
+        positions.map((b) => Math.abs(a - b) * 100),
+      );
+      let geocodeIndex = 0;
+      let matrixCalls = 0;
+      vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+        const url = input.toString();
+        if (url.startsWith("https://api.geoapify.com/"))
+          return Response.json({
+            features: [{ geometry: { coordinates: points[geocodeIndex++] } }],
+          });
+        if (url.includes("/table/v1/driving/")) {
+          matrixCalls += 1;
+          return Response.json({ code: "Ok", durations: matrix });
+        }
+        if (url.includes("/route/v1/driving/")) {
+          const coordinates = new URL(url).pathname
+            .split("/driving/")[1]
+            .split(";")
+            .map((pair) => pair.split(",").map(Number));
+          return Response.json({
+            code: "Ok",
+            routes: [
+              { distance: 10000, duration: 1000, geometry: { coordinates } },
+            ],
+          });
+        }
+        throw new Error("Optional enrichment unavailable");
+      });
+      const route = await createTripRoute(
+        {
+          region: "Black Forest",
+          preserveStopOrder,
+          stops: positions.map((_, index) => ({
+            day: 1,
+            kind: "photo" as const,
+            name: "Stop " + index,
+            mapQuery: index === 4 ? "Place 0" : "Place " + index,
+          })),
+        },
+        { GEOAPIFY_API_KEY: "test-key" },
+      );
+      expect(route.stops.map((stop) => stop.sourceIndex)).toEqual(
+        preserveStopOrder ? [0, 1, 2, 3, 4] : [0, 2, 1, 3, 4],
+      );
+      expect(route.geometry.coordinates).toEqual(
+        route.stops.map((stop) => [stop.longitude, stop.latitude]),
+      );
+      expect(route.ordering?.status).toBe(
+        preserveStopOrder ? "preserved" : "optimized",
+      );
+      expect(matrixCalls).toBe(preserveStopOrder ? 0 : 1);
+      expect(route.stops).toHaveLength(5);
+    },
+  );
 });
 
 describe("route ordering fallback and complete itineraries", () => {
   afterEach(() => vi.restoreAllMocks());
-  it.each([5, 9, 18])("keeps all %s visits when matrix data is unavailable", async count => {
-    let index = 0;
-    vi.spyOn(globalThis, "fetch").mockImplementation(async input => {
-      const url = input.toString();
-      if (url.startsWith("https://api.geoapify.com/")) {
-        const point = [8 + index++ / 100, 50];
-        return Response.json({ features: [{ geometry: { coordinates: point } }] });
-      }
-      if (url.includes("/table/v1/driving/")) return new Response(null, { status: 503 });
-      if (url.includes("/route/v1/driving/")) {
-        const coordinates = new URL(url).pathname.split("/driving/")[1].split(";").map(pair => pair.split(",").map(Number));
-        return Response.json({ code: "Ok", routes: [{ distance: 20000, duration: 2000, geometry: { coordinates } }] });
-      }
-      throw new Error("Optional enrichment unavailable");
+  it.each([5, 9, 18])(
+    "keeps all %s visits when matrix data is unavailable",
+    async (count) => {
+      let index = 0;
+      vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+        const url = input.toString();
+        if (url.startsWith("https://api.geoapify.com/")) {
+          const point = [8 + index++ / 100, 50];
+          return Response.json({
+            features: [{ geometry: { coordinates: point } }],
+          });
+        }
+        if (url.includes("/table/v1/driving/"))
+          return new Response(null, { status: 503 });
+        if (url.includes("/route/v1/driving/")) {
+          const coordinates = new URL(url).pathname
+            .split("/driving/")[1]
+            .split(";")
+            .map((pair) => pair.split(",").map(Number));
+          return Response.json({
+            code: "Ok",
+            routes: [
+              { distance: 20000, duration: 2000, geometry: { coordinates } },
+            ],
+          });
+        }
+        throw new Error("Optional enrichment unavailable");
+      });
+      const route = await createTripRoute(
+        {
+          region: "Rheingau",
+          preserveStopOrder: false,
+          stops: Array.from({ length: count }, (_, i) => ({
+            day: 1,
+            kind: "photo" as const,
+            name: "Visit " + i,
+            mapQuery: "Place " + i,
+          })),
+        },
+        { GEOAPIFY_API_KEY: "test-key" },
+      );
+      expect(route.stops).toHaveLength(count);
+      expect(route.ordering?.status).toBe("unavailable");
+      expect(route.stops.map((stop) => stop.sourceIndex)).toEqual(
+        Array.from({ length: count }, (_, i) => i),
+      );
+    },
+  );
+});
+
+describe("complete external navigation handoff", () => {
+  const stops = Array.from({ length: 18 }, (_, index) => ({
+    latitude: 50 + index / 100,
+    longitude: 8 + index / 100,
+  }));
+  const coordinate = (stop: (typeof stops)[number]) =>
+    `${stop.latitude.toFixed(6)},${stop.longitude.toFixed(6)}`;
+  it("passes every intermediate stop to Apple's supported waypoint parameters", () => {
+    const selected = stops.slice(0, 5);
+    const apple = new URL(createRoutedMapLinks(selected).apple);
+    expect(apple.pathname).toBe("/directions");
+    expect(apple.searchParams.get("source")).toBe(coordinate(selected[0]));
+    expect(apple.searchParams.get("destination")).toBe(coordinate(selected[4]));
+    expect(apple.searchParams.getAll("waypoint")).toEqual(
+      selected.slice(1, -1).map(coordinate),
+    );
+    expect(apple.searchParams.get("mode")).toBe("driving");
+  });
+  it.each([2, 5, 6, 11, 18])(
+    "shares all %s stops in ordered mobile-compatible sections",
+    (count) => {
+      const selected = stops.slice(0, count);
+      const sections = createRoutedNavigationSections(selected);
+      const points: string[] = [];
+      sections.forEach((section, index) => {
+        const url = new URL(section.links.google);
+        const middle = url.searchParams.get("waypoints")?.split("|") ?? [];
+        expect(middle.length).toBeLessThanOrEqual(3);
+        const values = [
+          url.searchParams.get("origin")!,
+          ...middle,
+          url.searchParams.get("destination")!,
+        ];
+        points.push(...(index === 0 ? values : values.slice(1)));
+        expect(
+          new URL(section.links.apple).searchParams.getAll("waypoint"),
+        ).toEqual(middle);
+      });
+      expect(points).toEqual(selected.map(coordinate));
+    },
+  );
+  it("gives Waze and OSM every consecutive leg instead of skipping to the finish", () => {
+    const selected = [...stops.slice(0, 4), stops[0]];
+    const legs = createRoutedNavigationLegs(selected);
+    expect(legs).toHaveLength(4);
+    legs.forEach((leg, index) => {
+      expect(new URL(leg.links.waze).searchParams.get("ll")).toBe(
+        coordinate(selected[index + 1]),
+      );
+      expect(new URL(leg.links.openStreetMap).searchParams.get("route")).toBe(
+        `${coordinate(selected[index])};${coordinate(selected[index + 1])}`,
+      );
     });
-    const route = await createTripRoute({
-      region: "Rheingau", preserveStopOrder: false,
-      stops: Array.from({ length: count }, (_, i) => ({ day: 1, kind: "photo" as const, name: "Visit " + i, mapQuery: "Place " + i })),
-    }, { GEOAPIFY_API_KEY: "test-key" });
-    expect(route.stops).toHaveLength(count);
-    expect(route.ordering?.status).toBe("unavailable");
-    expect(route.stops.map(stop => stop.sourceIndex)).toEqual(Array.from({ length: count }, (_, i) => i));
   });
 });

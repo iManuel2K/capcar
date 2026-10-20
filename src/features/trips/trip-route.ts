@@ -48,10 +48,12 @@ export const tripRouteSchema = z.object({
   distanceKm: z.number().positive(),
   durationMinutes: z.number().positive(),
   stops: z.array(routedStopSchema).min(2).max(18),
-  ordering: z.object({
-    status: z.enum(["optimized", "unchanged", "unavailable", "preserved"]),
-    provider: z.string().optional(),
-  }).optional(),
+  ordering: z
+    .object({
+      status: z.enum(["optimized", "unchanged", "unavailable", "preserved"]),
+      provider: z.string().optional(),
+    })
+    .optional(),
   bounds: z.tuple([
     z.tuple([z.number(), z.number()]),
     z.tuple([z.number(), z.number()]),
@@ -101,10 +103,12 @@ export function createRoutedMapLinks(
   if (waypoints.length)
     google.searchParams.set("waypoints", waypoints.join("|"));
 
-  const apple = new URL("https://maps.apple.com/");
-  apple.searchParams.set("saddr", origin);
-  apple.searchParams.set("daddr", destination);
-  apple.searchParams.set("dirflg", "d");
+  const apple = new URL("https://maps.apple.com/directions");
+  apple.searchParams.set("source", origin);
+  apple.searchParams.set("destination", destination);
+  apple.searchParams.set("mode", "driving");
+  for (const point of points.slice(1, -1))
+    apple.searchParams.append("waypoint", point);
 
   const waze = new URL("https://www.waze.com/ul");
   waze.searchParams.set("ll", destination);
@@ -120,6 +124,35 @@ export function createRoutedMapLinks(
     waze: waze.toString(),
     openStreetMap: openStreetMap.toString(),
   };
+}
+
+/** Share consecutive sections of at most five stops (three via points).
+ * This fits Google Maps' documented mobile-browser waypoint limit.
+ * Sections overlap at their boundary so no driving leg is dropped.
+ */
+export function createRoutedNavigationSections(
+  stops: Array<Pick<TripRoute["stops"][number], "latitude" | "longitude">>,
+) {
+  const sections = [];
+  for (let start = 0; start < stops.length - 1; start += 4) {
+    const end = Math.min(start + 4, stops.length - 1);
+    sections.push({
+      startIndex: start,
+      endIndex: end,
+      links: createRoutedMapLinks(stops.slice(start, end + 1)),
+    });
+  }
+  return sections;
+}
+
+export function createRoutedNavigationLegs(
+  stops: Array<Pick<TripRoute["stops"][number], "latitude" | "longitude">>,
+) {
+  return stops.slice(1).map((_, index) => ({
+    startIndex: index,
+    endIndex: index + 1,
+    links: createRoutedMapLinks(stops.slice(index, index + 2)),
+  }));
 }
 
 // Keep every visit, including a repeated starting point at the end of a loop.
@@ -303,29 +336,56 @@ async function routeWithOsrm(stops: Array<GeocodedPoint>) {
   };
 }
 
-async function roadDurationMatrix(stops: Array<GeocodedPoint>, environment: RouteEnvironment) {
-  const coordinates = stops.map(stop => [stop.longitude, stop.latitude]);
+async function roadDurationMatrix(
+  stops: Array<GeocodedPoint>,
+  environment: RouteEnvironment,
+) {
+  const coordinates = stops.map((stop) => [stop.longitude, stop.latitude]);
   const osrm = async () => {
-    const url = new URL("https://router.project-osrm.org/table/v1/driving/" +
-      coordinates.map(point => point.join(",")).join(";"));
+    const url = new URL(
+      "https://router.project-osrm.org/table/v1/driving/" +
+        coordinates.map((point) => point.join(",")).join(";"),
+    );
     url.searchParams.set("annotations", "duration");
-    const body = await fetchJson(url) as { code?: string; durations?: Array<Array<number | null>> };
+    const body = (await fetchJson(url)) as {
+      code?: string;
+      durations?: Array<Array<number | null>>;
+    };
     if (body.code !== "Ok") throw new Error("Road-time matrix unavailable.");
     return { durations: body.durations, provider: "OSRM" };
   };
   const ors = async () => {
-    const body = await fetchJson("https://api.openrouteservice.org/v2/matrix/driving-car", {
-      method: "POST",
-      headers: { authorization: environment.OPENROUTESERVICE_API_KEY!, "content-type": "application/json" },
-      body: JSON.stringify({ locations: coordinates, metrics: ["duration"] }),
-    }) as { durations?: Array<Array<number | null>> };
+    const body = (await fetchJson(
+      "https://api.openrouteservice.org/v2/matrix/driving-car",
+      {
+        method: "POST",
+        headers: {
+          authorization: environment.OPENROUTESERVICE_API_KEY!,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ locations: coordinates, metrics: ["duration"] }),
+      },
+    )) as { durations?: Array<Array<number | null>> };
     if (!body.durations) throw new Error("Road-time matrix unavailable.");
     return { durations: body.durations, provider: "OpenRouteService" };
   };
-  const result = environment.OPENROUTESERVICE_API_KEY ? await ors().catch(osrm) : await osrm();
-  if (!result.durations || result.durations.length !== stops.length ||
-      result.durations.some(row => !Array.isArray(row) || row.length !== stops.length ||
-        row.some(value => value !== null && (typeof value !== "number" || !Number.isFinite(value) || value < 0)))) {
+  const result = environment.OPENROUTESERVICE_API_KEY
+    ? await ors().catch(osrm)
+    : await osrm();
+  if (
+    !result.durations ||
+    result.durations.length !== stops.length ||
+    result.durations.some(
+      (row) =>
+        !Array.isArray(row) ||
+        row.length !== stops.length ||
+        row.some(
+          (value) =>
+            value !== null &&
+            (typeof value !== "number" || !Number.isFinite(value) || value < 0),
+        ),
+    )
+  ) {
     throw new Error("Invalid road-time matrix.");
   }
   return { durations: result.durations, provider: result.provider };
@@ -462,12 +522,21 @@ export async function createTripRoute(
   let ordering: NonNullable<TripRoute["ordering"]> = { status: "preserved" };
   // Opt in only for AI-generated suggestions. Missing geocodes must never cause
   // a supposedly synchronized itinerary to lose a stop.
-  if (request.preserveStopOrder === false && stops.length === request.stops.length && stops.length >= 4) {
+  if (
+    request.preserveStopOrder === false &&
+    stops.length === request.stops.length &&
+    stops.length >= 4
+  ) {
     try {
       const matrix = await roadDurationMatrix(stops, environment);
       const ordered = orderStopsByTravelTime(stops, matrix.durations);
-      const changed = ordered.some((stop, index) => stop.sourceIndex !== stops[index].sourceIndex);
-      ordering = { status: changed ? "optimized" : "unchanged", provider: matrix.provider };
+      const changed = ordered.some(
+        (stop, index) => stop.sourceIndex !== stops[index].sourceIndex,
+      );
+      ordering = {
+        status: changed ? "optimized" : "unchanged",
+        provider: matrix.provider,
+      };
       stops = ordered;
     } catch {
       ordering = { status: "unavailable" };
