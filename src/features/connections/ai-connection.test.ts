@@ -21,7 +21,7 @@ function record(
     key_hint: "sk-…-key",
     model:
       provider === "gemini"
-        ? "gemini-2.5-flash-lite"
+        ? "gemini-3.5-flash-lite"
         : provider === "openai"
           ? "gpt-5.4-mini"
           : "claude-sonnet-4-5-20250929",
@@ -62,12 +62,12 @@ describe("AI connections", () => {
     expect(environment).toMatchObject({
       CAPCAR_TRIP_PLANNER_MODE: "gemini",
       CAPCAR_TRIP_PLANNER_CREDENTIAL_OWNER: "user",
-      CAPCAR_GEMINI_TRIP_PLANNER_MODEL: "gemini-2.5-flash-lite",
+      CAPCAR_GEMINI_TRIP_PLANNER_MODEL: "gemini-3.5-flash-lite",
       GEMINI_API_KEY: "provider-secret-key",
       OPENAI_API_KEY: undefined,
       ANTHROPIC_API_KEY: undefined,
     });
-    expect(getAiProviderModel("gemini", {})).toBe("gemini-2.5-flash-lite");
+    expect(getAiProviderModel("gemini", {})).toBe("gemini-3.5-flash-lite");
   });
 
   it("routes a Claude connection through the user's key", () => {
