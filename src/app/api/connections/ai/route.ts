@@ -82,7 +82,13 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error(
       "AI connection failed",
-      error instanceof AiConnectionError ? error.message : error,
+      error instanceof AiConnectionError
+        ? {
+            message: error.message,
+            status: error.status,
+            providerStatus: error.providerStatus,
+          }
+        : "Unexpected AI connection failure",
     );
     if (error instanceof AiConnectionError)
       return NextResponse.json(
