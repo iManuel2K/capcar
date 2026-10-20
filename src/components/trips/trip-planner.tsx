@@ -426,7 +426,7 @@ export function TripPlanner({
                 : "The calculated route is unavailable.",
             );
           setRoute(routeBody);
-          setPlan(alignTripPlanWithRoute(body, routeBody));
+          setPlan(current => current === body ? alignTripPlanWithRoute(current, routeBody) : current);
         })
         .catch((routeFailure) =>
           setRouteError(
