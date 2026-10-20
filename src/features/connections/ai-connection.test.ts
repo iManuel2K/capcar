@@ -1,6 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
+  verifyAiConnection,
   getAiConnectionEncryptionKey,
   getAiProviderModel,
   tripPlannerEnvironmentForConnection,
@@ -86,4 +87,37 @@ describe("AI connections", () => {
       "claude-sonnet-4-5-20250929",
     );
   });
+});
+
+describe("Gemini verification failures", () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it.each([
+    [400, "User location is not supported", 422, "region"],
+    [400, "Failed precondition: billing required", 422, "billing"],
+    [404, "model not found", 422, "model"],
+    [429, "quota exhausted", 429, "quota"],
+    [503, "unavailable", 503, "temporarily"],
+    [400, "API key not valid", 401, "rejected this API key"],
+  ])(
+    "maps upstream %s into an actionable error",
+    async (status, message, expectedStatus, expectedMessage) => {
+      vi.stubGlobal(
+        "fetch",
+        vi
+          .fn()
+          .mockResolvedValue(
+            new Response(JSON.stringify({ error: { message } }), {
+              status: Number(status),
+            }),
+          ),
+      );
+      await expect(
+        verifyAiConnection("gemini", "test-key-never-log-this", {}),
+      ).rejects.toMatchObject({
+        status: expectedStatus,
+        message: expect.stringContaining(String(expectedMessage)),
+      });
+    },
+  );
 });
