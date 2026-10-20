@@ -11,9 +11,27 @@ export function getBuildJourney(
   const planning = planningForBuild(build);
   const metrics = getConnectedBuildMetrics(build, items, planning);
   const next = metrics.next;
+  const offerSaved = items.some((item) => Boolean(item.selectedOfferId));
+  const workStarted = items.some(
+    (item) => item.status === "ordered" || item.status === "installed",
+  );
+  // Later work can be recorded without an offer or an optional visual concept.
+  const currentStep =
+    items.length > 0 && remaining.length === 0
+      ? 5
+      : workStarted
+        ? 4
+        : offerSaved
+          ? visualSaved
+            ? 4
+            : 3
+          : items.length > 0
+            ? 2
+            : 1;
   return {
+    currentStep,
     next,
-    activated: items.some((item) => Boolean(item.selectedOfferId)),
+    activated: offerSaved,
     steps: [
       { label: "Imagine", done: true },
       { label: "Plan", done: items.length > 0 },

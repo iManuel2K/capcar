@@ -1,12 +1,7 @@
 "use client";
 
-import {
-  CheckCircle2,
-  Cloud,
-  CloudOff,
-  LoaderCircle,
-  RefreshCw,
-} from "lucide-react";
+import { LoaderCircle } from "lucide-react";
+import { GarageSyncNotice, type SyncState } from "./garage-sync-notice";
 import { usePathname, useRouter } from "next/navigation";
 import {
   createContext,
@@ -36,18 +31,6 @@ import { createClient } from "@/lib/supabase/client";
 export const ACTIVE_GARAGE_USER_KEY = "capcar.active-garage-user.v1";
 const GarageAccountContext = createContext({ configured: false, userId: "" });
 export const useGarageAccount = () => useContext(GarageAccountContext);
-
-type SyncState =
-  "loading" | "synced" | "saving" | "unsaved" | "offline" | "error";
-
-const statusCopy: Record<SyncState, string> = {
-  loading: "Loading your garage…",
-  synced: "Garage synced",
-  saving: "Saving changes…",
-  unsaved: "Changes waiting to sync",
-  offline: "Offline · changes stay on this device",
-  error: "Cloud sync needs attention",
-};
 
 export function GarageAccountBoundary({
   configured,
@@ -268,23 +251,12 @@ export function GarageAccountBoundary({
   return (
     <GarageAccountContext.Provider value={{ configured, userId }}>
       {configured && userId && (
-        <div
-          aria-live="polite"
-          className={`mx-auto mb-4 flex max-w-7xl items-center gap-2 rounded-xl border px-4 py-3 text-xs ${syncState === "error" ? "border-red-300/15 bg-red-300/6 text-red-100/70" : syncState === "offline" || syncState === "unsaved" ? "border-amber-300/15 bg-amber-300/6 text-amber-100/70" : "border-white/8 bg-white/[0.025] text-white/40"}`}
-        >
-          <SyncIcon state={syncState} />
-          <span>{statusCopy[syncState]}</span>
-          {error && <span className="truncate">· {error}</span>}
-          {(syncState === "error" || syncState === "unsaved") && userId && (
-            <button
-              type="button"
-              onClick={() => void upload(userId)}
-              className="ml-auto inline-flex shrink-0 items-center gap-1.5 font-medium text-white/70"
-            >
-              <RefreshCw className="size-3.5" /> Retry
-            </button>
-          )}
-        </div>
+        <GarageSyncNotice
+          key={syncState}
+          state={syncState}
+          error={error}
+          onRetry={() => void upload(userId)}
+        />
       )}
       {!configured || userId || (allowGuest && !error) ? (
         children
@@ -295,17 +267,4 @@ export function GarageAccountBoundary({
       )}
     </GarageAccountContext.Provider>
   );
-}
-
-function SyncIcon({ state }: { state: SyncState }) {
-  if (state === "saving" || state === "loading") {
-    return <LoaderCircle className="size-4 shrink-0 animate-spin" />;
-  }
-  if (state === "synced") {
-    return <CheckCircle2 className="size-4 shrink-0" />;
-  }
-  if (state === "offline") {
-    return <CloudOff className="size-4 shrink-0" />;
-  }
-  return <Cloud className="size-4 shrink-0" />;
 }
