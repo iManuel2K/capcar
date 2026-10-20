@@ -84,15 +84,14 @@ describe("trip planner", () => {
         );
         const requestBody = JSON.parse(String(init?.body)) as {
           generationConfig: {
-            responseFormat: { text: { mimeType: string; schema: unknown } };
+            responseMimeType: string;
+            responseJsonSchema: unknown;
           };
         };
-        expect(requestBody.generationConfig.responseFormat.text.mimeType).toBe(
+        expect(requestBody.generationConfig.responseMimeType).toBe(
           "application/json",
         );
-        expect(
-          requestBody.generationConfig.responseFormat.text.schema,
-        ).toBeTruthy();
+        expect(requestBody.generationConfig.responseJsonSchema).toBeTruthy();
         return Response.json({
           candidates: [
             {
@@ -351,4 +350,39 @@ describe("trip planner", () => {
       }),
     ).toThrow();
   });
+});
+
+describe("Gemini error classification", () => {
+  afterEach(() => vi.unstubAllGlobals());
+  it.each([
+    [
+      "Invalid value at generation_config.response_format.text.mime_type",
+      "gemini_request",
+      422,
+    ],
+    [
+      "Invalid JSON payload received. Unknown name responseFormat",
+      "gemini_request",
+      422,
+    ],
+    ["API key not valid. Please pass a valid API key.", "gemini_auth", 503],
+  ])(
+    "classifies %s without blaming unrelated key credentials",
+    async (message, code, status) => {
+      vi.stubGlobal(
+        "fetch",
+        vi
+          .fn()
+          .mockResolvedValue(
+            Response.json({ error: { message } }, { status: 400 }),
+          ),
+      );
+      await expect(
+        planScenicTrip(request, undefined, {
+          CAPCAR_TRIP_PLANNER_MODE: "gemini",
+          GEMINI_API_KEY: "test-key",
+        }),
+      ).rejects.toMatchObject({ code, status });
+    },
+  );
 });
