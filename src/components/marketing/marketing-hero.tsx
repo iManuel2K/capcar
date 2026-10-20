@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { ArrowRight, Check, Layers3, MapPinned, Wrench } from "lucide-react";
+import { BuildTransformation } from "./build-transformation";
+import { ArrowRight, Layers3, MapPinned, Wrench } from "lucide-react";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
 import type { AppLocale } from "@/i18n/config";
 import { HomepageLink } from "./homepage-link";
@@ -7,12 +7,6 @@ import styles from "./homepage.module.css";
 
 export function MarketingHero({ locale = "en" }: { locale?: AppLocale }) {
   const c = homepageCopy[locale] ?? homepageCopy.en;
-  const euro = (value: number) =>
-    new Intl.NumberFormat(locale, {
-      style: "currency",
-      currency: "EUR",
-      maximumFractionDigits: 0,
-    }).format(value);
   return (
     <section className={styles.hero} aria-labelledby="homepage-title">
       <div className={styles.heroInner}>
@@ -51,59 +45,15 @@ export function MarketingHero({ locale = "en" }: { locale?: AppLocale }) {
           <p className={styles.support}>{c.support}</p>
           <p className={styles.fine}>{c.account}</p>
         </div>
-        <figure className={styles.preview} aria-label={c.sample}>
-          <figcaption className={styles.previewTop}>
+        <div className={styles.preview} aria-label={c.sample}>
+          <div className={styles.previewTop}>
             <span>CAPCAR / BMW 318i</span>
             <span>{c.sample}</span>
-          </figcaption>
-          <div className={styles.car}>
-            <Image
-              src="/garage/cutouts/bmw-318i.webp"
-              alt="BMW 318i · E90 · 2011"
-              fill
-              sizes="(min-width: 1440px) 650px, (min-width: 761px) 48vw, 100vw"
-              quality={75}
-              preload
-            />
           </div>
-          <div className={styles.carTitle}>
-            <p>2011 · E90</p>
-            <h2>BMW 318i</h2>
+          <div className={styles.conceptPreview}>
+            <BuildTransformation eager />
           </div>
-          <div className={styles.dashboard}>
-            <div className={styles.dashboardHead}>
-              <strong>{c.project}</strong>
-              <span className={styles.badge}>{c.active}</span>
-            </div>
-            <dl className={styles.stats}>
-              <div>
-                <dt>{c.budget}</dt>
-                <dd>{euro(300)}</dd>
-              </div>
-              <div>
-                <dt>{c.planned}</dt>
-                <dd>{euro(30)}</dd>
-              </div>
-              <div>
-                <dt>{c.actual}</dt>
-                <dd>{euro(28)}</dd>
-              </div>
-            </dl>
-            <div className={styles.next}>
-              <span>
-                <Wrench size={15} aria-hidden="true" />
-              </span>
-              <div>
-                <p>{c.next}</p>
-                <strong>{c.task}</strong>
-              </div>
-            </div>
-            <p className="mt-4 flex items-center gap-2 text-xs text-[#b7cbc2]">
-              <Check size={13} aria-hidden="true" />
-              {c.progress}
-            </p>
-          </div>
-        </figure>
+        </div>
       </div>
     </section>
   );

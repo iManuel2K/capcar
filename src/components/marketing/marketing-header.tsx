@@ -16,7 +16,7 @@ import styles from "./homepage.module.css";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
 
 const navigation = [
-  { label: "how", href: "/#platform" },
+  { label: "how", href: "/platform" },
   { label: "projects", href: "/#projects" },
   { label: "parts", href: "/parts-search" },
 ] as const;
@@ -25,6 +25,11 @@ export function MarketingHeader() {
   const journalLocale = resolveJournalLocale(useLocale());
   const journal = journalUI[journalLocale];
   const home = homepageCopy[journalLocale];
+  const links = navigation.map((item) =>
+    item.href === "/platform" && journalLocale !== "en"
+      ? { ...item, href: `/${journalLocale}/platform` }
+      : item,
+  );
   const pathname = usePathname() ?? "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const t = useTranslations("Navigation");
@@ -90,7 +95,7 @@ export function MarketingHeader() {
             aria-label={t("main")}
             className="hidden items-center gap-0.5 rounded-full border border-[#0e2d30]/8 bg-white/20 p-1 text-sm text-[#0e2d30]/68 xl:flex"
           >
-            {navigation.map((item) => (
+            {links.map((item) => (
               <Link
                 key={item.label}
                 aria-current={active(item.href) ? "page" : undefined}
@@ -209,7 +214,7 @@ export function MarketingHeader() {
             </div>
 
             <nav aria-label={t("mobileMain")} className="mt-4">
-              {navigation.map((item) => (
+              {links.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}

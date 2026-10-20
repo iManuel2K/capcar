@@ -33,7 +33,11 @@ describe("route metadata", () => {
         entry.url,
       );
       expect(entry.lastModified).toBe(
-        isJournal ? "2026-10-17" : isHomepage ? "2026-10-19" : "2026-10-16",
+        isJournal
+          ? "2026-10-17"
+          : isHomepage || new URL(entry.url).pathname.endsWith("/platform")
+            ? "2026-10-19"
+            : "2026-10-16",
       );
       expect(entry).not.toHaveProperty("changeFrequency");
       expect(entry).not.toHaveProperty("priority");

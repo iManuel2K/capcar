@@ -10,12 +10,13 @@ import ImprintPage, {
 import MovieCarsPage, {
   generateMetadata as movieCarsMetadata,
 } from "@/app/movie-cars/page";
-import HomePage, {
-  generateMetadata as homeMetadata,
-} from "@/app/page";
+import HomePage, { generateMetadata as homeMetadata } from "@/app/page";
 import PartsSearchPage, {
   generateMetadata as partsSearchMetadata,
 } from "@/app/parts-search/page";
+import PlatformPage, {
+  generateMetadata as platformMetadata,
+} from "@/app/platform/page";
 import PrivacyPage, {
   generateMetadata as privacyMetadata,
 } from "@/app/privacy/page";
@@ -34,9 +35,7 @@ import SpecialistsPage, {
 import StudioPage, {
   generateMetadata as studioMetadata,
 } from "@/app/studio/page";
-import TermsPage, {
-  generateMetadata as termsMetadata,
-} from "@/app/terms/page";
+import TermsPage, { generateMetadata as termsMetadata } from "@/app/terms/page";
 import {
   isPublicIndexableRoute,
   localizedMetadata,
@@ -73,6 +72,8 @@ async function routeMetadata(route: PublicIndexableRoute): Promise<Metadata> {
       return movieCarsMetadata();
     case "/parts-search":
       return partsSearchMetadata();
+    case "/platform":
+      return platformMetadata();
     case "/privacy":
       return privacyMetadata();
     case "/roadbook":
@@ -117,6 +118,8 @@ export default async function LocalizedPublicPage({
       return <MovieCarsPage />;
     case "/parts-search":
       return <PartsSearchPage searchParams={query} />;
+    case "/platform":
+      return <PlatformPage />;
     case "/privacy":
       return <PrivacyPage />;
     case "/roadbook":

@@ -10,7 +10,6 @@ import { MarketingLanding } from "./marketing-landing";
 import { MarketingHeader } from "./marketing-header";
 import { ProductDashboardPreview } from "./product-dashboard-preview";
 import { SkipToContent } from "@/components/ui/skip-to-content";
-import { BuildTransformation } from "./build-transformation";
 
 beforeEach(() => window.history.replaceState(null, "", "/"));
 afterEach(cleanup);
@@ -160,7 +159,6 @@ describe("the connected homepage example", () => {
 
   it("uses a native comparison range and a working mobile menu", () => {
     renderPage();
-    render(<BuildTransformation />);
     const slider = screen.getByRole("slider");
     fireEvent.change(slider, { target: { value: "75" } });
     expect(slider).toHaveAttribute("aria-valuetext", "75% concept");

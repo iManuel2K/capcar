@@ -10,7 +10,11 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
   const id = useId();
   return (
     <figure className="min-w-0">
-      <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-[#071519]">
+      <div className="mb-3 flex flex-wrap justify-between gap-3 text-xs">
+        <span>{t("concept")}</span>
+        <span>{t("current")}</span>
+      </div>
+      <div className="relative aspect-video overflow-hidden rounded-xl bg-[#071519]">
         <Image
           src="/capcar-hero-bmw-garage.png"
           alt={t("alt")}
@@ -19,7 +23,7 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
           quality={72}
           loading={eager ? "eager" : "lazy"}
           fetchPriority={eager ? "high" : "auto"}
-          className="object-cover"
+          className="object-contain"
         />
         <div
           className="absolute inset-0"
@@ -32,7 +36,8 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
             fill
             sizes="(min-width: 1600px) 880px, (min-width: 900px) 55vw, 100vw"
             quality={72}
-            className="object-cover"
+            loading={eager ? "eager" : "lazy"}
+            className="object-contain"
           />
         </div>
         <span
@@ -40,14 +45,6 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
           className="pointer-events-none absolute inset-y-0 w-px bg-[#e8e6d7]/75"
           style={{ left: `${reveal}%` }}
         />
-        <div className="absolute inset-x-0 top-0 flex justify-between gap-3 p-3 text-xs text-white sm:p-4">
-          <span className="rounded-md bg-[#071519]/90 px-2 py-1">
-            {t("concept")}
-          </span>
-          <span className="rounded-md bg-[#071519]/90 px-2 py-1">
-            {t("current")}
-          </span>
-        </div>
       </div>
       <div className="mt-2 flex items-center gap-3 text-xs">
         <label htmlFor={id} className="sr-only">
