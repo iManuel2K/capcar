@@ -12,6 +12,8 @@ import {
   Volume2,
   WandSparkles,
 } from "lucide-react";
+import Link from "next/link";
+import { platformCopy } from "@/features/marketing/platform-copy";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
 import { journalArticlePath } from "@/features/journal/routes";
 import type { AppLocale } from "@/i18n/config";
@@ -24,6 +26,7 @@ import styles from "./homepage.module.css";
 
 export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
   const c = homepageCopy[locale] ?? homepageCopy.en;
+  const p = platformCopy[locale];
   const guide = journalArticlePath("bmw-wochenendprojekt-planen", locale);
   const euro = (value: number) =>
     new Intl.NumberFormat(locale, {
@@ -60,6 +63,19 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
     <div className={styles.page}>
       <main id="main-content">
         <MarketingHero locale={locale} />
+        <aside className={styles.platformBridge} aria-label={p.label}>
+          <div>
+            <strong>{p.bridge}</strong>
+            <p>{p.bridgeText}</p>
+          </div>
+          <Link
+            href={locale === "en" ? "/platform" : `/${locale}/platform`}
+            className={styles.secondary}
+          >
+            {p.label}
+            <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+        </aside>
         <section
           id="platform"
           className={styles.section}

@@ -31,7 +31,10 @@ export function SiteFooter() {
     {
       title: "CapCar",
       links: [
-        [l("nav.how"), "/#platform"],
+        [
+          l("nav.how"),
+          journalLocale === "en" ? "/platform" : `/${journalLocale}/platform`,
+        ],
         [l("nav.projects"), "/#projects"],
         [t("roadmap"), "/roadmap"],
         [journal.label, journalPath(journalLocale)],
