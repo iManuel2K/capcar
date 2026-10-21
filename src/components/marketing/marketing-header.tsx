@@ -14,6 +14,7 @@ import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 import { HomepageLink } from "./homepage-link";
 import styles from "./homepage.module.css";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
+import { useNavigationAuth } from "@/features/auth/use-navigation-auth";
 
 const navigation = [
   { label: "how", href: "/platform" },
@@ -22,9 +23,12 @@ const navigation = [
 ] as const;
 
 export function MarketingHeader() {
+  const { showSignIn, signedIn } = useNavigationAuth();
   const journalLocale = resolveJournalLocale(useLocale());
   const journal = journalUI[journalLocale];
   const home = homepageCopy[journalLocale];
+  const garageHref = signedIn ? "/garage" : "/garage/new";
+  const garageLabel = signedIn ? home.openGarage : home.create;
   const links = navigation.map((item) =>
     item.href === "/platform" && journalLocale !== "en"
       ? { ...item, href: `/${journalLocale}/platform` }
@@ -149,19 +153,21 @@ export function MarketingHeader() {
           </div>
           <div className="hidden items-center gap-2 xl:flex">
             <LanguageSelector compact />
-            <Link
-              href="/login"
-              aria-current={pathname === "/login" ? "page" : undefined}
-              className="inline-flex min-h-11 items-center rounded-full px-3 text-sm transition hover:bg-[#0e2d30]/5 focus-visible:outline-2"
-            >
-              {t("signIn")}
-            </Link>
+            {showSignIn && (
+              <Link
+                href="/login"
+                aria-current={pathname === "/login" ? "page" : undefined}
+                className="inline-flex min-h-11 items-center rounded-full px-3 text-sm transition hover:bg-[#0e2d30]/5 focus-visible:outline-2"
+              >
+                {t("signIn")}
+              </Link>
+            )}
             <HomepageLink
-              href="/garage/new"
+              href={garageHref}
               placement="header"
               className={styles.primary}
             >
-              {home.create} <ArrowRight className="size-4" aria-hidden="true" />
+              {garageLabel} <ArrowRight className="size-4" aria-hidden="true" />
             </HomepageLink>
           </div>
 
@@ -266,20 +272,22 @@ export function MarketingHeader() {
             </div>
 
             <div className="mt-auto border-t border-[#0e2d30]/10 pt-5">
-              <Link
-                href="/login"
-                onClick={() => setMenuOpen(false)}
-                className="inline-flex min-h-11 items-center text-sm font-medium"
-              >
-                {t("signIn")}
-              </Link>
+              {showSignIn && (
+                <Link
+                  href="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="inline-flex min-h-11 items-center text-sm font-medium"
+                >
+                  {t("signIn")}
+                </Link>
+              )}
               <HomepageLink
-                href="/garage/new"
+                href={garageHref}
                 placement="header"
                 onClick={() => setMenuOpen(false)}
                 className={`${styles.primary} mt-2 w-full`}
               >
-                {home.create}{" "}
+                {garageLabel}{" "}
                 <ArrowRight className="size-4" aria-hidden="true" />
               </HomepageLink>
               <div className="mt-4">
