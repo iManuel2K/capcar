@@ -8,7 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("StudioPage");
   return {
     ...canonicalMetadata("/studio"),
-    title: t("eyebrow"),
+    title: t("title"),
     description: t("description"),
   };
 }

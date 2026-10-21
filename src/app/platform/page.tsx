@@ -7,7 +7,7 @@ import { isAppLocale } from "@/i18n/config";
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const c = platformCopy[isAppLocale(locale) ? locale : "en"];
-  return pageMetadata("/platform", c.label, c.description);
+  return pageMetadata("/platform", c.title, c.description);
 }
 export default async function PlatformPage() {
   const locale = await getLocale();

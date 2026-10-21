@@ -10,11 +10,11 @@ import { soundDeskCopy } from "@/features/visualizer/sound-desk-copy";
 import { soundCatalog } from "@/features/visualizer/sound-catalog";
 import styles from "@/components/marketing/homepage.module.css";
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("SoundPage");
+  const c = soundDeskCopy(await getLocale());
   const description = await getTranslations("PageMeta");
   const meta = pageMetadata(
     "/sound-studio",
-    t("title"),
+    c.title,
     description("sound-studio"),
   );
   return {
@@ -31,6 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ],
     },
     twitter: {
+      ...meta.twitter,
       card: "summary_large_image",
       images: ["/social/capcar-sound-studio-share.png"],
     },
