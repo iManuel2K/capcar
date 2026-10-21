@@ -315,12 +315,12 @@
     "footerNote": "Die Roadmap kann sich durch Beta-Feedback ändern."
   },
   "PartsPage": {
-    "eyebrow": "Offener Katalog · kein Konto erforderlich",
-    "title": "Erst die Teile. Dann die Garage.",
-    "description": "Suche nach Namen, Teilenummern, Baureihen und Motorcodes. CapCar zeigt, was ein Datensatz abdeckt, ohne für ein unbekanntes Fahrzeug bestätigte Passgenauigkeit zu behaupten.",
+    "eyebrow": "BEISPIELKATALOG",
+    "title": "Beispielkatalog für Teile",
+    "description": "Entdecke beispielhafte Teile und Umbauideen. Aktuelle Preise und Verfügbarkeit findest du in den Händlerangeboten.",
     "liveOffers": "Live-Händlerangebote suchen",
     "resultsFor": "Ergebnisse für „{query}“",
-    "prepared": "Vorbereiteter Katalog",
+    "prepared": "Illustrative Beispiele · Keine aktuellen Angebote",
     "matching": "{count, plural, =1 {Ein passendes Teil} other {# passende Teile}}",
     "conditional": "Passgenauigkeit bleibt offen, bis ein Fahrzeug gewählt ist",
     "approx": "Ca.",
@@ -328,7 +328,8 @@
     "emptyTitle": "Noch kein Katalogtreffer",
     "emptyDescription": "Versuche einen einfacheren Begriff wie E90, N43, Bremse, Felge oder eine vollständige Teilenummer. Live-Händlerangebote kannst du ebenfalls ohne Konto durchsuchen.",
     "noticeTitle": "Hinweis zur Passgenauigkeit.",
-    "notice": "Suchergebnisse sind Querverweise, keine Einbaufreigabe. Bestätige vor der Bestellung VIN, Produktionsdatum, Ausstattungscodes, Maße und lokale Straßenzulassung."
+    "notice": "Suchergebnisse sind Querverweise, keine Einbaufreigabe. Bestätige vor der Bestellung VIN, Produktionsdatum, Ausstattungscodes, Maße und lokale Straßenzulassung.",
+    "examples": "Beispielkatalog ansehen"
   },
   "StudioPage": {
     "back": "Zurück zu CapCar",

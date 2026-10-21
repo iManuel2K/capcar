@@ -181,7 +181,6 @@ export async function proxy(request: NextRequest) {
 
   const { data } = await supabase.auth.getUser();
   const protectedRoute =
-    request.nextUrl.pathname === "/ai" ||
     request.nextUrl.pathname === "/account" ||
     request.nextUrl.pathname.startsWith("/account/") ||
     request.nextUrl.pathname === "/garage" ||

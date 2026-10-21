@@ -18,7 +18,7 @@ import { homepageCopy } from "@/features/marketing/homepage-copy";
 const navigation = [
   { label: "how", href: "/platform" },
   { label: "projects", href: "/#projects" },
-  { label: "parts", href: "/parts-search" },
+  { label: "parts", href: "/connected-parts" },
 ] as const;
 
 export function MarketingHeader() {

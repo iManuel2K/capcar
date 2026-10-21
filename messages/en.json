@@ -437,7 +437,7 @@
       "entryOne": "Vehicle added · Owner-provided details",
       "entryTwo": "Maintenance review · Service date not recorded",
       "empty": "Choose an example part to see it appear here.",
-      "session": "Example changes last while this page is open. Your own build starts in your private garage.",
+      "session": "Example only · Changes reset when you leave.",
       "save": "Save your own build",
       "realSearch": "Search live listings",
       "visualText": "Explore the overall direction. This concept does not render the selected listing or prove its fitment."

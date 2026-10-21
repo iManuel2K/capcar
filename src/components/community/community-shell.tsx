@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BadgeCheck, Search, Store, Wrench } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import styles from "@/components/marketing/homepage.module.css";
 export const fieldClass =
   "mt-2 block min-h-12 w-full rounded-xl border border-[#0e2d30]/16 bg-white/55 p-3 text-sm shadow-[inset_0_1px_0_rgba(255,255,255,.45)] outline-none transition focus:border-[#6d0101]/45 focus:bg-white";
 export const actionClass =
@@ -54,7 +55,7 @@ export function CommunityShell({
             })}
           </nav>
           <div className="mt-12 mb-9 h-1 w-12 rounded-full bg-[#6d0101]" />
-          <h1 className="mb-10 max-w-4xl text-4xl leading-[.98] font-medium tracking-[-0.05em] sm:text-6xl">
+          <h1 className={`${styles.pageTitle} mb-8 max-w-4xl`}>
             {t(titleKey)}
           </h1>
           {children}

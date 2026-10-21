@@ -315,12 +315,12 @@
     "footerNote": "Roadmap direction may change with Beta feedback."
   },
   "PartsPage": {
-    "eyebrow": "Open catalogue · no account required",
-    "title": "Parts first. Garage later.",
-    "description": "Search names, part numbers, chassis codes and engine references. CapCar shows what each record covers without claiming confirmed fitment for an unidentified vehicle.",
+    "eyebrow": "EXAMPLE CATALOGUE",
+    "title": "Example parts catalogue",
+    "description": "Explore illustrative parts and build ideas. For current prices and availability, search live retailer offers.",
     "liveOffers": "Search live retailer offers",
     "resultsFor": "Results for “{query}”",
-    "prepared": "Prepared catalogue",
+    "prepared": "Illustrative examples · Not live offers",
     "matching": "{count, plural, =1 {One matching part} other {# matching parts}}",
     "conditional": "Fitment remains conditional until a vehicle is selected",
     "approx": "Approx.",
@@ -328,7 +328,8 @@
     "emptyTitle": "No catalogue match yet",
     "emptyDescription": "Try a simpler term such as E90, N43, brake, wheel or a complete part number. You can also search live retailer offers without an account.",
     "noticeTitle": "Fitment notice.",
-    "notice": "Search results are cross-references, not installation approval. Confirm VIN, production date, option codes, dimensions and local road approval before ordering."
+    "notice": "Search results are cross-references, not installation approval. Confirm VIN, production date, option codes, dimensions and local road approval before ordering.",
+    "examples": "Browse the example catalogue"
   },
   "StudioPage": {
     "back": "Back to CapCar",
