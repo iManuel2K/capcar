@@ -170,7 +170,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .animation {
+  .map {
     display: none;
   }
 }

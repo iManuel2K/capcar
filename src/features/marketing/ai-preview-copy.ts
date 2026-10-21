@@ -12,8 +12,8 @@ const en = {
   example: "Example trip · Illustrative data",
   promptLabel: "You ask",
   prompt:
-    "Plan a relaxed Sunday drive from Rüsselsheim in my BMW 318i. Stop in Mainz, then take a scenic road through the Rheingau.",
-  result: "A Sunday in the Rheingau",
+    "Plan a relaxed two-day weekend from Rüsselsheim in my BMW 318i. Stop in Mainz, then take a scenic road through the Rheingau.",
+  result: "A weekend in the Rheingau",
   stops: [
     "Start in Rüsselsheim",
     "A stop in Mainz",
@@ -47,8 +47,8 @@ export const aiPreviewCopy: Record<AppLocale, typeof en> = {
     example: "Beispieltour · Illustrative Daten",
     promptLabel: "Du fragst",
     prompt:
-      "Plane eine entspannte Sonntagstour ab Rüsselsheim mit meinem BMW 318i. Ein Stopp in Mainz, danach eine schöne Strecke durch den Rheingau.",
-    result: "Ein Sonntag im Rheingau",
+      "Plane ein entspanntes Wochenende mit zwei Tagen ab Rüsselsheim mit meinem BMW 318i. Ein Stopp in Mainz, danach eine schöne Strecke durch den Rheingau.",
+    result: "Ein Wochenende im Rheingau",
     stops: [
       "Start in Rüsselsheim",
       "Ein Stopp in Mainz",
@@ -79,8 +79,8 @@ export const aiPreviewCopy: Record<AppLocale, typeof en> = {
     example: "Παράδειγμα εκδρομής · Ενδεικτικά δεδομένα",
     promptLabel: "Εσύ ζητάς",
     prompt:
-      "Σχεδίασε μια χαλαρή κυριακάτικη βόλτα από το Rüsselsheim με την BMW 318i μου. Στάση στο Mainz και μετά μια όμορφη διαδρομή στο Rheingau.",
-    result: "Μια Κυριακή στο Rheingau",
+      "Σχεδίασε ένα χαλαρό διήμερο από το Rüsselsheim με την BMW 318i μου. Στάση στο Mainz και μετά μια όμορφη διαδρομή στο Rheingau.",
+    result: "Ένα διήμερο στο Rheingau",
     stops: [
       "Αφετηρία στο Rüsselsheim",
       "Στάση στο Mainz",
@@ -111,8 +111,8 @@ export const aiPreviewCopy: Record<AppLocale, typeof en> = {
     example: "Udhëtim shembull · Të dhëna ilustruese",
     promptLabel: "Ti kërkon",
     prompt:
-      "Planifiko një shëtitje të qetë të dielën nga Rüsselsheim me BMW 318i tim. Një ndalesë në Mainz, pastaj një rrugë panoramike në Rheingau.",
-    result: "Një e diel në Rheingau",
+      "Planifiko një fundjavë të qetë dyditore nga Rüsselsheim me BMW 318i tim. Një ndalesë në Mainz, pastaj një rrugë panoramike në Rheingau.",
+    result: "Një fundjavë në Rheingau",
     stops: [
       "Nisja nga Rüsselsheim",
       "Një ndalesë në Mainz",
@@ -143,8 +143,8 @@ export const aiPreviewCopy: Record<AppLocale, typeof en> = {
     example: "ドライブの例 · 参考データ",
     promptLabel: "こんなふうに聞く",
     prompt:
-      "BMW 318iでリュッセルスハイムからのんびり日曜ドライブを計画して。マインツに寄り、その後ラインガウの景色のよい道を走りたい。",
-    result: "ラインガウで過ごす日曜日",
+      "BMW 318iでリュッセルスハイムからのんびり週末2日間のドライブを計画して。マインツに寄り、その後ラインガウの景色のよい道を走りたい。",
+    result: "ラインガウで過ごす週末",
     stops: [
       "リュッセルスハイムを出発",
       "マインツに立ち寄る",
