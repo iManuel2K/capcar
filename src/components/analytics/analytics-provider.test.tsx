@@ -69,3 +69,17 @@ it("hides the prompt when analytics is not configured", () => {
     screen.queryByRole("button", { name: "Allow analytics" }),
   ).not.toBeInTheDocument();
 });
+
+it("keeps the complete disclosure available without requesting consent to read it", () => {
+  render(<AnalyticsProvider />);
+  const summary = screen.getByText("How analytics works");
+  const disclosure = summary.closest("details")!;
+  expect(disclosure).not.toHaveAttribute("open");
+  expect(disclosure).toHaveTextContent(
+    "sends usage events to PostHog in the US",
+  );
+  disclosure.open = true;
+  expect(screen.getByRole("link", { name: "Privacy notice" })).toBeVisible();
+  expect(localStorage.getItem(ANALYTICS_CONSENT_KEY)).toBeNull();
+  expect(sdk.init).not.toHaveBeenCalled();
+});

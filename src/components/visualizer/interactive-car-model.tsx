@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import {
   getCarModel,
@@ -30,13 +30,9 @@ export function InteractiveCarModel({
   autoRotate = false,
   presentation = "studio",
 }: InteractiveCarModelProps) {
+  const t = useTranslations("CarStudio");
   const model = getCarModel(modelId);
-  if (!model)
-    return (
-      <p role="status">
-        This car model is not in the free library. Choose another reference.
-      </p>
-    );
+  if (!model) return <p role="status">{t("unavailable")}</p>;
   return (
     <ModelViewer
       key={model.id}
@@ -68,15 +64,7 @@ function ModelViewer({
   label?: string;
   posterUrl?: string;
 }) {
-  const locale = useLocale();
-  const rotationLabels: Record<string, [string, string]> = {
-    en: ["Auto rotate", "Pause rotation"],
-    de: ["Automatisch drehen", "Drehung pausieren"],
-    el: ["Αυτόματη περιστροφή", "Παύση περιστροφής"],
-    sq: ["Rrotullo automatikisht", "Ndalo rrotullimin"],
-    ja: ["自動回転", "回転を一時停止"],
-  };
-  const rotationLabel = rotationLabels[locale] ?? rotationLabels.en;
+  const t = useTranslations("CarStudio");
   const [active, setActive] = useState(autoStart);
   const [rotating, setRotating] = useState(
     () =>
@@ -137,11 +125,16 @@ function ModelViewer({
   }, [ready, rotating]);
   return (
     <section
-      aria-label={label ?? `${model.name} interactive model`}
+      aria-label={label ?? t("modelLabel", { model: model.name })}
       data-model-id={model.id}
       data-model-state={phase}
       data-presentation={presentation}
     >
+      {!floating && (
+        <p className="mb-3 text-xs font-semibold tracking-widest uppercase">
+          {ready ? t("rotateHint") : t("freeModel")}
+        </p>
+      )}
       <div
         className={
           floating
@@ -149,64 +142,51 @@ function ModelViewer({
             : "relative isolate aspect-[4/3] overflow-hidden rounded-2xl bg-[#e2e4da] sm:aspect-[16/10]"
         }
       >
-        {(!active || (floating && !ready)) && (
+        {(!active || !ready) && (
           <Image
             src={posterUrl ?? `/models/cars/previews/${model.id}.webp`}
-            alt={`${model.name} 3D model preview`}
+            alt={t("posterAlt", { model: model.name })}
             unoptimized
             fill
             sizes="(max-width: 1024px) 100vw, 800px"
             className="object-contain"
-            priority={model.id === "bmw-m3-e30"}
+            preload={model.id === "bmw-m3-e30"}
           />
         )}
         <div
           ref={host}
           className="absolute inset-0 touch-pan-y [&>canvas]:!h-full [&>canvas]:!w-full [&>canvas]:touch-pan-y"
+          style={{ visibility: ready ? "visible" : "hidden" }}
         />
-        {!active && (
-          <div className="absolute inset-x-0 bottom-5 flex justify-center px-4">
-            <button
-              type="button"
-              className={`${studioButton} border-transparent bg-[#0e2d30] text-[#f3f1e7] shadow-lg hover:bg-[#19464a]`}
-              onClick={() => setActive(true)}
-            >
-              Load interactive 3D <span aria-hidden="true">↗</span>
-            </button>
-          </div>
-        )}
-        {active && !ready && !floating && (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#e2e4da]/90 p-6 text-center">
-            <p className="max-w-xs text-sm leading-6">
-              {phase === "error"
-                ? "3D could not start. Try again, or stop 3D to see the preview."
-                : `Loading ${model.name}…`}
-            </p>
-          </div>
-        )}
-        {!floating && (
-          <span className="pointer-events-none absolute top-4 left-4 rounded-full bg-[#f3f1e7]/95 px-3 py-1.5 text-[10px] font-semibold tracking-widest uppercase">
-            {ready ? "Drag to rotate · 360°" : "Free 3D model"}
-          </span>
-        )}
       </div>
+      {!active && (
+        <div className="mt-4 flex justify-start">
+          <button
+            type="button"
+            className={`${studioButton} border-transparent bg-[#0e2d30] text-[#f3f1e7] shadow-lg hover:bg-[#19464a]`}
+            onClick={() => setActive(true)}
+          >
+            {t("load")} <span aria-hidden="true">↗</span>
+          </button>
+        </div>
+      )}
       <p
         role="status"
         aria-live="polite"
         className="mt-3 min-h-5 text-xs leading-5 text-[#0e2d30]/80"
       >
         {phase === "idle"
-          ? "No account needed. The 3D viewer downloads only after you press load."
+          ? t("idle")
           : phase === "loading"
-            ? "Loading the selected car only. Slower connections may take a moment."
+            ? t("loading", { model: model.name })
             : phase === "ready"
-              ? "Model ready. Drag to rotate, or use the camera and zoom buttons."
-              : "3D is unavailable. Your selection is kept; retry or use the preview."}
+              ? t("ready")
+              : t("error")}
       </p>
       {active && (
         <div
           className="mt-3 flex flex-wrap gap-2"
-          aria-label="3D camera controls"
+          aria-label={t("cameraControls")}
         >
           {(["perspective", "front", "side", "rear"] as const).map((view) => (
             <button
@@ -220,9 +200,7 @@ function ModelViewer({
                 runtime.current?.camera(view);
               }}
             >
-              {view === "perspective"
-                ? "Reset view"
-                : `${view[0].toUpperCase()}${view.slice(1)} view`}
+              {t(`camera.${view}`)}
             </button>
           ))}
           <button
@@ -232,7 +210,7 @@ function ModelViewer({
             aria-pressed={rotating}
             onClick={() => setRotating((value) => !value)}
           >
-            {rotationLabel[rotating ? 1 : 0]}
+            {t(rotating ? "pauseRotation" : "autoRotation")}
           </button>
           {!floating && (
             <>
@@ -243,7 +221,7 @@ function ModelViewer({
                 disabled={!ready}
                 onClick={() => runtime.current?.zoom("in")}
               >
-                Zoom in
+                {t("zoomIn")}
               </button>
               <button
                 type="button"
@@ -251,7 +229,7 @@ function ModelViewer({
                 disabled={!ready}
                 onClick={() => runtime.current?.zoom("out")}
               >
-                Zoom out
+                {t("zoomOut")}
               </button>
               <button
                 type="button"
@@ -265,17 +243,13 @@ function ModelViewer({
                     link.href = url;
                     link.download = `capcar-${model.id}.png`;
                     link.click();
-                    setExportMessage(
-                      "Image downloaded. Keep the model credit when sharing.",
-                    );
+                    setExportMessage(t("exported"));
                   } catch {
-                    setExportMessage(
-                      "Image could not be saved. Try your device’s screenshot tool.",
-                    );
+                    setExportMessage(t("exportError"));
                   }
                 }}
               >
-                Save image
+                {t("saveImage")}
               </button>
               <button
                 type="button"
@@ -285,7 +259,7 @@ function ModelViewer({
                   setPhase("idle");
                 }}
               >
-                Stop 3D
+                {t("stop")}
               </button>
             </>
           )}
@@ -295,7 +269,7 @@ function ModelViewer({
               className={studioButton}
               onClick={() => setAttempt((value) => value + 1)}
             >
-              Retry
+              {t("retry")}
             </button>
           )}
         </div>
@@ -306,7 +280,7 @@ function ModelViewer({
         </p>
       )}
       <p className="mt-4 text-xs leading-5 text-[#0e2d30]/80">
-        Model by{" "}
+        {t("modelBy")}{" "}
         <a
           className="underline underline-offset-2"
           href={model.authorUrl}
@@ -322,7 +296,7 @@ function ModelViewer({
           target="_blank"
           rel="noopener noreferrer"
         >
-          Original model
+          {t("originalModel")}
         </a>{" "}
         ·{" "}
         <a
@@ -333,12 +307,12 @@ function ModelViewer({
         >
           {model.license}
         </a>
-        . Optimized for CapCar.{" "}
+        . {t("optimized")}{" "}
         <a
           className="underline underline-offset-2"
           href="/models/cars/ATTRIBUTION.md"
         >
-          Credits & changes
+          {t("credits")}
         </a>
         .
       </p>

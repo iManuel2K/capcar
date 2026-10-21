@@ -67,6 +67,28 @@ describe("shared free car viewer", () => {
       screen.getByRole("button", { name: "Load interactive 3D" }),
     ).toBeEnabled();
   });
+  it("keeps Studio controls and labels outside the car visual, including on failure", async () => {
+    runtime.load.mockRejectedValueOnce(new Error("GPU unavailable"));
+    const { container } = render(<InteractiveCarModel modelId="bmw-m3-e30" />);
+    const image = screen.getByRole("img", { name: /3D model preview/ });
+    const visual = image.parentElement!;
+    expect(visual).not.toContainElement(
+      screen.getByRole("button", { name: "Load interactive 3D" }),
+    );
+    expect(visual).not.toContainElement(screen.getByText("Free 3D model"));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Load interactive 3D" }),
+    );
+    await waitFor(() =>
+      expect(screen.getByRole("status")).toHaveTextContent("3D is unavailable"),
+    );
+    expect(image).toBeVisible();
+    expect(visual).not.toContainElement(screen.getByRole("status"));
+    expect(
+      container.querySelector('[style*="visibility: hidden"]'),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Retry" })).toBeEnabled();
+  });
   it("supports camera and zoom buttons, paint without reloading, and disposal", async () => {
     const view = render(<InteractiveCarModel modelId="bmw-e36-m3" />);
     fireEvent.click(

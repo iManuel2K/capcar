@@ -176,7 +176,7 @@ describe("garage onboarding UI", () => {
       </StrictMode>,
     );
     expect(
-      screen.getByRole("heading", { name: "Your direction is ready." }),
+      screen.getByRole("heading", { name: "Ready to save your garage." }),
     ).toBeInTheDocument();
     expect(screen.getByText("PRIVATE PERSONAL TASK")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Save my garage" }));

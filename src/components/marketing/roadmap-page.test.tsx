@@ -14,7 +14,7 @@ describe("RoadmapPage", () => {
       screen.getByRole("heading", { name: "The foundation" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Beta hardening" }),
+      screen.getByRole("heading", { name: "Improving the beta" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "Make it tangible" }),

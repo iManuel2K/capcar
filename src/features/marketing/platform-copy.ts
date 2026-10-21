@@ -1,11 +1,11 @@
 import type { AppLocale } from "@/i18n/config";
 const en = {
   label: "The platform",
-  title: "One car. Everything you want to do with it.",
+  title: "Your car's plans and records, together.",
   description:
-    "A place for the ideas, the work and the miles that follow. See how your garage, plans, guides and drives fit together.",
+    "See how your garage brings together plans, guides and drives for your car.",
   connect: "Your car is the starting point.",
-  explore: "See how it connects",
+  explore: "Explore the garage tools",
   choose: "Explore the CapCar tools",
   garage: "Your garage",
   studio: "Concept Studio",
@@ -15,18 +15,18 @@ const en = {
   available: "Available now",
   preview: "Preview",
   planned: "Planned",
-  bridge: "More than a collection of tools.",
-  bridgeText: "Discover how the rest of CapCar fits around your car.",
-  journey: "An idea becomes part of your car’s story.",
+  bridge: "Keep plans and records with the right car.",
+  bridgeText: "Explore the garage, build plans, guides and drives.",
+  journey: "From an idea to a vehicle record.",
   journeyText:
-    "You do not need a finished build to start. One useful next step is enough.",
-  availability: "What you can use. What comes next.",
+    "Start with one task, even if the rest of the build is still undecided.",
+  availability: "Available, preview and planned features",
   availabilityText:
-    "The platform is growing. Previews show the direction; planned features are not working integrations or release promises.",
+    "Previews show what we're exploring. Planned features are not working integrations or release promises.",
   todayTitle: "Start with the essentials",
   todayText:
     "Garage, build plans, maintenance records, costs and history. Parts search, Journal guides, Sound Studio and Roadbook are also available. Saving personal records requires an account.",
-  previewTitle: "Explore the direction",
+  previewTitle: "3D references and diagnostics previews",
   previewText:
     "Reference 3D models and concept comparisons help you explore a look. They do not simulate every change on your exact car. Diagnostics supports manual notes; native OBD scanning is a preview.",
   futureTitle: "A more connected garage",
@@ -36,7 +36,7 @@ const en = {
   privacy: "Your garage. Your choice of what to share.",
   privacyText:
     "Personal vehicle records are private by default. Public examples use illustrative data. Passport sharing is optional, and owner-recorded work is not professional verification.",
-  final: "Start with your car. Build from there.",
+  final: "Add your car to the garage.",
 };
 export const platformCopy: Record<AppLocale, typeof en> = {
   en,
@@ -56,8 +56,8 @@ export const platformCopy: Record<AppLocale, typeof en> = {
     available: "Jetzt verfügbar",
     preview: "Vorschau",
     planned: "Geplant",
-    bridge: "Mehr als eine Sammlung von Werkzeugen.",
-    bridgeText: "Entdecke, wie der Rest von CapCar zu deinem Auto passt.",
+    bridge: "Pläne und Einträge beim richtigen Auto aufbewahren.",
+    bridgeText: "Entdecke Garage, Umbaupläne, Anleitungen und Touren.",
     journey: "Eine Idee wird Teil deiner Autogeschichte.",
     journeyText:
       "Du brauchst keinen fertigen Umbau, um anzufangen. Ein sinnvoller nächster Schritt reicht.",
@@ -95,8 +95,9 @@ export const platformCopy: Record<AppLocale, typeof en> = {
     available: "Διαθέσιμο τώρα",
     preview: "Προεπισκόπηση",
     planned: "Προγραμματισμένο",
-    bridge: "Περισσότερο από μια συλλογή εργαλείων.",
-    bridgeText: "Ανακάλυψε πώς ταιριάζει το CapCar γύρω από το αυτοκίνητό σου.",
+    bridge: "Κράτησε σχέδια και εγγραφές στο σωστό αυτοκίνητο.",
+    bridgeText:
+      "Εξερεύνησε το γκαράζ, τα σχέδια μετατροπών, τους οδηγούς και τις διαδρομές.",
     journey: "Μια ιδέα γίνεται μέρος της ιστορίας του αυτοκινήτου.",
     journeyText:
       "Δεν χρειάζεσαι ολοκληρωμένο project για να ξεκινήσεις. Αρκεί ένα χρήσιμο επόμενο βήμα.",
@@ -134,9 +135,9 @@ export const platformCopy: Record<AppLocale, typeof en> = {
     available: "E disponueshme tani",
     preview: "Parapamje",
     planned: "E planifikuar",
-    bridge: "Më shumë se një koleksion mjetesh.",
+    bridge: "Mbaj planet dhe regjistrat me makinën e duhur.",
     bridgeText:
-      "Zbulo si përshtatet pjesa tjetër e CapCar rreth makinës tënde.",
+      "Eksploro garazhin, planet e modifikimit, udhëzuesit dhe udhëtimet.",
     journey: "Një ide bëhet pjesë e historisë së makinës.",
     journeyText:
       "Nuk të duhet një projekt i përfunduar për të filluar. Mjafton një hap i dobishëm.",
@@ -174,8 +175,9 @@ export const platformCopy: Record<AppLocale, typeof en> = {
     available: "利用可能",
     preview: "プレビュー",
     planned: "計画中",
-    bridge: "ツールを集める、その先へ。",
-    bridgeText: "愛車を中心としたCapCarの機能のつながりを見つけましょう。",
+    bridge: "車ごとに計画と記録をまとめる。",
+    bridgeText:
+      "ガレージ、カスタム計画、ガイド、ドライブの機能を確認しましょう。",
     journey: "アイデアが、愛車の歴史の一部になる。",
     journeyText:
       "完成したカスタムは必要ありません。役立つ次の一歩から始めましょう。",

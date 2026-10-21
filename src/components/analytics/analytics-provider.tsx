@@ -78,16 +78,21 @@ export function AnalyticsProvider() {
       {(consent === null || settingsOpen) && (
         <section
           aria-label={t.title}
-          className="fixed inset-x-3 bottom-16 z-[100] mx-auto max-w-xl rounded-2xl border border-[#405856]/25 bg-[#f5f2e8] p-5 text-[#0e2d30] shadow-2xl sm:inset-x-auto sm:right-5 sm:bottom-5"
+          className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-[100] mx-auto max-h-[calc(100dvh-6.5rem)] max-w-xl overflow-y-auto rounded-2xl border border-[#405856]/25 bg-[#f5f2e8] p-4 text-[#0e2d30] shadow-2xl sm:inset-x-auto sm:right-5 sm:bottom-5"
         >
           <h2 className="text-base font-semibold">{t.title}</h2>
-          <p className="mt-2 text-sm leading-6">{t.description}</p>
-          <Link
-            href="/privacy"
-            className="mt-2 inline-flex min-h-11 items-center text-sm underline"
-          >
-            {t.privacy}
-          </Link>
+          <details className="mt-1">
+            <summary className="flex min-h-11 cursor-pointer items-center rounded text-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0e2d30]">
+              {t.details}
+            </summary>
+            <p className="mt-1 text-sm leading-6">{t.description}</p>
+            <Link
+              href="/privacy"
+              className="mt-1 inline-flex min-h-11 items-center rounded text-sm underline"
+            >
+              {t.privacy}
+            </Link>
+          </details>
           <div className="mt-3 flex flex-wrap gap-3">
             <button
               type="button"

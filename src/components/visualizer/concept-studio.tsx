@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import {
   carModels,
   getCarModel,
@@ -9,15 +10,16 @@ import {
 import { InteractiveCarModel, studioButton } from "./interactive-car-model";
 
 const paintColors = [
-  { name: "Alpine white", value: "#e8e6d7" },
-  { name: "Carbon black", value: "#191e20" },
-  { name: "Racing red", value: "#a92029" },
-  { name: "Deep green", value: "#174d41" },
-  { name: "Estoril blue", value: "#2e64a6" },
+  { name: "white", value: "#e8e6d7" },
+  { name: "black", value: "#191e20" },
+  { name: "red", value: "#a92029" },
+  { name: "green", value: "#174d41" },
+  { name: "blue", value: "#2e64a6" },
 ] as const;
 const storageKey = "capcar.car-studio.v1";
 
 export function ConceptStudio() {
+  const t = useTranslations("CarStudio");
   const [modelId, setModelId] = useState("bmw-m3-e30");
   const [paint, setPaint] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -39,17 +41,15 @@ export function ConceptStudio() {
     <div className="overflow-hidden rounded-3xl border border-[#0e2d30]/20 bg-[#f3f1e7] text-[#0e2d30]">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#0e2d30]/15 px-5 py-4 sm:px-7">
         <p className="text-xs font-semibold tracking-[0.18em] uppercase">
-          The free model collection{" "}
+          {t("collectionTitle")}{" "}
           <span className="ml-2 rounded-full bg-[#0e2d30] px-2 py-1 text-[#f3f1e7]">
-            25
+            {carModels.length}
           </span>
         </p>
-        <span className="text-xs">
-          No account · No subscription · Same models in your garage
-        </span>
+        <span className="text-xs">{t("access")}</span>
       </div>
       <label className="mx-5 mt-5 block text-sm font-semibold lg:hidden">
-        Choose a car
+        {t("choose")}
         <select
           className="mt-2 min-h-12 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3"
           value={model.id}
@@ -86,19 +86,19 @@ export function ConceptStudio() {
             <span className="rounded-full border border-[#0e2d30]/20 px-3 py-1.5 text-xs">
               {model.platforms.length
                 ? model.platforms.join(" / ")
-                : "Reference model"}
+                : t("reference")}
             </span>
           </div>
           <InteractiveCarModel modelId={model.id} paint={paint} />
           <div className="mt-6 border-t border-[#0e2d30]/15 pt-5">
             <h3 className="text-sm font-semibold">
               {model.paintMaterials.length
-                ? "Try a paint direction"
-                : "Original model finish"}
+                ? t("paintTitle")
+                : t("originalFinish")}
             </h3>
             {model.paintMaterials.length > 0 ? (
               <fieldset className="mt-3">
-                <legend className="sr-only">Body paint preview</legend>
+                <legend className="sr-only">{t("paintLegend")}</legend>
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
@@ -106,7 +106,7 @@ export function ConceptStudio() {
                     aria-pressed={paint === null}
                     onClick={() => setPaint(null)}
                   >
-                    Original
+                    {t("original")}
                   </button>
                   {paintColors.map((color) => (
                     <button
@@ -121,27 +121,18 @@ export function ConceptStudio() {
                         className="size-4 rounded-full border border-black/20"
                         style={{ backgroundColor: color.value }}
                       />
-                      {color.name}
+                      {t(`paint.${color.name}`)}
                     </button>
                   ))}
                 </div>
-                <p className="mt-3 text-xs leading-5">
-                  Color previews affect mapped body materials only, not real
-                  paint or wrap accuracy.
-                </p>
+                <p className="mt-3 text-xs leading-5">{t("paintNote")}</p>
               </fieldset>
             ) : (
-              <p className="mt-2 text-sm leading-6">
-                This model keeps its creator’s original finish. Rotate it and
-                inspect the details; paint preview is not available for this
-                asset.
-              </p>
+              <p className="mt-2 text-sm leading-6">{t("originalNote")}</p>
             )}
             <p className="mt-4 text-xs leading-6">
-              {model.notes} These are independent artist models, not
-              manufacturer CAD, fitment checks or exact replicas of your
-              vehicle. Parts, wheels and ride height are not editable in these
-              25 models.
+              {t(`modelNotes.${model.id}`)}{" "}
+              {t("referenceNote", { count: carModels.length })}
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               <button
@@ -153,17 +144,13 @@ export function ConceptStudio() {
                       storageKey,
                       JSON.stringify({ modelId: model.id, paint }),
                     );
-                    setMessage(
-                      "Direction saved on this device. Garage builds have their own saved configuration.",
-                    );
+                    setMessage(t("saved"));
                   } catch {
-                    setMessage(
-                      "Saving is unavailable on this device. You can still explore every model.",
-                    );
+                    setMessage(t("saveError"));
                   }
                 }}
               >
-                Save direction
+                {t("save")}
               </button>
               <button
                 type="button"
@@ -190,21 +177,19 @@ export function ConceptStudio() {
                       throw new Error("Invalid paint");
                     setModelId(saved.modelId);
                     setPaint(color);
-                    setMessage("Your saved direction is restored.");
+                    setMessage(t("restored"));
                   } catch {
-                    setMessage(
-                      "No valid saved direction found on this device.",
-                    );
+                    setMessage(t("restoreError"));
                   }
                 }}
               >
-                Restore direction
+                {t("restore")}
               </button>
               <Link
                 href="/garage"
                 className={`${studioButton} border-transparent bg-[#0e2d30] text-[#f3f1e7] hover:bg-[#19464a]`}
               >
-                Use in your garage <span aria-hidden="true">↗</span>
+                {t("useGarage")} <span aria-hidden="true">↗</span>
               </Link>
             </div>
             {message && (
@@ -215,33 +200,31 @@ export function ConceptStudio() {
           </div>
         </div>
         <aside
-          aria-label="Choose a car model"
+          aria-label={t("chooseModel")}
           className="border-t border-[#0e2d30]/15 bg-[#e8e6d7]/45 p-5 sm:p-7 lg:border-t-0 lg:border-l"
         >
           <h3 className="text-xl font-medium tracking-tight">
-            Pick your next icon.
+            {t("browseTitle")}
           </h3>
-          <p className="mt-2 text-sm leading-6">
-            Find a car, load it, make it your reference.
-          </p>
+          <p className="mt-2 text-sm leading-6">{t("browseText")}</p>
           <label className="mt-5 block text-xs font-semibold">
-            Search cars
+            {t("search")}
             <input
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Supra, E30, Skyline…"
-              className="mt-2 min-h-11 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="mt-2 min-h-11 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3 text-base focus-visible:outline-2 focus-visible:outline-offset-2"
             />
           </label>
           <label className="mt-3 block text-xs font-semibold">
-            Manufacturer
+            {t("manufacturer")}
             <select
               value={make}
               onChange={(event) => setMake(event.target.value)}
-              className="mt-2 min-h-11 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="mt-2 min-h-11 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3 text-base focus-visible:outline-2 focus-visible:outline-offset-2"
             >
-              <option value="all">All manufacturers</option>
+              <option value="all">{t("allManufacturers")}</option>
               {makes.map((brand) => (
                 <option key={brand} value={brand}>
                   {brand}
@@ -250,12 +233,12 @@ export function ConceptStudio() {
             </select>
           </label>
           <p aria-live="polite" className="mt-4 text-xs">
-            {visible.length} of {carModels.length} cars
+            {t("count", { visible: visible.length, total: carModels.length })}
           </p>
           <div
             className="mt-3 max-h-[560px] space-y-2 overflow-y-auto pr-1"
             tabIndex={0}
-            aria-label="Car model collection"
+            aria-label={t("collectionLabel")}
           >
             {visible.map((car) => (
               <button
@@ -284,7 +267,7 @@ export function ConceptStudio() {
             ))}
             {visible.length === 0 && (
               <div className="py-8 text-sm leading-6">
-                <p>No cars match those filters.</p>
+                <p>{t("empty")}</p>
                 <button
                   type="button"
                   className={`${studioButton} mt-3`}
@@ -293,7 +276,7 @@ export function ConceptStudio() {
                     setSearch("");
                   }}
                 >
-                  Clear filters
+                  {t("clear")}
                 </button>
               </div>
             )}

@@ -2,7 +2,7 @@ import type { AppLocale } from "@/i18n/config";
 
 const en = {
   eyebrow: "CapCar — Digital Garage",
-  headline: "Your car. Every idea, job and journey in one place.",
+  headline: "Keep your car's plans and history together.",
   description:
     "Plan upgrades, track costs, follow DIY guides and keep your car’s history together. Find your next drive when you’re ready to get out.",
   create: "Create your garage",
@@ -35,13 +35,13 @@ const en = {
   completedTask: "Wiper blades replaced",
   build: "Plan your build",
   buildText:
-    "Turn an idea into parts and tasks. Keep your budget, planned costs and actual spending in view as the project moves forward.",
+    "Plan the parts and tasks for your build. Track your budget, planned costs and actual spending as you go.",
   buildAccess:
     "Try the example below. Create an account to save your own build.",
   buildAction: "Start a build plan",
   drives: "Find your next drive",
   drivesText:
-    "Explore Roadbook places and routes, then use AI trip planning to put a drive together around your plans.",
+    "Find places and routes in Roadbook, then use AI trip planning to organize your drive.",
   drivesAccess:
     "Roadbook is open without an account. AI trip planning requires an account and a connected AI service; provider charges may apply.",
   drivesAction: "Explore Roadbook",
@@ -50,13 +50,12 @@ const en = {
   routeDetail: "A drive idea · Places, stops and a route to explore",
   drivePhoto:
     "Roadbook preview showing driving places across Europe; map data © OpenStreetMap contributors, OpenFreeMap and OpenMapTiles",
-  storyEyebrow: "One example. The whole picture.",
-  storyTitle: "From “one day” to part of your car’s story.",
+  storyEyebrow: "Maintenance example",
+  storyTitle: "From a planned job to your vehicle history.",
   storyText:
-    "Example BMW 318i · E90. A cabin-filter job shows how a plan becomes a record. All costs below are illustrative, not quotes.",
+    "Follow a cabin-filter replacement on an example BMW 318i (E90). All costs shown are illustrative, not quotes.",
   idea: "Save the idea",
-  ideaText:
-    "Freshen up the daily driver. Put a cabin-filter replacement in the plan.",
+  ideaText: "Add a cabin-filter replacement to your plan.",
   parts: "Organize parts and budget",
   partsText:
     "Example: €30 planned for the filter, within a €300 project budget. Check the exact part against your car.",
@@ -71,16 +70,16 @@ const en = {
     "The completed task joins the timeline. Actual spending is €28; reopening the task corrects the record.",
   ownerRecorded:
     "Owner-recorded work, not professional verification. Sharing stays optional.",
-  demoTitle: "Look around before you make it yours.",
+  demoTitle: "Try an example build.",
   demoText:
-    "Compare a part and see the BMW build budget change. Example data only; nothing is bought or saved.",
+    "Compare a part and see how it changes the BMW build budget. This uses example data; nothing is bought or saved.",
   demoHint:
     "Open Vehicle Passport to see the planned part in the example record.",
   toolsEyebrow: "There when you need them",
-  toolsTitle: "A few more tools for the detail-minded.",
+  toolsTitle: "Models, sound and vehicle records",
   visual: "Visualizer",
   visualText:
-    "Explore interactive reference car models and visual directions. A concept preview, not a guarantee of fitment or a model of your exact car.",
+    "Explore interactive reference car models and concept previews. These do not guarantee fitment or model your exact car.",
   sound: "Sound Studio",
   soundText:
     "Listen to engine and exhaust recordings. Compare a stock take with another recording or your own audio locally, without an account.",
@@ -92,7 +91,7 @@ const en = {
     "Keep vehicle details and owner-recorded history together. Share only what you choose.",
   open: "Explore",
   preview: "Preview",
-  finalTitle: "Start with one car. Save the next thing you want to do.",
+  finalTitle: "Add your car and save your first plan.",
   finalText:
     "Add the essentials, choose your goal and save a first task or drive idea. You can fill in the rest later.",
 } as const;
@@ -153,7 +152,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     drivePhoto:
       "Roadbook-Vorschau mit Ausflugszielen in Europa; Kartendaten © OpenStreetMap-Mitwirkende, OpenFreeMap und OpenMapTiles",
     storyEyebrow: "Ein Beispiel. Der ganze Zusammenhang.",
-    storyTitle: "Von „irgendwann“ zur Geschichte deines Autos.",
+    storyTitle: "Von der geplanten Arbeit zur Fahrzeughistorie.",
     storyText:
       "Beispiel: BMW 318i · E90. Ein Innenraumfilterwechsel zeigt, wie aus einem Plan ein Eintrag wird. Alle Kosten sind illustrative Beispiele, keine Angebote.",
     idea: "Idee festhalten",
@@ -173,13 +172,13 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Die erledigte Aufgabe erscheint in der Zeitleiste. Tatsächlich ausgegeben: 28 €. Wiederöffnen korrigiert den Eintrag.",
     ownerRecorded:
       "Vom Halter dokumentiert, nicht fachlich verifiziert. Teilen ist freiwillig.",
-    demoTitle: "Erst umsehen. Dann deine eigene Garage starten.",
+    demoTitle: "Probiere ein Beispielprojekt aus.",
     demoText:
       "Vergleiche ein Teil und sieh, wie sich das BMW-Budget ändert. Nur Beispieldaten; kein Kauf und keine Speicherung.",
     demoHint:
       "Öffne den Fahrzeugpass und sieh das geplante Teil im Beispieleintrag.",
     toolsEyebrow: "Da, wenn du sie brauchst",
-    toolsTitle: "Mehr Werkzeuge für die Details.",
+    toolsTitle: "Modelle, Sound und Fahrzeugeinträge",
     visual: "Visualizer",
     visualText:
       "Erkunde interaktive Referenzmodelle und Designideen. Eine Konzeptvorschau, keine Passgarantie und kein Modell deines exakten Autos.",
@@ -253,7 +252,8 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     drivePhoto:
       "Προεπισκόπηση Roadbook με μέρη για οδήγηση στην Ευρώπη· δεδομένα χάρτη © συνεισφέροντες OpenStreetMap, OpenFreeMap και OpenMapTiles",
     storyEyebrow: "Ένα παράδειγμα. Ολόκληρη η εικόνα.",
-    storyTitle: "Από το «κάποια μέρα» στην ιστορία του αυτοκινήτου σου.",
+    storyTitle:
+      "Από μια προγραμματισμένη εργασία στο ιστορικό του αυτοκινήτου.",
     storyText:
       "Παράδειγμα BMW 318i · E90. Η αλλαγή φίλτρου καμπίνας δείχνει πώς ένα σχέδιο γίνεται καταγραφή. Όλα τα κόστη είναι ενδεικτικά, όχι προσφορές.",
     idea: "Κράτησε την ιδέα",
@@ -273,13 +273,13 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Η ολοκληρωμένη εργασία εμφανίζεται στο χρονολόγιο. Πραγματικά έξοδα: 28 €. Η επαναφορά της εργασίας διορθώνει την καταγραφή.",
     ownerRecorded:
       "Καταγραφή ιδιοκτήτη, όχι επαγγελματική επαλήθευση. Η κοινοποίηση είναι προαιρετική.",
-    demoTitle: "Δες πώς λειτουργεί πριν το κάνεις δικό σου.",
+    demoTitle: "Δοκίμασε ένα παράδειγμα project.",
     demoText:
       "Σύγκρινε ένα ανταλλακτικό και δες τον προϋπολογισμό της BMW να αλλάζει. Μόνο ενδεικτικά δεδομένα· χωρίς αγορά ή αποθήκευση.",
     demoHint:
       "Άνοιξε το Διαβατήριο οχήματος για να δεις το προγραμματισμένο ανταλλακτικό στην εγγραφή-παράδειγμα.",
     toolsEyebrow: "Εκεί όταν τα χρειάζεσαι",
-    toolsTitle: "Εργαλεία για όσους προσέχουν τη λεπτομέρεια.",
+    toolsTitle: "Μοντέλα, ήχος και αρχεία αυτοκινήτου",
     visual: "Visualizer",
     visualText:
       "Εξερεύνησε διαδραστικά μοντέλα αναφοράς και οπτικές ιδέες. Προεπισκόπηση ιδέας, όχι εγγύηση συμβατότητας ή ακριβές μοντέλο του αυτοκινήτου σου.",
@@ -351,7 +351,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     drivePhoto:
       "Parapamje Roadbook me vende për udhëtime në Evropë; të dhënat e hartës © kontribuesit e OpenStreetMap, OpenFreeMap dhe OpenMapTiles",
     storyEyebrow: "Një shembull. Pamja e plotë.",
-    storyTitle: "Nga «një ditë» në historinë e makinës tënde.",
+    storyTitle: "Nga një punë e planifikuar te historiku i makinës.",
     storyText:
       "Shembull BMW 318i · E90. Ndërrimi i filtrit të kabinës tregon si plani bëhet shënim historiku. Të gjitha kostot janë ilustruese, jo oferta.",
     idea: "Ruaj idenë",
@@ -371,13 +371,13 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Detyra e përfunduar shfaqet në kronologji. Shpenzimi real është 28 €; rihapja e detyrës korrigjon shënimin.",
     ownerRecorded:
       "Punë e regjistruar nga pronari, jo verifikim profesional. Ndarja është fakultative.",
-    demoTitle: "Shikoje para se ta bësh tëndin.",
+    demoTitle: "Provo një projekt shembull.",
     demoText:
       "Krahaso një pjesë dhe shiko si ndryshon buxheti i BMW-së. Vetëm të dhëna shembull; asgjë nuk blihet ose ruhet.",
     demoHint:
       "Hap Pasaportën e makinës për të parë pjesën e planifikuar në regjistrin shembull.",
     toolsEyebrow: "Aty kur të duhen",
-    toolsTitle: "Mjete të tjera për ata që duan detajet.",
+    toolsTitle: "Modele, tinguj dhe regjistra të makinës",
     visual: "Visualizer",
     visualText:
       "Eksploro modele interaktive reference dhe ide pamjeje. Parapamje koncepti, jo garanci përshtatshmërie apo model i saktë i makinës tënde.",
@@ -447,7 +447,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     drivePhoto:
       "ヨーロッパのドライブスポットを表示したRoadbookの画面。地図データ © OpenStreetMapの貢献者、OpenFreeMap、OpenMapTiles",
     storyEyebrow: "ひとつの例で、つながりを確認。",
-    storyTitle: "「いつかやりたい」を、愛車の履歴に。",
+    storyTitle: "作業の計画から、愛車の履歴へ。",
     storyText:
       "サンプル：BMW 318i・E90。キャビンフィルターの交換を例に、計画が記録になる流れをご紹介します。金額はすべて例示で、見積もりではありません。",
     idea: "アイデアを保存",
@@ -467,12 +467,12 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "完了した作業がタイムラインに反映されます。実際の支出は28ユーロ。タスクを再開すれば記録も修正されます。",
     ownerRecorded:
       "オーナーによる記録で、専門家の認証ではありません。共有は任意です。",
-    demoTitle: "自分のガレージを作る前に、のぞいてみましょう。",
+    demoTitle: "サンプルのプロジェクトを試す。",
     demoText:
       "パーツを比較してBMWの予算がどう変わるか試せます。参考データのみで、購入や保存は行いません。",
     demoHint: "車両パスポートを開くと、予定のパーツが記録の例に表示されます。",
     toolsEyebrow: "必要なときに、必要な道具を",
-    toolsTitle: "細部までこだわるためのツール。",
+    toolsTitle: "モデル、サウンド、車両記録",
     visual: "Visualizer",
     visualText:
       "参考用のインタラクティブな車両モデルや外観アイデアを確認。コンセプトのプレビューであり、適合保証や愛車そのもののモデルではありません。",
