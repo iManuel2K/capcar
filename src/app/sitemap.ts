@@ -27,21 +27,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       alternates,
     };
 
-    return [
-      {
-        url: new URL(route || "/", PUBLIC_SITE_URL).toString(),
-        ...shared,
-      },
-      ...locales.map((locale) => ({
-        url: localizedPublicUrl(route, locale),
-        ...shared,
-      })),
-    ];
+    return locales.map((locale) => ({
+      url: localizedPublicUrl(route, locale),
+      ...shared,
+      ...(["/ai", "/project-car-planner", "/car-maintenance-tracker"].includes(
+        route,
+      )
+        ? { lastModified: "2026-10-21" }
+        : {}),
+    }));
   });
   const journalPages = locales.flatMap((locale) => [
     {
       url: new URL(journalPath(locale), PUBLIC_SITE_URL).toString(),
-      lastModified: "2026-10-17",
+      lastModified: "2026-10-21",
       alternates: { languages: journalLanguageAlternates() },
     },
     ...getJournalArticles(locale).map((article) => ({
@@ -49,7 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         journalArticlePath(article.slug, locale),
         PUBLIC_SITE_URL,
       ).toString(),
-      lastModified: article.published,
+      lastModified: article.updated ?? article.published,
       alternates: { languages: journalLanguageAlternates(article.slug) },
     })),
   ]);

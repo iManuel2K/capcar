@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/i18n/public-link";
 import type { ReactNode } from "react";
 
 // Editorial text only: React escapes content; no HTML or executable Markdown.

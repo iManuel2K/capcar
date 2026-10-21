@@ -9,6 +9,7 @@ import sq from "../messages/hardening/sq.json";
 import ja from "../messages/hardening/ja.json";
 import { isJournalSlug, journalPath } from "@/features/journal/routes";
 import { journalUI } from "@/features/journal/ui";
+import { isPublicIndexableRoute } from "@/features/seo/public-metadata";
 
 function localeFromPathname(pathname: string): AppLocale | undefined {
   const candidate = pathname.split("/")[1];
@@ -90,6 +91,18 @@ function passportUnavailableResponse(
 }
 
 export async function proxy(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+  const englishAlias =
+    pathname === "/en"
+      ? ""
+      : pathname.startsWith("/en/")
+        ? pathname.slice(3)
+        : null;
+  if (englishAlias !== null && isPublicIndexableRoute(englishAlias)) {
+    const destination = request.nextUrl.clone();
+    destination.pathname = englishAlias || "/";
+    return persistPathLocale(NextResponse.redirect(destination, 308), "en");
+  }
   if (request.nextUrl.pathname === "/journal") {
     const locale = resolveLocale(
       request.cookies.get(localeCookie)?.value,
@@ -99,7 +112,13 @@ export async function proxy(request: NextRequest) {
     destination.pathname = journalPath(locale);
     return NextResponse.redirect(destination);
   }
-  const pathLocale = localeFromPathname(request.nextUrl.pathname);
+  // Canonical, unprefixed public pages always render English, independently
+  // of an old locale cookie. Other public languages use explicit URL paths.
+  const pathLocale =
+    localeFromPathname(pathname) ??
+    (isPublicIndexableRoute(pathname === "/" ? "" : pathname)
+      ? "en"
+      : undefined);
   // Reject invalid journal paths before streamed layouts can commit HTTP 200.
   const journal = request.nextUrl.pathname.match(
     /^\/([a-z]{2})\/journal(?:\/(.*))?$/,

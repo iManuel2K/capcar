@@ -1,0 +1,127 @@
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 64px;
+  max-width: 1440px;
+  margin: auto;
+  padding: 72px 40px 24px;
+  align-items: center;
+}
+.hero h1 {
+  margin: 24px 0;
+  max-width: 18ch;
+}
+.lead {
+  max-width: 42rem;
+  line-height: 1.8;
+  color: #405856;
+}
+.access {
+  margin-top: 20px;
+  max-width: 38rem;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: #526965;
+}
+.example {
+  background: #102528;
+  color: #f0eedf;
+  padding: 32px;
+  border-radius: 24px;
+}
+.example > p {
+  color: #e1ad91;
+  line-height: 1.7;
+}
+.example dl {
+  margin: 24px 0 0;
+}
+.example dl > div {
+  padding: 20px 0;
+  border-top: 1px solid #ffffff26;
+}
+.example dt {
+  color: #becdc7;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.example dd {
+  margin: 8px 0 0;
+  font-size: clamp(1.25rem, 2.2vw, 2rem);
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.steps li {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 24px;
+  padding: 32px 0;
+  border-top: 1px solid #0e2d3026;
+}
+.steps li > span {
+  font-family: monospace;
+  color: #84553f;
+}
+.steps h2 {
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  line-height: 1.3;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+.steps p {
+  margin-top: 16px;
+  max-width: 50rem;
+  line-height: 1.8;
+  color: #405856;
+}
+.links {
+  margin-top: 24px;
+}
+.links a {
+  display: flex;
+  min-height: 64px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid #0e2d3026;
+  line-height: 1.6;
+}
+.links a:hover {
+  color: #84553f;
+}
+.links a:focus-visible {
+  outline: 3px solid #84553f;
+  outline-offset: 4px;
+}
+.links svg {
+  flex-shrink: 0;
+}
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 40px 24px 0;
+  }
+  .hero h1 {
+    max-width: 22ch;
+  }
+}
+@media (max-width: 480px) {
+  .hero {
+    padding-inline: 20px;
+  }
+  .example {
+    padding: 24px;
+  }
+  .steps li {
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 12px;
+  }
+}

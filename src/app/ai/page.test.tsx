@@ -21,7 +21,7 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/ai",
 }));
 
-import AIPlannerPage from "./page";
+import AIPlannerPage, { generateMetadata } from "./page";
 import { AIPlannerPreview } from "@/components/marketing/ai-planner-preview";
 import { aiPreviewCopy } from "@/features/marketing/ai-preview-copy";
 import { locales } from "@/i18n/config";
@@ -33,6 +33,18 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe("public AI discovery and private planning", () => {
+  it("indexes the public explanation and keeps signed-in planning out of search", async () => {
+    expect((await generateMetadata()).robots).toEqual({
+      index: true,
+      follow: true,
+    });
+    mocks.user.mockResolvedValue({ id: "owner" });
+    expect((await generateMetadata()).robots).toEqual({
+      index: false,
+      follow: true,
+    });
+    expect(mocks.connection).not.toHaveBeenCalled();
+  });
   it("shows a useful example without reading private AI connection data", async () => {
     render(await AIPlannerPage({ searchParams: Promise.resolve({}) }));
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(

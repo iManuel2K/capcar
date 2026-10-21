@@ -7,7 +7,7 @@ import {
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { actionClass, fieldClass } from "./community-shell";
-import Link from "next/link";
+import Link from "@/components/i18n/public-link";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 import { saveRetailItem } from "@/features/retail/save-retail-item";
 import { announceWishlistChange } from "@/features/wishlist/wishlist-storage";

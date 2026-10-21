@@ -11,6 +11,13 @@ import MovieCarsPage, {
   generateMetadata as movieCarsMetadata,
 } from "@/app/movie-cars/page";
 import HomePage, { generateMetadata as homeMetadata } from "@/app/page";
+import AIPlannerPage, { generateMetadata as aiMetadata } from "@/app/ai/page";
+import ProjectPlannerPage, {
+  generateMetadata as plannerMetadata,
+} from "@/app/project-car-planner/page";
+import MaintenanceTrackerPage, {
+  generateMetadata as maintenanceMetadata,
+} from "@/app/car-maintenance-tracker/page";
 import PartsSearchPage, {
   generateMetadata as partsSearchMetadata,
 } from "@/app/parts-search/page";
@@ -64,6 +71,12 @@ async function routeMetadata(route: PublicIndexableRoute): Promise<Metadata> {
   switch (route) {
     case "":
       return homeMetadata();
+    case "/ai":
+      return aiMetadata();
+    case "/project-car-planner":
+      return plannerMetadata();
+    case "/car-maintenance-tracker":
+      return maintenanceMetadata();
     case "/connected-parts":
       return connectedPartsMetadata();
     case "/imprint":
@@ -110,6 +123,18 @@ export default async function LocalizedPublicPage({
   switch (route) {
     case "":
       return <HomePage locale={locale} />;
+    case "/ai":
+      return (
+        <AIPlannerPage
+          searchParams={
+            searchParams as Promise<{ journal?: string; vehicle?: string }>
+          }
+        />
+      );
+    case "/project-car-planner":
+      return <ProjectPlannerPage />;
+    case "/car-maintenance-tracker":
+      return <MaintenanceTrackerPage />;
     case "/connected-parts":
       return <ConnectedPartsPage searchParams={query} />;
     case "/imprint":
