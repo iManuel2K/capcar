@@ -6,6 +6,7 @@ const en = {
   description:
     "Plan upgrades, track costs, follow DIY guides and keep your car’s history together. Find your next drive when you’re ready to get out.",
   create: "Create your garage",
+  openGarage: "Open garage",
   explore: "Explore an example garage",
   support: "Start with the car you already own.",
   account: "Explore freely. Create an account to save your car.",
@@ -106,6 +107,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     description:
       "Plane Umbauten, behalte Kosten im Blick, nutze DIY-Anleitungen und sammle die Geschichte deines Autos. Und wenn du losfahren willst, finde deine nächste Tour.",
     create: "Garage erstellen",
+    openGarage: "Garage öffnen",
     explore: "Beispielgarage ansehen",
     support: "Fang mit dem Auto an, das du schon hast.",
     account: "Ohne Konto umsehen. Mit Konto dein Auto speichern.",
@@ -205,6 +207,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     description:
       "Σχεδίασε αναβαθμίσεις, παρακολούθησε έξοδα, ακολούθησε οδηγούς DIY και κράτησε το ιστορικό του αυτοκινήτου σου συγκεντρωμένο. Βρες την επόμενη διαδρομή σου όταν έρθει η ώρα για βόλτα.",
     create: "Δημιούργησε το γκαράζ σου",
+    openGarage: "Άνοιγμα γκαράζ",
     explore: "Δες ένα γκαράζ-παράδειγμα",
     support: "Ξεκίνα με το αυτοκίνητο που ήδη έχεις.",
     account:
@@ -305,6 +308,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     description:
       "Planifiko përmirësime, ndiq kostot, përdor udhëzues DIY dhe mbaj bashkë historikun e makinës. Gjej rrugën e radhës kur të jesh gati për të dalë.",
     create: "Krijo garazhin tënd",
+    openGarage: "Hap garazhin",
     explore: "Shiko një garazh shembull",
     support: "Fillo me makinën që ke tashmë.",
     account: "Eksploro lirisht. Krijo llogari për të ruajtur makinën tënde.",
@@ -402,6 +406,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     description:
       "カスタムを計画し、費用を記録し、DIYガイドを参考に。愛車の履歴をまとめて残せます。走りに出たくなったら、次のドライブを見つけましょう。",
     create: "ガレージを作成",
+    openGarage: "ガレージを開く",
     explore: "サンプルガレージを見る",
     support: "今乗っている車から始めましょう。",
     account: "自由に見て回れます。愛車の保存にはアカウントが必要です。",
