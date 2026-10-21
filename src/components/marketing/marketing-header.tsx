@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/i18n/public-link";
 import { usePathname } from "next/navigation";
 import { ArrowRight, ChevronDown, ChevronRight, Menu, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -17,6 +17,7 @@ import { homepageCopy } from "@/features/marketing/homepage-copy";
 import { ExpandableNavigation } from "./expandable-navigation";
 import navigationStyles from "./expandable-navigation.module.css";
 import { interactionCopy } from "@/features/ui/interaction-copy";
+import { publicHref } from "@/features/seo/public-metadata";
 import { trapDialogFocus } from "@/components/ui/dialog-focus";
 import { useNavigationAuth } from "@/features/auth/use-navigation-auth";
 
@@ -34,11 +35,10 @@ export function MarketingHeader() {
   const garageHref = signedIn ? "/garage" : "/garage/new";
   const garageLabel = signedIn ? home.openGarage : home.create;
   const ui = interactionCopy[journalLocale];
-  const links = navigation.map((item) =>
-    item.href === "/platform" && journalLocale !== "en"
-      ? { ...item, href: `/${journalLocale}/platform` }
-      : item,
-  );
+  const links = navigation.map((item) => ({
+    ...item,
+    href: publicHref(item.href, journalLocale),
+  }));
   const pathname = usePathname() ?? "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const t = useTranslations("Navigation");
@@ -107,7 +107,7 @@ export function MarketingHeader() {
                   links: [
                     { href: garageHref, label: garageLabel },
                     { href: "/#projects", label: l("nav.projects") },
-                    { href: "/parts-search", label: l("nav.parts") },
+                    { href: "/connected-parts", label: l("nav.parts") },
                     { href: "/marketplace", label: footer("marketplace") },
                   ],
                 },

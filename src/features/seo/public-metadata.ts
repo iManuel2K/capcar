@@ -5,11 +5,14 @@ import { isAppLocale, type AppLocale, locales } from "@/i18n/config";
 
 export const PUBLIC_SITE_URL = new URL("https://capcar.dev");
 export const PUBLIC_SITE_NAME = "CapCar — Digital Garage";
-export const HOMEPAGE_LAST_MODIFIED = "2026-10-19";
+export const HOMEPAGE_LAST_MODIFIED = "2026-10-21";
 export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-10-16";
 
 export const PUBLIC_INDEXABLE_ROUTES = [
   "",
+  "/ai",
+  "/project-car-planner",
+  "/car-maintenance-tracker",
   "/connected-parts",
   "/imprint",
   "/movie-cars",
@@ -36,7 +39,7 @@ export function localizedPublicPath(
   route: PublicIndexableRoute,
   locale: AppLocale,
 ) {
-  return `/${locale}${route}`;
+  return locale === "en" ? route || "/" : `/${locale}${route}`;
 }
 
 export function localizedPublicUrl(
@@ -70,6 +73,16 @@ export function localizePublicPathname(
   return isPublicIndexableRoute(route)
     ? localizedPublicPath(route, locale)
     : null;
+}
+
+/** Keep URL state intact while localizing only known public content routes. */
+export function publicHref(href: string, locale: AppLocale): string {
+  if (!href.startsWith("/") || href.startsWith("//")) return href;
+  const suffixAt = href.search(/[?#]/);
+  const pathname = suffixAt < 0 ? href : href.slice(0, suffixAt);
+  const suffix = suffixAt < 0 ? "" : href.slice(suffixAt);
+  const localized = localizePublicPathname(pathname, locale);
+  return localized === null ? href : `${localized}${suffix}`;
 }
 
 export function canonicalMetadata(

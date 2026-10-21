@@ -1,7 +1,10 @@
 "use client";
 import { Search } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useId, useState } from "react";
+
+import { publicHref } from "@/features/seo/public-metadata";
+import { resolveJournalLocale } from "@/features/journal/routes";
 
 export function GlobalPartsSearch({
   theme = "light",
@@ -15,6 +18,7 @@ export function GlobalPartsSearch({
   destination?: "/connected-parts" | "/parts-search";
 }) {
   const dark = theme === "dark";
+  const locale = resolveJournalLocale(useLocale());
   const t = useTranslations("GlobalSearch");
   const id = useId();
   const [pending, setPending] = useState(false);
@@ -25,7 +29,7 @@ export function GlobalPartsSearch({
   }, []);
   return (
     <form
-      action={destination}
+      action={publicHref(destination, locale)}
       role="search"
       onSubmit={() => setPending(true)}
       aria-busy={pending}

@@ -1,7 +1,7 @@
 "use client";
 
 import { SiteFooter } from "@/components/marketing/site-footer";
-import Link from "next/link";
+import Link from "@/components/i18n/public-link";
 import { BadgeCheck, Search, Store, Wrench } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";

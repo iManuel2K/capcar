@@ -80,7 +80,7 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                 <p className={styles.fine}>{c.maintainAccess}</p>
                 <div className={styles.actions}>
                   <HomepageLink
-                    href="/garage/new?goal=maintain"
+                    href="/car-maintenance-tracker"
                     useCase="maintain"
                     className={styles.secondary}
                   >
@@ -129,7 +129,7 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                 <p className={styles.fine}>{c.buildAccess}</p>
                 <div className={styles.actions}>
                   <HomepageLink
-                    href="/garage/new?goal=modify"
+                    href="/project-car-planner"
                     useCase="modify"
                     className={styles.secondary}
                   >

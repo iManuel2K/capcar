@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/i18n/public-link";
 import { ArrowRight, BadgeCheck, PackageSearch } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 

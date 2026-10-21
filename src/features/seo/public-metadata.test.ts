@@ -10,6 +10,7 @@ import {
   PUBLIC_INDEXABLE_ROUTES,
   PUBLIC_SITE_URL,
   publicLanguageAlternates,
+  publicHref,
 } from "./public-metadata";
 
 describe("public metadata", () => {
@@ -18,7 +19,7 @@ describe("public metadata", () => {
       PUBLIC_INDEXABLE_ROUTES.length,
     );
     expect(PUBLIC_INDEXABLE_ROUTES).not.toContain("/faq");
-    expect(PUBLIC_INDEXABLE_ROUTES).not.toContain("/ai");
+    expect(PUBLIC_INDEXABLE_ROUTES).toContain("/ai");
     expect(PUBLIC_INDEXABLE_ROUTES).toEqual(
       expect.arrayContaining([
         "",
@@ -53,8 +54,28 @@ describe("public metadata", () => {
   it("maps the language selector to locale-specific public URLs", () => {
     expect(localizePublicPathname("/", "de")).toBe("/de");
     expect(localizePublicPathname("/roadbook", "ja")).toBe("/ja/roadbook");
-    expect(localizePublicPathname("/sq/roadbook", "en")).toBe("/en/roadbook");
+    expect(localizePublicPathname("/sq/roadbook", "en")).toBe("/roadbook");
     expect(localizePublicPathname("/garage", "de")).toBeNull();
+  });
+
+  it("localizes public links without dropping query strings or anchors", () => {
+    expect(
+      publicHref("/connected-parts?q=N43&utm_source=journal#results", "de"),
+    ).toBe("/de/connected-parts?q=N43&utm_source=journal#results");
+    expect(publicHref("/en/platform", "en")).toBe("/platform");
+    expect(publicHref("/#faq", "ja")).toBe("/ja#faq");
+    expect(publicHref("/en/journal/build-plan-first-job", "el")).toBe(
+      "/el/journal/build-plan-first-job",
+    );
+    expect(publicHref("/garage/new?goal=modify", "de")).toBe(
+      "/garage/new?goal=modify",
+    );
+    expect(publicHref("https://retailer.example/parts", "de")).toBe(
+      "https://retailer.example/parts",
+    );
+    expect(publicHref("//retailer.example/parts", "de")).toBe(
+      "//retailer.example/parts",
+    );
   });
 
   it("keeps intentional FAQ navigation on the homepage section", () => {

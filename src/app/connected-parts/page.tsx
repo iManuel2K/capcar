@@ -1,14 +1,16 @@
 import { CommunityShell } from "@/components/community/community-shell";
 import { RetailSearch } from "@/components/community/retail-search";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
+import { publicTitle } from "@/features/seo/public-titles";
+import { resolveJournalLocale } from "@/features/journal/routes";
 import { pageMetadata } from "@/features/seo/public-metadata";
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("Community");
+  const locale = resolveJournalLocale(await getLocale());
   const description = await getTranslations("PageMeta");
   return pageMetadata(
     "/connected-parts",
-    t("connectedTitle"),
+    publicTitle(locale, "parts"),
     description("connected-parts"),
   );
 }

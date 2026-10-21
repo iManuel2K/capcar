@@ -44,14 +44,14 @@ describe("the connected homepage example", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /Plan a maintenance task/ }),
-    ).toHaveAttribute("href", "/garage/new?goal=maintain");
+    ).toHaveAttribute("href", "/car-maintenance-tracker");
     fireEvent.click(screen.getByRole("tab", { name: "Plan your build" }));
     expect(
       screen.getByRole("heading", { name: "Plan your build" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /Start a build plan/ }),
-    ).toHaveAttribute("href", "/garage/new?goal=modify");
+    ).toHaveAttribute("href", "/project-car-planner");
     fireEvent.click(screen.getByRole("tab", { name: "Find your next drive" }));
     expect(
       screen.getByRole("heading", { name: "Find your next drive" }),

@@ -2,19 +2,21 @@ import { SiteFooter } from "@/components/marketing/site-footer";
 import { SoundStudioArchive } from "@/components/visualizer/sound-studio-archive";
 import { CuratedSounds } from "@/components/visualizer/curated-sounds";
 import { getLocale, getTranslations } from "next-intl/server";
+import { publicTitle } from "@/features/seo/public-titles";
+import { resolveJournalLocale } from "@/features/journal/routes";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/features/seo/public-metadata";
-import Link from "next/link";
+import Link from "@/components/i18n/public-link";
 import { ArrowUpRight } from "lucide-react";
 import { soundDeskCopy } from "@/features/visualizer/sound-desk-copy";
 import { soundCatalog } from "@/features/visualizer/sound-catalog";
 import styles from "@/components/marketing/homepage.module.css";
 export async function generateMetadata(): Promise<Metadata> {
-  const c = soundDeskCopy(await getLocale());
+  const locale = resolveJournalLocale(await getLocale());
   const description = await getTranslations("PageMeta");
   const meta = pageMetadata(
     "/sound-studio",
-    c.title,
+    publicTitle(locale, "sound"),
     description("sound-studio"),
   );
   return {

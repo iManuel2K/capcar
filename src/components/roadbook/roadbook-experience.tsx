@@ -323,12 +323,6 @@ export function RoadbookExperience() {
           <p className="text-[9px] font-semibold tracking-[0.16em] text-[#ff667a] uppercase sm:text-[10px]">
             {t("eyebrow")}
           </p>
-          <h1 className="mt-1 text-lg font-medium tracking-[-0.035em] sm:text-3xl">
-            {t("title")}
-          </h1>
-          <p className="mt-1 hidden max-w-lg text-xs leading-5 text-white/48 sm:block">
-            {t("description")}
-          </p>
           <label className="mt-2 flex min-h-10 items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 text-white/60 sm:mt-3 sm:min-h-11">
             <Search className="size-4 shrink-0" aria-hidden="true" />
             <input

@@ -1,24 +1,28 @@
 "use client";
 import { AnalyticsSettingsButton } from "@/components/analytics/analytics-provider";
-import Link from "next/link";
+import Link from "@/components/i18n/public-link";
 import { useLocale, useTranslations } from "next-intl";
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { LanguageSelector } from "@/components/i18n/language-selector";
 import { journalPath, resolveJournalLocale } from "@/features/journal/routes";
 import { journalUI } from "@/features/journal/ui";
 import { HomepageLink } from "./homepage-link";
+import { featureDiscoveryCopy } from "@/features/marketing/feature-discovery-copy";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
 import styles from "./homepage.module.css";
 
 export function SiteFooter() {
   const journalLocale = resolveJournalLocale(useLocale());
   const journal = journalUI[journalLocale];
+  const features = featureDiscoveryCopy[journalLocale];
   const t = useTranslations("Footer");
   const l = useTranslations("Launch");
   const groups = [
     {
       title: t("explore"),
       links: [
+        [features.plannerLabel, "/project-car-planner"],
+        [features.maintenanceLabel, "/car-maintenance-tracker"],
         [t("parts"), "/connected-parts"],
         [t("conceptStudio"), "/studio"],
         [t("soundStudio"), "/sound-studio"],

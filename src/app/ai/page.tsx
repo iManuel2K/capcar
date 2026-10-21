@@ -4,7 +4,10 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { TripPlanner } from "@/components/trips/trip-planner";
 import { getAiConnection } from "@/features/connections/ai-connection";
-import { pageMetadata } from "@/features/seo/public-metadata";
+import {
+  localizedPublicPath,
+  pageMetadata,
+} from "@/features/seo/public-metadata";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { currentUser } from "@/lib/supabase/current-user";
 import { AIPlannerPreview } from "@/components/marketing/ai-planner-preview";
@@ -14,9 +17,10 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("AIPlanner");
+  const user = await currentUser();
   return pageMetadata("/ai", t("metaTitle"), t("metaDescription"), {
-    index: false,
-    follow: false,
+    index: !user,
+    follow: true,
   });
 }
 
@@ -32,15 +36,11 @@ export default async function AIPlannerPage({
     params.set("journal", query.journal!);
     if (query.vehicle) params.set("vehicle", query.vehicle);
   }
-  const returnTo = `/ai${params.size ? `?${params}` : ""}`;
+  const locale = resolveJournalLocale(await getLocale());
+  const returnTo = `${localizedPublicPath("/ai", locale)}${params.size ? `?${params}` : ""}`;
   const user = await currentUser();
   if (!user) {
-    return (
-      <AIPlannerPreview
-        locale={resolveJournalLocale(await getLocale())}
-        returnTo={returnTo}
-      />
-    );
+    return <AIPlannerPreview locale={locale} returnTo={returnTo} />;
   }
 
   const aiConnection = await getAiConnection(

@@ -157,6 +157,52 @@ describe("proxy public Passport guard", () => {
   });
 
   it.each([
+    "/en",
+    "/en/platform",
+    "/en/connected-parts",
+    "/en/ai",
+    "/en/project-car-planner",
+  ])("consolidates %s without losing search parameters", async (path) => {
+    const response = await proxy(
+      new NextRequest(
+        `https://capcar.example${path}?q=N43&utm_source=instagram`,
+      ),
+    );
+    expect(response.status).toBe(308);
+    expect(response.headers.get("location")).toBe(
+      `https://capcar.example${path === "/en" ? "/" : path.slice(3)}?q=N43&utm_source=instagram`,
+    );
+    expect(supabaseMocks.authGetUser).not.toHaveBeenCalled();
+  });
+
+  it("preserves English journal URLs and explicit non-English public routes", async () => {
+    for (const path of [
+      "/en/journal/build-plan-first-job",
+      "/de/platform",
+      "/el/ai",
+      "/sq/car-maintenance-tracker",
+      "/ja/project-car-planner",
+    ]) {
+      const response = await proxy(
+        new NextRequest(`https://capcar.example${path}`),
+      );
+      expect(response.status).toBe(200);
+      expect(response.headers.get("location")).toBeNull();
+    }
+  });
+
+  it("renders the canonical English public route independently of an old locale cookie", async () => {
+    const response = await proxy(
+      new NextRequest("https://capcar.example/platform", {
+        headers: { cookie: "capcar_locale=de" },
+      }),
+    );
+    expect(response.headers.get("x-middleware-request-x-capcar-locale")).toBe(
+      "en",
+    );
+  });
+
+  it.each([
     "/garage",
     "/garage/private-car",
     "/account",

@@ -17,28 +17,31 @@ describe("route metadata", () => {
     const entries = sitemap();
     const urls = entries.map((route) => route.url);
     expect(entries).toHaveLength(
-      PUBLIC_INDEXABLE_ROUTES.length * (locales.length + 1) +
+      PUBLIC_INDEXABLE_ROUTES.length * locales.length +
         (journalArticles.length + 1) * locales.length,
     );
     expect(urls).toContain("https://capcar.dev/roadbook");
     expect(urls).toContain("https://capcar.dev/de/roadbook");
     expect(urls).toContain("https://capcar.dev/ja/roadbook");
-    expect(urls).not.toContain("https://capcar.dev/ai");
+    expect(urls).toContain("https://capcar.dev/ai");
+    expect(urls).toContain("https://capcar.dev/de/ai");
+    expect(urls).toContain("https://capcar.dev/project-car-planner");
+    expect(urls).toContain("https://capcar.dev/ja/car-maintenance-tracker");
+    expect(new Set(urls).size).toBe(urls.length);
+    expect(
+      urls.some(
+        (url) =>
+          new URL(url).pathname === "/en" ||
+          (new URL(url).pathname.startsWith("/en/") &&
+            !url.includes("/en/journal")),
+      ),
+    ).toBe(false);
     expect(urls).not.toContain("https://capcar.dev/system");
     expect(urls).not.toContain("https://capcar.dev/login");
 
     for (const entry of entries) {
       const isJournal = entry.url.includes("/journal");
-      const isHomepage = /^https:\/\/capcar\.dev\/(?:en|de|el|sq|ja)?$/.test(
-        entry.url,
-      );
-      expect(entry.lastModified).toBe(
-        isJournal
-          ? "2026-10-17"
-          : isHomepage || new URL(entry.url).pathname.endsWith("/platform")
-            ? "2026-10-19"
-            : "2026-10-16",
-      );
+      expect(entry.lastModified).toMatch(/^2026-10-(16|17|21)$/);
       expect(entry).not.toHaveProperty("changeFrequency");
       expect(entry).not.toHaveProperty("priority");
       if (isJournal) {

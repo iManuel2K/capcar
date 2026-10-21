@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "@/components/i18n/public-link";
 import type { ComponentProps } from "react";
 import { trackAnalytics } from "@/features/analytics/client";
 type Props = ComponentProps<typeof Link> & {

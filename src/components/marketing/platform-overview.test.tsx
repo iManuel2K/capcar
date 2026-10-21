@@ -19,9 +19,17 @@ describe("platform exploration", () => {
     expect(main).toHaveClass(styles.page);
     const footer = screen.getByRole("contentinfo");
     expect(footer.closest(`.${styles.page}`)).toBeNull();
-    expect(within(footer).getAllByRole("heading", { level: 2 })).toHaveLength(3);
-    for (const heading of within(footer).getAllByRole("heading", { level: 2 })) {
-      expect(heading).toHaveClass("text-xs", "font-semibold", "tracking-widest");
+    expect(within(footer).getAllByRole("heading", { level: 2 })).toHaveLength(
+      3,
+    );
+    for (const heading of within(footer).getAllByRole("heading", {
+      level: 2,
+    })) {
+      expect(heading).toHaveClass(
+        "text-xs",
+        "font-semibold",
+        "tracking-widest",
+      );
     }
   });
   it("connects tool selection to its preview and real destination", () => {
@@ -82,7 +90,9 @@ describe("platform exploration", () => {
       expect(Object.values(c).every((s) => s.trim().length > 0)).toBe(true);
       expect(
         sitemap().find(
-          (e) => e.url === `https://capcar.dev/${locale}/platform`,
+          (e) =>
+            e.url ===
+            `https://capcar.dev${locale === "en" ? "" : `/${locale}`}/platform`,
         ),
       ).toBeTruthy();
       render(<PlatformOverview locale={locale} />);

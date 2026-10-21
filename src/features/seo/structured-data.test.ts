@@ -28,7 +28,7 @@ describe("CapCar structured data", () => {
 
     expect(serialized).toContain('"@type":"SoftwareApplication"');
     expect(serialized).toContain('"price":"0"');
-    expect(serialized).toContain('"url":"https://capcar.dev/en"');
+    expect(serialized).toContain('"url":"https://capcar.dev/"');
     expect(serialized).not.toContain("aggregateRating");
     expect(serialized).not.toContain('"review"');
   });
