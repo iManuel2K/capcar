@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { LoadingIndicator } from "@/components/ui/loading-indicator";
 
 import type { TripRoute } from "@/features/trips/trip-route";
 
@@ -13,7 +14,7 @@ const TripRouteMap = dynamic(
     ssr: false,
     loading: () => (
       <div className="grid min-h-[34rem] place-items-center bg-[#0e2d30]">
-        <div className="size-8 animate-spin rounded-full border-2 border-white/15 border-t-[#ff766d]" />
+        <LoadingIndicator />
       </div>
     ),
   },

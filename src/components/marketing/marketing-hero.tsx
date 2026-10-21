@@ -7,6 +7,12 @@ import styles from "./homepage.module.css";
 
 export function MarketingHero({ locale = "en" }: { locale?: AppLocale }) {
   const c = homepageCopy[locale] ?? homepageCopy.en;
+  const euro = (value: number) =>
+    new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: "EUR",
+      maximumFractionDigits: 0,
+    }).format(value);
   return (
     <section className={styles.hero} aria-labelledby="homepage-title">
       <div className={styles.heroInner}>
@@ -52,6 +58,26 @@ export function MarketingHero({ locale = "en" }: { locale?: AppLocale }) {
           </div>
           <div className={styles.conceptPreview}>
             <BuildTransformation eager />
+          </div>
+          <div className={styles.heroJob} aria-label={c.project}>
+            <div>
+              <span>{c.next}</span>
+              <strong>{c.task}</strong>
+            </div>
+            <dl>
+              <div>
+                <dt>{c.budget}</dt>
+                <dd>{euro(300)}</dd>
+              </div>
+              <div>
+                <dt>{c.planned}</dt>
+                <dd>{euro(30)}</dd>
+              </div>
+              <div>
+                <dt>{c.actual}</dt>
+                <dd>{euro(0)}</dd>
+              </div>
+            </dl>
           </div>
         </div>
       </div>

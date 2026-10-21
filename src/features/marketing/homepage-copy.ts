@@ -7,6 +7,7 @@ const en = {
     "Plan upgrades, track costs, follow DIY guides and keep your car’s history together. Find your next drive when you’re ready to get out.",
   create: "Create your garage",
   openGarage: "Open garage",
+  undo: "Undo completion",
   explore: "Explore an example garage",
   support: "Start with the car you already own.",
   account: "Explore freely. Create an account to save your car.",
@@ -72,7 +73,7 @@ const en = {
     "The completed task joins the timeline. Actual spending is €28; reopening the task corrects the record.",
   ownerRecorded:
     "Owner-recorded work, not professional verification. Sharing stays optional.",
-  demoTitle: "Look around before you make it yours.",
+  demoTitle: "Try a job on the example BMW.",
   demoText:
     "Compare a part and see the BMW build budget change. Example data only; nothing is bought or saved.",
   demoHint:
@@ -108,6 +109,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Plane Umbauten, behalte Kosten im Blick, nutze DIY-Anleitungen und sammle die Geschichte deines Autos. Und wenn du losfahren willst, finde deine nächste Tour.",
     create: "Garage erstellen",
     openGarage: "Garage öffnen",
+    undo: "Abschluss rückgängig machen",
     explore: "Beispielgarage ansehen",
     support: "Fang mit dem Auto an, das du schon hast.",
     account: "Ohne Konto umsehen. Mit Konto dein Auto speichern.",
@@ -175,7 +177,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Die erledigte Aufgabe erscheint in der Zeitleiste. Tatsächlich ausgegeben: 28 €. Wiederöffnen korrigiert den Eintrag.",
     ownerRecorded:
       "Vom Halter dokumentiert, nicht fachlich verifiziert. Teilen ist freiwillig.",
-    demoTitle: "Erst umsehen. Dann deine eigene Garage starten.",
+    demoTitle: "Probiere eine Arbeit an der Beispiel-BMW aus.",
     demoText:
       "Vergleiche ein Teil und sieh, wie sich das BMW-Budget ändert. Nur Beispieldaten; kein Kauf und keine Speicherung.",
     demoHint:
@@ -208,6 +210,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Σχεδίασε αναβαθμίσεις, παρακολούθησε έξοδα, ακολούθησε οδηγούς DIY και κράτησε το ιστορικό του αυτοκινήτου σου συγκεντρωμένο. Βρες την επόμενη διαδρομή σου όταν έρθει η ώρα για βόλτα.",
     create: "Δημιούργησε το γκαράζ σου",
     openGarage: "Άνοιγμα γκαράζ",
+    undo: "Αναίρεση ολοκλήρωσης",
     explore: "Δες ένα γκαράζ-παράδειγμα",
     support: "Ξεκίνα με το αυτοκίνητο που ήδη έχεις.",
     account:
@@ -276,7 +279,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Η ολοκληρωμένη εργασία εμφανίζεται στο χρονολόγιο. Πραγματικά έξοδα: 28 €. Η επαναφορά της εργασίας διορθώνει την καταγραφή.",
     ownerRecorded:
       "Καταγραφή ιδιοκτήτη, όχι επαγγελματική επαλήθευση. Η κοινοποίηση είναι προαιρετική.",
-    demoTitle: "Δες πώς λειτουργεί πριν το κάνεις δικό σου.",
+    demoTitle: "Δοκίμασε μια εργασία στην BMW του παραδείγματος.",
     demoText:
       "Σύγκρινε ένα ανταλλακτικό και δες τον προϋπολογισμό της BMW να αλλάζει. Μόνο ενδεικτικά δεδομένα· χωρίς αγορά ή αποθήκευση.",
     demoHint:
@@ -309,6 +312,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Planifiko përmirësime, ndiq kostot, përdor udhëzues DIY dhe mbaj bashkë historikun e makinës. Gjej rrugën e radhës kur të jesh gati për të dalë.",
     create: "Krijo garazhin tënd",
     openGarage: "Hap garazhin",
+    undo: "Anulo përfundimin",
     explore: "Shiko një garazh shembull",
     support: "Fillo me makinën që ke tashmë.",
     account: "Eksploro lirisht. Krijo llogari për të ruajtur makinën tënde.",
@@ -375,7 +379,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Detyra e përfunduar shfaqet në kronologji. Shpenzimi real është 28 €; rihapja e detyrës korrigjon shënimin.",
     ownerRecorded:
       "Punë e regjistruar nga pronari, jo verifikim profesional. Ndarja është fakultative.",
-    demoTitle: "Shikoje para se ta bësh tëndin.",
+    demoTitle: "Provo një punë në BMW-në shembull.",
     demoText:
       "Krahaso një pjesë dhe shiko si ndryshon buxheti i BMW-së. Vetëm të dhëna shembull; asgjë nuk blihet ose ruhet.",
     demoHint:
@@ -407,6 +411,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "カスタムを計画し、費用を記録し、DIYガイドを参考に。愛車の履歴をまとめて残せます。走りに出たくなったら、次のドライブを見つけましょう。",
     create: "ガレージを作成",
     openGarage: "ガレージを開く",
+    undo: "完了を取り消す",
     explore: "サンプルガレージを見る",
     support: "今乗っている車から始めましょう。",
     account: "自由に見て回れます。愛車の保存にはアカウントが必要です。",
@@ -472,7 +477,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "完了した作業がタイムラインに反映されます。実際の支出は28ユーロ。タスクを再開すれば記録も修正されます。",
     ownerRecorded:
       "オーナーによる記録で、専門家の認証ではありません。共有は任意です。",
-    demoTitle: "自分のガレージを作る前に、のぞいてみましょう。",
+    demoTitle: "サンプルのBMWで、ひとつの作業を試そう。",
     demoText:
       "パーツを比較してBMWの予算がどう変わるか試せます。参考データのみで、購入や保存は行いません。",
     demoHint: "車両パスポートを開くと、予定のパーツが記録の例に表示されます。",

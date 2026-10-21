@@ -1,6 +1,7 @@
 "use client";
 
-import { LoaderCircle } from "lucide-react";
+import {} from "lucide-react";
+import { MotionLoader as LoaderCircle } from "@/components/ui/motion-loader";
 import { GarageSyncNotice, type SyncState } from "./garage-sync-notice";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -241,7 +242,7 @@ export function GarageAccountBoundary({
     return (
       <div className="grid min-h-[60dvh] place-items-center text-center">
         <div>
-          <LoaderCircle className="mx-auto size-7 animate-spin text-[#ff667a]" />
+          <LoaderCircle className="mx-auto size-7" />
           <p className="mt-4 text-sm text-white/45">Loading your garage…</p>
         </div>
       </div>

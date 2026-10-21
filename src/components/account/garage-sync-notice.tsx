@@ -1,13 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  CheckCircle2,
-  Cloud,
-  CloudOff,
-  LoaderCircle,
-  RefreshCw,
-} from "lucide-react";
+import { CheckCircle2, Cloud, CloudOff, RefreshCw } from "lucide-react";
+import { MotionLoader as LoaderCircle } from "@/components/ui/motion-loader";
 
 export type SyncState =
   "loading" | "synced" | "saving" | "unsaved" | "offline" | "error";
@@ -51,10 +46,7 @@ export function GarageSyncNotice({
       aria-live="polite"
       className={`mx-auto mb-4 flex max-w-7xl items-center gap-2 rounded-xl border px-4 py-3 text-xs ${state === "error" ? "border-red-300/30 bg-red-300/6 text-red-100" : state === "offline" || state === "unsaved" ? "border-amber-300/30 bg-amber-300/6 text-amber-100" : state === "synced" ? "border-emerald-300/25 bg-emerald-300/5 text-emerald-100" : "border-white/15 bg-white/[0.025] text-white/70"}`}
     >
-      <Icon
-        aria-hidden="true"
-        className={`size-4 shrink-0 ${state === "saving" || state === "loading" ? "motion-safe:animate-spin" : ""}`}
-      />
+      <Icon aria-hidden="true" className="size-4 shrink-0" />
       <span>{statusCopy[state]}</span>
       {error && <span className="truncate">· {error}</span>}
       {(state === "error" || state === "unsaved") && (

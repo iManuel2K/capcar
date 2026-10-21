@@ -5,10 +5,10 @@ import {
   BadgeCheck,
   CarFront,
   CircleAlert,
-  LoaderCircle,
   Search,
   ShieldAlert,
 } from "lucide-react";
+import { MotionLoader as LoaderCircle } from "@/components/ui/motion-loader";
 import { FormEvent, useState } from "react";
 import { useTranslations } from "next-intl";
 
@@ -98,7 +98,7 @@ export function FitmentLookup() {
             className="grid size-12 shrink-0 place-items-center rounded-xl bg-white text-black transition hover:-translate-y-0.5 disabled:opacity-50"
           >
             {loading ? (
-              <LoaderCircle className="size-4 animate-spin" />
+              <LoaderCircle className="size-4" />
             ) : (
               <ArrowRight className="size-4" />
             )}

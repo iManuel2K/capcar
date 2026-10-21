@@ -3,13 +3,13 @@
 import {
   Box,
   CheckCircle2,
-  LoaderCircle,
   Minus,
   Orbit,
   Plus,
   RotateCcw,
   ShieldAlert,
 } from "lucide-react";
+import { MotionLoader as LoaderCircle } from "@/components/ui/motion-loader";
 import { useEffect, useRef, useState } from "react";
 
 import {
@@ -213,7 +213,7 @@ export function VehicleModelStage({
         {!model && !error && (
           <div className="absolute inset-0 grid place-items-center text-sm text-white/35">
             <span className="flex items-center gap-2">
-              <LoaderCircle className="size-4 animate-spin" /> Loading model…
+              <LoaderCircle className="size-4" /> Loading model…
             </span>
           </div>
         )}

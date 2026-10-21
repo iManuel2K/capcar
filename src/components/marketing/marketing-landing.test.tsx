@@ -125,13 +125,17 @@ describe("the connected homepage example", () => {
     expect(
       screen.getByText("Planned part · Not installed"),
     ).toBeInTheDocument();
-    expect(screen.getByText("Rear lighting · €225")).toBeInTheDocument();
-    expect(screen.getByText("€47")).toBeInTheDocument();
+    expect(
+      screen.getByText("Replace the cabin filter · €30"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("€270")).toBeInTheDocument();
     fireEvent.click(
       screen.getByRole("button", { name: "Remove from the example" }),
     );
-    expect(screen.queryByText("Rear lighting · €225")).not.toBeInTheDocument();
-    expect(screen.getByText("€272")).toBeInTheDocument();
+    expect(
+      screen.queryByText("Replace the cabin filter · €30"),
+    ).not.toBeInTheDocument();
+    expect(screen.getAllByText("€300").length).toBeGreaterThan(0);
   });
 
   it("does not present an incomplete price as a final budget balance", () => {
@@ -144,7 +148,7 @@ describe("the connected homepage example", () => {
       screen.getByRole("button", { name: "Add to the example plan" }),
     );
     fireEvent.click(screen.getByRole("tab", { name: "Vehicle Passport" }));
-    expect(screen.getByText("€195 + ?")).toBeInTheDocument();
+    expect(screen.getByText("€28 + ?")).toBeInTheDocument();
     expect(screen.queryByText("€77")).not.toBeInTheDocument();
     expect(screen.getByText("Shipping: Not provided")).toBeInTheDocument();
   });
@@ -170,7 +174,44 @@ describe("the connected homepage example", () => {
       "aria-selected",
       "true",
     );
-    expect(screen.getByText("€0")).toBeInTheDocument();
+    expect(screen.getAllByText("€0")).toHaveLength(2);
+  });
+
+  it("records and reopens the example job without duplicate costs or saved owner records", () => {
+    renderInteractiveDemo();
+    fireEvent.click(screen.getByRole("tab", { name: "Parts comparison" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Add to the example plan" }),
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "Vehicle Passport" }));
+    const amount = (label: string) =>
+      screen.getByText(label, { selector: "dt" }).nextElementSibling
+        ?.textContent;
+    expect(amount("Spent")).toBe("€0");
+    expect(amount("Planned")).toBe("€30");
+    fireEvent.click(
+      screen.getByRole("button", { name: "Record completed work" }),
+    );
+    expect(amount("Spent")).toBe("€28");
+    expect(amount("Planned")).toBe("€0");
+    expect(amount("Unallocated")).toBe("€272");
+    expect(
+      screen.queryByText("Planned part · Not installed"),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("Recorded · Actual spending: €28")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Undo completion" }));
+    expect(amount("Spent")).toBe("€0");
+    expect(amount("Planned")).toBe("€30");
+    fireEvent.click(
+      screen.getByRole("button", { name: "Record completed work" }),
+    );
+    expect(amount("Spent")).toBe("€28");
+    expect(screen.getAllByText("Recorded · Actual spending: €28")).toHaveLength(
+      1,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Reset example" }));
+    expect(amount("Spent")).toBe("€0");
+    expect(amount("Planned")).toBe("€0");
   });
 
   it("opens a direct view from a section link", () => {

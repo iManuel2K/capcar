@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { LoadingIndicator } from "@/components/ui/loading-indicator";
 import {
   ArrowLeft,
   Armchair,
@@ -67,7 +68,7 @@ const InteractiveCarModel = dynamic(
         className="flex min-h-80 items-center justify-center rounded-[2rem] border border-white/10 bg-[#111111] text-sm text-white/70"
         role="status"
       >
-        Preparing model viewer…
+        <LoadingIndicator />
       </div>
     ),
   },

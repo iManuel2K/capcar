@@ -69,3 +69,27 @@ it("hides the prompt when analytics is not configured", () => {
     screen.queryByRole("button", { name: "Allow analytics" }),
   ).not.toBeInTheDocument();
 });
+
+it("keeps the mobile notice in document flow with equally accessible choices and full disclosures", () => {
+  render(<AnalyticsProvider />);
+  const notice = screen.getByRole("region", {
+    name: "Optional usage analytics",
+  });
+  expect(notice.className).toContain("relative");
+  expect(notice.className).toContain("sm:fixed");
+  expect(notice.className).not.toMatch(/(?:^| )fixed(?: |$)/);
+  expect(screen.getByText(/PostHog \(US\)/)).toBeVisible();
+  const details = notice.querySelector("details")!;
+  expect(details).not.toHaveAttribute("open");
+  fireEvent.click(screen.getByText("How analytics works"));
+  expect(details).toHaveAttribute("open");
+  expect(screen.getByRole("link", { name: "Privacy notice" })).toHaveAttribute(
+    "href",
+    "/privacy",
+  );
+  expect(screen.getByRole("button", { name: "Allow analytics" })).toBeVisible();
+  expect(
+    screen.getByRole("button", { name: "Decline analytics" }),
+  ).toBeVisible();
+  expect(sdk.init).not.toHaveBeenCalled();
+});

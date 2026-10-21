@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JournalChecklist } from "@/components/journal/journal-checklist";
 import { SiteFooter } from "@/components/marketing/site-footer";
+import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { JournalContent } from "@/components/journal/journal-content";
 import { JournalCards } from "@/components/journal/journal-cards";
 import {
@@ -96,6 +97,7 @@ export default async function JournalArticlePage({ params }: Props) {
             __html: JSON.stringify(schema).replace(/</g, "\\u003c"),
           }}
         />
+        <ScrollProgress />
         <article className="mx-auto max-w-6xl px-5 pt-10 pb-16 sm:px-8 sm:pt-16">
           <Link
             href={journalPath(locale)}

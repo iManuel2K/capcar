@@ -33,7 +33,7 @@ export default async function MovieCarsPage() {
         <IconicGallery />
         <section
           aria-label={t("makeItYours")}
-          className="mt-8 grid gap-4 md:grid-cols-3"
+          className="mt-8 divide-y divide-[#0e2d30]/15 border-y border-[#0e2d30]/15"
         >
           {[
             [ScanEye, "inspectTitle", "inspectText"],
@@ -44,7 +44,7 @@ export default async function MovieCarsPage() {
             return (
               <article
                 key={String(title)}
-                className="rounded-2xl border border-[#0e2d30]/15 bg-white/25 p-6"
+                className="grid gap-4 py-5 sm:grid-cols-[40px_180px_1fr] sm:items-center"
               >
                 <div className="flex items-center justify-between">
                   <Symbol
@@ -55,10 +55,10 @@ export default async function MovieCarsPage() {
                     0{index + 1}
                   </span>
                 </div>
-                <h2 className="mt-5 text-xl font-medium tracking-tight">
+                <h2 className="text-xl font-medium tracking-tight">
                   {t(String(title))}
                 </h2>
-                <p className="mt-3 text-sm leading-6 text-[#0e2d30]/70">
+                <p className="text-base leading-7 text-[#0e2d30]/75">
                   {t(String(detail))}
                 </p>
               </article>

@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useLocale } from "next-intl";
-import { ArrowUpRight, RefreshCw, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, ShieldCheck } from "lucide-react";
+import { MotionLoader } from "@/components/ui/motion-loader";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 import type { AppLocale } from "@/i18n/config";
 import {
@@ -119,10 +120,7 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
       {!id && <p className="mt-5 text-sm leading-7">{c.unknown}</p>}
       {id && !result && !error && (
         <p role="status" className="mt-5 flex items-center gap-2 text-sm">
-          <RefreshCw
-            aria-hidden="true"
-            className="size-4 motion-safe:animate-spin"
-          />
+          <MotionLoader className="size-4" />
           {c.loading}
         </p>
       )}

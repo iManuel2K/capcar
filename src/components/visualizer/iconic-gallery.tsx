@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import { VideoModal } from "@/components/ui/video-modal";
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowUpRight, Clapperboard, Play, Rotate3D, X } from "lucide-react";
+import { ArrowUpRight, Clapperboard, Rotate3D, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { iconicCars } from "@/features/visualizer/iconic-cars";
 import { InteractiveCarModel } from "./interactive-car-model";
@@ -51,7 +52,7 @@ function ScreenImage({
           ? "(max-width: 768px) 100vw, 1200px"
           : "(max-width: 640px) 240px, 400px"
       }
-      className="object-cover transition duration-500 motion-reduce:transition-none"
+      className="object-contain"
       onError={() => {
         if (youtube && hero && !fallback) setFallback(true);
         else setFailed(true);
@@ -101,17 +102,13 @@ export function IconicGallery() {
                 image={item.image}
                 alt={g(`${item.story}.imageAlt`)}
               />
-              <span className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/15 to-transparent" />
-              <span className="absolute top-3 left-3 rounded-full border border-white/25 bg-black/55 px-2.5 py-1 text-[10px] tracking-widest uppercase">
-                {item.year}
+            </span>
+            <span className="block border-t border-white/15 p-4">
+              <span className="block text-[10px] tracking-[.1em] text-[#e8e6d7]/75 uppercase">
+                {item.production} · {item.year}
               </span>
-              <span className="absolute right-3 bottom-4 left-4">
-                <span className="block text-[10px] tracking-[.1em] text-[#e8e6d7]/75 uppercase">
-                  {item.production}
-                </span>
-                <span className="mt-1 block text-xl font-medium tracking-tight">
-                  {g(`${item.story}.title`)}
-                </span>
+              <span className="mt-1 block text-xl font-medium tracking-tight">
+                {g(`${item.story}.title`)}
               </span>
             </span>
           </button>
@@ -126,18 +123,15 @@ export function IconicGallery() {
               alt={g(`${car.story}.imageAlt`)}
               hero
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#041416]/60 via-transparent to-black/10 sm:from-[#041416] sm:via-[#041416]/30" />
-            <div className="absolute top-5 right-5 left-5 flex items-center justify-between gap-3 sm:top-6 sm:right-7 sm:left-7">
-              <span className="rounded-full border border-white/25 bg-black/55 px-3 py-1.5 text-[10px] font-medium tracking-[.16em] uppercase">
-                {g(car.kind === "tvReference" ? "television" : "film")} ·{" "}
-                {car.year}
-              </span>
-              <span className="rounded-full bg-black/55 px-3 py-1.5 text-[10px] tracking-widest uppercase">
-                {g("screenImage")}
-              </span>
-            </div>
           </div>
-          <div className="relative px-5 py-6 sm:absolute sm:right-8 sm:bottom-8 sm:left-8 sm:p-0">
+          <div className="flex items-center justify-between gap-3 px-5 pt-5 text-[#c8d4cb] sm:px-7">
+            <span className="text-xs">
+              {g(car.kind === "tvReference" ? "television" : "film")} ·{" "}
+              {car.year}
+            </span>
+            <span className="text-xs">{g("screenImage")}</span>
+          </div>
+          <div className="relative px-5 py-6 sm:px-7">
             <p
               className="text-xs font-semibold tracking-[.2em] uppercase"
               style={{ color: car.accent }}
@@ -151,16 +145,12 @@ export function IconicGallery() {
               {g(`${car.story}.hook`)}
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href={clipUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#e8e6d7] px-5 text-sm font-semibold text-[#0e2d30] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-              >
-                <Play className="size-4" aria-hidden="true" />
-                {g("watchScene")}
-                <ArrowUpRight className="size-4" aria-hidden="true" />
-              </a>
+              <VideoModal
+                key={car.videoId}
+                src={clipUrl}
+                title={car.production}
+                trigger={g("watchScene")}
+              />
               <button
                 type="button"
                 aria-expanded={workspace}

@@ -8,11 +8,11 @@ import {
   CheckCircle2,
   Eye,
   EyeOff,
-  LoaderCircle,
   LockKeyhole,
   Mail,
   UserRound,
 } from "lucide-react";
+import { MotionLoader as LoaderCircle } from "@/components/ui/motion-loader";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -352,7 +352,7 @@ export function AuthForm({
                 className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#6d0101] px-5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(109,1,1,.18)] transition hover:-translate-y-0.5 hover:bg-[#830705] disabled:opacity-50"
               >
                 {loading ? (
-                  <LoaderCircle className="size-4 animate-spin" />
+                  <LoaderCircle className="size-4" />
                 ) : (
                   <ArrowRight className="size-4" />
                 )}

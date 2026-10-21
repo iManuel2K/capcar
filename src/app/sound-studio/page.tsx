@@ -5,7 +5,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/features/seo/public-metadata";
 import Link from "next/link";
-import { Headphones, ShieldCheck, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { soundDeskCopy } from "@/features/visualizer/sound-desk-copy";
 import { soundCatalog } from "@/features/visualizer/sound-catalog";
 import styles from "@/components/marketing/homepage.module.css";
@@ -41,34 +41,26 @@ export default async function Page() {
   const s = await getTranslations("StudioPolish");
   return (
     <div className="capcar-paper-grid min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
-      <main id="main-content" className="px-4 pt-10 pb-16 sm:px-8 sm:pt-16">
+      <main id="main-content" className="px-4 pt-5 pb-16 sm:px-8 sm:pt-10">
         <div className="mx-auto max-w-6xl">
-          <header className="mb-10 sm:mb-14">
+          <header className="mb-5 sm:mb-8">
             <p className="text-xs font-semibold tracking-[.2em] text-[#6d0101] uppercase">
               CapCar / {s("soundStudio")}
             </p>
-            <h1 className={`${styles.pageTitle} mt-5 max-w-3xl`}>
+            <h1
+              className={`${styles.pageTitle} mt-3 max-w-4xl text-[1.9rem]! sm:text-[clamp(2.5rem,4.4vw,4.6rem)]!`}
+            >
               {c.title}
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-[#0e2d30]/75">
+            <p className="mt-3 max-w-2xl text-base leading-7 text-[#0e2d30]/75">
               {c.intro}
             </p>
-            <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-xs text-[#0e2d30]/70">
-              <span className="flex items-center gap-2">
-                <Headphones aria-hidden="true" className="size-4" />
-                {s("realAudio")}
-              </span>
-              <span className="flex items-center gap-2">
-                <ShieldCheck aria-hidden="true" className="size-4" />
-                {s("privateFiles")}
-              </span>
-              <span>
-                {soundCatalog.length} {c.results} · {c.headphone}
-              </span>
-            </div>
+            <p className="mt-3 text-sm text-[#405856]">
+              {soundCatalog.length} {c.results} · {c.headphone}
+            </p>
             <nav
               aria-label={s("studioSections")}
-              className="mt-8 flex flex-wrap gap-2"
+              className="mt-3 flex flex-wrap gap-x-5"
             >
               {[
                 ["compare", "01"],
@@ -78,7 +70,7 @@ export default async function Page() {
                 <a
                   key={id}
                   href={`#${id}`}
-                  className="inline-flex min-h-11 items-center gap-3 rounded-full border border-[#0e2d30]/20 bg-white/25 px-5 text-sm transition hover:bg-[#0e2d30] hover:text-[#e8e6d7]"
+                  className="inline-flex min-h-11 items-center gap-2 border-b border-[#0e2d30]/25 text-sm hover:border-[#92644d]"
                 >
                   <span className="text-xs opacity-60">{number}</span>
                   {s(id)}

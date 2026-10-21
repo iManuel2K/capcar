@@ -1,6 +1,7 @@
 "use client";
 
-import { AlertTriangle, LoaderCircle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
+import { MotionLoader as LoaderCircle } from "@/components/ui/motion-loader";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -182,8 +183,7 @@ export function LicensedVehicleAsset({
       {state === "loading" && (
         <div className="absolute inset-0 grid place-items-center text-sm text-white/45">
           <span className="flex items-center gap-2">
-            <LoaderCircle className="size-4 animate-spin" /> Verifying licensed
-            model…
+            <LoaderCircle className="size-4" /> Verifying licensed model…
           </span>
         </div>
       )}

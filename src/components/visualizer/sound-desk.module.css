@@ -539,6 +539,29 @@
     flex-direction: column;
     gap: 1rem;
   }
+  .consoleHeader {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .consoleHeader > div > p:last-child {
+    display: none;
+  }
+  .consoleHeader h2 {
+    margin-top: 0;
+    font-size: 1.3rem;
+  }
+  .consoleHeader .eyebrow {
+    display: none;
+  }
+  .consoleHeader .outlineButton {
+    padding: 0.5rem;
+    white-space: normal;
+  }
+  .slots {
+    margin-top: 1rem;
+  }
   .slots {
     grid-template-columns: 1fr;
   }

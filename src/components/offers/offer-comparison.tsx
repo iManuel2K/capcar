@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { MotionLoader } from "@/components/ui/motion-loader";
 import {
   ArrowLeft,
   BadgeEuro,
@@ -199,7 +200,11 @@ export function OfferComparison({
             onClick={() => setRefreshKey((value) => value + 1)}
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/10 px-5 text-sm text-white/55 disabled:opacity-40"
           >
-            <RefreshCw className={`size-4 ${loading ? "animate-spin" : ""}`} />
+            {loading ? (
+              <MotionLoader className="size-4" />
+            ) : (
+              <RefreshCw className="size-4" />
+            )}
             Refresh prices
           </button>
         </div>

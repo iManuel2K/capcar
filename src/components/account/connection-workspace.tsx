@@ -9,12 +9,12 @@ import {
   CheckCircle2,
   KeyRound,
   Link2,
-  LoaderCircle,
   Mail,
   RefreshCw,
   ShieldCheck,
   Trash2,
 } from "lucide-react";
+import { MotionLoader as LoaderCircle } from "@/components/ui/motion-loader";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -281,7 +281,7 @@ export function ConnectionWorkspace({
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/45 hover:text-white disabled:opacity-40"
               >
                 {aiAction === "disconnect" ? (
-                  <LoaderCircle className="size-4 animate-spin" />
+                  <LoaderCircle className="size-4" />
                 ) : (
                   <Trash2 className="size-4" />
                 )}
@@ -349,7 +349,7 @@ export function ConnectionWorkspace({
                     className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6d0101] px-5 text-sm font-semibold text-white shadow-[0_10px_28px_rgba(109,1,1,.18)] transition hover:bg-[#830705] disabled:opacity-40"
                   >
                     {aiAction === "connect" ? (
-                      <LoaderCircle className="size-4 animate-spin" />
+                      <LoaderCircle className="size-4" />
                     ) : (
                       <ShieldCheck className="size-4" />
                     )}
@@ -436,7 +436,7 @@ export function ConnectionWorkspace({
                     className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#6d0101] px-4 text-sm font-semibold text-white transition hover:bg-[#830705] disabled:opacity-40"
                   >
                     {action === "sync" ? (
-                      <LoaderCircle className="size-4 animate-spin" />
+                      <LoaderCircle className="size-4" />
                     ) : (
                       <RefreshCw className="size-4" />
                     )}
@@ -449,7 +449,7 @@ export function ConnectionWorkspace({
                     className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/45 hover:text-white disabled:opacity-40"
                   >
                     {action === "disconnect" ? (
-                      <LoaderCircle className="size-4 animate-spin" />
+                      <LoaderCircle className="size-4" />
                     ) : (
                       <Trash2 className="size-4" />
                     )}
@@ -462,6 +462,8 @@ export function ConnectionWorkspace({
                 <p className="text-sm leading-6 text-white/40">
                   {t("connectDescription")}
                 </p>
+                {/* OAuth must start with a full browser navigation, without Link prefetch. */}
+                {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
                 <a
                   href="/api/connections/google/start"
                   className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#6d0101] px-5 text-sm font-semibold text-white transition hover:bg-[#830705]"

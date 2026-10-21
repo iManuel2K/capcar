@@ -20,6 +20,14 @@ vi.mock("./interactive-car-model", () => ({
   ),
 }));
 
+function expectClip(url: string) {
+  fireEvent.click(screen.getByRole("button", { name: /Watch original scene/ }));
+  expect(
+    screen.getByRole("link", { name: /Open original video/ }),
+  ).toHaveAttribute("href", url);
+  fireEvent.click(screen.getByRole("button", { name: "Close video" }));
+}
+
 let init: ReturnType<typeof vi.fn>;
 let events: Record<string, () => void>;
 let api: ViewerApi;
@@ -223,9 +231,7 @@ describe("iconic reference collection", () => {
       expect(image.getAttribute("src")).toMatch(
         /^https:\/\/(?:i\.ytimg\.com\/vi\/|images\.contentstack\.io\/)/,
       );
-    expect(
-      screen.getByRole("link", { name: /Watch original scene/ }),
-    ).toHaveAttribute("href", "https://www.youtube.com/watch?v=NVH__HVdLhU");
+    expectClip("https://www.youtube.com/watch?v=NVH__HVdLhU");
     expect(screen.getByText(/Film \/ TV imagery ©/)).toBeVisible();
     expect(
       screen.getByRole("link", { name: /Original imagery/ }),
@@ -258,9 +264,7 @@ describe("iconic reference collection", () => {
       screen.getByRole("button", { name: "KITT · Knight Rider" }),
     );
     expect(screen.queryByTestId("local-car-model")).not.toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: /Watch original scene/ }),
-    ).toHaveAttribute("href", "https://www.youtube.com/watch?v=KH24SrIMdgo");
+    expectClip("https://www.youtube.com/watch?v=KH24SrIMdgo");
     expect(loadSketchfab).not.toHaveBeenCalled();
   });
   it("falls back to a lower-resolution frame of the same show, never a generic car", () => {
@@ -276,8 +280,6 @@ describe("iconic reference collection", () => {
     );
     fireEvent.error(hero);
     expect(container.querySelector('img[src*="/showcase/"]')).toBeNull();
-    expect(
-      screen.getByRole("link", { name: /Watch original scene/ }),
-    ).toHaveAttribute("href", "https://www.youtube.com/watch?v=KH24SrIMdgo");
+    expectClip("https://www.youtube.com/watch?v=KH24SrIMdgo");
   });
 });

@@ -164,6 +164,8 @@ export function safeJourneyProperties(properties: Record<string, unknown>) {
       "add",
       "remove",
       "reset",
+      "complete",
+      "reopen",
     ],
     step: ["car", "goal", "action", "save"],
     goal: ["maintain", "modify", "drives"],

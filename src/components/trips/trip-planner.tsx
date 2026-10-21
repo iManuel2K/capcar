@@ -7,6 +7,7 @@ import {
 
 import { TripNavigationLinks } from "@/components/trips/trip-navigation-links";
 
+import { AIInput, AIResponse } from "@/components/ui/ai-conversation";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 import { trackAnalytics } from "@/features/analytics/client";
 
@@ -23,7 +24,6 @@ import {
   Clock3,
   ExternalLink,
   Fuel,
-  LoaderCircle,
   ListTree,
   Mail,
   Map as MapIcon,
@@ -36,6 +36,7 @@ import {
   Utensils,
   X,
 } from "lucide-react";
+import { MotionLoader as LoaderCircle } from "@/components/ui/motion-loader";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -352,7 +353,15 @@ export function TripPlanner({
   }
 
   async function createPlan() {
-    if (!effectiveStartDate) return;
+    if (
+      !effectiveStartDate ||
+      loading ||
+      vehicle.trim().length < 2 ||
+      (inputMode === "prompt" &&
+        aiConnection?.configured === true &&
+        !aiConnection.connected)
+    )
+      return;
     const selectedPlaces = places.map((place) => place.trim()).filter(Boolean);
     const effectivePrompt =
       inputMode === "prompt"
@@ -446,9 +455,13 @@ export function TripPlanner({
         )
         .finally(() => setRouteLoading(false));
       window.setTimeout(() =>
-        document
-          .getElementById("capcar-plan")
-          ?.scrollIntoView({ behavior: "smooth", block: "start" }),
+        document.getElementById("capcar-plan")?.scrollIntoView({
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+            .matches
+            ? "instant"
+            : "smooth",
+          block: "start",
+        }),
       );
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : t("errors.plan"));
@@ -589,20 +602,21 @@ export function TripPlanner({
             </div>
 
             {inputMode === "prompt" ? (
-              <label className="mt-4 block text-xs text-[#f5f2e8]/55">
-                Tell CapCar where you want to go
-                <textarea
+              <div className="mt-4">
+                <AIInput
                   value={prompt}
-                  onChange={(event) => setPrompt(event.target.value)}
+                  onValueChange={setPrompt}
                   maxLength={600}
-                  rows={5}
-                  placeholder="I will visit Kosovo with two cars. Plan a route through Pristina and Pejë…"
-                  className="mt-2 w-full resize-none rounded-2xl border border-white/12 bg-white/6 px-4 py-3 text-sm leading-6 text-white transition outline-none placeholder:text-white/25 focus:border-[#ff7d75]/60"
+                  busy={loading}
+                  disabled={
+                    !effectiveStartDate ||
+                    vehicle.trim().length < 2 ||
+                    (aiConnection?.configured === true &&
+                      !aiConnection.connected)
+                  }
+                  onSubmit={() => void createPlan()}
                 />
-                <span className="mt-2 block text-[10px] text-white/35">
-                  Your message is the only destination source in this mode.
-                </span>
-              </label>
+              </div>
             ) : (
               <div className="mt-4 rounded-2xl border border-white/12 bg-white/6 p-4">
                 <div className="flex items-start justify-between gap-4">
@@ -764,29 +778,26 @@ export function TripPlanner({
               </div>
             ) : null}
 
-            <button
-              type="button"
-              disabled={
-                loading ||
-                vehicle.trim().length < 2 ||
-                (inputMode === "prompt"
-                  ? prompt.trim().length < 2
-                  : places.filter((place) => place.trim()).length < 2) ||
-                (inputMode === "prompt" &&
-                  aiConnection?.configured === true &&
-                  !aiConnection.connected) ||
-                !effectiveStartDate
-              }
-              onClick={() => void createPlan()}
-              className="mt-5 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-xl bg-[#ff766d] px-5 text-sm font-semibold text-[#260808] transition hover:bg-[#ff8f87] disabled:opacity-40"
-            >
-              {loading ? (
-                <LoaderCircle className="size-4 animate-spin" />
-              ) : (
-                <Sparkles className="size-4" />
-              )}
-              {loading ? "CapCar is composing your route…" : t("create")}
-            </button>
+            {inputMode === "places" && (
+              <button
+                type="button"
+                disabled={
+                  loading ||
+                  vehicle.trim().length < 2 ||
+                  places.filter((place) => place.trim()).length < 2 ||
+                  !effectiveStartDate
+                }
+                onClick={() => void createPlan()}
+                className="mt-5 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-xl bg-[#ff766d] px-5 text-sm font-semibold text-[#260808] transition hover:bg-[#ff8f87] disabled:opacity-40"
+              >
+                {loading ? (
+                  <LoaderCircle className="size-4" />
+                ) : (
+                  <Sparkles className="size-4" />
+                )}
+                {loading ? "CapCar is composing your route…" : t("create")}
+              </button>
+            )}
           </aside>
 
           <article
@@ -810,9 +821,9 @@ export function TripPlanner({
                     <h2 className="mt-3 text-3xl font-medium tracking-[-0.045em] sm:text-5xl">
                       {plan.title}
                     </h2>
-                    <p className="mt-4 max-w-2xl leading-7 text-[#405856]">
-                      {plan.summary}
-                    </p>
+                    <div className="mt-4 max-w-2xl text-[#405856]">
+                      <AIResponse text={plan.summary} />
+                    </div>
                   </div>
                   {connection?.connected ? (
                     <button
@@ -822,7 +833,7 @@ export function TripPlanner({
                       className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#0e2d30]/15 px-4 text-sm font-medium transition hover:bg-[#0e2d30] hover:text-[#f5f2e8] disabled:opacity-40"
                     >
                       {calendarLoading ? (
-                        <LoaderCircle className="size-4 animate-spin" />
+                        <LoaderCircle className="size-4" />
                       ) : (
                         <CalendarPlus className="size-4" />
                       )}
@@ -892,7 +903,7 @@ export function TripPlanner({
                     {routeLoading && (
                       <div className="grid min-h-[34rem] place-items-center rounded-[1.7rem] bg-[#0e2d30] text-white">
                         <div className="text-center">
-                          <LoaderCircle className="mx-auto size-7 animate-spin text-[#ff766d]" />
+                          <LoaderCircle className="mx-auto size-7" />
                           <p className="mt-3 text-sm text-white/55">
                             Calculating the road between every stop…
                           </p>

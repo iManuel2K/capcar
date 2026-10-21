@@ -18,26 +18,34 @@ export function JournalCards({
 }) {
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      {articles.map((article) => (
+      {articles.map((article, index) => (
         <Link
           key={article.slug}
           href={journalArticlePath(article.slug, locale)}
-          className="group overflow-hidden rounded-[1.5rem] border border-[#0e2d30]/15 bg-[#f5f2e8] transition hover:border-[#92644d] focus-visible:outline-2 focus-visible:outline-offset-4"
+          className={`group border-b border-[#0e2d30]/20 pb-8 transition hover:border-[#92644d] focus-visible:outline-2 focus-visible:outline-offset-4 ${index === 0 ? "md:col-span-2 md:grid md:grid-cols-[1.2fr_1fr] md:items-center md:gap-10" : "grid grid-cols-[96px_1fr] items-start gap-5 sm:grid-cols-[160px_1fr]"}`}
         >
-          <div className="relative aspect-[16/9] overflow-hidden bg-[#0e2d30]">
+          <div
+            className={`relative bg-transparent ${index === 0 ? "aspect-[16/9]" : "aspect-square"}`}
+          >
             <Image
               src={article.image}
               alt=""
               fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover transition duration-500 group-hover:scale-105"
+              sizes={
+                index === 0
+                  ? "(max-width: 768px) 100vw, 60vw"
+                  : "(max-width: 640px) 96px, 160px"
+              }
+              className="object-contain"
             />
           </div>
-          <div className="p-6 sm:p-8">
+          <div className={index === 0 ? "pt-5 md:pt-0" : ""}>
             <p className="text-xs font-semibold tracking-widest text-[#79503c] uppercase">
               {article.category} · {journalReadingTime(locale, article.minutes)}
             </p>
-            <h2 className="mt-4 flex items-start justify-between gap-4 text-2xl leading-tight font-medium tracking-tight">
+            <h2
+              className={`mt-3 flex items-start justify-between gap-4 leading-tight font-medium tracking-tight ${index === 0 ? "text-3xl sm:text-4xl" : "text-xl"}`}
+            >
               {article.title}
               <ArrowUpRight
                 className="mt-1 size-5 shrink-0"

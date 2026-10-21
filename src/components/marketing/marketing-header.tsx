@@ -14,6 +14,10 @@ import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 import { HomepageLink } from "./homepage-link";
 import styles from "./homepage.module.css";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
+import { ExpandableNavigation } from "./expandable-navigation";
+import navigationStyles from "./expandable-navigation.module.css";
+import { interactionCopy } from "@/features/ui/interaction-copy";
+import { trapDialogFocus } from "@/components/ui/dialog-focus";
 import { useNavigationAuth } from "@/features/auth/use-navigation-auth";
 
 const navigation = [
@@ -29,6 +33,7 @@ export function MarketingHeader() {
   const home = homepageCopy[journalLocale];
   const garageHref = signedIn ? "/garage" : "/garage/new";
   const garageLabel = signedIn ? home.openGarage : home.create;
+  const ui = interactionCopy[journalLocale];
   const links = navigation.map((item) =>
     item.href === "/platform" && journalLocale !== "en"
       ? { ...item, href: `/${journalLocale}/platform` }
@@ -39,25 +44,6 @@ export function MarketingHeader() {
   const t = useTranslations("Navigation");
   const l = useTranslations("Launch");
   const footer = useTranslations("Footer");
-  const explore = useRef<HTMLDetailsElement>(null);
-  useEffect(() => {
-    const close = (event: MouseEvent) => {
-      if (!explore.current?.contains(event.target as Node))
-        explore.current?.removeAttribute("open");
-    };
-    const escape = (event: globalThis.KeyboardEvent) => {
-      if (event.key === "Escape" && explore.current?.open) {
-        explore.current.removeAttribute("open");
-        explore.current.querySelector("summary")?.focus();
-      }
-    };
-    document.addEventListener("click", close);
-    document.addEventListener("keydown", escape);
-    return () => {
-      document.removeEventListener("click", close);
-      document.removeEventListener("keydown", escape);
-    };
-  }, []);
   const drawer = useRef<HTMLDialogElement>(null);
   const opener = useRef<HTMLButtonElement>(null);
 
@@ -99,7 +85,7 @@ export function MarketingHeader() {
             aria-label={t("main")}
             className="hidden items-center gap-0.5 rounded-full border border-[#0e2d30]/8 bg-white/20 p-1 text-sm text-[#0e2d30]/68 xl:flex"
           >
-            {links.map((item) => (
+            {links.slice(0, 2).map((item) => (
               <Link
                 key={item.label}
                 aria-current={active(item.href) ? "page" : undefined}
@@ -113,39 +99,40 @@ export function MarketingHeader() {
                 {l(`nav.${item.label}`)}
               </Link>
             ))}
-            <details ref={explore} className="relative z-40">
-              <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1 rounded-full px-3 transition hover:bg-[#0e2d30]/5 focus-visible:outline-2 [&::-webkit-details-marker]:hidden">
-                {l("nav.explore")}
-                <ChevronDown className="size-3" aria-hidden="true" />
-              </summary>
-              <div className="absolute top-[calc(100%+.5rem)] right-0 min-w-60 rounded-2xl border border-[#0e2d30]/14 bg-[#f5f2e8] p-2 shadow-[0_24px_70px_rgba(14,45,48,0.18)]">
-                {[
-                  ["conceptStudio", "/studio"],
-                  ["soundStudio", "/sound-studio"],
-                  ["movieCars", "/movie-cars"],
-                  ["roadbook", "/roadbook"],
-                  ["aiPlanner", "/ai"],
-                  ["marketplace", "/marketplace"],
-                  ["roadmap", "/roadmap"],
-                  ["faq", "/#faq"],
-                  ["journal", journalPath(journalLocale)],
-                ].map(([label, href]) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    aria-current={active(href) ? "page" : undefined}
-                    onClick={() => explore.current?.removeAttribute("open")}
-                    className={`flex min-h-11 items-center rounded-xl px-3 transition focus-visible:outline-2 ${
-                      active(href)
-                        ? "bg-[#0e2d30] text-[#e8e6d7]"
-                        : "hover:bg-[#0e2d30]/6"
-                    }`}
-                  >
-                    {label === "journal" ? journal.label : footer(label)}
-                  </Link>
-                ))}
-              </div>
-            </details>
+            <ExpandableNavigation
+              sections={[
+                {
+                  label: ui.garage,
+                  description: ui.overview,
+                  links: [
+                    { href: garageHref, label: garageLabel },
+                    { href: "/#projects", label: l("nav.projects") },
+                    { href: "/parts-search", label: l("nav.parts") },
+                    { href: "/marketplace", label: footer("marketplace") },
+                  ],
+                },
+                {
+                  label: ui.drives,
+                  description: ui.journeys,
+                  links: [
+                    { href: "/roadbook", label: footer("roadbook") },
+                    { href: "/ai", label: footer("aiPlanner") },
+                    { href: journalPath(journalLocale), label: journal.label },
+                  ],
+                },
+                {
+                  label: ui.discover,
+                  description: ui.tools,
+                  links: [
+                    { href: "/studio", label: footer("conceptStudio") },
+                    { href: "/sound-studio", label: footer("soundStudio") },
+                    { href: "/movie-cars", label: footer("movieCars") },
+                    { href: "/roadmap", label: footer("roadmap") },
+                    { href: "/#faq", label: footer("faq") },
+                  ],
+                },
+              ]}
+            />
           </nav>
 
           <div className="hidden 2xl:block">
@@ -188,6 +175,7 @@ export function MarketingHeader() {
       {menuOpen && (
         <dialog
           ref={drawer}
+          onKeyDown={trapDialogFocus}
           aria-label={t("mobile")}
           onCancel={(event) => {
             event.preventDefault();
@@ -204,7 +192,7 @@ export function MarketingHeader() {
           />
           <div
             id="mobile-marketing-navigation"
-            className="absolute top-0 right-0 flex h-full w-[min(92%,24rem)] flex-col overflow-y-auto overscroll-contain rounded-l-[1.75rem] bg-[#e8e6d7] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] text-[#0e2d30] shadow-[-30px_0_90px_rgba(5,3,6,0.24)]"
+            className={`${navigationStyles.mobileDrawer} absolute top-0 right-0 flex h-full w-[min(92%,24rem)] flex-col overflow-y-auto overscroll-contain rounded-l-[1.75rem] bg-[#e8e6d7] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] text-[#0e2d30] shadow-[-30px_0_90px_rgba(5,3,6,0.24)]`}
           >
             <div className="flex items-center justify-between border-b border-[#0e2d30]/10 pb-5">
               <CapcarWordmark glow={false} />

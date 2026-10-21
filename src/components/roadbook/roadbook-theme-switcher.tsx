@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useId, useRef, type CSSProperties } from "react";
 
 import {
   roadbookMapModes,
@@ -28,6 +28,7 @@ export function RoadbookThemeSwitcher({
   compatibilityLabel: string;
 }) {
   const buttons = useRef<Array<HTMLButtonElement | null>>([]);
+  const titleId = useId();
   const rail = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -52,77 +53,88 @@ export function RoadbookThemeSwitcher({
   };
 
   return (
-    <section
-      aria-labelledby="roadbook-style-title"
-      className="roadbook-style-picker"
-    >
-      <div className="roadbook-style-picker__intro">
-        <h2 id="roadbook-style-title" className="roadbook-style-picker__title">
-          {headline}
-        </h2>
-        <p className="roadbook-style-picker__description">{description}</p>
-        {compatibility && (
-          <p className="roadbook-style-picker__description" role="status">
-            {compatibilityLabel}
-          </p>
-        )}
-      </div>
-      <div
-        ref={rail}
-        role="radiogroup"
-        aria-label={label}
-        className="roadbook-style-chips"
+    <section aria-label={label} className="roadbook-style-picker">
+      <details
+        onToggle={(event) => {
+          if (event.currentTarget.open)
+            buttons.current[roadbookMapModes.indexOf(mode)]?.scrollIntoView?.({
+              block: "nearest",
+              inline: "center",
+            });
+        }}
       >
-        {roadbookMapModes.map((value, index) => {
-          const selected = value === mode;
-          const swatch = ROADBOOK_MAP_STYLES[value].swatch;
-          return (
-            <button
-              key={value}
-              ref={(node) => {
-                buttons.current[index] = node;
-              }}
-              type="button"
-              role="radio"
-              aria-checked={selected}
-              tabIndex={selected ? 0 : -1}
-              onClick={() => onChange(value)}
-              onKeyDown={(event) => {
-                if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-                  event.preventDefault();
-                  choose(index - 1);
+        <summary className="roadbook-style-picker__summary">
+          <span>{label}</span>
+          <strong>{labels[mode]}</strong>
+        </summary>
+        <div className="roadbook-style-picker__intro">
+          <h2 id={titleId} className="roadbook-style-picker__title">
+            {headline}
+          </h2>
+          <p className="roadbook-style-picker__description">{description}</p>
+          {compatibility && (
+            <p className="roadbook-style-picker__description" role="status">
+              {compatibilityLabel}
+            </p>
+          )}
+        </div>
+        <div
+          ref={rail}
+          role="radiogroup"
+          aria-label={label}
+          className="roadbook-style-chips"
+        >
+          {roadbookMapModes.map((value, index) => {
+            const selected = value === mode;
+            const swatch = ROADBOOK_MAP_STYLES[value].swatch;
+            return (
+              <button
+                key={value}
+                ref={(node) => {
+                  buttons.current[index] = node;
+                }}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                tabIndex={selected ? 0 : -1}
+                onClick={() => onChange(value)}
+                onKeyDown={(event) => {
+                  if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+                    event.preventDefault();
+                    choose(index - 1);
+                  }
+                  if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+                    event.preventDefault();
+                    choose(index + 1);
+                  }
+                  if (event.key === "Home") {
+                    event.preventDefault();
+                    choose(0);
+                  }
+                  if (event.key === "End") {
+                    event.preventDefault();
+                    choose(roadbookMapModes.length - 1);
+                  }
+                }}
+                className={`roadbook-style-chip ${selected ? "is-selected" : ""}`}
+                style={
+                  {
+                    "--roadbook-chip-land": swatch[0],
+                    "--roadbook-chip-road": swatch[1],
+                    "--roadbook-chip-water": swatch[2],
+                  } as CSSProperties
                 }
-                if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-                  event.preventDefault();
-                  choose(index + 1);
-                }
-                if (event.key === "Home") {
-                  event.preventDefault();
-                  choose(0);
-                }
-                if (event.key === "End") {
-                  event.preventDefault();
-                  choose(roadbookMapModes.length - 1);
-                }
-              }}
-              className={`roadbook-style-chip ${selected ? "is-selected" : ""}`}
-              style={
-                {
-                  "--roadbook-chip-land": swatch[0],
-                  "--roadbook-chip-road": swatch[1],
-                  "--roadbook-chip-water": swatch[2],
-                } as CSSProperties
-              }
-            >
-              <span
-                className="roadbook-style-chip__swatch"
-                aria-hidden="true"
-              />
-              <span>{labels[value]}</span>
-            </button>
-          );
-        })}
-      </div>
+              >
+                <span
+                  className="roadbook-style-chip__swatch"
+                  aria-hidden="true"
+                />
+                <span>{labels[value]}</span>
+              </button>
+            );
+          })}
+        </div>
+      </details>
     </section>
   );
 }

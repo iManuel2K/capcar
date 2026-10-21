@@ -230,21 +230,25 @@
       }
     },
     "tangible": {
+      "tripPlanning": {
+        "title": "Lange Wochenenden mit KI planen",
+        "description": "Erstelle Ausflugspläne mit Konto und verbundenem KI-Dienst. Anbietergebühren sind möglich. Prüfe Routen, Zugang und aktuelle Bedingungen vor der Fahrt."
+      },
       "label": "In Beta · wächst weiter",
       "title": "Mach es greifbar",
       "description": "Die visuelle und vernetzte Ebene von CapCar. Funktionierende Grundlagen stehen, während Inhalte, Fahrzeugabdeckung und Partnerzugänge wachsen.",
       "itemStatus": "Im Ausbau",
       "models": {
         "title": "Interaktive Fahrzeugmodelle",
-        "description": "Nutze heute leichtgewichtige Referenzgeometrie; für freigegebene Modellanbieter ist die integritätsgeprüfte Auslieferung lizenzierter GLB-Dateien vorbereitet. Die fahrzeugspezifische Abdeckung bleibt von Nutzungsrechten abhängig."
+        "description": "Erkunde {modelCount} lizenzierte Referenzautos in interaktivem 3D. Drehen, zoomen und unterstützte Lackfarben testen. Unabhängige Künstlermodelle, keine Passformsimulation deines genauen Autos."
       },
       "movie": {
         "title": "Ikonische Filmauto-Demos",
-        "description": "Erkunde Brians R34 als Community-Filmreferenz sowie Skyline und Porsche. Weitere ikonische Builds folgen."
+        "description": "Entdecke Brians Skyline, Docs DeLorean und KITT mit Bildern aus Film und Fernsehen. Unabhängige 3D-Referenzen sind von den Filmfahrzeugen getrennt und werden erst auf Wunsch geladen."
       },
       "sound": {
         "title": "Sound Studio",
-        "description": "Fünf Aufnahmen mit Quellenangabe filtern und vergleichen. Drei weitere Originale streamen über CapCar. Exakte Serien-/Umbaupaare benötigen verifizierte Aufnahmen."
+        "description": "Durchsuche {count} Aufnahmen mit Quellenangabe, vergleiche zwei Clips oder eigene Dateien lokal. Aufnahmebedingungen variieren; keine verifizierten Serien-/Umbaupaare."
       },
       "obd": {
         "title": "Native OBD-II-Diagnose",
@@ -288,10 +292,6 @@
         "title": "KI-Build-Richtung",
         "description": "Erzeuge sinnvolle Upgrade-Ideen und visuelle Konzepte rund um dein eigenes Fahrzeug."
       },
-      "tripPlanning": {
-        "title": "Lange Wochenenden mit KI planen",
-        "description": "Frage eine unterstützte KI: „Plane mir ein langes, landschaftlich schönes Wochenende mit [Auto] in [Region].“ CapCar gibt Fahrzeug- und Roadbook-Kontext nur mit Zustimmung weiter; Route, Zufahrt und aktuelle Bedingungen bleiben zu prüfen."
-      },
       "calendarMail": {
         "title": "Kalender- und E-Mail-Synchronisierung",
         "description": "Übertrage ausgewählte Roadbook-Pläne, Buchungen und Eventdetails über freigegebene Kalender- und E-Mail-Verbindungen in einen klaren Reiseplan. Kein Postfachzugriff und keine Termine ohne ausdrückliche Zustimmung."
@@ -334,8 +334,8 @@
   "StudioPage": {
     "back": "Zurück zu CapCar",
     "eyebrow": "Concept Studio",
-    "title": "Erkunde die Richtung.",
-    "description": "Entdecke 25 legendäre Autos in interaktivem 3D – kostenlos und ohne Konto. Drehen, zoomen und neue Ideen finden. Dieselbe Modellbibliothek steht auch in deinen Garagen-Projekten bereit."
+    "title": "25 Autos in interaktivem 3D entdecken.",
+    "description": "Drehe ein Referenzauto, probiere unterstützte Lackfarben und speichere die Ansicht. Kostenlos und ohne Konto."
   },
   "SoundPage": {
     "back": "CapCar",

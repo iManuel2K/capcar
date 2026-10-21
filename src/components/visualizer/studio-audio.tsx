@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState, type RefObject } from "react";
-import { Pause, Play, RotateCcw, RotateCw, Volume2 } from "lucide-react";
+import { RotateCcw, RotateCw } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { MusicToggle, PlaybackSignal } from "@/components/ui/music-toggle";
+import { MotionLoader } from "@/components/ui/motion-loader";
 import { pauseOtherStudioAudio } from "@/features/visualizer/audio-files";
 
 const MASTER_VOLUME_KEY = "capcar.sound-studio.master-volume";
@@ -131,6 +133,7 @@ function AudioSession({
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [buffering, setBuffering] = useState(false);
   useEffect(() => {
     const audio = player.current;
     if (audio) audio.volume = initialVolume();
@@ -138,10 +141,15 @@ function AudioSession({
     const volume = (event: Event) => {
       if (audio) audio.volume = (event as CustomEvent<number>).detail;
     };
+    const visibility = () => {
+      if (document.hidden) stop();
+    };
+    document.addEventListener("visibilitychange", visibility);
     window.addEventListener("pagehide", stop);
     window.addEventListener(MASTER_VOLUME_EVENT, volume);
     return () => {
       stop();
+      document.removeEventListener("visibilitychange", visibility);
       window.removeEventListener("pagehide", stop);
       window.removeEventListener(MASTER_VOLUME_EVENT, volume);
     };
@@ -169,7 +177,10 @@ function AudioSession({
     }
   }
   return (
-    <div className="min-w-0 rounded-2xl border border-white/10 bg-[#091d20] p-3 shadow-[inset_0_1px_rgba(255,255,255,.04)]">
+    <div
+      aria-busy={buffering}
+      className="min-w-0 rounded-2xl border border-white/10 bg-[#091d20] p-3 shadow-[inset_0_1px_rgba(255,255,255,.04)]"
+    >
       <audio
         key={retry}
         data-capcar-audio
@@ -186,20 +197,30 @@ function AudioSession({
           onPlaybackChange?.(true);
         }}
         onPause={() => {
+          setBuffering(false);
           setPlaying(false);
           onPlaybackChange?.(false);
         }}
         onEnded={() => {
+          setBuffering(false);
           setPlaying(false);
           onPlaybackChange?.(false);
         }}
         onTimeUpdate={(event) => setCurrent(event.currentTarget.currentTime)}
+        onWaiting={() => setBuffering(true)}
+        onPlaying={() => setBuffering(false)}
         onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
         onError={() => {
+          setBuffering(false);
+          setPlaying(false);
+          onPlaybackChange?.(false);
           if (fallback && !useFallback) setUseFallback(true);
           else setFailed(true);
         }}
-        onCanPlay={() => setFailed(false)}
+        onCanPlay={() => {
+          setFailed(false);
+          setBuffering(false);
+        }}
       />
       <div className="flex items-center gap-2">
         <button
@@ -210,18 +231,12 @@ function AudioSession({
         >
           <RotateCcw aria-hidden="true" className="size-4" />
         </button>
-        <button
-          type="button"
-          aria-label={playing ? studio("pause") : studio("play")}
-          onClick={toggle}
-          className="grid size-13 shrink-0 place-items-center rounded-full bg-[#ff746c] text-[#071719] shadow-[0_8px_24px_rgba(255,116,108,.22)] transition hover:scale-[1.03] hover:bg-[#ff8b84] motion-reduce:hover:scale-100"
-        >
-          {playing ? (
-            <Pause aria-hidden="true" className="size-5 fill-current" />
-          ) : (
-            <Play aria-hidden="true" className="ml-0.5 size-5 fill-current" />
-          )}
-        </button>
+        <MusicToggle
+          playing={playing}
+          progress={duration > 0 ? current / duration : 0}
+          onToggle={() => void toggle()}
+          label={`${playing ? studio("pause") : studio("play")}: ${label}`}
+        />
         <button
           type="button"
           aria-label={studio("forward")}
@@ -250,10 +265,7 @@ function AudioSession({
             <span>{time(duration)}</span>
           </div>
         </div>
-        <Volume2
-          aria-hidden="true"
-          className="mr-1 size-4 shrink-0 text-[#cfaa96]"
-        />
+        {buffering ? <MotionLoader /> : <PlaybackSignal playing={playing} />}
       </div>
       {failed && (
         <div className="mt-3 rounded-xl border border-[#bf8269]/30 bg-[#bf8269]/10 px-4 py-2 text-sm">

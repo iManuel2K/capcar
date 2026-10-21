@@ -1,6 +1,6 @@
 const en = {
   eyebrow: "CAPCAR / SOUND STUDIO",
-  title: "Hear your next move.",
+  title: "Compare engine and exhaust recordings.",
   intro:
     "Explore real engine and exhaust recordings. Bring your own stock clip, build a shortlist, and hear the difference side by side.",
   library: "The sound library",
@@ -30,8 +30,8 @@ const en = {
   compare: "Your listening desk",
   compareIntro:
     "Start with your stock recording, then compare it with anything in the library or a second file.",
-  stock: "Your stock / reference",
-  alternative: "Your alternative",
+  stock: "Reference A",
+  alternative: "Comparison B",
   choose: "Choose from library",
   upload: "Add your own recording",
   local: "MP3, WAV, OGG or M4A · up to 30 MB · stays on this device",
@@ -69,7 +69,7 @@ const en = {
 type Copy = typeof en;
 const de: Copy = {
   ...en,
-  title: "Hör deinen nächsten Schritt.",
+  title: "Motor- und Auspuffsounds vergleichen.",
   intro:
     "Entdecke echte Motor- und Auspuffaufnahmen. Lade deinen Serienklang und vergleiche ihn mit deiner Auswahl.",
   library: "Die Soundbibliothek",
@@ -98,8 +98,8 @@ const de: Copy = {
   compare: "Dein Hörvergleich",
   compareIntro:
     "Vergleiche deinen Serienklang mit der Bibliothek oder einer zweiten Datei.",
-  stock: "Deine Serie / Referenz",
-  alternative: "Deine Alternative",
+  stock: "Referenz A",
+  alternative: "Vergleich B",
   choose: "Aus Bibliothek wählen",
   upload: "Eigene Aufnahme hinzufügen",
   local: "MP3, WAV, OGG oder M4A · bis 30 MB · bleibt auf diesem Gerät",
@@ -130,7 +130,7 @@ const de: Copy = {
 };
 const el: Copy = {
   ...en,
-  title: "Άκου την επόμενη αλλαγή.",
+  title: "Σύγκρινε ήχους κινητήρων και εξατμίσεων.",
   intro:
     "Ανακάλυψε πραγματικές ηχογραφήσεις κινητήρων και εξατμίσεων. Πρόσθεσε τον εργοστασιακό σου ήχο και σύγκρινε.",
   library: "Βιβλιοθήκη ήχων",
@@ -155,8 +155,8 @@ const el: Copy = {
   addA: "Χρήση ως A",
   addB: "Σύγκριση ως B",
   compare: "Η σύγκρισή σου",
-  stock: "Εργοστασιακός / αναφορά",
-  alternative: "Εναλλακτικός ήχος",
+  stock: "Αναφορά A",
+  alternative: "Σύγκριση B",
   choose: "Επιλογή από βιβλιοθήκη",
   upload: "Προσθήκη δικής σου ηχογράφησης",
   local: "MP3, WAV, OGG ή M4A · έως 30 MB · μένει στη συσκευή",
@@ -176,7 +176,7 @@ const el: Copy = {
 };
 const sq: Copy = {
   ...en,
-  title: "Dëgjo ndryshimin e radhës.",
+  title: "Krahaso tinguj motorësh dhe shkarkimesh.",
   intro:
     "Zbulo regjistrime reale motorësh dhe marmitash. Shto tingullin origjinal dhe krahasoje me zgjedhjet e tua.",
   library: "Biblioteka e tingujve",
@@ -201,8 +201,8 @@ const sq: Copy = {
   addA: "Përdor si A",
   addB: "Krahaso si B",
   compare: "Krahasimi yt",
-  stock: "Origjinali / referenca jote",
-  alternative: "Alternativa jote",
+  stock: "Referenca A",
+  alternative: "Krahasimi B",
   choose: "Zgjidh nga biblioteka",
   upload: "Shto regjistrimin tënd",
   local: "MP3, WAV, OGG ose M4A · deri 30 MB · mbetet në pajisje",
@@ -222,7 +222,7 @@ const sq: Copy = {
 };
 const ja: Copy = {
   ...en,
-  title: "次の変化を、音で選ぶ。",
+  title: "エンジン音と排気音を聴き比べる。",
   intro:
     "実際のエンジンと排気音を探そう。自分の純正音を追加して、気になる録音と聴き比べ。",
   library: "サウンドライブラリ",
@@ -247,8 +247,8 @@ const ja: Copy = {
   addA: "Aに設定",
   addB: "Bと比較",
   compare: "あなたの聴き比べ",
-  stock: "純正音／基準",
-  alternative: "比較する音",
+  stock: "基準の音源 A",
+  alternative: "比較する音源 B",
   choose: "ライブラリから選択",
   upload: "自分の録音を追加",
   local: "MP3・WAV・OGG・M4A · 30 MBまで · この端末内で使用",

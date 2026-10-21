@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { isAppLocale } from "@/i18n/config";
 import { analyticsUI } from "@/features/analytics/ui";
 import {
@@ -31,7 +31,11 @@ export function AnalyticsProvider() {
   const pathname = usePathname();
   const consent = useSyncExternalStore(subscribe, analyticsConsent, () => null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const prompt = useRef<HTMLElement>(null);
   const configured = analyticsConfigured();
+  useEffect(() => {
+    if (settingsOpen) prompt.current?.scrollIntoView?.({ block: "start" });
+  }, [settingsOpen]);
 
   useEffect(() => {
     if (consent !== "granted") return;
@@ -77,17 +81,24 @@ export function AnalyticsProvider() {
     <>
       {(consent === null || settingsOpen) && (
         <section
+          ref={prompt}
           aria-label={t.title}
-          className="fixed inset-x-3 bottom-16 z-[100] mx-auto max-w-xl rounded-2xl border border-[#405856]/25 bg-[#f5f2e8] p-5 text-[#0e2d30] shadow-2xl sm:inset-x-auto sm:right-5 sm:bottom-5"
+          className="relative z-[100] border-b border-[#405856]/25 bg-[#f5f2e8] p-4 text-[#0e2d30] sm:fixed sm:right-5 sm:bottom-5 sm:max-h-[80dvh] sm:max-w-md sm:overflow-y-auto sm:rounded-2xl sm:border sm:p-5 sm:shadow-xl"
         >
           <h2 className="text-base font-semibold">{t.title}</h2>
-          <p className="mt-2 text-sm leading-6">{t.description}</p>
-          <Link
-            href="/privacy"
-            className="mt-2 inline-flex min-h-11 items-center text-sm underline"
-          >
-            {t.privacy}
-          </Link>
+          <p className="mt-2 text-sm leading-6">{t.brief}</p>
+          <details className="mt-1 text-sm leading-6">
+            <summary className="inline-flex min-h-11 cursor-pointer items-center underline underline-offset-4">
+              {t.details}
+            </summary>
+            <p>{t.description}</p>
+            <Link
+              href="/privacy"
+              className="inline-flex min-h-11 items-center underline"
+            >
+              {t.privacy}
+            </Link>
+          </details>
           <div className="mt-3 flex flex-wrap gap-3">
             <button
               type="button"

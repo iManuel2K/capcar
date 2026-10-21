@@ -19,6 +19,9 @@ vi.mock("@/lib/supabase/client", () => ({
   createClient: () => ({ auth: { onAuthStateChange: auth.subscribe } }),
 }));
 vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
+vi.mock("./expandable-navigation", () => ({
+  ExpandableNavigation: () => null,
+}));
 vi.mock("@/components/i18n/language-selector", () => ({
   LanguageSelector: () => null,
 }));

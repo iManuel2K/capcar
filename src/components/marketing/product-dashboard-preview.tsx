@@ -11,7 +11,6 @@ import {
   Check,
   CircleHelp,
   IdCard,
-  QrCode,
   RotateCcw,
   ShieldCheck,
 } from "lucide-react";
@@ -30,7 +29,7 @@ type Modification = (typeof modifications)[number];
 const amounts: Record<Modification, [number, number]> = {
   lights: [210, 195],
   wheels: [450, 420],
-  service: [90, 80],
+  service: [30, 28],
 };
 const nextSteps = {
   lights: "checkLights",
@@ -40,7 +39,7 @@ const nextSteps = {
 const queries = {
   lights: "BMW E90 rear lights",
   wheels: "BMW E90 wheels",
-  service: "BMW E90 service parts",
+  service: "BMW E90 cabin filter",
 };
 type PlannedItem = {
   modification: Modification;
@@ -57,9 +56,10 @@ export function ProductDashboardPreview() {
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const [view, setView] = useState<View>("plan");
   const [goal, setGoal] = useState("oem");
-  const [modification, setModification] = useState<Modification>("lights");
+  const [modification, setModification] = useState<Modification>("service");
   const [offer, setOffer] = useState(0);
   const [planned, setPlanned] = useState<PlannedItem[]>([]);
+  const [completed, setCompleted] = useState(false);
   const [message, setMessage] = useState("");
   const currency = (amount: number) =>
     new Intl.NumberFormat(locale, {
@@ -67,13 +67,19 @@ export function ProductDashboardPreview() {
       currency: "EUR",
       maximumFractionDigits: 0,
     }).format(amount);
-  const spent = 28;
+  const spent = completed ? 28 : 0;
   const budget = 300;
-  const plannedTotal = planned.reduce(
+  const openPlanned = planned.filter(
+    (item) => !completed || item.modification !== "service",
+  );
+  const servicePlan = planned.find((item) => item.modification === "service");
+  const shipping = (index: number) =>
+    index === 0 ? (modification === "service" ? 0 : 15) : null;
+  const plannedTotal = openPlanned.reduce(
     (sum, item) => sum + item.amount + (item.shipping ?? 0),
     0,
   );
-  const incomplete = planned.some((item) => item.shipping === null);
+  const incomplete = openPlanned.some((item) => item.shipping === null);
   const alreadyAdded = planned.some(
     (item) => item.modification === modification && item.offer === offer,
   );
@@ -118,7 +124,7 @@ export function ProductDashboardPreview() {
         modification,
         offer,
         amount: amounts[modification][offer],
-        shipping: offer === 0 ? 15 : null,
+        shipping: shipping(offer),
       },
     ]);
     setMessage(t("demo.added"));
@@ -162,7 +168,8 @@ export function ProductDashboardPreview() {
                 });
                 setPlanned([]);
                 setGoal("oem");
-                setModification("lights");
+                setModification("service");
+                setCompleted(false);
                 setOffer(0);
                 selectView("plan");
                 setMessage("");
@@ -230,7 +237,7 @@ export function ProductDashboardPreview() {
                       fill
                       sizes="(min-width: 1500px) 700px, (min-width: 1024px) 50vw, 100vw"
                       quality={65}
-                      className="object-cover"
+                      className="object-contain"
                     />
                   </div>
                   <p className="mt-2 text-xs text-[#bfcac5]">
@@ -260,7 +267,7 @@ export function ProductDashboardPreview() {
                       >
                         {modifications.map((item) => (
                           <option key={item} value={item}>
-                            {t(`demo.${item}`)}
+                            {item === "service" ? home.task : t(`demo.${item}`)}
                           </option>
                         ))}
                       </select>
@@ -275,7 +282,9 @@ export function ProductDashboardPreview() {
                   <div>
                     <p className="text-xs text-[#bfcac5]">{t("demo.next")}</p>
                     <p className="mt-1 text-base leading-7">
-                      {t(`demo.${nextSteps[modification]}`)}
+                      {modification === "service"
+                        ? home.task
+                        : t(`demo.${nextSteps[modification]}`)}
                     </p>
                   </div>
                   {renderBudget()}
@@ -293,7 +302,11 @@ export function ProductDashboardPreview() {
             {view === "parts" && (
               <div>
                 <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-                  <h3 className="text-xl">{t(`demo.${modification}`)}</h3>
+                  <h3 className="text-xl">
+                    {modification === "service"
+                      ? home.task
+                      : t(`demo.${modification}`)}
+                  </h3>
                   <Link
                     href={`/connected-parts?q=${encodeURIComponent(queries[modification])}`}
                     className={styles.link}
@@ -316,13 +329,20 @@ export function ProductDashboardPreview() {
                         />
                         <Row
                           label={t("demo.shipping")}
-                          value={index === 0 ? currency(15) : t("demo.unknown")}
+                          value={
+                            shipping(index) === null
+                              ? t("demo.unknown")
+                              : currency(shipping(index)!)
+                          }
                         />
                         <Row
                           label={t("demo.total")}
                           value={
                             index === 0
-                              ? currency(amounts[modification][index] + 15)
+                              ? currency(
+                                  amounts[modification][index] +
+                                    (shipping(index) ?? 0),
+                                )
                               : t("demo.unknown")
                           }
                         />
@@ -367,6 +387,14 @@ export function ProductDashboardPreview() {
                   >
                     {t("demo.add")}
                   </button>
+                  <button
+                    type="button"
+                    className={styles.link}
+                    onClick={() => selectView("history")}
+                  >
+                    {home.history}
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </button>
                 </div>
                 <p role="status" className="mt-3 text-sm text-[#d1e7d7]">
                   {message}
@@ -409,19 +437,49 @@ export function ProductDashboardPreview() {
             )}
             {view === "history" && (
               <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-                <DemoVehiclePassport plannedCount={planned.length} />
+                <DemoVehiclePassport plannedCount={openPlanned.length} />
                 <div>
                   {renderBudget()}
-                  {planned.length > 0 && (
+                  {servicePlan && (
+                    <div
+                      className="mt-5 border-y border-white/20 py-4"
+                      aria-live="polite"
+                    >
+                      <p className="font-medium">{home.task}</p>
+                      <p className="mt-2 text-sm text-[#bfcac5]">
+                        {completed
+                          ? `${home.done} · ${home.actual}: ${currency(28)}`
+                          : `${home.planned}: ${currency(servicePlan.amount + (servicePlan.shipping ?? 0))}${servicePlan.shipping === null ? " + ?" : ""}`}
+                      </p>
+                      <p className="mt-2 text-xs leading-6 text-[#bfcac5]">
+                        {home.ownerRecorded}
+                      </p>
+                      <button
+                        type="button"
+                        className={`${styles.secondary} mt-3`}
+                        onClick={() => {
+                          setCompleted((value) => !value);
+                          trackAnalytics("homepage_demo_engaged", {
+                            demo_action: completed ? "reopen" : "complete",
+                          });
+                        }}
+                      >
+                        {completed ? home.undo : home.record}
+                      </button>
+                    </div>
+                  )}
+                  {openPlanned.length > 0 && (
                     <ul className="mt-4 space-y-3">
-                      {planned.map((item) => (
+                      {openPlanned.map((item) => (
                         <li
                           key={item.modification}
                           className="rounded-xl border border-white/15 p-4 text-sm"
                         >
                           <p className="font-medium">
-                            {t(`demo.${item.modification}`)} ·{" "}
-                            {currency(item.amount + (item.shipping ?? 0))}
+                            {item.modification === "service"
+                              ? home.task
+                              : t(`demo.${item.modification}`)}{" "}
+                            · {currency(item.amount + (item.shipping ?? 0))}
                             {item.shipping === null ? " + ?" : ""}
                           </p>
                           <p className="mt-1 text-xs text-[#bfcac5]">
@@ -525,6 +583,7 @@ export function ProductDashboardPreview() {
 
 function DemoVehiclePassport({ plannedCount }: { plannedCount: number }) {
   const t = useTranslations("Launch");
+  const home = homepageCopy[useLocale() as AppLocale] ?? homepageCopy.en;
   return (
     <article className="overflow-hidden rounded-2xl border border-white/10 bg-[#e8e6d7] text-[#0e2d30] shadow-[0_24px_70px_rgba(0,0,0,.25)]">
       <div className="grid min-h-[390px] lg:grid-cols-[1.15fr_0.85fr]">
@@ -575,28 +634,20 @@ function DemoVehiclePassport({ plannedCount }: { plannedCount: number }) {
           </div>
         </div>
 
-        <div className="relative min-h-64 overflow-hidden bg-[#071519]">
-          <Image
-            src="/capcar-hero-bmw-e90.jpeg"
-            alt={t("demo.passport.photoAlt")}
-            fill
-            sizes="(min-width: 1500px) 450px, (min-width: 1024px) 35vw, 100vw"
-            quality={65}
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#071519] via-transparent to-transparent" />
-          <div className="absolute right-4 bottom-4 left-4 flex items-end justify-between gap-4 text-white">
-            <div>
-              <p className="text-[9px] font-semibold tracking-[0.14em] text-white/50 uppercase">
-                {t("demo.passport.live")}
-              </p>
-              <p className="mt-1 max-w-48 text-xs leading-5 text-white/70">
-                {t("demo.passport.scan")}
-              </p>
-            </div>
-            <span className="grid size-14 shrink-0 place-items-center rounded-xl bg-white text-[#0e2d30]">
-              <QrCode className="size-9" aria-hidden="true" />
-            </span>
+        <div className="flex flex-col bg-[#071519] text-white">
+          <div className="relative min-h-64 flex-1">
+            <Image
+              src="/garage/cutouts/bmw-318i.webp"
+              alt={t("demo.passport.photoAlt")}
+              fill
+              sizes="(min-width: 1500px) 450px, (min-width: 1024px) 35vw, 100vw"
+              quality={65}
+              className="object-contain p-3"
+            />
+          </div>
+          <div className="border-t border-white/15 p-4 text-xs leading-6 text-[#c8d4cb]">
+            <p>{home.sample}</p>
+            <p className="mt-2">{home.ownerRecorded}</p>
           </div>
         </div>
       </div>

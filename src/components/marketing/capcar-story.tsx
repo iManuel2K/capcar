@@ -1,8 +1,7 @@
 "use client";
 
-import { Pause, Play } from "lucide-react";
+import { VideoModal } from "@/components/ui/video-modal";
 import { useLocale, useTranslations } from "next-intl";
-import { useRef, useState } from "react";
 
 const steps = [
   "car",
@@ -17,23 +16,9 @@ const tracks = ["de", "en", "el", "sq", "ja"] as const;
 export function CapcarStory() {
   const t = useTranslations("Walkthrough");
   const locale = useLocale();
-  const video = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(false);
   const trackLocale = tracks.includes(locale as (typeof tracks)[number])
     ? locale
     : "en";
-
-  async function togglePlayback() {
-    const player = video.current;
-    if (!player) return;
-    if (player.paused) {
-      try {
-        await player.play();
-      } catch {
-        setPlaying(false);
-      }
-    } else player.pause();
-  }
 
   return (
     <section
@@ -73,47 +58,21 @@ export function CapcarStory() {
               {t("runtime")}
             </span>
           </div>
-          <div className="relative bg-[#050b0d]">
-            <video
-              ref={video}
-              className="aspect-video w-full bg-[#071519] object-cover"
-              controls
-              muted
-              playsInline
-              preload="none"
-              poster="/walkthrough/capcar-walkthrough-poster.webp"
-              aria-describedby="walkthrough-transcript"
-              onPlay={() => setPlaying(true)}
-              onPause={() => setPlaying(false)}
-              onEnded={() => setPlaying(false)}
-            >
-              <source
-                src="/walkthrough/capcar-walkthrough.mp4"
-                type="video/mp4"
-              />
-              <track
-                src={`/walkthrough/capcar-walkthrough.${trackLocale}.vtt`}
-                kind="captions"
-                srcLang={trackLocale}
-                label={t("captions")}
-                default
-              />
-              {t("videoFallback")}
-            </video>
-            <button
-              type="button"
-              onClick={() => void togglePlayback()}
-              className="absolute bottom-4 left-4 inline-flex min-h-12 items-center gap-2 rounded-full border border-white/20 bg-[#081b1e]/92 px-5 text-sm font-semibold text-white shadow-2xl backdrop-blur-xl transition duration-200 hover:bg-[#12373a] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#f0c0a8] motion-reduce:transition-none sm:bottom-6 sm:left-6"
-              aria-label={playing ? t("pause") : t("play")}
-            >
-              {playing ? (
-                <Pause className="size-4" aria-hidden="true" />
-              ) : (
-                <Play className="size-4 fill-current" aria-hidden="true" />
-              )}
-              {playing ? t("pauseShort") : t("playShort")}
-            </button>
-          </div>
+          <VideoModal
+            title={t("title")}
+            src="/walkthrough/capcar-walkthrough.mp4"
+            kind="file"
+            poster="/walkthrough/capcar-walkthrough-poster.webp"
+            trigger={t("playShort")}
+            describedBy="walkthrough-transcript"
+            tracks={[
+              {
+                src: `/walkthrough/capcar-walkthrough.${trackLocale}.vtt`,
+                language: trackLocale,
+                label: t("captions"),
+              },
+            ]}
+          />
         </div>
         <ol
           id="walkthrough-transcript"

@@ -7,11 +7,11 @@ import {
   FileJson,
   Link2,
   Link2Off,
-  LoaderCircle,
   Printer,
   Share2,
   Trash2,
 } from "lucide-react";
+import { MotionLoader as LoaderCircle } from "@/components/ui/motion-loader";
 import {
   useCallback,
   useEffect,
@@ -326,7 +326,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
               className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-white disabled:opacity-40"
             >
               {sharing ? (
-                <LoaderCircle className="size-4 animate-spin" />
+                <LoaderCircle className="size-4" />
               ) : (
                 <Share2 className="size-4" />
               )}{" "}
@@ -442,8 +442,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
         </button>
         {linksLoading ? (
           <div className="mt-6 flex items-center gap-2 text-sm text-white/35">
-            <LoaderCircle className="size-4 animate-spin" /> Loading shared
-            links…
+            <LoaderCircle className="size-4" /> Loading shared links…
           </div>
         ) : links.length === 0 ? (
           <p className="mt-6 rounded-xl border border-dashed border-white/10 p-6 text-center text-sm text-white/35">

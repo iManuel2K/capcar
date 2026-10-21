@@ -230,21 +230,25 @@
       }
     },
     "tangible": {
+      "tripPlanning": {
+        "title": "Planifikim fundjave panoramike me AI",
+        "description": "Krijo plane udhëtimi me llogari dhe shërbim AI të lidhur. Mund të ketë tarifa. Kontrollo rrugët dhe kushtet para nisjes."
+      },
       "label": "Në Beta · po zgjerohet",
       "title": "Bëje të prekshme",
       "description": "Shtresa vizuale dhe e lidhur e CapCar. Bazat funksionojnë, ndërsa përmbajtja, mbulimi i makinave dhe partnerët vazhdojnë të rriten.",
       "itemStatus": "Po zgjerohet",
       "models": {
         "title": "Modele interaktive makinash",
-        "description": "Përdor sot gjeometri të lehtë reference, ndërsa shpërndarja e modeleve GLB të licencuara me kontroll integriteti është gati për ofrues të miratuar. Mbulimi sipas automjetit vazhdon të varet nga të drejtat e përdorimit."
+        "description": "Eksploro {modelCount} makina reference të licencuara në 3D. Rrotullo, zmadho dhe provo ngjyrat e mbështetura. Modele nga krijues të pavarur, jo simulime përputhshmërie për makinën tënde."
       },
       "movie": {
         "title": "Demo të makinave ikonike nga filmat",
-        "description": "Eksploro R34 e Brian nga komuniteti, si dhe Skyline e Porsche. Modele të tjera ikonike do të shtohen."
+        "description": "Rizbulo Skyline-in e Brian, DeLorean-in e Doc dhe KITT me pamje nga filmat dhe televizioni. Modelet e pavarura 3D janë referenca të veçanta dhe ngarkohen vetëm kur kërkohen."
       },
       "sound": {
         "title": "Sound Studio",
-        "description": "Filtro dhe krahaso pesë regjistrime me burime. Tre origjinale transmetohen përmes CapCar. Çiftet e sakta standarde/modifikuara kërkojnë verifikim."
+        "description": "Krahaso {count} regjistrime me burime ose audion tënde lokalisht. Kushtet ndryshojnë; nuk janë çifte të verifikuara origjinal/modifikuar."
       },
       "obd": {
         "title": "Diagnostikim vendas OBD-II",
@@ -288,10 +292,6 @@
         "title": "Drejtimi i build-it me AI",
         "description": "Gjenero ide të dobishme për përmirësime dhe koncepte vizuale rreth makinës tënde."
       },
-      "tripPlanning": {
-        "title": "Planifikim fundjave panoramike me AI",
-        "description": "Pyet një AI të mbështetur: “Më planifiko një fundjavë të gjatë panoramike me [makinë] në [rajon].” CapCar jep kontekstin e makinës dhe Roadbook vetëm me miratim; itinerari, hyrja dhe kushtet duhen verifikuar."
-      },
       "calendarMail": {
         "title": "Sinkronizim kalendari dhe emaili",
         "description": "Kthe planet e zgjedhura të Roadbook, rezervimet dhe detajet e eventeve në një itinerar të qartë përmes lidhjeve me leje. Pa hyrje në email ose krijim eventesh pa miratim të qartë."
@@ -334,8 +334,8 @@
   "StudioPage": {
     "back": "Kthehu te CapCar",
     "eyebrow": "Concept Studio",
-    "title": "Eksploro drejtimin.",
-    "description": "Eksploro 25 makina ikonike në 3D interaktiv, falas dhe pa llogari. Rrotullo, zmadho dhe gjej ide të reja. E njëjta bibliotekë modelesh është në dispozicion edhe në projektet e garazhit tënd."
+    "title": "Eksploro 25 makina në 3D interaktiv.",
+    "description": "Rrotullo një makinë reference, provo ngjyrat e mbështetura dhe ruaj pamjen. Falas, pa llogari."
   },
   "SoundPage": {
     "back": "CapCar",

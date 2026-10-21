@@ -12,8 +12,6 @@ import {
   Volume2,
   WandSparkles,
 } from "lucide-react";
-import Link from "next/link";
-import { platformCopy } from "@/features/marketing/platform-copy";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
 import { journalArticlePath } from "@/features/journal/routes";
 import type { AppLocale } from "@/i18n/config";
@@ -27,7 +25,6 @@ import styles from "./homepage.module.css";
 
 export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
   const c = homepageCopy[locale] ?? homepageCopy.en;
-  const p = platformCopy[locale];
   const guide = journalArticlePath("bmw-wochenendprojekt-planen", locale);
   const euro = (value: number) =>
     new Intl.NumberFormat(locale, {
@@ -64,19 +61,6 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
     <div className={styles.page}>
       <main id="main-content">
         <MarketingHero locale={locale} />
-        <aside className={styles.platformBridge} aria-label={p.label}>
-          <div>
-            <strong>{p.bridge}</strong>
-            <p>{p.bridgeText}</p>
-          </div>
-          <Link
-            href={locale === "en" ? "/platform" : `/${locale}/platform`}
-            className={styles.secondary}
-          >
-            {p.label}
-            <ArrowRight size={16} aria-hidden="true" />
-          </Link>
-        </aside>
         <section
           id="platform"
           className={styles.section}
@@ -241,6 +225,12 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
             </article>
           </UseCaseExplorer>
         </section>
+        <DeferredProductDashboardPreview
+          eyebrow={c.sample}
+          title={c.demoTitle}
+          description={c.demoText}
+          action={c.create}
+        />
         <section
           id="projects"
           className={styles.story}
@@ -256,9 +246,42 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
               {steps.map(({ title, text, icon: Icon }, index) => (
                 <li key={title} className={styles.step}>
                   <span className={styles.number}>0{index + 1}</span>
-                  <Icon aria-hidden="true" />
-                  <h3>{title}</h3>
-                  <p>{text}</p>
+                  <div>
+                    <Icon aria-hidden="true" />
+                    <h3>{title}</h3>
+                    <p>{text}</p>
+                  </div>
+                  {index === 0 && (
+                    <strong className={styles.jobValue}>BMW 318i / E90</strong>
+                  )}
+                  {index === 1 && (
+                    <dl className={styles.jobCosts}>
+                      <div>
+                        <dt>{c.budget}</dt>
+                        <dd>{euro(300)}</dd>
+                      </div>
+                      <div>
+                        <dt>{c.planned}</dt>
+                        <dd>{euro(30)}</dd>
+                      </div>
+                    </dl>
+                  )}
+                  {index === 3 && (
+                    <dl className={styles.jobCosts}>
+                      <div>
+                        <dt>{c.actual}</dt>
+                        <dd>{euro(28)}</dd>
+                      </div>
+                    </dl>
+                  )}
+                  {index === 4 && (
+                    <strong className={styles.jobValue}>
+                      {c.task}
+                      <small>
+                        {c.done} · {euro(28)}
+                      </small>
+                    </strong>
+                  )}
                   {index === 2 && (
                     <HomepageLink href={guide} className={styles.secondary}>
                       {c.guides}
@@ -271,12 +294,6 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
             <p className={styles.fine}>{c.ownerRecorded}</p>
           </div>
         </section>
-        <DeferredProductDashboardPreview
-          eyebrow={c.sample}
-          title={c.demoTitle}
-          description={c.demoText}
-          action={c.create}
-        />
         <section
           className={styles.tools}
           aria-labelledby="supporting-tools-title"

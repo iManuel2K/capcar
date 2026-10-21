@@ -2,8 +2,6 @@ import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
-  Check,
-  Circle,
   Gauge,
   Layers3,
   ShieldCheck,
@@ -12,6 +10,8 @@ import {
 import { useTranslations } from "next-intl";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
+import { soundCatalog } from "@/features/visualizer/sound-catalog";
+import { carModels } from "@/features/visualizer/car-model-catalog";
 
 const stages = [
   {
@@ -65,6 +65,7 @@ const stages = [
       "roadbook",
       "photoSpots",
       "events",
+      "tripPlanning",
     ],
   },
   {
@@ -73,7 +74,7 @@ const stages = [
     tone: "#0e2d30",
     surface: "bg-[#ccd5cc]",
     icon: Sparkles,
-    items: ["ai", "tripPlanning", "calendarMail", "twowheels", "more"],
+    items: ["ai", "calendarMail", "twowheels", "more"],
   },
 ] as const;
 
@@ -88,7 +89,7 @@ export function RoadmapPage() {
     <div className="min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
       <main>
         <section className="px-2 pb-2 sm:px-4 sm:pb-4 lg:px-6 lg:pb-6">
-          <div className="relative mx-auto grid min-h-[540px] max-w-[1500px] overflow-hidden rounded-[1.75rem] bg-[#0e2d30] text-[#e8e6d7] sm:min-h-[620px] sm:rounded-[2.5rem] lg:grid-cols-[1.12fr_0.88fr]">
+          <div className="relative mx-auto grid min-h-[360px] max-w-[1500px] overflow-hidden rounded-[1.75rem] bg-[#0e2d30] text-[#e8e6d7] sm:min-h-[460px] sm:rounded-[2.5rem] lg:grid-cols-[1.12fr_0.88fr]">
             <div className="flex items-end p-6 sm:p-12 lg:p-16">
               <div className="max-w-3xl">
                 <p className="text-xs font-semibold tracking-[0.22em] text-[#bf8269] uppercase">
@@ -124,7 +125,7 @@ export function RoadmapPage() {
                   <a
                     key={stage.key}
                     href={`#${stage.key}`}
-                    className="group flex min-h-52 flex-col justify-between rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-6 transition hover:-translate-y-1 hover:border-[#bf8269]/55 hover:bg-white/[0.075]"
+                    className="group flex flex-col justify-between gap-5 border-b border-white/15 p-5 transition hover:border-[#bf8269]/55 hover:bg-white/[0.035] motion-reduce:transition-none"
                   >
                     <div className="flex items-start justify-between">
                       <span className="grid size-10 place-items-center rounded-full bg-[#bf8269]/14 text-[#bf8269]">
@@ -206,7 +207,7 @@ export function RoadmapPage() {
                 className={`${stage.surface} scroll-mt-24 overflow-hidden rounded-[1.75rem] border border-[#0e2d30]/10 sm:rounded-[2.25rem]`}
               >
                 <div className="grid lg:grid-cols-[0.38fr_0.62fr]">
-                  <header className="flex flex-col justify-between border-b border-[#0e2d30]/10 p-6 sm:p-9 lg:min-h-[440px] lg:border-r lg:border-b-0">
+                  <header className="flex flex-col justify-between border-b border-[#0e2d30]/10 p-6 sm:p-9 lg:border-r lg:border-b-0">
                     <div>
                       <div className="flex items-center justify-between gap-4">
                         <span
@@ -233,52 +234,44 @@ export function RoadmapPage() {
                       </p>
                     </div>
                     <p className="mt-10 text-xs font-medium text-[#0e2d30]/42">
-                      {t("milestoneCount", { count: stage.items.length })}
+                      {t(`${stage.key}.itemStatus`)}
                     </p>
                   </header>
-
-                  <ol className="grid sm:grid-cols-2">
-                    {stage.items.map((item, itemIndex) => {
-                      return (
-                        <li
-                          key={item}
-                          className="group min-h-48 border-b border-[#0e2d30]/10 p-6 transition last:border-b-0 hover:bg-white/25 sm:border-r sm:p-7 sm:nth-[2n]:border-r-0 sm:nth-last-[-n+2]:border-b-0"
-                        >
-                          <div className="flex items-center justify-between gap-4">
-                            <span
-                              className="font-mono text-[10px] font-semibold"
-                              style={{ color: stage.tone }}
-                            >
-                              {String(milestoneOffset + itemIndex + 1).padStart(
-                                2,
-                                "0",
-                              )}
-                            </span>
-                            <span
-                              className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[9px] font-semibold tracking-[0.08em] uppercase"
-                              style={{
-                                borderColor: `${stage.tone}26`,
-                                color: stage.tone,
-                              }}
-                            >
-                              {stage.key === "foundation" ? (
-                                <Check className="size-2.5" />
-                              ) : (
-                                <Circle className="size-2.5 fill-current" />
-                              )}
-                              {t(`${stage.key}.itemStatus`)}
-                            </span>
-                          </div>
-                          <h4 className="mt-7 text-lg font-medium tracking-[-0.025em]">
-                            {t(`${stage.key}.${item}.title`)}
-                          </h4>
-                          <p className="mt-3 text-sm leading-6 text-[#0e2d30]/54">
-                            {t(`${stage.key}.${item}.description`)}
-                          </p>
-                        </li>
-                      );
-                    })}
-                  </ol>
+                  <details className="p-2" open={stage.key === "hardening"}>
+                    <summary className="flex min-h-12 cursor-pointer items-center border-b border-[#0e2d30]/15 px-5 text-sm font-semibold underline underline-offset-4">
+                      {t("milestoneCount", { count: stage.items.length })}
+                    </summary>
+                    <ol className="grid sm:grid-cols-2">
+                      {stage.items.map((item, itemIndex) => {
+                        return (
+                          <li
+                            key={item}
+                            className="border-b border-[#0e2d30]/10 p-6 last:border-b-0 sm:p-7"
+                          >
+                            <div className="flex items-center justify-between gap-4">
+                              <span
+                                className="font-mono text-[10px] font-semibold"
+                                style={{ color: stage.tone }}
+                              >
+                                {String(
+                                  milestoneOffset + itemIndex + 1,
+                                ).padStart(2, "0")}
+                              </span>
+                            </div>
+                            <h4 className="mt-7 text-lg font-medium tracking-[-0.025em]">
+                              {t(`${stage.key}.${item}.title`)}
+                            </h4>
+                            <p className="mt-3 text-sm leading-6 text-[#0e2d30]/54">
+                              {t(`${stage.key}.${item}.description`, {
+                                count: soundCatalog.length,
+                                modelCount: carModels.length,
+                              })}
+                            </p>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  </details>
                 </div>
               </article>
             );

@@ -230,21 +230,25 @@
       }
     },
     "tangible": {
+      "tripPlanning": {
+        "title": "AI scenic weekend planning",
+        "description": "Create and review trip outlines with an account and a connected AI service. Provider charges may apply. Check routes, access and current conditions before driving."
+      },
       "label": "In beta · still expanding",
       "title": "Make it tangible",
       "description": "The visual and connected layer of CapCar. Working foundations exist, while content, vehicle coverage and partner access continue to grow.",
       "itemStatus": "Expanding",
       "models": {
         "title": "Interactive vehicle models",
-        "description": "Use lightweight reference geometry today, with integrity-checked licensed GLB delivery ready for approved model providers. Vehicle-specific asset coverage still depends on usage rights."
+        "description": "Explore {modelCount} licensed reference cars in interactive 3D. Rotate, zoom and try supported body colors. These are independent artist models, not exact-car fitment simulations."
       },
       "movie": {
         "title": "Iconic movie-car demos",
-        "description": "Explore a community-made Brian’s R34 film reference alongside Skyline and Porsche models. More iconic builds are still to come."
+        "description": "Rediscover Brian’s Skyline, Doc’s DeLorean and KITT through film and TV imagery. Independent 3D references are separate from the screen-used cars and load only when requested."
       },
       "sound": {
         "title": "Sound studio",
-        "description": "Filter and compare five credited recordings. Three additional originals stream through CapCar; exact stock-versus-modified pairs still need verified recordings."
+        "description": "Browse {count} credited recordings, compare two clips or add your own audio locally. Recording setups vary; these are not verified stock-versus-modified pairs."
       },
       "obd": {
         "title": "Native OBD-II diagnostics",
@@ -288,10 +292,6 @@
         "title": "AI build direction",
         "description": "Generate useful upgrade ideas and visual concepts around the vehicle you own."
       },
-      "tripPlanning": {
-        "title": "AI scenic weekend planning",
-        "description": "Ask a supported AI: “Plan me a long scenic weekend with [car] in [region].” CapCar will provide selected vehicle and Roadbook context only with the owner's approval, while routes, access and current conditions still require verification."
-      },
       "calendarMail": {
         "title": "Calendar and mail sync",
         "description": "Turn chosen Roadbook plans, bookings and event details into a clearer itinerary through permission-based calendar and email connections. No inbox access or event creation without explicit owner approval."
@@ -334,8 +334,8 @@
   "StudioPage": {
     "back": "Back to CapCar",
     "eyebrow": "Concept studio",
-    "title": "Explore the direction.",
-    "description": "Explore 25 iconic cars in interactive 3D, free and without an account. Rotate, zoom and find your next direction. The same model library is available in your garage builds."
+    "title": "Explore 25 cars in interactive 3D.",
+    "description": "Rotate a reference car, try supported paint colors and save your view. Free, no account needed."
   },
   "SoundPage": {
     "back": "CapCar",

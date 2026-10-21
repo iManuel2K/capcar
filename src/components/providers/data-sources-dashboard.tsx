@@ -9,13 +9,13 @@ import {
   Cuboid,
   DatabaseZap,
   KeyRound,
-  LoaderCircle,
   PackageSearch,
   RefreshCw,
   ServerCog,
   ShoppingBag,
   type LucideIcon,
 } from "lucide-react";
+import { MotionLoader as LoaderCircle } from "@/components/ui/motion-loader";
 import { useState, useSyncExternalStore } from "react";
 
 import type {
@@ -185,7 +185,7 @@ export function DataSourcesDashboard({
             className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d] disabled:opacity-50"
           >
             {resolving ? (
-              <LoaderCircle className="size-4 animate-spin" />
+              <LoaderCircle className="size-4" />
             ) : (
               <RefreshCw className="size-4" />
             )}

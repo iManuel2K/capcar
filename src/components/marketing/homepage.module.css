@@ -134,6 +134,57 @@
   font-size: 0.8rem;
   color: #d1dad2;
 }
+.heroJob {
+  margin: 0 22px 22px;
+  padding-top: 18px;
+  border-top: 1px solid #ffffff26;
+}
+.heroJob span,
+.heroJob dt {
+  font-size: 0.75rem;
+  color: #becdc7;
+}
+.heroJob strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 1rem;
+  font-weight: 550;
+}
+.heroJob dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+.heroJob dd {
+  margin: 4px 0 0;
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+}
+.jobCosts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.jobCosts dt {
+  font-size: 0.8rem;
+  color: #435e59;
+}
+.jobCosts dd {
+  margin: 6px 0 0;
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+.jobValue {
+  font-size: 1rem;
+  font-weight: 550;
+}
+.jobValue small {
+  display: block;
+  margin-top: 8px;
+  font-weight: 400;
+  color: #435e59;
+}
 .car {
   position: relative;
   aspect-ratio: 16/9;
@@ -341,16 +392,19 @@
   padding: 0;
   margin: 48px 0 0;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 }
 .step {
-  padding: 0 22px;
-  border-left: 1px solid #0e2d3033;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) minmax(180px, 0.6fr);
+  align-items: start;
+  gap: 24px;
+  padding: 28px 0;
+  border-top: 1px solid #0e2d3033;
   min-width: 0;
 }
 .step:first-child {
-  padding-left: 0;
-  border: 0;
+  border-top: 1px solid #0e2d3033;
 }
 .number {
   font-family: monospace;
@@ -358,23 +412,21 @@
   color: #84553f;
 }
 .step svg {
-  margin: 20px 0;
-  width: 24px;
-  height: 24px;
-  stroke-width: 1.5;
+  display: none;
 }
 .step h3 {
-  font-size: 1.05rem;
+  font-size: 1.25rem;
   font-weight: 550;
   line-height: 1.4;
 }
 .step p {
   font-size: 1rem;
-  line-height: 1.8;
+  line-height: 1.7;
   color: #435e59;
   margin-top: 12px;
 }
 .step a {
+  grid-column: 3;
   margin-top: 10px;
   font-size: 0.8rem;
 }
@@ -463,6 +515,8 @@
   }
   .step,
   .step:first-child {
+    grid-template-columns: 1fr;
+    gap: 16px;
     border: 0;
     padding: 0 0 0 44px;
     position: relative;
@@ -486,6 +540,9 @@
   .step p {
     margin-top: 6px;
     max-width: 60em;
+  }
+  .step a {
+    grid-column: auto;
   }
   .tool {
     grid-template-columns: 28px 140px 1fr;

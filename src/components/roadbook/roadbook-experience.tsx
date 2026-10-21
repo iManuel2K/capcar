@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import { MotionLoader } from "@/components/ui/motion-loader";
 
 import { RoadbookFilterBar } from "@/components/roadbook/roadbook-filter-bar";
 import { RoadbookFuelDrawer } from "@/components/roadbook/roadbook-fuel-drawer";
@@ -310,7 +311,7 @@ export function RoadbookExperience() {
       {!mapReady && !mapError && (
         <div className="pointer-events-none absolute inset-0 z-10 grid place-items-center bg-[#0b0e0c]">
           <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.035] px-4 py-3 text-xs text-white/55">
-            <RefreshCw className="size-4 animate-spin text-[#ff667a]" />
+            <MotionLoader className="size-4" />
             {t("mapLoading")}
           </div>
         </div>

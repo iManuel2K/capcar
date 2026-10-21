@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { VideoModal } from "@/components/ui/video-modal";
 import { useLocale } from "next-intl";
 import {
   Activity,
@@ -484,28 +485,11 @@ function GuideMediaHub({
           <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
         </summary>
         <div className="mt-5 border-t border-white/8 pt-5">
-          {guide.video?.embedUrl ? (
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-black">
-              <iframe
-                src={guide.video.embedUrl}
-                title={guide.video.title}
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="aspect-video w-full"
-              />
-            </div>
-          ) : guide.video?.url ? (
-            <a
-              href={guide.video.url}
-              target="_blank"
-              rel="noreferrer"
-              className="group/video flex aspect-video items-center justify-center rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_center,rgba(231,45,69,0.22),transparent_52%),#090909]"
-            >
-              <span className="grid size-16 place-items-center rounded-full bg-[#e72d45] text-white transition group-hover/video:scale-105">
-                <PlayCircle className="size-7" />
-              </span>
-            </a>
+          {guide.video ? (
+            <VideoModal
+              title={guide.video.title}
+              src={guide.video.embedUrl ?? guide.video.url}
+            />
           ) : (
             <p className="text-sm text-white/35">
               Video reference coming soon.
