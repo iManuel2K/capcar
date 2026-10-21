@@ -10,6 +10,7 @@ import { requestRetail, SearchFailure } from "@/features/retail/search-client";
 import { ebaySearchUrl } from "@/features/retail/retail-contracts";
 
 import styles from "./part-search-theme.module.css";
+import marketing from "@/components/marketing/homepage.module.css";
 
 type ResultState = {
   key: string;
@@ -369,7 +370,7 @@ export function ResilientPartSearch({
           )}
         </fieldset>
         <button
-          className={`${action} sm:col-span-2`}
+          className={`${appearance === "light" ? marketing.primary : action} sm:col-span-2`}
           disabled={
             pending ||
             refreshing ||

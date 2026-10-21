@@ -147,14 +147,27 @@ describe("proxy public Passport guard", () => {
     expect(response.headers.get("x-robots-tag")).toBeNull();
   });
 
-  it("requires an account before opening CapCar AI", async () => {
+  it("allows the public AI preview without redirecting visitors to login", async () => {
     const response = await proxy(
       new NextRequest("https://capcar.example/ai?from=header"),
     );
 
+    expect(response.status).toBe(200);
+    expect(response.headers.get("location")).toBeNull();
+  });
+
+  it.each([
+    "/garage",
+    "/garage/private-car",
+    "/account",
+    "/account/connections",
+  ])("keeps %s protected while the AI preview is public", async (path) => {
+    const response = await proxy(
+      new NextRequest(`https://capcar.example${path}`),
+    );
     expect(response.status).toBe(307);
     expect(response.headers.get("location")).toBe(
-      "https://capcar.example/login?next=%2Fai%3Ffrom%3Dheader",
+      `https://capcar.example/login?next=${encodeURIComponent(path)}`,
     );
   });
 

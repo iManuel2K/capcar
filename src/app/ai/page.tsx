@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { TripPlanner } from "@/components/trips/trip-planner";
 import { getAiConnection } from "@/features/connections/ai-connection";
 import { pageMetadata } from "@/features/seo/public-metadata";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { currentUser } from "@/lib/supabase/current-user";
+import { AIPlannerPreview } from "@/components/marketing/ai-planner-preview";
+import { resolveJournalLocale } from "@/features/journal/routes";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +34,14 @@ export default async function AIPlannerPage({
   }
   const returnTo = `/ai${params.size ? `?${params}` : ""}`;
   const user = await currentUser();
-  if (!user) redirect(`/login?next=${encodeURIComponent(returnTo)}`);
+  if (!user) {
+    return (
+      <AIPlannerPreview
+        locale={resolveJournalLocale(await getLocale())}
+        returnTo={returnTo}
+      />
+    );
+  }
 
   const aiConnection = await getAiConnection(
     createAdminClient(),

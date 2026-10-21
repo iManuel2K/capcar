@@ -315,12 +315,12 @@
     "footerNote": "Drejtimi i udhërrëfyesit mund të ndryshojë nga reagimet e Beta-s."
   },
   "PartsPage": {
-    "eyebrow": "Katalog i hapur · pa llogari",
-    "title": "Së pari pjesët. Garazhi më vonë.",
-    "description": "Kërko emra, numra pjesësh, kode shasie dhe motori. CapCar tregon çfarë mbulon çdo rekord pa pretenduar përshtatshmëri të konfirmuar për një makinë të paidentifikuar.",
+    "eyebrow": "KATALOG SHEMBULL",
+    "title": "Katalog shembull i pjesëve",
+    "description": "Eksploro pjesë ilustruese dhe ide për projektin. Për çmimet dhe disponueshmërinë aktuale, kërko oferta nga shitësit.",
     "liveOffers": "Kërko oferta live",
     "resultsFor": "Rezultate për “{query}”",
-    "prepared": "Katalog i përgatitur",
+    "prepared": "Shembuj ilustrues · Jo oferta aktuale",
     "matching": "{count} pjesë që përputhen",
     "conditional": "Përshtatshmëria mbetet me kusht derisa të zgjidhet një makinë",
     "approx": "Afërsisht",
@@ -328,7 +328,8 @@
     "emptyTitle": "Ende pa rezultat në katalog",
     "emptyDescription": "Provo një term më të thjeshtë si E90, N43, frenë, disqe ose numër të plotë pjese. Mund të kërkosh edhe oferta live pa llogari.",
     "noticeTitle": "Shënim për përshtatshmërinë.",
-    "notice": "Rezultatet janë referenca, jo miratim montimi. Konfirmo VIN-in, datën e prodhimit, kodet e pajisjeve, përmasat dhe homologimin lokal para porosisë."
+    "notice": "Rezultatet janë referenca, jo miratim montimi. Konfirmo VIN-in, datën e prodhimit, kodet e pajisjeve, përmasat dhe homologimin lokal para porosisë.",
+    "examples": "Shiko katalogun shembull"
   },
   "StudioPage": {
     "back": "Kthehu te CapCar",

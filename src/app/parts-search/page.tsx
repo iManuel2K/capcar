@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/marketing/site-footer";
 import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 import { searchCatalogParts } from "@/features/parts/part-catalog";
 import { canonicalMetadata } from "@/features/seo/public-metadata";
+import styles from "@/components/marketing/homepage.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("PartsPage");
@@ -36,24 +37,29 @@ export default async function PartsSearchPage({
         <p className="text-xs font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
           {t("eyebrow")}
         </p>
-        <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-[-0.05em] text-balance sm:text-6xl">
-          {t("title")}
-        </h1>
+        <h1 className={`${styles.pageTitle} mt-4 max-w-4xl`}>{t("title")}</h1>
         <p className="mt-5 max-w-2xl leading-7 text-[#0e2d30]/62">
           {t("description")}
         </p>
         <div className="mt-8 max-w-2xl">
-          <GlobalPartsSearch key={query} expanded initialQuery={query} />
           <Link
             href={
               query
                 ? `/connected-parts?q=${encodeURIComponent(query)}`
                 : "/connected-parts"
             }
-            className="mt-3 inline-flex min-h-11 items-center text-sm underline"
+            className={styles.primary}
           >
             {t("liveOffers")} →
           </Link>
+          <div className="mt-6">
+            <GlobalPartsSearch
+              key={query}
+              expanded
+              initialQuery={query}
+              destination="/parts-search"
+            />
+          </div>
         </div>
 
         <div className="mt-10 flex items-end justify-between gap-5 border-b border-[#0e2d30]/14 pb-4">

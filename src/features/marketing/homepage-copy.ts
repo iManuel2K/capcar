@@ -8,8 +8,7 @@ const en = {
   create: "Create your garage",
   explore: "Explore an example garage",
   support: "Start with the car you already own.",
-  account:
-    "Explore without an account. Create one when you’re ready to save your own car.",
+  account: "Explore freely. Create an account to save your car.",
   sample: "Example garage · Illustrative data",
   photo: "Black BMW E90 photographed beside a concrete bridge",
   active: "Active build",
@@ -25,9 +24,9 @@ const en = {
   usesTitle: "What would you like to do next?",
   maintain: "Maintain your car",
   maintainText:
-    "Find relevant DIY guides, keep maintenance records and line up the next job. Keep what you did, when you did it and what it cost.",
+    "Find a guide, plan the next job and keep a record of the work and cost.",
   maintainAccess:
-    "Read Journal guides without an account. Saving tasks and vehicle records requires a garage account.",
+    "Guides are public. An account saves your tasks and vehicle records.",
   maintainAction: "Plan a maintenance task",
   guides: "Read a practical guide",
   guideName: "Plan a BMW weekend project",
@@ -38,7 +37,7 @@ const en = {
   buildText:
     "Turn an idea into parts and tasks. Keep your budget, planned costs and actual spending in view as the project moves forward.",
   buildAccess:
-    "Try the example below without registering. Your own saved plans need a garage account. Confirm fitment separately.",
+    "Try the example below. Create an account to save your own build.",
   buildAction: "Start a build plan",
   drives: "Find your next drive",
   drivesText:
@@ -74,9 +73,9 @@ const en = {
     "Owner-recorded work, not professional verification. Sharing stays optional.",
   demoTitle: "Look around before you make it yours.",
   demoText:
-    "A read-only example of the BMW garage, with a local planning sandbox. Change a part or compare costs: nothing is purchased, saved to an account or written to a real owner’s garage.",
+    "Compare a part and see the BMW build budget change. Example data only; nothing is bought or saved.",
   demoHint:
-    "Try Parts comparison, then Vehicle Passport to see how a planned part changes the example budget. Demo choices do not transfer to your own garage.",
+    "Open Vehicle Passport to see the planned part in the example record.",
   toolsEyebrow: "There when you need them",
   toolsTitle: "A few more tools for the detail-minded.",
   visual: "Visualizer",
@@ -87,10 +86,10 @@ const en = {
     "Listen to engine and exhaust recordings. Compare a stock take with another recording or your own audio locally, without an account.",
   diagnostics: "Diagnostics",
   diagnosticsText:
-    "Keep fault codes and your notes with the car. Requires a garage account. Native OBD connection is a preview; manual recording is available.",
+    "Save fault codes and notes with your car. Manual entries are available; native OBD scanning is a preview.",
   passport: "Passport",
   passportText:
-    "Keep vehicle information and owner-recorded history together, with optional sharing. Create it in your garage; private details stay excluded by default.",
+    "Keep vehicle details and owner-recorded history together. Share only what you choose.",
   open: "Explore",
   preview: "Preview",
   finalTitle: "Start with one car. Save the next thing you want to do.",
@@ -109,8 +108,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     create: "Garage erstellen",
     explore: "Beispielgarage ansehen",
     support: "Fang mit dem Auto an, das du schon hast.",
-    account:
-      "Ohne Konto umsehen. Erstelle eines, wenn du dein eigenes Auto speichern möchtest.",
+    account: "Ohne Konto umsehen. Mit Konto dein Auto speichern.",
     sample: "Beispielgarage · Illustrative Daten",
     photo: "Schwarzer BMW E90 neben einer Betonbrücke",
     active: "Aktives Projekt",
@@ -127,9 +125,9 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     usesTitle: "Was möchtest du als Nächstes machen?",
     maintain: "Dein Auto warten",
     maintainText:
-      "Finde passende DIY-Anleitungen, dokumentiere Wartungen und plane die nächste Arbeit. Halte fest, was du wann gemacht hast und was es gekostet hat.",
+      "Finde eine Anleitung, plane die nächste Arbeit und dokumentiere Aufwand und Kosten.",
     maintainAccess:
-      "Journal-Anleitungen sind ohne Konto lesbar. Zum Speichern von Aufgaben und Fahrzeugdaten brauchst du ein Garagenkonto.",
+      "Anleitungen sind frei zugänglich. Aufgaben und Fahrzeugdaten speicherst du mit Konto.",
     maintainAction: "Wartungsaufgabe planen",
     guides: "Praktische Anleitung lesen",
     guideName: "Ein BMW-Wochenendprojekt planen",
@@ -140,7 +138,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     buildText:
       "Mach aus einer Idee konkrete Teile und Aufgaben. Behalte Budget, geplante Kosten und tatsächliche Ausgaben im Blick, während dein Projekt wächst.",
     buildAccess:
-      "Das Beispiel unten funktioniert ohne Anmeldung. Eigene Pläne erfordern ein Garagenkonto. Prüfe die Passgenauigkeit separat.",
+      "Probiere das Beispiel unten aus. Deinen eigenen Umbau speicherst du mit Konto.",
     buildAction: "Umbau planen",
     drives: "Deine nächste Tour finden",
     drivesText:
@@ -177,9 +175,9 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Vom Halter dokumentiert, nicht fachlich verifiziert. Teilen ist freiwillig.",
     demoTitle: "Erst umsehen. Dann deine eigene Garage starten.",
     demoText:
-      "Eine schreibgeschützte BMW-Beispielgarage mit lokalem Planungsbereich. Ändere ein Teil oder vergleiche Kosten: Es wird nichts gekauft, in einem Konto gespeichert oder in eine echte Garage geschrieben.",
+      "Vergleiche ein Teil und sieh, wie sich das BMW-Budget ändert. Nur Beispieldaten; kein Kauf und keine Speicherung.",
     demoHint:
-      "Probiere den Teilevergleich und danach den Fahrzeugpass aus. So siehst du, wie ein geplantes Teil das Beispielbudget verändert. Die Auswahl wird nicht in deine Garage übernommen.",
+      "Öffne den Fahrzeugpass und sieh das geplante Teil im Beispieleintrag.",
     toolsEyebrow: "Da, wenn du sie brauchst",
     toolsTitle: "Mehr Werkzeuge für die Details.",
     visual: "Visualizer",
@@ -190,10 +188,10 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Höre Motor- und Auspuffaufnahmen. Vergleiche Serienklang mit einer anderen oder deiner eigenen Aufnahme lokal, ohne Konto.",
     diagnostics: "Diagnose",
     diagnosticsText:
-      "Sammle Fehlercodes und Notizen beim Auto. Garagenkonto erforderlich. Die native OBD-Verbindung ist eine Vorschau; manuelle Einträge sind möglich.",
+      "Speichere Fehlercodes und Notizen beim Auto. Manuelle Einträge sind verfügbar; natives OBD-Scanning ist eine Vorschau.",
     passport: "Fahrzeugpass",
     passportText:
-      "Fahrzeugdaten und selbst dokumentierte Historie zusammenhalten und optional teilen. In der Garage erstellen; private Angaben bleiben standardmäßig ausgeschlossen.",
+      "Fahrzeugdaten und selbst dokumentierte Historie an einem Ort. Teile nur, was du möchtest.",
     open: "Entdecken",
     preview: "Vorschau",
     finalTitle: "Ein Auto genügt. Speichere, was du als Nächstes vorhast.",
@@ -210,7 +208,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     explore: "Δες ένα γκαράζ-παράδειγμα",
     support: "Ξεκίνα με το αυτοκίνητο που ήδη έχεις.",
     account:
-      "Περιηγήσου χωρίς λογαριασμό. Δημιούργησε έναν όταν θελήσεις να αποθηκεύσεις το δικό σου αυτοκίνητο.",
+      "Εξερεύνησε ελεύθερα. Δημιούργησε λογαριασμό για να αποθηκεύσεις το αυτοκίνητό σου.",
     sample: "Γκαράζ-παράδειγμα · Ενδεικτικά δεδομένα",
     photo: "Μαύρη BMW E90 δίπλα σε γέφυρα από σκυρόδεμα",
     active: "Ενεργό πρότζεκτ",
@@ -227,9 +225,9 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     usesTitle: "Τι θέλεις να κάνεις στη συνέχεια;",
     maintain: "Συντήρησε το αυτοκίνητό σου",
     maintainText:
-      "Βρες σχετικούς οδηγούς DIY, κράτησε αρχείο συντήρησης και οργάνωσε την επόμενη εργασία. Κατέγραψε τι έκανες, πότε και πόσο κόστισε.",
+      "Βρες οδηγό, σχεδίασε την επόμενη εργασία και κατέγραψε τη δουλειά και το κόστος.",
     maintainAccess:
-      "Οι οδηγοί Journal διαβάζονται χωρίς λογαριασμό. Για αποθήκευση εργασιών και αρχείων οχήματος χρειάζεται λογαριασμός γκαράζ.",
+      "Οι οδηγοί είναι δημόσιοι. Ο λογαριασμός αποθηκεύει εργασίες και στοιχεία οχήματος.",
     maintainAction: "Προγραμμάτισε μια συντήρηση",
     guides: "Διάβασε έναν πρακτικό οδηγό",
     guideName: "Σχεδίασε ένα πρότζεκτ Σαββατοκύριακου για BMW",
@@ -240,7 +238,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     buildText:
       "Κάνε μια ιδέα ανταλλακτικά και εργασίες. Κράτησε ορατά τον προϋπολογισμό, τα προγραμματισμένα κόστη και τα πραγματικά έξοδα καθώς προχωρά το έργο.",
     buildAccess:
-      "Δοκίμασε το παράδειγμα χωρίς εγγραφή. Τα δικά σου αποθηκευμένα σχέδια χρειάζονται λογαριασμό γκαράζ. Επιβεβαίωσε ξεχωριστά τη συμβατότητα.",
+      "Δοκίμασε το παράδειγμα παρακάτω. Με λογαριασμό αποθηκεύεις το δικό σου πρότζεκτ.",
     buildAction: "Ξεκίνα ένα σχέδιο μετατροπών",
     drives: "Βρες την επόμενη διαδρομή σου",
     drivesText:
@@ -277,9 +275,9 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Καταγραφή ιδιοκτήτη, όχι επαγγελματική επαλήθευση. Η κοινοποίηση είναι προαιρετική.",
     demoTitle: "Δες πώς λειτουργεί πριν το κάνεις δικό σου.",
     demoText:
-      "Ένα γκαράζ BMW μόνο για ανάγνωση, με τοπικό χώρο δοκιμής σχεδιασμού. Άλλαξε ανταλλακτικό ή σύγκρινε κόστη: τίποτα δεν αγοράζεται, δεν αποθηκεύεται σε λογαριασμό και δεν αλλάζει πραγματικό γκαράζ.",
+      "Σύγκρινε ένα ανταλλακτικό και δες τον προϋπολογισμό της BMW να αλλάζει. Μόνο ενδεικτικά δεδομένα· χωρίς αγορά ή αποθήκευση.",
     demoHint:
-      "Δοκίμασε τη σύγκριση ανταλλακτικών και μετά το Διαβατήριο οχήματος για να δεις την αλλαγή στον ενδεικτικό προϋπολογισμό. Οι επιλογές δεν μεταφέρονται στο δικό σου γκαράζ.",
+      "Άνοιξε το Διαβατήριο οχήματος για να δεις το προγραμματισμένο ανταλλακτικό στην εγγραφή-παράδειγμα.",
     toolsEyebrow: "Εκεί όταν τα χρειάζεσαι",
     toolsTitle: "Εργαλεία για όσους προσέχουν τη λεπτομέρεια.",
     visual: "Visualizer",
@@ -290,10 +288,10 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Άκου ηχογραφήσεις κινητήρων και εξατμίσεων. Σύγκρινε εργοστασιακό ήχο με άλλη ή δική σου ηχογράφηση τοπικά, χωρίς λογαριασμό.",
     diagnostics: "Διαγνωστικά",
     diagnosticsText:
-      "Κράτησε κωδικούς βλαβών και σημειώσεις μαζί με το αυτοκίνητο. Απαιτείται λογαριασμός. Η εγγενής σύνδεση OBD είναι σε προεπισκόπηση· υπάρχει χειροκίνητη καταγραφή.",
+      "Αποθήκευσε κωδικούς βλαβών και σημειώσεις στο όχημα. Διατίθεται χειροκίνητη καταγραφή· η σύνδεση OBD είναι προεπισκόπηση.",
     passport: "Διαβατήριο οχήματος",
     passportText:
-      "Συγκέντρωσε στοιχεία οχήματος και ιστορικό ιδιοκτήτη, με προαιρετική κοινοποίηση. Δημιουργείται στο γκαράζ· οι ιδιωτικές λεπτομέρειες εξαιρούνται από προεπιλογή.",
+      "Κράτα μαζί στοιχεία οχήματος και ιστορικό που καταγράφεις. Μοιράσου μόνο ό,τι επιλέξεις.",
     open: "Εξερεύνησε",
     preview: "Προεπισκόπηση",
     finalTitle:
@@ -309,8 +307,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     create: "Krijo garazhin tënd",
     explore: "Shiko një garazh shembull",
     support: "Fillo me makinën që ke tashmë.",
-    account:
-      "Eksploro pa llogari. Krijo një kur të jesh gati të ruash makinën tënde.",
+    account: "Eksploro lirisht. Krijo llogari për të ruajtur makinën tënde.",
     sample: "Garazh shembull · Të dhëna ilustruese",
     photo: "BMW E90 e zezë pranë një ure betoni",
     active: "Projekt aktiv",
@@ -326,9 +323,9 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     usesTitle: "Çfarë do të bësh më pas?",
     maintain: "Mirëmbaj makinën",
     maintainText:
-      "Gjej udhëzues DIY të përshtatshëm, mbaj shënime mirëmbajtjeje dhe planifiko punën e radhës. Shëno çfarë bëre, kur dhe sa kushtoi.",
+      "Gjej një udhëzues, planifiko punën e radhës dhe regjistro punën e koston.",
     maintainAccess:
-      "Udhëzuesit Journal lexohen pa llogari. Ruajtja e detyrave dhe historikut kërkon llogari garazhi.",
+      "Udhëzuesit janë publikë. Llogaria ruan detyrat dhe të dhënat e makinës.",
     maintainAction: "Planifiko një detyrë mirëmbajtjeje",
     guides: "Lexo një udhëzues praktik",
     guideName: "Planifiko një projekt fundjave për BMW",
@@ -339,7 +336,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     buildText:
       "Ktheje një ide në pjesë dhe detyra. Mbaj parasysh buxhetin, kostot e planifikuara dhe shpenzimet reale gjatë ecurisë së projektit.",
     buildAccess:
-      "Provo shembullin më poshtë pa regjistrim. Planet e tua të ruajtura kërkojnë llogari garazhi. Verifiko veçmas përshtatshmërinë e pjesëve.",
+      "Provo shembullin më poshtë. Krijo llogari për të ruajtur projektin tënd.",
     buildAction: "Fillo një plan modifikimesh",
     drives: "Gjej rrugën e radhës",
     drivesText:
@@ -376,9 +373,9 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Punë e regjistruar nga pronari, jo verifikim profesional. Ndarja është fakultative.",
     demoTitle: "Shikoje para se ta bësh tëndin.",
     demoText:
-      "Një garazh BMW vetëm për lexim, me një hapësirë lokale për të provuar planet. Ndrysho një pjesë ose krahaso kostot: asgjë nuk blihet, nuk ruhet në llogari dhe nuk ndryshon garazhin e një pronari real.",
+      "Krahaso një pjesë dhe shiko si ndryshon buxheti i BMW-së. Vetëm të dhëna shembull; asgjë nuk blihet ose ruhet.",
     demoHint:
-      "Provo krahasimin e pjesëve, pastaj Pasaportën e makinës për të parë ndikimin te buxheti shembull. Zgjedhjet nuk transferohen te garazhi yt.",
+      "Hap Pasaportën e makinës për të parë pjesën e planifikuar në regjistrin shembull.",
     toolsEyebrow: "Aty kur të duhen",
     toolsTitle: "Mjete të tjera për ata që duan detajet.",
     visual: "Visualizer",
@@ -389,10 +386,10 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Dëgjo regjistrime motorësh dhe marmitash. Krahaso tingullin standard me një regjistrim tjetër ose tëndin lokalisht, pa llogari.",
     diagnostics: "Diagnostikimi",
     diagnosticsText:
-      "Mbaj kodet e defekteve dhe shënimet bashkë me makinën. Kërkon llogari garazhi. Lidhja vendase OBD është parapamje; regjistrimi manual është i disponueshëm.",
+      "Ruaj kodet e defekteve dhe shënimet te makina. Regjistrimi manual është i disponueshëm; skanimi OBD është pamje paraprake.",
     passport: "Pasaporta",
     passportText:
-      "Mbaj bashkë të dhënat e makinës dhe historikun e regjistruar nga pronari, me ndarje fakultative. Krijoje në garazh; detajet private përjashtohen si parazgjedhje.",
+      "Mbaji bashkë të dhënat e makinës dhe historikun që regjistron vetë. Ndaj vetëm çfarë dëshiron.",
     open: "Eksploro",
     preview: "Parapamje",
     finalTitle: "Fillo me një makinë. Ruaj atë që do të bësh më pas.",
@@ -407,8 +404,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     create: "ガレージを作成",
     explore: "サンプルガレージを見る",
     support: "今乗っている車から始めましょう。",
-    account:
-      "閲覧にアカウントは不要です。自分の車を保存するときに作成できます。",
+    account: "自由に見て回れます。愛車の保存にはアカウントが必要です。",
     sample: "サンプルガレージ・架空のデータ",
     photo: "コンクリート橋のそばに停まる黒いBMW E90",
     active: "進行中のプロジェクト",
@@ -424,9 +420,9 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     usesTitle: "次は何をしましょうか？",
     maintain: "愛車をメンテナンス",
     maintainText:
-      "関連するDIYガイドを探し、整備の記録と次の作業を整理。いつ、何をして、いくらかかったかを残せます。",
+      "ガイドを探し、次の作業を計画して、作業内容と費用を記録しましょう。",
     maintainAccess:
-      "Journalのガイドはアカウントなしで読めます。タスクや車両記録の保存にはガレージ用アカウントが必要です。",
+      "ガイドは公開されています。作業と車両記録の保存にはアカウントが必要です。",
     maintainAction: "整備タスクを計画",
     guides: "実用ガイドを読む",
     guideName: "BMWの週末プロジェクトを計画する",
@@ -437,7 +433,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     buildText:
       "アイデアをパーツとタスクに。プロジェクトを進めながら、予算・予定費用・実際の支出を確認できます。",
     buildAccess:
-      "下のサンプルは登録せずに試せます。自分の計画の保存にはアカウントが必要です。適合は別途確認してください。",
+      "下の例を試してみましょう。自分の計画の保存にはアカウントが必要です。",
     buildAction: "カスタム計画を始める",
     drives: "次のドライブを見つける",
     drivesText:
@@ -473,9 +469,8 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "オーナーによる記録で、専門家の認証ではありません。共有は任意です。",
     demoTitle: "自分のガレージを作る前に、のぞいてみましょう。",
     demoText:
-      "BMWの閲覧専用サンプルと、端末内だけで試せる計画デモです。パーツや費用を変更しても、購入・アカウントへの保存・実在するガレージの変更は行われません。",
-    demoHint:
-      "パーツ比較の後に車両パスポートを開くと、予定パーツがサンプル予算にどう反映されるか確認できます。選択内容は自分のガレージには引き継がれません。",
+      "パーツを比較してBMWの予算がどう変わるか試せます。参考データのみで、購入や保存は行いません。",
+    demoHint: "車両パスポートを開くと、予定のパーツが記録の例に表示されます。",
     toolsEyebrow: "必要なときに、必要な道具を",
     toolsTitle: "細部までこだわるためのツール。",
     visual: "Visualizer",
@@ -486,10 +481,10 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "エンジンや排気音の録音を試聴。純正音と別の録音や自分の音源を端末内で比較できます。アカウントは不要です。",
     diagnostics: "診断",
     diagnosticsText:
-      "故障コードとメモを愛車と一緒に記録。アカウントが必要です。ネイティブOBD接続はプレビュー段階で、手動記録は利用できます。",
+      "故障コードやメモを愛車にまとめます。手動記録に対応し、OBDスキャンはプレビュー段階です。",
     passport: "車両パスポート",
     passportText:
-      "車両情報とオーナーの記録をまとめ、任意で共有。ガレージ内で作成でき、非公開情報は初期設定では共有されません。",
+      "車両情報と自分で記録した履歴を一か所に。選んだ情報だけを共有できます。",
     open: "詳しく見る",
     preview: "プレビュー",
     finalTitle: "まずは1台。次にやりたいことを保存しましょう。",

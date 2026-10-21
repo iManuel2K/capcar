@@ -36,9 +36,8 @@ describe("the connected homepage example", () => {
     ).toBeInTheDocument();
     expect(screen.queryByText("Verified builder")).not.toBeInTheDocument();
     expect(
-      screen.getAllByText(
-        "Explore without an account. Create one when you’re ready to save your own car.",
-      ).length,
+      screen.getAllByText("Explore freely. Create an account to save your car.")
+        .length,
     ).toBeGreaterThan(0);
     expect(
       screen.getByRole("tabpanel", { name: "Maintain your car" }),
@@ -206,7 +205,7 @@ describe("the connected homepage example", () => {
     const drawer = screen.getByRole("dialog", { name: "Mobile navigation" });
     expect(
       within(drawer).getByRole("link", { name: "Find parts" }),
-    ).toHaveAttribute("href", "/parts-search");
+    ).toHaveAttribute("href", "/connected-parts");
     const explore = within(drawer).getByText("Explore", {
       selector: "summary",
     });

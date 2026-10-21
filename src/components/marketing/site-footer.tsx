@@ -19,7 +19,7 @@ export function SiteFooter() {
     {
       title: t("explore"),
       links: [
-        [t("parts"), "/parts-search"],
+        [t("parts"), "/connected-parts"],
         [t("conceptStudio"), "/studio"],
         [t("soundStudio"), "/sound-studio"],
         [t("movieCars"), "/movie-cars"],

@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Headphones, ShieldCheck, ArrowUpRight } from "lucide-react";
 import { soundDeskCopy } from "@/features/visualizer/sound-desk-copy";
 import { soundCatalog } from "@/features/visualizer/sound-catalog";
+import styles from "@/components/marketing/homepage.module.css";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("SoundPage");
   const description = await getTranslations("PageMeta");
@@ -46,7 +47,7 @@ export default async function Page() {
             <p className="text-xs font-semibold tracking-[.2em] text-[#6d0101] uppercase">
               CapCar / {s("soundStudio")}
             </p>
-            <h1 className="mt-5 max-w-3xl text-5xl leading-[1.02] font-medium tracking-[-.055em] sm:text-7xl">
+            <h1 className={`${styles.pageTitle} mt-5 max-w-3xl`}>
               {c.title}
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[#0e2d30]/75">

@@ -7,10 +7,12 @@ export function GlobalPartsSearch({
   theme = "light",
   expanded = false,
   initialQuery = "",
+  destination = "/connected-parts",
 }: {
   theme?: "light" | "dark";
   expanded?: boolean;
   initialQuery?: string;
+  destination?: "/connected-parts" | "/parts-search";
 }) {
   const dark = theme === "dark";
   const t = useTranslations("GlobalSearch");
@@ -23,7 +25,7 @@ export function GlobalPartsSearch({
   }, []);
   return (
     <form
-      action="/parts-search"
+      action={destination}
       role="search"
       onSubmit={() => setPending(true)}
       aria-busy={pending}

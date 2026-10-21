@@ -14,6 +14,7 @@ import { announceWishlistChange } from "@/features/wishlist/wishlist-storage";
 import { ResilientPartSearch } from "@/components/parts/resilient-part-search";
 export function RetailSearch({ initialQuery = "" }: { initialQuery?: string }) {
   const t = useTranslations("Retail");
+  const parts = useTranslations("PartsPage");
   const labels = useTranslations("Hardening.Search");
   const locale = useLocale();
   const money = (value: number, currency: string) =>
@@ -26,6 +27,12 @@ export function RetailSearch({ initialQuery = "" }: { initialQuery?: string }) {
   return (
     <div className="space-y-6">
       <p className="max-w-3xl leading-7">{t("intro")}</p>
+      <Link
+        href="/parts-search"
+        className="inline-flex min-h-11 items-center text-sm underline underline-offset-4"
+      >
+        {parts("examples")} →
+      </Link>
       <PartsBoardProvider>
         <ResilientPartSearch initialQuery={initialQuery}>
           {(result, input, search) => (

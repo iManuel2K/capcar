@@ -10,7 +10,18 @@ const ProductDashboardPreview = dynamic(
     import("@/components/marketing/product-dashboard-preview").then(
       (module) => module.ProductDashboardPreview,
     ),
-  { ssr: false },
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        aria-hidden="true"
+        className="mx-auto max-w-[1320px] px-5 py-16 sm:px-8"
+      >
+        <div className="h-12 w-2/3 rounded-xl bg-[#0e2d30]/10 motion-safe:animate-pulse" />
+        <div className="mt-8 h-[480px] rounded-[1.6rem] bg-[#0b2326]/12 motion-safe:animate-pulse" />
+      </div>
+    ),
+  },
 );
 
 const FitmentLookup = dynamic(

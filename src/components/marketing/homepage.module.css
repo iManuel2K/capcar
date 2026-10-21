@@ -46,6 +46,14 @@
   letter-spacing: -0.055em;
   text-wrap: balance;
 }
+.pageTitle {
+  font-size: clamp(2.5rem, 4.4vw, 4.6rem);
+  font-weight: 500;
+  line-height: 1.03;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
 .description {
   max-width: 36em;
   font-size: 1rem;
@@ -77,6 +85,10 @@
 .primary:focus-visible {
   outline: 3px solid #ad6a50;
   outline-offset: 5px;
+}
+.primary:disabled {
+  cursor: wait;
+  opacity: 0.6;
 }
 .secondary {
   display: inline-flex;

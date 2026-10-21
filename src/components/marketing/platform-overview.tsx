@@ -158,9 +158,7 @@ export function PlatformOverview({ locale = "en" }: { locale?: AppLocale }) {
         >
           <p className={styles.eyebrow}>{p.label}</p>
           <h2 id="connected-heading">{p.connect}</h2>
-          <p className={styles.intro}>
-            {p.description} {c.sample}.
-          </p>
+          <p className={styles.intro}>{c.sample}.</p>
           <div role="tablist" aria-label={p.choose} className={styles.tabs}>
             {labels.map((label, index) => {
               const I = icons[index];
