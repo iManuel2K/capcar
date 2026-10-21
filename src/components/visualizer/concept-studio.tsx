@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { studioText } from "@/features/visualizer/studio-copy";
 import {
   carModels,
@@ -21,6 +21,7 @@ const storageKey = "capcar.car-studio.v1";
 
 export function ConceptStudio() {
   const t = studioText(useLocale());
+  const sourceCopy = useTranslations("CarStudio");
   const [modelId, setModelId] = useState("bmw-m3-e30");
   const [paint, setPaint] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -126,7 +127,9 @@ export function ConceptStudio() {
             ) : (
               <p className="mt-2 text-sm leading-6">{t("fixedFinish")}</p>
             )}
-            <p className="mt-4 text-xs leading-6">{t("scope")}</p>
+            <p className="mt-4 text-xs leading-6">
+              {sourceCopy(`modelNotes.${model.id}`)} {t("scope")}
+            </p>
             <details className="mt-3 text-xs leading-6">
               <summary className="inline-flex min-h-11 cursor-pointer items-center underline underline-offset-4">
                 {t("notes")}
@@ -211,7 +214,7 @@ export function ConceptStudio() {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Supra, E30, Skyline…"
-              className="mt-2 min-h-11 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="mt-2 min-h-11 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3 text-base focus-visible:outline-2 focus-visible:outline-offset-2"
             />
           </label>
           <label className="mt-3 block text-xs font-semibold">
@@ -219,7 +222,7 @@ export function ConceptStudio() {
             <select
               value={make}
               onChange={(event) => setMake(event.target.value)}
-              className="mt-2 min-h-11 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="mt-2 min-h-11 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3 text-base focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               <option value="all">{t("allMakes")}</option>
               {makes.map((brand) => (

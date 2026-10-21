@@ -220,7 +220,7 @@ export function AuthForm({
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     placeholder={t("namePlaceholder")}
-                    className="w-full bg-transparent text-sm text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
+                    className="min-h-11 w-full bg-transparent text-base text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
                   />
                 </Field>
               )}
@@ -234,7 +234,7 @@ export function AuthForm({
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     placeholder="you@example.com"
-                    className="w-full bg-transparent text-sm text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
+                    className="min-h-11 w-full bg-transparent text-base text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
                   />
                 </Field>
               )}
@@ -250,7 +250,7 @@ export function AuthForm({
                         showPassword ? t("hidePassword") : t("showPassword")
                       }
                       onClick={() => setShowPassword((current) => !current)}
-                      className="text-[#405856]/55 transition hover:text-[#0e2d30]"
+                      className="grid size-11 shrink-0 place-items-center rounded-lg text-[#405856] transition-colors hover:bg-[#0e2d30]/5 hover:text-[#0e2d30] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0e2d30]"
                     >
                       {showPassword ? (
                         <EyeOff className="size-4" />
@@ -270,7 +270,7 @@ export function AuthForm({
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     placeholder={t("passwordPlaceholder")}
-                    className="w-full bg-transparent text-sm text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
+                    className="min-h-11 w-full bg-transparent text-base text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
                   />
                 </Field>
               )}
@@ -288,7 +288,7 @@ export function AuthForm({
                     value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
                     placeholder={t("confirmPlaceholder")}
-                    className="w-full bg-transparent text-sm text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
+                    className="min-h-11 w-full bg-transparent text-base text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
                   />
                 </Field>
               )}
@@ -297,7 +297,7 @@ export function AuthForm({
                 <div className="flex justify-end">
                   <Link
                     href="/forgot-password"
-                    className="text-xs text-[#405856] transition hover:text-[#6d0101]"
+                    className="inline-flex min-h-11 items-center rounded text-sm text-[#405856] transition hover:text-[#6d0101]"
                   >
                     {t("forgotLink")}
                   </Link>
@@ -426,8 +426,8 @@ function Field({
 }) {
   const fieldId = useId();
   return (
-    <div className="block rounded-xl border border-[#0e2d30]/12 bg-white/55 px-4 py-3 transition focus-within:border-[#6d0101]/55 focus-within:bg-white">
-      <span className="mb-2 flex items-center justify-between text-[10px] font-semibold tracking-[0.12em] text-[#405856]/70 uppercase">
+    <div className="block rounded-xl border border-[#0e2d30]/12 bg-white/55 px-4 py-3 transition-colors focus-within:border-[#0e2d30] focus-within:bg-white">
+      <span className="mb-2 flex items-center justify-between text-xs font-semibold tracking-[0.04em] text-[#405856] uppercase">
         <label htmlFor={fieldId} className="flex items-center gap-2">
           {icon}
           {label}

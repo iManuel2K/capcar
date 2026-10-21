@@ -66,7 +66,6 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
           className={styles.section}
           aria-labelledby="use-cases-title"
         >
-          <p className={styles.eyebrow}>{c.usesEyebrow}</p>
           <h2 id="use-cases-title" className={styles.title}>
             {c.usesTitle}
           </h2>
@@ -299,7 +298,6 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
           aria-labelledby="supporting-tools-title"
         >
           <div className={styles.section}>
-            <p className={styles.eyebrow}>{c.toolsEyebrow}</p>
             <h2 id="supporting-tools-title" className={styles.title}>
               {c.toolsTitle}
             </h2>

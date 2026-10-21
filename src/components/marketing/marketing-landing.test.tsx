@@ -29,7 +29,7 @@ describe("the connected homepage example", () => {
   it("makes the product and its capability limits clear", async () => {
     renderPage();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Your car. Every idea, job and journey in one place.",
+      "Keep your car's plans and history together.",
     );
     expect(
       await screen.findByText(/Interactive example · Illustrative data/),

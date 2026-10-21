@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { studioText } from "@/features/visualizer/studio-copy";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -67,6 +67,7 @@ function ModelViewer({
 }) {
   const locale = useLocale();
   const t = studioText(locale);
+  const labels = useTranslations("CarStudio");
   const [active, setActive] = useState(autoStart);
   const [rotating, setRotating] = useState(
     () =>
@@ -137,6 +138,11 @@ function ModelViewer({
       data-model-state={phase}
       data-presentation={presentation}
     >
+      {!floating && (
+        <p className="mb-3 text-xs font-semibold tracking-widest uppercase">
+          {ready ? labels("rotateHint") : labels("freeModel")}
+        </p>
+      )}
       <div
         className={
           floating
@@ -152,12 +158,13 @@ function ModelViewer({
             fill
             sizes="(max-width: 1024px) 100vw, 800px"
             className="object-contain"
-            priority={model.id === "bmw-m3-e30"}
+            preload={model.id === "bmw-m3-e30"}
           />
         )}
         <div
           ref={host}
           className="absolute inset-0 touch-pan-y [&>canvas]:!h-full [&>canvas]:!w-full [&>canvas]:touch-pan-y"
+          style={{ visibility: ready ? "visible" : "hidden" }}
         />
       </div>
       {!active && (

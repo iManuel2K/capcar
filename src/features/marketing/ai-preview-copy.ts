@@ -2,7 +2,7 @@ import type { AppLocale } from "@/i18n/config";
 
 const en = {
   eyebrow: "CapCar / AI trip planner",
-  title: "A good drive starts with a plan.",
+  title: "Plan a drive around your car and destination.",
   description:
     "Tell CapCar what you drive and where you want to go. Turn your ideas into a day-by-day outline with places, breaks and a route to review.",
   create: "Plan my first drive",
@@ -24,7 +24,7 @@ const en = {
   routeAlt:
     "Illustrative route preview from Rüsselsheim through Mainz and the Rheingau; map data © OpenStreetMap contributors",
   note: "Example outline, not a live route. Check directions, access and opening hours before driving.",
-  how: "From an idea to your next drive.",
+  how: "How to plan your drive",
   steps: [
     "Describe your car, region and the kind of day you want.",
     "Review the suggested stops and adjust the order.",
