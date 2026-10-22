@@ -14,6 +14,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Installed agent skills include upstream examples, not application code.
     ".agents/**",
+    // Generated QA artifacts can contain complete archived worktrees.
+    "artifacts/**",
+    ".netlify/**",
     "**/.capcar-backups/**",
     "**/capcar-backups/**",
     "**/installer-backups/**",

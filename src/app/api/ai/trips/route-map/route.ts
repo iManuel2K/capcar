@@ -5,6 +5,7 @@ import {
   tripRouteRequestSchema,
 } from "@/features/trips/trip-route";
 import {
+  guardProductApi,
   isSameOriginRequest,
   productApiError,
   readJsonRequest,
@@ -19,6 +20,8 @@ export async function POST(request: Request) {
       { status: 403, headers: { "Cache-Control": "no-store" } },
     );
   try {
+    const guard = await guardProductApi("trip-route", { limit: 10 });
+    if (!guard.ok) return guard.response;
     const input = await readJsonRequest(request, tripRouteRequestSchema);
     const route = await createTripRoute(input);
     return NextResponse.json(route, {

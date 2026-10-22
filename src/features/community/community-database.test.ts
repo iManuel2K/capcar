@@ -52,7 +52,8 @@ describe("community database authorization", () => {
       "20260909090000_community_and_verified_work.sql",
       "20260910090000_public_discovery.sql",
       "20260912180000_beta_hardening.sql",
-      "20260913120000_feature_expansion.sql",
+      "20261022202359_production_storage_reconciliation.sql",
+      "20261022154914_security_review_hardening.sql",
     ])
       await db.exec(readFileSync(`supabase/migrations/${file}`, "utf8"));
     await db.query(
@@ -157,6 +158,67 @@ describe("community database authorization", () => {
   });
   afterAll(async () => {
     await db?.close();
+  });
+  it("isolates private documents and enforces bucket limits after reconciliation", async () => {
+    await as(seller);
+    const path = `${seller}/car-a/evidence.pdf`;
+    await db.query(
+      "insert into storage.objects(bucket_id,name) values('vehicle-documents',$1)",
+      [path],
+    );
+    await as(buyer);
+    expect(
+      (
+        await db.query(
+          "select * from storage.objects where bucket_id='vehicle-documents'",
+        )
+      ).rows,
+    ).toHaveLength(0);
+    await expect(
+      db.query(
+        "insert into storage.objects(bucket_id,name) values('vehicle-documents',$1)",
+        [path],
+      ),
+    ).rejects.toThrow();
+    await db.query(
+      "delete from storage.objects where bucket_id='vehicle-documents'",
+    );
+    await as(seller);
+    expect(
+      (
+        await db.query(
+          "select * from storage.objects where bucket_id='vehicle-documents'",
+        )
+      ).rows,
+    ).toHaveLength(1);
+    await db.exec("reset role");
+    const buckets = (
+      await db.query<{
+        id: string;
+        public: boolean;
+        file_size_limit: number;
+        allowed_mime_types: string[];
+      }>("select * from storage.buckets order by id")
+    ).rows;
+    expect(buckets).toMatchObject([
+      {
+        id: "listing-photos",
+        public: false,
+        file_size_limit: 1048576,
+        allowed_mime_types: ["image/jpeg"],
+      },
+      {
+        id: "vehicle-documents",
+        public: false,
+        file_size_limit: 10485760,
+        allowed_mime_types: [
+          "application/pdf",
+          "image/jpeg",
+          "image/png",
+          "image/webp",
+        ],
+      },
+    ]);
   });
   it("allows anonymous published projections but denies private tables and budget overrides", async () => {
     await db.exec("reset role");

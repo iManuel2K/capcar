@@ -19,6 +19,7 @@ import {
   type RoadbookVectorProvider,
 } from "@/features/roadbook/roadbook-vector-style";
 import type { TripRoute } from "@/features/trips/trip-route";
+import { createTripStopMarker } from "@/features/trips/trip-stop-marker";
 
 const RASTER_TILES = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const OSM_ATTRIBUTION =
@@ -26,13 +27,6 @@ const OSM_ATTRIBUTION =
 const OPENFREE_ATTRIBUTION =
   '&copy; <a href="https://openfreemap.org/">OpenFreeMap</a> · OpenMapTiles';
 const VECTOR_PANE = "trip-route-vector-basemap";
-
-function stopMarker(index: number, label: string) {
-  const element = document.createElement("div");
-  element.className = "trip-route-marker";
-  element.innerHTML = `<span>${index + 1}</span><strong>${label}</strong>`;
-  return element;
-}
 
 export function TripRouteMap({ route }: { route: TripRoute }) {
   const container = useRef<HTMLDivElement>(null);
@@ -101,7 +95,7 @@ export function TripRouteMap({ route }: { route: TripRoute }) {
       L.marker([stop.latitude, stop.longitude], {
         icon: L.divIcon({
           className: "trip-route-marker-shell",
-          html: stopMarker(index, stop.name),
+          html: createTripStopMarker(index, stop.name),
           iconSize: [42, 42],
           iconAnchor: [21, 21],
         }),

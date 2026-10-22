@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import { guardProductApi, isSameOriginRequest } from "@/lib/api/guard";
+import {
+  guardProductApi,
+  isSameOriginRequest,
+  productApiError,
+} from "@/lib/api/guard";
+import { readBoundedBytes } from "@/lib/http/read-bounded-body";
 export const runtime = "nodejs";
 const headers = { "Cache-Control": "private, no-store" };
 export async function GET(request: Request) {
@@ -60,29 +65,8 @@ export async function POST(request: Request) {
         { status: 400, headers },
       );
     // Bound the stream before parsing multipart data; Content-Length is not trusted.
-    const reader = request.body?.getReader();
-    if (!reader) throw new Error("Empty body");
-    const chunks: Uint8Array[] = [];
-    let size = 0;
-    try {
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        size += value.byteLength;
-        if (size > 1100000) {
-          await reader.cancel();
-          return NextResponse.json(
-            { error: "Photo too large" },
-            { status: 413, headers },
-          );
-        }
-        chunks.push(value);
-      }
-    } finally {
-      reader.releaseLock();
-    }
-    const body = Buffer.concat(chunks);
-    const form = await new Response(body, {
+    const body = await readBoundedBytes(request, 1_100_000, 30_000);
+    const form = await new Response(Buffer.from(body), {
       headers: { "Content-Type": request.headers.get("content-type")! },
     }).formData();
     const id = z.uuid().parse(form.get("id"));
@@ -132,10 +116,7 @@ export async function POST(request: Request) {
       { url: signed.data?.signedUrl ?? null },
       { headers },
     );
-  } catch {
-    return NextResponse.json(
-      { error: "Photo upload failed" },
-      { status: 400, headers },
-    );
+  } catch (error) {
+    return productApiError(error, "Photo upload failed");
   }
 }

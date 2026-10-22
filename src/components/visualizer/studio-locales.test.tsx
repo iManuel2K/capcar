@@ -13,6 +13,7 @@ import el from "../../../messages/public/el.json";
 import sq from "../../../messages/public/sq.json";
 import ja from "../../../messages/public/ja.json";
 import { ConceptStudio } from "./concept-studio";
+import { studioText } from "@/features/visualizer/studio-copy";
 
 vi.unmock("next-intl");
 vi.mock("next/image", () => ({
@@ -30,6 +31,8 @@ describe("Studio in all five languages", () => {
     "keeps selection, filtering and saved directions working in %s",
     (locale, messages) => {
       const c = messages.CarStudio;
+      // Controls use the Studio catalog; provider messages supply model notes.
+      const controls = studioText(locale);
       render(
         <NextIntlClientProvider
           locale={locale}
@@ -42,32 +45,44 @@ describe("Studio in all five languages", () => {
           <ConceptStudio />
         </NextIntlClientProvider>,
       );
-      expect(screen.getByRole("button", { name: c.load })).toBeEnabled();
       expect(
-        screen.getByText(c.modelNotes["bmw-m3-e30"], { exact: false }),
+        screen.getByRole("button", { name: controls("load") }),
+      ).toBeEnabled();
+      expect(
+        screen
+          .getAllByText(c.modelNotes["bmw-m3-e30"], { exact: false })
+          .find((element) => !element.closest("details")),
       ).toBeVisible();
-      const collection = screen.getByLabelText(c.collectionLabel);
-      fireEvent.change(screen.getByRole("searchbox", { name: c.search }), {
-        target: { value: "Skyline" },
-      });
+      const collection = screen.getByLabelText(controls("list"));
+      fireEvent.change(
+        screen.getByRole("searchbox", { name: controls("search") }),
+        {
+          target: { value: "Skyline" },
+        },
+      );
       expect(within(collection).getAllByRole("button")).toHaveLength(1);
       fireEvent.click(within(collection).getByRole("button"));
-      fireEvent.click(screen.getByRole("button", { name: c.save }));
-      expect(screen.getByText(c.saved)).toBeVisible();
+      fireEvent.click(screen.getByRole("button", { name: controls("save") }));
+      expect(screen.getByText(controls("saved"))).toBeVisible();
       expect(JSON.parse(localStorage.getItem("capcar.car-studio.v1")!)).toEqual(
         {
           modelId: "nissan-gt-r",
           paint: null,
         },
       );
-      fireEvent.change(screen.getByRole("combobox", { name: c.choose }), {
-        target: { value: "audi-r8" },
-      });
-      fireEvent.click(screen.getByRole("button", { name: c.restore }));
-      expect(screen.getByText(c.restored)).toBeVisible();
-      expect(screen.getByRole("combobox", { name: c.choose })).toHaveValue(
-        "nissan-gt-r",
+      fireEvent.change(
+        screen.getByRole("combobox", { name: controls("choose") }),
+        {
+          target: { value: "audi-r8" },
+        },
       );
+      fireEvent.click(
+        screen.getByRole("button", { name: controls("restore") }),
+      );
+      expect(screen.getByText(controls("restored"))).toBeVisible();
+      expect(
+        screen.getByRole("combobox", { name: controls("choose") }),
+      ).toHaveValue("nissan-gt-r");
     },
   );
 });

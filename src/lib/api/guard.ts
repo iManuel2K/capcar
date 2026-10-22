@@ -3,6 +3,14 @@ import type { ZodType } from "zod";
 
 import { getAuthStatus } from "@/features/auth/auth-config";
 import { createClient } from "@/lib/supabase/server";
+import { isProductionRuntime } from "@/lib/api/runtime";
+import {
+  BodyReadTimeoutError,
+  readBoundedText,
+  RequestTooLargeError,
+} from "@/lib/http/read-bounded-body";
+
+export { RequestTooLargeError } from "@/lib/http/read-bounded-body";
 
 type ApiGuardResult =
   { ok: true; userId?: string } | { ok: false; response: NextResponse };
@@ -69,7 +77,18 @@ export async function guardProductApi(
   route: string,
   options: { limit?: number; windowSeconds?: number } = {},
 ): Promise<ApiGuardResult> {
-  if (!getAuthStatus().configured) return { ok: true };
+  if (!getAuthStatus().configured) {
+    // Browser-local demos must never bypass authentication on a deployed API.
+    if (isProductionRuntime())
+      return {
+        ok: false,
+        response: NextResponse.json(
+          { error: "Account service unavailable." },
+          { status: 503, headers: { "Cache-Control": "no-store" } },
+        ),
+      };
+    return { ok: true };
+  }
 
   const client = await createClient();
   const { data: auth, error: authError } = await client.auth.getUser();
@@ -126,28 +145,22 @@ export async function readJsonRequest<T>(
   schema: ZodType<T>,
   maxBytes = 16_384,
 ): Promise<T> {
-  const declaredLength = Number(request.headers.get("content-length") ?? 0);
-  if (declaredLength > maxBytes) throw new RequestTooLargeError();
-
-  const raw = await request.text();
-  if (new TextEncoder().encode(raw).byteLength > maxBytes) {
-    throw new RequestTooLargeError();
-  }
-
+  const raw = await readBoundedText(request, maxBytes);
   return schema.parse(JSON.parse(raw));
 }
 
-export class RequestTooLargeError extends Error {
-  constructor() {
-    super("Request too large.");
-    this.name = "RequestTooLargeError";
-  }
-}
-
 export function productApiError(error: unknown, fallback: string) {
-  const status = error instanceof RequestTooLargeError ? 413 : 400;
+  const status =
+    error instanceof RequestTooLargeError
+      ? 413
+      : error instanceof BodyReadTimeoutError
+        ? 408
+        : 400;
   const message =
-    error instanceof RequestTooLargeError ? error.message : fallback;
+    error instanceof RequestTooLargeError ||
+    error instanceof BodyReadTimeoutError
+      ? error.message
+      : fallback;
   return NextResponse.json(
     { error: message },
     { status, headers: { "Cache-Control": "no-store" } },

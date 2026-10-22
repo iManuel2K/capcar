@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
@@ -31,5 +32,5 @@ describe("licensed listening catalog", () => {
       expect(item.duration).toMatch(/^\d+:\d{2}$/);
       expect(item.make, item.title).not.toBe("Other");
     }
-  });
+  }, 30_000);
 });

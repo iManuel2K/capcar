@@ -1,3 +1,5 @@
+import { readBoundedText } from "@/lib/http/read-bounded-body";
+
 export async function requestExternalProvider<TRequest, TResponse>(
   connection: { endpoint: string; apiKey: string },
   body: TRequest,
@@ -18,12 +20,7 @@ export async function requestExternalProvider<TRequest, TResponse>(
     });
     if (!response.ok)
       throw new Error(`Provider request failed with status ${response.status}`);
-    const declaredSize = Number(response.headers.get("content-length") ?? 0);
-    if (declaredSize > 2_000_000)
-      throw new Error("Provider response exceeded the safe size limit.");
-    const raw = await response.text();
-    if (new TextEncoder().encode(raw).byteLength > 2_000_000)
-      throw new Error("Provider response exceeded the safe size limit.");
+    const raw = await readBoundedText(response, 2_000_000);
     return JSON.parse(raw) as TResponse;
   } finally {
     clearTimeout(timeout);

@@ -14,6 +14,9 @@ export default defineConfig({
     setupFiles: ["./src/test/setup.ts"],
     exclude: [
       ...configDefaults.exclude,
+      "**/artifacts/**",
+      "**/.agents/**",
+      "**/.netlify/**",
       "**/.capcar-backups/**",
       "**/capcar-backups/**",
       "**/installer-backups/**",

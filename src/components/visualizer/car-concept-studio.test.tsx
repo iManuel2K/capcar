@@ -6,9 +6,27 @@ import {
   within,
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { NextIntlClientProvider } from "next-intl";
+import en from "../../../messages/public/en.json";
+import de from "../../../messages/public/de.json";
+import el from "../../../messages/public/el.json";
+import sq from "../../../messages/public/sq.json";
+import ja from "../../../messages/public/ja.json";
 import { ConceptStudio } from "./concept-studio";
 const language = vi.hoisted(() => ({ current: "en" }));
-vi.mock("next-intl", () => ({ useLocale: () => language.current }));
+vi.unmock("next-intl");
+const messages: Record<string, typeof en> = { en, de, el, sq, ja };
+function renderStudio() {
+  return render(
+    <NextIntlClientProvider
+      locale={language.current}
+      messages={messages[language.current]}
+      timeZone="UTC"
+    >
+      <ConceptStudio />
+    </NextIntlClientProvider>,
+  );
+}
 vi.mock("./interactive-car-model", () => ({
   studioButton: "button",
   InteractiveCarModel: ({ modelId }: { modelId: string }) => (
@@ -33,7 +51,7 @@ describe("25-car public concept studio", () => {
     ["ja", "車を検索", "選択を保存", "選択を復元"],
   ])("translates working controls for %s", (locale, search, save, restore) => {
     language.current = locale;
-    render(<ConceptStudio />);
+    renderStudio();
     expect(screen.getByRole("searchbox", { name: search })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: save }));
     expect(localStorage.getItem("capcar.car-studio.v1")).toContain(
@@ -46,7 +64,7 @@ describe("25-car public concept studio", () => {
     expect(screen.queryByRole("button", { name: "Save direction" })).toBeNull();
   });
   it("exposes every car free and filters without changing the selection", () => {
-    render(<ConceptStudio />);
+    renderStudio();
     const collection = screen.getByLabelText("Car model collection");
     expect(within(collection).getAllByRole("button")).toHaveLength(25);
     fireEvent.change(screen.getByRole("searchbox", { name: "Search cars" }), {
@@ -60,7 +78,7 @@ describe("25-car public concept studio", () => {
     ).toHaveAttribute("href", "/garage");
   });
   it("restores a valid saved car and rejects untrusted storage", () => {
-    render(<ConceptStudio />);
+    renderStudio();
     localStorage.setItem(
       "capcar.car-studio.v1",
       JSON.stringify({ modelId: "audi-r8", paint: null }),
@@ -81,7 +99,7 @@ describe("25-car public concept studio", () => {
     );
   });
   it("offers clear recovery from empty search results", () => {
-    render(<ConceptStudio />);
+    renderStudio();
     fireEvent.change(screen.getByRole("searchbox"), {
       target: { value: "not a real car" },
     });

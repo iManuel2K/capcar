@@ -29,3 +29,14 @@ it("stops when both database and fallback allowances are unavailable", async () 
   expect(response?.status).toBe(429);
   expect(await response?.text()).not.toContain("secret");
 });
+it("never spends provider quota through a per-process fallback in production", async () => {
+  rpc.mockResolvedValue({ data: null, error: { message: "private detail" } });
+  const fallback = vi.fn(() => true);
+  const response = await guardPublicRetail(fallback, {
+    NODE_ENV: "production",
+  });
+  expect(response?.status).toBe(503);
+  expect(response?.headers.get("cache-control")).toBe("no-store");
+  expect(fallback).not.toHaveBeenCalled();
+  expect(await response?.text()).not.toContain("private detail");
+});

@@ -4,11 +4,17 @@ import { createVehicleDataProvider } from "@/features/vehicle-data/vehicle-data-
 import { vehicleDataRequestSchema } from "@/features/vehicle-data/vehicle-data-schema";
 import {
   guardProductApi,
+  isSameOriginRequest,
   productApiError,
   readJsonRequest,
 } from "@/lib/api/guard";
 
 export async function POST(request: Request) {
+  if (!isSameOriginRequest(request))
+    return NextResponse.json(
+      { error: "Same-origin request required." },
+      { status: 403, headers: { "Cache-Control": "no-store" } },
+    );
   const guard = await guardProductApi("vehicle-resolve", { limit: 15 });
   if (!guard.ok) return guard.response;
   try {

@@ -7,7 +7,11 @@ import {
   getFreshGoogleAccessToken,
   getGoogleConnection,
 } from "@/features/connections/google-store";
-import { isSameOriginRequest, readJsonRequest } from "@/lib/api/guard";
+import {
+  guardProductApi,
+  isSameOriginRequest,
+  readJsonRequest,
+} from "@/lib/api/guard";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { currentUser } from "@/lib/supabase/current-user";
 
@@ -33,6 +37,8 @@ export async function POST(request: Request) {
       { status: 401 },
     );
   try {
+    const guard = await guardProductApi("google-calendar", { limit: 10 });
+    if (!guard.ok) return guard.response;
     const input = await readJsonRequest(request, requestSchema);
     if (input.endDate <= input.startDate)
       return NextResponse.json(

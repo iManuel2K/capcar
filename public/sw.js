@@ -1,4 +1,4 @@
-const CACHE_NAME = "capcar-public-v4";
+const CACHE_NAME = "capcar-public-v5";
 const PUBLIC_SHELL = [
   "/",
   "/roadmap",
@@ -34,9 +34,30 @@ function isPrivate(url) {
   );
 }
 
+function canCacheResponse(response) {
+  // Cache Storage ignores HTTP cache directives unless we enforce them here.
+  return (
+    response.ok &&
+    !response.redirected &&
+    !/\b(?:private|no-store|no-cache)\b/i.test(
+      response.headers.get("cache-control") || "",
+    ) &&
+    !/(?:^|,)\s*(?:cookie|authorization|\*)\s*(?:,|$)/i.test(
+      response.headers.get("vary") || "",
+    )
+  );
+}
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(PUBLIC_SHELL)),
+    caches.open(CACHE_NAME).then((cache) =>
+      Promise.all(
+        PUBLIC_SHELL.map(async (path) => {
+          const response = await fetch(path);
+          if (canCacheResponse(response)) await cache.put(path, response);
+        }),
+      ),
+    ),
   );
   self.skipWaiting();
 });
@@ -63,6 +84,8 @@ self.addEventListener("fetch", (event) => {
     request.method !== "GET" ||
     url.origin !== self.location.origin ||
     url.pathname.startsWith("/api/") ||
+    request.headers.get("rsc") === "1" ||
+    request.headers.has("authorization") ||
     isPrivate(url)
   )
     return;
@@ -77,7 +100,7 @@ self.addEventListener("fetch", (event) => {
         (cached) =>
           cached ||
           fetch(request).then((response) => {
-            if (response.ok) {
+            if (canCacheResponse(response)) {
               const copy = response.clone();
               void caches
                 .open(CACHE_NAME)
@@ -94,7 +117,7 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          if (response.ok) {
+          if (canCacheResponse(response)) {
             const copy = response.clone();
             void caches
               .open(CACHE_NAME)

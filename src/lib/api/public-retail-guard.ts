@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { isProductionRuntime } from "@/lib/api/runtime";
 
 const fallbackBudget = {
   minuteStart: 0,
@@ -27,6 +28,7 @@ export function consumeProcessRetailBudget(now = Date.now()) {
 
 export async function guardPublicRetail(
   fallback: () => boolean = consumeProcessRetailBudget,
+  environment: Record<string, string | undefined> = process.env,
 ) {
   const headers = { "Cache-Control": "no-store", "Retry-After": "60" };
   try {
@@ -44,6 +46,15 @@ export async function guardPublicRetail(
       );
     return null;
   } catch {
+    // Per-instance counters cannot enforce a shared budget on serverless hosts.
+    if (isProductionRuntime(environment))
+      return NextResponse.json(
+        {
+          error:
+            "Live search protection is temporarily unavailable. Please try again later.",
+        },
+        { status: 503, headers },
+      );
     if (fallback()) return null;
     return NextResponse.json(
       { error: "Live search is busy. Please try again in a minute." },

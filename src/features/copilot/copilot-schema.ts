@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { safeAuthNext } from "@/features/auth/next-path";
 
 export const copilotRequestSchema = z.object({
   message: z.string().trim().min(2).max(1000),
@@ -30,7 +31,12 @@ export const copilotResponseSchema = z.object({
   evidence: z.array(z.string()),
   warnings: z.array(z.string()),
   nextActions: z.array(
-    z.object({ label: z.string(), href: z.string().startsWith("/") }),
+    z.object({
+      label: z.string(),
+      href: z.string().refine((value) => Boolean(safeAuthNext(value, "")), {
+        message: "Copilot actions must link to a safe same-site path.",
+      }),
+    }),
   ),
 });
 

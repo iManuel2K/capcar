@@ -9,7 +9,7 @@ import {
   getFreshGoogleAccessToken,
   getGoogleConnection,
 } from "@/features/connections/google-store";
-import { isSameOriginRequest } from "@/lib/api/guard";
+import { guardProductApi, isSameOriginRequest } from "@/lib/api/guard";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { currentUser } from "@/lib/supabase/current-user";
 
@@ -28,6 +28,11 @@ export async function POST(request: Request) {
       { status: 401 },
     );
   try {
+    const guard = await guardProductApi("google-sync", {
+      limit: 2,
+      windowSeconds: 300,
+    });
+    if (!guard.ok) return guard.response;
     const environment = getGoogleConnectionEnvironment();
     const admin = createAdminClient();
     const connection = await getGoogleConnection(admin, user.id);
