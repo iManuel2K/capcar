@@ -10,6 +10,9 @@ import {
   journalArticlePath,
 } from "@/features/journal/routes";
 import { journalUI } from "@/features/journal/ui";
+import { homepageCopy } from "@/features/marketing/homepage-copy";
+import "leaflet/dist/leaflet.css";
+import "./roadbook.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Roadbook");
@@ -33,6 +36,9 @@ export default async function RoadbookPage() {
             </h1>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-[#becdc7]">
               {t("description")}
+            </p>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-[#becdc7]">
+              {homepageCopy[locale].drivesAccess}
             </p>
             <Link
               className="mt-2 inline-flex min-h-11 items-center underline underline-offset-4 focus-visible:outline-2"

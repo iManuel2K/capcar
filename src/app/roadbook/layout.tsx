@@ -1,6 +1,3 @@
-import "leaflet/dist/leaflet.css";
-import "./roadbook.css";
-
 export default function RoadbookLayout({
   children,
 }: {

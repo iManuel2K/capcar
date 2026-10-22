@@ -33,7 +33,10 @@ export default async function PartsSearchPage({
   const results = searchCatalogParts(query);
   return (
     <div className="min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
-      <main className="mx-auto max-w-[1200px] px-5 pt-10 pb-20 sm:px-8 sm:pt-16">
+      <main
+        id="main-content"
+        className="mx-auto max-w-[1200px] px-5 pt-10 pb-20 sm:px-8 sm:pt-16"
+      >
         <p className="text-xs font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
           {t("eyebrow")}
         </p>

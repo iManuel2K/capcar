@@ -6,12 +6,29 @@ import {
   localizedPublicUrl,
 } from "./public-metadata";
 
+export const ORGANIZATION_ID = new URL(
+  "/#organization",
+  PUBLIC_SITE_URL,
+).toString();
+export const WEBSITE_ID = new URL("/#website", PUBLIC_SITE_URL).toString();
+
+export function capcarOrganization() {
+  return {
+    "@type": "Organization",
+    "@id": ORGANIZATION_ID,
+    name: "CapCar",
+    alternateName: PUBLIC_SITE_NAME,
+    url: PUBLIC_SITE_URL.toString(),
+    logo: new URL("/capcar-mark-192.png", PUBLIC_SITE_URL).toString(),
+  };
+}
+
 export function buildCapCarStructuredData(
   description: string,
   locale: AppLocale,
 ) {
-  const organizationId = new URL("/#organization", PUBLIC_SITE_URL).toString();
-  const websiteId = new URL("/#website", PUBLIC_SITE_URL).toString();
+  const organizationId = ORGANIZATION_ID;
+  const websiteId = WEBSITE_ID;
   const applicationId = new URL("/#application", PUBLIC_SITE_URL).toString();
 
   return {
@@ -26,14 +43,7 @@ export function buildCapCarStructuredData(
         description,
         publisher: { "@id": organizationId },
       },
-      {
-        "@type": "Organization",
-        "@id": organizationId,
-        name: "CapCar",
-        alternateName: PUBLIC_SITE_NAME,
-        url: PUBLIC_SITE_URL.toString(),
-        logo: new URL("/capcar-mark-192.png", PUBLIC_SITE_URL).toString(),
-      },
+      capcarOrganization(),
       {
         "@type": "SoftwareApplication",
         "@id": applicationId,
@@ -47,6 +57,8 @@ export function buildCapCarStructuredData(
         isAccessibleForFree: true,
         offers: {
           "@type": "Offer",
+          name: "CapCar core garage beta",
+          url: `${localizedPublicUrl("", locale)}#faq`,
           price: "0",
           priceCurrency: "EUR",
         },

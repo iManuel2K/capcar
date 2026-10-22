@@ -11,7 +11,6 @@ import {
   findJournalArticle,
   getJournalArticles,
   relatedJournalArticles,
-  journalArticlePath,
   journalPath,
 } from "@/features/journal/articles";
 import { PUBLIC_SITE_URL } from "@/features/seo/public-metadata";
@@ -19,6 +18,7 @@ import { PUBLIC_SITE_URL } from "@/features/seo/public-metadata";
 import { isAppLocale, locales } from "@/i18n/config";
 import { journalMetadata } from "@/features/journal/metadata";
 import { journalUI, journalReadingTime } from "@/features/journal/ui";
+import { journalStructuredData } from "@/features/journal/structured-data";
 
 type Props = { params: Promise<{ locale: string; articleSlug: string }> };
 
@@ -71,21 +71,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function JournalArticlePage({ params }: Props) {
   const { article, locale } = await resolveArticle(params);
-  const path = journalArticlePath(article.slug, locale);
   const ui = journalUI[locale];
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: article.title,
-    description: article.description,
-    inLanguage: locale,
-    datePublished: article.published,
-    dateModified: article.updated ?? article.published,
-    image: new URL(article.image, PUBLIC_SITE_URL).toString(),
-    author: { "@type": "Organization", name: "CapCar" },
-    publisher: { "@type": "Organization", name: "CapCar" },
-    mainEntityOfPage: new URL(path, PUBLIC_SITE_URL).toString(),
-  };
+  const schema = journalStructuredData(article, locale);
   return (
     <>
       <main
