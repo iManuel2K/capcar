@@ -47,25 +47,32 @@
   color-scheme: dark;
   --radius: 0.875rem;
   /* Obsidian Chrome — the shared public and private app palette. */
-  --background: #0c0d10;
+  --background: #151d28;
   --foreground: #f0f1f3;
-  --card: #191c21;
+  --card: #243244;
   --card-foreground: var(--foreground);
-  --popover: #191c21;
+  --popover: #243244;
   --popover-foreground: var(--foreground);
-  --primary: #b8c7d9;
-  --primary-foreground: #0c0d10;
-  --primary-hover: #d1dbe7;
-  --secondary: #232831;
+  --primary: #a7ceff;
+  --primary-foreground: #142338;
+  --primary-hover: #c5dfff;
+  --secondary: #2b3b4e;
   --secondary-foreground: var(--foreground);
-  --muted: #232831;
-  --muted-foreground: #9ba1ac;
-  --accent: #2b3441;
+  --muted: #2b3b4e;
+  --muted-foreground: #becbda;
+  --accent: #354e68;
   --accent-foreground: var(--foreground);
   --destructive: #ff8c9c;
-  --border: rgb(184 199 217 / 18%);
-  --input: #626b78;
+  --border: rgb(174 203 236 / 30%);
+  --input: #8599b1;
   --ring: var(--primary);
+  --section-tint: #203c48;
+  --warm-accent: #efbd91;
+  --mint-accent: #a6decf;
+  --light-surface: #e8eff5;
+  --light-foreground: #203246;
+  --light-muted: #4b6076;
+  --light-primary: #285b91;
   --chart-1: var(--primary);
   --chart-2: #809bb8;
   --chart-3: #89cbb0;
@@ -327,4 +334,29 @@
   html {
     scroll-behavior: auto !important;
   }
+}
+
+/* Deliberate light sections: all local roles switch together, including native controls. */
+.capcar-light-section {
+  color-scheme: light;
+  --background: var(--light-surface);
+  --foreground: var(--light-foreground);
+  --card: #f7fafc;
+  --card-foreground: var(--light-foreground);
+  --secondary: #d7e3ef;
+  --secondary-foreground: var(--light-foreground);
+  --muted: #d7e3ef;
+  --muted-foreground: var(--light-muted);
+  --primary: var(--light-primary);
+  --primary-foreground: #f7fafc;
+  --primary-hover: #1e4875;
+  --border: #a7b9cb;
+  --input: #7d93aa;
+  --ring: var(--light-primary);
+  --capcar-editorial-ink: var(--light-foreground);
+  --capcar-editorial-muted: var(--light-muted);
+  --capcar-editorial-accent: var(--light-primary);
+  --capcar-editorial-rule: #b8c8d8;
+  background: var(--background);
+  color: var(--foreground);
 }

@@ -9,3 +9,7 @@ Inspiration: Locins homepage and platform page reviewed on October 19, 2026. Bor
 ## Interaction polish · October 20, 2026
 
 Use Agrumea's spacious product-first presentation as inspiration, keeping CapCar's approved Obsidian Chrome palette and original assets. Homepage use cases use keyboard-accessible tabs with one visible preview and a discreet selection indicator. Keep hero comparison presets and the native range control outside the image. Hover and focus may gently lift CTAs or advance their arrows; never introduce auto-cycling, scroll hijacking or covering labels. Section reveals progressively enhance supported browsers and always leave content available without motion. Respect reduced motion, preserve all five locales and keep public preview choices out of account storage.
+
+## Section separation · October 22, 2026
+
+Use the refined Chrome surfaces from MASTER. Give homepage sections visibly different planes: light slate for use cases and FAQ, green-blue for the project journey, brighter charcoal for interactive demonstrations, pale blue for the closing CTA. Keep one primary action and readable local text roles per plane.

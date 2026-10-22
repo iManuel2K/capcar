@@ -47,6 +47,18 @@ describe("Obsidian Chrome accessibility", () => {
     expect(contrast(token("input"), token("card"))).toBeGreaterThanOrEqual(3);
     expect(contrast(token("ring"), token("card"))).toBeGreaterThanOrEqual(3);
   });
+  it("keeps light sections and colored journey accents readable", () => {
+    for (const text of ["light-foreground", "light-muted", "light-primary"]) {
+      expect(
+        contrast(token(text), token("light-surface")),
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+    for (const text of ["warm-accent", "mint-accent", "muted-foreground"]) {
+      expect(
+        contrast(token(text), token("section-tint")),
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+  });
   it("keeps exported Canvas cards and map route accents aligned with the app", () => {
     for (const [literal, variable] of Object.entries({
       background: "background",

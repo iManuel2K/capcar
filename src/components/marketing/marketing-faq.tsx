@@ -21,7 +21,7 @@ export function MarketingFaq() {
   return (
     <section
       id="faq"
-      className="bg-background text-foreground scroll-mt-8"
+      className="capcar-light-section border-border scroll-mt-8 border-y"
       aria-labelledby="faq-title"
     >
       <div className={`${styles.section} grid gap-8 lg:grid-cols-[.7fr_1.3fr]`}>

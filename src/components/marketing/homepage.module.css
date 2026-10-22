@@ -1187,3 +1187,104 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Surface rhythm: an immediate visual boundary between each stage. */
+.hero {
+  background: linear-gradient(125deg, var(--background), var(--card));
+  border-bottom: 1px solid var(--border);
+}
+.hero .eyebrow {
+  color: var(--warm-accent);
+}
+.hero .previewTop {
+  color: var(--primary);
+}
+.hero .preview {
+  padding: clamp(1rem, 2vw, 1.75rem);
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+.useCases {
+  border-block: 1px solid var(--border);
+}
+.useCases .title {
+  max-width: 22ch;
+}
+.useCases .mini {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  box-shadow: 0 12px 36px rgb(32 50 70 / 7%);
+}
+.useCases .drive {
+  padding: 0;
+}
+.useCases .driveCaption {
+  padding: 1.5rem;
+}
+.useCases .use + .use {
+  border-top: 1px solid var(--border);
+}
+.useCases .use .secondary {
+  color: var(--primary);
+}
+.useCases .miniRow svg {
+  color: var(--primary);
+}
+.story {
+  background: var(--section-tint);
+  border-block: 1px solid var(--border);
+}
+.story .section {
+  border-top: 0;
+}
+.story .eyebrow,
+.story .number {
+  color: var(--mint-accent);
+}
+.story .number {
+  display: inline-flex;
+  min-width: 40px;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  background: rgb(166 222 207 / 12%);
+  border: 1px solid rgb(166 222 207 / 32%);
+  border-radius: 50%;
+}
+.tools {
+  background: var(--card);
+}
+.tool > svg {
+  color: var(--warm-accent);
+}
+.tool:nth-child(even) > svg {
+  color: var(--mint-accent);
+}
+.final {
+  background: #ccdded;
+  border-top: 1px solid var(--border);
+}
+.final .title,
+.final p {
+  color: var(--foreground);
+}
+.page .final .primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+@media (max-width: 760px) {
+  .hero .preview {
+    padding: 1rem;
+    border-radius: 14px;
+  }
+  .useCases .mini {
+    padding: 1.25rem;
+  }
+  .useCases .drive {
+    padding: 0;
+  }
+}

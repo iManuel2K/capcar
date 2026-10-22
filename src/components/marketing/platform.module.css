@@ -654,3 +654,41 @@
     padding-block: 2.5rem;
   }
 }
+
+/* Alternate workspace planes without changing the connected planning flow. */
+.hero {
+  background: linear-gradient(125deg, var(--background), var(--card));
+  border-bottom: 1px solid var(--border);
+}
+.hero .eyebrow {
+  color: var(--warm-accent);
+}
+.node {
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+.journey {
+  background: var(--section-tint);
+  border-block: 1px solid var(--border);
+}
+.journey .eyebrow {
+  color: var(--mint-accent);
+}
+.demo {
+  background: var(--card);
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: 16px;
+}
+.tabs button[aria-selected="true"] {
+  color: var(--primary-foreground);
+}
+.privacy {
+  background: var(--card);
+}
+.privacy svg {
+  color: var(--mint-accent);
+}
+.final {
+  background: var(--secondary);
+  border-top: 1px solid var(--border);
+}

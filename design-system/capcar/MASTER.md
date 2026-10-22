@@ -65,3 +65,9 @@ Skill source: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill at commit 
 ## Obsidian Chrome · October 22, 2026
 
 User-approved app-wide palette replaces teal, cream and copper. Public pages, workspace, account forms, menus, charts and map chrome use shared semantic variables. Reuse `background`, `card`, `foreground`, `muted-foreground`, `primary` and `primary-foreground` utilities instead of introducing local brand hex values. Legacy `--capcar-*` names are compatibility aliases, not separate palettes. Keep print documents and QR backgrounds white, natural car paint and photos unchanged, and meaningful error/warning/success colors distinct. Map basemap styles retain their geographic identity; controls and route accents follow Chrome. Standalone error HTML carries equivalent literal fallback colors because global CSS may be unavailable.
+
+## Chrome color and section refinement · October 22, 2026
+
+User requested more color, lighter surfaces and clear section separation after reviewing the monochrome deployment. This supersedes the near-black palette values above: background #151d28, card #243244, secondary #2b3b4e, primary #a7ceff, muted text #becbda. Retain foreground #f0f1f3. Use warm amber #efbd91 and mint #a6decf for selective icon/eyebrow accents, not error or success replacements. Borders and inputs have stronger contrast. Canvas companions match shared tokens.
+
+Public homepage alternates blue-charcoal hero, pale slate feature explanations, green-blue project journey, slate tools, light FAQ and pale-blue closing CTA. Light sections set their text, captions, borders and interaction tokens together via `capcar-light-section`; never put light text on a light surface. Transparent vehicle framing and existing imagery remain unchanged. Keep editorial typography and working interactions.
