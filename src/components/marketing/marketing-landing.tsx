@@ -16,7 +16,6 @@ import { homepageCopy } from "@/features/marketing/homepage-copy";
 import { journalArticlePath } from "@/features/journal/routes";
 import type { AppLocale } from "@/i18n/config";
 import { DeferredProductDashboardPreview } from "./deferred-marketing-demos";
-import { UseCaseExplorer } from "./use-case-explorer";
 import { MarketingHero } from "./marketing-hero";
 import { HomepageLink } from "./homepage-link";
 import { MarketingFaq } from "./marketing-faq";
@@ -63,166 +62,174 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
         <MarketingHero locale={locale} />
         <section
           id="platform"
-          className={styles.section}
+          className={`capcar-light-section ${styles.useCases}`}
           aria-labelledby="use-cases-title"
         >
-          <h2 id="use-cases-title" className={styles.title}>
-            {c.usesTitle}
-          </h2>
-          <UseCaseExplorer
-            label={c.usesTitle}
-            titles={[c.maintain, c.build, c.drives]}
-          >
-            <article className={styles.use}>
-              <div>
-                <h3>{c.maintain}</h3>
-                <p>{c.maintainText}</p>
-                <p className={styles.fine}>{c.maintainAccess}</p>
-                <div className={styles.actions}>
-                  <HomepageLink
-                    href="/car-maintenance-tracker"
-                    useCase="maintain"
-                    className={styles.secondary}
-                  >
-                    {c.maintainAction}
-                    <ArrowRight size={16} aria-hidden="true" />
-                  </HomepageLink>
-                </div>
-                <HomepageLink
-                  href={guide}
-                  useCase="maintain"
-                  className={styles.secondary}
-                >
-                  {c.guides}
-                  <ArrowRight size={16} aria-hidden="true" />
-                </HomepageLink>
-              </div>
-              <div className={styles.mini} aria-label={c.maintain}>
-                <p>{c.sample} / BMW 318i</p>
-                <div className={styles.miniRow}>
-                  <strong>{c.task}</strong>
-                  <span>{c.due}</span>
-                </div>
-                <div className={styles.miniRow}>
-                  <strong className="flex items-center gap-2">
-                    <Check size={16} aria-hidden="true" />
-                    {c.completedTask}
-                  </strong>
-                  <span>{c.done}</span>
-                </div>
-                <div className={styles.miniRow}>
-                  <BookOpen size={20} aria-hidden="true" />
+          <div className={styles.section}>
+            <h2 id="use-cases-title" className={styles.title}>
+              {c.usesTitle}
+            </h2>
+            <div className={styles.editorialUses}>
+              <article className={styles.use}>
+                <div>
+                  <h3>{c.maintain}</h3>
+                  <p>{c.maintainText}</p>
+                  <p className={styles.fine}>{c.maintainAccess}</p>
+                  <div className={styles.actions}>
+                    <HomepageLink
+                      href="/car-maintenance-tracker"
+                      useCase="maintain"
+                      className={styles.secondary}
+                    >
+                      {c.maintainAction}
+                      <ArrowRight size={16} aria-hidden="true" />
+                    </HomepageLink>
+                  </div>
                   <HomepageLink
                     href={guide}
                     useCase="maintain"
                     className={styles.secondary}
                   >
-                    {c.guideName}
-                  </HomepageLink>
-                </div>
-              </div>
-            </article>
-            <article className={styles.use}>
-              <div>
-                <h3>{c.build}</h3>
-                <p>{c.buildText}</p>
-                <p className={styles.fine}>{c.buildAccess}</p>
-                <div className={styles.actions}>
-                  <HomepageLink
-                    href="/project-car-planner"
-                    useCase="modify"
-                    className={styles.secondary}
-                  >
-                    {c.buildAction}
+                    {c.guides}
                     <ArrowRight size={16} aria-hidden="true" />
                   </HomepageLink>
                 </div>
-              </div>
-              <div className={styles.mini} aria-label={c.build}>
-                <p>{c.sample} / BMW 318i</p>
-                <strong>{c.project}</strong>
-                <div className={styles.bar} aria-hidden="true">
-                  <span />
+                <div className={styles.mini} aria-label={c.maintain}>
+                  <p>{c.sample} / BMW 318i</p>
+                  <div className={styles.miniRow}>
+                    <strong>{c.task}</strong>
+                    <span>{c.due}</span>
+                  </div>
+                  <div className={styles.miniRow}>
+                    <strong className="flex items-center gap-2">
+                      <Check size={16} aria-hidden="true" />
+                      {c.completedTask}
+                    </strong>
+                    <span>{c.done}</span>
+                  </div>
+                  <div className={styles.miniRow}>
+                    <BookOpen size={20} aria-hidden="true" />
+                    <HomepageLink
+                      href={guide}
+                      useCase="maintain"
+                      className={styles.secondary}
+                    >
+                      {c.guideName}
+                    </HomepageLink>
+                  </div>
                 </div>
-                <span className="text-xs">{c.progress}</span>
-                <dl className={styles.stats}>
-                  <div>
-                    <dt>{c.budget}</dt>
-                    <dd>{euro(300)}</dd>
+              </article>
+              <article className={styles.use}>
+                <div>
+                  <h3>{c.build}</h3>
+                  <p>{c.buildText}</p>
+                  <p className={styles.fine}>{c.buildAccess}</p>
+                  <div className={styles.actions}>
+                    <HomepageLink
+                      href="/project-car-planner"
+                      useCase="modify"
+                      className={styles.secondary}
+                    >
+                      {c.buildAction}
+                      <ArrowRight size={16} aria-hidden="true" />
+                    </HomepageLink>
                   </div>
-                  <div>
-                    <dt>{c.planned}</dt>
-                    <dd>{euro(30)}</dd>
+                </div>
+                <div className={styles.mini} aria-label={c.build}>
+                  <p>{c.sample} / BMW 318i</p>
+                  <div className={styles.editorialCar}>
+                    <Image
+                      src="/garage/cutouts/bmw-318i.webp"
+                      alt=""
+                      fill
+                      sizes="(max-width: 760px) 90vw, 540px"
+                      className="object-contain"
+                    />
                   </div>
-                  <div>
-                    <dt>{c.actual}</dt>
-                    <dd>{euro(28)}</dd>
+                  <strong>{c.project}</strong>
+                  <div className={styles.bar} aria-hidden="true">
+                    <span />
                   </div>
-                </dl>
-                <p className={styles.fine}>{c.progressNote}</p>
-              </div>
-            </article>
-            <article className={styles.use}>
-              <div>
-                <h3>{c.drives}</h3>
-                <p>{c.drivesText}</p>
-                <p className={styles.fine}>{c.drivesAccess}</p>
-                <div className={styles.actions}>
+                  <span className="text-xs">{c.progress}</span>
+                  <dl className={styles.stats}>
+                    <div>
+                      <dt>{c.budget}</dt>
+                      <dd>{euro(300)}</dd>
+                    </div>
+                    <div>
+                      <dt>{c.planned}</dt>
+                      <dd>{euro(30)}</dd>
+                    </div>
+                    <div>
+                      <dt>{c.actual}</dt>
+                      <dd>{euro(28)}</dd>
+                    </div>
+                  </dl>
+                  <p className={styles.fine}>{c.progressNote}</p>
+                </div>
+              </article>
+              <article className={styles.use}>
+                <div>
+                  <h3>{c.drives}</h3>
+                  <p>{c.drivesText}</p>
+                  <p className={styles.fine}>{c.drivesAccess}</p>
+                  <div className={styles.actions}>
+                    <HomepageLink
+                      href="/roadbook"
+                      useCase="drives"
+                      className={styles.secondary}
+                    >
+                      {c.drivesAction}
+                      <ArrowRight size={16} aria-hidden="true" />
+                    </HomepageLink>
+                  </div>
                   <HomepageLink
-                    href="/roadbook"
+                    href="/ai"
                     useCase="drives"
                     className={styles.secondary}
                   >
-                    {c.drivesAction}
+                    {c.trip}
                     <ArrowRight size={16} aria-hidden="true" />
                   </HomepageLink>
                 </div>
-                <HomepageLink
-                  href="/ai"
-                  useCase="drives"
-                  className={styles.secondary}
-                >
-                  {c.trip}
-                  <ArrowRight size={16} aria-hidden="true" />
-                </HomepageLink>
-              </div>
-              <figure className={`${styles.mini} ${styles.drive}`}>
-                <div className={styles.drivePhoto}>
-                  <Image
-                    src="/previews/roadbook.png"
-                    alt={c.drivePhoto}
-                    fill
-                    sizes="(min-width: 1320px) 590px, (min-width: 761px) 45vw, 100vw"
-                    quality={65}
-                  />
-                </div>
-                <figcaption className={styles.driveCaption}>
-                  <p className={styles.fine}>
-                    ©{" "}
-                    <a href="https://www.openstreetmap.org/copyright">
-                      OpenStreetMap
-                    </a>{" "}
-                    · <a href="https://openfreemap.org/">OpenFreeMap</a> ·{" "}
-                    <a href="https://openmaptiles.org/">OpenMapTiles</a>
-                  </p>
-                  <p className={styles.fine}>{c.sample}</p>
-                  <strong>{c.route}</strong>
-                  <p>{c.routeDetail}</p>
-                  <HomepageLink
-                    href={journalArticlePath(
-                      "ruesselsheim-rheingau-tagesausflug",
-                      locale,
-                    )}
-                    useCase="drives"
-                    className={styles.secondary}
-                  >
-                    {c.open}
-                    <ArrowRight size={16} aria-hidden="true" />
-                  </HomepageLink>
-                </figcaption>
-              </figure>
-            </article>
-          </UseCaseExplorer>
+                <figure className={`${styles.mini} ${styles.drive}`}>
+                  <div className={styles.drivePhoto}>
+                    <Image
+                      src="/previews/roadbook.png"
+                      alt={c.drivePhoto}
+                      fill
+                      sizes="(min-width: 1320px) 590px, (min-width: 761px) 45vw, 100vw"
+                      quality={65}
+                    />
+                  </div>
+                  <figcaption className={styles.driveCaption}>
+                    <p className={styles.fine}>
+                      ©{" "}
+                      <a href="https://www.openstreetmap.org/copyright">
+                        OpenStreetMap
+                      </a>{" "}
+                      · <a href="https://openfreemap.org/">OpenFreeMap</a> ·{" "}
+                      <a href="https://openmaptiles.org/">OpenMapTiles</a>
+                    </p>
+                    <p className={styles.fine}>{c.sample}</p>
+                    <strong>{c.route}</strong>
+                    <p>{c.routeDetail}</p>
+                    <HomepageLink
+                      href={journalArticlePath(
+                        "ruesselsheim-rheingau-tagesausflug",
+                        locale,
+                      )}
+                      useCase="drives"
+                      className={styles.secondary}
+                    >
+                      {c.open}
+                      <ArrowRight size={16} aria-hidden="true" />
+                    </HomepageLink>
+                  </figcaption>
+                </figure>
+              </article>
+            </div>
+          </div>
         </section>
         <DeferredProductDashboardPreview
           eyebrow={c.sample}
@@ -308,7 +315,7 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                   <h3>
                     {title}
                     {preview && (
-                      <span className="mt-1 block text-xs font-normal text-[#84553f]">
+                      <span className="text-primary mt-1 block text-xs font-normal">
                         {c.preview}
                       </span>
                     )}
@@ -324,7 +331,7 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
           </div>
         </section>
         <MarketingFaq />
-        <section className={styles.final}>
+        <section className={`capcar-light-section ${styles.final}`}>
           <div className={styles.section}>
             <h2 className={styles.title}>{c.finalTitle}</h2>
             <p>{c.finalText}</p>

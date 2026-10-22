@@ -53,7 +53,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
 
   if (pathname === "/garage/new")
     return (
-      <div className="capcar-editorial-grid min-h-dvh bg-[#07191b] text-[#f4f5f2]">
+      <div className="capcar-editorial-grid bg-background text-foreground min-h-dvh">
         <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
           <Link href="/" aria-label={navigation("home")} className="rounded-lg">
             <CapcarWordmark />
@@ -67,7 +67,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
     );
 
   return (
-    <div className="capcar-editorial-grid min-h-dvh bg-[#07191b] text-[#f4f5f2] lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]">
+    <div className="capcar-editorial-grid bg-background text-foreground min-h-dvh lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]">
       <PriceWatchMonitor />
 
       <aside className="sticky top-0 hidden h-dvh border-r border-white/7 lg:block">
@@ -81,7 +81,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div className="min-w-0">
-        <header className="sticky top-0 z-40 border-b border-white/8 bg-[#07191b]/90 shadow-[0_12px_40px_rgba(0,0,0,.12)] backdrop-blur-2xl">
+        <header className="bg-background/90 sticky top-0 z-40 border-b border-white/8 shadow-[0_12px_40px_rgba(0,0,0,.12)] backdrop-blur-2xl">
           <div className="mx-auto flex h-18 max-w-[1500px] items-center justify-between gap-4 px-4 sm:px-7">
             <div className="flex items-center gap-3 lg:hidden">
               <button
@@ -99,7 +99,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             </div>
 
             <div className="hidden min-w-0 lg:block">
-              <p className="text-xs font-semibold tracking-[0.15em] text-[#aab6b1] uppercase">
+              <p className="text-muted-foreground text-xs font-semibold tracking-[0.15em] uppercase">
                 {vehicleId ? t("vehicleWorkspace") : t("garage")}
               </p>
               <p className="mt-0.5 truncate text-sm font-semibold text-white/72">
@@ -110,7 +110,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
             <div className="hidden w-full max-w-sm xl:block">
               <GlobalPartsSearch theme="dark" />
             </div>
-            <span className="ml-auto hidden text-xs tracking-[0.12em] text-[#aab6b1] uppercase sm:inline lg:hidden">
+            <span className="text-muted-foreground ml-auto hidden text-xs tracking-[0.12em] uppercase sm:inline lg:hidden">
               {vehicleLabel ?? t("garage")}
             </span>
           </div>

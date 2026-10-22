@@ -8,7 +8,7 @@
   font-weight: 650;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #bf8269;
+  color: var(--primary);
 }
 .title {
   max-width: 900px;
@@ -22,7 +22,7 @@
   max-width: 620px;
   font-size: 1rem;
   line-height: 1.8;
-  color: #bfcac5;
+  color: var(--foreground);
 }
 .primary,
 .secondary {
@@ -40,9 +40,9 @@
   cursor: pointer;
 }
 .primary {
-  background: #e8e6d7;
-  color: #0e2d30;
-  border: 1px solid #e8e6d7;
+  background: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--foreground);
   box-shadow: 0 12px 35px rgb(5 3 6 / 16%);
 }
 .secondary {
@@ -51,7 +51,7 @@
   border: 1px solid currentColor;
 }
 .primary:hover {
-  background: #fff8e7;
+  background: var(--background);
 }
 .secondary:hover {
   background: rgb(146 100 77 / 12%);
@@ -69,18 +69,18 @@
 .hero {
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid rgb(232 230 215 / 10%);
+  border-bottom: 1px solid rgb(240 241 243 / 10%);
   background:
-    linear-gradient(rgb(232 230 215 / 2.8%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(232 230 215 / 2.8%) 1px, transparent 1px),
+    linear-gradient(rgb(240 241 243 / 2.8%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(240 241 243 / 2.8%) 1px, transparent 1px),
     radial-gradient(circle at 88% 10%, rgb(146 100 77 / 17%), transparent 30%),
-    #0b2326;
+    var(--background);
   background-size:
     74px 74px,
     74px 74px,
     auto,
     auto;
-  color: #e8e6d7;
+  color: var(--foreground);
 }
 .heroGrid {
   display: grid;
@@ -101,15 +101,15 @@
 }
 .panel {
   padding: 1.65rem;
-  border: 1px solid rgb(14 45 48 / 18%);
+  border: 1px solid color-mix(in srgb, var(--foreground) 18%, transparent);
   border-radius: 1.35rem;
-  background: #f5f2e8;
-  color: #0e2d30;
+  background: var(--background);
+  color: var(--foreground);
   box-shadow: 0 22px 70px rgb(5 3 6 / 8%);
 }
 .label {
   font-size: 0.75rem;
-  color: #4b6260;
+  color: var(--muted-foreground);
   line-height: 1.6;
 }
 .field {
@@ -118,40 +118,40 @@
   min-height: 48px;
   margin-top: 0.5rem;
   padding: 0.6rem 0.8rem;
-  border: 1px solid #748783;
+  border: 1px solid var(--input);
   border-radius: 0.65rem;
-  background: #fbf9f3;
-  color: #0e2d30;
+  background: var(--background);
+  color: var(--foreground);
   font-size: 1rem;
 }
 .field option {
-  background: #fbf9f3;
-  color: #0e2d30;
+  background: var(--background);
+  color: var(--foreground);
 }
 .tab {
   min-height: 48px;
   padding: 0.75rem 1rem;
   flex: 1;
-  color: #bfcac5;
+  color: var(--foreground);
   border-bottom: 2px solid transparent;
   font-size: 0.875rem;
   white-space: nowrap;
   cursor: pointer;
 }
 .tab[aria-selected="true"] {
-  border-color: #d8a58b;
-  color: #fff7e9;
+  border-color: var(--primary);
+  color: var(--foreground);
   background: rgb(255 255 255 / 5%);
 }
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  border: 1px solid #ad8350;
+  border: 1px solid var(--input);
   border-radius: 0.45rem;
   padding: 0.35rem 0.6rem;
-  background: #f1e3c4;
-  color: #69430e;
+  background: var(--background);
+  color: var(--muted-foreground);
   font-size: 0.75rem;
   line-height: 1.5;
 }
@@ -160,11 +160,11 @@
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   padding: 2.5rem 0;
-  border-top: 1px solid rgb(14 45 48 / 20%);
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 20%, transparent);
   align-items: center;
 }
 :where(.primary, .secondary, .link, .tab, .field):focus-visible {
-  outline: 3px solid #bf8269;
+  outline: 3px solid var(--primary);
   outline-offset: 4px;
 }
 @media (prefers-reduced-motion: no-preference) {

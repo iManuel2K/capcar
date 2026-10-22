@@ -25,7 +25,7 @@
   background: rgb(245 242 232 / 16%);
 }
 .step[data-passed="true"]::after {
-  background: #d6aa92;
+  background: var(--primary);
 }
 .number {
   display: grid;
@@ -35,18 +35,18 @@
   flex-shrink: 0;
   border: 1px solid rgb(245 242 232 / 25%);
   border-radius: 50%;
-  color: #a7b7b2;
+  color: var(--muted-foreground);
   font-size: 0.875rem;
   font-variant-numeric: tabular-nums;
 }
 .step[data-done="true"] .number {
-  border-color: #89cbb0;
-  color: #89cbb0;
+  border-color: var(--input);
+  color: var(--muted-foreground);
 }
 .step[aria-current="step"] .number {
-  background: #d6aa92;
-  border-color: #d6aa92;
-  color: #0b2326;
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
   box-shadow: 0 0 0 5px rgb(214 170 146 / 12%);
   font-weight: 700;
 }
@@ -57,21 +57,21 @@
   flex-wrap: wrap;
   gap: 5px;
   font-size: 0.875rem;
-  color: #a7b7b2;
+  color: var(--muted-foreground);
 }
 .step[data-done="true"] .label,
 .step[aria-current="step"] .label {
-  color: #eeebe4;
+  color: var(--foreground);
 }
 .check {
   width: 14px;
   height: 14px;
-  color: #89cbb0;
+  color: var(--muted-foreground);
 }
 .current {
   display: block;
   margin-top: 4px;
-  color: #d6aa92;
+  color: var(--primary);
   font-size: 0.75rem;
   line-height: 1.5;
 }
@@ -89,7 +89,7 @@
   border: 1px solid rgb(245 242 232 / 22%);
   border-radius: 999px;
   background: transparent;
-  color: #b8c6c1;
+  color: var(--foreground);
   font-size: 0.8rem;
   cursor: pointer;
 }
@@ -105,22 +105,22 @@
   font-weight: 650;
 }
 .status[data-status="planning"][aria-pressed="true"] {
-  color: #e1b99e;
+  color: var(--primary);
   background: rgb(214 170 146 / 12%);
 }
 .status[data-status="in_progress"][aria-pressed="true"] {
-  color: #9edbd8;
+  color: var(--muted-foreground);
   background: rgb(158 219 216 / 12%);
 }
 .status[data-status="complete"][aria-pressed="true"] {
-  color: #9ed8b6;
+  color: var(--muted-foreground);
   background: rgb(158 216 182 / 12%);
 }
 .status:hover {
   border-color: currentColor;
 }
 .status:focus-visible {
-  outline: 2px solid #d6aa92;
+  outline: 2px solid var(--primary);
   outline-offset: 4px;
 }
 @media (prefers-reduced-motion: no-preference) {

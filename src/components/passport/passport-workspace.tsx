@@ -145,7 +145,9 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
     );
   if (!passport)
     return (
-      <div className="py-32 text-center text-white/45">Vehicle not found.</div>
+      <div className="text-muted-foreground py-32 text-center">
+        Vehicle not found.
+      </div>
     );
   const title = `${passport.vehicle.productionYear} ${passport.vehicle.make} ${passport.vehicle.model}`;
   const activeLink = links.find((link) => isPassportLinkActive(link));
@@ -272,16 +274,16 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
 
   return (
     <div className="passport-print pb-24 sm:pb-0">
-      <header className="no-print rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_8%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10">
+      <header className="no-print rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_8%,rgba(184,199,217,0.2),transparent_30%),#111111] p-6 sm:p-10">
         <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-[0.15em] uppercase">
               CapCar Vehicle Passport
             </p>
             <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
               {title}
             </h1>
-            <p className="mt-4 text-sm text-white/45">
+            <p className="text-muted-foreground mt-4 text-sm">
               {passport.vehicle.platform} · {passport.vehicle.engineCode} ·{" "}
               {passport.vehicle.transmission} ·{" "}
               {passport.vehicle.mileage.toLocaleString(locale)} km
@@ -323,7 +325,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
             <button
               disabled={sharing}
               onClick={() => void publish()}
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-white disabled:opacity-40"
+              className="bg-primary text-primary-foreground inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-sm font-semibold disabled:opacity-40"
             >
               {sharing ? (
                 <LoaderCircle className="size-4" />
@@ -341,7 +343,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
             <Link2 className="size-4" /> Public passport ready
           </p>
           <a
-            className="mt-2 block text-sm break-all text-white underline"
+            className="text-foreground mt-2 block text-sm break-all underline"
             href={shareUrl}
             target="_blank"
             rel="noreferrer"
@@ -387,14 +389,14 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
             : undefined)
         }
       />
-      <section className="no-print mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
+      <section className="no-print bg-card mt-5 rounded-[2rem] border border-white/10 p-5 sm:p-8">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+            <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
               Privacy controls
             </p>
             <h2 className="mt-2 text-2xl font-medium">Shared passport links</h2>
-            <p className="mt-2 text-sm leading-6 text-white/40">
+            <p className="text-muted-foreground mt-2 text-sm leading-6">
               Revoke access immediately or remove a link permanently. A revoked
               link shows no vehicle data.
             </p>
@@ -408,7 +410,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
             type="button"
             disabled={sharing}
             onClick={() => void publish()}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-white disabled:opacity-40"
+            className="bg-primary text-primary-foreground inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold disabled:opacity-40"
           >
             <Share2 className="size-4" /> New public link
           </button>
@@ -424,7 +426,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
                   : (Number(event.target.value) as 30 | 90 | 365),
               )
             }
-            className="mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-black/20 px-3 text-white"
+            className="text-foreground mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-black/20 px-3"
           >
             <option value="30">30 days</option>
             <option value="90">90 days</option>
@@ -441,11 +443,11 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
           Refresh shared links
         </button>
         {linksLoading ? (
-          <div className="mt-6 flex items-center gap-2 text-sm text-white/35">
+          <div className="text-muted-foreground mt-6 flex items-center gap-2 text-sm">
             <LoaderCircle className="size-4" /> Loading shared links…
           </div>
         ) : links.length === 0 ? (
-          <p className="mt-6 rounded-xl border border-dashed border-white/10 p-6 text-center text-sm text-white/35">
+          <p className="text-muted-foreground mt-6 rounded-xl border border-dashed border-white/10 p-6 text-center text-sm">
             No passport links have been created.
           </p>
         ) : (
@@ -456,10 +458,10 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
                 className="flex flex-col justify-between gap-4 py-4 sm:flex-row sm:items-center"
               >
                 <div className="min-w-0">
-                  <p className="truncate font-mono text-xs text-white/55">
+                  <p className="text-muted-foreground truncate font-mono text-xs">
                     {link.share_id}
                   </p>
-                  <p className="mt-1 text-xs text-white/30">
+                  <p className="text-muted-foreground mt-1 text-xs">
                     Created{" "}
                     {new Date(link.created_at).toLocaleDateString("en-GB")} ·{" "}
                     {isPassportLinkActive(link)
@@ -480,7 +482,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
                         type="button"
                         onClick={() => void copyLink(link.share_id)}
                         aria-label="Copy passport link"
-                        className="grid size-10 place-items-center rounded-xl border border-white/10 text-white/55"
+                        className="text-muted-foreground grid size-10 place-items-center rounded-xl border border-white/10"
                       >
                         <Copy className="size-4" />
                       </button>
@@ -488,7 +490,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
                         type="button"
                         disabled={sharing}
                         onClick={() => void setLinkPublic(link.share_id, false)}
-                        className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 px-3 text-xs text-white/55"
+                        className="text-muted-foreground inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 px-3 text-xs"
                       >
                         <Link2Off className="size-3.5" /> Revoke
                       </button>
@@ -498,7 +500,7 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
                       type="button"
                       disabled={sharing}
                       onClick={() => void setLinkPublic(link.share_id, true)}
-                      className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 px-3 text-xs text-white/55"
+                      className="text-muted-foreground inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 px-3 text-xs"
                     >
                       <Link2 className="size-3.5" /> Restore
                     </button>
@@ -616,12 +618,12 @@ function VehiclePassportWorkspace({ vehicleId }: { vehicleId: string }) {
           }))}
         />
       </div>
-      <aside className="no-print mt-5 flex items-center justify-between gap-4 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm text-white/45">
+      <aside className="no-print border-primary/15 bg-primary/6 text-muted-foreground mt-5 flex items-center justify-between gap-4 rounded-2xl border p-5 text-sm">
         <span>
           <strong className="text-white/75">CapCar Pro</strong> ·{" "}
           {proFeatureLabels.advancedPassportExports}
         </span>
-        <span className="rounded-full border border-[#ff667a]/20 px-3 py-1 text-[10px] text-[#ff8796] uppercase">
+        <span className="border-primary/20 text-primary rounded-full border px-3 py-1 text-[10px] uppercase">
           Coming later
         </span>
       </aside>
@@ -647,7 +649,7 @@ function Action({
   return (
     <button
       onClick={onClick}
-      className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"
+      className="hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60"
     >
       <Icon className="size-4" />
       {children}
@@ -656,9 +658,9 @@ function Action({
 }
 function PassportMetric({ label, value }: { label: string; value: number }) {
   return (
-    <article className="rounded-2xl border border-white/10 bg-[#111111] p-5">
+    <article className="bg-card rounded-2xl border border-white/10 p-5">
       <p className="text-2xl font-medium">{value}</p>
-      <p className="mt-1 text-xs text-white/35">{label}</p>
+      <p className="text-muted-foreground mt-1 text-xs">{label}</p>
     </article>
   );
 }
@@ -672,12 +674,12 @@ function RecordSection({
   rows: Array<{ title: string; meta: string }>;
 }) {
   return (
-    <section className="print-surface rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
+    <section className="print-surface bg-card rounded-[2rem] border border-white/10 p-5 sm:p-8">
       <h2 className="flex items-center gap-2 text-xl font-medium">
-        <BadgeCheck className="size-4 text-[#ff667a]" /> {title}
+        <BadgeCheck className="text-primary size-4" /> {title}
       </h2>
       {rows.length === 0 ? (
-        <p className="mt-8 rounded-xl border border-dashed border-white/10 p-8 text-center text-sm text-white/35">
+        <p className="text-muted-foreground mt-8 rounded-xl border border-dashed border-white/10 p-8 text-center text-sm">
           {empty}
         </p>
       ) : (
@@ -685,7 +687,9 @@ function RecordSection({
           {rows.map((row, index) => (
             <div key={`${row.title}-${index}`} className="py-4">
               <p className="font-medium text-white/80">{row.title}</p>
-              <p className="mt-1 text-xs leading-5 text-white/35">{row.meta}</p>
+              <p className="text-muted-foreground mt-1 text-xs leading-5">
+                {row.meta}
+              </p>
             </div>
           ))}
         </div>
@@ -763,16 +767,16 @@ function PassportProfileEditor({
   }
 
   return (
-    <section className="no-print mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
+    <section className="no-print bg-card mt-5 rounded-[2rem] border border-white/10 p-5 sm:p-8">
       <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
         <div>
-          <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+          <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
             Document identity
           </p>
           <h2 className="mt-2 text-2xl font-medium">
             Officer check or show-card detail
           </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-white/42">
+          <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-6">
             These details stay in your garage until you create a public
             Passport. Owner identity appears only when the explicit publish
             switch is enabled.
@@ -796,13 +800,13 @@ function PassportProfileEditor({
           placeholder="+49 …"
           type="tel"
         />
-        <label className="text-xs text-white/45 sm:col-span-2">
+        <label className="text-muted-foreground text-xs sm:col-span-2">
           Owner address
           <textarea
             name="ownerAddress"
             defaultValue={initial?.ownerAddress}
             placeholder="Street, postcode and city"
-            className="mt-2 min-h-24 w-full rounded-xl border border-white/12 bg-[#0b0b0b] p-4 text-sm text-white placeholder:text-white/20 focus:border-[#e72d45] focus:outline-none"
+            className="bg-background text-foreground placeholder:text-muted-foreground focus:border-primary mt-2 min-h-24 w-full rounded-xl border border-white/12 p-4 text-sm focus:outline-none"
           />
         </label>
         <PassportField
@@ -851,13 +855,13 @@ function PassportProfileEditor({
               type="checkbox"
               name="publishOwnerDetails"
               defaultChecked={initial?.publishOwnerDetails}
-              className="mt-1 size-4 accent-[#e72d45]"
+              className="accent-primary mt-1 size-4"
             />
             <span>
               <strong className="block text-white/80">
                 Publish owner details
               </strong>
-              <small className="mt-1 block leading-5 text-white/38">
+              <small className="text-muted-foreground mt-1 block leading-5">
                 Name, address and phone will be visible to anyone with a live
                 Passport link.
               </small>
@@ -868,23 +872,23 @@ function PassportProfileEditor({
               type="checkbox"
               name="includeFullVin"
               defaultChecked={initial?.includeFullVin}
-              className="mt-1 size-4 accent-[#e72d45]"
+              className="accent-primary mt-1 size-4"
             />
             <span>
               <strong className="block text-white/80">Include full VIN</strong>
-              <small className="mt-1 block leading-5 text-white/38">
+              <small className="text-muted-foreground mt-1 block leading-5">
                 Otherwise only the final five characters are displayed.
               </small>
             </span>
           </label>
         </div>
         <div className="flex flex-col-reverse gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
-          <p role="status" className="text-xs text-white/50">
+          <p role="status" className="text-muted-foreground text-xs">
             {message}
           </p>
           <button
             type="submit"
-            className="min-h-11 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-white"
+            className="bg-primary text-primary-foreground min-h-11 rounded-xl px-5 text-sm font-semibold"
           >
             Save & refresh preview
           </button>
@@ -908,14 +912,14 @@ function PassportField({
   type?: string;
 }) {
   return (
-    <label className="text-xs text-white/45">
+    <label className="text-muted-foreground text-xs">
       {label}
       <input
         name={name}
         type={type}
         defaultValue={defaultValue}
         placeholder={placeholder}
-        className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-[#0b0b0b] px-4 text-sm text-white placeholder:text-white/20 focus:border-[#e72d45] focus:outline-none"
+        className="bg-background text-foreground placeholder:text-muted-foreground focus:border-primary mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm focus:outline-none"
       />
     </label>
   );

@@ -11,7 +11,7 @@ export default async function Loading() {
       role="status"
       aria-live="polite"
       aria-busy="true"
-      className="min-h-dvh bg-[#0b0e0c] px-5 py-8 text-white sm:p-8"
+      className="bg-background text-foreground min-h-dvh px-5 py-8 sm:p-8"
     >
       <span className="flex items-center gap-3">
         <MotionLoader />

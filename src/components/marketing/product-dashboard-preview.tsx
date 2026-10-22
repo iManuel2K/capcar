@@ -133,29 +133,27 @@ export function ProductDashboardPreview() {
   return (
     <section
       id="live-demo"
-      className={`${styles.deferredSection} scroll-mt-24 bg-[#e8e6d7] text-[#0e2d30]`}
+      className={`${styles.deferredSection} bg-background text-foreground scroll-mt-24`}
       aria-labelledby="demo-title"
     >
       <div className={styles.section}>
-        <p className={`${styles.eyebrow} text-[#80533e]!`}>
-          {t("demo.eyebrow")}
-        </p>
+        <p className={`${styles.eyebrow} text-primary!`}>{t("demo.eyebrow")}</p>
         <div className="mt-3 grid gap-5 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <h2 id="demo-title" className={styles.title}>
             {home.demoTitle}
           </h2>
-          <p className="max-w-xl text-base leading-7 text-[#4b6260]">
+          <p className="text-muted-foreground max-w-xl text-base leading-7">
             {home.demoText}
           </p>
         </div>
-        <p className="mt-4 max-w-3xl text-xs leading-6 text-[#4b6260]">
+        <p className="text-muted-foreground mt-4 max-w-3xl text-xs leading-6">
           {home.demoHint}
         </p>
-        <div className="relative mt-8 overflow-hidden rounded-2xl border border-[#0e2d30]/20 bg-[#0b2326] text-[#e8e6d7]">
+        <div className="border-foreground/20 bg-background text-foreground relative mt-8 overflow-hidden rounded-2xl border">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 px-5 py-4 sm:px-7">
             <div>
               <p className="text-lg font-medium">{home.project}</p>
-              <p className="mt-1 font-mono text-xs text-[#bfcac5]">
+              <p className="text-foreground mt-1 font-mono text-xs">
                 BMW E90 318i · 2011
               </p>
             </div>
@@ -179,7 +177,7 @@ export function ProductDashboardPreview() {
               {t("demo.reset")}
             </button>
           </div>
-          <div className="px-5 pt-3 text-xs leading-5 text-[#d8b69d] sm:px-7">
+          <div className="text-primary px-5 pt-3 text-xs leading-5 sm:px-7">
             {t("demo.sample")}
           </div>
           <div className="relative mt-3">
@@ -230,7 +228,7 @@ export function ProductDashboardPreview() {
             {view === "plan" && (
               <div className="grid gap-6 lg:grid-cols-[1.15fr_1fr]">
                 <div>
-                  <div className="relative aspect-[16/8] overflow-hidden rounded-xl bg-[#071519]">
+                  <div className="bg-card relative aspect-[16/8] overflow-hidden rounded-xl">
                     <Image
                       src="/capcar-hero-bmw-garage.png"
                       alt={t("visual.alt")}
@@ -240,7 +238,7 @@ export function ProductDashboardPreview() {
                       className="object-contain"
                     />
                   </div>
-                  <p className="mt-2 text-xs text-[#bfcac5]">
+                  <p className="text-foreground mt-2 text-xs">
                     {t("visual.note")}
                   </p>
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -276,11 +274,11 @@ export function ProductDashboardPreview() {
                 </div>
                 <div className="flex flex-col gap-5">
                   <div>
-                    <p className="text-xs text-[#bfcac5]">{t("demo.phase")}</p>
+                    <p className="text-foreground text-xs">{t("demo.phase")}</p>
                     <p className="mt-1 text-xl">{t("demo.phaseValue")}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-[#bfcac5]">{t("demo.next")}</p>
+                    <p className="text-foreground text-xs">{t("demo.next")}</p>
                     <p className="mt-1 text-base leading-7">
                       {modification === "service"
                         ? home.task
@@ -396,7 +394,7 @@ export function ProductDashboardPreview() {
                     <ArrowRight className="size-4" aria-hidden="true" />
                   </button>
                 </div>
-                <p role="status" className="mt-3 text-sm text-[#d1e7d7]">
+                <p role="status" className="text-foreground mt-3 text-sm">
                   {message}
                 </p>
               </div>
@@ -406,7 +404,7 @@ export function ProductDashboardPreview() {
                 <BuildTransformation />
                 <div className="flex flex-col items-start gap-5">
                   <h3 className="text-2xl">{t("features.visual")}</h3>
-                  <p className="text-sm leading-7 text-[#bfcac5]">
+                  <p className="text-foreground text-sm leading-7">
                     {t("demo.visualText")}
                   </p>
                   <Link href="/studio" className={styles.link}>
@@ -421,7 +419,7 @@ export function ProductDashboardPreview() {
                   >
                     {t("demo.add")}
                   </button>
-                  <p role="status" className="text-sm text-[#d1e7d7]">
+                  <p role="status" className="text-foreground text-sm">
                     {message}
                   </p>
                   <button
@@ -446,12 +444,12 @@ export function ProductDashboardPreview() {
                       aria-live="polite"
                     >
                       <p className="font-medium">{home.task}</p>
-                      <p className="mt-2 text-sm text-[#bfcac5]">
+                      <p className="text-foreground mt-2 text-sm">
                         {completed
                           ? `${home.done} · ${home.actual}: ${currency(28)}`
                           : `${home.planned}: ${currency(servicePlan.amount + (servicePlan.shipping ?? 0))}${servicePlan.shipping === null ? " + ?" : ""}`}
                       </p>
-                      <p className="mt-2 text-xs leading-6 text-[#bfcac5]">
+                      <p className="text-foreground mt-2 text-xs leading-6">
                         {home.ownerRecorded}
                       </p>
                       <button
@@ -482,7 +480,7 @@ export function ProductDashboardPreview() {
                             · {currency(item.amount + (item.shipping ?? 0))}
                             {item.shipping === null ? " + ?" : ""}
                           </p>
-                          <p className="mt-1 text-xs text-[#bfcac5]">
+                          <p className="text-foreground mt-1 text-xs">
                             {t("demo.record")}
                           </p>
                           <button
@@ -518,7 +516,7 @@ export function ProductDashboardPreview() {
             )}
           </div>
           <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/15 px-5 py-4 sm:px-7">
-            <p className="max-w-2xl text-xs leading-5 text-[#bfcac5]">
+            <p className="text-foreground max-w-2xl text-xs leading-5">
               {t("demo.session")}
             </p>
             <HomepageLink
@@ -548,11 +546,11 @@ export function ProductDashboardPreview() {
           aria-hidden="true"
         >
           <span
-            className="bg-[#b9cbbf]"
+            className="bg-background"
             style={{ width: `${(spent / budget) * 100}%` }}
           />
           <span
-            className="bg-[#bf8269]"
+            className="bg-primary text-primary-foreground"
             style={{ width: `${(plannedTotal / budget) * 100}%` }}
           />
         </div>
@@ -585,24 +583,26 @@ function DemoVehiclePassport({ plannedCount }: { plannedCount: number }) {
   const t = useTranslations("Launch");
   const home = homepageCopy[useLocale() as AppLocale] ?? homepageCopy.en;
   return (
-    <article className="overflow-hidden rounded-2xl border border-white/10 bg-[#e8e6d7] text-[#0e2d30] shadow-[0_24px_70px_rgba(0,0,0,.25)]">
+    <article className="bg-background text-foreground overflow-hidden rounded-2xl border border-white/10 shadow-[0_24px_70px_rgba(0,0,0,.25)]">
       <div className="grid min-h-[390px] lg:grid-cols-[1.15fr_0.85fr]">
         <div className="p-5 sm:p-7">
-          <div className="flex items-center justify-between gap-4 border-b border-[#0e2d30]/10 pb-4">
+          <div className="border-foreground/10 flex items-center justify-between gap-4 border-b pb-4">
             <span className="text-[10px] font-semibold tracking-[0.18em]">
               CAPCAR
             </span>
-            <span className="rounded-full border border-[#6d0101]/15 bg-[#6d0101]/5 px-3 py-1 text-[9px] font-semibold tracking-[0.12em] text-[#6d0101] uppercase">
+            <span className="border-primary/15 bg-primary/5 text-primary rounded-full border px-3 py-1 text-[9px] font-semibold tracking-[0.12em] uppercase">
               {t("demo.passport.badge")}
             </span>
           </div>
-          <p className="mt-6 text-[10px] font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
+          <p className="text-primary mt-6 text-[10px] font-semibold tracking-[0.16em] uppercase">
             {t("demo.passport.eyebrow")}
           </p>
           <h3 className="mt-2 text-3xl font-medium tracking-[-0.05em] sm:text-4xl">
             2011 BMW 318i
           </h3>
-          <p className="mt-2 text-sm text-[#405856]">E90 · N43B20 · Manual</p>
+          <p className="text-muted-foreground mt-2 text-sm">
+            E90 · N43B20 · Manual
+          </p>
 
           <dl className="mt-7 grid gap-4 sm:grid-cols-2">
             <PassportField
@@ -627,14 +627,14 @@ function DemoVehiclePassport({ plannedCount }: { plannedCount: number }) {
             />
           </dl>
 
-          <div className="mt-6 rounded-xl border border-dashed border-[#0e2d30]/15 px-4 py-3 text-xs text-[#405856]">
+          <div className="border-foreground/15 text-muted-foreground mt-6 rounded-xl border border-dashed px-4 py-3 text-xs">
             {plannedCount > 0
               ? t("demo.passport.planned", { count: plannedCount })
               : t("demo.passport.private")}
           </div>
         </div>
 
-        <div className="flex flex-col bg-[#071519] text-white">
+        <div className="bg-card text-foreground flex flex-col">
           <div className="relative min-h-64 flex-1">
             <Image
               src="/garage/cutouts/bmw-318i.webp"
@@ -645,13 +645,13 @@ function DemoVehiclePassport({ plannedCount }: { plannedCount: number }) {
               className="object-contain p-3"
             />
           </div>
-          <div className="border-t border-white/15 p-4 text-xs leading-6 text-[#c8d4cb]">
+          <div className="text-foreground border-t border-white/15 p-4 text-xs leading-6">
             <p>{home.sample}</p>
             <p className="mt-2">{home.ownerRecorded}</p>
           </div>
         </div>
       </div>
-      <div className="flex flex-wrap justify-between gap-2 border-t border-[#0e2d30]/10 px-5 py-3 text-[9px] text-[#405856] sm:px-7">
+      <div className="border-foreground/10 text-muted-foreground flex flex-wrap justify-between gap-2 border-t px-5 py-3 text-[9px] sm:px-7">
         <span>{t("demo.passport.footer")}</span>
         <span>{t("demo.passport.verify")}</span>
       </div>
@@ -670,11 +670,11 @@ function PassportField({
 }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#0e2d30]/6 text-[#6d0101]">
+      <span className="bg-card/6 text-primary grid size-9 shrink-0 place-items-center rounded-full">
         <Icon className="size-4" aria-hidden="true" />
       </span>
       <div className="min-w-0">
-        <dt className="text-[8px] font-semibold tracking-[0.12em] text-[#405856]/65 uppercase">
+        <dt className="text-muted-foreground/65 text-[8px] font-semibold tracking-[0.12em] uppercase">
           {label}
         </dt>
         <dd className="mt-1 truncate text-xs font-medium">{value}</dd>

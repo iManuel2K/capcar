@@ -134,7 +134,7 @@ export function AddVehicleForm({
     <div className="pb-24 sm:pb-0">
       <Link
         href="/garage"
-        className="mb-8 inline-flex items-center gap-2 text-sm text-white/50 transition hover:text-white"
+        className="text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 text-sm transition"
       >
         <ArrowLeft className="size-4" /> Back to garage
       </Link>
@@ -143,22 +143,22 @@ export function AddVehicleForm({
         <form
           onSubmit={handleSubmit}
           noValidate
-          className="rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8 lg:p-10"
+          className="bg-card rounded-[2rem] border border-white/10 p-5 sm:p-8 lg:p-10"
         >
           <div className="flex items-start justify-between gap-5 border-b border-white/8 pb-8">
             <div>
-              <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+              <p className="text-primary mb-3 text-xs font-semibold tracking-[0.16em] uppercase">
                 Vehicle profile
               </p>
               <h1 className="text-3xl font-medium tracking-[-0.035em] sm:text-5xl">
                 {vehicle ? "Edit your car." : "Add your car."}
               </h1>
-              <p className="mt-4 max-w-xl leading-7 text-white/50">
+              <p className="text-muted-foreground mt-4 max-w-xl leading-7">
                 Use the information on your registration document or what you
                 already know. You can change these details at any time.
               </p>
             </div>
-            <span className="hidden rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/40 sm:inline-flex">
+            <span className="text-muted-foreground hidden rounded-full border border-white/10 px-3 py-1.5 text-xs sm:inline-flex">
               1–2 min
             </span>
           </div>
@@ -355,13 +355,13 @@ export function AddVehicleForm({
           </FormSection>
 
           <div className="mt-9 flex flex-col-reverse items-stretch justify-between gap-4 border-t border-white/8 pt-7 sm:flex-row sm:items-center">
-            <p className="flex items-center gap-2 text-xs text-white/35">
+            <p className="text-muted-foreground flex items-center gap-2 text-xs">
               <LockKeyhole className="size-3.5" /> Saved to your private garage
             </p>
             <button
               disabled={submitting}
               type="submit"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-6 text-sm font-semibold text-[#07101d] transition hover:-translate-y-0.5 hover:bg-[#ff667a] disabled:opacity-60"
+              className="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-6 text-sm font-semibold transition hover:-translate-y-0.5 disabled:opacity-60"
             >
               {submitting
                 ? "Saving…"
@@ -393,7 +393,7 @@ export function AddVehicleForm({
               }
             />
           </div>
-          <p className="mt-4 flex items-start gap-2 px-1 text-xs leading-5 text-white/35">
+          <p className="text-muted-foreground mt-4 flex items-start gap-2 px-1 text-xs leading-5">
             <Info className="mt-0.5 size-3.5 shrink-0" /> This silhouette is
             atmospheric, not a precise rendering of the selected vehicle.
           </p>
@@ -404,7 +404,7 @@ export function AddVehicleForm({
 }
 
 const inputClass =
-  "mt-2 min-h-12 w-full rounded-xl border border-white/16 bg-[#181818] px-4 text-sm font-medium text-white outline-none transition placeholder:font-normal placeholder:text-white/48 hover:border-white/25 focus:border-[#ff667a] focus:bg-[#1b1718] focus:ring-3 focus:ring-[#e72d45]/15 disabled:cursor-not-allowed disabled:text-white/50 aria-[invalid=true]:border-red-400/80";
+  "mt-2 min-h-12 w-full rounded-xl border border-white/16 bg-card px-4 text-sm font-medium text-foreground outline-none transition placeholder:font-normal placeholder:text-muted-foreground hover:border-white/25 focus:border-primary focus:bg-card focus:ring-3 focus:ring-primary/15 disabled:cursor-not-allowed disabled:text-muted-foreground aria-[invalid=true]:border-red-400/80";
 
 function FormSection({
   number,
@@ -420,9 +420,11 @@ function FormSection({
   return (
     <section className="grid gap-6 border-b border-white/8 py-8 lg:grid-cols-[150px_1fr]">
       <div>
-        <span className="text-xs text-[#ff667a]">{number}</span>
+        <span className="text-primary text-xs">{number}</span>
         <h2 className="mt-2 font-medium">{title}</h2>
-        <p className="mt-1 text-xs leading-5 text-white/50">{description}</p>
+        <p className="text-muted-foreground mt-1 text-xs leading-5">
+          {description}
+        </p>
       </div>
       <div>{children}</div>
     </section>
@@ -449,7 +451,9 @@ function Field({
     >
       <span>{label}</span>
       {hint && (
-        <span className="ml-2 text-xs font-normal text-white/50">{hint}</span>
+        <span className="text-muted-foreground ml-2 text-xs font-normal">
+          {hint}
+        </span>
       )}
       {children}
       {error && (
@@ -462,7 +466,7 @@ function Field({
 function PreviewStat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-      <p className="text-[11px] tracking-[0.12em] text-white/30 uppercase">
+      <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
         {label}
       </p>
       <p className="mt-2 truncate text-sm font-medium text-white/75">{value}</p>

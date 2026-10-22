@@ -250,22 +250,22 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
   return (
     <div className="mx-auto max-w-5xl py-10 sm:py-16">
       <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(146,100,77,0.22),transparent_30%),#0b2326] p-6 shadow-[0_28px_80px_rgba(0,0,0,.16)] sm:p-10">
-        <p className="text-xs font-semibold tracking-[0.15em] text-[#d6aa92] uppercase">
+        <p className="text-primary text-xs font-semibold tracking-[0.15em] uppercase">
           CapCar account
         </p>
         <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
           Your garage stays yours.
         </h1>
-        <p className="mt-5 max-w-2xl leading-7 text-white/45">
+        <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
           Create an account or sign in to keep vehicles, maintenance and build
           plans private and available across your devices.
         </p>
       </header>
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
-        <aside className="rounded-[2rem] border border-white/10 bg-[#0b2326] p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:p-8">
+        <aside className="bg-background rounded-[2rem] border border-white/10 p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:p-8">
           <div className="flex items-center justify-between gap-3">
-            <Cloud className="size-5 text-[#d6aa92]" />
+            <Cloud className="text-primary size-5" />
             <span
               className={`rounded-full border px-3 py-1.5 text-[10px] uppercase ${status.configured ? "border-emerald-300/20 bg-emerald-300/8 text-emerald-200" : "border-amber-300/20 bg-amber-300/8 text-amber-100/70"}`}
             >
@@ -275,11 +275,11 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
           <h2 className="mt-7 text-2xl font-medium">
             {status.configured ? "Cloud mode ready" : "Local mode active"}
           </h2>
-          <p className="mt-3 text-sm leading-6 text-white/40">
+          <p className="text-muted-foreground mt-3 text-sm leading-6">
             {status.message}
           </p>
           {!status.configured && (
-            <div className="mt-6 flex gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-4 text-xs leading-5 text-white/45">
+            <div className="text-muted-foreground mt-6 flex gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-4 text-xs leading-5">
               <KeyRound className="mt-0.5 size-4 shrink-0 text-amber-200" />
               Add the two public Supabase variables and apply the included
               database migration when you are ready.
@@ -287,14 +287,14 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
           )}
         </aside>
 
-        <article className="rounded-[2rem] border border-white/10 bg-[#0b2326] p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:p-8">
+        <article className="bg-background rounded-[2rem] border border-white/10 p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:p-8">
           {!status.configured ? (
             <div className="flex min-h-72 flex-col items-center justify-center text-center">
-              <Cloud className="size-10 text-white/20" />
+              <Cloud className="text-muted-foreground size-10" />
               <h2 className="mt-5 text-2xl font-medium">
                 Nothing to configure today
               </h2>
-              <p className="mt-3 max-w-md text-sm leading-6 text-white/40">
+              <p className="text-muted-foreground mt-3 max-w-md text-sm leading-6">
                 Your current vehicles, builds, guides, visual concepts and
                 tuning plans remain stored in this browser.
               </p>
@@ -303,13 +303,13 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
             <>
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <p className="text-xs text-white/30">Signed in as</p>
+                  <p className="text-muted-foreground text-xs">Signed in as</p>
                   <p className="mt-1 font-medium">{userEmail}</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => void signOut()}
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-sm text-white/50"
+                  className="text-muted-foreground inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-sm"
                 >
                   <LogOut className="size-4" /> Sign out
                 </button>
@@ -319,7 +319,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
                   type="button"
                   disabled={loading}
                   onClick={() => void uploadSnapshot()}
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6d0101] px-4 text-sm font-semibold text-white transition hover:bg-[#830705] disabled:opacity-40"
+                  className="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition disabled:opacity-40"
                 >
                   <CloudUpload className="size-4" /> Back up local data
                 </button>
@@ -334,7 +334,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
               </div>
               <Link
                 href="/account/connections"
-                className="mt-3 flex min-h-12 items-center justify-between gap-3 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"
+                className="hover:text-foreground mt-3 flex min-h-12 items-center justify-between gap-3 rounded-xl border border-white/10 px-4 text-sm text-white/60"
               >
                 <span className="inline-flex items-center gap-2">
                   <CalendarDays className="size-4" /> Calendar &amp; mail
@@ -348,25 +348,25 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
               <h2 className="text-2xl font-medium">
                 Create account or sign in
               </h2>
-              <p className="mt-3 text-sm leading-6 text-white/40">
+              <p className="text-muted-foreground mt-3 text-sm leading-6">
                 Enter your email and CapCar will send a secure one-time link. A
                 new account is created automatically when needed—no password to
                 remember.
               </p>
-              <label className="mt-7 block text-xs text-white/35">
+              <label className="text-muted-foreground mt-7 block text-xs">
                 Email
                 <input
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-4 text-sm text-white outline-none"
+                  className="bg-card text-foreground mt-2 min-h-12 w-full rounded-xl border border-white/10 px-4 text-sm outline-none"
                 />
               </label>
               <button
                 type="button"
                 disabled={loading || !email.includes("@")}
                 onClick={() => void sendMagicLink()}
-                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#6d0101] px-4 text-sm font-semibold text-white transition hover:bg-[#830705] disabled:opacity-40"
+                className="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition disabled:opacity-40"
               >
                 {loading ? (
                   <LoaderCircle className="size-4" />
@@ -392,16 +392,16 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
         </article>
       </section>
 
-      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#0b2326] p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:p-8">
+      <section className="bg-background mt-5 rounded-[2rem] border border-white/10 p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:p-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+            <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
               Data ownership
             </p>
             <h2 className="mt-2 text-2xl font-medium">
               Take the complete garage with you.
             </h2>
-            <p className="mt-3 max-w-xl text-sm leading-6 text-white/40">
+            <p className="text-muted-foreground mt-3 max-w-xl text-sm leading-6">
               Export every local CapCar record—including the wishlist,
               diagnostics, costs and install stamps—without closing your
               account.
@@ -411,14 +411,14 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
             <button
               type="button"
               onClick={exportGarageJson}
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"
+              className="hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60"
             >
               <FileJson className="size-4" /> Export JSON
             </button>
             <button
               type="button"
               onClick={exportGarageCsv}
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"
+              className="hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60"
             >
               <Sheet className="size-4" /> Export CSV
             </button>
@@ -437,7 +437,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
               <h2 className="mt-2 text-2xl font-medium">
                 Delete what CapCar stores.
               </h2>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/40">
+              <p className="text-muted-foreground mt-3 max-w-2xl text-sm leading-6">
                 Download an export first if you need a copy. Private document
                 files are not included in JSON/CSV exports; download them from
                 each Vehicle Passport before deleting. Cloud-garage deletion
@@ -449,7 +449,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
                   <h3 className="font-medium text-white/75">
                     Garage data only
                   </h3>
-                  <p className="mt-2 text-xs leading-5 text-white/35">
+                  <p className="text-muted-foreground mt-2 text-xs leading-5">
                     Deletes the cloud snapshot, shared passports, rate-limit
                     history and recorded affiliate clicks.
                   </p>
@@ -464,7 +464,7 @@ export function AccountWorkspace({ status }: { status: AuthStatus }) {
                 </div>
                 <div className="rounded-2xl border border-red-300/12 p-4">
                   <h3 className="font-medium text-white/75">Entire account</h3>
-                  <p className="mt-2 text-xs leading-5 text-white/35">
+                  <p className="text-muted-foreground mt-2 text-xs leading-5">
                     Type DELETE to confirm. This cannot be undone.
                   </p>
                   <input

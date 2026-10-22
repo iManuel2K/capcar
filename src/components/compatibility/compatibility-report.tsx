@@ -43,7 +43,7 @@ const severityContent: Record<
   info: {
     label: "Information",
     icon: CircleHelp,
-    className: "border-[#e72d45]/20 bg-[#e72d45]/8 text-[#a9c7ff]",
+    className: "border-primary/20 bg-primary/8 text-primary",
   },
 };
 
@@ -82,7 +82,9 @@ export function CompatibilityReport({
     );
   if (!vehicle || !build)
     return (
-      <div className="py-32 text-center text-white/45">Build not found.</div>
+      <div className="text-muted-foreground py-32 text-center">
+        Build not found.
+      </div>
     );
 
   const report = evaluateBuildCompatibility({ vehicle, items });
@@ -120,18 +122,18 @@ export function CompatibilityReport({
     <div className="pb-24 sm:pb-0">
       <Link
         href={`/garage/${vehicleId}/builds/${buildId}`}
-        className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
+        className="text-muted-foreground hover:text-foreground mb-7 inline-flex items-center gap-2 text-sm"
       >
         <ArrowLeft className="size-4" /> Build roadmap
       </Link>
-      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(231,45,69,0.18),transparent_30%),#111111] p-6 sm:p-10">
-        <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
+      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(184,199,217,0.18),transparent_30%),#111111] p-6 sm:p-10">
+        <p className="text-primary text-xs font-semibold tracking-[0.15em] uppercase">
           Epic 16 · Build compatibility
         </p>
         <h1 className="mt-4 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
           Check the combination, not only each part.
         </h1>
-        <p className="mt-5 max-w-2xl leading-7 text-white/45">
+        <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
           {build.name} · {vehicle.productionYear} {vehicle.make} {vehicle.model}
           . The report joins fitment rules, missing data, dependencies and
           part-to-part interactions.
@@ -148,17 +150,17 @@ export function CompatibilityReport({
         <Metric label="Reviews needed" value={String(reviews)} />
       </section>
 
-      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
+      <section className="bg-card mt-5 rounded-[2rem] border border-white/10 p-6 sm:p-8">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+            <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
               Findings
             </p>
             <h2 className="mt-2 text-2xl font-medium">
               {report.findings.length} checks surfaced
             </h2>
           </div>
-          <p className="text-xs text-white/30">
+          <p className="text-muted-foreground text-xs">
             {report.structuredItems} structured · {report.unstructuredItems}{" "}
             manual items
           </p>
@@ -175,14 +177,14 @@ export function CompatibilityReport({
               >
                 <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
                   <div className="flex items-start gap-3">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-lg border border-white/8 text-white/35">
+                    <span className="text-muted-foreground grid size-9 shrink-0 place-items-center rounded-lg border border-white/8">
                       <CategoryIcon className="size-4" />
                     </span>
                     <div>
                       <p className="font-medium text-white/80">
                         {finding.title}
                       </p>
-                      <p className="mt-2 max-w-3xl text-sm leading-6 text-white/40">
+                      <p className="text-muted-foreground mt-2 max-w-3xl text-sm leading-6">
                         {finding.detail}
                       </p>
                     </div>
@@ -202,27 +204,27 @@ export function CompatibilityReport({
       <section className="mt-5 grid gap-4 sm:grid-cols-2">
         <Link
           href={`/garage/${vehicleId}/parts`}
-          className="group rounded-[2rem] border border-white/10 bg-[#111111] p-6 hover:border-white/20"
+          className="group bg-card rounded-[2rem] border border-white/10 p-6 hover:border-white/20"
         >
-          <PackageCheck className="size-5 text-[#ff667a]" />
+          <PackageCheck className="text-primary size-5" />
           <h2 className="mt-5 text-xl font-medium">Review catalogue parts</h2>
-          <p className="mt-2 text-sm text-white/40">
+          <p className="text-muted-foreground mt-2 text-sm">
             Replace manual items or mismatches with structured alternatives.
           </p>
         </Link>
         <Link
           href={`/garage/${vehicleId}/builds/${buildId}/visualize`}
-          className="group rounded-[2rem] border border-white/10 bg-[#111111] p-6 hover:border-white/20"
+          className="group bg-card rounded-[2rem] border border-white/10 p-6 hover:border-white/20"
         >
-          <Eye className="size-5 text-[#ff667a]" />
+          <Eye className="text-primary size-5" />
           <h2 className="mt-5 text-xl font-medium">Return to concept</h2>
-          <p className="mt-2 text-sm text-white/40">
+          <p className="text-muted-foreground mt-2 text-sm">
             Adjust the visual direction while keeping technical claims separate.
           </p>
         </Link>
       </section>
 
-      <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6 text-white/45">
+      <aside className="text-muted-foreground mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6">
         <ShieldAlert className="mt-0.5 size-4 shrink-0 text-amber-200" />
         This is a conservative demo rule engine, not a fitment guarantee, legal
         approval or safety certification. Resolve every review with
@@ -234,9 +236,9 @@ export function CompatibilityReport({
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6">
+    <article className="bg-card rounded-[2rem] border border-white/10 p-6">
       <p className="text-4xl font-medium tracking-[-0.04em]">{value}</p>
-      <p className="mt-3 text-xs text-white/35">{label}</p>
+      <p className="text-muted-foreground mt-3 text-xs">{label}</p>
     </article>
   );
 }

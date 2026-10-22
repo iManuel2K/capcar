@@ -64,19 +64,19 @@ export default async function SystemPage() {
     })),
   ];
   return (
-    <main className="min-h-dvh bg-[#0b0e0c] px-5 py-16 text-[#f4f5f2]">
+    <main className="bg-background text-foreground min-h-dvh px-5 py-16">
       <div className="mx-auto max-w-5xl">
-        <Link href="/" className="text-sm text-[#ff667a]">
+        <Link href="/" className="text-primary text-sm">
           {t("homeBack")}
         </Link>
-        <header className="mt-12 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(231,45,69,0.2),transparent_30%),#111111] p-7 sm:p-10">
-          <p className="text-xs font-semibold tracking-[0.14em] text-[#ff667a] uppercase">
+        <header className="mt-12 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(184,199,217,0.2),transparent_30%),#111111] p-7 sm:p-10">
+          <p className="text-primary text-xs font-semibold tracking-[0.14em] uppercase">
             {t("systemEyebrow")}
           </p>
           <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
             {t("systemTitle")}
           </h1>
-          <p className="mt-5 max-w-2xl leading-7 text-white/45">
+          <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
             {t("systemDescription")}
           </p>
         </header>
@@ -84,7 +84,7 @@ export default async function SystemPage() {
           {checks.map((check) => (
             <article
               key={check.label}
-              className="rounded-2xl border border-white/10 bg-[#111111] p-5"
+              className="bg-card rounded-2xl border border-white/10 p-5"
             >
               <div className="flex items-start gap-3">
                 {check.ready ? (
@@ -94,7 +94,7 @@ export default async function SystemPage() {
                 )}
                 <div>
                   <h2 className="font-medium text-white/80">{check.label}</h2>
-                  <p className="mt-2 text-sm leading-6 text-white/40">
+                  <p className="text-muted-foreground mt-2 text-sm leading-6">
                     {check.detail}
                   </p>
                 </div>
@@ -102,13 +102,13 @@ export default async function SystemPage() {
             </article>
           ))}
         </section>
-        <aside className="mt-5 flex gap-3 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/45">
-          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#9ec2ff]" />
+        <aside className="border-primary/15 bg-primary/6 text-muted-foreground mt-5 flex gap-3 rounded-2xl border p-5 text-sm leading-6">
+          <ShieldCheck className="text-primary mt-0.5 size-4 shrink-0" />
           {t("systemSafety")}
         </aside>
         <Link
           href="/launch"
-          className="mt-5 inline-flex min-h-12 items-center rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]"
+          className="bg-primary text-primary-foreground mt-5 inline-flex min-h-12 items-center rounded-xl px-5 text-sm font-semibold"
         >
           {t("openLaunch")}
         </Link>

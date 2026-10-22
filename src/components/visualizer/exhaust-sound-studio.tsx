@@ -47,7 +47,7 @@ export function ExhaustSoundStudio({ vehicle }: { vehicle: Vehicle }) {
   return (
     <section
       aria-labelledby="exhaust-sound-heading"
-      className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8"
+      className="bg-card mt-5 rounded-[2rem] border border-white/10 p-6 sm:p-8"
     >
       <h2 id="exhaust-sound-heading" className="text-2xl font-medium">
         Exhaust sound studio
@@ -67,7 +67,7 @@ export function ExhaustSoundStudio({ vehicle }: { vehicle: Vehicle }) {
               stop();
               setConfiguration(event.target.value as typeof configuration);
             }}
-            className="mt-2 w-full rounded-xl border border-white/20 bg-[#151916] p-3"
+            className="bg-card mt-2 w-full rounded-xl border border-white/20 p-3"
           >
             <option value="stock">Stock setup</option>
             <option value="modified">Modified setup</option>
@@ -81,7 +81,7 @@ export function ExhaustSoundStudio({ vehicle }: { vehicle: Vehicle }) {
               stop();
               setScenario(event.target.value as typeof scenario);
             }}
-            className="mt-2 w-full rounded-xl border border-white/20 bg-[#151916] p-3"
+            className="bg-card mt-2 w-full rounded-xl border border-white/20 p-3"
           >
             {soundScenarios.map((value) => (
               <option key={value} value={value}>
@@ -99,7 +99,7 @@ export function ExhaustSoundStudio({ vehicle }: { vehicle: Vehicle }) {
               stop();
               setSelectedId(event.target.value);
             }}
-            className="mt-2 w-full rounded-xl border border-white/20 bg-[#151916] p-3 disabled:opacity-50"
+            className="bg-card mt-2 w-full rounded-xl border border-white/20 p-3 disabled:opacity-50"
           >
             {matches.length ? (
               matches.map((record) => (
@@ -190,7 +190,7 @@ export function ExhaustSoundStudio({ vehicle }: { vehicle: Vehicle }) {
             }}
           />
         </div>
-        <p className="mt-3 text-sm text-white/50">
+        <p className="text-muted-foreground mt-3 text-sm">
           Nothing is uploaded or saved. Choose recordings you have permission to
           use.
         </p>

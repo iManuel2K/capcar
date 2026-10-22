@@ -112,7 +112,7 @@ export function OfferComparison({
     );
   if (!vehicle || !part)
     return (
-      <div className="py-32 text-center text-white/45">
+      <div className="text-muted-foreground py-32 text-center">
         Vehicle or part not found.
       </div>
     );
@@ -130,29 +130,31 @@ export function OfferComparison({
     <div className="pb-24 sm:pb-0">
       <Link
         href={`/garage/${vehicleId}/parts/${partId}`}
-        className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
+        className="text-muted-foreground hover:text-foreground mb-7 inline-flex items-center gap-2 text-sm"
       >
         <ArrowLeft className="size-4" /> Part details
       </Link>
 
-      <header className="overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(231,45,69,0.2),transparent_28%),#111111] p-6 sm:p-10">
+      <header className="overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(184,199,217,0.2),transparent_28%),#111111] p-6 sm:p-10">
         <span className="rounded-full border border-amber-300/20 bg-amber-300/8 px-3 py-1.5 text-[11px] tracking-[0.12em] text-amber-100/70 uppercase">
           {source === "demo" ? "Fictional offers" : "External offers"}
         </span>
-        <p className="mt-8 text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
+        <p className="text-primary mt-8 text-xs font-semibold tracking-[0.15em] uppercase">
           {vehicle.productionYear} {vehicle.make} {vehicle.model}
         </p>
         <h1 className="mt-3 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
           Compare the delivered price.
         </h1>
-        <p className="mt-4 max-w-2xl leading-7 text-white/45">
+        <p className="text-muted-foreground mt-4 max-w-2xl leading-7">
           {part.name} · product price, shipping, seller confidence and return
           window in one decision.
         </p>
-        <p className="mt-3 text-xs text-white/30">Provider: {providerName}</p>
+        <p className="text-muted-foreground mt-3 text-xs">
+          Provider: {providerName}
+        </p>
       </header>
 
-      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-7">
+      <section className="bg-card mt-5 rounded-[2rem] border border-white/10 p-5 sm:p-7">
         <div className="grid gap-4 lg:grid-cols-[1fr_auto_auto] lg:items-end">
           <label className="text-sm text-white/60">
             Add the selected offer to a build
@@ -162,7 +164,7 @@ export function OfferComparison({
                 setSelectedBuildId(event.target.value);
                 setMessage("");
               }}
-              className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-4 text-white/70 outline-none md:min-w-80"
+              className="bg-card mt-2 min-h-12 w-full rounded-xl border border-white/10 px-4 text-white/70 outline-none md:min-w-80"
             >
               <option value="">Select a build</option>
               {builds.map((build) => (
@@ -175,7 +177,7 @@ export function OfferComparison({
           {builds.length === 0 && (
             <Link
               href={`/garage/${vehicleId}/builds/new`}
-              className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]"
+              className="bg-primary text-primary-foreground inline-flex min-h-12 items-center justify-center rounded-xl px-5 text-sm font-semibold"
             >
               Create a build
             </Link>
@@ -187,7 +189,7 @@ export function OfferComparison({
               onChange={(event) =>
                 setSortMode(event.target.value as typeof sortMode)
               }
-              className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-4 text-white/70 outline-none"
+              className="bg-card mt-2 min-h-12 w-full rounded-xl border border-white/10 px-4 text-white/70 outline-none"
             >
               <option value="best">Best value</option>
               <option value="price">Lowest total</option>
@@ -198,7 +200,7 @@ export function OfferComparison({
             type="button"
             disabled={loading}
             onClick={() => setRefreshKey((value) => value + 1)}
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/10 px-5 text-sm text-white/55 disabled:opacity-40"
+            className="text-muted-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/10 px-5 text-sm disabled:opacity-40"
           >
             {loading ? (
               <MotionLoader className="size-4" />
@@ -219,10 +221,10 @@ export function OfferComparison({
         {sortedOffers.map((offer) => (
           <article
             key={offer.id}
-            className={`relative overflow-hidden rounded-[2rem] border bg-[#111111] p-6 ${offer.isBestValue ? "border-[#e72d45]/45" : "border-white/10"}`}
+            className={`bg-card relative overflow-hidden rounded-[2rem] border p-6 ${offer.isBestValue ? "border-primary/45" : "border-white/10"}`}
           >
             {offer.isBestValue && (
-              <span className="absolute top-0 right-0 rounded-bl-2xl bg-[#e72d45] px-4 py-2 text-[11px] font-semibold text-[#07101d]">
+              <span className="bg-primary text-primary-foreground absolute top-0 right-0 rounded-bl-2xl px-4 py-2 text-[11px] font-semibold">
                 BEST VALUE
               </span>
             )}
@@ -232,10 +234,10 @@ export function OfferComparison({
                   CHEAPEST
                 </span>
               )}
-              <span className="text-xs text-white/30">
+              <span className="text-muted-foreground text-xs">
                 {source === "demo" ? "Demo merchant" : "Provider merchant"}
               </span>
-              <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] text-white/35 uppercase">
+              <span className="text-muted-foreground rounded-full border border-white/10 px-2.5 py-1 text-[10px] uppercase">
                 {offer.availability.replace("-", " ")}
               </span>
             </div>
@@ -244,7 +246,9 @@ export function OfferComparison({
               <span className="text-4xl font-medium tracking-[-0.04em]">
                 {formatEuro(offer.deliveredTotal)}
               </span>
-              <span className="pb-1 text-xs text-white/35">delivered</span>
+              <span className="text-muted-foreground pb-1 text-xs">
+                delivered
+              </span>
             </div>
             <dl className="mt-6 divide-y divide-white/8 rounded-2xl border border-white/8 px-4">
               <Row
@@ -290,7 +294,7 @@ export function OfferComparison({
               type="button"
               disabled={!selectedBuildId}
               onClick={() => chooseOffer(offer.id)}
-              className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d] disabled:cursor-not-allowed disabled:opacity-35"
+              className="bg-primary text-primary-foreground mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-35"
             >
               <Check className="size-4" /> Choose this offer
             </button>
@@ -299,12 +303,12 @@ export function OfferComparison({
                 href={offer.purchaseUrl}
                 target="_blank"
                 rel="sponsored noopener noreferrer"
-                className="mt-2 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/55"
+                className="text-muted-foreground mt-2 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-4 text-sm"
               >
                 Open merchant <ExternalLink className="size-4" />
               </a>
             )}
-            <p className="mt-4 flex items-center gap-2 text-[11px] text-white/25">
+            <p className="text-muted-foreground mt-4 flex items-center gap-2 text-[11px]">
               <Clock3 className="size-3.5" /> Checked{" "}
               {formatCheckedAt(offer.priceCheckedAt)}
             </p>
@@ -313,7 +317,7 @@ export function OfferComparison({
       </section>
 
       {loading && (
-        <div className="mt-5 animate-pulse rounded-[2rem] border border-white/10 bg-white/[0.03] py-24 text-center text-sm text-white/30">
+        <div className="text-muted-foreground mt-5 animate-pulse rounded-[2rem] border border-white/10 bg-white/[0.03] py-24 text-center text-sm">
           Loading provider offers…
         </div>
       )}
@@ -325,13 +329,13 @@ export function OfferComparison({
       )}
 
       {searchedAt && (
-        <p className="mt-4 text-center text-xs text-white/25">
+        <p className="text-muted-foreground mt-4 text-center text-xs">
           Epic 22 · {offers.length} offers for delivery to Germany · refreshed{" "}
           {formatCheckedAt(searchedAt)}
         </p>
       )}
 
-      <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6 text-white/45">
+      <aside className="text-muted-foreground mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6">
         <ShieldAlert className="mt-0.5 size-4 shrink-0 text-amber-200" />
         {source === "demo"
           ? "Prices, merchants, ratings and delivery estimates are fictional UX data. "
@@ -354,7 +358,7 @@ function Row({
 }) {
   return (
     <div className="flex items-center justify-between gap-3 py-3 text-sm">
-      <span className="flex items-center gap-2 text-white/35">
+      <span className="text-muted-foreground flex items-center gap-2">
         <Icon className="size-3.5" /> {label}
       </span>
       <span className="text-right text-white/65">{value}</span>

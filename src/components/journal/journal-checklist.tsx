@@ -75,7 +75,7 @@ export function JournalChecklist({
     <section
       id="checklist"
       aria-labelledby="checklist-title"
-      className="mt-12 scroll-mt-24 rounded-3xl border border-[#0e2d30]/15 bg-[#f5f2e8] p-5 text-[#0e2d30] sm:p-8"
+      className="border-foreground/15 bg-background text-foreground mt-12 scroll-mt-24 rounded-3xl border p-5 sm:p-8"
     >
       <h2 id="checklist-title" className="text-2xl font-medium tracking-tight">
         {t.title}
@@ -181,7 +181,7 @@ function ChecklistForm({
           maxLength={120}
           value={values.title}
           onChange={(e) => setValues({ ...values, title: e.target.value })}
-          className="mt-2 block min-h-12 w-full rounded-xl border border-[#0e2d30]/25 bg-white px-4 py-3 text-base text-[#0e2d30]"
+          className="border-foreground/25 bg-card text-foreground mt-2 block min-h-12 w-full rounded-xl border px-4 py-3 text-base"
         />
       </label>
       <fieldset className="space-y-3">
@@ -189,7 +189,7 @@ function ChecklistForm({
         {items.map((item) => (
           <label
             key={item.id}
-            className="flex min-h-12 cursor-pointer items-start gap-3 rounded-xl border border-[#0e2d30]/15 bg-white/60 px-4 py-3 text-sm leading-6"
+            className="border-foreground/15 bg-card flex min-h-12 cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 text-sm leading-6"
           >
             <input
               type="checkbox"
@@ -202,7 +202,7 @@ function ChecklistForm({
                     : values.checked.filter((id) => id !== item.id),
                 })
               }
-              className="mt-1 size-4 shrink-0 accent-[#0e2d30]"
+              className="accent-foreground mt-1 size-4 shrink-0"
             />
             {item.label}
           </label>
@@ -215,16 +215,16 @@ function ChecklistForm({
           rows={4}
           value={values.notes}
           onChange={(e) => setValues({ ...values, notes: e.target.value })}
-          className="mt-2 block w-full rounded-xl border border-[#0e2d30]/25 bg-white px-4 py-3 text-base font-normal text-[#0e2d30]"
+          className="border-foreground/25 bg-card text-foreground mt-2 block w-full rounded-xl border px-4 py-3 text-base font-normal"
         />
       </label>
       {!vehicleId && (
-        <p className="text-sm leading-6 text-[#405856]">{t.draft}</p>
+        <p className="text-muted-foreground text-sm leading-6">{t.draft}</p>
       )}
       <div className="flex flex-wrap gap-3">
         <button
           type="submit"
-          className="inline-flex min-h-12 items-center rounded-full bg-[#0e2d30] px-5 py-3 text-sm font-semibold text-[#e8e6d7]"
+          className="bg-card text-foreground inline-flex min-h-12 items-center rounded-full px-5 py-3 text-sm font-semibold"
         >
           {vehicleId ? t.save : inWorkspace ? t.addVehicle : t.continue} →
         </button>
@@ -232,21 +232,21 @@ function ChecklistForm({
           <button
             type="button"
             onClick={addVehicle}
-            className="min-h-12 rounded-full border border-[#0e2d30]/30 px-5 py-3 text-sm font-semibold"
+            className="border-foreground/30 min-h-12 rounded-full border px-5 py-3 text-sm font-semibold"
           >
             {t.addVehicle}
           </button>
         )}
       </div>
       {error && (
-        <p role="alert" className="text-sm text-[#6d0101]">
+        <p role="alert" className="text-destructive text-sm">
           {t.error}
         </p>
       )}
       {saved && (
         <div
           role="status"
-          className="rounded-xl border border-[#0e2d30]/20 p-4 text-sm"
+          className="border-foreground/20 rounded-xl border p-4 text-sm"
         >
           <p>{t.saved}</p>
           <Link
@@ -284,7 +284,7 @@ export function JournalWorkspace({
   const article = findJournalArticle(articleChoice, locale);
   const t = checklistUI[locale];
   return (
-    <main className="mx-auto max-w-4xl rounded-3xl bg-[#ebe9dc] p-5 text-[#0e2d30] sm:p-8">
+    <main className="bg-background text-foreground mx-auto max-w-4xl rounded-3xl p-5 sm:p-8">
       <h1 className="text-3xl font-medium">{t.heading}</h1>
       {selected && (
         <Link
@@ -299,7 +299,7 @@ export function JournalWorkspace({
         <select
           value={selected?.id ?? ""}
           onChange={(e) => setVehicleChoice(e.target.value)}
-          className="mt-2 block min-h-12 w-full rounded-xl border border-[#0e2d30]/25 bg-white px-4 text-base text-[#0e2d30]"
+          className="border-foreground/25 bg-card text-foreground mt-2 block min-h-12 w-full rounded-xl border px-4 text-base"
         >
           {!selected && <option value="">{t.choose}</option>}
           {vehicles.map((v) => (
@@ -311,7 +311,7 @@ export function JournalWorkspace({
         </select>
       </label>
       {article && (selected || vehicles.length === 0) && (
-        <section className="mt-8 rounded-2xl bg-[#f5f2e8] p-5">
+        <section className="bg-background mt-8 rounded-2xl p-5">
           <h2 className="mb-4 text-2xl font-medium">{article.title}</h2>
           <Link
             href={journalArticlePath(article.slug, locale)}
@@ -340,14 +340,14 @@ export function JournalWorkspace({
               key={item.slug}
               type="button"
               onClick={() => setArticleChoice(item.slug)}
-              className="min-h-16 rounded-xl border border-[#0e2d30]/20 bg-white/50 p-4 text-left text-sm font-semibold"
+              className="border-foreground/20 bg-card min-h-16 rounded-xl border p-4 text-left text-sm font-semibold"
             >
               {item.title} →
             </button>
           ))}
         </div>
       )}
-      <section className="mt-10 border-t border-[#0e2d30]/20 pt-6">
+      <section className="border-foreground/20 mt-10 border-t pt-6">
         <h2 className="text-xl font-medium">{t.heading}</h2>
         {records.filter((r) => r.vehicleId === selected?.id).length === 0 ? (
           <p className="mt-3 text-sm">{t.empty}</p>
@@ -358,7 +358,7 @@ export function JournalWorkspace({
               .map((record) => (
                 <li
                   key={record.articleSlug}
-                  className="rounded-xl border border-[#0e2d30]/20 p-4"
+                  className="border-foreground/20 rounded-xl border p-4"
                 >
                   <p className="font-semibold">{record.title}</p>
                   <p className="mt-1 text-sm">

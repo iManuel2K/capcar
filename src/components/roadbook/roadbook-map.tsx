@@ -1,5 +1,7 @@
 "use client";
 
+import { brandPalette } from "@/features/ui/brand-palette";
+
 import L, {
   type Map as LeafletMap,
   type Marker,
@@ -432,7 +434,7 @@ export function RoadbookMap({
           radius: 8,
           weight: 3,
           color: "#ffffff",
-          fillColor: "#e72d45",
+          fillColor: brandPalette.primary,
           fillOpacity: 1,
           className: "roadbook-user-position",
         },
@@ -462,7 +464,7 @@ export function RoadbookMap({
           longitude,
         ]),
         {
-          color: "#e72d45",
+          color: brandPalette.primary,
           weight: 5,
           opacity: 0.9,
           dashArray: "8 6",

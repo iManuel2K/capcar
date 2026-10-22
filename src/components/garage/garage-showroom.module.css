@@ -1,10 +1,10 @@
 .showroom {
-  --paper: #0c2426;
-  --ink: #eeebe4;
-  --rust: #d6aa92;
-  --muted: #a7b7b2;
-  --line: #ffffff24;
-  --hover: #ffffff09;
+  --paper: var(--background);
+  --ink: var(--foreground);
+  --rust: var(--primary);
+  --muted: var(--muted-foreground);
+  --line: color-mix(in srgb, var(--foreground) 14.12%, transparent);
+  --hover: color-mix(in srgb, var(--foreground) 3.53%, transparent);
   color: var(--ink);
   background: transparent;
   padding: 12px 0;
@@ -188,7 +188,7 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 8px 12px;
-  background: #10292b;
+  background: var(--card);
   color: var(--ink);
 }
 .details {
@@ -293,12 +293,12 @@
 .primaryAction {
   width: 100%;
   background: var(--rust);
-  color: #102629;
+  color: var(--primary-foreground);
   border-color: var(--rust) !important;
 }
 .primaryAction:hover {
-  background: #e8bea7;
-  color: #102629;
+  background: var(--primary-hover);
+  color: var(--primary-foreground);
 }
 .studioLink {
   display: inline-flex;
@@ -312,7 +312,7 @@
   text-underline-offset: 4px;
 }
 .darkContent {
-  color: #ede9d8;
+  color: var(--foreground);
 }
 .radar {
   margin-top: 24px;

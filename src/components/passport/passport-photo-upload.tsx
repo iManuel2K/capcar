@@ -84,7 +84,7 @@ export function PassportPhotoUpload({
   return (
     <section
       aria-labelledby="passport-photo-title"
-      className="no-print mt-5 rounded-[2rem] border border-white/15 bg-[#111111] p-5 sm:p-8"
+      className="no-print bg-card mt-5 rounded-[2rem] border border-white/15 p-5 sm:p-8"
     >
       <h2 id="passport-photo-title" className="text-2xl font-medium">
         Your car. Your Passport.

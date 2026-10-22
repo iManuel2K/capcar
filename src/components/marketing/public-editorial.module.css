@@ -1,0 +1,114 @@
+/* Hallmark · macrostructure: Split Studio · studied: yes · DNA-source: image
+ * Palette and chrome retained. Public page bodies and practical workbenches use shared theme roles.
+ */
+
+.page {
+  background: var(--capcar-editorial-paper);
+  color: var(--capcar-editorial-ink);
+  min-height: 100dvh;
+  padding: var(--capcar-editorial-section) var(--capcar-editorial-gutter);
+}
+.inner {
+  max-width: 1200px;
+  margin-inline: auto;
+  min-width: 0;
+}
+.intro {
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+  max-width: 60rem;
+}
+.intro h1,
+.reading h1 {
+  font-family: var(--capcar-editorial-display);
+  font-size: clamp(2.25rem, 4.5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.intro > p {
+  color: var(--capcar-editorial-muted);
+  max-width: 62ch;
+  line-height: 1.8;
+}
+.intro > p:first-child {
+  color: var(--capcar-editorial-accent);
+}
+.workbench {
+  background: var(--capcar-editorial-sheet);
+  color: var(--capcar-editorial-sheet-ink);
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  min-width: 0;
+}
+.reading {
+  background: var(--capcar-editorial-sheet);
+  color: var(--capcar-editorial-sheet-ink);
+}
+.reading h2 {
+  font-family: var(--capcar-editorial-display);
+  font-weight: 400;
+}
+.roadmap {
+  background: var(--capcar-editorial-sheet);
+  color: var(--capcar-editorial-sheet-ink);
+}
+.roadmap :is(h1, h2, h3) {
+  font-family: var(--capcar-editorial-display);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+.roadmap > section:first-child > div {
+  border-radius: 0;
+}
+.roadmap section[id] {
+  border-radius: 0;
+}
+.roadmap h1 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+}
+.index {
+  margin-top: 4rem;
+}
+.index > div > a {
+  border-color: var(--capcar-editorial-rule);
+  padding-block: 2rem;
+}
+.index h2 {
+  font-family: var(--capcar-editorial-display);
+  font-weight: 400;
+}
+.index p {
+  color: var(--capcar-editorial-muted);
+}
+.index a > div > p:first-child {
+  color: var(--capcar-editorial-accent);
+}
+.page :is(a, button, summary, input, select):focus-visible {
+  outline: 2px solid var(--capcar-editorial-accent);
+  outline-offset: 5px;
+}
+@media (min-width: 768px) {
+  .index > div > a:first-child {
+    padding-bottom: 4rem;
+    margin-bottom: 2rem;
+  }
+  .index > div > a:nth-child(3n) {
+    margin-top: 3rem;
+  }
+}
+@media (max-width: 480px) {
+  .page {
+    padding-top: 2rem;
+  }
+  .intro {
+    margin-bottom: 2rem;
+  }
+  .index {
+    margin-top: 2.5rem;
+  }
+}

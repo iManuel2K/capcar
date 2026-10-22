@@ -11,7 +11,7 @@ export function SignInCard({
 }) {
   const t = useTranslations("CommunityPublic");
   return (
-    <section className="rounded-2xl border border-[#0e2d30]/15 bg-white/35 p-6 sm:p-8">
+    <section className="border-foreground/15 bg-card rounded-2xl border p-6 sm:p-8">
       <h2 className="text-2xl font-medium">{t("connectedTitle")}</h2>
       <p className="mt-3 max-w-xl leading-7">{children}</p>
       <div className="mt-5 flex flex-wrap gap-3">

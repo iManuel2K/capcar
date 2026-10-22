@@ -37,7 +37,7 @@ export function RetailSearch({ initialQuery = "" }: { initialQuery?: string }) {
         <ResilientPartSearch initialQuery={initialQuery}>
           {(result, input, search) => (
             <>
-              <section className="rounded-2xl border border-[#0e2d30]/20 p-5">
+              <section className="border-foreground/20 rounded-2xl border p-5">
                 <label className="block">
                   {t("saveOptional")}
                   <select
@@ -84,7 +84,7 @@ export function RetailSearch({ initialQuery = "" }: { initialQuery?: string }) {
                     {result.items.map((item) => (
                       <article
                         key={item.id}
-                        className="space-y-4 rounded-2xl border border-[#0e2d30]/20 p-5"
+                        className="border-foreground/20 space-y-4 rounded-2xl border p-5"
                       >
                         {input && (
                           <BoardButton

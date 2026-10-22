@@ -104,22 +104,22 @@ export function NotificationCenter() {
   }
 
   return (
-    <main className="min-h-dvh bg-[#0b0e0c] px-5 py-12 text-[#f4f5f2]">
+    <main className="bg-background text-foreground min-h-dvh px-5 py-12">
       <div className="mx-auto max-w-6xl">
         <Link
           href="/garage"
-          className="inline-flex items-center gap-2 text-sm text-[#ff667a]"
+          className="text-primary inline-flex items-center gap-2 text-sm"
         >
           <ArrowLeft className="size-4" /> Garage
         </Link>
-        <header className="mt-8 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_12%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10">
-          <p className="text-xs font-semibold tracking-[0.14em] text-[#ff667a] uppercase">
+        <header className="mt-8 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_12%,rgba(184,199,217,0.2),transparent_30%),#111111] p-6 sm:p-10">
+          <p className="text-primary text-xs font-semibold tracking-[0.14em] uppercase">
             Epic 25 · Maintenance reminders
           </p>
           <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
             Nothing important should surprise you.
           </h1>
-          <p className="mt-5 max-w-2xl leading-7 text-white/45">
+          <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
             CapCar creates reminders from the maintenance history on this
             device. Browser alerts are opt-in and quiet hours remain under your
             control.
@@ -127,7 +127,7 @@ export function NotificationCenter() {
           <div className="mt-7 flex flex-wrap gap-3">
             <button
               onClick={refresh}
-              className="min-h-11 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d]"
+              className="bg-primary text-primary-foreground min-h-11 rounded-xl px-4 text-sm font-semibold"
             >
               Refresh reminders
             </button>
@@ -145,15 +145,15 @@ export function NotificationCenter() {
           </div>
         </header>
         <section className="mt-5 grid gap-5 lg:grid-cols-[1.25fr_.75fr]">
-          <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-7">
+          <div className="bg-card rounded-[2rem] border border-white/10 p-5 sm:p-7">
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-xs tracking-[0.13em] text-white/30 uppercase">
+                <p className="text-muted-foreground text-xs tracking-[0.13em] uppercase">
                   Notification centre
                 </p>
                 <h2 className="mt-2 text-2xl font-medium">{unread} unread</h2>
               </div>
-              <BellRing className="size-5 text-[#ff667a]" />
+              <BellRing className="text-primary size-5" />
             </div>
             <div className="mt-6 divide-y divide-white/8">
               {notifications.map((item) => (
@@ -177,11 +177,11 @@ export function NotificationCenter() {
                   </span>
                   <span>
                     <span
-                      className={`font-medium ${item.readAt ? "text-white/45" : "text-white/80"}`}
+                      className={`font-medium ${item.readAt ? "text-muted-foreground" : "text-white/80"}`}
                     >
                       {item.title}
                     </span>
-                    <span className="mt-1 block text-sm text-white/35">
+                    <span className="text-muted-foreground mt-1 block text-sm">
                       {item.vehicleLabel} · {item.detail}
                     </span>
                   </span>
@@ -189,9 +189,11 @@ export function NotificationCenter() {
               ))}
               {notifications.length === 0 && (
                 <div className="py-16 text-center">
-                  <Bell className="mx-auto size-6 text-white/25" />
-                  <p className="mt-4 text-white/45">No due reminders yet.</p>
-                  <p className="mt-2 text-sm text-white/30">
+                  <Bell className="text-muted-foreground mx-auto size-6" />
+                  <p className="text-muted-foreground mt-4">
+                    No due reminders yet.
+                  </p>
+                  <p className="text-muted-foreground mt-2 text-sm">
                     Add sample maintenance history or complete service records
                     first.
                   </p>
@@ -200,9 +202,9 @@ export function NotificationCenter() {
             </div>
           </div>
           <aside className="space-y-5">
-            <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-6">
+            <div className="bg-card rounded-[2rem] border border-white/10 p-6">
               <h2 className="text-xl font-medium">Reminder settings</h2>
-              <label className="mt-6 flex items-center justify-between gap-4 text-sm text-white/55">
+              <label className="text-muted-foreground mt-6 flex items-center justify-between gap-4 text-sm">
                 <span>Maintenance reminders</span>
                 <input
                   type="checkbox"
@@ -213,7 +215,7 @@ export function NotificationCenter() {
                       enabled: e.target.checked,
                     })
                   }
-                  className="size-4 accent-[#e72d45]"
+                  className="accent-primary size-4"
                 />
               </label>
               <label className="flex min-h-11 items-center gap-3">
@@ -226,7 +228,7 @@ export function NotificationCenter() {
                 />
                 Price-watch alerts
               </label>
-              <label className="mt-5 block text-xs text-white/40">
+              <label className="text-muted-foreground mt-5 block text-xs">
                 Remind this many days before due
                 <input
                   type="number"
@@ -236,11 +238,11 @@ export function NotificationCenter() {
                   onChange={(e) =>
                     update({ daysBeforeDue: Number(e.target.value) })
                   }
-                  className="mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-black/15 px-3 text-white"
+                  className="text-foreground mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-black/15 px-3"
                 />
               </label>
               <div className="mt-5 grid grid-cols-2 gap-3">
-                <label className="text-xs text-white/40">
+                <label className="text-muted-foreground text-xs">
                   Quiet from
                   <input
                     type="time"
@@ -248,22 +250,22 @@ export function NotificationCenter() {
                     onChange={(e) =>
                       update({ quietHoursStart: e.target.value })
                     }
-                    className="mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-black/15 px-3 text-white"
+                    className="text-foreground mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-black/15 px-3"
                   />
                 </label>
-                <label className="text-xs text-white/40">
+                <label className="text-muted-foreground text-xs">
                   Until
                   <input
                     type="time"
                     value={preferences.quietHoursEnd}
                     onChange={(e) => update({ quietHoursEnd: e.target.value })}
-                    className="mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-black/15 px-3 text-white"
+                    className="text-foreground mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-black/15 px-3"
                   />
                 </label>
               </div>
             </div>
-            <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-6">
-              <p className="text-xs tracking-[0.13em] text-white/30 uppercase">
+            <div className="bg-card rounded-[2rem] border border-white/10 p-6">
+              <p className="text-muted-foreground text-xs tracking-[0.13em] uppercase">
                 Browser permission
               </p>
               <p className="mt-3 text-xl font-medium capitalize">
@@ -273,7 +275,7 @@ export function NotificationCenter() {
                 {permission !== "granted" && permission !== "unsupported" && (
                   <button
                     onClick={enableBrowserNotifications}
-                    className="min-h-11 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d]"
+                    className="bg-primary text-primary-foreground min-h-11 rounded-xl px-4 text-sm font-semibold"
                   >
                     Enable alerts
                   </button>
@@ -281,14 +283,14 @@ export function NotificationCenter() {
                 <button
                   disabled={permission !== "granted"}
                   onClick={sendPreview}
-                  className="min-h-11 rounded-xl border border-white/10 px-4 text-sm text-white/55 disabled:opacity-30"
+                  className="text-muted-foreground min-h-11 rounded-xl border border-white/10 px-4 text-sm disabled:opacity-30"
                 >
                   Send preview
                 </button>
               </div>
             </div>
-            <div className="flex gap-3 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/45">
-              <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#9ec2ff]" />
+            <div className="border-primary/15 bg-primary/6 text-muted-foreground flex gap-3 rounded-2xl border p-5 text-sm leading-6">
+              <ShieldCheck className="text-primary mt-0.5 size-4 shrink-0" />
               In-app reminders update whenever CapCar opens. Alerts while every
               device is offline require a later server push service and are not
               claimed here.

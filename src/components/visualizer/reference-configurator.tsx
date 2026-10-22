@@ -128,7 +128,7 @@ export function ReferenceConfigurator({
     });
   }
   return (
-    <div className="overflow-hidden bg-[#101615] text-[#e8e6d7]">
+    <div className="bg-card text-foreground overflow-hidden">
       <div className="relative h-[340px] sm:h-[540px]">
         {active ? (
           <iframe
@@ -152,7 +152,7 @@ export function ReferenceConfigurator({
             />
             <button
               type="button"
-              className="absolute bottom-5 left-1/2 min-h-12 -translate-x-1/2 rounded-xl bg-[#e8e6d7] px-5 font-medium whitespace-nowrap text-[#0e2d30]"
+              className="bg-background text-foreground absolute bottom-5 left-1/2 min-h-12 -translate-x-1/2 rounded-xl px-5 font-medium whitespace-nowrap"
               onClick={() => {
                 originals.current = [];
                 home.current = undefined;
@@ -176,11 +176,11 @@ export function ReferenceConfigurator({
           </p>
         )}
       </div>
-      <div className="space-y-3 border-t border-white/10 bg-[#0e2d30] p-5 sm:p-8">
+      <div className="bg-card space-y-3 border-t border-white/10 p-5 sm:p-8">
         {failed && (
           <div
             role="alert"
-            className="rounded-xl border border-[#cfaa96]/25 bg-[#cfaa96]/10 p-4 text-sm leading-6"
+            className="border-primary/25 bg-primary/10 rounded-xl border p-4 text-sm leading-6"
           >
             <p>{t("viewerError")}</p>
             <a
@@ -193,10 +193,10 @@ export function ReferenceConfigurator({
             </a>
           </div>
         )}
-        <p className="max-w-3xl text-sm leading-6 text-[#e8e6d7]/70">
+        <p className="text-foreground/70 max-w-3xl text-sm leading-6">
           {ui("controls")}
         </p>
-        <p className="max-w-3xl text-xs leading-6 text-[#e8e6d7]/60">
+        <p className="text-foreground/60 max-w-3xl text-xs leading-6">
           {t("configNote")}
         </p>
         {ready && (
@@ -224,7 +224,7 @@ export function ReferenceConfigurator({
                 disabled={!materials.length}
                 value={material}
                 onChange={(e) => setMaterial(e.target.value)}
-                className="mt-1 block min-h-11 w-full max-w-full rounded-xl border border-white/30 bg-[#101615] p-2"
+                className="bg-card mt-1 block min-h-11 w-full max-w-full rounded-xl border border-white/30 p-2"
               >
                 {!materials.length && (
                   <option value="">{studio("noMaterials")}</option>

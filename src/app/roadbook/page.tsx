@@ -13,6 +13,7 @@ import { journalUI } from "@/features/journal/ui";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
 import "leaflet/dist/leaflet.css";
 import "./roadbook.css";
+import editorial from "@/components/marketing/public-editorial.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Roadbook");
@@ -27,17 +28,19 @@ export default async function RoadbookPage() {
   const t = await getTranslations("Roadbook");
   const locale = resolveJournalLocale(await getLocale());
   return (
-    <div className="min-h-dvh bg-[#0b0e0c]">
+    <div className="bg-background min-h-dvh">
       <main id="main-content">
-        <header className="border-b border-white/10 bg-[#0b2326] px-5 py-6 text-[#f5f2e8] sm:px-8">
+        <header
+          className={`${editorial.intro} bg-background text-foreground border-b border-white/10 px-5 py-6 sm:px-8`}
+        >
           <div className="mx-auto max-w-[1440px]">
             <h1 className="text-2xl font-medium tracking-tight sm:text-3xl">
               {t("title")}
             </h1>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-[#becdc7]">
+            <p className="text-foreground mt-2 max-w-3xl text-sm leading-6">
               {t("description")}
             </p>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-[#becdc7]">
+            <p className="text-foreground mt-2 max-w-3xl text-sm leading-6">
               {homepageCopy[locale].drivesAccess}
             </p>
             <Link

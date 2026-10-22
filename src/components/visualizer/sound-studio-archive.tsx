@@ -16,7 +16,7 @@ export function SoundStudioArchive() {
         aria-expanded={open}
         aria-controls="recording-archive-content"
         onClick={() => setOpen(!open)}
-        className="flex min-h-16 w-full items-center justify-between rounded-2xl border border-[#0e2d30]/20 bg-white/30 px-6 text-left text-base font-medium focus-visible:outline-2 focus-visible:outline-offset-4"
+        className="border-foreground/20 bg-card flex min-h-16 w-full items-center justify-between rounded-2xl border px-6 text-left text-base font-medium focus-visible:outline-2 focus-visible:outline-offset-4"
       >
         <span>03 / {s("archive")}</span>
         <span aria-hidden="true">{open ? "−" : "+"}</span>

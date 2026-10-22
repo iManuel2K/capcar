@@ -8,6 +8,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import editorial from "./public-editorial.module.css";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { soundCatalog } from "@/features/visualizer/sound-catalog";
@@ -17,8 +18,8 @@ const stages = [
   {
     key: "foundation",
     number: "01",
-    tone: "#6d0101",
-    surface: "bg-[#f2eee3]",
+    tone: "var(--primary)",
+    surface: "bg-background",
     icon: Layers3,
     items: [
       "garage",
@@ -35,8 +36,8 @@ const stages = [
   {
     key: "hardening",
     number: "02",
-    tone: "#0e2d30",
-    surface: "bg-[#d9ddd2]",
+    tone: "var(--primary)",
+    surface: "bg-background",
     icon: ShieldCheck,
     items: [
       "reliability",
@@ -50,8 +51,8 @@ const stages = [
   {
     key: "tangible",
     number: "03",
-    tone: "#92644d",
-    surface: "bg-[#eaded0]",
+    tone: "var(--primary)",
+    surface: "bg-background",
     icon: Gauge,
     items: [
       "models",
@@ -71,8 +72,8 @@ const stages = [
   {
     key: "beyond",
     number: "04",
-    tone: "#0e2d30",
-    surface: "bg-[#ccd5cc]",
+    tone: "var(--primary)",
+    surface: "bg-background",
     icon: Sparkles,
     items: ["ai", "calendarMail", "twowheels", "more"],
   },
@@ -86,13 +87,13 @@ export function RoadmapPage() {
   );
 
   return (
-    <div className="min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
-      <main>
+    <div className="bg-background text-foreground min-h-dvh">
+      <main id="main-content" className={editorial.roadmap}>
         <section className="px-2 pb-2 sm:px-4 sm:pb-4 lg:px-6 lg:pb-6">
-          <div className="relative mx-auto grid min-h-[360px] max-w-[1500px] overflow-hidden rounded-[1.75rem] bg-[#0e2d30] text-[#e8e6d7] sm:min-h-[460px] sm:rounded-[2.5rem] lg:grid-cols-[1.12fr_0.88fr]">
+          <div className="bg-card text-foreground relative mx-auto grid min-h-[360px] max-w-[1500px] overflow-hidden rounded-[1.75rem] sm:min-h-[460px] sm:rounded-[2.5rem] lg:grid-cols-[1.12fr_0.88fr]">
             <div className="flex items-end p-6 sm:p-12 lg:p-16">
               <div className="max-w-3xl">
-                <p className="text-xs font-semibold tracking-[0.22em] text-[#bf8269] uppercase">
+                <p className="text-primary text-xs font-semibold tracking-[0.22em] uppercase">
                   {t("eyebrow")}
                 </p>
                 <h1 className="mt-5 text-5xl leading-[0.88] font-medium tracking-[-0.065em] sm:text-7xl lg:text-8xl">
@@ -104,13 +105,13 @@ export function RoadmapPage() {
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="/register"
-                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#e8e6d7] px-5 text-sm font-semibold text-[#0e2d30] transition hover:-translate-y-0.5"
+                    className="bg-background text-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition hover:-translate-y-0.5"
                   >
                     {t("build")} <ArrowRight className="size-4" />
                   </Link>
                   <Link
                     href="/"
-                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/18 px-5 text-sm font-medium text-white/78 transition hover:border-white/35 hover:text-white"
+                    className="hover:text-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/18 px-5 text-sm font-medium text-white/78 transition hover:border-white/35"
                   >
                     <ArrowLeft className="size-4" /> {t("back")}
                   </Link>
@@ -125,24 +126,24 @@ export function RoadmapPage() {
                   <a
                     key={stage.key}
                     href={`#${stage.key}`}
-                    className="group flex flex-col justify-between gap-5 border-b border-white/15 p-5 transition hover:border-[#bf8269]/55 hover:bg-white/[0.035] motion-reduce:transition-none"
+                    className="group hover:border-primary/55 flex flex-col justify-between gap-5 border-b border-white/15 p-5 transition hover:bg-white/[0.035] motion-reduce:transition-none"
                   >
                     <div className="flex items-start justify-between">
-                      <span className="grid size-10 place-items-center rounded-full bg-[#bf8269]/14 text-[#bf8269]">
+                      <span className="bg-primary/14 text-primary grid size-10 place-items-center rounded-full">
                         <Icon className="size-4" />
                       </span>
-                      <span className="font-mono text-xs text-white/28">
+                      <span className="text-muted-foreground font-mono text-xs">
                         {stage.number}
                       </span>
                     </div>
                     <div>
-                      <p className="text-xs tracking-[0.12em] text-[#bf8269] uppercase">
+                      <p className="text-primary text-xs tracking-[0.12em] uppercase">
                         {t(`${stage.key}.label`)}
                       </p>
                       <p className="mt-2 text-xl font-medium">
                         {t(`${stage.key}.title`)}
                       </p>
-                      <p className="mt-2 text-xs text-white/38">
+                      <p className="text-muted-foreground mt-2 text-xs">
                         {t("milestoneCount", { count: stage.items.length })}
                       </p>
                     </div>
@@ -156,13 +157,13 @@ export function RoadmapPage() {
         <section className="mx-auto max-w-[1280px] px-5 py-18 sm:px-8 sm:py-24">
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
             <div className="max-w-3xl">
-              <p className="text-xs font-semibold tracking-[0.2em] text-[#6d0101] uppercase">
+              <p className="text-primary text-xs font-semibold tracking-[0.2em] uppercase">
                 {t("sequenceEyebrow")}
               </p>
               <h2 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
                 {t("sequenceTitle")}
               </h2>
-              <p className="mt-5 max-w-2xl leading-7 text-[#0e2d30]/58">
+              <p className="text-foreground/58 mt-5 max-w-2xl leading-7">
                 {t("sequenceDescription")}
               </p>
             </div>
@@ -183,9 +184,9 @@ export function RoadmapPage() {
               <a
                 key={stage.key}
                 href={`#${stage.key}`}
-                className="inline-flex min-h-11 shrink-0 snap-start items-center gap-3 rounded-full border border-[#0e2d30]/14 bg-white/20 px-4 text-sm transition hover:border-[#6d0101]/30 hover:bg-white/40"
+                className="border-foreground/14 hover:border-primary/30 hover:bg-card inline-flex min-h-11 shrink-0 snap-start items-center gap-3 rounded-full border bg-white/20 px-4 text-sm transition"
               >
-                <span className="font-mono text-[10px] text-[#6d0101]">
+                <span className="text-primary font-mono text-[10px]">
                   {stage.number}
                 </span>
                 {t(`${stage.key}.title`)}
@@ -204,19 +205,19 @@ export function RoadmapPage() {
               <article
                 id={stage.key}
                 key={stage.key}
-                className={`${stage.surface} scroll-mt-24 overflow-hidden rounded-[1.75rem] border border-[#0e2d30]/10 sm:rounded-[2.25rem]`}
+                className={`${stage.surface} border-foreground/10 scroll-mt-24 overflow-hidden rounded-[1.75rem] border sm:rounded-[2.25rem]`}
               >
                 <div className="grid lg:grid-cols-[0.38fr_0.62fr]">
-                  <header className="flex flex-col justify-between border-b border-[#0e2d30]/10 p-6 sm:p-9 lg:border-r lg:border-b-0">
+                  <header className="border-foreground/10 flex flex-col justify-between border-b p-6 sm:p-9 lg:border-r lg:border-b-0">
                     <div>
                       <div className="flex items-center justify-between gap-4">
                         <span
-                          className="grid size-12 place-items-center rounded-full text-white"
+                          className="text-foreground grid size-12 place-items-center rounded-full"
                           style={{ backgroundColor: stage.tone }}
                         >
                           <Icon className="size-5" />
                         </span>
-                        <span className="font-mono text-sm text-[#0e2d30]/25">
+                        <span className="text-muted-foreground font-mono text-sm">
                           {stage.number}
                         </span>
                       </div>
@@ -229,16 +230,16 @@ export function RoadmapPage() {
                       <h3 className="mt-3 text-4xl font-medium tracking-[-0.05em] sm:text-5xl">
                         {t(`${stage.key}.title`)}
                       </h3>
-                      <p className="mt-5 max-w-md text-sm leading-7 text-[#0e2d30]/58">
+                      <p className="text-foreground/58 mt-5 max-w-md text-sm leading-7">
                         {t(`${stage.key}.description`)}
                       </p>
                     </div>
-                    <p className="mt-10 text-xs font-medium text-[#0e2d30]/42">
+                    <p className="text-muted-foreground mt-10 text-xs font-medium">
                       {t(`${stage.key}.itemStatus`)}
                     </p>
                   </header>
                   <details className="p-2" open={stage.key === "hardening"}>
-                    <summary className="flex min-h-12 cursor-pointer items-center border-b border-[#0e2d30]/15 px-5 text-sm font-semibold underline underline-offset-4">
+                    <summary className="border-foreground/15 flex min-h-12 cursor-pointer items-center border-b px-5 text-sm font-semibold underline underline-offset-4">
                       {t("milestoneCount", { count: stage.items.length })}
                     </summary>
                     <ol className="grid sm:grid-cols-2">
@@ -246,7 +247,7 @@ export function RoadmapPage() {
                         return (
                           <li
                             key={item}
-                            className="border-b border-[#0e2d30]/10 p-6 last:border-b-0 sm:p-7"
+                            className="border-foreground/10 border-b p-6 last:border-b-0 sm:p-7"
                           >
                             <div className="flex items-center justify-between gap-4">
                               <span
@@ -261,7 +262,7 @@ export function RoadmapPage() {
                             <h4 className="mt-7 text-lg font-medium tracking-[-0.025em]">
                               {t(`${stage.key}.${item}.title`)}
                             </h4>
-                            <p className="mt-3 text-sm leading-6 text-[#0e2d30]/54">
+                            <p className="text-muted-foreground mt-3 text-sm leading-6">
                               {t(`${stage.key}.${item}.description`, {
                                 count: soundCatalog.length,
                                 modelCount: carModels.length,
@@ -278,16 +279,16 @@ export function RoadmapPage() {
           })}
         </section>
 
-        <section className="bg-[#0e2d30] px-5 py-20 text-[#e8e6d7] sm:px-8 sm:py-28">
+        <section className="bg-card text-foreground px-5 py-20 sm:px-8 sm:py-28">
           <div className="mx-auto grid max-w-[1100px] gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
-            <p className="text-xs font-semibold tracking-[0.2em] text-[#bf8269] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-[0.2em] uppercase">
               {t("decisionEyebrow")}
             </p>
             <div>
               <h2 className="text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
                 {t("decisionTitle")}
               </h2>
-              <p className="mt-5 max-w-2xl leading-7 text-white/52">
+              <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
                 {t("decisionDescription")}
               </p>
             </div>
@@ -295,19 +296,19 @@ export function RoadmapPage() {
         </section>
 
         <section className="mx-auto max-w-[1100px] px-5 py-20 sm:px-8 sm:py-28">
-          <div className="rounded-[1.75rem] border border-[#0e2d30]/12 bg-[#88988d] p-7 sm:rounded-[2.25rem] sm:p-12">
-            <p className="text-xs font-semibold tracking-[0.2em] text-[#6d0101] uppercase">
+          <div className="border-foreground/12 bg-secondary rounded-[1.75rem] border p-7 sm:rounded-[2.25rem] sm:p-12">
+            <p className="text-primary text-xs font-semibold tracking-[0.2em] uppercase">
               {t("feedbackEyebrow")}
             </p>
             <h2 className="mt-4 max-w-3xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
               {t("feedbackTitle")}
             </h2>
-            <p className="mt-5 max-w-2xl leading-7 text-[#0e2d30]/64">
+            <p className="text-foreground/64 mt-5 max-w-2xl leading-7">
               {t("feedbackDescription")}
             </p>
             <Link
               href="/register"
-              className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#6d0101] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+              className="bg-primary text-primary-foreground mt-8 inline-flex min-h-12 items-center gap-2 rounded-full px-5 text-sm font-semibold transition hover:-translate-y-0.5"
             >
               {t("openGarage")} <ArrowRight className="size-4" />
             </Link>
@@ -315,9 +316,9 @@ export function RoadmapPage() {
         </section>
       </main>
 
-      <footer className="mx-auto flex max-w-[1500px] flex-col justify-between gap-6 border-t border-[#0e2d30]/10 px-5 py-10 sm:flex-row sm:items-center sm:px-8">
+      <footer className="border-foreground/10 mx-auto flex max-w-[1500px] flex-col justify-between gap-6 border-t px-5 py-10 sm:flex-row sm:items-center sm:px-8">
         <CapcarWordmark glow={false} />
-        <p className="text-xs text-[#0e2d30]/48">{t("footerNote")}</p>
+        <p className="text-muted-foreground text-xs">{t("footerNote")}</p>
         <Link href="/" className="text-sm font-medium">
           {t("back")} →
         </Link>
@@ -328,9 +329,9 @@ export function RoadmapPage() {
 
 function Metric({ value, label }: { value: string; label: string }) {
   return (
-    <div className="min-w-28 rounded-2xl border border-[#0e2d30]/12 bg-white/20 px-4 py-3">
+    <div className="border-foreground/12 min-w-28 rounded-2xl border bg-white/20 px-4 py-3">
       <p className="text-2xl font-medium tracking-[-0.04em]">{value}</p>
-      <p className="mt-1 text-[10px] font-semibold tracking-[0.1em] text-[#0e2d30]/45 uppercase">
+      <p className="text-muted-foreground mt-1 text-[10px] font-semibold tracking-[0.1em] uppercase">
         {label}
       </p>
     </div>

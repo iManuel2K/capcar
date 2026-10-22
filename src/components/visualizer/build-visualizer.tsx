@@ -65,7 +65,7 @@ const InteractiveCarModel = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="flex min-h-80 items-center justify-center rounded-[2rem] border border-white/10 bg-[#111111] text-sm text-white/70"
+        className="bg-card flex min-h-80 items-center justify-center rounded-[2rem] border border-white/10 text-sm text-white/70"
         role="status"
       >
         <LoadingIndicator />
@@ -134,7 +134,9 @@ export function BuildVisualizer({
     );
   if (!vehicle || !build)
     return (
-      <div className="py-32 text-center text-white/45">Build not found.</div>
+      <div className="text-muted-foreground py-32 text-center">
+        Build not found.
+      </div>
     );
 
   const reference = vehicleReferenceFor(vehicle.platform);
@@ -184,20 +186,20 @@ export function BuildVisualizer({
       )}
       <Link
         href={`/garage/${vehicleId}/builds/${buildId}`}
-        className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
+        className="text-muted-foreground hover:text-foreground mb-7 inline-flex items-center gap-2 text-sm"
       >
         <ArrowLeft className="size-4" /> Build roadmap
       </Link>
-      <header className="rounded-[2rem] border border-white/10 bg-[#111111] p-5">
+      <header className="bg-card rounded-[2rem] border border-white/10 p-5">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-[#e72d45]/25 bg-[#e72d45]/10 px-3 py-1.5 text-[10px] text-[#a9c7ff] uppercase">
+          <span className="border-primary/25 bg-primary/10 text-primary rounded-full border px-3 py-1.5 text-[10px] uppercase">
             Build Studio · Visual parts & sound
           </span>
           <span className="rounded-full border border-amber-300/20 bg-amber-300/8 px-3 py-1.5 text-[10px] text-amber-100/65 uppercase">
             Not fitment proof
           </span>
         </div>
-        <p className="mt-3 text-sm font-semibold text-[#ff667a]">
+        <p className="text-primary mt-3 text-sm font-semibold">
           {vehicle.productionYear} {vehicle.make} {vehicle.model} · {build.name}
         </p>
         <h1 className="mt-2 text-3xl font-medium tracking-tight">
@@ -207,14 +209,14 @@ export function BuildVisualizer({
 
       <section className="relative mt-5">
         <div className="mb-3 flex flex-wrap gap-3">
-          <div className="inline-flex flex-wrap rounded-xl border border-white/10 bg-[#111111] p-1">
+          <div className="bg-card inline-flex flex-wrap rounded-xl border border-white/10 p-1">
             {viewOptions.map((candidate) => (
               <button
                 key={candidate}
                 type="button"
                 onClick={() => setView(candidate)}
                 aria-pressed={activeView === candidate}
-                className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-xs capitalize ${activeView === candidate ? "bg-white font-semibold text-black" : "text-white/40"}`}
+                className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-xs capitalize ${activeView === candidate ? "bg-primary text-primary-foreground font-semibold" : "text-muted-foreground"}`}
               >
                 {candidate === "exterior" || candidate === "photo" ? (
                   <CarFront className="size-3.5" />
@@ -236,14 +238,14 @@ export function BuildVisualizer({
           {activeView !== "reference" &&
             activeView !== "photo" &&
             (activeView !== "model" || canPreviewModelPaint) && (
-              <div className="inline-flex rounded-xl border border-white/10 bg-[#111111] p-1">
+              <div className="bg-card inline-flex rounded-xl border border-white/10 p-1">
                 {(["current", "concept"] as const).map((mode) => (
                   <button
                     key={mode}
                     type="button"
                     onClick={() => setPreviewMode(mode)}
                     aria-pressed={previewMode === mode}
-                    className={`rounded-lg px-4 py-2 text-xs capitalize ${previewMode === mode ? "bg-[#e72d45] font-semibold text-[#07101d]" : "text-white/40"}`}
+                    className={`rounded-lg px-4 py-2 text-xs capitalize ${previewMode === mode ? "bg-primary text-primary-foreground font-semibold" : "text-muted-foreground"}`}
                   >
                     {activeView === "model"
                       ? mode === "current"
@@ -260,7 +262,7 @@ export function BuildVisualizer({
         {activeView === "model" ? (
           selectedModel ? (
             <div className="space-y-3">
-              <div className="rounded-[2rem] border border-white/10 bg-[#f3f1e7] p-3 text-[#0e2d30] sm:p-5">
+              <div className="bg-background text-foreground rounded-[2rem] border border-white/10 p-3 sm:p-5">
                 <InteractiveCarModel
                   key={selectedModel.id}
                   modelId={selectedModel.id}
@@ -284,8 +286,8 @@ export function BuildVisualizer({
               </p>
             </div>
           ) : (
-            <div className="rounded-[2rem] border border-white/10 bg-[#0b2528] p-7 sm:p-10">
-              <Rotate3D className="size-8 text-[#ff667a]" />
+            <div className="bg-card rounded-[2rem] border border-white/10 p-7 sm:p-10">
+              <Rotate3D className="text-primary size-8" />
               <h2 className="mt-4 text-2xl font-medium">
                 Choose a model to explore.
               </h2>
@@ -333,7 +335,7 @@ export function BuildVisualizer({
             </p>
           </div>
         ) : activeView === "photo" ? (
-          <div className="overflow-hidden rounded-[2rem] border border-white/15 bg-[#0b2528]">
+          <div className="bg-card overflow-hidden rounded-[2rem] border border-white/15">
             {vehicle.imageUrl && (
               <div className="relative aspect-[16/10] sm:aspect-video">
                 <Image
@@ -377,10 +379,10 @@ export function BuildVisualizer({
       </section>
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
-        <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
+        <article className="bg-card rounded-[2rem] border border-white/10 p-6 sm:p-8">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+              <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
                 Visual configuration
               </p>
               <h2 className="mt-2 text-2xl font-medium">
@@ -416,7 +418,7 @@ export function BuildVisualizer({
                       });
                       setView("model");
                     }}
-                    className="mt-3 min-h-12 w-full rounded-xl border border-white/20 bg-[#171717] px-4 text-sm text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff667a]"
+                    className="bg-card text-foreground focus-visible:outline-primary mt-3 min-h-12 w-full rounded-xl border border-white/20 px-4 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
                   >
                     <option value="">
                       {matchedModel
@@ -462,13 +464,13 @@ export function BuildVisualizer({
                 <button
                   type="button"
                   onClick={() => setView("model")}
-                  className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 px-4 font-medium text-white"
+                  className="text-foreground mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 px-4 font-medium"
                 >
                   <Rotate3D className="size-4" /> Browse 25 free models
                 </button>
               </div>
             ) : activeView === "reference" ? (
-              <div className="rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/55">
+              <div className="border-primary/15 bg-primary/6 text-muted-foreground rounded-2xl border p-5 text-sm leading-6">
                 This external model is an additional body and cabin reference.
                 Use its own controls to save material tints, or open 3D model
                 for CapCar’s free model library and saved paint previews.
@@ -481,7 +483,7 @@ export function BuildVisualizer({
                   of road approval.
                 </p>
                 {previewMode === "current" && (
-                  <p className="text-sm text-[#ff667a]">
+                  <p className="text-primary text-sm">
                     Showing the factory-style reference. Switch to Dream concept
                     to see your selections; this baseline is not a scan of your
                     actual car.
@@ -664,14 +666,14 @@ export function BuildVisualizer({
           </div>
         </article>
 
-        <aside className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
-          <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+        <aside className="bg-card rounded-[2rem] border border-white/10 p-6 sm:p-8">
+          <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
             Connected roadmap
           </p>
           <h2 className="mt-2 text-2xl font-medium">
             {items.length} build items
           </h2>
-          <p className="mt-4 text-sm leading-6 text-white/40">
+          <p className="text-muted-foreground mt-4 text-sm leading-6">
             The concept belongs to this build. Visual choices do not
             automatically claim that a catalogue product fits.
           </p>
@@ -679,12 +681,12 @@ export function BuildVisualizer({
             {items.slice(0, 5).map((item) => (
               <li
                 key={item.id}
-                className="flex items-start gap-2 rounded-xl border border-white/8 p-3 text-sm text-white/50"
+                className="text-muted-foreground flex items-start gap-2 rounded-xl border border-white/8 p-3 text-sm"
               >
-                <Check className="mt-0.5 size-4 shrink-0 text-white/25" />
+                <Check className="text-muted-foreground mt-0.5 size-4 shrink-0" />
                 <span>
                   {item.title}
-                  <small className="mt-1 block text-white/25">
+                  <small className="text-muted-foreground mt-1 block">
                     {item.stage} · {item.status}
                   </small>
                 </span>
@@ -693,7 +695,7 @@ export function BuildVisualizer({
           </ul>
           <Link
             href={`/garage/${vehicleId}/builds/${buildId}/compatibility`}
-            className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d]"
+            className="bg-primary text-primary-foreground mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-xl px-4 text-sm font-semibold"
           >
             Check build compatibility
           </Link>
@@ -701,7 +703,7 @@ export function BuildVisualizer({
       </section>
 
       <ExhaustSoundStudio key={vehicle.id} vehicle={vehicle} />
-      <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6 text-white/45">
+      <aside className="text-muted-foreground mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6">
         <ShieldAlert className="mt-0.5 size-4 shrink-0 text-amber-200" />
         The studio now uses real 3D projection, millimetre scene units and
         model-provider accuracy gates. The included body mesh remains reference
@@ -727,8 +729,8 @@ function OptionGroup<T extends string>({
 }) {
   return (
     <fieldset>
-      <legend className="flex items-center gap-2 text-sm text-white/55">
-        <Icon className="size-4 text-[#ff667a]" /> {label}
+      <legend className="text-muted-foreground flex items-center gap-2 text-sm">
+        <Icon className="text-primary size-4" /> {label}
       </legend>
       <div className="mt-3 flex flex-wrap gap-2">
         {options.map((option) => (
@@ -737,7 +739,7 @@ function OptionGroup<T extends string>({
             type="button"
             aria-pressed={value === option}
             onClick={() => onChange(option)}
-            className={`rounded-xl border px-3.5 py-2 text-sm ${value === option ? "border-[#e72d45]/45 bg-[#e72d45]/12 text-[#bad1ff]" : "border-white/10 text-white/60"}`}
+            className={`rounded-xl border px-3.5 py-2 text-sm ${value === option ? "border-primary/45 bg-primary/12 text-primary" : "border-white/10 text-white/60"}`}
           >
             {optionLabels[option] ?? option}
           </button>

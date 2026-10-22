@@ -10,7 +10,7 @@ function inline(text: string): ReactNode[] {
     .map((part, i) => {
       if (part.startsWith("**") && part.endsWith("**")) {
         return (
-          <strong key={i} className="font-semibold text-[#0e2d30]">
+          <strong key={i} className="text-foreground font-semibold">
             {part.slice(2, -2)}
           </strong>
         );
@@ -23,7 +23,7 @@ function inline(text: string): ReactNode[] {
           <Link
             key={i}
             href={link[2]}
-            className="underline decoration-[#92644d]/60 underline-offset-4 hover:text-[#6d0101]"
+            className="decoration-primary/60 hover:text-primary underline underline-offset-4"
           >
             {link[1]}
           </Link>
@@ -32,7 +32,7 @@ function inline(text: string): ReactNode[] {
         <a
           key={i}
           href={link[2]}
-          className="underline decoration-[#92644d]/60 underline-offset-4 hover:text-[#6d0101]"
+          className="decoration-primary/60 hover:text-primary underline underline-offset-4"
         >
           {link[1]}
         </a>
@@ -44,14 +44,14 @@ function inline(text: string): ReactNode[] {
 
 export function JournalContent({ text }: { text: string }) {
   return (
-    <div className="space-y-6 text-base leading-8 text-[#0e2d30]/80 sm:text-lg">
+    <div className="text-foreground/80 space-y-6 text-base leading-8 sm:text-lg">
       {text.split(/\n\s*\n/).map((block, index) => {
         if (block.startsWith("## "))
           return (
             <h2
               key={index}
               id={`section-${index}`}
-              className="scroll-mt-28 pt-6 text-2xl font-medium tracking-tight text-[#0e2d30] sm:text-3xl"
+              className="text-foreground scroll-mt-28 pt-6 text-2xl font-medium tracking-tight sm:text-3xl"
             >
               {block.slice(3)}
             </h2>
@@ -69,10 +69,10 @@ export function JournalContent({ text }: { text: string }) {
           return (
             <div
               key={index}
-              className="overflow-x-auto rounded-2xl border border-[#0e2d30]/15"
+              className="border-foreground/15 overflow-x-auto rounded-2xl border"
             >
               <table className="w-full min-w-[460px] text-left text-sm">
-                <thead className="bg-[#0e2d30]/5">
+                <thead className="bg-card/5">
                   <tr>
                     {rows[0].map((cell, i) => (
                       <th
@@ -87,7 +87,7 @@ export function JournalContent({ text }: { text: string }) {
                 </thead>
                 <tbody>
                   {rows.slice(1).map((row, i) => (
-                    <tr key={i} className="border-t border-[#0e2d30]/10">
+                    <tr key={i} className="border-foreground/10 border-t">
                       {row.map((cell, j) => (
                         <td key={j} className="h-14 px-5 py-3">
                           {inline(cell)}

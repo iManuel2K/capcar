@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Plan, price and build your project car.",
     start_url: "/garage",
     display: "standalone",
-    background_color: "#0b0e0c",
-    theme_color: "#0b0e0c",
+    background_color: "#151d28",
+    theme_color: "#151d28",
     icons: [
       {
         src: "/capcar-mark-192.png",

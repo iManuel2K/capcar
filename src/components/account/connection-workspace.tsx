@@ -195,42 +195,44 @@ export function ConnectionWorkspace({
   }
 
   return (
-    <main className="capcar-editorial-grid min-h-dvh bg-[#07191b] px-4 py-10 text-[#f4f5f2] sm:px-7 sm:py-16">
+    <main className="capcar-editorial-grid bg-background text-foreground min-h-dvh px-4 py-10 sm:px-7 sm:py-16">
       <div className="mx-auto max-w-5xl">
         <Link
           href="/account"
-          className="inline-flex min-h-11 items-center gap-2 text-sm text-white/45 hover:text-white"
+          className="text-muted-foreground hover:text-foreground inline-flex min-h-11 items-center gap-2 text-sm"
         >
           <ArrowLeft className="size-4" /> {t("back")}
         </Link>
         <header className="mt-5 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_82%_10%,rgba(146,100,77,0.22),transparent_34%),#0b2326] p-6 shadow-[0_28px_80px_rgba(0,0,0,.16)] sm:p-10">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full border border-[#bf8269]/25 bg-[#92644d]/12 px-3 py-1.5 text-[10px] text-[#d6aa92] uppercase">
+            <span className="border-primary/25 bg-primary/12 text-primary rounded-full border px-3 py-1.5 text-[10px] uppercase">
               {t("beta")}
             </span>
             <span className="rounded-full border border-emerald-300/15 bg-emerald-300/6 px-3 py-1.5 text-[10px] text-emerald-100/65 uppercase">
               {t("ownerControlled")}
             </span>
           </div>
-          <p className="mt-7 text-xs font-semibold tracking-[0.14em] text-[#d6aa92] uppercase">
+          <p className="text-primary mt-7 text-xs font-semibold tracking-[0.14em] uppercase">
             {t("eyebrow")}
           </p>
           <h1 className="mt-3 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
             {t("title")}
           </h1>
-          <p className="mt-5 max-w-2xl leading-7 text-white/45">
+          <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
             {t("description")}
           </p>
         </header>
 
-        <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#0b2326] p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:p-8">
+        <section className="bg-background mt-5 rounded-[2rem] border border-white/10 p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-5">
             <div className="flex items-start gap-3">
-              <div className="grid size-11 place-items-center rounded-xl bg-[#92644d]/14">
-                <Bot className="size-5 text-[#d6aa92]" />
+              <div className="bg-primary/14 grid size-11 place-items-center rounded-xl">
+                <Bot className="text-primary size-5" />
               </div>
               <div>
-                <p className="text-xs text-white/30">{t("aiEyebrow")}</p>
+                <p className="text-muted-foreground text-xs">
+                  {t("aiEyebrow")}
+                </p>
                 <h2 className="mt-1 text-2xl font-medium">{t("aiTitle")}</h2>
               </div>
             </div>
@@ -238,14 +240,14 @@ export function ConnectionWorkspace({
               className={
                 aiStatus.connected
                   ? "rounded-full border border-emerald-300/20 bg-emerald-300/8 px-3 py-1.5 text-[10px] text-emerald-200 uppercase"
-                  : "rounded-full border border-white/10 px-3 py-1.5 text-[10px] text-white/35 uppercase"
+                  : "text-muted-foreground rounded-full border border-white/10 px-3 py-1.5 text-[10px] uppercase"
               }
             >
               {aiStatus.connected ? t("connected") : t("notConnected")}
             </span>
           </div>
 
-          <p className="mt-5 max-w-3xl text-sm leading-6 text-white/40">
+          <p className="text-muted-foreground mt-5 max-w-3xl text-sm leading-6">
             {t("aiDescription")}
           </p>
 
@@ -259,7 +261,9 @@ export function ConnectionWorkspace({
           ) : aiStatus.connected ? (
             <div className="mt-6 grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
               <div className="rounded-2xl border border-white/8 bg-black/10 p-5">
-                <p className="text-xs text-white/30">{t("aiConnectedWith")}</p>
+                <p className="text-muted-foreground text-xs">
+                  {t("aiConnectedWith")}
+                </p>
                 <p className="mt-1 font-medium text-white/80">
                   {aiStatus.provider === "gemini"
                     ? t("providerGemini")
@@ -267,10 +271,13 @@ export function ConnectionWorkspace({
                       ? t("providerClaude")
                       : t("providerOpenAi")}
                   {aiStatus.keyHint ? (
-                    <span className="text-white/40"> · {aiStatus.keyHint}</span>
+                    <span className="text-muted-foreground">
+                      {" "}
+                      · {aiStatus.keyHint}
+                    </span>
                   ) : null}
                 </p>
-                <p className="mt-2 text-xs text-white/30">
+                <p className="text-muted-foreground mt-2 text-xs">
                   {t("aiUsesCredits")}
                 </p>
               </div>
@@ -278,7 +285,7 @@ export function ConnectionWorkspace({
                 type="button"
                 disabled={Boolean(aiAction)}
                 onClick={() => void disconnectAi()}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/45 hover:text-white disabled:opacity-40"
+                className="text-muted-foreground hover:text-foreground inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 px-4 text-sm disabled:opacity-40"
               >
                 {aiAction === "disconnect" ? (
                   <LoaderCircle className="size-4" />
@@ -291,7 +298,9 @@ export function ConnectionWorkspace({
           ) : (
             <div className="mt-6 grid gap-5 lg:grid-cols-[0.75fr_1.25fr]">
               <div>
-                <p className="text-xs text-white/35">{t("chooseProvider")}</p>
+                <p className="text-muted-foreground text-xs">
+                  {t("chooseProvider")}
+                </p>
                 <div className="mt-2 grid grid-cols-3 gap-2">
                   {(["gemini", "openai", "anthropic"] as const).map(
                     (provider) => (
@@ -302,8 +311,8 @@ export function ConnectionWorkspace({
                         onClick={() => setAiProvider(provider)}
                         className={
                           aiProvider === provider
-                            ? "min-h-12 rounded-xl border border-[#bf8269]/55 bg-[#92644d]/14 px-4 text-sm text-white transition"
-                            : "min-h-12 rounded-xl border border-white/10 px-4 text-sm text-white/40 transition hover:text-white"
+                            ? "border-primary/55 bg-primary/14 text-foreground min-h-12 rounded-xl border px-4 text-sm transition"
+                            : "text-muted-foreground hover:text-foreground min-h-12 rounded-xl border border-white/10 px-4 text-sm transition"
                         }
                       >
                         {provider === "gemini"
@@ -322,12 +331,15 @@ export function ConnectionWorkspace({
                 )}
               </div>
               <div>
-                <label htmlFor="ai-api-key" className="text-xs text-white/35">
+                <label
+                  htmlFor="ai-api-key"
+                  className="text-muted-foreground text-xs"
+                >
                   {t("apiKey")}
                 </label>
                 <div className="mt-2 flex flex-col gap-2 sm:flex-row">
                   <div className="relative flex-1">
-                    <KeyRound className="absolute top-1/2 left-4 size-4 -translate-y-1/2 text-white/25" />
+                    <KeyRound className="text-muted-foreground absolute top-1/2 left-4 size-4 -translate-y-1/2" />
                     <input
                       id="ai-api-key"
                       type="password"
@@ -339,14 +351,14 @@ export function ConnectionWorkspace({
                       autoComplete="off"
                       spellCheck={false}
                       placeholder={t("apiKeyPlaceholder")}
-                      className="min-h-12 w-full rounded-xl border border-white/10 bg-black/20 pr-4 pl-11 text-sm text-white outline-none placeholder:text-white/20 focus:border-[#bf8269]/60"
+                      className="text-foreground placeholder:text-muted-foreground focus:border-primary/60 min-h-12 w-full rounded-xl border border-white/10 bg-black/20 pr-4 pl-11 text-sm outline-none"
                     />
                   </div>
                   <button
                     type="button"
                     disabled={Boolean(aiAction) || apiKey.trim().length < 20}
                     onClick={() => void connectAi()}
-                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6d0101] px-5 text-sm font-semibold text-white shadow-[0_10px_28px_rgba(109,1,1,.18)] transition hover:bg-[#830705] disabled:opacity-40"
+                    className="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold shadow-[0_10px_28px_rgba(184,199,217,.18)] transition disabled:opacity-40"
                   >
                     {aiAction === "connect" ? (
                       <LoaderCircle className="size-4" />
@@ -356,7 +368,7 @@ export function ConnectionWorkspace({
                     {t("connectAi")}
                   </button>
                 </div>
-                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-white/30">
+                <div className="text-muted-foreground mt-3 flex flex-wrap items-center justify-between gap-2 text-xs">
                   <span>{t("aiPrivate")}</span>
                   <a
                     href={
@@ -368,7 +380,7 @@ export function ConnectionWorkspace({
                     }
                     target="_blank"
                     rel="noreferrer"
-                    className="text-[#d6aa92] hover:text-white"
+                    className="text-primary hover:text-foreground"
                   >
                     {t("getApiKey")} →
                   </a>
@@ -379,14 +391,14 @@ export function ConnectionWorkspace({
         </section>
 
         <section className="mt-5 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-          <article className="rounded-[2rem] border border-white/10 bg-[#0b2326] p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:p-8">
+          <article className="bg-background rounded-[2rem] border border-white/10 p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:p-8">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="flex items-start gap-3">
                 <div className="grid size-11 place-items-center rounded-xl bg-white/6">
-                  <Link2 className="size-5 text-[#d6aa92]" />
+                  <Link2 className="text-primary size-5" />
                 </div>
                 <div>
-                  <p className="text-xs text-white/30">Google</p>
+                  <p className="text-muted-foreground text-xs">Google</p>
                   <h2 className="mt-1 text-2xl font-medium">
                     {t("googleTitle")}
                   </h2>
@@ -396,7 +408,7 @@ export function ConnectionWorkspace({
                 className={`rounded-full border px-3 py-1.5 text-[10px] uppercase ${
                   status.connected
                     ? "border-emerald-300/20 bg-emerald-300/8 text-emerald-200"
-                    : "border-white/10 text-white/35"
+                    : "text-muted-foreground border-white/10"
                 }`}
               >
                 {status.connected ? t("connected") : t("notConnected")}
@@ -409,18 +421,20 @@ export function ConnectionWorkspace({
                   <AlertTriangle className="size-4 shrink-0" />
                   {t("setupRequired")}
                 </p>
-                <p className="mt-2 text-xs leading-5 text-white/35">
+                <p className="text-muted-foreground mt-2 text-xs leading-5">
                   {t("setupDescription")}
                 </p>
               </div>
             ) : status?.connected ? (
               <div className="mt-7">
                 <div className="rounded-2xl border border-white/8 bg-black/10 p-5">
-                  <p className="text-xs text-white/30">{t("connectedAs")}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {t("connectedAs")}
+                  </p>
                   <p className="mt-1 font-medium text-white/80">
                     {status.email}
                   </p>
-                  <p className="mt-3 text-xs text-white/30">
+                  <p className="text-muted-foreground mt-3 text-xs">
                     {status.lastSyncedAt
                       ? t("lastSync", {
                           value: new Date(status.lastSyncedAt).toLocaleString(),
@@ -433,7 +447,7 @@ export function ConnectionWorkspace({
                     type="button"
                     disabled={Boolean(action)}
                     onClick={() => void sync()}
-                    className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#6d0101] px-4 text-sm font-semibold text-white transition hover:bg-[#830705] disabled:opacity-40"
+                    className="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-sm font-semibold transition disabled:opacity-40"
                   >
                     {action === "sync" ? (
                       <LoaderCircle className="size-4" />
@@ -446,7 +460,7 @@ export function ConnectionWorkspace({
                     type="button"
                     disabled={Boolean(action)}
                     onClick={() => void disconnect()}
-                    className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/45 hover:text-white disabled:opacity-40"
+                    className="text-muted-foreground hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm disabled:opacity-40"
                   >
                     {action === "disconnect" ? (
                       <LoaderCircle className="size-4" />
@@ -459,14 +473,14 @@ export function ConnectionWorkspace({
               </div>
             ) : (
               <div className="mt-7">
-                <p className="text-sm leading-6 text-white/40">
+                <p className="text-muted-foreground text-sm leading-6">
                   {t("connectDescription")}
                 </p>
                 {/* OAuth must start with a full browser navigation, without Link prefetch. */}
                 {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
                 <a
                   href="/api/connections/google/start"
-                  className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#6d0101] px-5 text-sm font-semibold text-white transition hover:bg-[#830705]"
+                  className="bg-primary text-primary-foreground hover:bg-primary mt-5 inline-flex min-h-12 items-center gap-2 rounded-xl px-5 text-sm font-semibold transition"
                 >
                   {t("connectGoogle")} <ArrowRight className="size-4" />
                 </a>
@@ -475,10 +489,10 @@ export function ConnectionWorkspace({
           </article>
 
           <aside className="space-y-5">
-            <section className="rounded-[2rem] border border-white/10 bg-[#0b2326] p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)]">
-              <CalendarDays className="size-5 text-[#d6aa92]" />
+            <section className="bg-background rounded-[2rem] border border-white/10 p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)]">
+              <CalendarDays className="text-primary size-5" />
               <h2 className="mt-5 text-xl font-medium">{t("calendarTitle")}</h2>
-              <p className="mt-2 text-sm leading-6 text-white/40">
+              <p className="text-muted-foreground mt-2 text-sm leading-6">
                 {t("calendarDescription")}
               </p>
               {status?.summary && (
@@ -489,10 +503,10 @@ export function ConnectionWorkspace({
                 </p>
               )}
             </section>
-            <section className="rounded-[2rem] border border-white/10 bg-[#0b2326] p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)]">
-              <Mail className="size-5 text-[#d6aa92]" />
+            <section className="bg-background rounded-[2rem] border border-white/10 p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)]">
+              <Mail className="text-primary size-5" />
               <h2 className="mt-5 text-xl font-medium">{t("mailTitle")}</h2>
-              <p className="mt-2 text-sm leading-6 text-white/40">
+              <p className="text-muted-foreground mt-2 text-sm leading-6">
                 {t("mailDescription")}
               </p>
               {status?.summary && (
@@ -508,9 +522,9 @@ export function ConnectionWorkspace({
         </section>
 
         {status?.summary?.mailSignals?.length ? (
-          <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#0b2326] p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:p-8">
+          <section className="bg-background mt-5 rounded-[2rem] border border-white/10 p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:p-8">
             <h2 className="text-xl font-medium">{t("signalsTitle")}</h2>
-            <p className="mt-2 text-sm leading-6 text-white/35">
+            <p className="text-muted-foreground mt-2 text-sm leading-6">
               {t("signalsDescription")}
             </p>
             <ul className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -521,7 +535,9 @@ export function ConnectionWorkspace({
                 >
                   <p className="text-sm text-white/70">{signal.subject}</p>
                   {signal.date && (
-                    <p className="mt-1 text-xs text-white/25">{signal.date}</p>
+                    <p className="text-muted-foreground mt-1 text-xs">
+                      {signal.date}
+                    </p>
                   )}
                 </li>
               ))}
@@ -529,19 +545,19 @@ export function ConnectionWorkspace({
           </section>
         ) : null}
 
-        <section className="mt-5 flex flex-col gap-5 rounded-[2rem] border border-white/10 bg-[#0b2326] p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:flex-row sm:items-center sm:justify-between sm:p-8">
+        <section className="bg-background mt-5 flex flex-col gap-5 rounded-[2rem] border border-white/10 p-6 shadow-[0_18px_55px_rgba(0,0,0,.1)] sm:flex-row sm:items-center sm:justify-between sm:p-8">
           <div className="flex gap-3">
             <ShieldCheck className="mt-1 size-5 shrink-0 text-emerald-200/70" />
             <div>
               <h2 className="text-xl font-medium">{t("privacyTitle")}</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-white/40">
+              <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-6">
                 {t("privacyDescription")}
               </p>
             </div>
           </div>
           <Link
             href="/ai"
-            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"
+            className="hover:text-foreground inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60"
           >
             {t("openPlanner")} <ArrowRight className="size-4" />
           </Link>

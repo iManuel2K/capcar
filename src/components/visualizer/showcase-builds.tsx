@@ -43,7 +43,7 @@ export function ShowcaseBuilds() {
             key={item.name}
             aria-pressed={index === selected}
             onClick={() => setSelected(index)}
-            className={`min-h-36 min-w-64 flex-1 snap-start rounded-2xl border p-6 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ${selected === index ? "border-[#0e2d30] bg-[#0e2d30] text-[#e8e6d7]" : "border-[#0e2d30]/25"}`}
+            className={`min-h-36 min-w-64 flex-1 snap-start rounded-2xl border p-6 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ${selected === index ? "border-foreground bg-card text-foreground" : "border-foreground/25"}`}
           >
             <span className="text-xs">
               0{index + 1} / {t("original")}
@@ -60,7 +60,7 @@ export function ShowcaseBuilds() {
         initialConcept={preset.value}
         storageKey="capcar.visual-direction.v1"
       />
-      <div className="mt-6 grid gap-6 rounded-2xl border border-[#0e2d30]/20 p-6 md:grid-cols-3">
+      <div className="border-foreground/20 mt-6 grid gap-6 rounded-2xl border p-6 md:grid-cols-3">
         <div>
           <h3 className="font-semibold">{preset.name}</h3>
           <p className="mt-3 text-sm leading-6">{data(`${storyKey}.brief`)}</p>

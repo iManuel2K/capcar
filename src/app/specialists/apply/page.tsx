@@ -15,7 +15,7 @@ export default async function Page() {
     getTranslations("Hardening.Specialist"),
   ]);
   return (
-    <div className="min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
+    <div className="bg-background text-foreground min-h-dvh">
       <main className="mx-auto max-w-5xl px-5 py-12 sm:py-20">
         <h1 className="mb-8 text-4xl font-medium tracking-tight sm:text-6xl">
           {t("title")}

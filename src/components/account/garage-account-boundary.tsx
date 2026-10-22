@@ -243,7 +243,9 @@ export function GarageAccountBoundary({
       <div className="grid min-h-[60dvh] place-items-center text-center">
         <div>
           <LoaderCircle className="mx-auto size-7" />
-          <p className="mt-4 text-sm text-white/45">Loading your garage…</p>
+          <p className="text-muted-foreground mt-4 text-sm">
+            Loading your garage…
+          </p>
         </div>
       </div>
     );

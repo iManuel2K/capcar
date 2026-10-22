@@ -47,7 +47,7 @@ export function FitmentCard({
   return (
     <section
       aria-label={`Fitment for ${vehicle}`}
-      className="rounded-2xl border border-white/15 bg-[#0e1918] p-5 text-[#f3efdf] sm:p-6"
+      className="bg-card text-foreground rounded-2xl border border-white/15 p-5 sm:p-6"
     >
       <p className="text-xs tracking-widest text-white/65 uppercase">
         {vehicle}

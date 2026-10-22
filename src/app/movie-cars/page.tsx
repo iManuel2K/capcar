@@ -5,6 +5,7 @@ import { ArrowUpRight, ScanEye, Palette, FolderHeart } from "lucide-react";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { IconicGallery } from "@/components/visualizer/iconic-gallery";
 import { pageMetadata } from "@/features/seo/public-metadata";
+import editorial from "@/components/marketing/public-editorial.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("StudioPolish");
@@ -14,66 +15,71 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MovieCarsPage() {
   const t = await getTranslations("StudioPolish");
   return (
-    <div className="capcar-paper-grid min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
-      <main
-        id="main-content"
-        className="mx-auto max-w-[1280px] px-5 pt-10 pb-16 sm:px-8 sm:pt-16"
-      >
-        <header className="mb-10 sm:mb-14">
-          <p className="text-xs font-semibold tracking-[.2em] text-[#6d0101] uppercase">
-            CapCar / {t("movieCars")}
-          </p>
-          <h1 className="mt-5 max-w-4xl text-5xl leading-[1.02] font-medium tracking-[-.055em] sm:text-7xl">
-            {t("movieTitle")}
-          </h1>
-          <p className="mt-5 max-w-2xl text-base leading-7 text-[#0e2d30]/75">
-            {t("movieDescription")}
-          </p>
-        </header>
-        <IconicGallery />
-        <section
-          aria-label={t("makeItYours")}
-          className="mt-8 divide-y divide-[#0e2d30]/15 border-y border-[#0e2d30]/15"
-        >
-          {[
-            [ScanEye, "inspectTitle", "inspectText"],
-            [Palette, "shapeTitle", "shapeText"],
-            [FolderHeart, "planTitle", "planText"],
-          ].map(([Icon, title, detail], index) => {
-            const Symbol = Icon as typeof ScanEye;
-            return (
-              <article
-                key={String(title)}
-                className="grid gap-4 py-5 sm:grid-cols-[40px_180px_1fr] sm:items-center"
+    <div className="capcar-paper-grid bg-background text-foreground min-h-dvh">
+      <main id="main-content" className={editorial.page}>
+        <div className={editorial.inner}>
+          <header className={editorial.intro}>
+            <p className="text-primary text-xs font-semibold tracking-[.2em] uppercase">
+              CapCar / {t("movieCars")}
+            </p>
+            <h1 className="mt-5 max-w-4xl text-5xl leading-[1.02] font-medium tracking-[-.055em] sm:text-7xl">
+              {t("movieTitle")}
+            </h1>
+            <p className="text-foreground/75 mt-5 max-w-2xl text-base leading-7">
+              {t("movieDescription")}
+            </p>
+          </header>
+          <div className={editorial.workbench}>
+            <IconicGallery />
+          </div>
+          <div className={editorial.workbench}>
+            <section
+              aria-label={t("makeItYours")}
+              className="divide-foreground/15 border-foreground/15 mt-8 divide-y border-y"
+            >
+              {[
+                [ScanEye, "inspectTitle", "inspectText"],
+                [Palette, "shapeTitle", "shapeText"],
+                [FolderHeart, "planTitle", "planText"],
+              ].map(([Icon, title, detail], index) => {
+                const Symbol = Icon as typeof ScanEye;
+                return (
+                  <article
+                    key={String(title)}
+                    className="grid gap-4 py-5 sm:grid-cols-[40px_180px_1fr] sm:items-center"
+                  >
+                    <div className="flex items-center justify-between">
+                      <Symbol
+                        aria-hidden="true"
+                        className="text-primary size-5"
+                      />
+                      <span className="text-foreground/50 text-xs">
+                        0{index + 1}
+                      </span>
+                    </div>
+                    <h2 className="text-xl font-medium tracking-tight">
+                      {t(String(title))}
+                    </h2>
+                    <p className="text-foreground/75 text-base leading-7">
+                      {t(String(detail))}
+                    </p>
+                  </article>
+                );
+              })}
+            </section>
+            <div className="border-foreground/15 mt-10 flex flex-wrap items-center justify-between gap-4 border-t pt-7">
+              <p className="text-foreground/70 text-sm">
+                {t("soundInvitation")}
+              </p>
+              <Link
+                href="/sound-studio"
+                className="bg-card text-foreground inline-flex min-h-11 items-center gap-2 rounded-full px-5 text-sm font-medium"
               >
-                <div className="flex items-center justify-between">
-                  <Symbol
-                    aria-hidden="true"
-                    className="size-5 text-[#6d0101]"
-                  />
-                  <span className="text-xs text-[#0e2d30]/50">
-                    0{index + 1}
-                  </span>
-                </div>
-                <h2 className="text-xl font-medium tracking-tight">
-                  {t(String(title))}
-                </h2>
-                <p className="text-base leading-7 text-[#0e2d30]/75">
-                  {t(String(detail))}
-                </p>
-              </article>
-            );
-          })}
-        </section>
-        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-[#0e2d30]/15 pt-7">
-          <p className="text-sm text-[#0e2d30]/70">{t("soundInvitation")}</p>
-          <Link
-            href="/sound-studio"
-            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-medium text-[#e8e6d7]"
-          >
-            {t("soundStudio")}
-            <ArrowUpRight aria-hidden="true" className="size-4" />
-          </Link>
+                {t("soundStudio")}
+                <ArrowUpRight aria-hidden="true" className="size-4" />
+              </Link>
+            </div>
+          </div>
         </div>
       </main>
       <SiteFooter />

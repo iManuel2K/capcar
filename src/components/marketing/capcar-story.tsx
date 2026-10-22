@@ -24,12 +24,12 @@ export function CapcarStory() {
     <section
       id="walkthrough"
       aria-labelledby="walkthrough-title"
-      className="bg-[#d7d9cf] px-5 py-20 text-[#0e2d30] sm:px-8 sm:py-28"
+      className="bg-background text-foreground px-5 py-20 sm:px-8 sm:py-28"
     >
       <div className="mx-auto max-w-[1500px]">
         <div className="grid gap-7 lg:grid-cols-[1fr_0.62fr] lg:items-end">
           <div>
-            <p className="text-xs font-semibold tracking-[0.2em] text-[#6d0101] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-[0.2em] uppercase">
               {t("eyebrow")}
             </p>
             <h2
@@ -39,22 +39,22 @@ export function CapcarStory() {
               {t("title")}
             </h2>
           </div>
-          <p className="max-w-xl text-base leading-7 text-[#0e2d30]/64 lg:justify-self-end">
+          <p className="text-foreground/64 max-w-xl text-base leading-7 lg:justify-self-end">
             {t("description")}
           </p>
         </div>
-        <div className="mt-10 overflow-hidden rounded-[1.75rem] border border-[#0e2d30]/18 bg-[#081b1e] shadow-[0_30px_90px_rgba(14,45,48,.16)] sm:mt-14 sm:rounded-[2.2rem]">
+        <div className="border-foreground/18 bg-card mt-10 overflow-hidden rounded-[1.75rem] border shadow-[0_30px_90px_rgba(184,199,217,.16)] sm:mt-14 sm:rounded-[2.2rem]">
           <div className="flex min-h-14 items-center justify-between gap-4 border-b border-white/10 px-4 sm:px-6">
             <div className="flex min-w-0 items-center gap-3">
               <span
                 aria-hidden="true"
-                className="size-2 shrink-0 rounded-full bg-[#e72d45] shadow-[0_0_0_5px_rgba(231,45,69,.12)]"
+                className="bg-primary text-primary-foreground size-2 shrink-0 rounded-full shadow-[0_0_0_5px_rgba(184,199,217,.12)]"
               />
-              <span className="truncate font-mono text-[10px] tracking-[0.14em] text-white/55 uppercase sm:text-xs">
+              <span className="text-muted-foreground truncate font-mono text-[10px] tracking-[0.14em] uppercase sm:text-xs">
                 Project Streetline · CapCar
               </span>
             </div>
-            <span className="shrink-0 rounded-full border border-white/12 px-3 py-1.5 text-[10px] font-semibold tracking-[0.12em] text-[#d6aa92] uppercase">
+            <span className="text-primary shrink-0 rounded-full border border-white/12 px-3 py-1.5 text-[10px] font-semibold tracking-[0.12em] uppercase">
               {t("runtime")}
             </span>
           </div>
@@ -76,20 +76,20 @@ export function CapcarStory() {
         </div>
         <ol
           id="walkthrough-transcript"
-          className="mt-5 grid gap-px overflow-hidden rounded-[1.4rem] border border-[#0e2d30]/12 bg-[#0e2d30]/12 sm:grid-cols-2 lg:grid-cols-3"
+          className="border-foreground/12 bg-card/12 mt-5 grid gap-px overflow-hidden rounded-[1.4rem] border sm:grid-cols-2 lg:grid-cols-3"
         >
           {steps.map((step, index) => (
-            <li key={step} className="bg-[#e8e6d7] p-5 sm:min-h-44 sm:p-6">
+            <li key={step} className="bg-background p-5 sm:min-h-44 sm:p-6">
               <div className="flex items-center justify-between gap-4">
-                <span className="font-mono text-[10px] font-semibold tracking-[0.12em] text-[#6d0101]">
+                <span className="text-primary font-mono text-[10px] font-semibold tracking-[0.12em]">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <span className="h-px flex-1 bg-[#0e2d30]/12" />
+                <span className="bg-card/12 h-px flex-1" />
               </div>
               <h3 className="mt-5 text-lg font-medium tracking-[-0.025em]">
                 {t(`${step}.title`)}
               </h3>
-              <p className="mt-2 text-sm leading-6 text-[#0e2d30]/60">
+              <p className="text-foreground/60 mt-2 text-sm leading-6">
                 {t(`${step}.description`)}
               </p>
             </li>

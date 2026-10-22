@@ -66,7 +66,7 @@ function photo(vehicle: Vehicle) {
   );
 }
 const linkClass =
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-medium transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d6aa92]";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-medium transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary";
 
 export function GarageShowroom({
   vehicles,
@@ -197,7 +197,7 @@ export function GarageShowroom({
             </button>
           )}
           <span
-            className="mr-2 font-mono text-xs text-[#d6aa92]"
+            className="text-primary mr-2 font-mono text-xs"
             aria-hidden="true"
           >
             {String(index + 1).padStart(2, "0")} /{" "}
@@ -268,7 +268,7 @@ export function GarageShowroom({
                     className="object-contain"
                   />
                 ) : (
-                  <span className="grid h-full place-items-center text-[#d6aa92]">
+                  <span className="text-primary grid h-full place-items-center">
                     <CarFront className="size-14" />
                   </span>
                 )}

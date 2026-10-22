@@ -107,7 +107,7 @@ export function MaintenanceRepairPlans({ vehicleId }: { vehicleId: string }) {
   );
   if (!records.length) return null;
   return (
-    <section className="my-6 rounded-2xl border border-white/15 bg-[#111] p-5">
+    <section className="bg-card my-6 rounded-2xl border border-white/15 p-5">
       <h2 className="text-xl">Active diagnostic repairs</h2>
       {records.map((record) => (
         <article key={record.id} className="mt-5">

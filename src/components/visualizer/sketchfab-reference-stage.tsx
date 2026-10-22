@@ -47,19 +47,19 @@ export function SketchfabReferenceStage({
   }
 
   return (
-    <section className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#090909] shadow-[0_24px_80px_rgba(0,0,0,0.34)]">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/8 bg-[#0e1211] px-4 py-3 sm:px-5">
+    <section className="bg-background overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.34)]">
+      <div className="bg-card flex flex-wrap items-center justify-between gap-3 border-b border-white/8 px-4 py-3 sm:px-5">
         <div className="flex items-center gap-2 text-sm text-white/65">
-          <Rotate3D className="size-4 text-[#ff667a]" />
+          <Rotate3D className="text-primary size-4" />
           <span>
             {reference.title} · {reference.yearLabel}
           </span>
         </div>
-        <span className="rounded-full border border-[#e72d45]/20 bg-[#e72d45]/10 px-3 py-1 text-xs text-[#ff8a9a]">
+        <span className="border-primary/20 bg-primary/10 text-primary rounded-full border px-3 py-1 text-xs">
           Interactive 3D reference
         </span>
       </div>
-      <div className="relative aspect-[16/10] min-h-[430px] w-full bg-[radial-gradient(circle_at_50%_28%,rgba(231,45,69,0.18)_0%,rgba(19,31,38,0.72)_32%,#090909_72%)] sm:min-h-[560px]">
+      <div className="relative aspect-[16/10] min-h-[430px] w-full bg-[radial-gradient(circle_at_50%_28%,rgba(184,199,217,0.18)_0%,rgba(19,31,38,0.72)_32%,#090909_72%)] sm:min-h-[560px]">
         <iframe
           key={retryKey}
           title={`${reference.title} ${reference.yearLabel} 3D reference`}
@@ -72,7 +72,7 @@ export function SketchfabReferenceStage({
           className={`absolute inset-0 h-full w-full border-0 transition-opacity duration-300 ${status === "ready" ? "opacity-100" : "opacity-0"}`}
         />
         {status === "loading" && (
-          <div className="absolute inset-0 grid place-items-center text-sm text-white/40">
+          <div className="text-muted-foreground absolute inset-0 grid place-items-center text-sm">
             Connecting to the 3D viewer…
           </div>
         )}
@@ -80,9 +80,9 @@ export function SketchfabReferenceStage({
           <SketchfabFallback reference={reference} onRetry={retry} />
         )}
       </div>
-      <footer className="flex flex-col gap-3 border-t border-white/8 bg-[#0e1211] px-4 py-4 text-xs leading-5 text-white/40 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+      <footer className="bg-card text-muted-foreground flex flex-col gap-3 border-t border-white/8 px-4 py-4 text-xs leading-5 sm:flex-row sm:items-center sm:justify-between sm:px-5">
         <p className="flex max-w-xl items-start gap-2">
-          <BadgeInfo className="mt-0.5 size-3.5 shrink-0 text-[#ff667a]" />
+          <BadgeInfo className="text-primary mt-0.5 size-3.5 shrink-0" />
           Explore the shape and details in 3D. This creator-made reference may
           show a different model year, trim or equipment from your car.
         </p>
@@ -91,7 +91,7 @@ export function SketchfabReferenceStage({
             href={reference.sourceUrl}
             target="_blank"
             rel="noreferrer nofollow"
-            className="text-[#ff667a] hover:text-white"
+            className="text-primary hover:text-foreground"
           >
             {reference.title}
           </a>
@@ -100,7 +100,7 @@ export function SketchfabReferenceStage({
             href={reference.creatorUrl}
             target="_blank"
             rel="noreferrer nofollow"
-            className="text-[#ff667a] hover:text-white"
+            className="text-primary hover:text-foreground"
           >
             {reference.creator}
           </a>

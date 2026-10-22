@@ -25,7 +25,7 @@ export function GarageOverviewGrid({ data }: { data: GarageOverviewData }) {
   return (
     <section
       aria-label={`${data.name} overview`}
-      className="rounded-2xl bg-[#0e1918] p-5 text-[#f3efdf] sm:p-6"
+      className="bg-card text-foreground rounded-2xl p-5 sm:p-6"
     >
       <h2 className="text-2xl font-medium tracking-tight">{data.name}</h2>
       <p className="mt-2 text-sm text-white/65">{data.specs}</p>
@@ -54,7 +54,7 @@ export function GarageOverviewGrid({ data }: { data: GarageOverviewData }) {
                   aria-valuetext={`${euro.format(planned)} planned against ${euro.format(budget)}`}
                   max={100}
                   value={percentage}
-                  className={`mt-3 h-2 w-full overflow-hidden rounded-full [&::-webkit-progress-bar]:bg-white/10 [&::-webkit-progress-value]:rounded-full ${over ? "[&::-moz-progress-bar]:bg-[#e8b45d] [&::-webkit-progress-value]:bg-[#e8b45d]" : "[&::-moz-progress-bar]:bg-[#88b6a0] [&::-webkit-progress-value]:bg-[#88b6a0]"}`}
+                  className={`mt-3 h-2 w-full overflow-hidden rounded-full [&::-webkit-progress-bar]:bg-white/10 [&::-webkit-progress-value]:rounded-full ${over ? "[&::-moz-progress-bar]:bg-primary text-primary-foreground [&::-webkit-progress-value]:bg-primary text-primary-foreground" : "[&::-moz-progress-bar]:bg-secondary [&::-webkit-progress-value]:bg-secondary"}`}
                 />
                 <p
                   className={`mt-1 text-xs ${over ? "text-amber-200" : "text-white/65"}`}

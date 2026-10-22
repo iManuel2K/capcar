@@ -1,6 +1,6 @@
 # CapCar design system
 
-Curated project rules, October 19, 2026. Use these before catalog-generated recommendations. Page overrides in `pages/` take precedence for their scope. This document records the approved direction and guides future changes; it does not assert that every legacy screen already meets every rule.
+Curated project rules, October 22, 2026. Use these before catalog-generated recommendations. Page overrides in `pages/` take precedence for their scope. This document records the approved direction and guides future changes; it does not assert that every legacy screen already meets every rule.
 
 ## Product and hierarchy
 
@@ -12,16 +12,16 @@ Use UI/UX Pro Max for focused design research, accessibility and stack guidance.
 
 Reuse current variables in `src/app/globals.css` and existing component styles. Do not add another font, animation framework or component library just to follow a search result.
 
-| Role | Existing direction |
-| --- | --- |
-| Page | Dark teal, `--background: #0b2326` |
-| Text | Warm white, `--foreground: #f5f2e8` |
-| Muted text | `--muted-foreground: #aab6b1` |
-| Accent | Restrained copper, `--capcar-red-soft: #bf8269`; garage uses `#d6aa92` |
-| Destructive | `--destructive: #b72f3e`; accompany colour with text or an icon label |
-| Form or detail surface | Existing `--card: #123033`, only where grouping helps |
-| Borders | Existing subtle white borders; avoid a box around every element |
-| Typography | Existing system sans-serif; monospace for compact technical data where useful |
+| Role                   | Existing direction                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------------------- |
+| Page                   | Obsidian charcoal, `--background: #0c0d10`                                                              |
+| Text                   | Cool white, `--foreground: #f0f1f3`                                                                     |
+| Muted text             | `--muted-foreground: #9ba1ac`                                                                           |
+| Accent                 | Silver-blue chrome, `--primary: #b8c7d9`; pair solid primary fills with `--primary-foreground: #0c0d10` |
+| Destructive            | `--destructive: #ff8c9c`; accompany colour with text or an icon label                                   |
+| Form or detail surface | Charcoal `--card: #191c21`, only where grouping helps                                                   |
+| Borders                | Existing subtle white borders; avoid a box around every element                                         |
+| Typography             | Existing system sans-serif; monospace for compact technical data where useful                           |
 
 Keep body text readable, normally 16px with comfortable line height. Use smaller captions sparingly and check them on a real screen. Reserve the strongest type size for the selected vehicle or the page's main task. Prefer a consistent 4px spacing basis and existing component spacing; do not introduce arbitrary per-page scales.
 
@@ -61,3 +61,13 @@ Preserve Leaflet/OSM Roadbook and its functional zoom, filters, routes and detai
 4. Run relevant existing checks and inspect the requested page. State limitations accurately, especially if WebGL or device emulation is unavailable.
 
 Skill source: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill at commit `56ea9cf174ed86786187daa9de0e6247cb0747e4`. The installed CapCar adapter includes the MIT license, pinned search scripts, data and references. The approved CapCar system above is manually curated; the generic automotive result was not adopted as the theme.
+
+## Obsidian Chrome · October 22, 2026
+
+User-approved app-wide palette replaces teal, cream and copper. Public pages, workspace, account forms, menus, charts and map chrome use shared semantic variables. Reuse `background`, `card`, `foreground`, `muted-foreground`, `primary` and `primary-foreground` utilities instead of introducing local brand hex values. Legacy `--capcar-*` names are compatibility aliases, not separate palettes. Keep print documents and QR backgrounds white, natural car paint and photos unchanged, and meaningful error/warning/success colors distinct. Map basemap styles retain their geographic identity; controls and route accents follow Chrome. Standalone error HTML carries equivalent literal fallback colors because global CSS may be unavailable.
+
+## Chrome color and section refinement · October 22, 2026
+
+User requested more color, lighter surfaces and clear section separation after reviewing the monochrome deployment. This supersedes the near-black palette values above: background #151d28, card #243244, secondary #2b3b4e, primary #a7ceff, muted text #becbda. Retain foreground #f0f1f3. Use warm amber #efbd91 and mint #a6decf for selective icon/eyebrow accents, not error or success replacements. Borders and inputs have stronger contrast. Canvas companions match shared tokens.
+
+Public homepage alternates blue-charcoal hero, pale slate feature explanations, green-blue project journey, slate tools, light FAQ and pale-blue closing CTA. Light sections set their text, captions, borders and interaction tokens together via `capcar-light-section`; never put light text on a light surface. Transparent vehicle framing and existing imagery remain unchanged. Keep editorial typography and working interactions.

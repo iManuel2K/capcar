@@ -28,9 +28,9 @@ type Props = {
   ) => ReactNode;
 };
 const field =
-  "mt-2 min-h-12 w-full rounded-xl border border-[color:var(--parts-border,rgba(14,45,48,0.25))] bg-[var(--parts-field,rgba(255,255,255,0.5))] px-3 text-[color:var(--parts-text,#0e2d30)] outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--parts-focus,#6d0101)]";
+  "mt-2 min-h-12 w-full rounded-xl border border-[color:var(--parts-border,rgba(184,199,217,0.25))] bg-[var(--parts-field,var(--card))] px-3 text-[color:var(--parts-text,var(--foreground))] outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--parts-focus,var(--primary))]";
 const action =
-  "min-h-11 rounded-xl border border-[color:var(--parts-border,rgba(14,45,48,0.30))] px-4 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-4 disabled:opacity-50";
+  "min-h-11 rounded-xl border border-[color:var(--parts-border,rgba(184,199,217,0.30))] px-4 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-4 disabled:opacity-50";
 function optionalPrice(value: string) {
   if (!value) return undefined;
   const parsed = Number(value);
@@ -167,7 +167,7 @@ export function ResilientPartSearch({
   }
   return (
     <div
-      className={`space-y-5 text-[color:var(--parts-text,#0e2d30)] ${appearance === "garage" ? styles.garage : ""}`}
+      className={`space-y-5 text-[color:var(--parts-text,var(--foreground))] ${appearance === "garage" ? styles.garage : ""}`}
     >
       <form
         noValidate
@@ -183,7 +183,7 @@ export function ResilientPartSearch({
           )
             retry();
         }}
-        className="grid gap-4 rounded-2xl border border-[color:var(--parts-border,rgba(14,45,48,0.20))] bg-[var(--parts-surface,rgba(255,255,255,0.25))] p-5 sm:grid-cols-2"
+        className="grid gap-4 rounded-2xl border border-[color:var(--parts-border,rgba(184,199,217,0.20))] bg-[var(--parts-surface,rgba(255,255,255,0.25))] p-5 sm:grid-cols-2"
       >
         <label htmlFor={id} className="sm:col-span-2">
           {t("query")}
@@ -251,7 +251,7 @@ export function ResilientPartSearch({
             )}
           </select>
         </label>
-        <fieldset className="grid gap-4 border-t border-[color:var(--parts-border,rgba(14,45,48,0.15))] pt-4 sm:col-span-2 sm:grid-cols-2 lg:grid-cols-4">
+        <fieldset className="grid gap-4 border-t border-[color:var(--parts-border,rgba(184,199,217,0.15))] pt-4 sm:col-span-2 sm:grid-cols-2 lg:grid-cols-4">
           <legend className="px-1 text-sm font-medium tracking-[0.08em] uppercase">
             {t("refine")}
           </legend>
@@ -345,7 +345,7 @@ export function ResilientPartSearch({
             <p
               role="alert"
               id={`${id}-price-error`}
-              className="text-sm text-[color:var(--parts-error,#6d0101)] sm:col-span-2 lg:col-span-3"
+              className="text-sm text-[color:var(--parts-error,var(--destructive))] sm:col-span-2 lg:col-span-3"
             >
               {t("invalidRange")}
             </p>
@@ -393,7 +393,7 @@ export function ResilientPartSearch({
           {[0, 1, 2, 3].map((item) => (
             <div
               key={item}
-              className="h-40 rounded-2xl bg-[var(--parts-loading,rgba(14,45,48,0.1))] motion-safe:animate-pulse"
+              className="h-40 rounded-2xl bg-[var(--parts-loading,rgba(184,199,217,0.1))] motion-safe:animate-pulse"
             />
           ))}
         </div>
@@ -401,7 +401,7 @@ export function ResilientPartSearch({
       {current?.error && (
         <div
           role="alert"
-          className="rounded-2xl border border-[color:var(--parts-error,rgba(109,1,1,0.3))] bg-[var(--parts-surface,rgba(255,255,255,0.35))] p-5"
+          className="rounded-2xl border border-[color:var(--parts-error,rgba(184,199,217,0.3))] bg-[var(--parts-surface,rgba(255,255,255,0.35))] p-5"
         >
           <p>{errors(current.error.code)}</p>
           {current.error.retryable && (
@@ -423,7 +423,7 @@ export function ResilientPartSearch({
       )}
       {current?.data && (
         <div
-          className={`flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-4 ${current.data.freshness === "stale" ? "border-[color:var(--parts-border,rgba(146,64,14,0.25))] bg-[var(--parts-stale,rgba(254,243,199,0.35))]" : "border-[color:var(--parts-border,rgba(14,45,48,0.15))] bg-[var(--parts-surface,rgba(255,255,255,0.20))]"}`}
+          className={`flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-4 ${current.data.freshness === "stale" ? "border-[color:var(--parts-border,rgba(146,64,14,0.25))] bg-[var(--parts-stale,rgba(254,243,199,0.35))]" : "border-[color:var(--parts-border,rgba(184,199,217,0.15))] bg-[var(--parts-surface,rgba(255,255,255,0.20))]"}`}
         >
           <p className="text-sm">
             {refreshing
@@ -481,7 +481,7 @@ export function ResilientPartSearch({
             <p className="text-sm leading-6">{errors("warning")}</p>
             <p className="text-sm leading-6">{errors("original")}</p>
             {!current.data.items.length && (
-              <p className="rounded-2xl border border-dashed border-[color:var(--parts-border,rgba(14,45,48,0.30))] p-6">
+              <p className="rounded-2xl border border-dashed border-[color:var(--parts-border,rgba(184,199,217,0.30))] p-6">
                 {t("empty")}
               </p>
             )}
@@ -489,7 +489,7 @@ export function ResilientPartSearch({
               {current.data.items.map((item) => (
                 <article
                   key={item.id}
-                  className="rounded-2xl border border-[color:var(--parts-border,rgba(14,45,48,0.20))] bg-[var(--parts-surface,rgba(255,255,255,0.30))] p-5"
+                  className="rounded-2xl border border-[color:var(--parts-border,rgba(184,199,217,0.20))] bg-[var(--parts-surface,rgba(255,255,255,0.30))] p-5"
                 >
                   <h2 className="text-xl font-medium break-words">
                     {item.title}

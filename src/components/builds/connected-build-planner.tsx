@@ -34,9 +34,9 @@ import {
 
 const action =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/20 px-3 text-sm transition hover:border-white/40 focus-visible:outline-2 focus-visible:outline-offset-4 disabled:opacity-35";
-const primaryAction = `${action} border-[#e72d45] bg-[#e72d45] font-semibold text-white hover:border-[#ff667a]`;
+const primaryAction = `${action} border-primary bg-primary text-primary-foreground font-semibold hover:border-primary`;
 const input =
-  "mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-black/20 px-3 text-sm text-white outline-none placeholder:text-white/25 focus:border-[#e72d45]/70 focus:ring-3 focus:ring-[#e72d45]/10";
+  "mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-black/20 px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary/70 focus:ring-3 focus:ring-primary/10";
 const money = (value: number) =>
   new Intl.NumberFormat("en-IE", { style: "currency", currency: "EUR" }).format(
     value,
@@ -170,11 +170,11 @@ export function ConnectedBuildPlanner({
   }
 
   return (
-    <section className="mt-5 overflow-hidden rounded-[2rem] border border-white/10 bg-[#0d1918] text-[#eee7d8]">
+    <section className="bg-card text-foreground mt-5 overflow-hidden rounded-[2rem] border border-white/10">
       <div className="grid gap-6 border-b border-white/10 p-5 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <p className="text-xs tracking-[0.16em] text-[#cda58e] uppercase">
+            <p className="text-primary text-xs tracking-[0.16em] uppercase">
               Build Planner 2.0 · Available now
             </p>
             {!online && (
@@ -196,7 +196,7 @@ export function ConnectedBuildPlanner({
           </p>
         </div>
         <div className="max-w-sm rounded-2xl border border-white/10 bg-black/20 p-4">
-          <p className="text-xs text-white/40 uppercase">Next action</p>
+          <p className="text-muted-foreground text-xs uppercase">Next action</p>
           <p className="mt-2 font-medium">
             {metrics.next?.title ??
               (metrics.blocked.length
@@ -221,11 +221,11 @@ export function ConnectedBuildPlanner({
         <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4">
           <span>
             <span className="block font-medium">Build brief</span>
-            <span className="mt-1 block text-xs text-white/45">
+            <span className="text-muted-foreground mt-1 block text-xs">
               Goal, direction and overall budget
             </span>
           </span>
-          <PencilLine className="size-4 text-[#ff667a]" />
+          <PencilLine className="text-primary size-4" />
         </summary>
         <form
           className="mt-5 grid gap-4 sm:grid-cols-2"
@@ -298,7 +298,7 @@ export function ConnectedBuildPlanner({
 
       <div className="px-5 pb-7 sm:px-8 sm:pb-8">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end">
-          <label className="flex-1 text-xs text-white/50">
+          <label className="text-muted-foreground flex-1 text-xs">
             Add a build phase
             <input
               className={input}
@@ -323,14 +323,14 @@ export function ConnectedBuildPlanner({
             return (
               <article
                 key={phase.id}
-                className={`rounded-2xl border p-4 sm:p-5 ${phase.id === planning.currentPhaseId ? "border-[#e72d45]/55 bg-[#e72d45]/8" : overBudget ? "border-amber-200/30 bg-amber-200/[0.03]" : "border-white/10 bg-black/15"}`}
+                className={`rounded-2xl border p-4 sm:p-5 ${phase.id === planning.currentPhaseId ? "border-primary/55 bg-primary/8" : overBudget ? "border-amber-200/30 bg-amber-200/[0.03]" : "border-white/10 bg-black/15"}`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs text-white/35 uppercase">
+                    <p className="text-muted-foreground text-xs uppercase">
                       Phase {String(index + 1).padStart(2, "0")}
                     </p>
-                    <label className="mt-1 block text-xs text-white/45">
+                    <label className="text-muted-foreground mt-1 block text-xs">
                       Phase name
                       <input
                         className={`${input} text-lg font-medium sm:text-xl`}
@@ -491,12 +491,12 @@ export function ConnectedBuildPlanner({
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h3 className="text-xl font-medium">Modification plan</h3>
-            <p className="mt-2 text-sm text-white/45">
+            <p className="text-muted-foreground mt-2 text-sm">
               Edit estimates, priorities, dates and the work that must happen
               first.
             </p>
           </div>
-          <span className="text-xs text-white/35">
+          <span className="text-muted-foreground text-xs">
             {metrics.blocked.length} blocked · {items.length} total
           </span>
         </div>
@@ -514,10 +514,10 @@ export function ConnectedBuildPlanner({
               >
                 <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4">
                   <span className="inline-flex min-w-0 items-center gap-2">
-                    <Wrench className="size-4 shrink-0 text-[#ff667a]" />
+                    <Wrench className="text-primary size-4 shrink-0" />
                     <span className="truncate">{item.title}</span>
                   </span>
-                  <span className="shrink-0 text-right text-xs text-white/45">
+                  <span className="text-muted-foreground shrink-0 text-right text-xs">
                     {phaseForItem(item, planning)?.title} · {item.priority}
                   </span>
                 </summary>
@@ -532,7 +532,7 @@ export function ConnectedBuildPlanner({
                 )}
 
                 <div className="mt-3 rounded-xl border border-white/10 bg-black/10 p-3">
-                  <p className="text-[10px] font-semibold tracking-[0.12em] text-white/35 uppercase">
+                  <p className="text-muted-foreground text-[10px] font-semibold tracking-[0.12em] uppercase">
                     Installation preparation
                   </p>
                   {guide ? (
@@ -541,7 +541,7 @@ export function ConnectedBuildPlanner({
                         <p className="font-medium text-white/80">
                           {guide.title}
                         </p>
-                        <p className="mt-1 text-xs leading-5 text-white/45">
+                        <p className="text-muted-foreground mt-1 text-xs leading-5">
                           {guide.difficulty} · {guide.estimatedMinutes} min
                           {guide.installationPlan
                             ? " · " + guide.installationPlan.recommendedSetting
@@ -558,13 +558,13 @@ export function ConnectedBuildPlanner({
                           "/guides/" +
                           encodeURIComponent(guide.slug)
                         }
-                        className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl border border-white/15 px-4 text-sm font-medium text-white/70 hover:border-[#e72d45]/50 hover:text-white"
+                        className="hover:border-primary/50 hover:text-foreground inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl border border-white/15 px-4 text-sm font-medium text-white/70"
                       >
                         Open preparation
                       </Link>
                     </div>
                   ) : (
-                    <p className="mt-2 text-xs leading-5 text-white/40">
+                    <p className="text-muted-foreground mt-2 text-xs leading-5">
                       No vehicle-specific guide is attached. This plan is not
                       installation instruction; verify the exact workshop
                       procedure before starting.
@@ -643,7 +643,7 @@ export function ConnectedBuildPlanner({
                     </PlannerField>
                   </div>
                   <fieldset className="sm:col-span-2 lg:col-span-3">
-                    <legend className="text-xs text-white/50">
+                    <legend className="text-muted-foreground text-xs">
                       Must be installed first
                     </legend>
                     <div className="mt-2 grid gap-2 sm:grid-cols-2">
@@ -666,7 +666,7 @@ export function ConnectedBuildPlanner({
                           </label>
                         ))}
                       {items.length === 1 && (
-                        <span className="text-sm text-white/40">
+                        <span className="text-muted-foreground text-sm">
                           Add another modification to create a dependency.
                         </span>
                       )}
@@ -681,7 +681,7 @@ export function ConnectedBuildPlanner({
           })}
 
           {items.length === 0 && (
-            <div className="rounded-2xl border border-dashed border-white/15 p-6 text-sm text-white/45">
+            <div className="text-muted-foreground rounded-2xl border border-dashed border-white/15 p-6 text-sm">
               No modifications yet. Add the first modification below to create
               the build sequence.
             </div>
@@ -700,7 +700,7 @@ function PlannerField({
   children: React.ReactNode;
 }) {
   return (
-    <label className="block text-xs text-white/55">
+    <label className="text-muted-foreground block text-xs">
       <span>{label}</span>
       {children}
     </label>
@@ -722,14 +722,16 @@ function PlannerMetric({
     <div
       className={`min-w-0 rounded-2xl border p-3 sm:p-4 ${warning ? "border-red-300/30" : "border-white/10"}`}
     >
-      <p className="text-[10px] text-white/35 uppercase sm:text-xs">{label}</p>
+      <p className="text-muted-foreground text-[10px] uppercase sm:text-xs">
+        {label}
+      </p>
       <p
         className={`mt-2 truncate text-lg font-medium sm:text-xl ${warning ? "text-red-200" : ""}`}
         title={value}
       >
         {value}
       </p>
-      {detail && <p className="mt-1 text-xs text-white/45">{detail}</p>}
+      {detail && <p className="text-muted-foreground mt-1 text-xs">{detail}</p>}
     </div>
   );
 }
@@ -745,7 +747,7 @@ function PhaseStat({
 }) {
   return (
     <div>
-      <dt className="text-xs text-white/35">{label}</dt>
+      <dt className="text-muted-foreground text-xs">{label}</dt>
       <dd className={`mt-0.5 ${warning ? "text-amber-100" : "text-white/75"}`}>
         {value}
       </dd>

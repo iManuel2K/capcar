@@ -20,7 +20,7 @@ export interface InteractiveCarModelProps {
   posterUrl?: string;
 }
 export const studioButton =
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#0e2d30]/25 px-4 py-2 text-sm font-medium transition hover:bg-[#0e2d30]/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6d0101] disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-foreground/25 px-4 py-2 text-sm font-medium transition hover:bg-card/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none";
 
 export function InteractiveCarModel({
   modelId,
@@ -171,7 +171,7 @@ function ModelViewer({
         <div className="mt-3 flex justify-start">
           <button
             type="button"
-            className={`${studioButton} border-transparent bg-[#0e2d30] text-[#f3f1e7] shadow-lg hover:bg-[#19464a]`}
+            className={`${studioButton} bg-card text-foreground hover:bg-secondary border-transparent shadow-lg`}
             onClick={() => setActive(true)}
           >
             {t("load")} <span aria-hidden="true">↗</span>
@@ -181,7 +181,7 @@ function ModelViewer({
       <p
         role="status"
         aria-live="polite"
-        className="mt-3 min-h-5 text-xs leading-5 text-[#0e2d30]/80"
+        className="text-foreground/80 mt-3 min-h-5 text-xs leading-5"
       >
         {phase === "idle"
           ? t("idle")
@@ -284,7 +284,7 @@ function ModelViewer({
           {exportMessage}
         </p>
       )}
-      <p className="mt-4 text-xs leading-5 text-[#0e2d30]/80">
+      <p className="text-foreground/80 mt-4 text-xs leading-5">
         {t("author")}{" "}
         <a
           className="underline underline-offset-2"

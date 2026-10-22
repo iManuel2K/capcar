@@ -1,5 +1,7 @@
 "use client";
 
+import { brandPalette } from "@/features/ui/brand-palette";
+
 import L, { type Map as LeafletMap, type TileLayer } from "leaflet";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 
@@ -78,14 +80,14 @@ export function TripRouteMap({ route }: { route: TripRoute }) {
       ([longitude, latitude]) => [latitude, longitude] as [number, number],
     );
     L.polyline(routeCoordinates, {
-      color: "#0e2d30",
+      color: brandPalette.background,
       opacity: 0.82,
       weight: 13,
       lineCap: "round",
       lineJoin: "round",
     }).addTo(instance);
     L.polyline(routeCoordinates, {
-      color: "#e72d45",
+      color: brandPalette.primary,
       opacity: 1,
       weight: 7,
       lineCap: "round",
@@ -176,15 +178,15 @@ export function TripRouteMap({ route }: { route: TripRoute }) {
 
   return (
     <section
-      className="overflow-hidden rounded-[1.7rem] border border-[#0e2d30]/12 bg-[#0e2d30] shadow-[0_24px_60px_rgba(14,45,48,.16)]"
+      className="border-foreground/12 bg-card overflow-hidden rounded-[1.7rem] border shadow-[0_24px_60px_rgba(184,199,217,.16)]"
       style={{ "--trip-map-canvas": visualStyle.canvas } as CSSProperties}
     >
-      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 bg-[#0e2d30] px-4 py-4 text-[#f5f2e8] sm:px-5">
+      <header className="bg-card text-foreground flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-5">
         <div>
-          <p className="text-[10px] font-semibold tracking-[0.14em] text-[#ff8f87] uppercase">
+          <p className="text-primary text-[10px] font-semibold tracking-[0.14em] uppercase">
             Calculated road route
           </p>
-          <p className="mt-1 text-sm text-white/55">
+          <p className="text-muted-foreground mt-1 text-sm">
             {route.distanceKm} km · {route.durationMinutes} min ·{" "}
             {route.provider}
           </p>
@@ -195,13 +197,13 @@ export function TripRouteMap({ route }: { route: TripRoute }) {
               href={route.weather.sourceUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full border border-white/10 px-3 py-1.5 text-[10px] text-white/60 hover:text-white"
+              className="hover:text-foreground rounded-full border border-white/10 px-3 py-1.5 text-[10px] text-white/60"
             >
               {route.weather.temperatureMinC}–{route.weather.temperatureMaxC}°C
               · {route.weather.precipitationProbability}% rain
             </a>
           )}
-          <span className="rounded-full border border-white/10 px-3 py-1.5 text-[10px] text-white/45">
+          <span className="text-muted-foreground rounded-full border border-white/10 px-3 py-1.5 text-[10px]">
             {vectorReady ? "Styled Roadbook map" : "OSM compatibility map"}
           </span>
         </div>

@@ -78,7 +78,7 @@ export function InstallGuide({
     );
   if (!vehicle || !guide)
     return (
-      <div className="py-32 text-center text-white/45">
+      <div className="text-muted-foreground py-32 text-center">
         Vehicle or guide not found.
       </div>
     );
@@ -176,7 +176,7 @@ export function InstallGuide({
             ? `/garage/${vehicleId}/known-problems`
             : `/garage/${vehicleId}/guides`
         }
-        className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
+        className="text-muted-foreground hover:text-foreground mb-7 inline-flex items-center gap-2 text-sm"
       >
         <ArrowLeft className="size-4" />{" "}
         {guide.purpose === "inspection"
@@ -184,7 +184,7 @@ export function InstallGuide({
           : "All guides"}
       </Link>
 
-      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(231,45,69,0.18),transparent_28%),#111111] p-6 sm:p-10">
+      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(184,199,217,0.18),transparent_28%),#111111] p-6 sm:p-10">
         <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/20 bg-amber-300/8 px-3 py-1.5 text-[11px] text-amber-100/70 uppercase">
             <FileWarning className="size-3" />{" "}
@@ -198,26 +198,26 @@ export function InstallGuide({
             </span>
           )}
         </div>
-        <p className="mt-7 text-xs font-semibold tracking-[0.14em] text-[#ff667a] uppercase">
+        <p className="text-primary mt-7 text-xs font-semibold tracking-[0.14em] uppercase">
           {vehicle.productionYear} {vehicle.make} {vehicle.model}
         </p>
         <h1 className="mt-3 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
           {guide.title}
         </h1>
-        <p className="mt-4 max-w-2xl leading-7 text-white/45">
+        <p className="text-muted-foreground mt-4 max-w-2xl leading-7">
           {guide.summary}
         </p>
         <div className="mt-5 flex flex-wrap gap-2" aria-label="Guide scope">
           {guide.applicability.map((item) => (
             <span
               key={item}
-              className="rounded-full border border-white/10 bg-black/10 px-3 py-1.5 text-xs leading-5 text-white/45"
+              className="text-muted-foreground rounded-full border border-white/10 bg-black/10 px-3 py-1.5 text-xs leading-5"
             >
               {item}
             </span>
           ))}
         </div>
-        <div className="mt-7 flex flex-wrap gap-3 text-xs text-white/45">
+        <div className="text-muted-foreground mt-7 flex flex-wrap gap-3 text-xs">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2">
             <Clock3 className="size-3.5" /> {guide.estimatedMinutes} min
           </span>
@@ -239,13 +239,13 @@ export function InstallGuide({
 
       <GuideMediaHub guide={resolvedGuide} planningCost={planningCost} />
 
-      <details className="group mt-5 rounded-2xl border border-white/10 bg-[#111111] p-5">
+      <details className="group bg-card mt-5 rounded-2xl border border-white/10 p-5">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
-          <span className="flex items-center gap-3 text-sm text-white/55">
-            <FileCheck2 className="size-4 text-[#ff667a]" /> Evidence & source
+          <span className="text-muted-foreground flex items-center gap-3 text-sm">
+            <FileCheck2 className="text-primary size-4" /> Evidence & source
             record · revision {resolvedGuide.revision}
           </span>
-          <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
+          <ChevronDown className="text-muted-foreground size-4 transition group-open:rotate-180" />
         </summary>
         <div className="mt-5 grid gap-3 border-t border-white/8 pt-5 sm:grid-cols-2">
           {resolvedGuide.sources.map((source) => (
@@ -253,8 +253,10 @@ export function InstallGuide({
               key={source.label}
               className="rounded-xl border border-white/8 bg-black/10 p-4"
             >
-              <p className="text-sm leading-6 text-white/50">{source.label}</p>
-              <p className="mt-2 text-[10px] tracking-[0.12em] text-white/25 uppercase">
+              <p className="text-muted-foreground text-sm leading-6">
+                {source.label}
+              </p>
+              <p className="text-muted-foreground mt-2 text-[10px] tracking-[0.12em] uppercase">
                 {source.kind}
               </p>
               {source.url && (
@@ -271,7 +273,7 @@ export function InstallGuide({
           ))}
           <Link
             href={`/garage/${vehicleId}/guides/${guideSlug}/review`}
-            className="inline-flex min-h-11 items-center text-sm text-white/55 hover:text-white"
+            className="text-muted-foreground hover:text-foreground inline-flex min-h-11 items-center text-sm"
           >
             Open review workspace <ArrowRight className="ml-2 size-4" />
           </Link>
@@ -286,7 +288,10 @@ export function InstallGuide({
             </h2>
             <ul className="mt-5 space-y-3">
               {guide.safetyChecks.map((check) => (
-                <li key={check} className="text-sm leading-6 text-white/45">
+                <li
+                  key={check}
+                  className="text-muted-foreground text-sm leading-6"
+                >
                   {check}
                 </li>
               ))}
@@ -298,7 +303,7 @@ export function InstallGuide({
                 onChange={(event) =>
                   persist({ safetyAccepted: event.target.checked })
                 }
-                className="mt-1 size-4 accent-[#e72d45]"
+                className="accent-primary mt-1 size-4"
               />
               {guide.purpose === "inspection"
                 ? "I have checked the stated vehicle and powertrain scope, read the safety limits and understand that this checklist does not diagnose or certify a repair."
@@ -307,9 +312,9 @@ export function InstallGuide({
           </div>
         </aside>
 
-        <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-9">
+        <article className="bg-card rounded-[2rem] border border-white/10 p-6 sm:p-9">
           <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-5">
-            <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+            <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
               Step {stepIndex + 1} of {guide.steps.length}
               {step.estimatedMinutes
                 ? ` · about ${step.estimatedMinutes} min`
@@ -321,7 +326,7 @@ export function InstallGuide({
                   key={mode}
                   type="button"
                   onClick={() => persist({ mode })}
-                  className={`rounded-lg px-3 py-2 capitalize ${current.mode === mode ? "bg-white/8 text-white" : "text-white/35"}`}
+                  className={`rounded-lg px-3 py-2 capitalize ${current.mode === mode ? "text-foreground bg-white/8" : "text-muted-foreground"}`}
                 >
                   {mode}
                 </button>
@@ -330,7 +335,7 @@ export function InstallGuide({
           </div>
           <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/8">
             <div
-              className="h-full rounded-full bg-[#e72d45] transition-all"
+              className="bg-primary text-primary-foreground h-full rounded-full transition-all"
               style={{
                 width: `${((stepIndex + 1) / guide.steps.length) * 100}%`,
               }}
@@ -343,27 +348,27 @@ export function InstallGuide({
             {step.instruction}
           </p>
           <details className="group mt-6 rounded-2xl border border-white/10 bg-white/[0.025] p-5">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm text-white/55">
+            <summary className="text-muted-foreground flex cursor-pointer list-none items-center justify-between gap-4 text-sm">
               <span>Need more detail?</span>
               <ChevronDown className="size-4 transition group-open:rotate-180" />
             </summary>
             <div className="mt-5 space-y-5 border-t border-white/8 pt-5">
               {current.mode === "beginner" && (
                 <div>
-                  <p className="text-xs font-semibold tracking-[0.12em] text-[#ff8898] uppercase">
+                  <p className="text-primary text-xs font-semibold tracking-[0.12em] uppercase">
                     Beginner note
                   </p>
-                  <p className="mt-2 text-sm leading-6 text-white/50">
+                  <p className="text-muted-foreground mt-2 text-sm leading-6">
                     {step.beginnerDetail}
                   </p>
                 </div>
               )}
               {step.whyItMatters && (
                 <div>
-                  <p className="text-xs font-semibold tracking-[0.12em] text-white/35 uppercase">
+                  <p className="text-muted-foreground text-xs font-semibold tracking-[0.12em] uppercase">
                     Why this matters
                   </p>
-                  <p className="mt-2 text-sm leading-6 text-white/50">
+                  <p className="text-muted-foreground mt-2 text-sm leading-6">
                     {step.whyItMatters}
                   </p>
                 </div>
@@ -377,7 +382,7 @@ export function InstallGuide({
                     {step.mistakesToAvoid?.map((mistake) => (
                       <li
                         key={mistake}
-                        className="flex gap-2 text-sm leading-6 text-white/45"
+                        className="text-muted-foreground flex gap-2 text-sm leading-6"
                       >
                         <AlertTriangle className="mt-1 size-3.5 shrink-0 text-amber-200/60" />
                         <span>{mistake}</span>
@@ -388,16 +393,16 @@ export function InstallGuide({
               )}
               {Boolean(step.recordAfterStep?.length) && (
                 <div>
-                  <p className="text-xs font-semibold tracking-[0.12em] text-white/35 uppercase">
+                  <p className="text-muted-foreground text-xs font-semibold tracking-[0.12em] uppercase">
                     Save before continuing
                   </p>
                   <ul className="mt-2 space-y-2">
                     {step.recordAfterStep?.map((record) => (
                       <li
                         key={record}
-                        className="flex gap-2 text-sm leading-6 text-white/45"
+                        className="text-muted-foreground flex gap-2 text-sm leading-6"
                       >
-                        <FileCheck2 className="mt-1 size-3.5 shrink-0 text-white/30" />
+                        <FileCheck2 className="text-muted-foreground mt-1 size-3.5 shrink-0" />
                         <span>{record}</span>
                       </li>
                     ))}
@@ -407,13 +412,13 @@ export function InstallGuide({
             </div>
           </details>
           {step.warning && (
-            <div className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6 text-white/50">
+            <div className="text-muted-foreground mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6">
               <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-200" />
               {step.warning}
             </div>
           )}
           <div className="mt-8 rounded-2xl border border-white/10 p-5">
-            <p className="text-xs tracking-[0.12em] text-white/30 uppercase">
+            <p className="text-muted-foreground text-xs tracking-[0.12em] uppercase">
               Confirmation
             </p>
             <p className="mt-3 text-sm leading-6 text-white/60">{step.check}</p>
@@ -423,7 +428,7 @@ export function InstallGuide({
               type="button"
               disabled={stepIndex === 0}
               onClick={() => setStepIndex((index) => Math.max(0, index - 1))}
-              className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/55 disabled:opacity-30"
+              className="text-muted-foreground inline-flex min-h-12 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm disabled:opacity-30"
             >
               <ChevronLeft className="size-4" /> Previous
             </button>
@@ -431,7 +436,7 @@ export function InstallGuide({
               <button
                 type="button"
                 onClick={() => setStepIndex((index) => index + 1)}
-                className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]"
+                className="bg-primary text-primary-foreground inline-flex min-h-12 items-center gap-2 rounded-xl px-5 text-sm font-semibold"
               >
                 Next step <ArrowRight className="size-4" />
               </button>
@@ -440,7 +445,7 @@ export function InstallGuide({
                 type="button"
                 disabled={!current.safetyAccepted || completed}
                 onClick={completeStep}
-                className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d] disabled:cursor-not-allowed disabled:opacity-35"
+                className="bg-primary text-primary-foreground inline-flex min-h-12 items-center gap-2 rounded-xl px-5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-35"
               >
                 <Check className="size-4" />
                 {stepIndex === guide.steps.length - 1
@@ -469,20 +474,20 @@ function GuideMediaHub({
       className="mt-5 grid gap-4 lg:grid-cols-2"
       aria-label="Optional guide media and preparation"
     >
-      <details className="group rounded-[1.7rem] border border-white/10 bg-[#111111] p-5 sm:p-6">
+      <details className="group bg-card rounded-[1.7rem] border border-white/10 p-5 sm:p-6">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
           <span className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/12 text-[#ff667a]">
+            <span className="bg-primary/12 text-primary grid size-11 place-items-center rounded-xl">
               <PlayCircle className="size-5" />
             </span>
             <span>
               <span className="block font-medium">Visual walkthrough</span>
-              <span className="mt-1 block text-xs text-white/35">
+              <span className="text-muted-foreground mt-1 block text-xs">
                 Video or illustrated source, on demand
               </span>
             </span>
           </span>
-          <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
+          <ChevronDown className="text-muted-foreground size-4 transition group-open:rotate-180" />
         </summary>
         <div className="mt-5 border-t border-white/8 pt-5">
           {guide.video ? (
@@ -491,7 +496,7 @@ function GuideMediaHub({
               src={guide.video.embedUrl ?? guide.video.url}
             />
           ) : (
-            <p className="text-sm text-white/35">
+            <p className="text-muted-foreground text-sm">
               Video reference coming soon.
             </p>
           )}
@@ -500,7 +505,7 @@ function GuideMediaHub({
               <div className="mt-4 flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium">{guide.video.title}</p>
-                  <p className="mt-1 text-xs text-white/35">
+                  <p className="text-muted-foreground mt-1 text-xs">
                     {guide.video.source}
                   </p>
                 </div>
@@ -508,12 +513,12 @@ function GuideMediaHub({
                   href={guide.video.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex min-h-10 shrink-0 items-center gap-2 text-xs text-white/55 hover:text-white"
+                  className="text-muted-foreground hover:text-foreground inline-flex min-h-10 shrink-0 items-center gap-2 text-xs"
                 >
                   Open <ExternalLink className="size-3.5" />
                 </a>
               </div>
-              <p className="mt-4 rounded-xl border border-amber-300/10 bg-amber-300/5 p-3 text-xs leading-5 text-white/35">
+              <p className="text-muted-foreground mt-4 rounded-xl border border-amber-300/10 bg-amber-300/5 p-3 text-xs leading-5">
                 {guide.video.note}
               </p>
             </>
@@ -522,20 +527,20 @@ function GuideMediaHub({
       </details>
 
       {(guide.parts?.length || guide.specifications?.length) && (
-        <details className="group rounded-[1.7rem] border border-white/10 bg-[#111111] p-5 sm:p-6">
+        <details className="group bg-card rounded-[1.7rem] border border-white/10 p-5 sm:p-6">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
             <span className="flex items-center gap-3">
-              <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/12 text-[#ff667a]">
+              <span className="bg-primary/12 text-primary grid size-11 place-items-center rounded-xl">
                 <PackageSearch className="size-5" />
               </span>
               <span>
                 <span className="block font-medium">Parts & exact values</span>
-                <span className="mt-1 block text-xs text-white/35">
+                <span className="text-muted-foreground mt-1 block text-xs">
                   VIN-aware references before you order
                 </span>
               </span>
             </span>
-            <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
+            <ChevronDown className="text-muted-foreground size-4 transition group-open:rotate-180" />
           </summary>
           <div className="mt-5 space-y-3 border-t border-white/8 pt-5">
             {guide.specifications?.map((item) => (
@@ -543,7 +548,7 @@ function GuideMediaHub({
                 key={`${item.label}-${item.value}`}
                 className="rounded-xl border border-white/8 bg-black/15 p-4"
               >
-                <p className="text-[10px] tracking-[0.12em] text-white/30 uppercase">
+                <p className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">
                   {item.label}
                 </p>
                 <p className="mt-2 text-sm leading-6 text-white/65">
@@ -554,7 +559,7 @@ function GuideMediaHub({
                     href={item.sourceUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-2 inline-flex items-center gap-1.5 text-xs text-[#ff8898] hover:text-white"
+                    className="text-primary hover:text-foreground mt-2 inline-flex items-center gap-1.5 text-xs"
                   >
                     {item.sourceLabel} <ExternalLink className="size-3" />
                   </a>
@@ -570,11 +575,11 @@ function GuideMediaHub({
                   <p className="text-sm font-medium text-white/70">
                     {part.name}
                   </p>
-                  <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] text-white/35">
+                  <span className="text-muted-foreground rounded-full border border-white/10 px-2.5 py-1 text-[10px]">
                     {part.partNumber ?? "VIN required"}
                   </span>
                 </div>
-                <p className="mt-2 text-xs leading-5 text-white/45">
+                <p className="text-muted-foreground mt-2 text-xs leading-5">
                   {part.specification}
                 </p>
                 {part.note && (
@@ -588,20 +593,20 @@ function GuideMediaHub({
         </details>
       )}
 
-      <details className="group rounded-[1.7rem] border border-white/10 bg-[#111111] p-5 sm:p-6">
+      <details className="group bg-card rounded-[1.7rem] border border-white/10 p-5 sm:p-6">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
           <span className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/12 text-[#ff667a]">
+            <span className="bg-primary/12 text-primary grid size-11 place-items-center rounded-xl">
               <Wrench className="size-5" />
             </span>
             <span>
               <span className="block font-medium">Tools & materials</span>
-              <span className="mt-1 block text-xs text-white/35">
+              <span className="text-muted-foreground mt-1 block text-xs">
                 {guide.tools.length} items with visual cards
               </span>
             </span>
           </span>
-          <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
+          <ChevronDown className="text-muted-foreground size-4 transition group-open:rotate-180" />
         </summary>
         <div className="mt-5 grid gap-3 border-t border-white/8 pt-5 sm:grid-cols-2">
           {guide.tools.map((tool) => (
@@ -610,20 +615,20 @@ function GuideMediaHub({
         </div>
       </details>
 
-      <details className="group rounded-[1.7rem] border border-white/10 bg-[#111111] p-5 sm:p-6">
+      <details className="group bg-card rounded-[1.7rem] border border-white/10 p-5 sm:p-6">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
           <span className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/12 text-[#ff667a]">
+            <span className="bg-primary/12 text-primary grid size-11 place-items-center rounded-xl">
               <Images className="size-5" />
             </span>
             <span>
               <span className="block font-medium">Reference photos</span>
-              <span className="mt-1 block text-xs text-white/35">
+              <span className="text-muted-foreground mt-1 block text-xs">
                 Before and after reminders
               </span>
             </span>
           </span>
-          <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
+          <ChevronDown className="text-muted-foreground size-4 transition group-open:rotate-180" />
         </summary>
         <div className="mt-5 grid gap-3 border-t border-white/8 pt-5 sm:grid-cols-2">
           {(guide.photos ?? []).map((photo) => (
@@ -645,43 +650,43 @@ function GuideMediaHub({
                   </span>
                 )}
               </div>
-              <figcaption className="p-4 text-xs leading-5 text-white/40">
+              <figcaption className="text-muted-foreground p-4 text-xs leading-5">
                 {photo.caption}
               </figcaption>
             </figure>
           ))}
           {!guide.photos?.length && (
-            <p className="text-sm text-white/35">
+            <p className="text-muted-foreground text-sm">
               Reference photos are being prepared for this guide.
             </p>
           )}
         </div>
       </details>
 
-      <details className="group rounded-[1.7rem] border border-white/10 bg-[#111111] p-5 sm:p-6">
+      <details className="group bg-card rounded-[1.7rem] border border-white/10 p-5 sm:p-6">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
           <span className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/12 text-[#ff667a]">
+            <span className="bg-primary/12 text-primary grid size-11 place-items-center rounded-xl">
               <ShieldCheck className="size-5" />
             </span>
             <span>
               <span className="block font-medium">Plan & safety detail</span>
-              <span className="mt-1 block text-xs text-white/35">
+              <span className="text-muted-foreground mt-1 block text-xs">
                 Scope, stop points and record
               </span>
             </span>
           </span>
-          <ChevronDown className="size-4 text-white/30 transition group-open:rotate-180" />
+          <ChevronDown className="text-muted-foreground size-4 transition group-open:rotate-180" />
         </summary>
         {plan && (
           <div className="mt-5 border-t border-white/8 pt-5">
-            <div className="rounded-xl border border-[#e72d45]/15 bg-[#e72d45]/5 p-4">
+            <div className="border-primary/15 bg-primary/5 rounded-xl border p-4">
               <p className="text-sm font-medium">{plan.recommendedSetting}</p>
-              <p className="mt-2 text-xs leading-5 text-white/40">
+              <p className="text-muted-foreground mt-2 text-xs leading-5">
                 {plan.recommendation}
               </p>
               {planningCost && (
-                <p className="mt-3 text-xs text-white/30">
+                <p className="text-muted-foreground mt-3 text-xs">
                   {planningCost.format(plan.costRange.min)}–
                   {planningCost.format(plan.costRange.max)} planning range
                 </p>
@@ -739,11 +744,11 @@ function ToolVisual({ name }: { name: string }) {
     <div className="overflow-hidden rounded-2xl border border-white/8 bg-black/15">
       <div className="relative grid h-24 place-items-center overflow-hidden bg-[linear-gradient(135deg,rgba(255,255,255,0.055),transparent_55%)]">
         <div className="absolute inset-0 [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:20px_20px] opacity-25" />
-        <span className="relative grid size-14 place-items-center rounded-2xl border border-[#ff667a]/20 bg-[#e72d45]/12 text-[#ff8898] shadow-[0_12px_30px_rgba(231,45,69,0.12)]">
+        <span className="border-primary/20 bg-primary/12 text-primary relative grid size-14 place-items-center rounded-2xl border shadow-[0_12px_30px_rgba(184,199,217,0.12)]">
           <Icon className="size-7" strokeWidth={1.6} />
         </span>
       </div>
-      <p className="p-3 text-xs leading-5 text-white/55">{name}</p>
+      <p className="text-muted-foreground p-3 text-xs leading-5">{name}</p>
     </div>
   );
 }
@@ -759,16 +764,19 @@ function PreparationList({
 }) {
   return (
     <div className="mt-5 border-t border-white/8 pt-4">
-      <h3 className="text-xs font-semibold tracking-[0.1em] text-white/55 uppercase">
+      <h3 className="text-muted-foreground text-xs font-semibold tracking-[0.1em] uppercase">
         {title}
       </h3>
       <ul className="mt-3 space-y-2">
         {items.map((item) => (
-          <li key={item} className="flex gap-2 text-sm leading-6 text-white/45">
+          <li
+            key={item}
+            className="text-muted-foreground flex gap-2 text-sm leading-6"
+          >
             {tone === "warning" ? (
               <AlertTriangle className="mt-1 size-3.5 shrink-0 text-amber-200/60" />
             ) : (
-              <Check className="mt-1 size-3.5 shrink-0 text-white/25" />
+              <Check className="text-muted-foreground mt-1 size-3.5 shrink-0" />
             )}
             <span>{item}</span>
           </li>

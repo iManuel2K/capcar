@@ -48,15 +48,15 @@ export function WishlistDashboard({ vehicleId }: { vehicleId: string }) {
 
   return (
     <div className="pb-24 sm:pb-0">
-      <header className="flex flex-col gap-6 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_86%_10%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10 lg:flex-row lg:items-end lg:justify-between">
+      <header className="flex flex-col gap-6 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_86%_10%,rgba(184,199,217,0.2),transparent_30%),#111111] p-6 sm:p-10 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
+          <p className="text-primary text-xs font-semibold tracking-[0.15em] uppercase">
             Part wishlist
           </p>
           <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
             Save it before you buy it.
           </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-white/45 sm:text-base sm:leading-7">
+          <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-6 sm:text-base sm:leading-7">
             Keep product links, prices and delivery state connected to your{" "}
             {vehicle.model}.
           </p>
@@ -67,7 +67,7 @@ export function WishlistDashboard({ vehicleId }: { vehicleId: string }) {
             setEditing(undefined);
             setShowForm((value) => !value);
           }}
-          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-white"
+          className="bg-primary text-primary-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold"
         >
           <Plus className="size-4" /> Save part link
         </button>
@@ -101,21 +101,21 @@ export function WishlistDashboard({ vehicleId }: { vehicleId: string }) {
         </p>
       )}
 
-      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
+      <section className="bg-card mt-5 rounded-[2rem] border border-white/10 p-5 sm:p-8">
         <p className="mb-5 text-sm leading-6 text-white/65">
           Prices are your saved values. Edit them when an offer changes; open
           the listing to confirm current price and availability.
         </p>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+            <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
               Purchase queue
             </p>
             <h2 className="mt-2 text-2xl font-medium">
               Saved → ordered → delivered
             </h2>
           </div>
-          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[#ff667a]/20 bg-[#e72d45]/8 px-3 py-1.5 text-[10px] font-semibold tracking-[0.1em] text-[#ff8796] uppercase">
+          <span className="border-primary/20 bg-primary/8 text-primary inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] font-semibold tracking-[0.1em] uppercase">
             <BellRing className="size-3.5" /> Pro ·{" "}
             {proFeatureLabels.automatedPriceDrops}
           </span>
@@ -128,20 +128,20 @@ export function WishlistDashboard({ vehicleId }: { vehicleId: string }) {
             {items.map((item) => (
               <article
                 key={item.id}
-                className="rounded-2xl border border-white/8 bg-[#0c0c0c] p-4 sm:p-5"
+                className="bg-card rounded-2xl border border-white/8 p-4 sm:p-5"
               >
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <StatusPill status={item.status} />
-                      <span className="text-xs text-white/30">
+                      <span className="text-muted-foreground text-xs">
                         {item.merchant}
                       </span>
                     </div>
                     <h3 className="mt-3 truncate text-lg font-medium text-white/90">
                       {item.title}
                     </h3>
-                    <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/40">
+                    <div className="text-muted-foreground mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
                       <span>
                         Recorded{" "}
                         {item.currentPrice === undefined
@@ -175,7 +175,7 @@ export function WishlistDashboard({ vehicleId }: { vehicleId: string }) {
                           );
                         }
                       }}
-                      className="min-h-10 rounded-xl border border-white/10 bg-[#171717] px-3 text-xs text-white"
+                      className="bg-card text-foreground min-h-10 rounded-xl border border-white/10 px-3 text-xs"
                     >
                       {wishlistStatuses.map((status) => (
                         <option key={status} value={status}>
@@ -187,7 +187,7 @@ export function WishlistDashboard({ vehicleId }: { vehicleId: string }) {
                       href={buildOutboundUrl(item.url, item.id)}
                       target="_blank"
                       rel="noopener noreferrer sponsored"
-                      className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 px-3 text-xs text-white/65 hover:text-white"
+                      className="hover:text-foreground inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 px-3 text-xs text-white/65"
                     >
                       Open listing <ArrowUpRight className="size-3.5" />
                     </a>
@@ -225,7 +225,7 @@ export function WishlistDashboard({ vehicleId }: { vehicleId: string }) {
                           );
                         }
                       }}
-                      className="grid size-10 place-items-center rounded-xl border border-white/10 text-white/35 hover:text-red-200"
+                      className="text-muted-foreground grid size-10 place-items-center rounded-xl border border-white/10 hover:text-red-200"
                     >
                       <Trash2 className="size-4" />
                     </button>
@@ -283,7 +283,7 @@ function WishlistForm({
   return (
     <form
       onSubmit={submit}
-      className="mt-5 rounded-[2rem] border border-[#e72d45]/20 bg-[#151010] p-5 sm:p-8"
+      className="border-primary/20 bg-card mt-5 rounded-[2rem] border p-5 sm:p-8"
     >
       <div className="grid gap-4 md:grid-cols-2">
         <Field
@@ -335,11 +335,11 @@ function WishlistForm({
         <button
           type="button"
           onClick={onClose}
-          className="min-h-11 rounded-xl border border-white/10 px-4 text-sm text-white/50"
+          className="text-muted-foreground min-h-11 rounded-xl border border-white/10 px-4 text-sm"
         >
           Cancel
         </button>
-        <button className="min-h-11 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-white">
+        <button className="bg-primary text-primary-foreground min-h-11 rounded-xl px-5 text-sm font-semibold">
           Save link
         </button>
       </div>
@@ -365,7 +365,9 @@ function Field({
   value?: string | number;
 }) {
   return (
-    <label className={`text-xs text-white/45 ${wide ? "md:col-span-2" : ""}`}>
+    <label
+      className={`text-muted-foreground text-xs ${wide ? "md:col-span-2" : ""}`}
+    >
       {label}
       <input
         name={name}
@@ -386,7 +388,7 @@ function Field({
         min={type === "number" ? 0 : undefined}
         step={type === "number" ? "0.01" : undefined}
         placeholder={placeholder}
-        className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-[#0b0b0b] px-4 text-sm text-white placeholder:text-white/20 focus:border-[#e72d45] focus:outline-none"
+        className="bg-background text-foreground placeholder:text-muted-foreground focus:border-primary mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm focus:outline-none"
       />
     </label>
   );
@@ -394,15 +396,15 @@ function Field({
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <article className="rounded-2xl border border-white/10 bg-[#111111] p-5">
+    <article className="bg-card rounded-2xl border border-white/10 p-5">
       <p className="text-2xl font-medium">{value}</p>
-      <p className="mt-1 text-xs text-white/35">{label}</p>
+      <p className="text-muted-foreground mt-1 text-xs">{label}</p>
     </article>
   );
 }
 function StatusPill({ status }: { status: WishlistStatus }) {
   const styles = {
-    saved: "border-white/10 bg-white/5 text-white/50",
+    saved: "border-white/10 bg-white/5 text-muted-foreground",
     ordered: "border-amber-300/20 bg-amber-300/8 text-amber-200",
     delivered: "border-emerald-300/20 bg-emerald-300/8 text-emerald-200",
   };
@@ -417,9 +419,9 @@ function StatusPill({ status }: { status: WishlistStatus }) {
 function EmptyWishlist({ onAdd }: { onAdd: () => void }) {
   return (
     <div className="mt-7 flex min-h-64 flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 text-center">
-      <ShoppingBag className="size-8 text-white/18" />
+      <ShoppingBag className="text-muted-foreground size-8" />
       <h3 className="mt-5 text-xl font-medium">No saved parts yet</h3>
-      <p className="mt-2 max-w-sm text-sm leading-6 text-white/38">
+      <p className="text-muted-foreground mt-2 max-w-sm text-sm leading-6">
         Save any secure product link and keep its buying state with the car.
       </p>
       <button
@@ -433,7 +435,7 @@ function EmptyWishlist({ onAdd }: { onAdd: () => void }) {
 }
 function MissingVehicle() {
   return (
-    <div className="grid min-h-[60vh] place-items-center text-white/45">
+    <div className="text-muted-foreground grid min-h-[60vh] place-items-center">
       <PackageCheck className="size-5" /> Vehicle not found.
     </div>
   );

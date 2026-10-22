@@ -21,7 +21,7 @@ const cache = new Map<
   { expires: number; result: OfficialProblemResult }
 >();
 const link =
-  "inline-flex min-h-11 items-center gap-2 rounded-lg py-2 text-sm text-[#ecc3a7] underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4";
+  "inline-flex min-h-11 items-center gap-2 rounded-lg py-2 text-sm text-primary underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4";
 export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
   const locale = useLocale() as AppLocale;
   const c = problemSourceCopy[locale] ?? problemSourceCopy.en;
@@ -77,10 +77,10 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
   return (
     <section
       aria-labelledby="official-problem-title"
-      className="mt-6 scroll-mt-24 rounded-3xl border border-[#668178] bg-[#102e30] p-5 text-[#f2f0e3] sm:p-8"
+      className="border-input bg-card text-foreground mt-6 scroll-mt-24 rounded-3xl border p-5 sm:p-8"
     >
       <div className="flex items-center gap-3">
-        <ShieldCheck aria-hidden="true" className="size-5 text-[#d6aa92]" />
+        <ShieldCheck aria-hidden="true" className="text-primary size-5" />
         <h2
           id="official-problem-title"
           className="text-2xl font-medium tracking-tight"
@@ -88,7 +88,7 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
           {c.title}
         </h2>
       </div>
-      <p className="mt-4 max-w-4xl text-sm leading-7 text-[#c4d3ca]">
+      <p className="text-foreground mt-4 max-w-4xl text-sm leading-7">
         {c.intro}
       </p>
       {profile && (
@@ -98,7 +98,7 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
           </label>
           <select
             id="recall-model-year"
-            className="mt-2 block min-h-11 rounded-xl border border-white/30 bg-[#0b2326] px-4 text-base focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d6aa92]"
+            className="bg-background focus-visible:outline-primary mt-2 block min-h-11 rounded-xl border border-white/30 px-4 text-base focus-visible:outline-2 focus-visible:outline-offset-4"
             value={year}
             onChange={(event) => {
               setYear(Number(event.target.value));
@@ -114,7 +114,7 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
               </option>
             ))}
           </select>
-          <p className="mt-2 text-xs leading-6 text-[#c4d3ca]">{c.yearHint}</p>
+          <p className="text-foreground mt-2 text-xs leading-6">{c.yearHint}</p>
         </div>
       )}
       {!id && <p className="mt-5 text-sm leading-7">{c.unknown}</p>}
@@ -141,7 +141,7 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
       {result && (
         <>
           {result.fetchedAt && (
-            <p className="mt-5 text-xs leading-6 text-[#c4d3ca]">
+            <p className="text-foreground mt-5 text-xs leading-6">
               {c.checked}:{" "}
               <time dateTime={result.fetchedAt}>
                 {new Date(result.fetchedAt).toLocaleString(locale)}
@@ -174,9 +174,9 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
             {records.slice(0, expanded ? records.length : 4).map((record) => (
               <article
                 key={record.campaign}
-                className="rounded-2xl border border-white/20 bg-[#0b2326] p-5"
+                className="bg-background rounded-2xl border border-white/20 p-5"
               >
-                <p className="text-xs leading-6 text-[#d6aa92]">
+                <p className="text-primary text-xs leading-6">
                   {c.evidence} · {record.campaign}
                 </p>
                 <h3 className="mt-2 text-lg font-semibold break-words">
@@ -190,7 +190,7 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
                 {record.parkOutside && (
                   <p className="mt-3 text-sm text-[#f4d4a4]">{c.outside}</p>
                 )}
-                <p className="mt-3 text-sm leading-7 text-[#d0dbd2]">
+                <p className="text-foreground mt-3 text-sm leading-7">
                   {record.summary}
                 </p>
                 <details className="mt-4">
@@ -201,13 +201,15 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
                     {record.consequence && (
                       <div>
                         <dt className="font-semibold">{c.consequence}</dt>
-                        <dd className="text-[#d0dbd2]">{record.consequence}</dd>
+                        <dd className="text-foreground">
+                          {record.consequence}
+                        </dd>
                       </div>
                     )}
                     {record.remedy && (
                       <div>
                         <dt className="font-semibold">{c.remedy}</dt>
-                        <dd className="text-[#d0dbd2]">{record.remedy}</dd>
+                        <dd className="text-foreground">{record.remedy}</dd>
                       </div>
                     )}
                     {record.reportedAt && (
@@ -217,7 +219,7 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
                       </div>
                     )}
                   </dl>
-                  <p className="mt-4 text-xs text-[#c4d3ca]">{c.original}</p>
+                  <p className="text-foreground mt-4 text-xs">{c.original}</p>
                 </details>
                 <a
                   className={`${link} mt-2`}
@@ -244,7 +246,7 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
       )}
       <aside className="mt-6 border-t border-white/20 pt-5">
         <h3 className="font-semibold">{c.market}</h3>
-        <p className="mt-2 max-w-4xl text-sm leading-7 text-[#c4d3ca]">
+        <p className="text-foreground mt-2 max-w-4xl text-sm leading-7">
           {c.marketText}
         </p>
         <div className="mt-2 flex flex-wrap gap-x-6">
@@ -268,12 +270,12 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
           </a>
         </div>
       </aside>
-      <p className="mt-4 text-xs leading-6 text-[#c4d3ca]">{c.cache}</p>
+      <p className="text-foreground mt-4 text-xs leading-6">{c.cache}</p>
       <details className="mt-5 border-t border-white/20 pt-4">
         <summary className="min-h-11 cursor-pointer py-2 font-medium focus-visible:outline-2">
           {c.coverage}
         </summary>
-        <p className="mt-2 text-sm leading-7 text-[#c4d3ca]">
+        <p className="text-foreground mt-2 text-sm leading-7">
           {c.coverageNote}
         </p>
         <ul className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
@@ -288,7 +290,7 @@ export function OfficialProblemRecords({ vehicle }: { vehicle: Vehicle }) {
                   {car.make} {car.model} · {car.platform} ·{" "}
                   {car.years.join("–")}
                 </strong>
-                <p className="mt-1 text-xs leading-6 text-[#c4d3ca]">
+                <p className="text-foreground mt-1 text-xs leading-6">
                   {mapping?.models.length
                     ? c.lookup
                     : mapping?.reason === "concept"

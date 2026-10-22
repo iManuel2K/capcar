@@ -34,7 +34,7 @@ export async function PublicPassport({
   const copy = garageCopy[isAppLocale(locale) ? locale : "en"];
 
   return (
-    <main className="min-h-dvh bg-[#0b0e0c] px-4 py-5 text-[#f4f5f2] sm:px-7 sm:py-8">
+    <main className="bg-background text-foreground min-h-dvh px-4 py-5 sm:px-7 sm:py-8">
       <div className="mx-auto max-w-6xl">
         <header className="flex items-center justify-between gap-5">
           <Link href="/" aria-label={t("home")}>
@@ -49,7 +49,7 @@ export async function PublicPassport({
           {title} {t("document")}
         </h1>
         <PassportIdentityDocument passport={passport} liveUrl={liveUrl} />
-        <p className="mt-3 text-right text-xs text-white/32">
+        <p className="text-muted-foreground mt-3 text-right text-xs">
           {t("published", {
             date: new Date(publishedAt).toLocaleDateString(locale),
           })}
@@ -71,11 +71,11 @@ export async function PublicPassport({
                 ? t("integrityVerified")
                 : t("legacyRecord")}
             </h2>
-            <p className="mt-2 max-w-3xl text-xs leading-5 text-white/45">
+            <p className="text-muted-foreground mt-2 max-w-3xl text-xs leading-5">
               {t("integrityNotice")}
             </p>
           </div>
-          <dl className="grid gap-2 text-xs text-white/55 sm:min-w-64">
+          <dl className="text-muted-foreground grid gap-2 text-xs sm:min-w-64">
             <div className="flex items-center justify-between gap-5">
               <dt className="flex items-center gap-2">
                 <Fingerprint className="size-3.5" /> {t("recordHash")}
@@ -164,11 +164,11 @@ export async function PublicPassport({
           />
         </div>
 
-        <aside className="mt-5 rounded-2xl border border-amber-300/12 bg-amber-300/5 p-5 text-xs leading-6 text-white/45">
+        <aside className="text-muted-foreground mt-5 rounded-2xl border border-amber-300/12 bg-amber-300/5 p-5 text-xs leading-6">
           {t("notice")}
         </aside>
 
-        <footer className="flex flex-col justify-between gap-5 py-10 text-xs text-white/35 sm:flex-row sm:items-center">
+        <footer className="text-muted-foreground flex flex-col justify-between gap-5 py-10 text-xs sm:flex-row sm:items-center">
           <CapcarWordmark />
           <Link href="/" className="font-medium text-white/60">
             {t("buildGarage")}
@@ -181,9 +181,9 @@ export async function PublicPassport({
 
 function Metric({ label, value }: { label: string; value: number }) {
   return (
-    <article className="rounded-2xl border border-white/10 bg-[#111111] p-5">
+    <article className="bg-card rounded-2xl border border-white/10 p-5">
       <p className="text-3xl font-medium">{value}</p>
-      <p className="mt-2 text-xs text-white/35">{label}</p>
+      <p className="text-muted-foreground mt-2 text-xs">{label}</p>
     </article>
   );
 }
@@ -198,12 +198,12 @@ function RecordSection({
   rows: Array<{ title: string; detail: string }>;
 }) {
   return (
-    <section className="rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
+    <section className="bg-card rounded-[2rem] border border-white/10 p-5 sm:p-8">
       <h2 className="flex items-center gap-2 text-xl font-medium">
-        <BadgeCheck className="size-4 text-[#ff667a]" /> {title}
+        <BadgeCheck className="text-primary size-4" /> {title}
       </h2>
       {rows.length === 0 ? (
-        <p className="mt-7 rounded-xl border border-dashed border-white/10 p-7 text-center text-sm text-white/35">
+        <p className="text-muted-foreground mt-7 rounded-xl border border-dashed border-white/10 p-7 text-center text-sm">
           {empty}
         </p>
       ) : (
@@ -211,7 +211,7 @@ function RecordSection({
           {rows.map((row, index) => (
             <div key={`${row.title}-${index}`} className="py-4">
               <p className="font-medium text-white/78">{row.title}</p>
-              <p className="mt-1 text-xs leading-5 text-white/35">
+              <p className="text-muted-foreground mt-1 text-xs leading-5">
                 {row.detail}
               </p>
             </div>

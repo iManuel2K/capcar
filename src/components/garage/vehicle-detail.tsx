@@ -66,18 +66,18 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
     return (
       <div className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center text-center">
         <span className="grid size-14 place-items-center rounded-2xl border border-white/10 bg-white/5">
-          <Wrench className="size-5 text-white/50" />
+          <Wrench className="text-muted-foreground size-5" />
         </span>
         <h1 className="mt-6 text-3xl font-medium tracking-[-0.035em]">
           Vehicle not found
         </h1>
-        <p className="mt-3 leading-7 text-white/45">
+        <p className="text-muted-foreground mt-3 leading-7">
           This local vehicle may have been removed when browser data was
           cleared.
         </p>
         <Link
           href="/garage"
-          className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]"
+          className="bg-primary text-primary-foreground mt-7 inline-flex min-h-11 items-center gap-2 rounded-xl px-5 text-sm font-semibold"
         >
           Return to garage <ArrowRight className="size-4" />
         </Link>
@@ -99,14 +99,14 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
       <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/garage"
-          className="inline-flex items-center gap-2 text-sm text-white/45 transition hover:text-white"
+          className="text-muted-foreground hover:text-foreground inline-flex items-center gap-2 text-sm transition"
         >
           <ArrowLeft className="size-4" /> All vehicles
         </Link>
         <div className="flex items-center gap-2">
           <Link
             href={`/garage/${vehicleId}/edit`}
-            className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white/70 transition hover:border-white/20 hover:text-white"
+            className="hover:text-foreground inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white/70 transition hover:border-white/20"
           >
             <Pencil className="size-3.5" /> Edit vehicle
           </Link>
@@ -120,20 +120,20 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
         </div>
       </div>
 
-      <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_35%,rgba(231,45,69,0.12),transparent_32%)]" />
+      <section className="bg-card relative overflow-hidden rounded-[2rem] border border-white/10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_35%,rgba(184,199,217,0.12),transparent_32%)]" />
         <div className="relative grid lg:grid-cols-[0.72fr_1.28fr]">
           <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12">
-            <div className="flex items-center gap-2 text-xs tracking-[0.14em] text-[#ff667a] uppercase">
+            <div className="text-primary flex items-center gap-2 text-xs tracking-[0.14em] uppercase">
               <CheckCircle2 className="size-3.5" /> Vehicle profile ready
             </div>
-            <p className="mt-10 text-sm text-white/35">
+            <p className="text-muted-foreground mt-10 text-sm">
               {vehicle.nickname || `${vehicle.platform} ${vehicle.bodyStyle}`}
             </p>
             <h1 className="mt-2 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
               {title}
             </h1>
-            <p className="mt-5 text-base text-white/50">
+            <p className="text-muted-foreground mt-5 text-base">
               {vehicle.color || "Color not recorded"} · {vehicle.engineCode} ·{" "}
               {vehicle.transmission}
             </p>
@@ -144,7 +144,7 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
                     ? c.unknown
                     : vehicle.mileage.toLocaleString("en-US")}
                 </p>
-                <p className="mt-1 text-xs tracking-[0.12em] text-white/30 uppercase">
+                <p className="text-muted-foreground mt-1 text-xs tracking-[0.12em] uppercase">
                   kilometres
                 </p>
               </div>
@@ -153,7 +153,7 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
                 <p className="text-3xl font-medium tracking-[-0.035em]">
                   {vehicle.platform}
                 </p>
-                <p className="mt-1 text-xs tracking-[0.12em] text-white/30 uppercase">
+                <p className="text-muted-foreground mt-1 text-xs tracking-[0.12em] uppercase">
                   platform
                 </p>
               </div>
@@ -181,7 +181,7 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
           aria-labelledby="delete-vehicle-title"
           className="fixed inset-0 z-50 grid place-items-center bg-black/75 p-4 backdrop-blur-sm"
         >
-          <div className="w-full max-w-md rounded-[1.75rem] border border-white/12 bg-[#111111] p-6 shadow-2xl sm:p-8">
+          <div className="bg-card w-full max-w-md rounded-[1.75rem] border border-white/12 p-6 shadow-2xl sm:p-8">
             <div className="flex items-start justify-between gap-4">
               <span className="grid size-11 place-items-center rounded-2xl bg-red-400/10 text-red-300">
                 <Trash2 className="size-5" />
@@ -190,7 +190,7 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
                 type="button"
                 onClick={() => setDeleteOpen(false)}
                 aria-label="Close delete confirmation"
-                className="grid size-9 place-items-center rounded-full text-white/40 transition hover:bg-white/5 hover:text-white"
+                className="text-muted-foreground hover:text-foreground grid size-9 place-items-center rounded-full transition hover:bg-white/5"
               >
                 <X className="size-4" />
               </button>
@@ -201,7 +201,7 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
             >
               Delete {vehicle.nickname || title}?
             </h2>
-            <p className="mt-3 leading-7 text-white/50">
+            <p className="text-muted-foreground mt-3 leading-7">
               This removes the vehicle from your garage. This action cannot be
               undone.
             </p>
@@ -216,7 +216,7 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
               <button
                 type="button"
                 onClick={handleDelete}
-                className="min-h-11 rounded-xl bg-red-500 px-5 text-sm font-semibold text-white hover:bg-red-400"
+                className="text-foreground min-h-11 rounded-xl bg-red-500 px-5 text-sm font-semibold hover:bg-red-400"
               >
                 Delete vehicle
               </button>
@@ -226,10 +226,10 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
       )}
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
+        <div className="bg-card rounded-[1.75rem] border border-white/10 p-6 sm:p-8">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs tracking-[0.14em] text-white/35 uppercase">
+              <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
                 Next attention
               </p>
               <h2 className="mt-2 text-2xl font-medium tracking-[-0.025em]">
@@ -240,7 +240,7 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
               <CalendarClock className="size-5" />
             </span>
           </div>
-          <p className="mt-5 max-w-2xl leading-7 text-white/45">
+          <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
             Review upcoming oil, fluid, filter, brake and inspection tasks for
             this exact garage profile.
           </p>
@@ -251,37 +251,37 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
           </div>
         </div>
 
-        <div className="flex flex-col rounded-[1.75rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
-          <p className="text-xs tracking-[0.14em] text-white/35 uppercase">
+        <div className="bg-card flex flex-col rounded-[1.75rem] border border-white/10 p-6 sm:p-8">
+          <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
             Project build
           </p>
           <h2 className="mt-2 text-2xl font-medium tracking-[-0.025em]">
             Shape it inside and out.
           </h2>
-          <p className="mt-4 leading-7 text-white/45">
+          <p className="text-muted-foreground mt-4 leading-7">
             Plan modifications in stages, preview exterior and interior
             concepts, and connect parts and offers to the roadmap.
           </p>
           <Link
             href={`/garage/${vehicleId}/builds`}
-            className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white/60 hover:border-white/20 hover:text-white lg:mt-auto"
+            className="hover:text-foreground mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white/60 hover:border-white/20 lg:mt-auto"
           >
             <Plus className="size-4" /> Open project builds
           </Link>
         </div>
       </section>
 
-      <section className="relative mt-5 overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
-        <div className="pointer-events-none absolute -top-32 -left-20 size-72 rounded-full bg-[#e72d45]/8 blur-3xl" />
+      <section className="bg-card relative mt-5 overflow-hidden rounded-[1.75rem] border border-white/10 p-5 sm:p-8">
+        <div className="bg-primary/8 pointer-events-none absolute -top-32 -left-20 size-72 rounded-full blur-3xl" />
         <div className="relative flex flex-col gap-5 border-b border-white/8 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+            <p className="text-primary flex items-center gap-2 text-[11px] font-semibold tracking-[0.16em] uppercase">
               <MapPin className="size-3.5" /> Garage profile
             </p>
             <h2 className="mt-2 text-2xl font-medium tracking-[-0.025em]">
               Vehicle identity
             </h2>
-            <p className="mt-2 text-sm text-white/50">
+            <p className="text-muted-foreground mt-2 text-sm">
               The specification used by parts, guides and build planning.
             </p>
           </div>
@@ -388,7 +388,7 @@ function ComingSoon({
   label: string;
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.025] p-4 text-sm text-white/45">
+    <div className="text-muted-foreground flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.025] p-4 text-sm">
       <Icon className="size-4" /> {label}
     </div>
   );
@@ -409,12 +409,12 @@ function IdentityItem({
     <div className="rounded-2xl border border-white/8 bg-white/[0.035] p-4 transition hover:border-white/15 hover:bg-white/[0.055]">
       <div className="flex items-center gap-3">
         <span
-          className={`grid size-9 place-items-center rounded-xl ${muted ? "bg-amber-300/10 text-amber-200" : "bg-[#e72d45]/10 text-[#ff667a]"}`}
+          className={`grid size-9 place-items-center rounded-xl ${muted ? "bg-amber-300/10 text-amber-200" : "bg-primary/10 text-primary"}`}
         >
           <Icon className="size-4" />
         </span>
         <div>
-          <dt className="text-[10px] font-semibold tracking-[0.14em] text-white/40 uppercase">
+          <dt className="text-muted-foreground text-[10px] font-semibold tracking-[0.14em] uppercase">
             {label}
           </dt>
           <dd
@@ -440,12 +440,12 @@ function ProfileLink({
   return (
     <Link
       href={href}
-      className="group flex min-h-12 items-center justify-between gap-3 rounded-xl border border-white/8 bg-[#0d0d0d] px-3.5 text-sm font-medium text-white/65 transition hover:border-[#e72d45]/35 hover:bg-[#e72d45]/8 hover:text-white"
+      className="group bg-card hover:border-primary/35 hover:bg-primary/8 hover:text-foreground flex min-h-12 items-center justify-between gap-3 rounded-xl border border-white/8 px-3.5 text-sm font-medium text-white/65 transition"
     >
       <span className="flex items-center gap-2.5">
-        <Icon className="size-4 text-[#ff667a]" /> {label}
+        <Icon className="text-primary size-4" /> {label}
       </span>
-      <ArrowRight className="size-3.5 text-white/25 transition group-hover:translate-x-0.5 group-hover:text-[#ff667a]" />
+      <ArrowRight className="text-muted-foreground group-hover:text-primary size-3.5 transition group-hover:translate-x-0.5" />
     </Link>
   );
 }

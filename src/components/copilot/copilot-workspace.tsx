@@ -70,7 +70,9 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
     );
   if (!vehicle)
     return (
-      <div className="py-32 text-center text-[#aab6b1]">Vehicle not found.</div>
+      <div className="text-muted-foreground py-32 text-center">
+        Vehicle not found.
+      </div>
     );
 
   async function submit(question = message) {
@@ -132,13 +134,13 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
     <div className="pb-24 sm:pb-0">
       <Link
         href={`/garage/${vehicleId}`}
-        className="mb-7 inline-flex items-center gap-2 text-sm text-[#aab6b1] hover:text-white"
+        className="text-muted-foreground hover:text-foreground mb-7 inline-flex items-center gap-2 text-sm"
       >
         <ArrowLeft className="size-4" /> Vehicle overview
       </Link>
-      <header className="rounded-[2rem] border border-white/10 bg-[#123033] p-5 sm:p-7">
+      <header className="bg-card rounded-[2rem] border border-white/10 p-5 sm:p-7">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#bf8269]/25 bg-[#bf8269]/10 px-3 py-1.5 text-[10px] text-[#d6aa92] uppercase">
+          <span className="border-primary/25 bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] uppercase">
             <Bot className="size-3" /> CapCar rules copilot
           </span>
           <span className="rounded-full border border-amber-300/20 bg-amber-300/8 px-3 py-1.5 text-[10px] text-amber-100/65 uppercase">
@@ -148,14 +150,14 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
         <h1 className="mt-5 max-w-4xl text-2xl font-medium tracking-[-0.04em] sm:text-4xl">
           {c.overview}
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-[#aab6b1]">
+        <p className="text-muted-foreground mt-3 max-w-2xl text-sm leading-6">
           The current copilot uses conservative rules and your saved
           vehicle/build context. An external AI adapter can be activated later.
         </p>
       </header>
 
       <section className="mt-5">
-        <article className="rounded-[2rem] border border-white/10 bg-[#0b2326] p-6 sm:p-8">
+        <article className="bg-background rounded-[2rem] border border-white/10 p-6 sm:p-8">
           <AIConversation contentKey={`${turns.length}:${pending}`}>
             {turns.flatMap((turn, index) => [
               <AIMessage key={`${index}-user`} role="user">
@@ -179,7 +181,7 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
               </>
             )}
             {!turns.length && !pending && (
-              <p className="p-4 text-[#aab6b1]">{c.empty}</p>
+              <p className="text-muted-foreground p-4">{c.empty}</p>
             )}
           </AIConversation>
           <div className="mt-4 border-t border-white/10 pt-4">
@@ -201,7 +203,7 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
                     type="button"
                     disabled={loading}
                     onClick={() => void submit(starter)}
-                    className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-left text-xs text-[#aab6b1] hover:text-white focus-visible:outline-2 focus-visible:outline-[#d6aa92]"
+                    className="text-muted-foreground hover:text-foreground focus-visible:outline-primary inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-left text-xs focus-visible:outline-2"
                   >
                     <span>{starter}</span>
                     <ArrowRight className="size-3.5 shrink-0" />
@@ -216,22 +218,22 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
                 <span className="inline-flex items-center gap-2 text-xs text-emerald-200/70">
                   <CheckCircle2 className="size-4" /> {response.provider}
                 </span>
-                <span className="text-[10px] text-white/25 uppercase">
+                <span className="text-muted-foreground text-[10px] uppercase">
                   {response.source}
                 </span>
               </div>
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-2xl border border-white/8 bg-black/10 p-5">
-                  <p className="text-xs tracking-[0.12em] text-[#aab6b1] uppercase">
+                  <p className="text-muted-foreground text-xs tracking-[0.12em] uppercase">
                     Evidence used
                   </p>
                   <ul className="mt-4 space-y-3">
                     {response.evidence.map((item) => (
                       <li
                         key={item}
-                        className="flex gap-2 text-xs leading-5 text-[#aab6b1]"
+                        className="text-muted-foreground flex gap-2 text-xs leading-5"
                       >
-                        <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-white/25" />
+                        <ShieldCheck className="text-muted-foreground mt-0.5 size-3.5 shrink-0" />
                         {item}
                       </li>
                     ))}
@@ -245,7 +247,7 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
                     {response.warnings.map((item) => (
                       <li
                         key={item}
-                        className="flex gap-2 text-xs leading-5 text-[#aab6b1]"
+                        className="text-muted-foreground flex gap-2 text-xs leading-5"
                       >
                         <AlertTriangle className="mt-0.5 size-3.5 shrink-0 text-amber-200" />
                         {item}
@@ -259,7 +261,7 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
                   <Link
                     key={action.href}
                     href={action.href}
-                    className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60 hover:text-white"
+                    className="hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60"
                   >
                     {action.label}
                     <ArrowRight className="size-3.5" />

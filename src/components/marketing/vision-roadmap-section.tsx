@@ -60,12 +60,12 @@ export function VisionRoadmapSection() {
   return (
     <section
       id="roadmap"
-      className="scroll-mt-20 border-y border-white/8 bg-[#0e2d30] text-[#e8e6d7]"
+      className="bg-card text-foreground scroll-mt-20 border-y border-white/8"
     >
       <div className="mx-auto max-w-[1500px] px-5 py-20 sm:px-8 sm:py-28">
         <div className="grid gap-8 lg:grid-cols-[1fr_0.58fr] lg:items-end">
           <div>
-            <p className="text-xs font-semibold tracking-[0.22em] text-[#bf8269] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-[0.22em] uppercase">
               {t("sequenceEyebrow")}
             </p>
             <h2 className="mt-5 max-w-4xl text-5xl leading-[0.9] font-medium tracking-[-0.06em] sm:text-7xl">
@@ -73,12 +73,12 @@ export function VisionRoadmapSection() {
             </h2>
           </div>
           <div>
-            <p className="text-base leading-7 text-white/48">
+            <p className="text-muted-foreground text-base leading-7">
               {t("sequenceDescription")}
             </p>
             <Link
               href="/roadmap"
-              className="mt-5 inline-flex min-h-11 items-center gap-2 font-medium text-white/76 transition hover:text-[#bf8269]"
+              className="hover:text-primary mt-5 inline-flex min-h-11 items-center gap-2 font-medium text-white/76 transition"
             >
               {faq("roadmap")} <ArrowRight className="size-4" />
             </Link>
@@ -89,9 +89,9 @@ export function VisionRoadmapSection() {
           {columns.map((column) => (
             <article
               key={column.id}
-              className={`rounded-[1.6rem] border border-white/10 p-6 sm:p-7 ${column.id === "hardening" ? "bg-[#1d494b]" : column.id === "tangible" ? "bg-[#183f42]" : "bg-[#153b3e]"}`}
+              className={`rounded-[1.6rem] border border-white/10 p-6 sm:p-7 ${column.id === "hardening" ? "bg-secondary" : column.id === "tangible" ? "bg-secondary" : "bg-secondary"}`}
             >
-              <p className="text-[11px] font-semibold tracking-[0.14em] text-[#f0b69d] uppercase">
+              <p className="text-primary text-[11px] font-semibold tracking-[0.14em] uppercase">
                 {t(`${column.id}.label`)}
               </p>
               <h3 className="mt-3 text-2xl font-medium tracking-[-0.035em]">
@@ -107,7 +107,7 @@ export function VisionRoadmapSection() {
                     className="flex items-center gap-3 text-sm text-white/58"
                   >
                     <span
-                      className={`grid size-5 shrink-0 place-items-center rounded-full ${column.active ? "bg-[#6d0101]/20 text-[#f0b69d]" : "bg-white/10 text-white/70"}`}
+                      className={`grid size-5 shrink-0 place-items-center rounded-full ${column.active ? "bg-primary/20 text-primary" : "bg-white/10 text-white/70"}`}
                     >
                       {column.active ? (
                         <Check aria-hidden="true" className="size-3" />

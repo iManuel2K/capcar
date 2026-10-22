@@ -1,0 +1,15 @@
+/* Editorial layout tokens share the approved Obsidian Chrome theme. */
+:root {
+  --capcar-editorial-paper: var(--background);
+  --capcar-editorial-ink: var(--foreground);
+  --capcar-editorial-muted: var(--muted-foreground);
+  --capcar-editorial-accent: var(--primary);
+  --capcar-editorial-rule: var(--border);
+  --capcar-editorial-sheet: var(--card);
+  --capcar-editorial-sheet-ink: var(--foreground);
+  --capcar-editorial-display:
+    ui-serif, Georgia, "Yu Mincho", "Hiragino Mincho ProN", serif;
+  --capcar-editorial-body: ui-sans-serif, system-ui, sans-serif;
+  --capcar-editorial-gutter: clamp(1.25rem, 4vw, 4rem);
+  --capcar-editorial-section: clamp(3.5rem, 8vw, 8rem);
+}

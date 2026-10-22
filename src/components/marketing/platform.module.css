@@ -1,9 +1,9 @@
 .page {
-  background: #ebe9dc;
-  color: #0e2d30;
+  background: var(--background);
+  color: var(--foreground);
 }
 .page :is(a, button, [role="tabpanel"]):focus-visible {
-  outline: 3px solid #92644d;
+  outline: 3px solid var(--primary);
   outline-offset: 5px;
 }
 .page section[id] {
@@ -27,12 +27,19 @@
   padding: 88px 32px;
 }
 .hero {
-  background-color: #0b2326;
+  background-color: var(--background);
   background-image:
-    linear-gradient(#ffffff03 1px, transparent 1px),
-    linear-gradient(90deg, #ffffff03 1px, transparent 1px);
+    linear-gradient(
+      color-mix(in srgb, var(--background) 1.18%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--background) 1.18%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 70px 70px;
-  color: #f5f2e8;
+  color: var(--foreground);
 }
 .heroInner {
   max-width: 1440px;
@@ -54,16 +61,16 @@
   font-weight: 650;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #84553f;
+  color: var(--primary);
   margin-bottom: 20px;
 }
 .hero .eyebrow,
 .journey .eyebrow {
-  color: #d6aa92;
+  color: var(--primary);
 }
 .lead {
   max-width: 35em;
-  color: #c2d0ca;
+  color: var(--foreground);
   font-size: 1.08rem;
   line-height: 1.8;
 }
@@ -77,7 +84,7 @@
 .fine {
   font-size: 0.8rem;
   line-height: 1.75;
-  color: #b6c5bf;
+  color: var(--foreground);
   max-width: 35em;
   margin-top: 18px;
 }
@@ -92,11 +99,11 @@
   height: 100%;
   pointer-events: none;
   fill: none;
-  stroke: #bf826947;
+  stroke: color-mix(in srgb, var(--primary) 27.84%, transparent);
   stroke-width: 1;
 }
 .connections circle {
-  stroke: #bf826928;
+  stroke: color-mix(in srgb, var(--primary) 15.69%, transparent);
   stroke-dasharray: 4 8;
 }
 .heroCar {
@@ -125,20 +132,20 @@
   gap: 9px;
   padding: 10px 7px;
   border-radius: 12px;
-  background: #0b2326;
+  background: var(--background);
   font-size: 0.8rem;
   line-height: 1.5;
   text-align: center;
-  color: #d9e0d8;
+  color: var(--foreground);
   transition: background 0.18s;
 }
 .node:hover {
-  background: #17383b;
+  background: var(--secondary);
 }
 .node svg {
   width: 20px;
   height: 20px;
-  color: #d6aa92;
+  color: var(--primary);
 }
 .identity {
   position: relative;
@@ -146,14 +153,14 @@
   text-align: center;
   font: 0.75rem/1.6 monospace;
   letter-spacing: 0.08em;
-  color: #aab6b1;
+  color: var(--muted-foreground);
 }
 .intro {
   max-width: 45em;
   font-size: 1rem;
   line-height: 1.8;
   margin-top: 22px;
-  color: #526965;
+  color: var(--muted-foreground);
 }
 .tabs {
   display: grid;
@@ -169,7 +176,7 @@
   min-height: 60px;
   padding: 12px;
   border-radius: 12px;
-  border: 1px solid #0e2d302a;
+  border: 1px solid color-mix(in srgb, var(--foreground) 16.47%, transparent);
   background: transparent;
   cursor: pointer;
   font-size: 0.875rem;
@@ -181,12 +188,12 @@
   flex-shrink: 0;
 }
 .tabs button[aria-selected="true"] {
-  background: #0e2d30;
-  color: #f5f2e8;
-  border-color: #0e2d30;
+  background: var(--card);
+  color: var(--foreground);
+  border-color: var(--foreground);
 }
 .tabs button:hover:not([aria-selected="true"]) {
-  background: #dcded2;
+  background: var(--background);
 }
 .panel {
   display: grid;
@@ -199,7 +206,7 @@
   display: block;
   width: 30px;
   height: 30px;
-  color: #84553f;
+  color: var(--primary);
   margin-top: 28px;
 }
 .panelText h3 {
@@ -210,7 +217,7 @@
 .panelText > p {
   font-size: 1rem;
   line-height: 1.8;
-  color: #435e59;
+  color: var(--muted-foreground);
 }
 .panelText .access {
   font-size: 0.85rem;
@@ -220,29 +227,30 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid #92644d80;
+  border: 1px solid color-mix(in srgb, var(--primary) 50.2%, transparent);
   border-radius: 999px;
   padding: 5px 11px;
   font-size: 0.75rem;
   line-height: 1.5;
-  color: #724b39;
+  color: var(--muted-foreground);
 }
 .demo {
   min-width: 0;
   padding: 24px;
   border-radius: 20px;
-  background: #102b2e;
-  color: #eeebe4;
+  background: var(--card);
+  color: var(--foreground);
   min-height: 340px;
-  border: 1px solid #57706a;
+  border: 1px solid var(--input);
 }
 .demoLabel {
   padding-bottom: 20px;
   margin-bottom: 22px;
-  border-bottom: 1px solid #ffffff20;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--foreground) 12.55%, transparent);
   font-size: 0.75rem;
   line-height: 1.6;
-  color: #aab6b1;
+  color: var(--muted-foreground);
 }
 .demo h4 {
   font-size: 1.35rem;
@@ -259,26 +267,27 @@
   align-items: center;
   gap: 14px;
   padding: 20px 0;
-  border-top: 1px solid #ffffff20;
+  border-top: 1px solid
+    color-mix(in srgb, var(--foreground) 12.55%, transparent);
   margin-top: 20px;
 }
 .record > svg {
   width: 22px;
   height: 22px;
   flex-shrink: 0;
-  color: #d6aa92;
+  color: var(--primary);
 }
 .record span {
   display: grid;
   gap: 8px;
   font-size: 0.85rem;
-  color: #bccac2;
+  color: var(--foreground);
 }
 .record strong {
   display: block;
   font-size: 1rem;
   font-weight: 500;
-  color: #eeebe4;
+  color: var(--foreground);
 }
 .stats {
   display: grid;
@@ -287,7 +296,7 @@
   margin: 36px 0;
 }
 .stats dt {
-  color: #b6c5bf;
+  color: var(--foreground);
   font-size: 0.8rem;
 }
 .stats dd {
@@ -295,7 +304,7 @@
   margin-top: 12px;
 }
 .progress {
-  background: #ffffff20;
+  background: color-mix(in srgb, var(--background) 12.55%, transparent);
   border-radius: 4px;
   height: 6px;
 }
@@ -303,12 +312,12 @@
   display: block;
   height: 100%;
   width: 33.333%;
-  background: #d6aa92;
+  background: var(--primary);
   border-radius: inherit;
 }
 .demoNote {
   font-size: 0.85rem;
-  color: #bdcbc4;
+  color: var(--foreground);
   line-height: 1.8;
   margin-top: 16px;
 }
@@ -327,7 +336,7 @@
 .timeline svg {
   width: 22px;
   height: 22px;
-  color: #d6aa92;
+  color: var(--primary);
   flex-shrink: 0;
 }
 .timeline span {
@@ -335,7 +344,7 @@
   gap: 4px;
 }
 .timeline small {
-  color: #aab6b1;
+  color: var(--muted-foreground);
 }
 .timeline strong {
   font-size: 0.95rem;
@@ -350,7 +359,7 @@
 .mapCredit {
   font-size: 0.75rem;
   line-height: 1.5;
-  color: #bdcbc4;
+  color: var(--foreground);
   margin-top: 12px;
 }
 .mapCredit a {
@@ -358,11 +367,11 @@
   text-underline-offset: 3px;
 }
 .journey {
-  background: #0b2326;
-  color: #f5f2e8;
+  background: var(--background);
+  color: var(--foreground);
 }
 .journey .intro {
-  color: #bacac2;
+  color: var(--foreground);
 }
 .steps {
   list-style: none;
@@ -373,26 +382,27 @@
   margin-top: 52px;
 }
 .steps li {
-  border-top: 1px solid #ffffff30;
+  border-top: 1px solid
+    color-mix(in srgb, var(--foreground) 18.82%, transparent);
   padding-top: 20px;
 }
 .stepNumber {
   display: block;
-  color: #d6aa92;
+  color: var(--primary);
   font: 0.8rem monospace;
 }
 .steps svg {
   width: 26px;
   height: 26px;
   margin: 30px 0 22px;
-  color: #d6aa92;
+  color: var(--primary);
 }
 .steps h3 {
   font-size: 1.3rem;
   line-height: 1.25;
 }
 .steps p {
-  color: #bacac2;
+  color: var(--foreground);
   line-height: 1.8;
   margin-top: 16px;
   font-size: 0.95rem;
@@ -404,7 +414,8 @@
   margin-top: 44px;
 }
 .availabilityGrid article {
-  border-top: 1px solid #0e2d3030;
+  border-top: 1px solid
+    color-mix(in srgb, var(--foreground) 18.82%, transparent);
   padding-top: 26px;
 }
 .availabilityGrid h3 {
@@ -414,13 +425,14 @@
 }
 .availabilityGrid p {
   margin-top: 20px;
-  color: #435e59;
+  color: var(--muted-foreground);
   font-size: 1rem;
   line-height: 1.8;
 }
 .privacy {
-  border-block: 1px solid #0e2d3020;
-  background: #dce0d5;
+  border-block: 1px solid
+    color-mix(in srgb, var(--foreground) 12.55%, transparent);
+  background: var(--background);
 }
 .privacy .section {
   display: flex;
@@ -432,20 +444,20 @@
   width: 38px;
   height: 38px;
   flex-shrink: 0;
-  color: #84553f;
+  color: var(--primary);
 }
 .privacy h2 {
   font-size: clamp(1.8rem, 3vw, 2.8rem);
 }
 .privacy p {
   max-width: 50em;
-  color: #435e59;
+  color: var(--muted-foreground);
   margin-top: 20px;
   line-height: 1.8;
 }
 .final {
-  background: #0e2d30;
-  color: #eeebe4;
+  background: var(--card);
+  color: var(--foreground);
 }
 .final .section {
   text-align: center;
@@ -566,4 +578,117 @@
   .page * {
     transition: none !important;
   }
+}
+
+/* Public editorial body. Shared site chrome is intentionally not targeted. */
+.page,
+.hero,
+.journey,
+.final,
+.privacy {
+  background: var(--capcar-editorial-paper);
+  color: var(--capcar-editorial-ink);
+}
+.page :is(h1, h2),
+.panelText h3 {
+  font-family: var(--capcar-editorial-display);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+}
+.section {
+  padding: var(--capcar-editorial-section) var(--capcar-editorial-gutter);
+}
+.heroInner {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  padding: var(--capcar-editorial-section) var(--capcar-editorial-gutter);
+}
+.intro,
+.panelText > p,
+.availabilityGrid p,
+.privacy p {
+  color: var(--capcar-editorial-muted);
+}
+.eyebrow,
+.panelIcon,
+.privacy svg {
+  color: var(--capcar-editorial-accent);
+}
+.tabs button {
+  border-radius: 0;
+  border-color: var(--capcar-editorial-rule);
+}
+.tabs button[aria-selected="true"] {
+  background: var(--capcar-editorial-accent);
+  color: var(--capcar-editorial-sheet-ink);
+}
+.tabs button:hover:not([aria-selected="true"]) {
+  background: transparent;
+  border-color: var(--capcar-editorial-accent);
+}
+.demo {
+  border-radius: 0;
+  background: transparent;
+  border-color: var(--capcar-editorial-rule);
+}
+.status {
+  border: 0;
+  padding-inline: 0;
+  color: var(--capcar-editorial-accent);
+}
+.availabilityGrid article,
+.privacy {
+  border-color: var(--capcar-editorial-rule);
+}
+.final .section {
+  text-align: left;
+}
+.final h2,
+.final .fine {
+  margin-inline: 0;
+}
+@media (max-width: 1000px) {
+  .heroInner {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 2.5rem;
+  }
+}
+
+/* Alternate workspace planes without changing the connected planning flow. */
+.hero {
+  background: linear-gradient(125deg, var(--background), var(--card));
+  border-bottom: 1px solid var(--border);
+}
+.hero .eyebrow {
+  color: var(--warm-accent);
+}
+.node {
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+.journey {
+  background: var(--section-tint);
+  border-block: 1px solid var(--border);
+}
+.journey .eyebrow {
+  color: var(--mint-accent);
+}
+.demo {
+  background: var(--card);
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: 16px;
+}
+.tabs button[aria-selected="true"] {
+  color: var(--primary-foreground);
+}
+.privacy {
+  background: var(--card);
+}
+.privacy svg {
+  color: var(--mint-accent);
+}
+.final {
+  background: var(--secondary);
+  border-top: 1px solid var(--border);
 }

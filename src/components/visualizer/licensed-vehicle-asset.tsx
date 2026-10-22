@@ -181,7 +181,7 @@ export function LicensedVehicleAsset({
       }
     >
       {state === "loading" && (
-        <div className="absolute inset-0 grid place-items-center text-sm text-white/45">
+        <div className="text-muted-foreground absolute inset-0 grid place-items-center text-sm">
           <span className="flex items-center gap-2">
             <LoaderCircle className="size-4" /> Verifying licensed model…
           </span>
