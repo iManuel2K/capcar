@@ -47,7 +47,10 @@ export function Marketplace({
         does not take payments or provide escrow.
       </p>
       {error && (
-        <div role="alert" className="border-primary/40 rounded-xl border p-4">
+        <div
+          role="alert"
+          className="border-destructive/40 rounded-xl border p-4"
+        >
           {error}
         </div>
       )}
@@ -202,7 +205,7 @@ export function Marketplace({
                 and can legally sell.
               </p>
               {invalidListing && (
-                <p role="alert" className="text-primary">
+                <p role="alert" className="text-destructive">
                   {trust("invalid")}
                 </p>
               )}

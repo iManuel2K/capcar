@@ -239,7 +239,7 @@ function ChecklistForm({
         )}
       </div>
       {error && (
-        <p role="alert" className="text-primary text-sm">
+        <p role="alert" className="text-destructive text-sm">
           {t.error}
         </p>
       )}
