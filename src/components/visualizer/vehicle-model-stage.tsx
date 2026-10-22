@@ -144,7 +144,7 @@ export function VehicleModelStage({
   }
 
   return (
-    <article className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#0a0d0c]">
+    <article className="bg-card overflow-hidden rounded-[2rem] border border-white/10">
       <div className="relative h-[520px] min-h-[420px] touch-none sm:h-[620px]">
         <canvas
           ref={canvasRef}
@@ -194,10 +194,10 @@ export function VehicleModelStage({
 
         <div className="pointer-events-none absolute inset-x-5 top-5 flex flex-wrap items-start justify-between gap-3">
           <div>
-            <span className="rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-[10px] tracking-[0.12em] text-white/55 uppercase backdrop-blur-md">
+            <span className="text-muted-foreground rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-[10px] tracking-[0.12em] uppercase backdrop-blur-md">
               {label}
             </span>
-            <p className="mt-3 text-xs text-white/30">
+            <p className="text-muted-foreground mt-3 text-xs">
               Drag to orbit · scroll or pinch to zoom
             </p>
           </div>
@@ -211,7 +211,7 @@ export function VehicleModelStage({
         </div>
 
         {!model && !error && (
-          <div className="absolute inset-0 grid place-items-center text-sm text-white/35">
+          <div className="text-muted-foreground absolute inset-0 grid place-items-center text-sm">
             <span className="flex items-center gap-2">
               <LoaderCircle className="size-4" /> Loading model…
             </span>
@@ -234,7 +234,7 @@ export function VehicleModelStage({
               type="button"
               title="Reset camera"
               onClick={() => setCamera(initialCamera)}
-              className="grid size-9 place-items-center rounded-lg text-white/45 hover:bg-white/8 hover:text-white"
+              className="text-muted-foreground hover:text-foreground grid size-9 place-items-center rounded-lg hover:bg-white/8"
             >
               <RotateCcw className="size-4" />
             </button>
@@ -247,7 +247,7 @@ export function VehicleModelStage({
                   zoom: Math.max(0.72, current.zoom - 0.1),
                 }))
               }
-              className="grid size-9 place-items-center rounded-lg text-white/45 hover:bg-white/8 hover:text-white"
+              className="text-muted-foreground hover:text-foreground grid size-9 place-items-center rounded-lg hover:bg-white/8"
             >
               <Minus className="size-4" />
             </button>
@@ -260,7 +260,7 @@ export function VehicleModelStage({
                   zoom: Math.min(1.38, current.zoom + 0.1),
                 }))
               }
-              className="grid size-9 place-items-center rounded-lg text-white/45 hover:bg-white/8 hover:text-white"
+              className="text-muted-foreground hover:text-foreground grid size-9 place-items-center rounded-lg hover:bg-white/8"
             >
               <Plus className="size-4" />
             </button>
@@ -274,16 +274,16 @@ export function VehicleModelStage({
             {model.accuracy === "dimensionally-verified" ? (
               <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-200" />
             ) : (
-              <Box className="mt-0.5 size-4 shrink-0 text-[#ff667a]" />
+              <Box className="text-primary mt-0.5 size-4 shrink-0" />
             )}
             <div>
               <p className="text-sm text-white/65">{model.provider}</p>
-              <p className="mt-1 text-xs text-white/30">
+              <p className="text-muted-foreground mt-1 text-xs">
                 {model.dimensions.length} × {model.dimensions.width} ×{" "}
                 {model.dimensions.height} mm · revision {model.revision}
               </p>
               {model.delivery && (
-                <p className="mt-1 text-xs text-white/30">
+                <p className="text-muted-foreground mt-1 text-xs">
                   {model.license.name ?? "Commercial-use rights confirmed"}
                   {model.license.attribution
                     ? ` · ${model.license.attribution}`
@@ -292,7 +292,7 @@ export function VehicleModelStage({
               )}
             </div>
           </div>
-          <span className="inline-flex items-center gap-2 text-xs text-white/30">
+          <span className="text-muted-foreground inline-flex items-center gap-2 text-xs">
             <Orbit className="size-4" />{" "}
             {model.delivery
               ? `Integrity-checked GLB · ${(model.delivery.byteLength / 1_000_000).toFixed(1)} MB`
@@ -309,7 +309,7 @@ function Control({ label, onClick }: { label: string; onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="min-h-9 rounded-lg px-3 text-xs text-white/45 hover:bg-white/8 hover:text-white sm:block"
+      className="text-muted-foreground hover:text-foreground min-h-9 rounded-lg px-3 text-xs hover:bg-white/8 sm:block"
     >
       {label}
     </button>

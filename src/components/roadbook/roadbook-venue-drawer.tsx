@@ -110,16 +110,16 @@ export function RoadbookVenueDrawer({
   return (
     <aside
       aria-label={t("details.label")}
-      className="absolute inset-x-2 bottom-2 z-30 max-h-[72%] overflow-y-auto rounded-[1.6rem] border border-white/12 bg-[#0a0f0c]/96 text-white shadow-[0_24px_90px_rgba(0,0,0,.45)] backdrop-blur-2xl lg:inset-y-3 lg:right-3 lg:left-auto lg:max-h-none lg:w-[26rem]"
+      className="bg-card/96 text-foreground absolute inset-x-2 bottom-2 z-30 max-h-[72%] overflow-y-auto rounded-[1.6rem] border border-white/12 shadow-[0_24px_90px_rgba(0,0,0,.45)] backdrop-blur-2xl lg:inset-y-3 lg:right-3 lg:left-auto lg:max-h-none lg:w-[26rem]"
     >
-      <div className="sticky top-0 z-10 flex items-start justify-between gap-5 border-b border-white/8 bg-[#0a0f0c]/94 p-5 backdrop-blur-xl">
+      <div className="bg-card/94 sticky top-0 z-10 flex items-start justify-between gap-5 border-b border-white/8 p-5 backdrop-blur-xl">
         <div>
           <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold tracking-[0.12em] uppercase">
-            <span className="text-[#ff667a]">
+            <span className="text-primary">
               {t(`categories.${venue.category}`)}
             </span>
-            <span className="text-white/25">·</span>
-            <span className="text-white/45">
+            <span className="text-muted-foreground">·</span>
+            <span className="text-muted-foreground">
               {venue.city || venue.countryCode}
             </span>
           </div>
@@ -131,7 +131,7 @@ export function RoadbookVenueDrawer({
           type="button"
           aria-label={t("details.close")}
           onClick={onClose}
-          className="grid size-10 shrink-0 place-items-center rounded-full border border-white/10 text-white/55 transition hover:bg-white/8 hover:text-white"
+          className="text-muted-foreground hover:text-foreground grid size-10 shrink-0 place-items-center rounded-full border border-white/10 transition hover:bg-white/8"
         >
           <X aria-hidden="true" className="size-4" />
         </button>
@@ -157,7 +157,7 @@ export function RoadbookVenueDrawer({
                 href={heroImage.sourceUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-8 items-center gap-1.5 text-right transition hover:text-white"
+                className="hover:text-foreground inline-flex min-h-8 items-center gap-1.5 text-right transition"
               >
                 {t("media.credit", { photographer: heroImage.photographer })}
                 <ExternalLink className="size-3" />
@@ -175,7 +175,9 @@ export function RoadbookVenueDrawer({
         )}
         {isPhotoSpot && <SafetyNotice text={t("photoSpot.safety")} />}
 
-        <p className="text-sm leading-6 text-white/55">{venue.description}</p>
+        <p className="text-muted-foreground text-sm leading-6">
+          {venue.description}
+        </p>
 
         {isPhotoSpot && photoSpot && (
           <section
@@ -205,13 +207,15 @@ export function RoadbookVenueDrawer({
                 ] as const
               ).map(([key, value]) => (
                 <div key={key} className="min-w-0">
-                  <dt className="text-white/40">{t(`photoSpot.${key}`)}</dt>
+                  <dt className="text-muted-foreground">
+                    {t(`photoSpot.${key}`)}
+                  </dt>
                   <dd className="mt-1 break-words text-white/80">{value}</dd>
                 </div>
               ))}
             </dl>
             {photoSpot.tags.length > 0 && (
-              <p className="text-xs text-white/55">
+              <p className="text-muted-foreground text-xs">
                 {photoSpot.tags
                   .map((tag) => t(`photoSpot.tags.${tag}`))
                   .join(" · ")}
@@ -222,7 +226,7 @@ export function RoadbookVenueDrawer({
                 href={photoSpot.imageUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 text-xs text-[#ff9baa] underline"
+                className="text-primary inline-flex min-h-11 items-center gap-2 text-xs underline"
               >
                 {t("photoSpot.example")} · {photoSpot.imageLicense}
                 <ExternalLink className="size-3" />
@@ -232,13 +236,13 @@ export function RoadbookVenueDrawer({
         )}
 
         {events.length > 0 && (
-          <section className="rounded-2xl border border-[#ff667a]/20 bg-[#ff667a]/[0.055] p-4">
+          <section className="border-primary/20 bg-primary text-primary-foreground/[0.055] rounded-2xl border p-4">
             <div className="flex items-center justify-between gap-3">
               <h3 className="inline-flex items-center gap-2 text-sm font-semibold">
-                <CalendarDays className="size-4 text-[#ff667a]" />
+                <CalendarDays className="text-primary size-4" />
                 {t("events.atVenue")}
               </h3>
-              <span className="rounded-full bg-white/7 px-2 py-1 text-[10px] text-white/45">
+              <span className="text-muted-foreground rounded-full bg-white/7 px-2 py-1 text-[10px]">
                 {events.length}
               </span>
             </div>
@@ -264,17 +268,17 @@ export function RoadbookVenueDrawer({
                     key={event.id}
                     className="rounded-xl border border-white/9 bg-black/15 p-3"
                   >
-                    <p className="text-[10px] font-semibold tracking-[0.1em] text-[#ff9baa] uppercase">
+                    <p className="text-primary text-[10px] font-semibold tracking-[0.1em] uppercase">
                       {t(`events.types.${event.eventType}`)} · {date}
                     </p>
                     <p className="mt-1 text-sm font-semibold text-white/85">
                       {event.title}
                     </p>
-                    <p className="mt-1 text-[11px] text-white/38">
+                    <p className="text-muted-foreground mt-1 text-[11px]">
                       {t(`events.participation.${event.participation}`)}
                     </p>
                     {event.description && (
-                      <p className="mt-1 text-xs leading-5 text-white/42">
+                      <p className="text-muted-foreground mt-1 text-xs leading-5">
                         {event.description}
                       </p>
                     )}
@@ -282,7 +286,7 @@ export function RoadbookVenueDrawer({
                       href={event.bookingUrl ?? event.sourceUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="mt-2 inline-flex min-h-8 items-center gap-1.5 text-xs font-semibold text-[#ff788a]"
+                      className="text-primary mt-2 inline-flex min-h-8 items-center gap-1.5 text-xs font-semibold"
                     >
                       {event.bookingUrl
                         ? t("events.booking")
@@ -349,14 +353,14 @@ export function RoadbookVenueDrawer({
               <CheckCircle2 className="size-4 text-[#6bd2ae]" />
               {t(`verification.${venue.verificationStatus}`)}
             </span>
-            <span className="text-xs text-white/35">
+            <span className="text-muted-foreground text-xs">
               {(venue.distanceM / 1000).toLocaleString(locale, {
                 maximumFractionDigits: 0,
               })}{" "}
               km
             </span>
           </div>
-          <p className="mt-2 text-xs leading-5 text-white/40">
+          <p className="text-muted-foreground mt-2 text-xs leading-5">
             {venue.verifiedAt
               ? t("details.verifiedOn", {
                   date: new Intl.DateTimeFormat(locale, {
@@ -369,7 +373,7 @@ export function RoadbookVenueDrawer({
             href={venue.sourceUrl}
             target="_blank"
             rel="noreferrer"
-            className="mt-3 inline-flex min-h-10 items-center gap-2 text-xs font-semibold text-[#ff788a] underline-offset-4 hover:underline"
+            className="text-primary mt-3 inline-flex min-h-10 items-center gap-2 text-xs font-semibold underline-offset-4 hover:underline"
           >
             {venue.sourceLabel} <ExternalLink className="size-3.5" />
           </a>
@@ -378,7 +382,7 @@ export function RoadbookVenueDrawer({
         <div className="rounded-2xl border border-white/9 bg-white/[0.035] p-4">
           <label
             htmlFor="roadbook-vehicle"
-            className="text-xs font-semibold tracking-[0.1em] text-white/40 uppercase"
+            className="text-muted-foreground text-xs font-semibold tracking-[0.1em] uppercase"
           >
             {t("vehicle.label")}
           </label>
@@ -386,7 +390,7 @@ export function RoadbookVenueDrawer({
             id="roadbook-vehicle"
             value={vehicleId ?? ""}
             onChange={(event) => onVehicleChange(event.target.value)}
-            className="mt-3 min-h-11 w-full rounded-xl border border-white/12 bg-[#111713] px-3 text-sm text-white outline-none focus:border-[#e72d45]"
+            className="bg-card text-foreground focus:border-primary mt-3 min-h-11 w-full rounded-xl border border-white/12 px-3 text-sm outline-none"
           >
             <option value="">{t("vehicle.choose")}</option>
             {vehicles.map((vehicle) => (
@@ -401,7 +405,7 @@ export function RoadbookVenueDrawer({
               {readiness.map((check) => (
                 <div
                   key={check.key}
-                  className="flex items-start gap-2 text-xs leading-5 text-white/48"
+                  className="text-muted-foreground flex items-start gap-2 text-xs leading-5"
                 >
                   {check.state === "ready" ? (
                     <Check className="mt-0.5 size-3.5 shrink-0 text-[#6bd2ae]" />
@@ -440,7 +444,7 @@ export function RoadbookVenueDrawer({
                 explainError(caught);
               }
             }}
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-white transition hover:bg-[#f13d54] disabled:cursor-not-allowed disabled:opacity-45"
+            className="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-45"
           >
             {saveState === "done" ? (
               <Check className="size-4" />
@@ -463,7 +467,7 @@ export function RoadbookVenueDrawer({
               href={venue.bookingUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/12 px-4 text-sm font-semibold text-white/75 hover:bg-white/7 hover:text-white"
+              className="hover:text-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/12 px-4 text-sm font-semibold text-white/75 hover:bg-white/7"
             >
               {t("actions.booking")} <ExternalLink className="size-4" />
             </a>
@@ -472,7 +476,7 @@ export function RoadbookVenueDrawer({
               href={venue.sourceUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/12 px-4 text-sm font-semibold text-white/75 hover:bg-white/7 hover:text-white"
+              className="hover:text-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/12 px-4 text-sm font-semibold text-white/75 hover:bg-white/7"
             >
               {t("actions.checkSource")} <ExternalLink className="size-4" />
             </a>
@@ -481,22 +485,21 @@ export function RoadbookVenueDrawer({
 
         <details className="rounded-2xl border border-white/9 bg-white/[0.025] p-4">
           <summary className="flex min-h-8 cursor-pointer list-none items-center gap-2 text-sm font-semibold [&::-webkit-details-marker]:hidden">
-            <CalendarDays className="size-4 text-[#ff667a]" />{" "}
-            {t("visit.title")}
+            <CalendarDays className="text-primary size-4" /> {t("visit.title")}
           </summary>
           <div className="mt-4 grid gap-3">
-            <label className="grid gap-1.5 text-xs text-white/48">
+            <label className="text-muted-foreground grid gap-1.5 text-xs">
               {t("visit.date")}
               <input
                 type="date"
                 max={new Date().toISOString().slice(0, 10)}
                 value={visitDate}
                 onChange={(event) => setVisitDate(event.target.value)}
-                className="min-h-11 rounded-xl border border-white/12 bg-[#111713] px-3 text-sm text-white"
+                className="bg-card text-foreground min-h-11 rounded-xl border border-white/12 px-3 text-sm"
               />
             </label>
             {!isPhotoSpot && (
-              <label className="grid gap-1.5 text-xs text-white/48">
+              <label className="text-muted-foreground grid gap-1.5 text-xs">
                 {t("visit.lap")}
                 <input
                   type="number"
@@ -506,18 +509,18 @@ export function RoadbookVenueDrawer({
                   value={bestLap}
                   onChange={(event) => setBestLap(event.target.value)}
                   placeholder={t("visit.lapPlaceholder")}
-                  className="min-h-11 rounded-xl border border-white/12 bg-[#111713] px-3 text-sm text-white placeholder:text-white/25"
+                  className="bg-card text-foreground placeholder:text-muted-foreground min-h-11 rounded-xl border border-white/12 px-3 text-sm"
                 />
               </label>
             )}
-            <label className="grid gap-1.5 text-xs text-white/48">
+            <label className="text-muted-foreground grid gap-1.5 text-xs">
               {t("visit.notes")}
               <textarea
                 value={visitNotes}
                 onChange={(event) => setVisitNotes(event.target.value)}
                 maxLength={2000}
                 rows={3}
-                className="rounded-xl border border-white/12 bg-[#111713] px-3 py-2 text-sm text-white"
+                className="bg-card text-foreground rounded-xl border border-white/12 px-3 py-2 text-sm"
               />
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -555,7 +558,7 @@ export function RoadbookVenueDrawer({
                 onChange={(event) => setObdFile(event.target.files?.[0])}
               />
             </div>
-            <p className="text-[11px] leading-5 text-white/34">
+            <p className="text-muted-foreground text-[11px] leading-5">
               {t("visit.evidenceNotice")}
             </p>
             <button
@@ -590,7 +593,7 @@ export function RoadbookVenueDrawer({
                   explainError(caught);
                 }
               }}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#f1eadf] px-4 text-sm font-semibold text-[#102e30] disabled:cursor-not-allowed disabled:opacity-45"
+              className="bg-background text-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-45"
             >
               {recordState === "done" ? (
                 <Check className="size-4" />
@@ -615,14 +618,14 @@ export function RoadbookVenueDrawer({
               maxLength={1000}
               rows={3}
               placeholder={t("report.placeholder")}
-              className="rounded-xl border border-white/12 bg-[#111713] px-3 py-2 text-sm text-white placeholder:text-white/25"
+              className="bg-card text-foreground placeholder:text-muted-foreground rounded-xl border border-white/12 px-3 py-2 text-sm"
             />
             <input
               type="url"
               value={evidenceUrl}
               onChange={(event) => setEvidenceUrl(event.target.value)}
               placeholder={t("report.sourcePlaceholder")}
-              className="min-h-11 rounded-xl border border-white/12 bg-[#111713] px-3 text-sm text-white placeholder:text-white/25"
+              className="bg-card text-foreground placeholder:text-muted-foreground min-h-11 rounded-xl border border-white/12 px-3 text-sm"
             />
             <button
               type="button"
@@ -674,8 +677,8 @@ function Fact({
 }) {
   return (
     <div className="min-h-23 rounded-xl border border-white/8 bg-white/[0.025] p-3">
-      <Icon aria-hidden="true" className="size-3.5 text-white/35" />
-      <p className="mt-3 text-[10px] tracking-[0.1em] text-white/28 uppercase">
+      <Icon aria-hidden="true" className="text-muted-foreground size-3.5" />
+      <p className="text-muted-foreground mt-3 text-[10px] tracking-[0.1em] uppercase">
         {label}
       </p>
       <p className="mt-1 text-xs leading-5 text-white/70">{value}</p>

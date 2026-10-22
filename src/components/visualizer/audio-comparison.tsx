@@ -38,9 +38,9 @@ export function AudioComparison() {
     <section
       id="compare"
       aria-labelledby="audio-comparison-heading"
-      className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-[#0e2d30] p-5 text-[#e8e6d7] sm:p-8"
+      className="bg-card text-foreground scroll-mt-28 rounded-[2rem] border border-white/10 p-5 sm:p-8"
     >
-      <p className="mb-3 text-xs font-medium tracking-[.18em] text-[#cfaa96] uppercase">
+      <p className="text-primary mb-3 text-xs font-medium tracking-[.18em] uppercase">
         02 / {s("compare")}
       </p>
       <h2
@@ -49,14 +49,14 @@ export function AudioComparison() {
       >
         {t("abTitle")}
       </h2>
-      <p className="mt-3 max-w-3xl text-sm leading-6 text-[#e8e6d7]/70">
+      <p className="text-foreground/70 mt-3 max-w-3xl text-sm leading-6">
         {t("abDescription")}
       </p>
       <div className="mt-6 grid gap-5 md:grid-cols-2">
         {(["stock", "modified"] as const).map((side) => (
           <div
             key={side}
-            className="min-w-0 rounded-2xl border border-white/15 bg-[#0b2326] p-4 sm:p-5"
+            className="bg-background min-w-0 rounded-2xl border border-white/15 p-4 sm:p-5"
           >
             <div>
               <p className="font-medium">
@@ -118,7 +118,7 @@ export function AudioComparison() {
           </div>
         ))}
       </div>
-      <p className="mt-4 text-sm leading-6 text-[#e8e6d7]/65">
+      <p className="text-foreground/65 mt-4 text-sm leading-6">
         {t("localOnly")}
       </p>
       <p role="status" className="mt-3 text-sm">

@@ -1,3 +1,4 @@
+import { brandPalette } from "@/features/ui/brand-palette";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -357,14 +358,14 @@ export function createCarModelRenderer(
       const context = image.getContext("2d");
       if (!context || !loadedCar) throw new Error("Image export unavailable");
       context.drawImage(renderer.domElement, 0, 0);
-      context.fillStyle = "#0e2d30";
+      context.fillStyle = brandPalette.background;
       context.fillRect(
         0,
         renderer.domElement.height,
         image.width,
         creditHeight,
       );
-      context.fillStyle = "#e8e6d7";
+      context.fillStyle = brandPalette.foreground;
       context.font = "14px sans-serif";
       const top = renderer.domElement.height;
       context.fillText(

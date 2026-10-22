@@ -26,11 +26,11 @@
   border-radius: 99px;
   padding: 0.6rem 0.8rem;
   cursor: pointer;
-  color: #0e2d30;
+  color: var(--foreground);
 }
 .trigger:hover,
 .trigger[aria-expanded="true"] {
-  background: #0e2d300d;
+  background: color-mix(in srgb, var(--card) 5.1%, transparent);
 }
 .trigger svg {
   transition: transform 0.2s ease;
@@ -45,11 +45,11 @@
   z-index: 90;
   width: min(44rem, calc(100vw - 4rem));
   overflow: hidden;
-  border: 1px solid #bf82694d;
+  border: 1px solid color-mix(in srgb, var(--primary) 30.2%, transparent);
   border-radius: 1.5rem;
-  background: #0b2326;
-  color: #f5f2e8;
-  box-shadow: 0 24px 60px #04141640;
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: 0 24px 60px color-mix(in srgb, #000000 25.1%, transparent);
 }
 .content {
   display: grid;
@@ -64,7 +64,7 @@
   font-family: monospace;
   font-size: 0.65rem;
   letter-spacing: 0.12em;
-  color: #d6aa92;
+  color: var(--primary);
 }
 .intro p {
   margin-top: 1rem;
@@ -91,16 +91,16 @@
 }
 .links a:hover,
 .links a[aria-current="page"] {
-  background: #bf82691f;
-  color: #d6aa92;
+  background: color-mix(in srgb, var(--primary) 12.16%, transparent);
+  color: var(--primary);
 }
 .links svg {
   flex: none;
-  color: #d6aa92;
+  color: var(--primary);
 }
 .trigger:focus-visible,
 .links a:focus-visible {
-  outline: 2px solid #bf8269;
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 @media (prefers-reduced-motion: reduce) {

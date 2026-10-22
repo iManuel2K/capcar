@@ -23,20 +23,22 @@ export function DiagnosticsDashboard({ vehicleId }: { vehicleId: string }) {
 
   if (!vehicle)
     return (
-      <div className="py-32 text-center text-white/45">Vehicle not found.</div>
+      <div className="text-muted-foreground py-32 text-center">
+        Vehicle not found.
+      </div>
     );
 
   return (
     <div className="pb-24 sm:pb-0">
-      <header className="flex flex-col gap-6 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10 lg:flex-row lg:items-end lg:justify-between">
+      <header className="flex flex-col gap-6 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(184,199,217,0.2),transparent_30%),#111111] p-6 sm:p-10 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
+          <p className="text-primary text-xs font-semibold tracking-[0.15em] uppercase">
             Diagnostic log
           </p>
           <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
             Faults need context.
           </h1>
-          <p className="mt-4 max-w-2xl leading-7 text-white/45">
+          <p className="text-muted-foreground mt-4 max-w-2xl leading-7">
             Record manual OBD-II readings, symptoms and the work that resolved
             them. A code is evidence—not a diagnosis.
           </p>
@@ -44,7 +46,7 @@ export function DiagnosticsDashboard({ vehicleId }: { vehicleId: string }) {
         <button
           type="button"
           onClick={() => setFormOpen((value) => !value)}
-          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-white"
+          className="bg-primary text-primary-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold"
         >
           <Plus className="size-4" /> Log fault code
         </button>
@@ -74,7 +76,7 @@ export function DiagnosticsDashboard({ vehicleId }: { vehicleId: string }) {
         </p>
       )}
 
-      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
+      <section className="bg-card mt-5 rounded-[2rem] border border-white/10 p-5 sm:p-8">
         <div className="grid gap-3 sm:grid-cols-3">
           <Summary
             label="Open"
@@ -96,9 +98,9 @@ export function DiagnosticsDashboard({ vehicleId }: { vehicleId: string }) {
         </div>
         {records.length === 0 ? (
           <div className="mt-7 flex min-h-64 flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 text-center">
-            <ScanLine className="size-8 text-white/18" />
+            <ScanLine className="text-muted-foreground size-8" />
             <h2 className="mt-5 text-xl font-medium">No diagnostic records</h2>
-            <p className="mt-2 max-w-sm text-sm leading-6 text-white/38">
+            <p className="text-muted-foreground mt-2 max-w-sm text-sm leading-6">
               Add the exact DTC, mileage and observed symptoms after reading the
               vehicle.
             </p>
@@ -157,7 +159,7 @@ function DiagnosticForm({
   return (
     <form
       onSubmit={submit}
-      className="mt-5 rounded-[2rem] border border-[#e72d45]/20 bg-[#151010] p-5 sm:p-8"
+      className="border-primary/20 bg-card mt-5 rounded-[2rem] border p-5 sm:p-8"
     >
       <div className="grid gap-4 md:grid-cols-2">
         <Field name="code" label="DTC code" placeholder="P0420" required />
@@ -167,12 +169,12 @@ function DiagnosticForm({
           placeholder="Catalyst efficiency below threshold"
           required
         />
-        <label className="text-xs text-white/45">
+        <label className="text-muted-foreground text-xs">
           Severity
           <select
             name="severity"
             defaultValue="warning"
-            className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-[#0b0b0b] px-4 text-sm"
+            className="bg-background mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm"
           >
             <option value="info">Information</option>
             <option value="warning">Warning</option>
@@ -187,13 +189,13 @@ function DiagnosticForm({
           type="number"
           required
         />
-        <label className="text-xs text-white/45 md:col-span-2">
+        <label className="text-muted-foreground text-xs md:col-span-2">
           Observed symptoms
           <textarea
             name="symptoms"
             required
             placeholder="When it appeared, sound, temperature and driving conditions"
-            className="mt-2 min-h-28 w-full rounded-xl border border-white/12 bg-[#0b0b0b] p-4 text-sm placeholder:text-white/20 focus:border-[#e72d45] focus:outline-none"
+            className="bg-background placeholder:text-muted-foreground focus:border-primary mt-2 min-h-28 w-full rounded-xl border border-white/12 p-4 text-sm focus:outline-none"
           />
         </label>
       </div>
@@ -201,11 +203,11 @@ function DiagnosticForm({
         <button
           type="button"
           onClick={onClose}
-          className="min-h-11 rounded-xl border border-white/10 px-4 text-sm text-white/50"
+          className="text-muted-foreground min-h-11 rounded-xl border border-white/10 px-4 text-sm"
         >
           Cancel
         </button>
-        <button className="min-h-11 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-white">
+        <button className="bg-primary text-primary-foreground min-h-11 rounded-xl px-5 text-sm font-semibold">
           Save diagnostic
         </button>
       </div>
@@ -246,11 +248,11 @@ function DiagnosticCard({
     critical: "border-red-300/20 bg-red-300/8 text-red-200",
   }[record.severity];
   return (
-    <article className="rounded-2xl border border-white/8 bg-[#0c0c0c] p-5">
+    <article className="bg-card rounded-2xl border border-white/8 p-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-lg font-semibold text-white">
+            <span className="text-foreground font-mono text-lg font-semibold">
               {record.code}
             </span>
             <span
@@ -260,10 +262,10 @@ function DiagnosticCard({
             </span>
           </div>
           <h3 className="mt-3 font-medium text-white/85">{record.title}</h3>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-white/40">
+          <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-6">
             {record.symptoms}
           </p>
-          <p className="mt-3 text-xs text-white/25">
+          <p className="text-muted-foreground mt-3 text-xs">
             Logged at {record.mileage.toLocaleString("en-US")} km
           </p>
         </div>
@@ -273,7 +275,7 @@ function DiagnosticCard({
           onChange={(event) =>
             setStatus(event.target.value as DiagnosticStatus)
           }
-          className="min-h-10 rounded-xl border border-white/10 bg-[#171717] px-3 text-xs"
+          className="bg-card min-h-10 rounded-xl border border-white/10 px-3 text-xs"
         >
           <option value="open">Open</option>
           <option value="monitoring">Monitoring</option>
@@ -287,7 +289,7 @@ function DiagnosticCard({
           value={resolution}
           onChange={(event) => setResolution(event.target.value)}
           placeholder="Resolution steps or workshop finding"
-          className="min-h-11 rounded-xl border border-white/10 bg-[#151515] px-4 text-sm placeholder:text-white/20 focus:outline-none"
+          className="bg-card placeholder:text-muted-foreground min-h-11 rounded-xl border border-white/10 px-4 text-sm focus:outline-none"
         />
         <button
           type="button"
@@ -323,7 +325,7 @@ function Field({
   defaultValue?: string;
 }) {
   return (
-    <label className="text-xs text-white/45">
+    <label className="text-muted-foreground text-xs">
       {label}
       <input
         name={name}
@@ -331,7 +333,7 @@ function Field({
         required={required}
         defaultValue={defaultValue}
         placeholder={placeholder}
-        className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-[#0b0b0b] px-4 text-sm placeholder:text-white/20 focus:border-[#e72d45] focus:outline-none"
+        className="bg-background placeholder:text-muted-foreground focus:border-primary mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm focus:outline-none"
       />
     </label>
   );
@@ -351,9 +353,9 @@ function Summary({
     green: "text-emerald-200",
   }[tone];
   return (
-    <div className="rounded-xl border border-white/8 bg-[#0c0c0c] p-4">
+    <div className="bg-card rounded-xl border border-white/8 p-4">
       <p className={`text-2xl font-medium ${color}`}>{value}</p>
-      <p className="mt-1 text-xs text-white/30">{label}</p>
+      <p className="text-muted-foreground mt-1 text-xs">{label}</p>
     </div>
   );
 }

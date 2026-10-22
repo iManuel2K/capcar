@@ -13,7 +13,7 @@ const TripRouteMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="grid min-h-[34rem] place-items-center bg-[#0e2d30]">
+      <div className="bg-card grid min-h-[34rem] place-items-center">
         <LoadingIndicator />
       </div>
     ),

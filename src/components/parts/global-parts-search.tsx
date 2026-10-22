@@ -39,10 +39,10 @@ export function GlobalPartsSearch({
         {t("label")}
       </label>
       <div
-        className={`flex min-h-11 items-center rounded-full border px-3 transition focus-within:ring-2 ${dark ? "border-white/10 bg-white/[0.04] focus-within:ring-[#e72d45]/40" : "border-[#0e2d30]/14 bg-white/35 focus-within:ring-[#6d0101]/25"}`}
+        className={`flex min-h-11 items-center rounded-full border px-3 transition focus-within:ring-2 ${dark ? "focus-within:ring-primary/40 border-white/10 bg-white/[0.04]" : "border-foreground/14 bg-card focus-within:ring-primary/25"}`}
       >
         <Search
-          className={`size-4 shrink-0 ${dark ? "text-white/40" : "text-[#0e2d30]/45"}`}
+          className={`size-4 shrink-0 ${dark ? "text-muted-foreground" : "text-muted-foreground"}`}
           aria-hidden="true"
         />
         <input
@@ -52,12 +52,12 @@ export function GlobalPartsSearch({
           type="search"
           maxLength={80}
           placeholder={t("placeholder")}
-          className={`min-w-0 flex-1 bg-transparent px-2 text-sm outline-none ${dark ? "text-white placeholder:text-white/30" : "text-[#0e2d30] placeholder:text-[#0e2d30]/42"}`}
+          className={`min-w-0 flex-1 bg-transparent px-2 text-sm outline-none ${dark ? "text-foreground placeholder:text-muted-foreground" : "text-foreground placeholder:text-muted-foreground"}`}
         />
         <button
           type="submit"
           disabled={pending}
-          className={`rounded-full px-2 py-1 text-[10px] font-semibold uppercase ${dark ? "text-[#ff667a]" : "text-[#6d0101]"}`}
+          className={`rounded-full px-2 py-1 text-[10px] font-semibold uppercase ${dark ? "text-primary" : "text-primary"}`}
         >
           {pending ? t("searching") : t("find")}
         </button>

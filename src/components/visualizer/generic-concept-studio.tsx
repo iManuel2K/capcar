@@ -11,7 +11,7 @@ import {
 import type { createConceptRenderer } from "./concept-renderer";
 
 const button =
-  "min-h-11 rounded-full border border-[#0e2d30]/30 px-4 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6d0101] disabled:opacity-40";
+  "min-h-11 rounded-full border border-foreground/30 px-4 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:opacity-40";
 
 export interface ConceptStudioProps {
   initialConcept?: Concept;
@@ -64,7 +64,7 @@ export function GenericConceptStudio({
     };
   }, [active, value.model, attempt]);
   return (
-    <div className="overflow-hidden rounded-3xl border border-[#0e2d30]/20 bg-[#f3f1e7] text-[#0e2d30]">
+    <div className="border-foreground/20 bg-background text-foreground overflow-hidden rounded-3xl border">
       <div className="grid lg:grid-cols-[1.5fr_1fr]">
         <div className="min-w-0 p-5 sm:p-8">
           <p className="text-xs font-semibold tracking-widest uppercase">
@@ -72,7 +72,7 @@ export function GenericConceptStudio({
           </p>
           <div
             ref={host}
-            className="relative my-5 h-64 overflow-hidden rounded-2xl bg-[#dfdfd2] sm:h-96"
+            className="bg-background relative my-5 h-64 overflow-hidden rounded-2xl sm:h-96"
           >
             {!active && (
               <div className="flex h-full flex-col items-center justify-center gap-4 px-5 text-center">
@@ -135,11 +135,11 @@ export function GenericConceptStudio({
             </div>
           )}
         </div>
-        <div className="space-y-6 border-t border-[#0e2d30]/15 p-5 sm:p-8 lg:border-t-0 lg:border-l">
+        <div className="border-foreground/15 space-y-6 border-t p-5 sm:p-8 lg:border-t-0 lg:border-l">
           <label className="block text-sm font-semibold">
             Silhouette
             <select
-              className="mt-2 block min-h-12 w-full rounded-xl border border-[#0e2d30]/30 bg-transparent px-3"
+              className="border-foreground/30 mt-2 block min-h-12 w-full rounded-xl border bg-transparent px-3"
               value={value.model}
               onChange={(event) =>
                 setValue({
@@ -160,7 +160,7 @@ export function GenericConceptStudio({
                 <button
                   key={name}
                   aria-pressed={value.paint === name}
-                  className={`${button} ${value.paint === name ? "ring-2 ring-[#0e2d30]" : ""}`}
+                  className={`${button} ${value.paint === name ? "ring-foreground ring-2" : ""}`}
                   onClick={() =>
                     setValue({ ...value, paint: name as Concept["paint"] })
                   }
@@ -183,7 +183,7 @@ export function GenericConceptStudio({
               {(["stock", "sport"] as const).map((stance) => (
                 <button
                   key={stance}
-                  className={`${button} ${value.stance === stance ? "bg-[#0e2d30] text-[#e8e6d7]" : ""}`}
+                  className={`${button} ${value.stance === stance ? "bg-card text-foreground" : ""}`}
                   aria-pressed={value.stance === stance}
                   onClick={() => setValue({ ...value, stance })}
                 >
@@ -195,7 +195,7 @@ export function GenericConceptStudio({
           <label className="flex min-h-11 items-center gap-3 text-sm">
             <input
               type="checkbox"
-              className="size-5 accent-[#0e2d30]"
+              className="accent-foreground size-5"
               checked={value.spoiler}
               disabled={value.model !== "sedan-sports"}
               onChange={(event) =>
@@ -254,7 +254,7 @@ export function GenericConceptStudio({
           </p>
         </div>
       </div>
-      <div className="border-t border-[#0e2d30]/15 p-5 sm:p-8">
+      <div className="border-foreground/15 border-t p-5 sm:p-8">
         <h3 className="text-xl font-medium">Cinema-inspired directions</h3>
         <p className="mt-2 text-sm leading-6">
           Original themes, not film-car replicas. No studio or manufacturer
@@ -264,7 +264,7 @@ export function GenericConceptStudio({
           {conceptPresets.map((preset) => (
             <button
               key={preset.name}
-              className="rounded-2xl border border-[#0e2d30]/25 p-5 text-left focus-visible:outline-2 focus-visible:outline-offset-4"
+              className="border-foreground/25 rounded-2xl border p-5 text-left focus-visible:outline-2 focus-visible:outline-offset-4"
               onClick={() => setValue({ ...preset.value })}
             >
               <span className="block font-semibold">{preset.name}</span>
@@ -275,7 +275,7 @@ export function GenericConceptStudio({
           ))}
         </div>
       </div>
-      <p className="border-t border-[#0e2d30]/15 px-5 py-4 text-xs leading-6 sm:px-8">
+      <p className="border-foreground/15 border-t px-5 py-4 text-xs leading-6 sm:px-8">
         Models:{" "}
         <a className="underline" href="https://kenney.nl/assets/car-kit">
           Kenney Car Kit

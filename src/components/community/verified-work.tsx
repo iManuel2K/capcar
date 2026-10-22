@@ -40,7 +40,7 @@ export function VerifiedWork({
             </p>
           ) : (
             <form
-              className="space-y-4 rounded-2xl border border-[#0e2d30]/20 p-5"
+              className="border-foreground/20 space-y-4 rounded-2xl border p-5"
               onSubmit={async (event) => {
                 event.preventDefault();
                 const form = event.currentTarget;
@@ -137,7 +137,7 @@ export function VerifiedWork({
             return (
               <article
                 key={stamp.id}
-                className="space-y-3 rounded-2xl border border-[#0e2d30]/20 p-5"
+                className="border-foreground/20 space-y-3 rounded-2xl border p-5"
               >
                 <p className="text-xs uppercase">
                   {stamp.status === "verified" && !specialist

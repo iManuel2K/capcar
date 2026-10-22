@@ -32,11 +32,14 @@ function ScreenImage({
   if (failed)
     return (
       <div
-        className="absolute inset-0 flex items-center justify-center bg-[#142b2d]"
+        className="bg-card absolute inset-0 flex items-center justify-center"
         role="img"
         aria-label={alt}
       >
-        <Clapperboard aria-hidden="true" className="size-12 text-white/30" />
+        <Clapperboard
+          aria-hidden="true"
+          className="text-muted-foreground size-12"
+        />
       </div>
     );
   return (
@@ -72,14 +75,14 @@ export function IconicGallery() {
   return (
     <section
       aria-label={g("collection")}
-      className="overflow-hidden rounded-[2rem] border border-[#0e2d30]/15 bg-[#091c1f] text-[#e8e6d7] shadow-[0_24px_70px_rgba(14,45,48,.16)]"
+      className="border-foreground/15 bg-card text-foreground overflow-hidden rounded-[2rem] border shadow-[0_24px_70px_rgba(184,199,217,.16)]"
     >
       <div className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-4 sm:px-7">
         <p className="flex items-center gap-2 text-[10px] font-semibold tracking-[.2em] uppercase">
-          <Clapperboard className="size-4 text-[#cfaa96]" aria-hidden="true" />
+          <Clapperboard className="text-primary size-4" aria-hidden="true" />
           {g("collection")}
         </p>
-        <span className="text-xs text-[#e8e6d7]/65">0{selected + 1} / 03</span>
+        <span className="text-foreground/65 text-xs">0{selected + 1} / 03</span>
       </div>
       <div
         className="flex snap-x snap-mandatory gap-3 overflow-x-auto p-4 sm:grid sm:grid-cols-3 sm:p-6"
@@ -95,7 +98,7 @@ export function IconicGallery() {
               setSelected(index);
               setWorkspace(false);
             }}
-            className={`group relative min-w-[240px] flex-[0_0_78%] snap-start overflow-hidden rounded-2xl border text-left transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e8e6d7] motion-reduce:transition-none sm:min-w-0 ${selected === index ? "border-[#cfaa96] ring-1 ring-[#cfaa96]/40" : "border-white/15 hover:border-white/50"}`}
+            className={`group focus-visible:outline-foreground relative min-w-[240px] flex-[0_0_78%] snap-start overflow-hidden rounded-2xl border text-left transition focus-visible:outline-2 focus-visible:outline-offset-4 motion-reduce:transition-none sm:min-w-0 ${selected === index ? "border-primary ring-primary/40 ring-1" : "border-white/15 hover:border-white/50"}`}
           >
             <span className="relative block aspect-[16/8] sm:aspect-[16/10]">
               <ScreenImage
@@ -104,7 +107,7 @@ export function IconicGallery() {
               />
             </span>
             <span className="block border-t border-white/15 p-4">
-              <span className="block text-[10px] tracking-[.1em] text-[#e8e6d7]/75 uppercase">
+              <span className="text-foreground/75 block text-[10px] tracking-[.1em] uppercase">
                 {item.production} · {item.year}
               </span>
               <span className="mt-1 block text-xl font-medium tracking-tight">
@@ -115,7 +118,7 @@ export function IconicGallery() {
         ))}
       </div>
       <div className="px-4 pb-4 sm:px-6 sm:pb-6">
-        <div className="relative isolate overflow-hidden rounded-2xl bg-[#041416]">
+        <div className="bg-card relative isolate overflow-hidden rounded-2xl">
           <div className="relative aspect-[16/10] sm:aspect-[16/8]">
             <ScreenImage
               key={car.videoId}
@@ -124,7 +127,7 @@ export function IconicGallery() {
               hero
             />
           </div>
-          <div className="flex items-center justify-between gap-3 px-5 pt-5 text-[#c8d4cb] sm:px-7">
+          <div className="text-foreground flex items-center justify-between gap-3 px-5 pt-5 sm:px-7">
             <span className="text-xs">
               {g(car.kind === "tvReference" ? "television" : "film")} ·{" "}
               {car.year}
@@ -141,7 +144,7 @@ export function IconicGallery() {
             <h2 className="mt-3 max-w-3xl text-4xl leading-[1.02] font-medium tracking-[-.04em] sm:text-6xl">
               {g(`${car.story}.title`)}
             </h2>
-            <p className="mt-4 max-w-xl text-sm leading-6 text-[#e8e6d7]/90">
+            <p className="text-foreground/90 mt-4 max-w-xl text-sm leading-6">
               {g(`${car.story}.hook`)}
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
@@ -164,7 +167,7 @@ export function IconicGallery() {
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-1 pt-4 text-[11px] leading-5 text-[#e8e6d7]/65">
+        <div className="text-foreground/65 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-1 pt-4 text-[11px] leading-5">
           <a
             href={car.imageSourceUrl}
             target="_blank"
@@ -178,18 +181,18 @@ export function IconicGallery() {
       </div>
       <div className="grid gap-6 border-t border-white/10 px-5 py-7 sm:px-8 lg:grid-cols-[1.25fr_1fr]">
         <div>
-          <p className="text-[10px] font-semibold tracking-[.18em] text-[#cfaa96] uppercase">
+          <p className="text-primary text-[10px] font-semibold tracking-[.18em] uppercase">
             {g("whyItStays")}
           </p>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-[#e8e6d7]/85">
+          <p className="text-foreground/85 mt-3 max-w-2xl text-sm leading-7">
             {g(`${car.story}.story`)}
           </p>
         </div>
         <div className="rounded-2xl border border-white/10 bg-white/[.035] p-5">
-          <p className="text-[10px] font-semibold tracking-[.18em] text-[#cfaa96] uppercase">
+          <p className="text-primary text-[10px] font-semibold tracking-[.18em] uppercase">
             {g("designNotes")}
           </p>
-          <p className="mt-3 text-sm leading-7 text-[#e8e6d7]/85">
+          <p className="text-foreground/85 mt-3 text-sm leading-7">
             {g(`${car.story}.details`)}
           </p>
         </div>
@@ -200,7 +203,7 @@ export function IconicGallery() {
             <div className="flex items-start justify-between gap-5 px-5 py-6 sm:px-8">
               <div>
                 <h3 className="text-xl font-medium">{g("modelHeading")}</h3>
-                <p className="mt-2 max-w-2xl text-xs leading-6 text-[#e8e6d7]/70">
+                <p className="text-foreground/70 mt-2 max-w-2xl text-xs leading-6">
                   {g(car.modelType)} {g("modelNotice")}
                 </p>
               </div>
@@ -214,7 +217,7 @@ export function IconicGallery() {
               </button>
             </div>
             {"localModelId" in car ? (
-              <div className="mx-4 mb-6 rounded-2xl bg-[#f3f1e7] p-4 text-[#0e2d30] sm:mx-6">
+              <div className="bg-background text-foreground mx-4 mb-6 rounded-2xl p-4 sm:mx-6">
                 <InteractiveCarModel modelId={car.localModelId} />
               </div>
             ) : (
@@ -227,7 +230,7 @@ export function IconicGallery() {
                 openLabel={t("explore")}
               />
             )}
-            <p className="px-5 py-5 text-xs leading-6 text-[#e8e6d7]/70 sm:px-8">
+            <p className="text-foreground/70 px-5 py-5 text-xs leading-6 sm:px-8">
               <a
                 href={`https://sketchfab.com/3d-models/${car.id}`}
                 target="_blank"
@@ -250,13 +253,13 @@ export function IconicGallery() {
         )}
       </div>
       <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 bg-white/[.025] px-5 py-6 sm:px-8">
-        <p className="max-w-lg text-xs leading-6 text-[#e8e6d7]/65">
+        <p className="text-foreground/65 max-w-lg text-xs leading-6">
           {g("buildInvitation")}
         </p>
         <div className="flex flex-wrap gap-3">
           <Link
             href="/garage/new"
-            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#e8e6d7] px-5 text-sm font-medium text-[#0e2d30]"
+            className="bg-background text-foreground inline-flex min-h-11 items-center gap-2 rounded-full px-5 text-sm font-medium"
           >
             {s("startBuild")}
             <ArrowUpRight aria-hidden="true" className="size-4" />

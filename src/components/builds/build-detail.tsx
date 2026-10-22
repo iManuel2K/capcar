@@ -119,10 +119,10 @@ export function BuildDetail({
   if (!vehicle || !build)
     return (
       <div className="py-32 text-center">
-        <p className="text-white/45">Build not found.</p>
+        <p className="text-muted-foreground">Build not found.</p>
         <Link
           href={`/garage/${vehicleId}/builds`}
-          className="mt-5 inline-flex rounded-xl bg-[#e72d45] px-5 py-3 text-sm font-semibold text-[#07101d]"
+          className="bg-primary text-primary-foreground mt-5 inline-flex rounded-xl px-5 py-3 text-sm font-semibold"
         >
           Return to builds
         </Link>
@@ -204,23 +204,23 @@ export function BuildDetail({
     <div className="pb-24 sm:pb-0">
       <Link
         href={`/garage/${vehicleId}/builds`}
-        className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
+        className="text-muted-foreground hover:text-foreground mb-7 inline-flex items-center gap-2 text-sm"
       >
         <ArrowLeft className="size-4" /> All builds
       </Link>
 
-      <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-9 lg:p-12">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_25%,rgba(231,45,69,0.18),transparent_30%)]" />
+      <header className="bg-card relative overflow-hidden rounded-[2rem] border border-white/10 p-6 sm:p-9 lg:p-12">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_25%,rgba(184,199,217,0.18),transparent_30%)]" />
         <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
-            <p className="text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-[0.16em] uppercase">
               {build.goal} · {vehicle.productionYear} {vehicle.make}{" "}
               {vehicle.model}
             </p>
             <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-7xl">
               {build.name}
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-white/50">
+            <p className="text-muted-foreground mt-5 max-w-2xl text-base leading-7">
               {build.description}
             </p>
           </div>
@@ -271,22 +271,22 @@ export function BuildDetail({
       <section className="mt-5 grid gap-4 sm:grid-cols-2">
         <Link
           href={`/garage/${vehicleId}/builds/${buildId}/visualize`}
-          className="group rounded-[2rem] border border-white/10 bg-[#111111] p-6 transition hover:border-[#e72d45]/35"
+          className="group bg-card hover:border-primary/35 rounded-[2rem] border border-white/10 p-6 transition"
         >
-          <Eye className="size-5 text-[#ff667a]" />
+          <Eye className="text-primary size-5" />
           <h2 className="mt-5 text-xl font-medium">Visualize this build</h2>
-          <p className="mt-2 text-sm leading-6 text-white/40">
+          <p className="text-muted-foreground mt-2 text-sm leading-6">
             Explore available 3D references and save a visual direction for this
             build.
           </p>
         </Link>
         <Link
           href={`/garage/${vehicleId}/builds/${buildId}/compatibility`}
-          className="group rounded-[2rem] border border-white/10 bg-[#111111] p-6 transition hover:border-[#e72d45]/35"
+          className="group bg-card hover:border-primary/35 rounded-[2rem] border border-white/10 p-6 transition"
         >
-          <ShieldCheck className="size-5 text-[#ff667a]" />
+          <ShieldCheck className="text-primary size-5" />
           <h2 className="mt-5 text-xl font-medium">Check compatibility</h2>
-          <p className="mt-2 text-sm leading-6 text-white/40">
+          <p className="text-muted-foreground mt-2 text-sm leading-6">
             Surface fitment gaps, dependencies and part interactions.
           </p>
         </Link>
@@ -294,7 +294,7 @@ export function BuildDetail({
 
       <div className="mt-5 flex items-center justify-between gap-5">
         <div>
-          <p className="text-xs tracking-[0.14em] text-[#ff667a] uppercase">
+          <p className="text-primary text-xs tracking-[0.14em] uppercase">
             Roadmap
           </p>
           <h2 className="mt-2 text-2xl font-medium tracking-[-0.025em]">
@@ -304,7 +304,7 @@ export function BuildDetail({
         <button
           type="button"
           onClick={() => setAdding(true)}
-          className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d]"
+          className="bg-primary text-primary-foreground inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl px-4 text-sm font-semibold"
         >
           <Plus className="size-4" /> Add modification
         </button>
@@ -313,12 +313,12 @@ export function BuildDetail({
       {adding && (
         <form
           onSubmit={submitItem}
-          className="mt-5 rounded-[2rem] border border-[#e72d45]/25 bg-[#121813] p-5 sm:p-7"
+          className="border-primary/25 bg-card mt-5 rounded-[2rem] border p-5 sm:p-7"
         >
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-medium">Add a concept modification</h3>
-              <p className="mt-1 text-xs text-white/35">
+              <p className="text-muted-foreground mt-1 text-xs">
                 Record an estimate, then compare live offers and check fitment
                 evidence.
               </p>
@@ -327,7 +327,7 @@ export function BuildDetail({
               type="button"
               onClick={() => setAdding(false)}
               aria-label="Close modification form"
-              className="grid size-9 place-items-center rounded-lg text-white/40 hover:bg-white/5"
+              className="text-muted-foreground grid size-9 place-items-center rounded-lg hover:bg-white/5"
             >
               <X className="size-4" />
             </button>
@@ -404,7 +404,7 @@ export function BuildDetail({
           <div className="mt-5 flex justify-end">
             <button
               type="submit"
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d]"
+              className="bg-primary text-primary-foreground inline-flex min-h-11 items-center gap-2 rounded-xl px-5 text-sm font-semibold"
             >
               <Check className="size-4" /> Add to roadmap
             </button>
@@ -429,17 +429,17 @@ export function BuildDetail({
             return (
               <article
                 key={phase.id}
-                className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]"
+                className="bg-card overflow-hidden rounded-[2rem] border border-white/10"
               >
                 <header className="flex items-start justify-between gap-4 border-b border-white/8 p-5 sm:p-7">
                   <div>
-                    <p className="text-xs text-[#ff667a]">{content.number}</p>
+                    <p className="text-primary text-xs">{content.number}</p>
                     <h3 className="mt-2 text-xl font-medium">{phase.title}</h3>
-                    <p className="mt-1 text-sm text-white/35">
+                    <p className="text-muted-foreground mt-1 text-sm">
                       {content.description}
                     </p>
                   </div>
-                  <span className="grid size-10 place-items-center rounded-xl border border-white/8 bg-white/[0.03] text-white/45">
+                  <span className="text-muted-foreground grid size-10 place-items-center rounded-xl border border-white/8 bg-white/[0.03]">
                     <StageIcon className="size-4" />
                   </span>
                 </header>
@@ -452,16 +452,16 @@ export function BuildDetail({
                             <p className="font-medium text-white/85">
                               {item.title}
                             </p>
-                            <span className="rounded-full border border-white/8 px-2 py-1 text-[10px] text-white/35">
+                            <span className="text-muted-foreground rounded-full border border-white/8 px-2 py-1 text-[10px]">
                               {item.priority}
                             </span>
                           </div>
                           {item.note && (
-                            <p className="mt-2 text-sm leading-6 text-white/35">
+                            <p className="text-muted-foreground mt-2 text-sm leading-6">
                               {item.note}
                             </p>
                           )}
-                          <p className="mt-3 text-sm text-white/55">
+                          <p className="text-muted-foreground mt-3 text-sm">
                             {copy.planned}:{" "}
                             {item.estimatedCostKnown === false
                               ? copy.moneyUnknown
@@ -474,7 +474,7 @@ export function BuildDetail({
                               : formatEuro(actualItemCost(item)!)}
                           </p>
                           {item.selectedOfferId && (
-                            <p className="mt-2 text-xs text-[#c98f72]">
+                            <p className="text-primary mt-2 text-xs">
                               {item.merchantName} offer saved · observed{" "}
                               {item.deliveredPrice?.toFixed(2)} EUR incl. quoted
                               shipping · fitment evidence attached
@@ -493,7 +493,7 @@ export function BuildDetail({
                           {item.status === "planned" && (
                             <Link
                               href={`/garage/${vehicleId}/builds/${buildId}/parts?item=${encodeURIComponent(item.id)}`}
-                              className="mt-2 inline-flex min-h-11 items-center text-sm text-[#eee7d8] underline"
+                              className="text-foreground mt-2 inline-flex min-h-11 items-center text-sm underline"
                             >
                               Compare offers for this modification →
                             </Link>
@@ -508,7 +508,7 @@ export function BuildDetail({
                     </div>
                   ))}
                   {stageItems.length === 0 && (
-                    <div className="p-7 text-sm text-white/30">
+                    <div className="text-muted-foreground p-7 text-sm">
                       No modifications in this stage yet.
                     </div>
                   )}
@@ -518,8 +518,8 @@ export function BuildDetail({
           })}
       </section>
 
-      <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/40">
-        <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#ff667a]" />
+      <aside className="border-primary/15 bg-primary/6 text-muted-foreground mt-5 flex items-start gap-3 rounded-2xl border p-5 text-sm leading-6">
+        <ShieldCheck className="text-primary mt-0.5 size-4 shrink-0" />
         <p>
           This is a planning roadmap. “Planned” does not mean compatible,
           road-legal or safe. Confirm the exact engine, part number and approval
@@ -533,7 +533,7 @@ export function BuildDetail({
 }
 
 const inputClass =
-  "mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-3 text-sm text-white outline-none placeholder:text-white/25 focus:border-[#e72d45]/60";
+  "mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-card px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary/60";
 
 function Field({
   label,
@@ -547,9 +547,9 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label className="block text-xs text-white/55">
+    <label className="text-muted-foreground block text-xs">
       <span>{label}</span>
-      {hint && <span className="ml-2 text-white/25">{hint}</span>}
+      {hint && <span className="text-muted-foreground ml-2">{hint}</span>}
       {children}
       {error && <span className="mt-1.5 block text-red-300">{error}</span>}
     </label>

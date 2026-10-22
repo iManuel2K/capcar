@@ -200,18 +200,18 @@ export function SketchfabInteriorStage({
   }
 
   return (
-    <section className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#090909] shadow-[0_24px_80px_rgba(0,0,0,0.34)]">
-      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-white/8 bg-[#090909] px-4 py-3 sm:px-5">
+    <section className="bg-background overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.34)]">
+      <header className="bg-background flex flex-wrap items-center justify-between gap-3 border-b border-white/8 px-4 py-3 sm:px-5">
         <div className="flex items-center gap-2 text-sm text-white/65">
-          <Armchair className="size-4 text-[#ff667a]" />
+          <Armchair className="text-primary size-4" />
           <span>{reference.title} · interactive cabin</span>
         </div>
-        <span className="rounded-full border border-[#e72d45]/20 bg-[#e72d45]/10 px-3 py-1 text-xs text-[#ff8a9a]">
+        <span className="border-primary/20 bg-primary/10 text-primary rounded-full border px-3 py-1 text-xs">
           Real model interior
         </span>
       </header>
 
-      <div className="relative aspect-[16/10] min-h-[430px] w-full bg-[#1c1f20] sm:min-h-[560px]">
+      <div className="bg-card relative aspect-[16/10] min-h-[430px] w-full sm:min-h-[560px]">
         <iframe
           key={retryKey}
           ref={iframeRef}
@@ -221,7 +221,7 @@ export function SketchfabInteriorStage({
           className="absolute inset-0 h-full w-full border-0"
         />
         {status === "loading" && (
-          <div className="absolute inset-0 grid place-items-center bg-[#090909]/90 p-6 text-center text-sm text-white/45">
+          <div className="bg-background/90 text-muted-foreground absolute inset-0 grid place-items-center p-6 text-center text-sm">
             Loading interactive cabin…
           </div>
         )}
@@ -230,7 +230,7 @@ export function SketchfabInteriorStage({
         )}
       </div>
 
-      <div className="border-t border-white/8 bg-[#090909] p-4 sm:p-5">
+      <div className="bg-background border-t border-white/8 p-4 sm:p-5">
         <div className="flex flex-wrap gap-2">
           {interiorCameraNames.map((name) => (
             <button
@@ -238,7 +238,7 @@ export function SketchfabInteriorStage({
               type="button"
               disabled={status !== "ready"}
               onClick={() => recallPreset(name)}
-              className={`inline-flex min-h-10 items-center gap-2 rounded-xl border px-3.5 text-sm disabled:opacity-40 ${activePreset === name ? "border-[#e72d45]/45 bg-[#e72d45]/12 text-[#bad1ff]" : "border-white/10 text-white/55"}`}
+              className={`inline-flex min-h-10 items-center gap-2 rounded-xl border px-3.5 text-sm disabled:opacity-40 ${activePreset === name ? "border-primary/45 bg-primary/12 text-primary" : "text-muted-foreground border-white/10"}`}
             >
               <Camera className="size-3.5" />
               {labels[name]}
@@ -256,7 +256,7 @@ export function SketchfabInteriorStage({
             type="button"
             disabled={status !== "ready"}
             onClick={saveCurrentCamera}
-            className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d] disabled:opacity-40"
+            className="bg-primary text-primary-foreground inline-flex min-h-10 items-center gap-2 rounded-xl px-4 text-sm font-semibold disabled:opacity-40"
           >
             <Save className="size-4" /> Save as {labels[activePreset]}
           </button>
@@ -264,20 +264,20 @@ export function SketchfabInteriorStage({
             type="button"
             disabled={status !== "ready"}
             onClick={resetCamera}
-            className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/55 disabled:opacity-40"
+            className="text-muted-foreground inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm disabled:opacity-40"
           >
             <Undo2 className="size-4" /> Reset camera
           </button>
-          <span className="inline-flex items-center gap-2 text-xs text-white/35">
+          <span className="text-muted-foreground inline-flex items-center gap-2 text-xs">
             <Rotate3D className="size-3.5" /> Drag, zoom and move through the
             cabin
           </span>
         </div>
         <p
           aria-live="polite"
-          className="mt-3 flex items-start gap-2 text-xs leading-5 text-white/40"
+          className="text-muted-foreground mt-3 flex items-start gap-2 text-xs leading-5"
         >
-          <BadgeInfo className="mt-0.5 size-3.5 shrink-0 text-[#ff667a]" />{" "}
+          <BadgeInfo className="text-primary mt-0.5 size-3.5 shrink-0" />{" "}
           {message}
         </p>
       </div>

@@ -111,7 +111,7 @@ export function SpecialistApplications() {
       <p className="max-w-3xl leading-7">{t("intro")}</p>
       <p className="max-w-3xl text-sm leading-6">{t("privacy")}</p>
       {error && (
-        <div role="alert" className="rounded-xl border border-[#6d0101]/40 p-4">
+        <div role="alert" className="border-primary/40 rounded-xl border p-4">
           <p>{t(error)}</p>
           <button
             className={`${actionClass} mt-3`}
@@ -126,7 +126,7 @@ export function SpecialistApplications() {
       <p role="status">{busy ? t("saving") : saved ? t("saved") : ""}</p>
       {data && (!own || own.status === "rejected") && (
         <form
-          className="grid gap-4 rounded-2xl border border-[#0e2d30]/20 p-5 sm:grid-cols-2"
+          className="border-foreground/20 grid gap-4 rounded-2xl border p-5 sm:grid-cols-2"
           onSubmit={(event) => {
             event.preventDefault();
             const fields = new FormData(event.currentTarget);
@@ -197,12 +197,12 @@ export function SpecialistApplications() {
               type="checkbox"
               name="consent"
               required
-              className="mt-1 size-5 shrink-0 accent-[#0e2d30]"
+              className="accent-foreground mt-1 size-5 shrink-0"
             />
             {t("consent")}
           </label>
           <button
-            className={`${actionClass} bg-[#0e2d30] text-[#f3eee2] sm:col-span-2`}
+            className={`${actionClass} bg-card text-foreground sm:col-span-2`}
             disabled={busy}
           >
             {busy ? t("saving") : t("submit")}
@@ -221,7 +221,7 @@ export function SpecialistApplications() {
           {data.applications.map((item) => (
             <article
               key={item.id}
-              className="min-w-0 space-y-3 rounded-2xl border border-[#0e2d30]/20 bg-white/30 p-5 break-words"
+              className="border-foreground/20 bg-card min-w-0 space-y-3 rounded-2xl border p-5 break-words"
             >
               <p className="text-sm font-medium">
                 {t(item.status)} ·{" "}
@@ -241,7 +241,7 @@ export function SpecialistApplications() {
                 {t("websiteLabel")} ↗
               </a>
               {item.review_reason && (
-                <p className="rounded-xl bg-[#0e2d30]/5 p-3 whitespace-pre-wrap">
+                <p className="bg-card/5 rounded-xl p-3 whitespace-pre-wrap">
                   {item.review_reason}
                 </p>
               )}
@@ -249,7 +249,7 @@ export function SpecialistApplications() {
                 item.user_id !== data.userId &&
                 ["pending", "approved"].includes(item.status) && (
                   <form
-                    className="space-y-3 border-t border-[#0e2d30]/20 pt-4"
+                    className="border-foreground/20 space-y-3 border-t pt-4"
                     onSubmit={(event) => {
                       event.preventDefault();
                       const fields = new FormData(event.currentTarget);

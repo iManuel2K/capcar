@@ -1,12 +1,12 @@
-/* Public editorial tokens only. Does not override chrome or garage theme tokens. */
+/* Editorial layout tokens share the approved Obsidian Chrome theme. */
 :root {
-  --capcar-editorial-paper: #0b2326;
-  --capcar-editorial-ink: #f5f2e8;
-  --capcar-editorial-muted: #bdcbc5;
-  --capcar-editorial-accent: #d6aa92;
-  --capcar-editorial-rule: #f5f2e82b;
-  --capcar-editorial-sheet: #ebe9dc;
-  --capcar-editorial-sheet-ink: #0e2d30;
+  --capcar-editorial-paper: var(--background);
+  --capcar-editorial-ink: var(--foreground);
+  --capcar-editorial-muted: var(--muted-foreground);
+  --capcar-editorial-accent: var(--primary);
+  --capcar-editorial-rule: var(--border);
+  --capcar-editorial-sheet: var(--card);
+  --capcar-editorial-sheet-ink: var(--foreground);
   --capcar-editorial-display:
     ui-serif, Georgia, "Yu Mincho", "Hiragino Mincho ProN", serif;
   --capcar-editorial-body: ui-sans-serif, system-ui, sans-serif;

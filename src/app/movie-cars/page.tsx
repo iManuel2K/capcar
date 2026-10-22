@@ -15,17 +15,17 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MovieCarsPage() {
   const t = await getTranslations("StudioPolish");
   return (
-    <div className="capcar-paper-grid min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
+    <div className="capcar-paper-grid bg-background text-foreground min-h-dvh">
       <main id="main-content" className={editorial.page}>
         <div className={editorial.inner}>
           <header className={editorial.intro}>
-            <p className="text-xs font-semibold tracking-[.2em] text-[#6d0101] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-[.2em] uppercase">
               CapCar / {t("movieCars")}
             </p>
             <h1 className="mt-5 max-w-4xl text-5xl leading-[1.02] font-medium tracking-[-.055em] sm:text-7xl">
               {t("movieTitle")}
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-[#0e2d30]/75">
+            <p className="text-foreground/75 mt-5 max-w-2xl text-base leading-7">
               {t("movieDescription")}
             </p>
           </header>
@@ -35,7 +35,7 @@ export default async function MovieCarsPage() {
           <div className={editorial.workbench}>
             <section
               aria-label={t("makeItYours")}
-              className="mt-8 divide-y divide-[#0e2d30]/15 border-y border-[#0e2d30]/15"
+              className="divide-foreground/15 border-foreground/15 mt-8 divide-y border-y"
             >
               {[
                 [ScanEye, "inspectTitle", "inspectText"],
@@ -51,29 +51,29 @@ export default async function MovieCarsPage() {
                     <div className="flex items-center justify-between">
                       <Symbol
                         aria-hidden="true"
-                        className="size-5 text-[#6d0101]"
+                        className="text-primary size-5"
                       />
-                      <span className="text-xs text-[#0e2d30]/50">
+                      <span className="text-foreground/50 text-xs">
                         0{index + 1}
                       </span>
                     </div>
                     <h2 className="text-xl font-medium tracking-tight">
                       {t(String(title))}
                     </h2>
-                    <p className="text-base leading-7 text-[#0e2d30]/75">
+                    <p className="text-foreground/75 text-base leading-7">
                       {t(String(detail))}
                     </p>
                   </article>
                 );
               })}
             </section>
-            <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-[#0e2d30]/15 pt-7">
-              <p className="text-sm text-[#0e2d30]/70">
+            <div className="border-foreground/15 mt-10 flex flex-wrap items-center justify-between gap-4 border-t pt-7">
+              <p className="text-foreground/70 text-sm">
                 {t("soundInvitation")}
               </p>
               <Link
                 href="/sound-studio"
-                className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#0e2d30] px-5 text-sm font-medium text-[#e8e6d7]"
+                className="bg-card text-foreground inline-flex min-h-11 items-center gap-2 rounded-full px-5 text-sm font-medium"
               >
                 {t("soundStudio")}
                 <ArrowUpRight aria-hidden="true" className="size-4" />

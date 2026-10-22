@@ -144,7 +144,7 @@ export function GarageSidebar({
   const moreActive = moreItems.some((item) => isActive(pathname, item));
 
   return (
-    <div className="capcar-editorial-grid flex h-full min-h-0 flex-col bg-[#0b2326] text-white">
+    <div className="capcar-editorial-grid bg-background text-foreground flex h-full min-h-0 flex-col">
       <div className="flex h-18 shrink-0 items-center justify-between border-b border-white/7 px-5">
         <Link
           href="/"
@@ -158,12 +158,12 @@ export function GarageSidebar({
             type="button"
             aria-label={t("close")}
             onClick={onClose}
-            className="grid size-11 place-items-center rounded-xl border border-white/8 text-[#aab6b1] transition hover:bg-white/6 hover:text-white"
+            className="text-muted-foreground hover:text-foreground grid size-11 place-items-center rounded-xl border border-white/8 transition hover:bg-white/6"
           >
             <X className="size-4" />
           </button>
         ) : (
-          <span className="rounded-full border border-[#bf8269]/25 bg-[#92644d]/12 px-2 py-1 text-xs font-semibold tracking-[0.08em] text-[#d6aa92] uppercase">
+          <span className="border-primary/25 bg-primary/12 text-primary rounded-full border px-2 py-1 text-xs font-semibold tracking-[0.08em] uppercase">
             {t("beta")}
           </span>
         )}
@@ -174,7 +174,7 @@ export function GarageSidebar({
           href="/garage"
           onClick={onNavigate}
           aria-current={pathname === "/garage" ? "page" : undefined}
-          className="mb-3 flex min-h-11 items-center gap-3 rounded-xl border border-white/8 bg-white/[0.025] px-3 text-sm text-white/62 transition hover:bg-white/6 hover:text-white"
+          className="hover:text-foreground mb-3 flex min-h-11 items-center gap-3 rounded-xl border border-white/8 bg-white/[0.025] px-3 text-sm text-white/62 transition hover:bg-white/6"
         >
           <House className="size-4" />
           <span>{t("garage")}</span>
@@ -183,14 +183,14 @@ export function GarageSidebar({
         {vehicleId ? (
           <div className="mb-5 rounded-2xl border border-white/9 bg-white/[0.035] p-3 shadow-[0_12px_32px_rgba(0,0,0,.12)]">
             <div className="flex items-center gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#92644d]/14 text-[#d6aa92]">
+              <span className="bg-primary/14 text-primary grid size-10 shrink-0 place-items-center rounded-xl">
                 <CarFront className="size-4" />
               </span>
               <div className="min-w-0">
                 <p className="text-sm font-semibold break-words text-white/88">
                   {vehicleLabel ?? t("activeVehicle")}
                 </p>
-                <p className="mt-0.5 text-xs break-words text-[#aab6b1]">
+                <p className="text-muted-foreground mt-0.5 text-xs break-words">
                   {vehicleMeta ?? t("vehicleWorkspace")}
                 </p>
               </div>
@@ -198,7 +198,7 @@ export function GarageSidebar({
             <Link
               href="/garage/new"
               onClick={onNavigate}
-              className="mt-3 flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/8 text-xs font-semibold text-[#aab6b1] transition hover:bg-white/5 hover:text-white"
+              className="text-muted-foreground hover:text-foreground mt-3 flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/8 text-xs font-semibold transition hover:bg-white/5"
             >
               <Plus className="size-3.5" /> {t("add")}
             </Link>
@@ -207,7 +207,7 @@ export function GarageSidebar({
           <Link
             href="/garage/new"
             onClick={onNavigate}
-            className="mb-5 flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6d0101] px-4 text-sm font-semibold text-white shadow-[0_10px_26px_rgba(109,1,1,.22)] transition hover:-translate-y-0.5 hover:bg-[#830705]"
+            className="bg-primary text-primary-foreground hover:bg-primary mb-5 flex min-h-12 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold shadow-[0_10px_26px_rgba(184,199,217,.22)] transition hover:-translate-y-0.5"
           >
             <Plus className="size-4" /> {t("add")}
           </Link>
@@ -215,7 +215,7 @@ export function GarageSidebar({
 
         {vehicleId && (
           <>
-            <p className="px-3 pb-2 text-xs font-semibold tracking-[0.16em] text-[#aab6b1] uppercase">
+            <p className="text-muted-foreground px-3 pb-2 text-xs font-semibold tracking-[0.16em] uppercase">
               {t("core")}
             </p>
             <nav aria-label={t("vehicleNavigation")} className="grid gap-1">
@@ -234,7 +234,7 @@ export function GarageSidebar({
               open={moreActive || undefined}
               className="group mt-3"
             >
-              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-xl px-3 text-xs font-semibold text-[#aab6b1] transition hover:bg-white/5 hover:text-white/70 [&::-webkit-details-marker]:hidden">
+              <summary className="text-muted-foreground flex min-h-11 cursor-pointer list-none items-center justify-between rounded-xl px-3 text-xs font-semibold transition hover:bg-white/5 hover:text-white/70 [&::-webkit-details-marker]:hidden">
                 <span>{t("more")}</span>
                 <ChevronDown className="size-3.5 transition group-open:rotate-180" />
               </summary>
@@ -256,7 +256,7 @@ export function GarageSidebar({
         )}
 
         <div className="mt-5 border-t border-white/7 pt-4">
-          <p className="px-3 pb-2 text-xs font-semibold tracking-[0.16em] text-[#aab6b1] uppercase">
+          <p className="text-muted-foreground px-3 pb-2 text-xs font-semibold tracking-[0.16em] uppercase">
             {t("explore")}
           </p>
           <SidebarLink
@@ -285,7 +285,7 @@ export function GarageSidebar({
           />
         </div>
         <div className="mt-2 flex items-center justify-between rounded-xl border border-white/7 px-3 py-2">
-          <span className="text-xs font-semibold tracking-[0.1em] text-[#aab6b1] uppercase">
+          <span className="text-muted-foreground text-xs font-semibold tracking-[0.1em] uppercase">
             {t("language")}
           </span>
           <LanguageSelector compact direction="up" align="end" />
@@ -315,14 +315,14 @@ function SidebarLink({
       href={item.href}
       onClick={onNavigate}
       aria-current={active ? "page" : undefined}
-      className={`group relative flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm transition ${active ? "bg-white/[0.075] text-white" : "text-[#aab6b1] hover:bg-white/[0.045] hover:text-white/82"}`}
+      className={`group relative flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm transition ${active ? "text-foreground bg-white/[0.075]" : "text-muted-foreground hover:bg-white/[0.045] hover:text-white/82"}`}
     >
       {active && (
-        <span className="absolute top-2 bottom-2 left-0 w-0.5 rounded-full bg-[#bf8269]" />
+        <span className="bg-primary text-primary-foreground absolute top-2 bottom-2 left-0 w-0.5 rounded-full" />
       )}
       <Icon
         aria-hidden="true"
-        className={`size-4 shrink-0 transition ${active ? "text-[#d6aa92]" : "text-[#aab6b1] group-hover:text-white/65"}`}
+        className={`size-4 shrink-0 transition ${active ? "text-primary" : "text-muted-foreground group-hover:text-white/65"}`}
       />
       <span className="min-w-0 leading-5 break-words">{item.label}</span>
     </Link>
@@ -349,11 +349,11 @@ function UtilityLink({
       href={href}
       onClick={onNavigate}
       aria-label={accessibleLabel}
-      className="relative flex min-h-11 items-center justify-center gap-2 rounded-xl text-xs font-semibold text-[#aab6b1] transition hover:bg-white/5 hover:text-white"
+      className="text-muted-foreground hover:text-foreground relative flex min-h-11 items-center justify-center gap-2 rounded-xl text-xs font-semibold transition hover:bg-white/5"
     >
       <Icon aria-hidden="true" className="size-4" /> {label}
       {badge > 0 && (
-        <span className="absolute top-1.5 right-1.5 grid min-w-4 place-items-center rounded-full bg-[#6d0101] px-1 text-xs text-white">
+        <span className="bg-primary text-primary-foreground absolute top-1.5 right-1.5 grid min-w-4 place-items-center rounded-full px-1 text-xs">
           {Math.min(badge, 9)}
           {badge > 9 ? "+" : ""}
         </span>

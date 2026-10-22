@@ -159,7 +159,7 @@ export function AIInput({
         }}
       />
       <div className={styles.composerFooter}>
-        <span className="text-xs text-[#aab6b1] tabular-nums">
+        <span className="text-muted-foreground text-xs tabular-nums">
           {value.length >= maxLength * 0.8
             ? `${value.length}/${maxLength}`
             : ""}

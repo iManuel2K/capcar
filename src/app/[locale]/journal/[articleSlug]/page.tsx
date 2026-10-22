@@ -92,16 +92,16 @@ export default async function JournalArticlePage({ params }: Props) {
             ← {ui.allArticles}
           </Link>
           <header className="max-w-4xl py-8 sm:py-12">
-            <p className="text-xs font-semibold tracking-widest text-[#79503c] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-widest uppercase">
               {article.category} · {journalReadingTime(locale, article.minutes)}
             </p>
             <h1 className="mt-5 text-4xl leading-[1.08] font-medium tracking-[-.045em] sm:text-6xl">
               {article.title}
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#0e2d30]/75">
+            <p className="text-foreground/75 mt-6 max-w-2xl text-lg leading-8">
               {article.description}
             </p>
-            <p className="mt-4 text-sm text-[#0e2d30]/65">
+            <p className="text-foreground/65 mt-4 text-sm">
               {ui.editorial} ·{" "}
               <time dateTime={article.published}>
                 {new Intl.DateTimeFormat(locale, {
@@ -111,7 +111,7 @@ export default async function JournalArticlePage({ params }: Props) {
               </time>
             </p>
           </header>
-          <div className="relative mb-12 aspect-[16/8] overflow-hidden rounded-3xl bg-[#0e2d30]">
+          <div className="bg-card relative mb-12 aspect-[16/8] overflow-hidden rounded-3xl">
             <Image
               src={article.image}
               alt=""

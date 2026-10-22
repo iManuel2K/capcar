@@ -31,7 +31,7 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
           </button>
         ))}
       </div>
-      <div className="relative aspect-video overflow-hidden rounded-xl bg-[#071519]">
+      <div className="bg-card relative aspect-video overflow-hidden rounded-xl">
         <Image
           src="/capcar-hero-bmw-garage.png"
           alt={t("alt")}
@@ -59,7 +59,7 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
         </div>
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 w-px bg-[#e8e6d7]/75"
+          className="bg-background/75 pointer-events-none absolute inset-y-0 w-px"
           style={{ left: `${reveal}%` }}
         />
       </div>
@@ -76,7 +76,7 @@ export function BuildTransformation({ eager = false }: { eager?: boolean }) {
           value={reveal}
           onChange={(event) => setReveal(Number(event.target.value))}
           aria-valuetext={t("value", { value: reveal })}
-          className="h-11 min-w-0 flex-1 cursor-ew-resize touch-pan-y accent-[#bf8269] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#bf8269]"
+          className="accent-primary focus-visible:outline-primary h-11 min-w-0 flex-1 cursor-ew-resize touch-pan-y focus-visible:outline-2 focus-visible:outline-offset-2"
         />
         <output htmlFor={id} className="min-w-20 text-right tabular-nums">
           {t("value", { value: reveal })}

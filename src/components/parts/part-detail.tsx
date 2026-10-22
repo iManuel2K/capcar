@@ -43,7 +43,7 @@ const fitmentContent: Record<
   },
   unverified: {
     label: "Not enough data",
-    className: "border-white/10 bg-white/[0.04] text-white/50",
+    className: "border-white/10 bg-white/[0.04] text-muted-foreground",
     icon: CircleHelp,
   },
   mismatch: {
@@ -82,10 +82,10 @@ export function PartDetail({
   if (!vehicle || !part)
     return (
       <div className="py-32 text-center">
-        <p className="text-white/45">Part or vehicle not found.</p>
+        <p className="text-muted-foreground">Part or vehicle not found.</p>
         <Link
           href={`/garage/${vehicleId}/parts`}
-          className="mt-5 inline-flex rounded-xl bg-[#e72d45] px-5 py-3 text-sm font-semibold text-[#07101d]"
+          className="bg-primary text-primary-foreground mt-5 inline-flex rounded-xl px-5 py-3 text-sm font-semibold"
         >
           Return to parts
         </Link>
@@ -116,23 +116,25 @@ export function PartDetail({
     <div className="pb-24 sm:pb-0">
       <Link
         href={`/garage/${vehicleId}/parts`}
-        className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
+        className="text-muted-foreground hover:text-foreground mb-7 inline-flex items-center gap-2 text-sm"
       >
         <ArrowLeft className="size-4" /> All parts
       </Link>
 
-      <section className="grid overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] lg:grid-cols-[0.92fr_1.08fr]">
-        <div className="relative min-h-[420px] overflow-hidden bg-[radial-gradient(circle_at_50%_48%,rgba(231,45,69,0.25),transparent_30%),#0d0d0d] p-7">
-          <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[11px] tracking-[0.12em] text-white/45 uppercase">
+      <section className="bg-card grid overflow-hidden rounded-[2rem] border border-white/10 lg:grid-cols-[0.92fr_1.08fr]">
+        <div className="relative min-h-[420px] overflow-hidden bg-[radial-gradient(circle_at_50%_48%,rgba(184,199,217,0.25),transparent_30%),#0d0d0d] p-7">
+          <span className="text-muted-foreground rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[11px] tracking-[0.12em] uppercase">
             Demo product
           </span>
           <Wrench className="absolute top-1/2 left-1/2 size-52 -translate-x-1/2 -translate-y-1/2 rotate-[-20deg] text-white/[0.07]" />
           <div className="absolute right-7 bottom-7 left-7 flex items-end justify-between gap-5">
             <div>
-              <p className="text-sm text-white/35">
+              <p className="text-muted-foreground text-sm">
                 {part.category} · {part.quality}
               </p>
-              <p className="mt-2 text-xs text-white/25">{part.partNumber}</p>
+              <p className="text-muted-foreground mt-2 text-xs">
+                {part.partNumber}
+              </p>
             </div>
             <p className="text-3xl font-medium tracking-[-0.035em]">
               {formatEuro(part.estimatedPrice)}
@@ -140,13 +142,13 @@ export function PartDetail({
           </div>
         </div>
         <div className="flex flex-col p-6 sm:p-10 lg:p-12">
-          <p className="text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+          <p className="text-primary text-xs font-semibold tracking-[0.16em] uppercase">
             {part.brand}
           </p>
           <h1 className="mt-4 text-4xl font-medium tracking-[-0.045em] text-balance sm:text-6xl">
             {part.name}
           </h1>
-          <p className="mt-5 leading-7 text-white/45">{part.summary}</p>
+          <p className="text-muted-foreground mt-5 leading-7">{part.summary}</p>
           <div className="mt-7">
             <span
               className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs ${content.className}`}
@@ -166,7 +168,7 @@ export function PartDetail({
       </section>
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
+        <div className="bg-card rounded-[2rem] border border-white/10 p-6 sm:p-8">
           <FitmentCard
             state="unverified"
             vehicle={`${vehicle.platform} · ${vehicle.engineCode}`}
@@ -179,7 +181,9 @@ export function PartDetail({
                 key={check.label}
                 className="grid gap-3 p-4 sm:grid-cols-[130px_1fr_auto] sm:items-center"
               >
-                <span className="text-xs text-white/35">{check.label}</span>
+                <span className="text-muted-foreground text-xs">
+                  {check.label}
+                </span>
                 <span className="text-sm text-white/65">
                   Expected {check.expected} · Your car {check.actual}
                 </span>
@@ -206,7 +210,7 @@ export function PartDetail({
                 {fitment.conditions.map((condition) => (
                   <li
                     key={condition}
-                    className="flex items-start gap-2 text-sm leading-6 text-white/45"
+                    className="text-muted-foreground flex items-start gap-2 text-sm leading-6"
                   >
                     <AlertTriangle className="mt-1 size-3.5 shrink-0 text-amber-200" />{" "}
                     {condition}
@@ -217,12 +221,12 @@ export function PartDetail({
           )}
         </div>
 
-        <aside className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
-          <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+        <aside className="bg-card rounded-[2rem] border border-white/10 p-6 sm:p-8">
+          <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
             Add to roadmap
           </p>
           <h2 className="mt-2 text-2xl font-medium">Connect part to build</h2>
-          <p className="mt-4 text-sm leading-6 text-white/40">
+          <p className="text-muted-foreground mt-4 text-sm leading-6">
             This creates a planned modification using the demo price and correct
             build stage.
           </p>
@@ -234,7 +238,7 @@ export function PartDetail({
                   setSelectedBuildId(event.target.value);
                   setMessage("");
                 }}
-                className="mt-6 min-h-12 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-4 text-sm text-white/70 outline-none"
+                className="bg-card mt-6 min-h-12 w-full rounded-xl border border-white/10 px-4 text-sm text-white/70 outline-none"
               >
                 <option value="">Select a build</option>
                 {vehicleBuilds.map((build) => (
@@ -251,7 +255,7 @@ export function PartDetail({
                   alreadyAdded
                 }
                 onClick={addToBuild}
-                className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d] disabled:cursor-not-allowed disabled:opacity-35"
+                className="bg-primary text-primary-foreground mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-35"
               >
                 <Plus className="size-4" />{" "}
                 {alreadyAdded ? "Already in this build" : "Add as planned"}
@@ -266,7 +270,7 @@ export function PartDetail({
           ) : (
             <Link
               href={`/garage/${vehicleId}/builds/new`}
-              className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d]"
+              className="bg-primary text-primary-foreground mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold"
             >
               <Layers3 className="size-4" /> Create a build first
             </Link>
@@ -287,7 +291,7 @@ export function PartDetail({
         <InfoCard icon={FileText} title="Documents" items={part.documents} />
       </section>
 
-      <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6 text-white/45">
+      <aside className="text-muted-foreground mt-5 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5 text-sm leading-6">
         <ShieldAlert className="mt-0.5 size-4 shrink-0 text-amber-200" />
         <p>
           This is fictional catalogue data for UX testing. Do not buy or install
@@ -311,8 +315,8 @@ function Spec({
 }) {
   return (
     <div className="rounded-2xl border border-white/8 bg-white/[0.025] p-4">
-      <Icon className="size-4 text-[#ff667a]" />
-      <p className="mt-5 text-[11px] tracking-[0.12em] text-white/30 uppercase">
+      <Icon className="text-primary size-4" />
+      <p className="text-muted-foreground mt-5 text-[11px] tracking-[0.12em] uppercase">
         {label}
       </p>
       <p className="mt-1 text-sm text-white/70">{value}</p>
@@ -329,18 +333,19 @@ function InfoCard({
   items: string[];
 }) {
   return (
-    <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
+    <article className="bg-card rounded-[2rem] border border-white/10 p-6 sm:p-8">
       <div className="flex items-center gap-3">
-        <Icon className="size-4 text-[#ff667a]" />
+        <Icon className="text-primary size-4" />
         <h2 className="font-medium">{title}</h2>
       </div>
       <ul className="mt-6 space-y-3">
         {items.map((item) => (
           <li
             key={item}
-            className="flex items-start gap-2 text-sm leading-6 text-white/45"
+            className="text-muted-foreground flex items-start gap-2 text-sm leading-6"
           >
-            <Check className="mt-1 size-3.5 shrink-0 text-white/30" /> {item}
+            <Check className="text-muted-foreground mt-1 size-3.5 shrink-0" />{" "}
+            {item}
           </li>
         ))}
       </ul>

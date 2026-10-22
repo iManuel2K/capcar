@@ -40,8 +40,8 @@ export function ConceptStudio() {
         .includes(search.trim().toLowerCase()),
   );
   return (
-    <div className="text-[#0e2d30]">
-      <div className="hidden flex-wrap items-center justify-between gap-3 border-b border-[#0e2d30]/15 py-4 lg:flex">
+    <div className="text-foreground">
+      <div className="border-foreground/15 hidden flex-wrap items-center justify-between gap-3 border-b py-4 lg:flex">
         <p className="text-xs font-semibold tracking-[0.18em] uppercase">
           {t("collection")} · {carModels.length}
         </p>
@@ -50,7 +50,7 @@ export function ConceptStudio() {
       <label className="mt-4 block text-sm font-semibold lg:hidden">
         {t("choose")}
         <select
-          className="mt-2 min-h-12 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3"
+          className="border-foreground/30 bg-background mt-2 min-h-12 w-full rounded-xl border px-3"
           value={model.id}
           onChange={(event) => {
             setModelId(event.target.value);
@@ -82,14 +82,14 @@ export function ConceptStudio() {
                 {model.name}
               </h2>
             </div>
-            <span className="font-mono text-xs text-[#405856]">
+            <span className="text-muted-foreground font-mono text-xs">
               {model.platforms.length
                 ? model.platforms.join(" / ")
                 : t("reference")}
             </span>
           </div>
           <InteractiveCarModel modelId={model.id} paint={paint} />
-          <div className="mt-6 border-t border-[#0e2d30]/15 pt-5">
+          <div className="border-foreground/15 mt-6 border-t pt-5">
             <h3 className="text-sm font-semibold">
               {model.paintMaterials.length ? t("paint") : t("finish")}
             </h3>
@@ -109,7 +109,7 @@ export function ConceptStudio() {
                     <button
                       type="button"
                       key={color.name}
-                      className={`${studioButton} ${paint === color.value ? "ring-2 ring-[#0e2d30]" : ""}`}
+                      className={`${studioButton} ${paint === color.value ? "ring-foreground ring-2" : ""}`}
                       aria-pressed={paint === color.value}
                       onClick={() => setPaint(color.value)}
                     >
@@ -189,7 +189,7 @@ export function ConceptStudio() {
               </button>
               <Link
                 href="/garage"
-                className={`${studioButton} border-transparent bg-[#0e2d30] text-[#f3f1e7] hover:bg-[#19464a]`}
+                className={`${studioButton} bg-card text-foreground hover:bg-secondary border-transparent`}
               >
                 {t("garage")} <span aria-hidden="true">↗</span>
               </Link>
@@ -203,7 +203,7 @@ export function ConceptStudio() {
         </div>
         <aside
           aria-label={t("choose")}
-          className="border-t border-[#0e2d30]/15 py-5 lg:border-t-0 lg:border-l lg:pl-7"
+          className="border-foreground/15 border-t py-5 lg:border-t-0 lg:border-l lg:pl-7"
         >
           <h3 className="text-xl font-medium tracking-tight">{t("browse")}</h3>
           <p className="mt-2 text-sm leading-6">{t("browseText")}</p>
@@ -214,7 +214,7 @@ export function ConceptStudio() {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Supra, E30, Skyline…"
-              className="mt-2 min-h-11 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3 text-base focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="border-foreground/30 bg-background mt-2 min-h-11 w-full rounded-xl border px-3 text-base focus-visible:outline-2 focus-visible:outline-offset-2"
             />
           </label>
           <label className="mt-3 block text-xs font-semibold">
@@ -222,7 +222,7 @@ export function ConceptStudio() {
             <select
               value={make}
               onChange={(event) => setMake(event.target.value)}
-              className="mt-2 min-h-11 w-full rounded-xl border border-[#0e2d30]/30 bg-[#f3f1e7] px-3 text-base focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="border-foreground/30 bg-background mt-2 min-h-11 w-full rounded-xl border px-3 text-base focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               <option value="all">{t("allMakes")}</option>
               {makes.map((brand) => (
@@ -250,7 +250,7 @@ export function ConceptStudio() {
                   setPaint(null);
                   setMessage("");
                 }}
-                className={`flex min-h-16 w-full items-center justify-between gap-3 border-b px-3 py-3 text-left focus-visible:outline-2 focus-visible:outline-offset-2 ${car.id === model.id ? "border-[#0e2d30] bg-[#0e2d30] text-[#f3f1e7]" : "border-[#0e2d30]/15 hover:bg-[#0e2d30]/5"}`}
+                className={`flex min-h-16 w-full items-center justify-between gap-3 border-b px-3 py-3 text-left focus-visible:outline-2 focus-visible:outline-offset-2 ${car.id === model.id ? "border-foreground bg-card text-foreground" : "border-foreground/15 hover:bg-card/5"}`}
               >
                 <span>
                   <span className="block text-[10px] tracking-widest uppercase">

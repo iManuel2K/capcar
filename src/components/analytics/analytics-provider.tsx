@@ -83,7 +83,7 @@ export function AnalyticsProvider() {
         <section
           ref={prompt}
           aria-label={t.title}
-          className="relative z-[100] border-b border-[#405856]/25 bg-[#f5f2e8] p-4 text-[#0e2d30] sm:fixed sm:right-5 sm:bottom-5 sm:max-h-[80dvh] sm:max-w-md sm:overflow-y-auto sm:rounded-2xl sm:border sm:p-5 sm:shadow-xl"
+          className="border-input/25 bg-background text-foreground relative z-[100] border-b p-4 sm:fixed sm:right-5 sm:bottom-5 sm:max-h-[80dvh] sm:max-w-md sm:overflow-y-auto sm:rounded-2xl sm:border sm:p-5 sm:shadow-xl"
         >
           <h2 className="text-base font-semibold">{t.title}</h2>
           <p className="mt-2 text-sm leading-6">{t.brief}</p>
@@ -103,14 +103,14 @@ export function AnalyticsProvider() {
             <button
               type="button"
               onClick={() => choose(false)}
-              className="min-h-11 flex-1 rounded-xl border border-[#0e2d30]/30 px-4 py-2 text-sm font-semibold"
+              className="border-foreground/30 min-h-11 flex-1 rounded-xl border px-4 py-2 text-sm font-semibold"
             >
               {t.decline}
             </button>
             <button
               type="button"
               onClick={() => choose(true)}
-              className="min-h-11 flex-1 rounded-xl border border-[#0e2d30]/30 px-4 py-2 text-sm font-semibold"
+              className="border-foreground/30 min-h-11 flex-1 rounded-xl border px-4 py-2 text-sm font-semibold"
             >
               {t.accept}
             </button>

@@ -55,7 +55,7 @@ export function SiteFooter() {
     },
   ];
   return (
-    <footer className="capcar-editorial-grid border-t border-white/8 bg-[#0b2326] px-5 py-14 text-[#e8e6d7] sm:px-8 sm:py-16">
+    <footer className="capcar-editorial-grid bg-background text-foreground border-t border-white/8 px-5 py-14 sm:px-8 sm:py-16">
       <div className="mx-auto grid max-w-[1440px] grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 lg:grid-cols-[2fr_1fr_1fr_1fr]">
         <div className="col-span-2 md:col-span-1">
           <Link
@@ -65,7 +65,7 @@ export function SiteFooter() {
           >
             <CapcarWordmark glow={false} />
           </Link>
-          <p className="mt-4 max-w-xs text-sm leading-7 text-[#e8e6d7]/55">
+          <p className="text-muted-foreground mt-4 max-w-xs text-sm leading-7">
             {t("tagline")}
           </p>
           <HomepageLink
@@ -78,7 +78,7 @@ export function SiteFooter() {
         </div>
         {groups.map((group) => (
           <nav key={group.title} aria-label={group.title}>
-            <h2 className="mb-3 text-xs font-semibold tracking-widest text-[#bf8269] uppercase">
+            <h2 className="text-primary mb-3 text-xs font-semibold tracking-widest uppercase">
               {group.title}
             </h2>
             <ul>
@@ -86,7 +86,7 @@ export function SiteFooter() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="inline-flex min-h-11 items-center rounded text-sm text-[#e8e6d7]/55 transition hover:text-[#e8e6d7] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                    className="text-muted-foreground hover:text-foreground inline-flex min-h-11 items-center rounded text-sm transition hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
                   >
                     {label}
                   </Link>
@@ -97,7 +97,7 @@ export function SiteFooter() {
         ))}
       </div>
       <div className="mx-auto mt-10 flex max-w-[1440px] flex-wrap items-center justify-between gap-5 border-t border-white/10 pt-6">
-        <p className="max-w-2xl text-xs leading-6 text-[#e8e6d7]/45">
+        <p className="text-muted-foreground max-w-2xl text-xs leading-6">
           {t("safety")}
         </p>
         <AnalyticsSettingsButton />

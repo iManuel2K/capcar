@@ -58,7 +58,7 @@ const copy = {
 } as const;
 
 const linkClass =
-  "inline-flex min-h-11 items-center gap-2 rounded-full border border-[#0e2d30]/15 bg-white/55 px-3 py-2 text-xs text-[#0e2d30] transition hover:border-[#92644d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#92644d]";
+  "inline-flex min-h-11 items-center gap-2 rounded-full border border-foreground/15 bg-card px-3 py-2 text-xs text-foreground transition hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
 export function TripNavigationLinks({ route }: { route: TripRoute }) {
   const locale = useLocale();
@@ -68,7 +68,7 @@ export function TripNavigationLinks({ route }: { route: TripRoute }) {
   return (
     <nav aria-label={t.label} className="w-full min-w-0 space-y-3">
       {sections.length > 1 && (
-        <p className="text-xs leading-5 text-[#405856]">{t.sections}</p>
+        <p className="text-muted-foreground text-xs leading-5">{t.sections}</p>
       )}
       <div className="flex flex-wrap gap-2">
         {sections.map((section) => (
@@ -98,17 +98,17 @@ export function TripNavigationLinks({ route }: { route: TripRoute }) {
           </div>
         ))}
       </div>
-      <details className="rounded-xl border border-[#0e2d30]/10 px-3">
-        <summary className="min-h-11 cursor-pointer py-3 text-xs font-medium text-[#0e2d30] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#92644d]">
+      <details className="border-foreground/10 rounded-xl border px-3">
+        <summary className="text-foreground focus-visible:outline-primary min-h-11 cursor-pointer py-3 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2">
           {t.legs}
         </summary>
-        <p className="mb-3 max-w-xl text-xs leading-5 text-[#405856]">
+        <p className="text-muted-foreground mb-3 max-w-xl text-xs leading-5">
           {t.note}
         </p>
         <ol className="space-y-3 pb-3">
           {legs.map((leg) => (
             <li key={leg.startIndex}>
-              <p className="mb-2 text-xs leading-5 text-[#405856]">
+              <p className="text-muted-foreground mb-2 text-xs leading-5">
                 {leg.startIndex + 1}. {route.stops[leg.startIndex].name} →{" "}
                 {route.stops[leg.endIndex].name}
               </p>
@@ -138,7 +138,7 @@ export function TripNavigationLinks({ route }: { route: TripRoute }) {
           ))}
         </ol>
       </details>
-      <p className="text-xs leading-5 text-[#405856]">{t.roads}</p>
+      <p className="text-muted-foreground text-xs leading-5">{t.roads}</p>
     </nav>
   );
 }

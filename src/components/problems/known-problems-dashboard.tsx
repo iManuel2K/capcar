@@ -73,15 +73,15 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
     <div className="pb-24 sm:pb-0">
       <Link
         href={`/garage/${vehicleId}`}
-        className="mb-7 inline-flex items-center gap-2 text-sm text-white/75 hover:text-white"
+        className="hover:text-foreground mb-7 inline-flex items-center gap-2 text-sm text-white/75"
       >
         <ArrowLeft className="size-4" /> Vehicle overview
       </Link>
 
-      <header className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]">
+      <header className="bg-card overflow-hidden rounded-[2rem] border border-white/10">
         <div className="grid gap-7 p-6 sm:p-9 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
-            <p className="text-xs tracking-[0.14em] text-[#ff667a] uppercase">
+            <p className="text-primary text-xs tracking-[0.14em] uppercase">
               Model watchlist · sourced
             </p>
             <h1 className="mt-3 text-4xl font-medium tracking-[-0.045em] sm:text-5xl">
@@ -130,7 +130,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                     type="button"
                     onClick={() => setSystem(candidate)}
                     aria-pressed={system === candidate}
-                    className={`rounded-xl border px-3.5 py-2 text-sm ${system === candidate ? "border-[#e72d45]/45 bg-[#e72d45]/12 text-[#bad1ff]" : "border-white/10 text-white/75"}`}
+                    className={`rounded-xl border px-3.5 py-2 text-sm ${system === candidate ? "border-primary/45 bg-primary/12 text-primary" : "border-white/10 text-white/75"}`}
                   >
                     {candidate}
                   </button>
@@ -145,7 +145,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                   return (
                     <article
                       key={problem.id}
-                      className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6 sm:p-7"
+                      className="bg-card rounded-[1.75rem] border border-white/10 p-6 sm:p-7"
                     >
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
@@ -166,7 +166,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                           </p>
                         </div>
                         <span
-                          className={`rounded-full px-3 py-1.5 text-xs ${problem.severity === "check-recall" ? "bg-amber-300/10 text-amber-100" : problem.severity === "service-soon" ? "bg-amber-300/10 text-amber-100/70" : "bg-[#e72d45]/10 text-[#a9c7ff]"}`}
+                          className={`rounded-full px-3 py-1.5 text-xs ${problem.severity === "check-recall" ? "bg-amber-300/10 text-amber-100" : problem.severity === "service-soon" ? "bg-amber-300/10 text-amber-100/70" : "bg-primary/10 text-primary"}`}
                         >
                           {problem.severity === "check-recall"
                             ? "Check required · verify VIN"
@@ -202,7 +202,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
                         href={problem.sourceUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="mt-6 inline-flex items-center gap-2 text-sm text-[#ff667a] hover:text-[#bdd3ff]"
+                        className="text-primary hover:text-primary mt-6 inline-flex items-center gap-2 text-sm"
                       >
                         {problem.sourceLabel}
                         <ArrowUpRight className="size-3.5" />
@@ -235,7 +235,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
               </div>
             </>
           ) : (
-            <div className="rounded-[2rem] border border-white/10 bg-[#111111] p-8 text-center">
+            <div className="bg-card rounded-[2rem] border border-white/10 p-8 text-center">
               <Database className="mx-auto size-6 text-white/75" />
               <h2 className="mt-4 text-2xl font-medium">
                 Coverage is being verified.
@@ -248,7 +248,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
         </div>
 
         <aside className="space-y-4">
-          <div className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6">
+          <div className="bg-card rounded-[1.75rem] border border-white/10 p-6">
             <ShieldCheck className="size-5 text-emerald-200" />
             <h2 className="mt-4 text-lg font-medium">Check safety recalls</h2>
             <p className="mt-3 text-sm leading-6 text-white/75">
@@ -260,25 +260,25 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
               href="https://www.kba-online.de/rrdb/buerger/"
               target="_blank"
               rel="noreferrer"
-              className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-white text-sm font-semibold text-black"
+              className="bg-card mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-black"
             >
               Open official recall search
               <ArrowUpRight className="size-3.5" />
             </a>
           </div>
-          <div className="rounded-[1.75rem] border border-white/10 bg-[#111111] p-6">
-            <Wrench className="size-5 text-[#ff667a]" />
+          <div className="bg-card rounded-[1.75rem] border border-white/10 p-6">
+            <Wrench className="text-primary size-5" />
             <h2 className="mt-4 text-lg font-medium">Act on evidence</h2>
             <div className="mt-4 grid gap-2">
               <Link
                 href={`/garage/${vehicleId}/maintenance`}
-                className="rounded-xl border border-white/10 px-4 py-3 text-sm text-white/75 hover:text-white"
+                className="hover:text-foreground rounded-xl border border-white/10 px-4 py-3 text-sm text-white/75"
               >
                 Open maintenance
               </Link>
               <Link
                 href={`/garage/${vehicleId}/parts`}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm text-white/75 hover:text-white"
+                className="hover:text-foreground inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm text-white/75"
               >
                 <Search className="size-3.5" /> Research parts after diagnosis
               </Link>

@@ -51,7 +51,7 @@ export function RoadbookFilterBar({
   return (
     <div
       aria-label={label}
-      className="flex max-w-full [scrollbar-width:none] gap-1.5 overflow-x-auto rounded-xl border border-white/12 bg-[#09100d]/88 p-1.5 shadow-2xl backdrop-blur-xl sm:gap-2 sm:rounded-2xl sm:p-2 [&::-webkit-scrollbar]:hidden"
+      className="bg-background/88 flex max-w-full [scrollbar-width:none] gap-1.5 overflow-x-auto rounded-xl border border-white/12 p-1.5 shadow-2xl backdrop-blur-xl sm:gap-2 sm:rounded-2xl sm:p-2 [&::-webkit-scrollbar]:hidden"
     >
       {filters.map(({ value, icon: Icon }) => {
         const active = selected.includes(value);
@@ -63,8 +63,8 @@ export function RoadbookFilterBar({
             onClick={() => toggle(value)}
             className={`inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-[11px] font-medium transition sm:min-h-10 sm:gap-2 sm:rounded-xl sm:px-3 sm:text-xs ${
               active
-                ? "bg-[#e72d45] text-white shadow-lg"
-                : "bg-white/[0.055] text-white/62 hover:bg-white/10 hover:text-white"
+                ? "bg-primary text-primary-foreground shadow-lg"
+                : "hover:text-foreground bg-white/[0.055] text-white/62 hover:bg-white/10"
             }`}
           >
             <Icon aria-hidden="true" className="size-3.5" />
@@ -78,8 +78,8 @@ export function RoadbookFilterBar({
         onClick={() => onFuelChange(!fuelEnabled)}
         className={`inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-[11px] font-medium transition sm:min-h-10 sm:gap-2 sm:rounded-xl sm:px-3 sm:text-xs ${
           fuelEnabled
-            ? "bg-[#e72d45] text-white shadow-lg"
-            : "bg-white/[0.055] text-white/62 hover:bg-white/10 hover:text-white"
+            ? "bg-primary text-primary-foreground shadow-lg"
+            : "hover:text-foreground bg-white/[0.055] text-white/62 hover:bg-white/10"
         }`}
       >
         <Fuel aria-hidden="true" className="size-3.5" />

@@ -44,11 +44,11 @@ export default async function Page() {
   const c = soundDeskCopy(await getLocale());
   const s = await getTranslations("StudioPolish");
   return (
-    <div className="capcar-paper-grid min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
+    <div className="capcar-paper-grid bg-background text-foreground min-h-dvh">
       <main id="main-content" className={editorial.page}>
         <div className={editorial.inner}>
           <header className={editorial.intro}>
-            <p className="text-xs font-semibold tracking-[.2em] text-[#6d0101] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-[.2em] uppercase">
               CapCar / {s("soundStudio")}
             </p>
             <h1
@@ -56,10 +56,10 @@ export default async function Page() {
             >
               {c.title}
             </h1>
-            <p className="mt-3 max-w-2xl text-base leading-7 text-[#0e2d30]/75">
+            <p className="text-foreground/75 mt-3 max-w-2xl text-base leading-7">
               {c.intro}
             </p>
-            <p className="mt-3 text-sm text-[#405856]">
+            <p className="text-muted-foreground mt-3 text-sm">
               {soundCatalog.length} {c.results} · {c.headphone}
             </p>
             <nav
@@ -74,7 +74,7 @@ export default async function Page() {
                 <a
                   key={id}
                   href={`#${id}`}
-                  className="inline-flex min-h-11 items-center gap-2 border-b border-[#0e2d30]/25 text-sm hover:border-[#92644d]"
+                  className="border-foreground/25 hover:border-primary inline-flex min-h-11 items-center gap-2 border-b text-sm"
                 >
                   <span className="text-xs opacity-60">{number}</span>
                   {s(id)}

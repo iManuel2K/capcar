@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export default function AccountPage() {
   return (
-    <main className="min-h-dvh bg-[#0b0e0c] px-4 text-[#f4f5f2] sm:px-7">
+    <main className="bg-background text-foreground min-h-dvh px-4 sm:px-7">
       <AccountWorkspace status={getAuthStatus()} />
     </main>
   );

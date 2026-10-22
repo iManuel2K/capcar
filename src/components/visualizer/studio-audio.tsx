@@ -60,20 +60,20 @@ export function MasterVolume() {
   }
   const degrees = -135 + volume * 270;
   return (
-    <div className="grid gap-5 rounded-[1.75rem] border border-white/10 bg-[#091d20] p-5 shadow-[inset_0_1px_rgba(255,255,255,.05)] sm:grid-cols-[auto_1fr] sm:items-center sm:p-6">
+    <div className="bg-card grid gap-5 rounded-[1.75rem] border border-white/10 p-5 shadow-[inset_0_1px_rgba(255,255,255,.05)] sm:grid-cols-[auto_1fr] sm:items-center sm:p-6">
       <div className="flex items-center gap-4">
         <div
           aria-hidden="true"
           className="relative grid size-24 shrink-0 place-items-center rounded-full border border-white/10 bg-[radial-gradient(circle_at_35%_28%,#335254_0,#142f32_48%,#071719_100%)] shadow-[0_14px_30px_rgba(0,0,0,.35),inset_0_1px_rgba(255,255,255,.15)]"
         >
           <span
-            className="absolute h-9 w-0.5 origin-bottom rounded-full bg-[#ff746c] shadow-[0_0_12px_rgba(255,116,108,.8)]"
+            className="bg-primary absolute h-9 w-0.5 origin-bottom rounded-full shadow-[0_0_12px_rgba(255,116,108,.8)]"
             style={{ transform: `translateY(-18px) rotate(${degrees}deg)` }}
           />
-          <span className="size-3 rounded-full bg-[#cfaa96] shadow-[0_0_14px_rgba(207,170,150,.6)]" />
+          <span className="bg-primary text-primary-foreground size-3 rounded-full shadow-[0_0_14px_rgba(207,170,150,.6)]" />
         </div>
         <div>
-          <p className="text-[10px] font-medium tracking-[.22em] text-[#cfaa96] uppercase">
+          <p className="text-primary text-[10px] font-medium tracking-[.22em] uppercase">
             {studio("masterVolume")}
           </p>
           <p className="mt-1 font-mono text-3xl tracking-tight tabular-nums">
@@ -81,7 +81,7 @@ export function MasterVolume() {
           </p>
         </div>
       </div>
-      <label className="block text-xs text-[#e8e6d7]/60">
+      <label className="text-foreground/60 block text-xs">
         <span className="sr-only">{studio("masterVolume")}</span>
         <input
           type="range"
@@ -91,7 +91,7 @@ export function MasterVolume() {
           value={Math.round(volume * 100)}
           aria-label={studio("masterVolume")}
           onChange={(event) => change(Number(event.target.value) / 100)}
-          className="h-2 w-full cursor-pointer accent-[#ff746c]"
+          className="accent-primary h-2 w-full cursor-pointer"
         />
         <span className="mt-3 flex justify-between font-mono text-[10px] tracking-[.16em] uppercase">
           <span>Min</span>
@@ -179,7 +179,7 @@ function AudioSession({
   return (
     <div
       aria-busy={buffering}
-      className="min-w-0 rounded-2xl border border-white/10 bg-[#091d20] p-3 shadow-[inset_0_1px_rgba(255,255,255,.04)]"
+      className="bg-card min-w-0 rounded-2xl border border-white/10 p-3 shadow-[inset_0_1px_rgba(255,255,255,.04)]"
     >
       <audio
         key={retry}
@@ -227,7 +227,7 @@ function AudioSession({
           type="button"
           aria-label={studio("rewind")}
           onClick={() => seek(-10)}
-          className="grid size-10 shrink-0 place-items-center rounded-full border border-white/10 bg-white/5 text-[#e8e6d7]/75 transition hover:border-white/25 hover:bg-white/10"
+          className="text-foreground/75 grid size-10 shrink-0 place-items-center rounded-full border border-white/10 bg-white/5 transition hover:border-white/25 hover:bg-white/10"
         >
           <RotateCcw aria-hidden="true" className="size-4" />
         </button>
@@ -241,7 +241,7 @@ function AudioSession({
           type="button"
           aria-label={studio("forward")}
           onClick={() => seek(10)}
-          className="grid size-10 shrink-0 place-items-center rounded-full border border-white/10 bg-white/5 text-[#e8e6d7]/75 transition hover:border-white/25 hover:bg-white/10"
+          className="text-foreground/75 grid size-10 shrink-0 place-items-center rounded-full border border-white/10 bg-white/5 transition hover:border-white/25 hover:bg-white/10"
         >
           <RotateCw aria-hidden="true" className="size-4" />
         </button>
@@ -258,9 +258,9 @@ function AudioSession({
               player.current.currentTime = Number(event.target.value);
               setCurrent(player.current.currentTime);
             }}
-            className="h-1.5 w-full cursor-pointer accent-[#cfaa96]"
+            className="accent-primary h-1.5 w-full cursor-pointer"
           />
-          <div className="mt-1 flex justify-between font-mono text-[10px] text-[#e8e6d7]/75 tabular-nums">
+          <div className="text-foreground/75 mt-1 flex justify-between font-mono text-[10px] tabular-nums">
             <span>{time(current)}</span>
             <span>{time(duration)}</span>
           </div>
@@ -268,7 +268,7 @@ function AudioSession({
         {buffering ? <MotionLoader /> : <PlaybackSignal playing={playing} />}
       </div>
       {failed && (
-        <div className="mt-3 rounded-xl border border-[#bf8269]/30 bg-[#bf8269]/10 px-4 py-2 text-sm">
+        <div className="border-primary/30 bg-primary/10 mt-3 rounded-xl border px-4 py-2 text-sm">
           <p role="alert">{t("playFailed")}</p>
           <button
             type="button"

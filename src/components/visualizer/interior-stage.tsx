@@ -44,14 +44,14 @@ export function InteriorStage({
   }, [view, visual]);
 
   return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#090909]">
+    <div className="bg-background relative overflow-hidden rounded-[2rem] border border-white/10">
       <canvas
         ref={canvasRef}
         className="block h-[430px] w-full sm:h-[560px]"
         aria-label={`${label}, generic interior concept`}
       />
       <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-        <span className="rounded-full border border-[#e72d45]/25 bg-[#0d0d0d]/90 px-3 py-1.5 text-xs text-[#ff8a9a]">
+        <span className="border-primary/25 bg-card/90 text-primary rounded-full border px-3 py-1.5 text-xs">
           {label}
         </span>
         <span className="rounded-full border border-amber-300/20 bg-[#17140b]/90 px-3 py-1.5 text-xs text-amber-100/70">
@@ -65,13 +65,13 @@ export function InteriorStage({
             type="button"
             onClick={() => setView(candidate)}
             aria-pressed={view === candidate}
-            className={`rounded-lg px-3 py-2 text-xs capitalize ${view === candidate ? "bg-white text-black" : "text-white/55"}`}
+            className={`rounded-lg px-3 py-2 text-xs capitalize ${view === candidate ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
           >
             {candidate}
           </button>
         ))}
       </div>
-      <div className="absolute bottom-4 left-4 hidden items-center gap-2 text-xs text-white/35 sm:flex">
+      <div className="text-muted-foreground absolute bottom-4 left-4 hidden items-center gap-2 text-xs sm:flex">
         <BadgeInfo className="size-3.5" /> Concept preview, not an exact vehicle
         interior
       </div>

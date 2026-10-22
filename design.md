@@ -9,12 +9,13 @@ Existing `design-system/capcar/MASTER.md` and its approved product boundaries st
 Automotive editorial, inspired by the user-supplied YOIN image, not a pixel copy.
 Public marketing: Split Studio, alternating explanation and authentic product proof.
 Interactive tools: readable, dense workbenches inside the public page, not decorative cards.
-Journal: visual index plus cream reading sheets. Garage: unchanged.
+Journal: visual index plus dark reading surfaces. Garage layout: unchanged.
 
 ## Palette and typography
 
 Source: `tokens.css`, public-prefixed custom properties only.
-Deep teal #0b2326; cream #f5f2e8; copper #d6aa92; muted #bdcbc5.
+Approved Obsidian Chrome: background #0c0d10, surface #191c21, foreground #f0f1f3,
+muted #9ba1ac and primary #b8c7d9. Public aliases inherit the shared global tokens.
 Display uses system serif/Georgia with Japanese Mincho fallbacks, upright, regular weight.
 Body and detailed controls retain the current system sans. No new downloaded fonts.
 Fluid display sizes, natural wrapping in all five supported languages; no fixed heading heights.

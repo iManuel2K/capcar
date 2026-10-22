@@ -1,7 +1,6 @@
 /* Hallmark · macrostructure: Split Studio · studied: yes · DNA-source: image
- * Palette and chrome retained. Public page bodies only; practical workbenches stay light.
+ * Palette and chrome retained. Public page bodies and practical workbenches use shared theme roles.
  */
-@import "../../../tokens.css";
 
 .page {
   background: var(--capcar-editorial-paper);

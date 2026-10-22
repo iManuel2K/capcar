@@ -1,3 +1,4 @@
+import { brandPalette } from "@/features/ui/brand-palette";
 import type { GarageCopy } from "@/features/onboarding/copy";
 import type { shareCardData } from "./build-story";
 
@@ -12,9 +13,9 @@ export async function createBuildProgressCard(
   const context = canvas.getContext("2d");
   if (!context) throw new Error("canvas");
   const ctx: CanvasRenderingContext2D = context;
-  ctx.fillStyle = "#0d292c";
+  ctx.fillStyle = brandPalette.background;
   ctx.fillRect(0, 0, 1080, 1350);
-  ctx.strokeStyle = "#244144";
+  ctx.strokeStyle = brandPalette.secondary;
   for (let x = 0; x < 1080; x += 90) {
     ctx.beginPath();
     ctx.moveTo(x, 0);
@@ -27,7 +28,7 @@ export async function createBuildProgressCard(
     ctx.lineTo(1080, y);
     ctx.stroke();
   }
-  ctx.fillStyle = "#d6aa92";
+  ctx.fillStyle = brandPalette.primary;
   ctx.font = "500 30px sans-serif";
   ctx.fillText("CAPCAR", 80, 130);
   function wrap(text: string, y: number, size: number, color: string) {
@@ -44,21 +45,21 @@ export async function createBuildProgressCard(
     }
     ctx.fillText(line, 80, y);
   }
-  wrap(copy.cardTitle, 270, 62, "#ede9d8");
-  ctx.fillStyle = "#ede9d8";
+  wrap(copy.cardTitle, 270, 62, brandPalette.foreground);
+  ctx.fillStyle = brandPalette.foreground;
   ctx.font = "500 184px sans-serif";
   ctx.fillText(`${data.progress}%`, 80, 670);
-  ctx.fillStyle = "#29474a";
+  ctx.fillStyle = brandPalette.secondary;
   ctx.fillRect(80, 740, 920, 12);
-  ctx.fillStyle = "#d6aa92";
+  ctx.fillStyle = brandPalette.primary;
   ctx.fillRect(80, 740, (920 * data.progress) / 100, 12);
   wrap(
     `${data.completed} / ${data.total} · ${copy.cardTasks}`,
     850,
     32,
-    "#ede9d8",
+    brandPalette.foreground,
   );
-  wrap(copy.cardFooter, 1200, 24, "#b7c2bd");
+  wrap(copy.cardFooter, 1200, 24, brandPalette.muted);
   return new Promise((resolve, reject) =>
     canvas.toBlob(
       (blob) => (blob ? resolve(blob) : reject(new Error("png"))),

@@ -33,7 +33,7 @@ export function BuildJourneyPanel({
   return (
     <section
       aria-label="Connected build journey"
-      className="mt-5 rounded-[2rem] border border-[#b7cec3]/20 bg-[#0b2528] p-5 text-[#eee7d8] sm:p-8"
+      className="border-foreground/20 bg-card text-foreground mt-5 rounded-[2rem] border p-5 sm:p-8"
     >
       <ol className={styles.steps} aria-label={copy.label}>
         {journey.steps.map((step, index) => (
@@ -64,7 +64,7 @@ export function BuildJourneyPanel({
       </ol>
       <div className="mt-7 grid gap-6 md:grid-cols-2">
         <div>
-          <p className="text-xs tracking-widest text-[#c98f72] uppercase">
+          <p className="text-primary text-xs tracking-widest uppercase">
             Next workshop action
           </p>
           <h2 className="mt-2 text-2xl font-medium">
@@ -90,7 +90,7 @@ export function BuildJourneyPanel({
           <div className="mt-4 flex flex-wrap gap-3">
             {next && (
               <Link
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#eee7d8] px-4 text-sm font-semibold text-[#0b2528]"
+                className="bg-background text-foreground inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-sm font-semibold"
                 href={parts}
               >
                 Compare parts <ArrowRight className="size-4" />
@@ -118,7 +118,7 @@ export function BuildJourneyPanel({
           </div>
         </div>
         <div>
-          <p className="text-xs tracking-widest text-[#c98f72] uppercase">
+          <p className="text-primary text-xs tracking-widest uppercase">
             Phase allocation · EUR estimates
           </p>
           <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">
@@ -133,7 +133,7 @@ export function BuildJourneyPanel({
           </dl>
           <Link
             href={`${base}/visualize`}
-            className="mt-5 block rounded-xl border border-white/20 p-3 text-sm hover:border-[#c98f72]"
+            className="hover:border-primary mt-5 block rounded-xl border border-white/20 p-3 text-sm"
           >
             {visual?.reference
               ? `Saved 3D reference: ${Object.keys(visual.reference.paints).length} material colours and camera view`

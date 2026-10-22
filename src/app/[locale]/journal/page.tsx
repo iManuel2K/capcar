@@ -29,13 +29,13 @@ export default async function JournalPage({ params }: Props) {
       <main id="main-content" lang={locale} className={editorial.page}>
         <div className={editorial.inner}>
           <header className={editorial.intro}>
-            <p className="text-xs font-semibold tracking-[.2em] text-[#79503c] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-[.2em] uppercase">
               CapCar {ui.label} · {ui.language}
             </p>
             <h1 className="mt-6 max-w-4xl text-5xl leading-[1.05] font-medium tracking-[-.05em] whitespace-pre-line sm:text-7xl">
               {ui.headline}
             </h1>
-            <p className="mt-6 mb-12 max-w-2xl text-lg leading-8 text-[#0e2d30]/75">
+            <p className="text-foreground/75 mt-6 mb-12 max-w-2xl text-lg leading-8">
               {ui.intro}
             </p>
           </header>

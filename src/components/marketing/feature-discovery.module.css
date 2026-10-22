@@ -40,23 +40,23 @@
 .lead {
   max-width: 42rem;
   line-height: 1.8;
-  color: #405856;
+  color: var(--muted-foreground);
 }
 .access {
   margin-top: 20px;
   max-width: 38rem;
   font-size: 0.875rem;
   line-height: 1.7;
-  color: #526965;
+  color: var(--muted-foreground);
 }
 .example {
-  background: #102528;
-  color: #f0eedf;
+  background: var(--card);
+  color: var(--foreground);
   padding: 32px;
   border-radius: 24px;
 }
 .example > p {
-  color: #e1ad91;
+  color: var(--primary);
   line-height: 1.7;
 }
 .example dl {
@@ -64,10 +64,10 @@
 }
 .example dl > div {
   padding: 20px 0;
-  border-top: 1px solid #ffffff26;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 14.9%, transparent);
 }
 .example dt {
-  color: #becdc7;
+  color: var(--foreground);
   font-size: 0.875rem;
   line-height: 1.6;
 }
@@ -88,11 +88,11 @@
   grid-template-columns: 64px minmax(0, 1fr);
   gap: 24px;
   padding: 32px 0;
-  border-top: 1px solid #0e2d3026;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 14.9%, transparent);
 }
 .steps li > span {
   font-family: monospace;
-  color: #84553f;
+  color: var(--primary);
 }
 .steps h2 {
   font-size: clamp(1.4rem, 2.2vw, 2rem);
@@ -104,7 +104,7 @@
   margin-top: 16px;
   max-width: 50rem;
   line-height: 1.8;
-  color: #405856;
+  color: var(--muted-foreground);
 }
 .links {
   margin-top: 24px;
@@ -116,14 +116,14 @@
   align-items: center;
   gap: 16px;
   padding: 16px 0;
-  border-top: 1px solid #0e2d3026;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 14.9%, transparent);
   line-height: 1.6;
 }
 .links a:hover {
-  color: #84553f;
+  color: var(--primary);
 }
 .links a:focus-visible {
-  outline: 3px solid #84553f;
+  outline: 3px solid var(--primary);
   outline-offset: 4px;
 }
 .links svg {

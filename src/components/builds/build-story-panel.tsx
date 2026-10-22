@@ -29,9 +29,9 @@ import { useLocale } from "next-intl";
 import { isAppLocale } from "@/i18n/config";
 
 const button =
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/25 px-4 py-2 text-sm text-[#ede9d8] transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d6aa92] disabled:opacity-50";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/25 px-4 py-2 text-sm text-foreground transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:opacity-50";
 const input =
-  "mt-2 min-h-12 w-full rounded-xl border border-white/20 bg-[#091e20] px-3 text-base text-white outline-none focus-visible:ring-2 focus-visible:ring-[#d6aa92]";
+  "mt-2 min-h-12 w-full rounded-xl border border-white/20 bg-card px-3 text-base text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary";
 
 export function CompletionPhotos({
   beforePhoto,
@@ -221,7 +221,7 @@ export function BuildTaskCompletion({
       {open && (
         <form
           onSubmit={save}
-          className="mt-4 rounded-2xl border border-[#d6aa92]/30 bg-[#102b2e] p-4 sm:p-5"
+          className="border-primary/30 bg-card mt-4 rounded-2xl border p-4 sm:p-5"
         >
           <div className="flex justify-between gap-3">
             <h4 className="font-medium">{c.story}</h4>
@@ -292,7 +292,7 @@ export function BuildTaskCompletion({
                   {c[kind]}
                   <input
                     disabled={busy}
-                    className="mt-3 block w-full text-xs file:mb-2 file:rounded-lg file:border-0 file:bg-[#ede9d8] file:px-3 file:py-3 file:text-[#102b2e]"
+                    className="file:bg-background file:text-foreground mt-3 block w-full text-xs file:mb-2 file:rounded-lg file:border-0 file:px-3 file:py-3"
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
                     onChange={(event) => {
@@ -321,7 +321,7 @@ export function BuildTaskCompletion({
           <CompletionPhotos beforePhoto={before} afterPhoto={after} />
           <button
             disabled={busy}
-            className={`${button.replace("text-[#ede9d8]", "text-[#102b2e]")} mt-5 bg-[#ede9d8]`}
+            className={`${button.replace("text-foreground", "text-foreground")} bg-background mt-5`}
             type="submit"
           >
             {c.saveCompletion}
@@ -348,7 +348,7 @@ export function BuildTaskCompletion({
       {message && (
         <p
           role="status"
-          className="mt-4 rounded-xl border border-[#d6aa92]/30 p-3 text-sm text-[#ede9d8] motion-safe:animate-[pulse_0.8s_ease-in-out_1]"
+          className="border-primary/30 text-foreground mt-4 rounded-xl border p-3 text-sm motion-safe:animate-[pulse_0.8s_ease-in-out_1]"
         >
           {message}
         </p>
@@ -420,7 +420,7 @@ export function BuildStoryPanel({
       currency: "EUR",
     }).format(amount);
   return (
-    <section className="mt-5 rounded-3xl border border-[#d6aa92]/25 bg-[#102c2e] p-5 sm:p-8">
+    <section className="border-primary/25 bg-card mt-5 rounded-3xl border p-5 sm:p-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h2 className="text-2xl font-medium">{c.story}</h2>
@@ -464,7 +464,7 @@ export function BuildStoryPanel({
         className="mt-5 h-2 overflow-hidden rounded-full bg-white/10"
       >
         <div
-          className="h-full bg-[#d6aa92] motion-safe:transition-[width] motion-safe:duration-500"
+          className="bg-primary text-primary-foreground h-full motion-safe:transition-[width] motion-safe:duration-500"
           style={{ width: `${data.progress}%` }}
         />
       </div>
@@ -474,26 +474,26 @@ export function BuildStoryPanel({
       )}
       <div className="mt-5 flex flex-wrap gap-2">
         {milestones.firstWork && (
-          <span className="rounded-full border border-[#d6aa92]/30 px-3 py-2 text-xs">
+          <span className="border-primary/30 rounded-full border px-3 py-2 text-xs">
             ✓ {c.firstWork}
           </span>
         )}
         {milestones.firstMaintenance && (
-          <span className="rounded-full border border-[#d6aa92]/30 px-3 py-2 text-xs">
+          <span className="border-primary/30 rounded-full border px-3 py-2 text-xs">
             ✓ {c.firstMaintenance}
           </span>
         )}
         {milestones.stages.map((stage) => (
           <span
             key={stage}
-            className="rounded-full border border-[#d6aa92]/30 px-3 py-2 text-xs"
+            className="border-primary/30 rounded-full border px-3 py-2 text-xs"
           >
             ✓ {c[stage]}
           </span>
         ))}
       </div>
       <div className="mt-5 rounded-2xl border border-white/10 p-4">
-        <p className="text-xs text-[#d6aa92]">{c.next}</p>
+        <p className="text-primary text-xs">{c.next}</p>
         <p className="mt-2 text-sm">
           {items.length === 0
             ? c.empty

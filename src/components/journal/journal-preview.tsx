@@ -13,10 +13,10 @@ export function JournalPreview() {
     <section
       lang={locale}
       aria-labelledby="journal-preview-title"
-      className="bg-[#ebe9dc] px-5 py-20 text-[#0e2d30] sm:px-8 sm:py-28"
+      className="bg-background text-foreground px-5 py-20 sm:px-8 sm:py-28"
     >
       <div className="mx-auto max-w-6xl">
-        <p className="text-xs font-semibold tracking-widest text-[#79503c] uppercase">
+        <p className="text-primary text-xs font-semibold tracking-widest uppercase">
           CapCar {ui.label}
         </p>
         <div className="mt-4 mb-10 flex flex-wrap items-end justify-between gap-5">

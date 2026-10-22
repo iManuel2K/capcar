@@ -141,9 +141,9 @@ export function VehicleRadar({
             <polygon
               key={vehicle.id}
               points={radarPolygon(profile)}
-              fill="var(--rust, #d6aa92)"
+              fill="var(--primary)"
               fillOpacity=".22"
-              stroke="var(--rust, #d6aa92)"
+              stroke="var(--primary)"
               strokeWidth="2"
               strokeLinejoin="round"
               className={styles.radarShape}
@@ -156,7 +156,7 @@ export function VehicleRadar({
                   cx={x}
                   cy={y}
                   r="3.6"
-                  fill="var(--rust, #d6aa92)"
+                  fill="var(--primary)"
                 >
                   <title>
                     {c.metrics[metric]}: {profile[metric]}/10
