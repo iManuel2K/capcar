@@ -52,15 +52,15 @@ function passportUnavailableResponse(
     <title>${t.title} | CapCar</title>
     <style>
       * { box-sizing: border-box; }
-      body { margin: 0; background: #0c0d10; color: #f0f1f3; font-family: Arial, sans-serif; }
+      body { margin: 0; background: #151d28; color: #f0f1f3; font-family: Arial, sans-serif; }
       main { display: grid; min-height: 100dvh; place-items: center; padding: 2rem 1.25rem; text-align: center; }
       section { max-width: 36rem; }
       .brand { color: #f0f1f3; font-size: 1.25rem; font-weight: 700; letter-spacing: -.04em; }
-      .icon { margin: 3rem auto 0; color: #b8c7d9; font-size: 2rem; line-height: 1; }
+      .icon { margin: 3rem auto 0; color: #a7ceff; font-size: 2rem; line-height: 1; }
       .eyebrow { margin: 1.5rem 0 0; color: rgba(255,255,255,.42); font-size: .75rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
       h1 { margin: .75rem 0 0; font-size: clamp(2.5rem, 8vw, 3.75rem); font-weight: 500; letter-spacing: -.05em; line-height: 1; }
       .copy { margin: 1.25rem auto 0; color: rgba(255,255,255,.52); line-height: 1.75; }
-      a { display: inline-flex; min-height: 3rem; align-items: center; margin-top: 2rem; border-radius: .75rem; background: #b8c7d9; color: #0c0d10; font-size: .875rem; font-weight: 700; padding: 0 1.25rem; text-decoration: none; }
+      a { display: inline-flex; min-height: 3rem; align-items: center; margin-top: 2rem; border-radius: .75rem; background: #a7ceff; color: #151d28; font-size: .875rem; font-weight: 700; padding: 0 1.25rem; text-decoration: none; }
       a:focus-visible { outline: 3px solid #f0f1f3; outline-offset: 4px; }
     </style>
   </head>
@@ -130,7 +130,7 @@ export async function proxy(request: NextRequest) {
     const locale = isAppLocale(journal[1]) ? journal[1] : "en";
     const ui = journalUI[locale];
     return new NextResponse(
-      `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><title>${ui.missingTitle} · CapCar</title></head><body style="margin:0;background:#0c0d10;color:#f0f1f3;font-family:Arial,sans-serif"><main style="max-width:42rem;margin:15vh auto;padding:2rem"><p>CapCar ${ui.label}</p><h1>${ui.missingTitle}</h1><p>${ui.missingBody}</p><a href="${journalPath(locale)}" style="color:inherit">${ui.allArticles} →</a></main></body></html>`,
+      `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><title>${ui.missingTitle} · CapCar</title></head><body style="margin:0;background:#151d28;color:#f0f1f3;font-family:Arial,sans-serif"><main style="max-width:42rem;margin:15vh auto;padding:2rem"><p>CapCar ${ui.label}</p><h1>${ui.missingTitle}</h1><p>${ui.missingBody}</p><a href="${journalPath(locale)}" style="color:inherit">${ui.allArticles} →</a></main></body></html>`,
       {
         status: 404,
         headers: {

@@ -87,7 +87,7 @@ export default function GlobalError({
             display: grid;
             place-items: center;
             padding: 3rem 1.25rem;
-            background: #0c0d10;
+            background: #151d28;
             color: #f0f1f3;
             font-family: Arial, Helvetica, sans-serif;
             text-align: center;
@@ -98,11 +98,11 @@ export default function GlobalError({
             padding: clamp(1.75rem, 5vw, 3rem);
             border: 1px solid rgba(184,199,217,0.18);
             border-radius: 2rem;
-            background: #191c21;
+            background: #243244;
           }
           .eyebrow {
             margin: 0;
-            color: #b8c7d9;
+            color: #a7ceff;
             font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 0.16em;
@@ -118,7 +118,7 @@ export default function GlobalError({
           .message {
             max-width: 32rem;
             margin: 1.25rem auto 0;
-            color: #9ba1ac;
+            color: #becbda;
             line-height: 1.75;
           }
           .actions {
@@ -141,10 +141,10 @@ export default function GlobalError({
             text-decoration: none;
             cursor: pointer;
           }
-          button { border: 0; background: #b8c7d9; color: #0c0d10; }
+          button { border: 0; background: #a7ceff; color: #151d28; }
           a { border: 1px solid rgba(184,199,217,0.25); color: #f0f1f3; }
           button:focus-visible, a:focus-visible {
-            outline: 3px solid #b8c7d9;
+            outline: 3px solid #a7ceff;
             outline-offset: 3px;
           }
           @media (max-width: 32rem) {

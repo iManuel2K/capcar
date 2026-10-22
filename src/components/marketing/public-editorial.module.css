@@ -39,7 +39,8 @@
   background: var(--capcar-editorial-sheet);
   color: var(--capcar-editorial-sheet-ink);
   padding: clamp(1rem, 3vw, 2rem);
-  border-radius: 4px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
   min-width: 0;
 }
 .reading {
