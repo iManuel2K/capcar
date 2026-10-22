@@ -1,0 +1,15 @@
+/* Public editorial tokens only. Does not override chrome or garage theme tokens. */
+:root {
+  --capcar-editorial-paper: #0b2326;
+  --capcar-editorial-ink: #f5f2e8;
+  --capcar-editorial-muted: #bdcbc5;
+  --capcar-editorial-accent: #d6aa92;
+  --capcar-editorial-rule: #f5f2e82b;
+  --capcar-editorial-sheet: #ebe9dc;
+  --capcar-editorial-sheet-ink: #0e2d30;
+  --capcar-editorial-display:
+    ui-serif, Georgia, "Yu Mincho", "Hiragino Mincho ProN", serif;
+  --capcar-editorial-body: ui-sans-serif, system-ui, sans-serif;
+  --capcar-editorial-gutter: clamp(1.25rem, 4vw, 4rem);
+  --capcar-editorial-section: clamp(3.5rem, 8vw, 8rem);
+}

@@ -8,7 +8,11 @@ import {
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ConceptStudio } from "./concept-studio";
 const language = vi.hoisted(() => ({ current: "en" }));
-vi.mock("next-intl", () => ({ useLocale: () => language.current }));
+vi.mock("next-intl", () => ({
+  useLocale: () => language.current,
+  // Model-source translations are independent of the controls exercised here.
+  useTranslations: (namespace: string) => (key: string) => `${namespace}.${key}`,
+}));
 vi.mock("./interactive-car-model", () => ({
   studioButton: "button",
   InteractiveCarModel: ({ modelId }: { modelId: string }) => (

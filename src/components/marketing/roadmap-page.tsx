@@ -8,6 +8,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import editorial from "./public-editorial.module.css";
 
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { soundCatalog } from "@/features/visualizer/sound-catalog";
@@ -87,7 +88,7 @@ export function RoadmapPage() {
 
   return (
     <div className="min-h-dvh bg-[#e8e6d7] text-[#0e2d30]">
-      <main>
+      <main id="main-content" className={editorial.roadmap}>
         <section className="px-2 pb-2 sm:px-4 sm:pb-4 lg:px-6 lg:pb-6">
           <div className="relative mx-auto grid min-h-[360px] max-w-[1500px] overflow-hidden rounded-[1.75rem] bg-[#0e2d30] text-[#e8e6d7] sm:min-h-[460px] sm:rounded-[2.5rem] lg:grid-cols-[1.12fr_0.88fr]">
             <div className="flex items-end p-6 sm:p-12 lg:p-16">

@@ -19,6 +19,7 @@ import { isAppLocale, locales } from "@/i18n/config";
 import { journalMetadata } from "@/features/journal/metadata";
 import { journalUI, journalReadingTime } from "@/features/journal/ui";
 import { journalStructuredData } from "@/features/journal/structured-data";
+import editorial from "@/components/marketing/public-editorial.module.css";
 
 type Props = { params: Promise<{ locale: string; articleSlug: string }> };
 
@@ -75,11 +76,7 @@ export default async function JournalArticlePage({ params }: Props) {
   const schema = journalStructuredData(article, locale);
   return (
     <>
-      <main
-        id="main-content"
-        lang={locale}
-        className="bg-[#ebe9dc] text-[#0e2d30]"
-      >
+      <main id="main-content" lang={locale} className={editorial.reading}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

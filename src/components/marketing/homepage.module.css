@@ -1,3 +1,5 @@
+@import "../../../tokens.css";
+
 .page {
   background: #ebe9dc;
   color: #0e2d30;
@@ -706,7 +708,7 @@
   }
 }
 
-/* Interactive editorial layer. Brand colours only; imagery stays unobstructed. */
+/* Interactive controls. Brand colours only; imagery stays unobstructed. */
 .hero {
   background:
     radial-gradient(ellipse at 80% 10%, #bf826914, transparent 55%), #0e2d30;
@@ -940,5 +942,239 @@
   }
   .comparisonPresets button {
     padding: 8px 6px;
+  }
+}
+
+/* Hallmark · macrostructure: Split Studio · theme: studied-DNA (image)
+ * Audience: car owners · purpose: create a garage · tone: automotive editorial.
+ * Existing chrome, comparison logic and localized copy are unchanged.
+ */
+.page,
+.hero,
+.story,
+.tools,
+.final {
+  background: var(--capcar-editorial-paper);
+  color: var(--capcar-editorial-ink);
+}
+.section {
+  max-width: 1280px;
+  padding: var(--capcar-editorial-section) var(--capcar-editorial-gutter);
+}
+.heroInner {
+  max-width: 1440px;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.15fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  padding: clamp(3rem, 7vw, 7rem) var(--capcar-editorial-gutter);
+}
+.headline,
+.pageTitle,
+.title,
+.use h3 {
+  font-family: var(--capcar-editorial-display);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.headline {
+  font-size: clamp(2.5rem, 4.1vw, 4rem);
+  max-width: 14ch;
+}
+.title {
+  font-size: clamp(2rem, 3.7vw, 3.5rem);
+  max-width: 24ch;
+}
+.pageTitle {
+  font-size: clamp(2.4rem, 4.4vw, 4.4rem);
+}
+.description,
+.intro,
+.fine,
+.tool p,
+.step p,
+.jobCosts dt,
+.jobValue small,
+.platformBridge p {
+  color: var(--capcar-editorial-muted);
+}
+.eyebrow,
+.hero .eyebrow,
+.number {
+  color: var(--capcar-editorial-accent);
+}
+.eyebrow {
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+.preview {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.previewTop {
+  padding: 0 0 1rem;
+  border-color: var(--capcar-editorial-rule);
+}
+.conceptPreview {
+  padding: 1.25rem 0;
+}
+.heroJob {
+  margin: 0;
+  border-color: var(--capcar-editorial-rule);
+}
+.page main .primary {
+  border-radius: 4px;
+  background: var(--capcar-editorial-accent);
+  border-color: var(--capcar-editorial-accent);
+  color: var(--capcar-editorial-sheet-ink);
+  box-shadow: none;
+}
+.secondary,
+.use .secondary {
+  color: inherit;
+}
+.capabilities {
+  gap: 0.75rem 1.5rem;
+}
+.capabilities li {
+  color: var(--capcar-editorial-muted);
+}
+.editorialUses .use {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: clamp(2rem, 8vw, 8rem);
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+  margin: 0;
+  border-top: 0;
+}
+.editorialUses .use:first-child {
+  padding-top: 3rem;
+}
+.editorialCar {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin-block: 0 1.5rem;
+}
+.editorialUses .use:nth-child(2) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+}
+.editorialUses .use:nth-child(2) > div:first-child {
+  order: 2;
+}
+.use h3 {
+  font-size: clamp(1.8rem, 3vw, 2.75rem);
+}
+.use p {
+  max-width: 48ch;
+}
+.use .fine {
+  font-size: 0.875rem;
+}
+.mini {
+  border: 0;
+  border-radius: 0;
+  border-block: 1px solid var(--capcar-editorial-rule);
+  background: transparent;
+  color: var(--capcar-editorial-ink);
+  padding: 1.5rem 0;
+  box-shadow: none;
+}
+.mini > p:first-child,
+.miniRow span,
+.mini .stats dt {
+  color: var(--capcar-editorial-muted);
+}
+.miniRow,
+.step,
+.step:first-child,
+.tool,
+.tools {
+  border-color: var(--capcar-editorial-rule);
+}
+.bar {
+  background: var(--capcar-editorial-rule);
+}
+.bar span {
+  background: var(--capcar-editorial-accent);
+}
+.drive {
+  border: 0;
+  padding: 0;
+}
+.driveCaption {
+  padding: 1.5rem 0 0;
+}
+.story .section {
+  border-top: 1px solid var(--capcar-editorial-rule);
+}
+.tool {
+  grid-template-columns: 24px minmax(120px, 0.6fr) minmax(0, 1.5fr) auto;
+}
+.tool > svg,
+.tool h3 span {
+  color: var(--capcar-editorial-accent);
+}
+.final {
+  text-align: left;
+}
+.final .title,
+.final p {
+  margin-inline: 0;
+}
+.final .actions {
+  justify-content: flex-start;
+}
+.story .section,
+.tools .section,
+.final .section {
+  animation: none;
+}
+.page main .primary:is(:hover, :focus-visible) {
+  transform: none;
+  box-shadow: none;
+}
+@media (max-width: 760px) {
+  .heroInner {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 2rem 3rem;
+  }
+  .headline {
+    font-size: clamp(2.25rem, 8vw, 3rem);
+    max-width: 18ch;
+  }
+  .section {
+    padding-block: 3.5rem;
+  }
+  .editorialUses .use,
+  .editorialUses .use:nth-child(2) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    padding-block: 2rem;
+  }
+  .editorialUses .use:nth-child(2) > div:first-child {
+    order: initial;
+  }
+  .tool {
+    grid-template-columns: 24px minmax(0, 1fr);
+  }
+  .tool p,
+  .tool a {
+    grid-column: 2;
+  }
+  .primary,
+  .secondary {
+    max-width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page *,
+  .page *::before,
+  .page *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }

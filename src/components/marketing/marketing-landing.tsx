@@ -16,7 +16,6 @@ import { homepageCopy } from "@/features/marketing/homepage-copy";
 import { journalArticlePath } from "@/features/journal/routes";
 import type { AppLocale } from "@/i18n/config";
 import { DeferredProductDashboardPreview } from "./deferred-marketing-demos";
-import { UseCaseExplorer } from "./use-case-explorer";
 import { MarketingHero } from "./marketing-hero";
 import { HomepageLink } from "./homepage-link";
 import { MarketingFaq } from "./marketing-faq";
@@ -69,10 +68,7 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
           <h2 id="use-cases-title" className={styles.title}>
             {c.usesTitle}
           </h2>
-          <UseCaseExplorer
-            label={c.usesTitle}
-            titles={[c.maintain, c.build, c.drives]}
-          >
+          <div className={styles.editorialUses}>
             <article className={styles.use}>
               <div>
                 <h3>{c.maintain}</h3>
@@ -140,6 +136,15 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
               </div>
               <div className={styles.mini} aria-label={c.build}>
                 <p>{c.sample} / BMW 318i</p>
+                <div className={styles.editorialCar}>
+                  <Image
+                    src="/garage/cutouts/bmw-318i.webp"
+                    alt=""
+                    fill
+                    sizes="(max-width: 760px) 90vw, 540px"
+                    className="object-contain"
+                  />
+                </div>
                 <strong>{c.project}</strong>
                 <div className={styles.bar} aria-hidden="true">
                   <span />
@@ -222,7 +227,7 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                 </figcaption>
               </figure>
             </article>
-          </UseCaseExplorer>
+          </div>
         </section>
         <DeferredProductDashboardPreview
           eyebrow={c.sample}
