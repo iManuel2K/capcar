@@ -24,7 +24,7 @@ describe("database-owned API quotas", () => {
     await db.query("insert into auth.users values($1),($2)", [user, other]);
     for (const file of [
       "20260908140000_add_beta_api_rate_limits.sql",
-      "20261022154914_security_review_hardening.sql",
+      "20261022202851_security_review_hardening.sql",
     ])
       await db.exec(readFileSync(`supabase/migrations/${file}`, "utf8"));
   }, 30_000);

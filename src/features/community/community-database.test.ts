@@ -52,8 +52,8 @@ describe("community database authorization", () => {
       "20260909090000_community_and_verified_work.sql",
       "20260910090000_public_discovery.sql",
       "20260912180000_beta_hardening.sql",
-      "20261022202359_production_storage_reconciliation.sql",
-      "20261022154914_security_review_hardening.sql",
+      "20261022202859_production_storage_reconciliation.sql",
+      "20261022202851_security_review_hardening.sql",
     ])
       await db.exec(readFileSync(`supabase/migrations/${file}`, "utf8"));
     await db.query(

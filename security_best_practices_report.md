@@ -2,11 +2,11 @@
 
 ## Summary
 
-Reviewed the nine supplied Instagram slides against CapCar's Next.js/React APIs, Supabase migrations, private storage, provider adapters, offline worker and scheduled jobs. This is a code and configuration review, not a penetration-test certification. Confirmed defects have fixes in this workspace; deployment and database migration are separate rollout steps.
+Reviewed the nine supplied Instagram slides against CapCar's Next.js/React APIs, Supabase migrations, private storage, provider adapters, offline worker and scheduled jobs. This is a code and configuration review, not a penetration-test certification. Confirmed defects have source fixes; the two database migrations were applied to production on 22 October 2026 at 20:28 UTC. Application release verification is recorded below.
 
 The main findings were unsafe map-label HTML, caller-controlled database quota windows, body limits enforced after buffering, missing request-origin checks, production authentication/quota fallbacks, unsafe copilot links and offline caching that ignored HTTP privacy directives. Dependency updates address the published advisories available during this review.
 
-Read-only inspection of the connected `capcar` Supabase project found RLS enabled on all 26 public tables. It also confirmed that the live quota RPC still uses caller-supplied windows, leaked-password protection is disabled, and storage/schema provisioning differs from the repository. No production database or hosting settings were changed during this review.
+Initial inspection of the connected `capcar` Supabase project found RLS enabled on all 26 public tables, caller-controlled quota windows and incomplete storage/schema provisioning. The rollout replaced the quota RPC and added two RLS-protected feature tables, two private buckets and seven scoped storage policies. Leaked-password protection remains disabled because the confirmed Free subscription does not support it.
 
 ## Findings fixed in source
 
@@ -32,12 +32,12 @@ Read-only inspection of the connected `capcar` Supabase project found RLS enable
 ### 3. High — authenticated callers could reset quota windows
 
 - Rule: server-side authorization and rate-limit integrity.
-- Locations: `supabase/migrations/20260908140000_add_beta_api_rate_limits.sql:13`; fix in `supabase/migrations/20261022154914_security_review_hardening.sql:5`.
+- Locations: `supabase/migrations/20260908140000_add_beta_api_rate_limits.sql:13`; fix in `supabase/migrations/20261022202851_security_review_hardening.sql:5`.
 - Evidence: `consume_api_rate_limit` is executable by authenticated users and originally reset counters using caller-supplied `p_window_seconds`. A direct call with a short window could reset the counter before the normal API's window elapsed. Arbitrary route names could also allocate counter rows.
 - Impact: users could exceed intended provider allowances and create avoidable database load/cost.
 - Fix: database-owned route allowlist, canonical windows, maximum quotas, explicit null rejection and bounded counters. Preserve the RPC signature and atomic upsert for existing clients.
 - Verification: PostgreSQL tests cover the direct-RPC reset attempt, the hourly specialist window, user isolation, anonymous/direct-write denial and the quota boundary.
-- Rollout: this is **not fixed on the live database until the new migration is applied**. Live inspection confirmed the original function remains installed.
+- Rollout: applied and verified in production as migration `20261022202851`. The live RPC uses database-owned policies; anonymous execution is denied and authenticated execution remains enabled.
 
 ### 4. Medium — body size was checked after buffering
 
@@ -94,13 +94,13 @@ Read-only inspection of the connected `capcar` Supabase project found RLS enable
 
 ### 10. Medium — leaked-password protection disabled in live Supabase
 
-The connected project's security advisor reported this setting disabled. Enable it in Auth settings if supported by the project's plan, then verify that a known compromised password is rejected in a test account. Do not change subscriptions to enable it without approval. [Supabase remediation](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection).
+The connected project's security advisor reported this setting disabled. The organization API confirmed the Free plan; Supabase documents leaked-password protection as Pro and above. No subscription change was made. This remains an account-plan limitation. [Supabase remediation](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection).
 
-### 11. Medium — live migration/schema drift needs reconciliation
+### 11. Resolved — missing live file/photo and specialist provisioning
 
 The read-only database inventory showed only the private `roadbook-visits` bucket. `vehicle-documents` and `listing-photos` buckets were absent, as were the `community_listing_photos` and `specialist_public_profiles` tables expected by source. Several live migration timestamps also differ from repository migration filenames.
 
-Do not blindly replay all historical migrations. Compare the existing objects and migration history, reconcile missing feature provisioning in staging, and apply the new security migration deliberately. Its bucket updates harden existing buckets; they do not create absent buckets or install missing storage policies.
+Applied the targeted additive migration `20261022202859_production_storage_reconciliation.sql` after comparing the actual columns, functions, policies and buckets. It provisions the missing feature tables, their authorized RPCs, private buckets and scoped policies without replaying historical migrations or replacing user tables. Database tests verify cross-account document denial, moderation-gated public photos and specialist approval/revocation. Live metadata confirms both tables have RLS, both buckets are private, MIME/size limits are enforced and all ten storage policies are present. Local migration filenames now match the newly recorded production versions; older historical timestamp differences remain documented and must not be blindly replayed.
 
 ### 12. High advisory severity, development-only exposure — unresolved braces advisory
 
@@ -174,10 +174,10 @@ Validation completed against Next.js 16.4.2:
 - `pnpm audit --prod`: no known production vulnerabilities. The complete audit retains one development-only `braces` advisory described above; peer dependencies are consistent.
 - `pnpm lint`: zero errors; one existing language-selector navigation warning under the newer Next.js lint rules.
 - `pnpm typecheck` and `pnpm build`: passed; the production build generated all 92 pages.
-- Full application suite: 182 files / 830 tests were exercised. The initial run passed 817 tests and found 13 failures in two stale Studio test fixtures and a file-I/O timeout. The fixtures now use real translation context/current control labels, without changing product UI; the 150-file audio integrity check uses Node and an explicit I/O deadline. A targeted rerun passed all 13 affected/security files and 73 tests, covering every prior failure plus the security regressions. The whole 182-file suite was not repeated after those test-only corrections.
+- Full combined design/security application suite: all 183 files / 834 tests passed. The stale Studio fixtures use real translation context/current control labels; the 150-file audio integrity check uses Node and an explicit I/O deadline. Database coverage includes the production reconciliation migration, cross-account private documents and moderation-gated photos.
 - Runtime security smoke against the local production build: all 15 cross-site, missing-origin and signed-out requests were rejected with HTTP 403/401 and no-store.
 - Standard local release smoke: public pages, headers, health, metadata, provider status and missing Passport passed. Readiness correctly stayed HTTP 503 because this local environment lacks the production deployment marker and complete public operator/privacy-contact settings. Those checks were not bypassed.
 
-The security migration was exercised in isolated PostgreSQL/PGlite tests. It has not been applied to the connected production database. No paid provider request, real calendar mutation, production load test or backup restore drill was performed.
+Both migrations were exercised in isolated PostgreSQL/PGlite tests and applied to the connected production database. Post-apply metadata verified bucket privacy/limits, new-table RLS and quota-RPC privileges. The live advisor has no RLS-disabled table finding; intentional public projection RPCs, authenticated mutation RPCs and deny-client token/quota tables remain flagged for review by generic advisor rules. No paid provider request, real calendar mutation, production load test or backup restore drill was performed.
 
 See [security operations](docs/security-operations.md) for the release and recovery work that cannot be completed by code changes alone.

@@ -2,12 +2,18 @@
 
 This runbook accompanies `security_best_practices_report.md`. It describes required operational work; it does not assert that backups, alerts or staging infrastructure have already been configured.
 
+## Applied database release — 22 October 2026
+
+The linked production project `ojbwkjjjlligfdybgqux` accepted migrations `20261022202851_security_review_hardening` and `20261022202859_production_storage_reconciliation` at 20:28 UTC. The local filenames match those recorded versions. Post-apply queries confirmed canonical quota policies, no anonymous quota-RPC execution, RLS on both new feature tables, private document/photo buckets with MIME/size limits, and ten total scoped storage policies. No existing user tables were replaced or historical migrations replayed. Isolated PostgreSQL tests cover ownership, photo moderation and specialist visibility.
+
+The organization is on Supabase Free. Leaked-password protection requires Pro or above and remains unavailable on this subscription. No billing changes were made. Older migration timestamp differences still require deliberate reconciliation before any blanket CLI push.
+
 ## Release the security fixes
 
 1. Review the source diff and preserve the user's installed skills and existing changes.
 2. Verify the resolved dependencies with `pnpm audit:production`, then run `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm build`. Keep the lockfile frozen on the deployment host.
 3. Compare the linked Supabase migration history and actual schema with the repository. Several production migration timestamps differ, and the file/photo feature provisioning is incomplete. Do not blindly run a command that replays all missing historical migrations.
-4. In an isolated staging database with the required baseline tables, apply `20261022154914_security_review_hardening.sql`. This keeps the existing RPC signature, enforces database-owned quotas and hardens already-provisioned private buckets. Provision missing buckets/policies separately from the reviewed historical feature migrations after checking for conflicts.
+4. In an isolated database with the required baseline tables, apply `20261022202851_security_review_hardening.sql` and, where feature provisioning is absent, `20261022202859_production_storage_reconciliation.sql`. These keep the existing RPC signature, enforce database-owned quotas and provision private buckets/policies. The reconciliation migration deliberately fails on conflicting feature objects; compare actual state first.
 5. With two staging accounts, verify that each can read/write only its own garage and documents; listing moderation and published photo access must still work. A signed-out caller must not obtain private tokens or files.
 6. Test a direct quota RPC using a shortened window: it must not reset an exhausted normal window. Confirm trip-route, Google sync and calendar quota responses. Do not send real mail/calendar mutations while checking a test environment.
 7. Apply the reviewed migration to the intended production project, then deploy the verified app build. Missing account/quota configuration now returns HTTP 503 instead of allowing provider spending.
@@ -29,7 +35,7 @@ Do not switch Supabase's shared browser/server auth cookies to HttpOnly without 
 
 ## Rollback
 
-Retain the previous known-good hosting deploy and its release identifier. If the app build fails acceptance, restore that deploy and verify `/health`, login and garage reads. Prefer retaining the security migration: its RPC signature is backward compatible and ownership protections must not be weakened as a shortcut.
+Retain the previous known-good hosting deploy and its release identifier. A failed Netlify build does not publish. For a bad published release, fix forward by reverting the faulty application commit and letting Git deployment build it; verify `/health`, login and garage reads. Prefer retaining the security migration: its RPC signature is backward compatible and ownership protections must not be weakened as a shortcut.
 
 Use a forward migration for database corrections. Restoring a whole database to undo code can discard newer owner data and must be an explicit incident decision. Retain logs and timestamps needed to understand what happened.
 
