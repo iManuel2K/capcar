@@ -1,3 +1,29 @@
+/* Public editorial feature journeys; functional account screens are unchanged. */
+.hero.hero {
+  max-width: 1280px;
+  padding-inline: var(--capcar-editorial-gutter);
+}
+.lead.lead,
+.access.access,
+.steps.steps p {
+  color: var(--capcar-editorial-muted);
+}
+.example.example {
+  border-radius: 0;
+  background: transparent;
+  border-block: 1px solid var(--capcar-editorial-rule);
+}
+.steps.steps li,
+.links.links a {
+  border-color: var(--capcar-editorial-rule);
+}
+.steps.steps h2 {
+  font-family: var(--capcar-editorial-display);
+  font-weight: 400;
+}
+.steps.steps li > span {
+  color: var(--capcar-editorial-accent);
+}
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);

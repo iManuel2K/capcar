@@ -6,6 +6,7 @@ import { BadgeCheck, Search, Store, Wrench } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import styles from "@/components/marketing/homepage.module.css";
+import editorial from "@/components/marketing/public-editorial.module.css";
 export const fieldClass =
   "mt-2 block min-h-12 w-full rounded-xl border border-foreground/16 bg-card p-3 text-sm shadow-[inset_0_1px_0_rgba(255,255,255,.45)] outline-none transition focus:border-primary/45 focus:bg-card";
 export const actionClass =
@@ -28,37 +29,39 @@ export function CommunityShell({
   ];
   return (
     <div className="capcar-paper-grid bg-background text-foreground min-h-dvh">
-      <main className="px-5 py-8 sm:px-8 sm:py-12">
-        <div className="mx-auto max-w-[1280px] break-words">
-          <nav
-            aria-label={t("label")}
-            className="border-foreground/10 bg-card flex max-w-full gap-1 overflow-x-auto rounded-2xl border p-1.5 text-sm shadow-[0_14px_40px_rgba(184,199,217,.06)] backdrop-blur"
-          >
-            {links.map(({ href, label, icon: Icon }) => {
-              const selected =
-                pathname === href || pathname.startsWith(`${href}/`);
-              return (
-                <Link
-                  key={href}
-                  href={href}
-                  aria-current={selected ? "page" : undefined}
-                  className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl px-3.5 transition ${
-                    selected
-                      ? "bg-card text-foreground shadow-sm"
-                      : "text-foreground/62 hover:bg-card/6 hover:text-foreground"
-                  }`}
-                >
-                  <Icon className="size-4" aria-hidden="true" />
-                  {label}
-                </Link>
-              );
-            })}
-          </nav>
-          <div className="bg-primary text-primary-foreground mt-12 mb-9 h-1 w-12 rounded-full" />
+      <main id="main-content" className={editorial.page}>
+        <div className={`${editorial.inner} break-words`}>
+          <div className={editorial.workbench}>
+            <nav
+              aria-label={t("label")}
+              className="border-foreground/10 bg-card flex max-w-full gap-1 overflow-x-auto rounded-2xl border p-1.5 text-sm shadow-[0_14px_40px_rgba(184,199,217,.06)] backdrop-blur"
+            >
+              {links.map(({ href, label, icon: Icon }) => {
+                const selected =
+                  pathname === href || pathname.startsWith(`${href}/`);
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    aria-current={selected ? "page" : undefined}
+                    className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl px-3.5 transition ${
+                      selected
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-foreground/62 hover:bg-card/6 hover:text-foreground"
+                    }`}
+                  >
+                    <Icon className="size-4" aria-hidden="true" />
+                    {label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+          <div className="bg-primary mt-12 mb-9 h-1 w-12 rounded-full" />
           <h1 className={`${styles.pageTitle} mb-8 max-w-4xl`}>
             {t(titleKey)}
           </h1>
-          {children}
+          <div className={editorial.workbench}>{children}</div>
         </div>
       </main>
       <SiteFooter />

@@ -13,6 +13,7 @@ import { journalUI } from "@/features/journal/ui";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
 import "leaflet/dist/leaflet.css";
 import "./roadbook.css";
+import editorial from "@/components/marketing/public-editorial.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Roadbook");
@@ -29,7 +30,9 @@ export default async function RoadbookPage() {
   return (
     <div className="bg-background min-h-dvh">
       <main id="main-content">
-        <header className="bg-background text-foreground border-b border-white/10 px-5 py-6 sm:px-8">
+        <header
+          className={`${editorial.intro} bg-background text-foreground border-b border-white/10 px-5 py-6 sm:px-8`}
+        >
           <div className="mx-auto max-w-[1440px]">
             <h1 className="text-2xl font-medium tracking-tight sm:text-3xl">
               {t("title")}

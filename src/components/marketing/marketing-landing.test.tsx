@@ -40,19 +40,17 @@ describe("the connected homepage example", () => {
         .length,
     ).toBeGreaterThan(0);
     expect(
-      screen.getByRole("tabpanel", { name: "Maintain your car" }),
+      screen.getByRole("heading", { name: "Maintain your car" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /Plan a maintenance task/ }),
     ).toHaveAttribute("href", "/car-maintenance-tracker");
-    fireEvent.click(screen.getByRole("tab", { name: "Plan your build" }));
     expect(
       screen.getByRole("heading", { name: "Plan your build" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /Start a build plan/ }),
     ).toHaveAttribute("href", "/project-car-planner");
-    fireEvent.click(screen.getByRole("tab", { name: "Find your next drive" }));
     expect(
       screen.getByRole("heading", { name: "Find your next drive" }),
     ).toBeInTheDocument();
@@ -79,28 +77,20 @@ describe("the connected homepage example", () => {
     ).toBe(true);
   });
 
-  it("moves through use cases by keyboard without exposing inactive panel controls", () => {
+  it("shows all three editorial use cases without requiring tab interaction", () => {
     renderPage();
-    const maintain = screen.getByRole("tab", { name: "Maintain your car" });
-    fireEvent.keyDown(maintain, { key: "End" });
-    const drives = screen.getByRole("tab", { name: "Find your next drive" });
-    expect(drives).toHaveFocus();
-    expect(drives).toHaveAttribute("aria-selected", "true");
     expect(
-      screen.queryByRole("link", { name: /Plan a maintenance task/ }),
+      screen.queryByRole("tab", { name: "Maintain your car" }),
     ).not.toBeInTheDocument();
-    expect(screen.getByRole("tabpanel")).toHaveAccessibleName(
-      "Find your next drive",
-    );
-    fireEvent.keyDown(drives, { key: "ArrowRight" });
-    expect(maintain).toHaveFocus();
-    expect(screen.getByRole("tabpanel")).toHaveAccessibleName(
-      "Maintain your car",
-    );
-    fireEvent.keyDown(maintain, { key: "ArrowLeft" });
-    expect(drives).toHaveFocus();
-    fireEvent.keyDown(drives, { key: "Home" });
-    expect(maintain).toHaveFocus();
+    expect(
+      screen.getByRole("link", { name: /Plan a maintenance task/ }),
+    ).toBeVisible();
+    expect(
+      screen.getByRole("link", { name: /Start a build plan/ }),
+    ).toBeVisible();
+    expect(
+      screen.getByRole("heading", { name: "Find your next drive" }),
+    ).toBeVisible();
   });
 
   it("connects the chosen part, estimated budget and planned passport record", () => {
