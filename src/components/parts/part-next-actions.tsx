@@ -33,12 +33,12 @@ export function PartNextActions({
           description="Prepare tools, pass the safety gate and complete one clear step at a time."
         />
       ) : (
-        <div className="rounded-[2rem] border border-white/8 bg-[#111111] p-7 opacity-50">
-          <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+        <div className="bg-card rounded-[2rem] border border-white/8 p-7 opacity-50">
+          <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
             Installation guide
           </p>
           <h2 className="mt-3 text-xl font-medium">Guide not yet available</h2>
-          <p className="mt-3 text-sm leading-6 text-white/40">
+          <p className="text-muted-foreground mt-3 text-sm leading-6">
             This demo part has no guided workflow in the current catalogue.
           </p>
         </div>
@@ -63,19 +63,19 @@ function ActionCard({
   return (
     <Link
       href={href}
-      className="group rounded-[2rem] border border-white/10 bg-[#111111] p-7 transition-colors hover:border-[#e72d45]/35"
+      className="group bg-card hover:border-primary/35 rounded-[2rem] border border-white/10 p-7 transition-colors"
     >
       <div className="flex items-center justify-between">
-        <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/10 text-[#ff667a]">
+        <span className="bg-primary/10 text-primary grid size-11 place-items-center rounded-xl">
           <Icon className="size-5" />
         </span>
-        <ArrowRight className="size-5 text-white/25 transition-transform group-hover:translate-x-1 group-hover:text-white" />
+        <ArrowRight className="text-muted-foreground group-hover:text-foreground size-5 transition-transform group-hover:translate-x-1" />
       </div>
-      <p className="mt-8 text-xs tracking-[0.14em] text-[#ff667a] uppercase">
+      <p className="text-primary mt-8 text-xs tracking-[0.14em] uppercase">
         {eyebrow}
       </p>
       <h2 className="mt-2 text-2xl font-medium">{title}</h2>
-      <p className="mt-3 max-w-lg text-sm leading-6 text-white/40">
+      <p className="text-muted-foreground mt-3 max-w-lg text-sm leading-6">
         {description}
       </p>
     </Link>

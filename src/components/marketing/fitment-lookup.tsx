@@ -66,7 +66,7 @@ export function FitmentLookup() {
   }
 
   return (
-    <div className="overflow-hidden rounded-[1.6rem] border border-black/15 bg-[#050306] text-[#e8e6d7] shadow-[0_30px_100px_rgba(40,0,7,0.28)] sm:rounded-[2rem]">
+    <div className="text-foreground overflow-hidden rounded-[1.6rem] border border-black/15 bg-[#050306] shadow-[0_30px_100px_rgba(40,0,7,0.28)] sm:rounded-[2rem]">
       <div className="border-b border-white/8 p-5 sm:p-6">
         <div className="flex items-center justify-between gap-4">
           <div>
@@ -88,14 +88,14 @@ export function FitmentLookup() {
               value={query}
               onChange={(event) => setQuery(event.target.value.toUpperCase())}
               placeholder={t("vin")}
-              className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/60"
+              className="text-foreground min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-white/60"
             />
           </label>
           <button
             type="submit"
             disabled={loading || !query.trim()}
             aria-label={t("lookup")}
-            className="grid size-12 shrink-0 place-items-center rounded-xl bg-white text-black transition hover:-translate-y-0.5 disabled:opacity-50"
+            className="bg-primary text-primary-foreground grid size-12 shrink-0 place-items-center rounded-xl transition hover:-translate-y-0.5 disabled:opacity-50"
           >
             {loading ? (
               <LoaderCircle className="size-4" />
@@ -123,7 +123,7 @@ export function FitmentLookup() {
         </div>
 
         <div className="grid gap-px bg-white/8 sm:grid-cols-[0.9fr_1.1fr]">
-          <div className="bg-[#0e2d30] p-4 sm:p-5">
+          <div className="bg-card p-4 sm:p-5">
             <p className="px-2 text-[10px] tracking-[0.13em] text-white/70 uppercase">
               {t("selectPart")}
             </p>
@@ -135,8 +135,8 @@ export function FitmentLookup() {
                   onClick={() => setActivePart(index)}
                   className={`w-full rounded-xl px-3 py-3 text-left transition ${
                     activePart === index
-                      ? "bg-white text-black"
-                      : "text-white/70 hover:bg-white/[0.05] hover:text-white"
+                      ? "bg-primary text-primary-foreground"
+                      : "hover:text-foreground text-white/70 hover:bg-white/[0.05]"
                   }`}
                 >
                   <span className="block text-xs font-medium">{part.name}</span>

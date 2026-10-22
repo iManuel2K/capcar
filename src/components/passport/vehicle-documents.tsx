@@ -215,7 +215,7 @@ function DocumentLibrary({
       className="no-print mt-5 rounded-2xl border border-white/15 p-5 sm:p-7"
     >
       <h2 className="flex items-center gap-2 text-xl font-medium">
-        <FileText aria-hidden="true" className="size-5 text-[#c98f72]" />
+        <FileText aria-hidden="true" className="text-primary size-5" />
         Receipts, photos & documents
       </h2>
       <p className="mt-3 text-sm leading-6 text-white/70">
@@ -275,7 +275,7 @@ function DocumentLibrary({
           </button>
         </p>
       )}
-      <p role="status" className="mt-3 text-sm text-[#a5d8bf]">
+      <p role="status" className="text-muted-foreground mt-3 text-sm">
         {message}
       </p>
       {!loading && !signedOut && !entries.length && !error && (

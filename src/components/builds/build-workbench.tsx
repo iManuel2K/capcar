@@ -38,7 +38,7 @@ import {
 import { requestConnectedFitment } from "@/features/fitment/fitment-client";
 
 const control =
-  "mt-2 min-h-11 w-full rounded-xl border border-white/25 bg-[#101817] px-3 py-2 text-sm text-[#eee7d8] focus-visible:outline-2 focus-visible:outline-offset-2";
+  "mt-2 min-h-11 w-full rounded-xl border border-white/25 bg-card px-3 py-2 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2";
 const button =
   "inline-flex min-h-11 items-center justify-center rounded-xl border border-white/30 px-4 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-4 disabled:opacity-40";
 const money = (value: number, currency = "EUR") =>
@@ -64,9 +64,9 @@ export function BuildWorkbench({
   return (
     <section
       id="workbench"
-      className="my-6 scroll-mt-24 rounded-[2rem] border border-white/20 bg-[#0d1918] p-5 text-[#eee7d8] sm:p-8"
+      className="bg-card text-foreground my-6 scroll-mt-24 rounded-[2rem] border border-white/20 p-5 sm:p-8"
     >
-      <p className="text-xs tracking-[0.16em] text-[#cda58e] uppercase">
+      <p className="text-primary text-xs tracking-[0.16em] uppercase">
         Compare → purchase → install → remember
       </p>
       <h2 className="mt-3 text-2xl font-medium sm:text-4xl">
@@ -360,7 +360,7 @@ function ItemWorkbench({
         ].map((name) => (
           <button
             key={name}
-            className={`${button} ${tab === name ? "bg-[#eee7d8] text-[#102f2b]" : ""}`}
+            className={`${button} ${tab === name ? "bg-background text-foreground" : ""}`}
             aria-pressed={tab === name}
             onClick={() => {
               setTab(name);
@@ -866,7 +866,7 @@ function ItemWorkbench({
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
                     <h4 className="font-medium">{quote.title}</h4>
-                    <p className="mt-1 text-sm text-white/55">
+                    <p className="text-muted-foreground mt-1 text-sm">
                       {quote.retailer} ·{" "}
                       {quote.partNumber || "part number unconfirmed"}
                     </p>
@@ -909,7 +909,7 @@ function ItemWorkbench({
                 </div>
                 {watch && (
                   <div className="mt-5 border-t border-white/10 pt-4">
-                    <p className="text-xs text-white/45">
+                    <p className="text-muted-foreground text-xs">
                       Target{" "}
                       {watch.targetPrice === undefined
                         ? "not set"
@@ -957,7 +957,7 @@ function ItemWorkbench({
                   key={quote.id}
                   className="rounded-2xl border border-white/15 bg-black/15 p-5"
                 >
-                  <p className="text-xs text-white/40 uppercase">
+                  <p className="text-muted-foreground text-xs uppercase">
                     Fitment decision
                   </p>
                   <h3 className="mt-2 text-lg font-medium">{quote.title}</h3>
@@ -985,26 +985,26 @@ function ItemWorkbench({
                   </button>
                   <dl className="mt-4 grid gap-2 text-sm">
                     <div>
-                      <dt className="text-white/35">Matched</dt>
+                      <dt className="text-muted-foreground">Matched</dt>
                       <dd>
                         {verdict.matchedAxes.join(", ") || "None established"}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-white/35">Missing</dt>
+                      <dt className="text-muted-foreground">Missing</dt>
                       <dd>
                         {verdict.missingAxes.join(", ") ||
                           "No required axes missing"}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-white/35">Conflicts</dt>
+                      <dt className="text-muted-foreground">Conflicts</dt>
                       <dd>
                         {verdict.conflicts.join(" versus ") || "None recorded"}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-white/35">Evidence</dt>
+                      <dt className="text-muted-foreground">Evidence</dt>
                       <dd>
                         {verdict.count} matching source
                         {verdict.count === 1 ? "" : "s"}
@@ -1438,7 +1438,7 @@ function PriceHistory({
     );
   if (!points.length)
     return (
-      <p className="mt-3 text-sm text-white/45">
+      <p className="text-muted-foreground mt-3 text-sm">
         No complete delivered-total snapshot yet.
       </p>
     );
@@ -1453,7 +1453,7 @@ function PriceHistory({
         {points.map((point) => (
           <div
             key={point.snapshot.observedAt}
-            className="min-w-3 flex-1 rounded-t bg-[#e72d45]"
+            className="bg-primary text-primary-foreground min-w-3 flex-1 rounded-t"
             style={{
               height: `${Math.max(10, (point.total / maximum) * 100)}%`,
             }}
@@ -1461,7 +1461,7 @@ function PriceHistory({
           />
         ))}
       </div>
-      <p className="mt-2 text-xs text-white/45">
+      <p className="text-muted-foreground mt-2 text-xs">
         {money(points[0].total, currency)} first ·{" "}
         {money(points.at(-1)!.total, currency)} latest
       </p>

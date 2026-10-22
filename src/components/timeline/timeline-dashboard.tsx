@@ -28,7 +28,7 @@ const categoryContent: Record<
   TimelineCategory,
   { label: string; icon: LucideIcon; color: string }
 > = {
-  vehicle: { label: "Vehicle", icon: CarFront, color: "text-[#9ec2ff]" },
+  vehicle: { label: "Vehicle", icon: CarFront, color: "text-primary" },
   maintenance: {
     label: "Maintenance",
     icon: Wrench,
@@ -69,7 +69,9 @@ export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
     );
   if (!vehicle)
     return (
-      <div className="py-32 text-center text-white/45">Vehicle not found.</div>
+      <div className="text-muted-foreground py-32 text-center">
+        Vehicle not found.
+      </div>
     );
 
   const visible =
@@ -89,15 +91,15 @@ export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
 
   return (
     <div className="pb-24 sm:pb-0">
-      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_82%_18%,rgba(231,45,69,0.18),transparent_28%),#111111] p-6 sm:p-10">
-        <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
+      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_82%_18%,rgba(184,199,217,0.18),transparent_28%),#111111] p-6 sm:p-10">
+        <p className="text-primary text-xs font-semibold tracking-[0.15em] uppercase">
           {vehicle.productionYear} {vehicle.make} {vehicle.model} ·{" "}
           {vehicle.platform}
         </p>
         <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-7xl">
           One history for the car.
         </h1>
-        <p className="mt-5 max-w-2xl leading-7 text-white/45">
+        <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
           Maintenance, build plans, selected demo offers and completed guided
           workflows—combined automatically from your local CapCar records.
         </p>
@@ -121,10 +123,10 @@ export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
         />
       </section>
 
-      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
+      <section className="bg-card mt-5 rounded-[2rem] border border-white/10 p-5 sm:p-8">
         <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
           <div>
-            <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+            <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
               Vehicle timeline
             </p>
             <h2 className="mt-2 text-2xl font-medium">Newest activity first</h2>
@@ -161,26 +163,26 @@ export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
                   {index < visible.length - 1 && (
                     <div className="absolute top-11 bottom-0 left-[21px] w-px bg-white/8" />
                   )}
-                  <div className="relative z-10 grid size-11 place-items-center rounded-xl border border-white/10 bg-[#0d0d0d]">
+                  <div className="bg-card relative z-10 grid size-11 place-items-center rounded-xl border border-white/10">
                     <Icon className={`size-4 ${content.color}`} />
                   </div>
                   <div className="rounded-2xl border border-white/8 bg-white/[0.022] p-5">
                     <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
                       <div>
-                        <p className="text-[11px] tracking-[0.12em] text-white/30 uppercase">
+                        <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
                           {content.label}
                         </p>
                         <h3 className="mt-2 font-medium text-white/85">
                           {event.title}
                         </h3>
                       </div>
-                      <time className="flex shrink-0 items-center gap-1.5 text-xs text-white/30">
+                      <time className="text-muted-foreground flex shrink-0 items-center gap-1.5 text-xs">
                         <CalendarDays className="size-3.5" />
                         {formatDate(event.occurredAt)}
                       </time>
                     </div>
                     <div className="mt-3 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-                      <p className="max-w-2xl text-sm leading-6 text-white/40">
+                      <p className="text-muted-foreground max-w-2xl text-sm leading-6">
                         {event.detail}
                       </p>
                       {event.value && (
@@ -191,7 +193,7 @@ export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
                     </div>
                     {event.completion && (
                       <div className="mt-3">
-                        <p className="text-xs text-[#d6aa92]">{copy.private}</p>
+                        <p className="text-primary text-xs">{copy.private}</p>
                         {event.completion.note && (
                           <p className="mt-3 text-sm whitespace-pre-wrap text-white/75">
                             {event.completion.note}
@@ -210,8 +212,8 @@ export function TimelineDashboard({ vehicleId }: { vehicleId: string }) {
           </div>
         ) : (
           <div className="mt-8 rounded-2xl border border-dashed border-white/10 py-20 text-center">
-            <Clock3 className="mx-auto size-7 text-white/20" />
-            <p className="mt-4 text-sm text-white/35">
+            <Clock3 className="text-muted-foreground mx-auto size-7" />
+            <p className="text-muted-foreground mt-4 text-sm">
               No records in this category yet.
             </p>
           </div>
@@ -231,10 +233,10 @@ function SummaryCard({
   value: string;
 }) {
   return (
-    <article className="rounded-2xl border border-white/10 bg-[#111111] p-5">
-      <Icon className="size-4 text-[#ff667a]" />
+    <article className="bg-card rounded-2xl border border-white/10 p-5">
+      <Icon className="text-primary size-4" />
       <p className="mt-5 text-2xl font-medium">{value}</p>
-      <p className="mt-1 text-xs text-white/35">{label}</p>
+      <p className="text-muted-foreground mt-1 text-xs">{label}</p>
     </article>
   );
 }
@@ -252,7 +254,7 @@ function FilterButton({
     <button
       type="button"
       onClick={onClick}
-      className={`shrink-0 rounded-full border px-3.5 py-2 text-xs ${active ? "border-[#e72d45]/40 bg-[#e72d45]/12 text-[#bad1ff]" : "border-white/10 text-white/35"}`}
+      className={`shrink-0 rounded-full border px-3.5 py-2 text-xs ${active ? "border-primary/40 bg-primary/12 text-primary" : "text-muted-foreground border-white/10"}`}
     >
       {children}
     </button>

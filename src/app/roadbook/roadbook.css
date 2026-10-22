@@ -5,8 +5,8 @@
   place-items: center;
   border: 1px solid rgb(255 255 255 / 18%);
   border-radius: 0.9rem 0.9rem 0.9rem 0.2rem;
-  background: #111613;
-  color: #f4f5f2;
+  background: var(--card);
+  color: var(--foreground);
   box-shadow: 0 14px 34px rgb(0 0 0 / 30%);
   transform: rotate(-45deg);
   transition:
@@ -28,10 +28,10 @@
   width: 1.15rem;
   height: 1.15rem;
   place-items: center;
-  border: 2px solid #111613;
+  border: 2px solid var(--foreground);
   border-radius: 999px;
-  background: #f1eadf;
-  color: #0e2d30;
+  background: var(--background);
+  color: var(--foreground);
   font-size: 0.6rem;
   font-weight: 800;
   line-height: 1;
@@ -42,7 +42,8 @@
 .roadbook-marker:focus-visible,
 .roadbook-marker.is-selected {
   z-index: 2;
-  background: #e72d45;
+  background: var(--primary);
+  color: var(--primary-foreground);
   transform: rotate(-45deg) translateY(-3px) scale(1.08);
   outline: none;
 }
@@ -60,8 +61,8 @@
 }
 
 .roadbook-marker--fuel {
-  background: #f1eadf;
-  color: #0e2d30;
+  background: var(--background);
+  color: var(--foreground);
 }
 
 .roadbook-marker__fuel-price {
@@ -69,11 +70,11 @@
   top: -0.48rem;
   right: -1rem;
   min-width: 2.25rem;
-  border: 2px solid #111613;
+  border: 2px solid var(--foreground);
   border-radius: 999px;
-  background: #e72d45;
+  background: var(--primary);
   padding: 0.2rem 0.35rem;
-  color: white;
+  color: var(--primary-foreground);
   font-size: 0.58rem;
   font-weight: 800;
   line-height: 1;
@@ -86,19 +87,19 @@
   height: 1rem;
   border: 3px solid white;
   border-radius: 999px;
-  background: #e72d45;
-  box-shadow: 0 0 0 7px rgb(231 45 69 / 20%);
+  background: var(--primary);
+  box-shadow: 0 0 0 7px rgb(184 199 217 / 20%);
 }
 
 .roadbook-map-shell {
   isolation: isolate;
-  background: var(--roadbook-map-canvas, #0b0e0c);
+  background: var(--roadbook-map-canvas, var(--background));
   transition: background-color 240ms ease;
 }
 
 .roadbook-leaflet-map {
   z-index: 0;
-  background: var(--roadbook-map-canvas, #0b0e0c);
+  background: var(--roadbook-map-canvas, var(--background));
   font-family: inherit;
   transition: background-color 240ms ease;
 }
@@ -157,14 +158,14 @@
   gap: 24px;
   cursor: pointer;
   font-size: 0.875rem;
-  color: #f5f2e8;
+  color: var(--foreground);
 }
 .roadbook-style-picker__summary strong {
-  color: #d6aa92;
+  color: var(--primary);
   font-weight: 550;
 }
 .roadbook-style-picker__summary:focus-visible {
-  outline: 2px solid #d6aa92;
+  outline: 2px solid var(--primary);
   outline-offset: 3px;
 }
 .roadbook-style-picker details[open] {
@@ -252,14 +253,14 @@
 
 .roadbook-style-chip:focus-visible {
   box-shadow:
-    0 0 0 2px #09100d,
+    0 0 0 2px #000000,
     0 0 0 4px rgb(255 255 255 / 78%);
 }
 
 .roadbook-style-chip.is-selected {
   border-color: white;
   background: white;
-  color: #101412;
+  color: var(--foreground);
   box-shadow: 0 7px 20px rgb(0 0 0 / 22%);
 }
 

@@ -22,7 +22,7 @@ export function JournalCards({
         <Link
           key={article.slug}
           href={journalArticlePath(article.slug, locale)}
-          className={`group border-b border-[#0e2d30]/20 pb-8 transition hover:border-[#92644d] focus-visible:outline-2 focus-visible:outline-offset-4 ${index === 0 ? "md:col-span-2 md:grid md:grid-cols-[1.2fr_1fr] md:items-center md:gap-10" : "grid grid-cols-[96px_1fr] items-start gap-5 sm:grid-cols-[160px_1fr]"}`}
+          className={`group border-foreground/20 hover:border-primary border-b pb-8 transition focus-visible:outline-2 focus-visible:outline-offset-4 ${index === 0 ? "md:col-span-2 md:grid md:grid-cols-[1.2fr_1fr] md:items-center md:gap-10" : "grid grid-cols-[96px_1fr] items-start gap-5 sm:grid-cols-[160px_1fr]"}`}
         >
           <div
             className={`relative bg-transparent ${index === 0 ? "aspect-[16/9]" : "aspect-square"}`}
@@ -40,7 +40,7 @@ export function JournalCards({
             />
           </div>
           <div className={index === 0 ? "pt-5 md:pt-0" : ""}>
-            <p className="text-xs font-semibold tracking-widest text-[#79503c] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-widest uppercase">
               {article.category} · {journalReadingTime(locale, article.minutes)}
             </p>
             <h2
@@ -52,7 +52,7 @@ export function JournalCards({
                 aria-hidden="true"
               />
             </h2>
-            <p className="mt-4 text-sm leading-7 text-[#0e2d30]/75">
+            <p className="text-foreground/75 mt-4 text-sm leading-7">
               {article.description}
             </p>
             <p className="mt-6 text-sm font-semibold">

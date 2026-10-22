@@ -30,7 +30,7 @@ export async function PublicMarketplace() {
   return (
     <section>
       <p className="max-w-2xl leading-7">{t("intro")}</p>
-      <details className="my-5 rounded-2xl border border-[#0e2d30]/20 p-5">
+      <details className="border-foreground/20 my-5 rounded-2xl border p-5">
         <summary className="min-h-11 cursor-pointer py-2 font-medium">
           {trust("details")}
         </summary>
@@ -45,7 +45,7 @@ export async function PublicMarketplace() {
         </Link>
       )}
       {unavailable ? (
-        <p role="alert" className="rounded-2xl border border-[#6d0101]/25 p-6">
+        <p role="alert" className="border-primary/25 rounded-2xl border p-6">
           {t("loadError")}{" "}
           <Link className="underline" href="/marketplace">
             {t("tryAgain")}
@@ -57,10 +57,10 @@ export async function PublicMarketplace() {
           .
         </p>
       ) : !listings.length ? (
-        <div className="overflow-hidden rounded-[2rem] border border-[#0e2d30]/12 bg-[#0e2d30] p-6 text-[#e8e6d7] shadow-[0_24px_70px_rgba(14,45,48,0.12)] sm:p-9">
+        <div className="border-foreground/12 bg-card text-foreground overflow-hidden rounded-[2rem] border p-6 shadow-[0_24px_70px_rgba(184,199,217,0.12)] sm:p-9">
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
-              <span className="grid size-12 place-items-center rounded-2xl bg-[#bf8269]/15 text-[#d6aa92]">
+              <span className="bg-primary/15 text-primary grid size-12 place-items-center rounded-2xl">
                 <PackageOpen className="size-5" aria-hidden="true" />
               </span>
               <h2 className="mt-6 text-2xl font-medium tracking-[-0.03em] sm:text-3xl">
@@ -72,13 +72,13 @@ export async function PublicMarketplace() {
             </div>
             <div className="flex flex-col gap-2 sm:flex-row lg:flex-col">
               <Link
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#e8e6d7] px-5 text-sm font-semibold text-[#0e2d30] transition hover:-translate-y-0.5"
+                className="bg-background text-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition hover:-translate-y-0.5"
                 href="/login?next=%2Fmarketplace"
               >
                 {t("signInTrade")} <ArrowRight className="size-4" />
               </Link>
               <Link
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 px-5 text-sm font-medium text-white/72 transition hover:border-white/30 hover:text-white"
+                className="hover:text-foreground inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 px-5 text-sm font-medium text-white/72 transition hover:border-white/30"
                 href="/connected-parts"
               >
                 {t("searchRetailers")}

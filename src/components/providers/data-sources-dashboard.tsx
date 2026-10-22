@@ -63,7 +63,9 @@ export function DataSourcesDashboard({
     );
   if (!vehicle)
     return (
-      <div className="py-32 text-center text-white/45">Vehicle not found.</div>
+      <div className="text-muted-foreground py-32 text-center">
+        Vehicle not found.
+      </div>
     );
 
   async function resolveVehicle() {
@@ -108,19 +110,19 @@ export function DataSourcesDashboard({
     <div className="pb-24 sm:pb-0">
       <Link
         href={`/garage/${vehicleId}`}
-        className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
+        className="text-muted-foreground hover:text-foreground mb-7 inline-flex items-center gap-2 text-sm"
       >
         <ArrowLeft className="size-4" /> Vehicle overview
       </Link>
 
-      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_12%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10">
-        <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
+      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_12%,rgba(184,199,217,0.2),transparent_30%),#111111] p-6 sm:p-10">
+        <p className="text-primary text-xs font-semibold tracking-[0.15em] uppercase">
           Vehicle data foundation
         </p>
         <h1 className="mt-4 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
           Know the exact car behind the badge.
         </h1>
-        <p className="mt-5 max-w-2xl leading-7 text-white/45">
+        <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
           Vehicle identity, catalogue records, offers and 3D assets use separate
           server-side provider contracts. Every resolved field keeps its source
           and verification state.
@@ -133,10 +135,10 @@ export function DataSourcesDashboard({
           return (
             <article
               key={status.domain}
-              className="rounded-[2rem] border border-white/10 bg-[#111111] p-6"
+              className="bg-card rounded-[2rem] border border-white/10 p-6"
             >
               <div className="flex items-center justify-between">
-                <span className="grid size-11 place-items-center rounded-xl bg-[#e72d45]/10 text-[#ff667a]">
+                <span className="bg-primary/10 text-primary grid size-11 place-items-center rounded-xl">
                   <Icon className="size-5" />
                 </span>
                 <span
@@ -145,13 +147,13 @@ export function DataSourcesDashboard({
                   {status.mode}
                 </span>
               </div>
-              <p className="mt-7 text-xs tracking-[0.12em] text-white/30 uppercase">
+              <p className="text-muted-foreground mt-7 text-xs tracking-[0.12em] uppercase">
                 {status.label}
               </p>
               <h2 className="mt-2 text-xl font-medium">
                 {status.providerName}
               </h2>
-              <p className="mt-3 text-sm leading-6 text-white/40">
+              <p className="text-muted-foreground mt-3 text-sm leading-6">
                 {status.message}
               </p>
             </article>
@@ -160,10 +162,10 @@ export function DataSourcesDashboard({
       </section>
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
-        <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
+        <article className="bg-card rounded-[2rem] border border-white/10 p-6 sm:p-8">
           <div className="flex items-start justify-between gap-5">
             <div>
-              <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+              <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
                 Vehicle / VIN identity
               </p>
               <h2 className="mt-2 text-2xl font-medium">
@@ -172,7 +174,7 @@ export function DataSourcesDashboard({
             </div>
             {resolution && <CheckCircle2 className="size-5 text-emerald-200" />}
           </div>
-          <p className="mt-4 text-sm leading-6 text-white/45">
+          <p className="text-muted-foreground mt-4 text-sm leading-6">
             Demo resolution normalizes what you entered. A licensed adapter can
             later return build date, manufacturer type code, market, drivetrain
             details, paint and factory option codes without changing this
@@ -182,7 +184,7 @@ export function DataSourcesDashboard({
             type="button"
             disabled={resolving}
             onClick={resolveVehicle}
-            className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-[#07101d] disabled:opacity-50"
+            className="bg-primary text-primary-foreground mt-6 inline-flex min-h-12 items-center gap-2 rounded-xl px-5 text-sm font-semibold disabled:opacity-50"
           >
             {resolving ? (
               <LoaderCircle className="size-4" />
@@ -203,11 +205,11 @@ export function DataSourcesDashboard({
                   {resolution.identity.productionYear}{" "}
                   {resolution.identity.make} {resolution.identity.model}
                 </p>
-                <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] text-white/40 uppercase">
+                <span className="text-muted-foreground rounded-full border border-white/10 px-2.5 py-1 text-[10px] uppercase">
                   {resolution.confidence}
                 </span>
               </div>
-              <p className="mt-2 text-sm text-white/45">
+              <p className="text-muted-foreground mt-2 text-sm">
                 {resolution.identity.platform} ·{" "}
                 {resolution.identity.engineCode} ·{" "}
                 {resolution.identity.bodyStyle}
@@ -248,9 +250,9 @@ export function DataSourcesDashboard({
                 {resolution.evidence.map((item) => (
                   <li
                     key={item}
-                    className="flex gap-2 text-xs leading-5 text-white/40"
+                    className="text-muted-foreground flex gap-2 text-xs leading-5"
                   >
-                    <Check className="mt-0.5 size-3.5 shrink-0 text-white/25" />
+                    <Check className="text-muted-foreground mt-0.5 size-3.5 shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -259,12 +261,12 @@ export function DataSourcesDashboard({
           )}
         </article>
 
-        <aside className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
+        <aside className="bg-card rounded-[2rem] border border-white/10 p-6 sm:p-8">
           <div className="flex items-center gap-3">
-            <ServerCog className="size-5 text-[#ff667a]" />
+            <ServerCog className="text-primary size-5" />
             <h2 className="text-xl font-medium">Activate later</h2>
           </div>
-          <p className="mt-4 text-sm leading-6 text-white/45">
+          <p className="text-muted-foreground mt-4 text-sm leading-6">
             Provider keys remain on the server and never enter browser code.
             Each source can be activated independently.
           </p>
@@ -279,7 +281,7 @@ export function DataSourcesDashboard({
               text="Switch only that provider to external mode."
             />
           </ol>
-          <div className="mt-7 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-4 text-xs leading-5 text-white/45">
+          <div className="text-muted-foreground mt-7 flex items-start gap-3 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-4 text-xs leading-5">
             <KeyRound className="mt-0.5 size-4 shrink-0 text-amber-200" />
             Never prefix provider secrets with NEXT_PUBLIC_.
           </div>
@@ -291,8 +293,8 @@ export function DataSourcesDashboard({
 
 function ActivationStep({ number, text }: { number: string; text: string }) {
   return (
-    <li className="flex items-center gap-3 text-sm text-white/50">
-      <span className="grid size-8 shrink-0 place-items-center rounded-lg border border-white/10 text-xs text-white/35">
+    <li className="text-muted-foreground flex items-center gap-3 text-sm">
+      <span className="text-muted-foreground grid size-8 shrink-0 place-items-center rounded-lg border border-white/10 text-xs">
         {number}
       </span>
       {text}
@@ -303,7 +305,7 @@ function ActivationStep({ number, text }: { number: string; text: string }) {
 function IdentityField({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-white/8 p-3">
-      <dt className="text-[10px] tracking-[0.1em] text-white/25 uppercase">
+      <dt className="text-muted-foreground text-[10px] tracking-[0.1em] uppercase">
         {label}
       </dt>
       <dd className="mt-1 text-sm text-white/60">{value}</dd>

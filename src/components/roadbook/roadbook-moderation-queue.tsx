@@ -105,15 +105,15 @@ export function RoadbookModerationQueue() {
         type="button"
         onClick={() => setOpen((current) => !current)}
         aria-expanded={open}
-        className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/12 bg-[#09100d]/88 px-4 text-xs font-semibold text-white/70 shadow-xl backdrop-blur-xl"
+        className="bg-background/88 inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/12 px-4 text-xs font-semibold text-white/70 shadow-xl backdrop-blur-xl"
       >
         <Shield className="size-4 text-[#6bd2ae]" aria-hidden="true" />
         {t("action")} · {queueCount}
       </button>
       {open && (
-        <section className="absolute top-13 right-0 w-[min(28rem,calc(100vw-2rem))] rounded-2xl border border-white/12 bg-[#09100d]/98 p-4 text-white shadow-2xl backdrop-blur-xl">
+        <section className="bg-background/98 text-foreground absolute top-13 right-0 w-[min(28rem,calc(100vw-2rem))] rounded-2xl border border-white/12 p-4 shadow-2xl backdrop-blur-xl">
           <h2 className="text-sm font-semibold">{t("title")}</h2>
-          <p className="mt-1 text-xs leading-5 text-white/42">
+          <p className="text-muted-foreground mt-1 text-xs leading-5">
             {t("description")}
           </p>
           <div className="mt-3 grid grid-cols-2 gap-2" role="tablist">
@@ -128,7 +128,7 @@ export function RoadbookModerationQueue() {
                   setActiveId("");
                   setNote("");
                 }}
-                className={`min-h-9 rounded-lg border px-3 text-xs font-semibold transition ${tab === value ? "border-white/28 bg-white/10 text-white" : "border-white/8 text-white/45 hover:text-white/75"}`}
+                className={`min-h-9 rounded-lg border px-3 text-xs font-semibold transition ${tab === value ? "text-foreground border-white/28 bg-white/10" : "text-muted-foreground border-white/8 hover:text-white/75"}`}
               >
                 {t(`tabs.${value}`)} ·
                 {value === "discoveries" ? candidates.length : reports.length}
@@ -142,10 +142,14 @@ export function RoadbookModerationQueue() {
           )}
           <div className="mt-3 max-h-[min(34rem,70dvh)] space-y-3 overflow-y-auto">
             {tab === "discoveries" && !candidates.length && (
-              <p className="text-xs text-white/45">{t("emptyDiscoveries")}</p>
+              <p className="text-muted-foreground text-xs">
+                {t("emptyDiscoveries")}
+              </p>
             )}
             {tab === "reports" && !reports.length && (
-              <p className="text-xs text-white/45">{t("emptyReports")}</p>
+              <p className="text-muted-foreground text-xs">
+                {t("emptyReports")}
+              </p>
             )}
 
             {tab === "discoveries" &&
@@ -170,7 +174,7 @@ export function RoadbookModerationQueue() {
                   className="rounded-xl border border-white/9 bg-white/[0.035] p-3"
                 >
                   <p className="text-xs font-semibold">{report.venueName}</p>
-                  <p className="mt-2 text-xs leading-5 text-white/48">
+                  <p className="text-muted-foreground mt-2 text-xs leading-5">
                     {report.reason}
                   </p>
                   {report.evidenceUrl && (
@@ -178,7 +182,7 @@ export function RoadbookModerationQueue() {
                       href={report.evidenceUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="mt-2 inline-flex min-h-8 items-center gap-1 text-xs text-[#ff788a]"
+                      className="text-primary mt-2 inline-flex min-h-8 items-center gap-1 text-xs"
                     >
                       {t("evidence")} <ExternalLink className="size-3" />
                     </a>
@@ -250,7 +254,7 @@ function DiscoveryCandidate({
             className="h-32 w-full object-cover"
           />
           {candidate.image.photographer && (
-            <p className="px-2 py-1.5 text-[10px] text-white/40">
+            <p className="text-muted-foreground px-2 py-1.5 text-[10px]">
               {t("photographer", {
                 photographer: candidate.image.photographer,
               })}
@@ -265,7 +269,7 @@ function DiscoveryCandidate({
       </p>
       <p className="mt-1 text-xs font-semibold">{candidate.title}</p>
       {(candidate.region || candidate.countryCode) && (
-        <p className="mt-1 text-[11px] text-white/42">
+        <p className="text-muted-foreground mt-1 text-[11px]">
           {[candidate.region, candidate.countryCode]
             .filter(Boolean)
             .join(" · ")}
@@ -275,7 +279,7 @@ function DiscoveryCandidate({
         href={candidate.sourceUrl}
         target="_blank"
         rel="noreferrer"
-        className="mt-2 inline-flex min-h-8 items-center gap-1 text-xs text-[#ff788a]"
+        className="text-primary mt-2 inline-flex min-h-8 items-center gap-1 text-xs"
       >
         {t("source")} <ExternalLink className="size-3" />
       </a>

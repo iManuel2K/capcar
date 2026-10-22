@@ -28,7 +28,7 @@ export default async function PrivacyPage() {
       description={t("description")}
     >
       {!legal.complete && (
-        <p className="rounded-2xl border border-[#6d0101]/15 bg-[#6d0101]/6 p-5 text-[#6d0101]">
+        <p className="border-primary/15 bg-primary/6 text-primary rounded-2xl border p-5">
           {t("blocked")}
         </p>
       )}

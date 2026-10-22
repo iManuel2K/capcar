@@ -17,6 +17,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -42,67 +43,54 @@
 }
 
 :root {
+  color-scheme: dark;
   --radius: 0.875rem;
-  --background: #0b2326;
-  --foreground: #f5f2e8;
-  --card: #123033;
-  --card-foreground: #f5f2e8;
-  --popover: #123033;
-  --popover-foreground: #f5f2e8;
-  --primary: #6d0101;
-  --primary-foreground: #ffffff;
-  --secondary: #17383a;
-  --secondary-foreground: #f5f2e8;
-  --muted: #19383a;
-  --muted-foreground: #aab6b1;
-  --accent: #34221e;
-  --accent-foreground: #f5f2e8;
-  --destructive: #b72f3e;
-  --border: rgb(255 255 255 / 12%);
-  --input: rgb(255 255 255 / 15%);
-  --ring: #bf8269;
-  --chart-1: #6d0101;
-  --chart-2: #92644d;
-  --chart-3: #88988d;
-  --chart-4: #e8e6d7;
-  --chart-5: #9f8c7d;
-  --capcar-cream: #e8e6d7;
-  --capcar-sage: #88988d;
-  --capcar-petrol: #0e2d30;
-  --capcar-oxblood: #6d0101;
-  --capcar-clay: #92644d;
-  --capcar-taupe: #9f8c7d;
-  --capcar-red: #6d0101;
-  --capcar-red-soft: #bf8269;
-  --capcar-blue: #0e2d30;
-  --capcar-blue-strong: #173d40;
-  --capcar-graphite: #050306;
+  /* Obsidian Chrome — the shared public and private app palette. */
+  --background: #0c0d10;
+  --foreground: #f0f1f3;
+  --card: #191c21;
+  --card-foreground: var(--foreground);
+  --popover: #191c21;
+  --popover-foreground: var(--foreground);
+  --primary: #b8c7d9;
+  --primary-foreground: #0c0d10;
+  --primary-hover: #d1dbe7;
+  --secondary: #232831;
+  --secondary-foreground: var(--foreground);
+  --muted: #232831;
+  --muted-foreground: #9ba1ac;
+  --accent: #2b3441;
+  --accent-foreground: var(--foreground);
+  --destructive: #ff8c9c;
+  --border: rgb(184 199 217 / 18%);
+  --input: #626b78;
+  --ring: var(--primary);
+  --chart-1: var(--primary);
+  --chart-2: #809bb8;
+  --chart-3: #89cbb0;
+  --chart-4: #c4cad3;
+  --chart-5: #a89ac7;
+  /* Compatibility aliases for existing components and chart controls. */
+  --capcar-cream: var(--foreground);
+  --capcar-sage: var(--muted-foreground);
+  --capcar-petrol: var(--background);
+  --capcar-oxblood: var(--primary);
+  --capcar-clay: var(--primary);
+  --capcar-taupe: var(--muted-foreground);
+  --capcar-red: var(--primary);
+  --capcar-red-soft: var(--primary);
+  --capcar-blue: var(--background);
+  --capcar-blue-strong: var(--secondary);
+  --capcar-graphite: var(--background);
   --capcar-scrollbar-track: var(--background);
-  --capcar-scrollbar-thumb: var(--capcar-red-soft);
-  --capcar-scrollbar-hover: #d6aa92;
-  --capcar-scrollbar-active: var(--capcar-cream);
+  --capcar-scrollbar-thumb: var(--input);
+  --capcar-scrollbar-hover: var(--primary);
+  --capcar-scrollbar-active: var(--foreground);
 }
 
+/* Both existing theme contexts use the same approved dark palette. */
 .dark {
-  --background: #0b2326;
-  --foreground: #f5f2e8;
-  --card: #123033;
-  --card-foreground: #f5f2e8;
-  --popover: #123033;
-  --popover-foreground: #f5f2e8;
-  --primary: #6d0101;
-  --primary-foreground: #ffffff;
-  --secondary: #17383a;
-  --secondary-foreground: #f5f2e8;
-  --muted: #19383a;
-  --muted-foreground: #aab6b1;
-  --accent: #34221e;
-  --accent-foreground: #f5f2e8;
-  --destructive: #b72f3e;
-  --border: rgb(255 255 255 / 12%);
-  --input: rgb(255 255 255 / 15%);
-  --ring: #bf8269;
-  --capcar-blue-strong: #173d40;
+  color-scheme: dark;
 }
 
 @keyframes capcar-hero-drift {
@@ -185,7 +173,7 @@
         border-radius: 999px;
         background: var(--capcar-scrollbar-thumb);
         background-clip: padding-box;
-        box-shadow: inset 0 0 0 1px rgb(245 242 232 / 12%);
+        box-shadow: inset 0 0 0 1px rgb(240 241 243 / 12%);
       }
 
       ::-webkit-scrollbar-thumb:hover {
@@ -241,13 +229,13 @@
   }
 
   select option {
-    background-color: #181818;
-    color: #f3f1ec;
+    background-color: var(--card);
+    color: var(--foreground);
   }
 
   select option:checked {
-    background-color: #4a1720;
-    color: #ffffff;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
   }
 
   ::selection {
@@ -265,15 +253,15 @@
 
 .capcar-editorial-grid {
   background-image:
-    linear-gradient(rgb(232 230 215 / 3%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(232 230 215 / 3%) 1px, transparent 1px);
+    linear-gradient(rgb(184 199 217 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(184 199 217 / 3%) 1px, transparent 1px);
   background-size: 72px 72px;
 }
 
 .capcar-paper-grid {
   background-image:
-    linear-gradient(rgb(14 45 48 / 3.5%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(14 45 48 / 3.5%) 1px, transparent 1px);
+    linear-gradient(rgb(184 199 217 / 3.5%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(184 199 217 / 3.5%) 1px, transparent 1px);
   background-size: 72px 72px;
 }
 
@@ -324,6 +312,13 @@
   .passport-print p,
   .passport-print span {
     color: #333333 !important;
+  }
+
+  /* Dark screen tokens must not make headings or detail values vanish on paper. */
+  .passport-document,
+  .passport-document *,
+  .passport-print :is(h1, h2, h3, h4, dt, dd, strong, a, li) {
+    color: #111111 !important;
   }
 }
 

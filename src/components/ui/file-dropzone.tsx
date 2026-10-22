@@ -53,11 +53,11 @@ export function FileDropzone({
       className={`group relative rounded-2xl border border-dashed transition duration-300 motion-reduce:transition-none ${
         tone === "studio"
           ? dragging
-            ? "border-[#cfaa96] bg-[#cfaa96]/10"
-            : "border-white/20 bg-white/[0.025] hover:border-[#cfaa96]/50"
+            ? "border-primary bg-primary/10"
+            : "hover:border-primary/50 border-white/20 bg-white/[0.025]"
           : dragging
-            ? "border-[#ff667a] bg-[#e72d45]/12"
-            : "border-white/16 bg-white/[0.025] hover:border-[#e72d45]/45 hover:bg-[#e72d45]/6"
+            ? "border-primary bg-primary/12"
+            : "hover:border-primary/45 hover:bg-primary/6 border-white/16 bg-white/[0.025]"
       } ${compact ? "p-4" : "p-5 sm:p-6"}`}
     >
       <input
@@ -75,7 +75,7 @@ export function FileDropzone({
       />
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <span
-          className={`grid size-12 shrink-0 place-items-center rounded-2xl border ${tone === "studio" ? "border-[#cfaa96]/20 bg-[#cfaa96]/10 text-[#cfaa96]" : "border-[#e72d45]/25 bg-[#e72d45]/10 text-[#ff7a8c]"}`}
+          className={`grid size-12 shrink-0 place-items-center rounded-2xl border ${tone === "studio" ? "border-primary/20 bg-primary/10 text-primary" : "border-primary/25 bg-primary/10 text-primary"}`}
         >
           {dragging ? (
             <FileUp className="size-5" aria-hidden="true" />
@@ -93,7 +93,7 @@ export function FileDropzone({
           type="button"
           disabled={disabled}
           onClick={() => inputRef.current?.click()}
-          className={`inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl px-4 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40 ${tone === "studio" ? "bg-[#e8e6d7] text-[#0e2d30] hover:bg-white focus-visible:outline-[#cfaa96]" : "bg-[#e72d45] text-white hover:bg-[#ff526a] focus-visible:outline-[#ff667a]"}`}
+          className={`inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl px-4 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40 ${tone === "studio" ? "bg-background hover:bg-card focus-visible:outline-primary" : "bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:outline-primary"}`}
         >
           Choose file
         </button>

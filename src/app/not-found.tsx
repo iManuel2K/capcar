@@ -4,18 +4,18 @@ import { getTranslations } from "next-intl/server";
 export default async function NotFound() {
   const t = await getTranslations("ErrorUi");
   return (
-    <main className="grid min-h-dvh place-items-center bg-[#0b0e0c] px-5 text-center text-[#f4f5f2]">
+    <main className="bg-background text-foreground grid min-h-dvh place-items-center px-5 text-center">
       <div>
-        <p className="text-xs tracking-[0.16em] text-[#ff667a] uppercase">
+        <p className="text-primary text-xs tracking-[0.16em] uppercase">
           {t("notFound")}
         </p>
         <h1 className="mt-4 text-5xl font-medium tracking-[-0.05em]">
           {t("roadEnds")}
         </h1>
-        <p className="mt-4 text-white/40">{t("notFoundDescription")}</p>
+        <p className="text-muted-foreground mt-4">{t("notFoundDescription")}</p>
         <Link
           href="/"
-          className="mt-7 inline-flex rounded-xl bg-[#e72d45] px-5 py-3 text-sm font-semibold text-[#07101d]"
+          className="bg-primary text-primary-foreground mt-7 inline-flex rounded-xl px-5 py-3 text-sm font-semibold"
         >
           {t("home")}
         </Link>

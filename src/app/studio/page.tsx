@@ -18,7 +18,7 @@ export default async function StudioPage() {
   return (
     <main
       id="main-content"
-      className="min-h-dvh bg-[#e8e6d7] px-5 py-4 text-[#0e2d30] sm:px-8 sm:py-8"
+      className="bg-background text-foreground min-h-dvh px-5 py-4 sm:px-8 sm:py-8"
     >
       <div className="mx-auto max-w-6xl">
         <p className="mt-4 text-xs font-semibold tracking-widest uppercase">
@@ -33,7 +33,7 @@ export default async function StudioPage() {
         <ConceptStudio />
         <Link
           href="/movie-cars"
-          className="mt-8 inline-flex min-h-11 items-center rounded-full border border-[#0e2d30]/20 px-5 text-sm font-medium"
+          className="border-foreground/20 mt-8 inline-flex min-h-11 items-center rounded-full border px-5 text-sm font-medium"
         >
           {s("movieCars")} ↗
         </Link>

@@ -121,11 +121,11 @@ export function FoundationHero() {
 
 function VehicleStage() {
   return (
-    <div className="relative min-h-[430px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#0c0f0d] p-6 text-white shadow-[0_30px_90px_rgba(16,20,18,0.24)] sm:p-8">
+    <div className="bg-card text-foreground relative min-h-[430px] overflow-hidden rounded-[2rem] border border-white/10 p-6 shadow-[0_30px_90px_rgba(16,20,18,0.24)] sm:p-8">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_65%_45%,rgba(88,142,230,0.24),transparent_38%)]" />
       <div className="relative flex items-start justify-between gap-4">
         <div>
-          <p className="mb-1 text-xs tracking-[0.16em] text-white/50 uppercase">
+          <p className="text-muted-foreground mb-1 text-xs tracking-[0.16em] uppercase">
             Current garage
           </p>
           <p className="text-lg font-medium">2011 BMW 318i</p>
@@ -138,21 +138,21 @@ function VehicleStage() {
       <div className="relative mt-14 flex min-h-48 items-center justify-center">
         <div className="absolute h-24 w-4/5 rounded-[50%] bg-[var(--capcar-blue)]/20 blur-3xl" />
         <div className="relative w-4/5 max-w-lg">
-          <div className="h-28 rounded-[48%_56%_22%_20%/58%_60%_30%_28%] bg-gradient-to-br from-[#58605b] via-[#1d211f] to-[#080a09] shadow-[inset_0_2px_0_rgba(255,255,255,0.15),0_28px_50px_rgba(0,0,0,0.4)] sm:h-36">
-            <div className="absolute top-2 left-[22%] h-[38%] w-[54%] rounded-[65%_70%_12%_10%] bg-gradient-to-br from-[#84928e] to-[#202927] opacity-75" />
+          <div className="via-card to-card h-28 rounded-[48%_56%_22%_20%/58%_60%_30%_28%] bg-gradient-to-br from-[#58605b] shadow-[inset_0_2px_0_rgba(255,255,255,0.15),0_28px_50px_rgba(0,0,0,0.4)] sm:h-36">
+            <div className="from-secondary to-card absolute top-2 left-[22%] h-[38%] w-[54%] rounded-[65%_70%_12%_10%] bg-gradient-to-br opacity-75" />
           </div>
-          <div className="absolute -bottom-6 left-[12%] size-16 rounded-full border-[13px] border-[#080a09] bg-[#6f7772] shadow-[0_0_0_5px_rgba(255,255,255,0.04)] sm:size-20" />
-          <div className="absolute -right-1 -bottom-6 size-16 rounded-full border-[13px] border-[#080a09] bg-[#6f7772] shadow-[0_0_0_5px_rgba(255,255,255,0.04)] sm:size-20" />
+          <div className="border-foreground bg-secondary absolute -bottom-6 left-[12%] size-16 rounded-full border-[13px] shadow-[0_0_0_5px_rgba(255,255,255,0.04)] sm:size-20" />
+          <div className="border-foreground bg-secondary absolute -right-1 -bottom-6 size-16 rounded-full border-[13px] shadow-[0_0_0_5px_rgba(255,255,255,0.04)] sm:size-20" />
         </div>
       </div>
 
       <div className="relative mt-12 grid grid-cols-2 gap-3">
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="mb-1 text-xs text-white/50">Next attention</p>
+          <p className="text-muted-foreground mb-1 text-xs">Next attention</p>
           <p className="mb-0 font-medium">Brake fluid</p>
         </div>
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="mb-1 text-xs text-white/50">Active build</p>
+          <p className="text-muted-foreground mb-1 text-xs">Active build</p>
           <p className="mb-0 font-medium">Stealth Rear</p>
         </div>
       </div>

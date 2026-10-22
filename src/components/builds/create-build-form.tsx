@@ -87,7 +87,9 @@ function BuildFormFields({
     );
   if (!vehicle)
     return (
-      <p className="py-32 text-center text-white/45">Vehicle not found.</p>
+      <p className="text-muted-foreground py-32 text-center">
+        Vehicle not found.
+      </p>
     );
 
   function update(key: keyof typeof form, value: string) {
@@ -158,23 +160,23 @@ function BuildFormFields({
     <div className="mx-auto max-w-5xl pb-24 sm:pb-0">
       <Link
         href={`/garage/${vehicleId}/builds`}
-        className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 hover:text-white"
+        className="text-muted-foreground hover:text-foreground mb-7 inline-flex items-center gap-2 text-sm"
       >
         <ArrowLeft className="size-4" /> All builds
       </Link>
       <form
         onSubmit={submit}
         noValidate
-        className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]"
+        className="bg-card overflow-hidden rounded-[2rem] border border-white/10"
       >
         <header className="border-b border-white/8 p-6 sm:p-10">
-          <p className="text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+          <p className="text-primary text-xs font-semibold tracking-[0.16em] uppercase">
             New build
           </p>
           <h1 className="mt-4 text-4xl font-medium tracking-[-0.045em] sm:text-6xl">
             Name the direction.
           </h1>
-          <p className="mt-5 max-w-2xl leading-7 text-white/45">
+          <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
             A strong project starts with a coherent goal and a budget
             ceiling—not a random shopping list.
           </p>
@@ -286,14 +288,14 @@ function BuildFormFields({
           )}
         </fieldset>
         <footer className="flex flex-col-reverse items-stretch justify-between gap-4 border-t border-white/8 p-6 sm:flex-row sm:items-center sm:p-8">
-          <p className="flex items-center gap-2 text-xs text-white/35">
+          <p className="text-muted-foreground flex items-center gap-2 text-xs">
             <ShieldCheck className="size-3.5" /> Concept plan · no fitment
             claims
           </p>
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-6 text-sm font-semibold text-[#07101d]"
+            className="bg-primary text-primary-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-6 text-sm font-semibold"
           >
             {saving ? "Saving build…" : "Create build"}{" "}
             <ArrowRight className="size-4" />
@@ -305,7 +307,7 @@ function BuildFormFields({
 }
 
 const inputClass =
-  "mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-white/[0.045] px-4 text-sm text-white outline-none placeholder:text-white/25 focus:border-[#e72d45]/70 focus:ring-3 focus:ring-[#e72d45]/10";
+  "mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-white/[0.045] px-4 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary/70 focus:ring-3 focus:ring-primary/10";
 
 function Field({
   label,
@@ -321,7 +323,9 @@ function Field({
   return (
     <label className="block text-sm text-white/70">
       <span>{label}</span>
-      {hint && <span className="ml-2 text-xs text-white/30">{hint}</span>}
+      {hint && (
+        <span className="text-muted-foreground ml-2 text-xs">{hint}</span>
+      )}
       {children}
       {error && (
         <span className="mt-1.5 block text-xs text-red-300">{error}</span>
@@ -341,9 +345,9 @@ function SectionIntro({
 }) {
   return (
     <div>
-      <Icon className="size-4 text-[#ff667a]" />
+      <Icon className="text-primary size-4" />
       <h2 className="mt-3 font-medium">{title}</h2>
-      <p className="mt-1 text-xs leading-5 text-white/35">{text}</p>
+      <p className="text-muted-foreground mt-1 text-xs leading-5">{text}</p>
     </div>
   );
 }

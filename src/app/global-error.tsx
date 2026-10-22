@@ -87,8 +87,8 @@ export default function GlobalError({
             display: grid;
             place-items: center;
             padding: 3rem 1.25rem;
-            background: #e8e6d7;
-            color: #0e2d30;
+            background: #0c0d10;
+            color: #f0f1f3;
             font-family: Arial, Helvetica, sans-serif;
             text-align: center;
           }
@@ -96,13 +96,13 @@ export default function GlobalError({
             width: 100%;
             max-width: 42rem;
             padding: clamp(1.75rem, 5vw, 3rem);
-            border: 1px solid rgba(14, 45, 48, 0.1);
+            border: 1px solid rgba(184,199,217,0.18);
             border-radius: 2rem;
-            background: rgba(255, 255, 255, 0.28);
+            background: #191c21;
           }
           .eyebrow {
             margin: 0;
-            color: #9d5f4c;
+            color: #b8c7d9;
             font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 0.16em;
@@ -118,7 +118,7 @@ export default function GlobalError({
           .message {
             max-width: 32rem;
             margin: 1.25rem auto 0;
-            color: rgba(14, 45, 48, 0.65);
+            color: #9ba1ac;
             line-height: 1.75;
           }
           .actions {
@@ -141,10 +141,10 @@ export default function GlobalError({
             text-decoration: none;
             cursor: pointer;
           }
-          button { border: 0; background: #6d0101; color: white; }
-          a { border: 1px solid rgba(14, 45, 48, 0.18); color: #0e2d30; }
+          button { border: 0; background: #b8c7d9; color: #0c0d10; }
+          a { border: 1px solid rgba(184,199,217,0.25); color: #f0f1f3; }
           button:focus-visible, a:focus-visible {
-            outline: 3px solid #bf8269;
+            outline: 3px solid #b8c7d9;
             outline-offset: 3px;
           }
           @media (max-width: 32rem) {

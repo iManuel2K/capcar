@@ -112,7 +112,7 @@ export function PartsBoardProvider({ children }: { children: ReactNode }) {
       {children}
       <section
         id="parts-board"
-        className="mt-8 space-y-5 rounded-3xl border border-[#0e2d30]/25 bg-white/25 p-5 sm:p-8"
+        className="border-foreground/25 mt-8 space-y-5 rounded-3xl border bg-white/25 p-5 sm:p-8"
       >
         <h2 className="text-2xl font-medium">{t("board")}</h2>
         <p className="max-w-3xl text-sm leading-6">{t("boardNote")}</p>
@@ -175,7 +175,7 @@ export function PartsBoardProvider({ children }: { children: ReactNode }) {
                   {entry.target !== null && entry.price <= entry.target && (
                     <p
                       role="status"
-                      className="rounded-xl bg-[#0e2d30] p-3 text-sm text-[#e8e6d7]"
+                      className="bg-card text-foreground rounded-xl p-3 text-sm"
                     >
                       {t("targetReached")}
                     </p>
@@ -209,7 +209,7 @@ export function PartsBoardProvider({ children }: { children: ReactNode }) {
               ))}
             </div>
             <button
-              className={`${actionClass} bg-[#0e2d30] text-[#e8e6d7]`}
+              className={`${actionClass} bg-card text-foreground`}
               onClick={() => {
                 setReview((value) => !value);
                 setConfirmed(false);

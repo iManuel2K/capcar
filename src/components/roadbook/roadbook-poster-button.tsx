@@ -1,5 +1,7 @@
 "use client";
 
+import { brandPalette } from "@/features/ui/brand-palette";
+
 import { Download } from "lucide-react";
 import { useState } from "react";
 
@@ -49,7 +51,8 @@ function drawTrackedRoutes(
       if (pointIndex === 0) context.moveTo(point.x, point.y);
       else context.lineTo(point.x, point.y);
     });
-    context.strokeStyle = index === 0 ? "#e72d45" : "rgba(244,245,242,.48)";
+    context.strokeStyle =
+      index === 0 ? brandPalette.primary : "rgba(244,245,242,.48)";
     context.lineWidth = index === 0 ? 7 : 4;
     context.stroke();
     const lastCoord = coordinates[coordinates.length - 1];
@@ -57,7 +60,7 @@ function drawTrackedRoutes(
       const last = position(lastCoord);
       context.beginPath();
       context.arc(last.x, last.y, 8, 0, Math.PI * 2);
-      context.fillStyle = "#f4f5f2";
+      context.fillStyle = brandPalette.foreground;
       context.fill();
     }
   });
@@ -74,7 +77,7 @@ export async function renderRoadbookPoster(
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Poster rendering is unavailable.");
 
-  context.fillStyle = "#09100d";
+  context.fillStyle = brandPalette.background;
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.strokeStyle = "rgba(244,245,242,.06)";
   context.lineWidth = 1;
@@ -91,10 +94,10 @@ export async function renderRoadbookPoster(
     context.stroke();
   }
 
-  context.fillStyle = "#e72d45";
+  context.fillStyle = brandPalette.primary;
   context.font = "700 24px Arial";
   context.fillText("CAPCAR ROADBOOK", 72, 92);
-  context.fillStyle = "#f4f5f2";
+  context.fillStyle = brandPalette.foreground;
   context.font = "500 76px Arial";
   context.fillText("Roads that shaped", 72, 190);
   context.fillText("this build.", 72, 278);
@@ -140,7 +143,7 @@ export async function renderRoadbookPoster(
   }
 
   drawTrackedRoutes(context, visits);
-  context.fillStyle = "#f4f5f2";
+  context.fillStyle = brandPalette.foreground;
   context.font = "600 30px Arial";
   context.fillText(
     `${visits.length} recorded ${visits.length === 1 ? "drive" : "drives"}`,
@@ -156,7 +159,7 @@ export async function renderRoadbookPoster(
       1140 + index * 38,
     );
   });
-  context.fillStyle = "#f4f5f2";
+  context.fillStyle = brandPalette.foreground;
   context.font = "700 24px Arial";
   context.fillText("FROM PLAN TO ROAD. NO GUESSWORK.", 72, 1300);
 
@@ -197,7 +200,7 @@ export function RoadbookPosterButton({
           setBusy(false);
         }
       }}
-      className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/12 bg-[#09100d]/88 px-4 text-xs font-semibold text-white/72 shadow-xl backdrop-blur-xl transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
+      className="bg-background/88 hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/12 px-4 text-xs font-semibold text-white/72 shadow-xl backdrop-blur-xl transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-45"
     >
       <Download aria-hidden="true" className="size-4" />
       {label}

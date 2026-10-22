@@ -111,7 +111,7 @@ export function LanguageSelector({
         }}
         disabled={pending}
         onClick={() => setOpen((current) => !current)}
-        className={`relative inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-current/15 bg-current/[0.035] transition hover:-translate-y-0.5 hover:bg-current/[0.07] focus-visible:ring-2 focus-visible:ring-[#6d0101] focus-visible:outline-none disabled:opacity-55 ${compact ? "min-w-16 px-3" : "min-w-32 px-3"}`}
+        className={`focus-visible:ring-primary relative inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-current/15 bg-current/[0.035] transition hover:-translate-y-0.5 hover:bg-current/[0.07] focus-visible:ring-2 focus-visible:outline-none disabled:opacity-55 ${compact ? "min-w-16 px-3" : "min-w-32 px-3"}`}
       >
         <Languages aria-hidden="true" className="size-4 shrink-0" />
         {compact ? (
@@ -148,7 +148,7 @@ export function LanguageSelector({
             buttons[next]?.focus();
           }}
           aria-label={t("label")}
-          className={`absolute z-[80] flex w-max gap-1 rounded-xl border border-[#0e2d30]/12 bg-[#f3eee2] p-1.5 text-[#0e2d30] shadow-[0_18px_50px_rgba(5,3,6,0.2)] ${direction === "up" ? "bottom-[calc(100%+0.55rem)]" : "top-[calc(100%+0.55rem)]"} ${(align ?? (direction === "up" ? "start" : "end")) === "end" ? "right-0" : "left-0"}`}
+          className={`border-foreground/12 bg-background text-foreground absolute z-[80] flex w-max gap-1 rounded-xl border p-1.5 shadow-[0_18px_50px_rgba(5,3,6,0.2)] ${direction === "up" ? "bottom-[calc(100%+0.55rem)]" : "top-[calc(100%+0.55rem)]"} ${(align ?? (direction === "up" ? "start" : "end")) === "end" ? "right-0" : "left-0"}`}
         >
           {locales.map((option) => (
             <button
@@ -161,10 +161,10 @@ export function LanguageSelector({
               onClick={() => selectLocale(option)}
               tabIndex={option === activeLocale ? 0 : -1}
               lang={option}
-              className={`min-h-11 min-w-11 rounded-lg px-2 text-xs font-semibold uppercase transition focus-visible:ring-2 focus-visible:ring-[#6d0101] focus-visible:outline-none ${
+              className={`focus-visible:ring-primary min-h-11 min-w-11 rounded-lg px-2 text-xs font-semibold uppercase transition focus-visible:ring-2 focus-visible:outline-none ${
                 option === activeLocale
-                  ? "bg-[#0e2d30] text-[#f3eee2]"
-                  : "text-[#0e2d30]/62 hover:bg-[#0e2d30]/8 hover:text-[#0e2d30]"
+                  ? "bg-card text-foreground"
+                  : "text-foreground/62 hover:bg-card/8 hover:text-foreground"
               }`}
             >
               {option}

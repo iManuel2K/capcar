@@ -50,12 +50,10 @@ export function GarageGoalPanel({ vehicle }: { vehicle: Vehicle }) {
       ? `/garage/${vehicle.id}/${goal === "maintain" ? "maintenance" : "builds"}`
       : `/garage/new?vehicle=${encodeURIComponent(vehicle.id)}`);
   return (
-    <section className="mb-6 rounded-3xl border border-[#d6aa92]/25 bg-[#102c2e] p-5 sm:p-7">
+    <section className="border-primary/25 bg-card mb-6 rounded-3xl border p-5 sm:p-7">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs tracking-wider text-[#d6aa92]">
-            {c.mainAction}
-          </p>
+          <p className="text-primary text-xs tracking-wider">{c.mainAction}</p>
           <h2 className="mt-2 text-2xl">{goal ? c[goal] : c.goalTitle}</h2>
           <p className="mt-3 text-sm text-white/70">
             {goal ? c[`${goal}Hint`] : c.noAction}
@@ -73,7 +71,7 @@ export function GarageGoalPanel({ vehicle }: { vehicle: Vehicle }) {
         <div className="mt-4 flex flex-wrap gap-3">
           {(["maintain", "modify", "drives"] as const).map((value) => (
             <button
-              className={`min-h-12 rounded-xl border px-4 text-sm ${goal === value ? "border-[#d6aa92] bg-[#d6aa92]/10" : "border-white/20"}`}
+              className={`min-h-12 rounded-xl border px-4 text-sm ${goal === value ? "border-primary bg-primary/10" : "border-white/20"}`}
               key={value}
               type="button"
               onClick={() => {
@@ -104,7 +102,7 @@ export function GarageGoalPanel({ vehicle }: { vehicle: Vehicle }) {
       )}
       <Link
         href={goal === "drives" && record?.driveIdea ? "/ai" : link}
-        className="mt-5 inline-flex min-h-12 items-center gap-3 rounded-xl bg-[#ede9d8] px-5 text-sm font-medium text-[#102b2e]"
+        className="bg-background text-foreground mt-5 inline-flex min-h-12 items-center gap-3 rounded-xl px-5 text-sm font-medium"
       >
         {savedPlan && goal !== "drives"
           ? c.viewPlan

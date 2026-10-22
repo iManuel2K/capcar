@@ -15,7 +15,7 @@ export function VehicleArt({
   return (
     <div
       aria-label={`Vehicle visual for ${label}`}
-      className={`relative isolate overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#101512] ${compact ? "min-h-52" : "min-h-[360px] lg:min-h-[470px]"}`}
+      className={`bg-card relative isolate overflow-hidden rounded-[1.75rem] border border-white/10 ${compact ? "min-h-52" : "min-h-[360px] lg:min-h-[470px]"}`}
       role="img"
     >
       {imageUrl && (
@@ -31,7 +31,7 @@ export function VehicleArt({
           src={imageUrl}
         />
       )}
-      <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(7,7,7,0.72),transparent_48%),radial-gradient(circle_at_58%_44%,rgba(231,45,69,0.2),transparent_38%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(7,7,7,0.72),transparent_48%),radial-gradient(circle_at_58%_44%,rgba(184,199,217,0.2),transparent_38%)]" />
       <div className="absolute inset-x-[10%] bottom-[16%] h-[12%] rounded-full bg-black/80 blur-2xl" />
       {!imageUrl && (
         <svg
@@ -107,12 +107,12 @@ export function VehicleArt({
           />
         </svg>
       )}
-      <div className="absolute top-5 left-5 flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[11px] tracking-[0.12em] text-white/55 uppercase backdrop-blur">
-        <Zap className="size-3 text-[#ff667a]" />{" "}
+      <div className="text-muted-foreground absolute top-5 left-5 flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[11px] tracking-[0.12em] uppercase backdrop-blur">
+        <Zap className="text-primary size-3" />{" "}
         {badge ?? (imageUrl ? "Showcase project" : "Concept stage")}
       </div>
       {!compact && !imageUrl && (
-        <div className="absolute right-5 bottom-5 flex items-center gap-2 rounded-xl border border-white/10 bg-black/25 px-3 py-2 text-xs text-white/55 backdrop-blur">
+        <div className="text-muted-foreground absolute right-5 bottom-5 flex items-center gap-2 rounded-xl border border-white/10 bg-black/25 px-3 py-2 text-xs backdrop-blur">
           <Gauge className="size-3.5" /> Precise 3D arrives later
         </div>
       )}

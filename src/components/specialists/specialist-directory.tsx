@@ -24,8 +24,8 @@ export function SpecialistDirectory({ vehicleId }: { vehicleId: string }) {
 
   return (
     <div className="space-y-5 pb-24 sm:pb-0">
-      <header className="rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-10">
-        <p className="text-xs font-semibold tracking-[0.15em] text-[#8fbcb0] uppercase">
+      <header className="bg-card rounded-[2rem] border border-white/10 p-6 sm:p-10">
+        <p className="text-muted-foreground text-xs font-semibold tracking-[0.15em] uppercase">
           Specialist directory
         </p>
         <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
@@ -45,14 +45,14 @@ export function SpecialistDirectory({ vehicleId }: { vehicleId: string }) {
       </header>
       <section
         aria-label="Enrolled specialists"
-        className="rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8"
+        className="bg-card rounded-[2rem] border border-white/10 p-5 sm:p-8"
       >
         <label className="block text-sm text-white/75">
           Search specialists
           <span className="relative mt-2 block">
             <Search
               aria-hidden="true"
-              className="absolute top-4 left-4 size-4 text-white/50"
+              className="text-muted-foreground absolute top-4 left-4 size-4"
             />
             <input
               type="search"
@@ -60,7 +60,7 @@ export function SpecialistDirectory({ vehicleId }: { vehicleId: string }) {
               maxLength={120}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Specialist name"
-              className="min-h-12 w-full rounded-xl border border-white/20 bg-[#0c0c0c] pr-4 pl-11 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8fbcb0]"
+              className="bg-card focus-visible:outline-input min-h-12 w-full rounded-xl border border-white/20 pr-4 pl-11 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
             />
           </span>
         </label>
@@ -112,11 +112,16 @@ export function SpecialistDirectory({ vehicleId }: { vehicleId: string }) {
           {results.map((shop) => (
             <article
               key={shop.user_id}
-              className="flex flex-col rounded-2xl border border-white/15 bg-[#0c0c0c] p-5"
+              className="bg-card flex flex-col rounded-2xl border border-white/15 p-5"
             >
-              <Store aria-hidden="true" className="size-5 text-[#8fbcb0]" />
+              <Store
+                aria-hidden="true"
+                className="text-muted-foreground size-5"
+              />
               <h2 className="mt-4 text-xl break-words">{shop.display_name}</h2>
-              <p className="mt-2 text-xs text-[#8fbcb0]">Enrolled specialist</p>
+              <p className="text-muted-foreground mt-2 text-xs">
+                Enrolled specialist
+              </p>
               <p className="my-4 text-sm leading-6 text-white/65">
                 Request confirmation for work this specialist has performed on
                 your vehicle.
@@ -143,7 +148,7 @@ export function SpecialistDirectory({ vehicleId }: { vehicleId: string }) {
         </p>
       </section>
       {stamps.length > 0 && (
-        <section className="rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
+        <section className="bg-card rounded-[2rem] border border-white/10 p-5 sm:p-8">
           <h2 className="text-xl">Previous local work notes</h2>
           <p className="mt-2 text-sm leading-6 text-white/65">
             Your earlier beta records are preserved. These were entered locally

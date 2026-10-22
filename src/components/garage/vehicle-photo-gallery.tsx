@@ -36,7 +36,7 @@ export function VehiclePhotoGallery({ label }: { label: string }) {
   const active = project318Photos[activeIndex];
 
   return (
-    <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0b0b0b]">
+    <div className="bg-background overflow-hidden rounded-[1.75rem] border border-white/10">
       <div className="group relative min-h-[330px] overflow-hidden sm:min-h-[430px] lg:min-h-[500px]">
         {project318Photos.map((photo, index) => (
           <Image
@@ -60,8 +60,8 @@ export function VehiclePhotoGallery({ label }: { label: string }) {
         </div>
         <div className="absolute right-4 bottom-4 left-4 flex items-end justify-between gap-4 sm:right-5 sm:bottom-5 sm:left-5">
           <div>
-            <p className="text-xs text-white/50">{label}</p>
-            <p className="mt-1 text-lg font-medium text-white">
+            <p className="text-muted-foreground text-xs">{label}</p>
+            <p className="text-foreground mt-1 text-lg font-medium">
               {active.label}
             </p>
           </div>
@@ -73,7 +73,7 @@ export function VehiclePhotoGallery({ label }: { label: string }) {
 
       <div
         aria-label="Vehicle photos"
-        className="grid grid-cols-4 gap-2 border-t border-white/8 bg-[#101010] p-2 sm:gap-3 sm:p-3"
+        className="bg-card grid grid-cols-4 gap-2 border-t border-white/8 p-2 sm:gap-3 sm:p-3"
       >
         {project318Photos.map((photo, index) => (
           <button
@@ -84,7 +84,7 @@ export function VehiclePhotoGallery({ label }: { label: string }) {
             onClick={() => setActiveIndex(index)}
             className={`group relative min-h-16 overflow-hidden rounded-xl border transition sm:min-h-20 ${
               index === activeIndex
-                ? "border-[#e72d45] ring-2 ring-[#e72d45]/20"
+                ? "border-primary ring-primary/20 ring-2"
                 : "border-white/8 opacity-60 hover:opacity-100"
             }`}
           >

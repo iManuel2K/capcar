@@ -23,7 +23,7 @@ import { useVehicles } from "@/features/vehicles/use-vehicles";
 import type { CostEntry } from "@/features/costs/cost-schema";
 
 const categoryStyle = {
-  parts: { label: "Parts spend", color: "#e72d45" },
+  parts: { label: "Parts spend", color: "var(--primary)" },
   labor: { label: "Labor cost", color: "#f59e0b" },
   maintenance: { label: "Maintenance", color: "#34d399" },
 } as const;
@@ -45,7 +45,9 @@ export function CostAnalyticsDashboard({ vehicleId }: { vehicleId: string }) {
     );
   if (!vehicle)
     return (
-      <div className="py-32 text-center text-white/45">Vehicle not found.</div>
+      <div className="text-muted-foreground py-32 text-center">
+        Vehicle not found.
+      </div>
     );
   const percent =
     summary.budget > 0
@@ -57,15 +59,15 @@ export function CostAnalyticsDashboard({ vehicleId }: { vehicleId: string }) {
 
   return (
     <div className="pb-24 sm:pb-0">
-      <header className="flex flex-col gap-6 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_12%,rgba(231,45,69,0.2),transparent_30%),#111111] p-6 sm:p-10 lg:flex-row lg:items-end lg:justify-between">
+      <header className="flex flex-col gap-6 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_12%,rgba(184,199,217,0.2),transparent_30%),#111111] p-6 sm:p-10 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
+          <p className="text-primary text-xs font-semibold tracking-[0.15em] uppercase">
             True cost of ownership
           </p>
           <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
             Know where the money went.
           </h1>
-          <p className="mt-4 max-w-2xl leading-7 text-white/45">
+          <p className="text-muted-foreground mt-4 max-w-2xl leading-7">
             Parts, labor and maintenance against one budget cap for your{" "}
             {vehicle.model}.
           </p>
@@ -76,7 +78,7 @@ export function CostAnalyticsDashboard({ vehicleId }: { vehicleId: string }) {
             setError("");
             setFormOpen((value) => !value);
           }}
-          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-white"
+          className="bg-primary text-primary-foreground inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold"
         >
           <Plus className="size-4" /> Add expense
         </button>
@@ -104,16 +106,16 @@ export function CostAnalyticsDashboard({ vehicleId }: { vehicleId: string }) {
       )}
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
-        <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
+        <article className="bg-card rounded-[2rem] border border-white/10 p-5 sm:p-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+              <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
                 Budget position
               </p>
               <p className="mt-3 text-4xl font-medium tracking-[-0.04em]">
                 {formatEuro(summary.total)}
               </p>
-              <p className="mt-2 text-sm text-white/35">
+              <p className="text-muted-foreground mt-2 text-sm">
                 of {formatEuro(summary.budget)} cap
               </p>
             </div>
@@ -134,13 +136,15 @@ export function CostAnalyticsDashboard({ vehicleId }: { vehicleId: string }) {
             className="mt-8 h-3 overflow-hidden rounded-full bg-white/8"
           >
             <div
-              className={`h-full origin-left rounded-full transition-[width] duration-700 ${over ? "bg-red-400" : percent > 80 ? "bg-amber-300" : "bg-[#e72d45]"}`}
+              className={`h-full origin-left rounded-full transition-[width] duration-700 ${over ? "bg-red-400" : percent > 80 ? "bg-amber-300" : "bg-primary text-primary-foreground"}`}
               style={{ width: `${percent}%` }}
             />
           </div>
           <div className="mt-3 flex items-center justify-between text-xs">
-            <span className="text-white/30">{Math.round(percent)}% used</span>
-            <span className={over ? "text-red-200" : "text-white/40"}>
+            <span className="text-muted-foreground">
+              {Math.round(percent)}% used
+            </span>
+            <span className={over ? "text-red-200" : "text-muted-foreground"}>
               {over
                 ? `${formatEuro(summary.total - summary.budget)} over cap`
                 : `${formatEuro(summary.budget - summary.total)} remaining`}
@@ -157,8 +161,8 @@ export function CostAnalyticsDashboard({ vehicleId }: { vehicleId: string }) {
             </div>
           )}
         </article>
-        <article className="rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
-          <p className="text-xs tracking-[0.14em] text-white/30 uppercase">
+        <article className="bg-card rounded-[2rem] border border-white/10 p-5 sm:p-8">
+          <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
             Cost split
           </p>
           <CostDonut categories={summary.categories} total={summary.total} />
@@ -168,7 +172,7 @@ export function CostAnalyticsDashboard({ vehicleId }: { vehicleId: string }) {
                 key={key}
                 className="flex items-center justify-between text-sm"
               >
-                <span className="flex items-center gap-2 text-white/45">
+                <span className="text-muted-foreground flex items-center gap-2">
                   <span
                     className="size-2.5 rounded-full"
                     style={{ backgroundColor: item.color }}
@@ -186,9 +190,9 @@ export function CostAnalyticsDashboard({ vehicleId }: { vehicleId: string }) {
         </article>
       </section>
 
-      <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-5 sm:p-8">
+      <section className="bg-card mt-5 rounded-[2rem] border border-white/10 p-5 sm:p-8">
         <div className="flex items-center gap-2">
-          <TrendingUp className="size-4 text-[#ff667a]" />
+          <TrendingUp className="text-primary size-4" />
           <h2 className="text-xl font-medium">Recorded expenses</h2>
           <button
             type="button"
@@ -212,8 +216,8 @@ export function CostAnalyticsDashboard({ vehicleId }: { vehicleId: string }) {
         </div>
         {summary.entries.length === 0 ? (
           <div className="mt-7 flex min-h-56 flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 text-center">
-            <WalletCards className="size-8 text-white/18" />
-            <p className="mt-4 text-sm text-white/38">
+            <WalletCards className="text-muted-foreground size-8" />
+            <p className="text-muted-foreground mt-4 text-sm">
               No costs recorded yet. Add the first invoice or purchase.
             </p>
           </div>
@@ -226,7 +230,7 @@ export function CostAnalyticsDashboard({ vehicleId }: { vehicleId: string }) {
               >
                 <div>
                   <p className="font-medium text-white/80">{entry.label}</p>
-                  <p className="mt-1 text-xs text-white/30">
+                  <p className="text-muted-foreground mt-1 text-xs">
                     {categoryStyle[entry.category].label} · {entry.occurredOn}
                   </p>
                   {entry.note && (
@@ -355,11 +359,11 @@ function BudgetEditor({
         step="0.01"
         value={value}
         onChange={(event) => setValue(event.target.value)}
-        className="min-h-10 w-32 rounded-xl border border-white/10 bg-[#0c0c0c] px-3 text-sm"
+        className="bg-card min-h-10 w-32 rounded-xl border border-white/10 px-3 text-sm"
       />
       <button
         onClick={save}
-        className="rounded-xl bg-white px-3 text-xs font-semibold text-black"
+        className="bg-card rounded-xl px-3 text-xs font-semibold text-black"
       >
         Save
       </button>
@@ -377,7 +381,7 @@ function BudgetEditor({
         setValue(String(budget));
         setEditing(true);
       }}
-      className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs text-white/50"
+      className="text-muted-foreground inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs"
     >
       <BadgeEuro className="size-3.5" /> Edit cap
     </button>
@@ -421,13 +425,13 @@ function CostForm({
   return (
     <form
       onSubmit={submit}
-      className="mt-5 rounded-[2rem] border border-[#e72d45]/20 bg-[#151010] p-5 sm:p-8"
+      className="border-primary/20 bg-card mt-5 rounded-[2rem] border p-5 sm:p-8"
     >
       <h2 className="mb-5 text-xl font-medium">
         {entry ? "Edit expense" : "Add expense"}
       </h2>
       <div className="grid gap-4 md:grid-cols-4">
-        <label className="text-xs text-white/45 md:col-span-2">
+        <label className="text-muted-foreground text-xs md:col-span-2">
           Expense
           <input
             name="label"
@@ -436,22 +440,22 @@ function CostForm({
             maxLength={120}
             required
             placeholder="Rear lights"
-            className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-[#0b0b0b] px-4 text-sm placeholder:text-white/20"
+            className="bg-background placeholder:text-muted-foreground mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm"
           />
         </label>
-        <label className="text-xs text-white/45">
+        <label className="text-muted-foreground text-xs">
           Category
           <select
             name="category"
             defaultValue={entry?.category ?? "parts"}
-            className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-[#0b0b0b] px-4 text-sm"
+            className="bg-background mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm"
           >
             <option value="parts">Parts</option>
             <option value="labor">Labor</option>
             <option value="maintenance">Maintenance</option>
           </select>
         </label>
-        <label className="text-xs text-white/45">
+        <label className="text-muted-foreground text-xs">
           Amount (€)
           <input
             name="amount"
@@ -461,10 +465,10 @@ function CostForm({
             min="0.01"
             step="0.01"
             required
-            className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-[#0b0b0b] px-4 text-sm"
+            className="bg-background mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm"
           />
         </label>
-        <label className="text-xs text-white/45">
+        <label className="text-muted-foreground text-xs">
           Date
           <input
             name="date"
@@ -473,7 +477,7 @@ function CostForm({
             defaultValue={
               entry?.occurredOn ?? new Date().toISOString().slice(0, 10)
             }
-            className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-[#0b0b0b] px-4 text-sm"
+            className="bg-background mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm"
           />
         </label>
         <label className="text-xs text-white/60 md:col-span-3">
@@ -482,7 +486,7 @@ function CostForm({
             name="note"
             defaultValue={entry?.note}
             maxLength={300}
-            className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-[#0b0b0b] px-4 text-sm"
+            className="bg-background mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm"
           />
         </label>
       </div>
@@ -490,11 +494,11 @@ function CostForm({
         <button
           type="button"
           onClick={onClose}
-          className="min-h-11 rounded-xl border border-white/10 px-4 text-sm text-white/50"
+          className="text-muted-foreground min-h-11 rounded-xl border border-white/10 px-4 text-sm"
         >
           Cancel
         </button>
-        <button className="min-h-11 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-white">
+        <button className="bg-primary text-primary-foreground min-h-11 rounded-xl px-5 text-sm font-semibold">
           Save expense
         </button>
       </div>
@@ -522,13 +526,15 @@ function CostDonut({
         background:
           total === 0
             ? "#1c1c1c"
-            : `conic-gradient(#e72d45 0 ${stops[0]}%, #f59e0b ${stops[0]}% ${stops[1]}%, #34d399 ${stops[1]}% 100%)`,
+            : `conic-gradient(var(--primary) 0 ${stops[0]}%, #f59e0b ${stops[0]}% ${stops[1]}%, #34d399 ${stops[1]}% 100%)`,
       }}
     >
-      <div className="grid size-30 place-items-center rounded-full bg-[#111111] text-center">
+      <div className="bg-card grid size-30 place-items-center rounded-full text-center">
         <div>
           <p className="text-xl font-medium">{formatEuro(total)}</p>
-          <p className="mt-1 text-[10px] text-white/30 uppercase">Total</p>
+          <p className="text-muted-foreground mt-1 text-[10px] uppercase">
+            Total
+          </p>
         </div>
       </div>
     </div>

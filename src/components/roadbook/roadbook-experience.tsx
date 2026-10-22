@@ -278,7 +278,7 @@ export function RoadbookExperience() {
   }
 
   return (
-    <div className="relative h-[calc(100dvh-4.5rem)] min-h-[32rem] overflow-hidden bg-[#0b0e0c] text-white sm:h-[calc(100dvh-5rem)] sm:min-h-[38rem]">
+    <div className="bg-background text-foreground relative h-[calc(100dvh-4.5rem)] min-h-[32rem] overflow-hidden sm:h-[calc(100dvh-5rem)] sm:min-h-[38rem]">
       <RoadbookMap
         venues={visibleVenues}
         fuelStations={fuelStations}
@@ -309,18 +309,18 @@ export function RoadbookExperience() {
       />
 
       {!mapReady && !mapError && (
-        <div className="pointer-events-none absolute inset-0 z-10 grid place-items-center bg-[#0b0e0c]">
-          <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.035] px-4 py-3 text-xs text-white/55">
+        <div className="bg-background pointer-events-none absolute inset-0 z-10 grid place-items-center">
+          <div className="text-muted-foreground flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.035] px-4 py-3 text-xs">
             <MotionLoader className="size-4" />
             {t("mapLoading")}
           </div>
         </div>
       )}
 
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-36 bg-gradient-to-b from-[#07100d]/82 to-transparent" />
+      <div className="from-card/82 pointer-events-none absolute inset-x-0 top-0 z-20 h-36 bg-gradient-to-b to-transparent" />
       <div className="absolute top-2 right-2 left-2 z-30 max-w-none sm:top-5 sm:right-auto sm:left-5 sm:max-w-[min(38rem,calc(100%-2.5rem))]">
-        <div className="rounded-[1.25rem] border border-white/12 bg-[#09100d]/88 p-3 shadow-2xl backdrop-blur-xl sm:rounded-2xl sm:p-5">
-          <p className="text-[9px] font-semibold tracking-[0.16em] text-[#ff667a] uppercase sm:text-[10px]">
+        <div className="bg-background/88 rounded-[1.25rem] border border-white/12 p-3 shadow-2xl backdrop-blur-xl sm:rounded-2xl sm:p-5">
+          <p className="text-primary text-[9px] font-semibold tracking-[0.16em] uppercase sm:text-[10px]">
             {t("eyebrow")}
           </p>
           <label className="mt-2 flex min-h-10 items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 text-white/60 sm:mt-3 sm:min-h-11">
@@ -331,7 +331,7 @@ export function RoadbookExperience() {
               onChange={(event) => setSearch(event.target.value)}
               placeholder={t("search")}
               aria-label={t("search")}
-              className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/45"
+              className="text-foreground placeholder:text-muted-foreground min-w-0 flex-1 bg-transparent text-sm outline-none"
             />
           </label>
           <RoadbookDiscoveryRail
@@ -392,7 +392,7 @@ export function RoadbookExperience() {
         <div className="min-w-0 flex-1">
           {fuelEnabled && (
             <div
-              className="mb-2 flex w-fit max-w-full [scrollbar-width:none] gap-1 overflow-x-auto rounded-xl border border-white/12 bg-[#09100d]/88 p-1 shadow-2xl backdrop-blur-xl [&::-webkit-scrollbar]:hidden"
+              className="bg-background/88 mb-2 flex w-fit max-w-full [scrollbar-width:none] gap-1 overflow-x-auto rounded-xl border border-white/12 p-1 shadow-2xl backdrop-blur-xl [&::-webkit-scrollbar]:hidden"
               aria-label={t("fuel.typeLabel")}
             >
               {roadbookFuelTypes.map((type) => (
@@ -403,8 +403,8 @@ export function RoadbookExperience() {
                   onClick={() => setFuelType(type)}
                   className={`min-h-9 shrink-0 rounded-lg px-3 text-[11px] font-semibold transition ${
                     fuelType === type
-                      ? "bg-white text-[#101412]"
-                      : "text-white/60 hover:bg-white/8 hover:text-white"
+                      ? "bg-card text-foreground"
+                      : "hover:text-foreground text-white/60 hover:bg-white/8"
                   }`}
                 >
                   {t(`fuel.types.${type}`)}
@@ -434,14 +434,14 @@ export function RoadbookExperience() {
           onClick={locateUser}
           aria-label={t("locate")}
           title={t("locate")}
-          className="grid size-11 shrink-0 place-items-center rounded-xl border border-white/12 bg-[#09100d]/88 text-white/70 shadow-2xl backdrop-blur-xl hover:text-white sm:size-12 sm:rounded-2xl"
+          className="bg-background/88 hover:text-foreground grid size-11 shrink-0 place-items-center rounded-xl border border-white/12 text-white/70 shadow-2xl backdrop-blur-xl sm:size-12 sm:rounded-2xl"
         >
           <Crosshair className="size-4" />
         </button>
       </div>
 
       <div className="absolute top-[27rem] left-3 z-20 hidden sm:block lg:top-[16.5rem] lg:left-5">
-        <div className="rounded-xl border border-white/10 bg-[#09100d]/82 px-3 py-2 text-[11px] text-white/52 shadow-lg backdrop-blur-xl">
+        <div className="bg-background/82 text-muted-foreground rounded-xl border border-white/10 px-3 py-2 text-[11px] shadow-lg backdrop-blur-xl">
           {loading
             ? t("loading")
             : t("resultCount", { count: visibleVenues.length })}
@@ -477,10 +477,10 @@ export function RoadbookExperience() {
       )}
 
       {!loading && !error && visibleVenues.length === 0 && (
-        <div className="absolute top-1/2 left-1/2 z-20 w-[min(28rem,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/12 bg-[#09100d]/92 p-5 text-center shadow-2xl backdrop-blur-xl">
-          <MapPinned className="mx-auto size-6 text-white/45" />
+        <div className="bg-background/92 absolute top-1/2 left-1/2 z-20 w-[min(28rem,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/12 p-5 text-center shadow-2xl backdrop-blur-xl">
+          <MapPinned className="text-muted-foreground mx-auto size-6" />
           <h2 className="mt-3 text-lg font-medium">{t("empty.title")}</h2>
-          <p className="mt-2 text-xs leading-5 text-white/45">
+          <p className="text-muted-foreground mt-2 text-xs leading-5">
             {t("empty.description")}
           </p>
         </div>

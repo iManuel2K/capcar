@@ -24,9 +24,9 @@ export default async function ImprintPage() {
     >
       <nav
         aria-label={t("contentsLabel")}
-        className="rounded-[1.5rem] border border-[#0e2d30]/10 bg-[#0e2d30] p-5 text-[#e8e6d7] sm:p-6"
+        className="border-foreground/10 bg-card text-foreground rounded-[1.5rem] border p-5 sm:p-6"
       >
-        <p className="text-xs font-semibold tracking-[0.18em] text-[#bf8269] uppercase">
+        <p className="text-primary text-xs font-semibold tracking-[0.18em] uppercase">
           {t("contents")}
         </p>
         <ol className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
@@ -36,8 +36,8 @@ export default async function ImprintPage() {
               aria-label={t("provider")}
               className="group flex min-h-11 items-center gap-3 rounded-xl px-3 transition-colors hover:bg-white/6 focus-visible:bg-white/6"
             >
-              <span className="font-mono text-xs text-[#bf8269]">01</span>
-              <span className="text-white/72 group-hover:text-white">
+              <span className="text-primary font-mono text-xs">01</span>
+              <span className="group-hover:text-foreground text-white/72">
                 {t("provider")}
               </span>
             </a>
@@ -48,8 +48,8 @@ export default async function ImprintPage() {
               aria-label={t("contact")}
               className="group flex min-h-11 items-center gap-3 rounded-xl px-3 transition-colors hover:bg-white/6 focus-visible:bg-white/6"
             >
-              <span className="font-mono text-xs text-[#bf8269]">02</span>
-              <span className="text-white/72 group-hover:text-white">
+              <span className="text-primary font-mono text-xs">02</span>
+              <span className="group-hover:text-foreground text-white/72">
                 {t("contact")}
               </span>
             </a>
@@ -69,7 +69,7 @@ export default async function ImprintPage() {
           {legal.privacyContact ? (
             <a
               href={`mailto:${legal.privacyContact}`}
-              className="font-medium text-[#0e2d30] underline decoration-[#bf8269]/55 underline-offset-4 transition-colors hover:decoration-[#bf8269]"
+              className="text-foreground decoration-primary/55 hover:decoration-primary font-medium underline underline-offset-4 transition-colors"
             >
               {legal.privacyContact}
             </a>
@@ -79,7 +79,7 @@ export default async function ImprintPage() {
         </p>
       </LegalSection>
       {!legal.complete && (
-        <p className="rounded-2xl border border-[#6d0101]/15 bg-[#6d0101]/6 p-5 text-[#6d0101]">
+        <p className="border-primary/15 bg-primary/6 text-primary rounded-2xl border p-5">
           {t("blocked")}
         </p>
       )}

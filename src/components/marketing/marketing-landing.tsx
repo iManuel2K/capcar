@@ -308,7 +308,7 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                   <h3>
                     {title}
                     {preview && (
-                      <span className="mt-1 block text-xs font-normal text-[#84553f]">
+                      <span className="text-primary mt-1 block text-xs font-normal">
                         {c.preview}
                       </span>
                     )}

@@ -121,8 +121,8 @@ function MapProviderLinks({
           rel="noreferrer"
           className={`inline-flex items-center gap-1.5 rounded-full border transition ${
             compact
-              ? "border-[#0e2d30]/10 bg-white/55 px-2.5 py-1.5 text-[10px] text-[#405856] hover:border-[#6d0101]/30 hover:text-[#6d0101]"
-              : "border-white/12 bg-white/7 px-3.5 py-2 text-xs text-white/70 hover:bg-white/12 hover:text-white"
+              ? "border-foreground/10 bg-card text-muted-foreground hover:border-primary/30 hover:text-primary px-2.5 py-1.5 text-[10px]"
+              : "hover:text-foreground border-white/12 bg-white/7 px-3.5 py-2 text-xs text-white/70 hover:bg-white/12"
           }`}
         >
           {provider.label}
@@ -135,7 +135,7 @@ function MapProviderLinks({
 
 function AnimatedRouteDemo() {
   return (
-    <div className="relative overflow-hidden rounded-[1.6rem] bg-[#0e2d30] shadow-[0_30px_80px_rgba(14,45,48,.24)]">
+    <div className="bg-card relative overflow-hidden rounded-[1.6rem] shadow-[0_30px_80px_rgba(184,199,217,.24)]">
       <Image
         src="/ai/capcar-route-demo.gif"
         alt="Animated CapCar map from Rüsselsheim through Mainz to the scenic Rheingau route"
@@ -153,15 +153,15 @@ function StopCard({ stop }: { stop: TripStop }) {
   const Icon = stopIcons[stop.kind];
   const links = createStopMapLinks(stop);
   return (
-    <article className="group rounded-2xl border border-[#0e2d30]/10 bg-white/50 p-4 transition hover:-translate-y-0.5 hover:bg-white/75 hover:shadow-[0_14px_35px_rgba(14,45,48,.08)]">
+    <article className="group border-foreground/10 bg-card hover:bg-card rounded-2xl border p-4 transition hover:-translate-y-0.5 hover:shadow-[0_14px_35px_rgba(184,199,217,.08)]">
       <div className="flex gap-3">
-        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#0e2d30] text-[#ff938c]">
+        <span className="bg-card text-primary grid size-10 shrink-0 place-items-center rounded-xl">
           <Icon className="size-4" />
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-[10px] font-semibold tracking-[0.12em] text-[#6d0101] uppercase">
+              <p className="text-primary text-[10px] font-semibold tracking-[0.12em] uppercase">
                 Day {stop.day} · {stop.kind.replace("_", " ")}
               </p>
               <h4 className="mt-1 font-medium tracking-[-0.02em]">
@@ -174,10 +174,12 @@ function StopCard({ stop }: { stop: TripStop }) {
               </span>
             )}
           </div>
-          <p className="mt-1 text-xs text-[#405856]">
+          <p className="text-muted-foreground mt-1 text-xs">
             {stop.area} · {stop.timing}
           </p>
-          <p className="mt-3 text-xs leading-5 text-[#405856]">{stop.reason}</p>
+          <p className="text-muted-foreground mt-3 text-xs leading-5">
+            {stop.reason}
+          </p>
           <div className="mt-3">
             <MapProviderLinks links={links} compact />
           </div>
@@ -193,14 +195,14 @@ function RouteStopGallery({ route }: { route: TripRoute }) {
       {route.stops.map((stop, index) => (
         <article
           key={`${stop.name}-${stop.latitude}-${stop.longitude}`}
-          className="overflow-hidden rounded-2xl border border-[#0e2d30]/10 bg-white/50"
+          className="border-foreground/10 bg-card overflow-hidden rounded-2xl border"
         >
           {stop.photo ? (
             <a
               href={stop.photo.sourceUrl}
               target="_blank"
               rel="noreferrer"
-              className="group relative block h-40 overflow-hidden bg-[#0e2d30]/8"
+              className="group bg-card/8 relative block h-40 overflow-hidden"
             >
               {/* The image is useful location context and always retains Unsplash attribution. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -217,15 +219,17 @@ function RouteStopGallery({ route }: { route: TripRoute }) {
             </a>
           ) : null}
           <div className="flex gap-3 p-4">
-            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#0e2d30] text-xs font-semibold text-white">
+            <span className="bg-card text-foreground grid size-9 shrink-0 place-items-center rounded-full text-xs font-semibold">
               {index + 1}
             </span>
             <div className="min-w-0">
-              <p className="text-[10px] font-semibold tracking-[0.12em] text-[#6d0101] uppercase">
+              <p className="text-primary text-[10px] font-semibold tracking-[0.12em] uppercase">
                 Day {stop.day} · {stop.kind.replace("_", " ")}
               </p>
               <h4 className="mt-1 font-medium">{stop.name}</h4>
-              <p className="mt-1 text-xs text-[#405856]">{stop.mapQuery}</p>
+              <p className="text-muted-foreground mt-1 text-xs">
+                {stop.mapQuery}
+              </p>
               {stop.locationAccuracy === "area" && (
                 <p className="mt-1 text-[10px] font-medium text-amber-800">
                   Approximate area · confirm the exact entrance before leaving
@@ -512,30 +516,30 @@ export function TripPlanner({
   }
 
   return (
-    <main className="min-h-dvh overflow-hidden bg-[#ebe9dc] text-[#0e2d30]">
-      <section className="capcar-paper-grid relative border-b border-[#0e2d30]/10 px-5 pt-14 pb-14 sm:px-8 sm:pt-20 sm:pb-24">
-        <div className="pointer-events-none absolute top-[-14rem] right-[-12rem] size-[34rem] rounded-full bg-[#92644d]/16 blur-3xl" />
+    <main className="bg-background text-foreground min-h-dvh overflow-hidden">
+      <section className="capcar-paper-grid border-foreground/10 relative border-b px-5 pt-14 pb-14 sm:px-8 sm:pt-20 sm:pb-24">
+        <div className="bg-primary/16 pointer-events-none absolute top-[-14rem] right-[-12rem] size-[34rem] rounded-full blur-3xl" />
         <div className="relative mx-auto max-w-[1440px]">
           <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold tracking-[0.16em] uppercase">
-            <span className="rounded-full bg-[#6d0101] px-3 py-1.5 text-[#fff7ed] shadow-[0_8px_20px_rgba(109,1,1,.12)]">
+            <span className="bg-primary text-primary-foreground rounded-full px-3 py-1.5 shadow-[0_8px_20px_rgba(184,199,217,.12)]">
               {t("experimental")}
             </span>
-            <span className="rounded-full border border-[#0e2d30]/15 px-3 py-1.5">
+            <span className="border-foreground/15 rounded-full border px-3 py-1.5">
               {t("connected")}
             </span>
-            <span className="rounded-full border border-[#0e2d30]/15 px-3 py-1.5">
+            <span className="border-foreground/15 rounded-full border px-3 py-1.5">
               Google · Apple · OSM
             </span>
           </div>
           <div className="mt-10 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
             <div>
-              <p className="text-sm font-semibold text-[#6d0101]">
+              <p className="text-primary text-sm font-semibold">
                 {t("eyebrow")}
               </p>
               <h1 className="mt-4 max-w-3xl text-5xl leading-[0.95] font-medium tracking-[-0.06em] sm:text-7xl lg:text-[5.6rem]">
                 {t("title")}
               </h1>
-              <p className="mt-7 max-w-xl text-lg leading-8 text-[#405856]">
+              <p className="text-muted-foreground mt-7 max-w-xl text-lg leading-8">
                 {t("description")}
               </p>
               <div className="mt-7 grid max-w-xl gap-3 sm:grid-cols-3">
@@ -546,14 +550,14 @@ export function TripPlanner({
                 ].map(([Icon, label]) => (
                   <div
                     key={label as string}
-                    className="flex items-center gap-2 rounded-2xl border border-[#0e2d30]/10 bg-white/45 px-3 py-3 text-xs font-medium text-[#405856] shadow-[0_8px_25px_rgba(14,45,48,.045)]"
+                    className="border-foreground/10 bg-card text-muted-foreground flex items-center gap-2 rounded-2xl border px-3 py-3 text-xs font-medium shadow-[0_8px_25px_rgba(184,199,217,.045)]"
                   >
-                    <Icon className="size-4 text-[#6d0101]" /> {label as string}
+                    <Icon className="text-primary size-4" /> {label as string}
                   </div>
                 ))}
               </div>
             </div>
-            <div className="overflow-hidden rounded-[2rem] border border-white/55 bg-[#f5f2e8] p-2 shadow-[0_35px_90px_rgba(14,45,48,.16)] sm:p-3">
+            <div className="bg-background overflow-hidden rounded-[2rem] border border-white/55 p-2 shadow-[0_35px_90px_rgba(184,199,217,.16)] sm:p-3">
               <AnimatedRouteDemo />
             </div>
           </div>
@@ -562,15 +566,15 @@ export function TripPlanner({
 
       <section className="px-5 py-12 sm:px-8 sm:py-20">
         <div className="mx-auto grid max-w-[1440px] gap-7 xl:grid-cols-[0.88fr_1.12fr]">
-          <aside className="capcar-editorial-grid h-fit rounded-[2rem] border border-white/8 bg-[#0e2d30] p-6 text-[#f5f2e8] shadow-[0_30px_80px_rgba(14,45,48,0.18)] sm:p-8 xl:sticky xl:top-24">
+          <aside className="capcar-editorial-grid bg-card text-foreground h-fit rounded-[2rem] border border-white/8 p-6 shadow-[0_30px_80px_rgba(184,199,217,0.18)] sm:p-8 xl:sticky xl:top-24">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-xs tracking-[0.14em] text-[#f5f2e8]/45 uppercase">
+                <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
                   {t("ask")}
                 </p>
                 <h2 className="mt-2 text-2xl font-medium">{t("formTitle")}</h2>
               </div>
-              <Sparkles className="size-6 text-[#ff7d75]" />
+              <Sparkles className="text-primary size-6" />
             </div>
 
             <div
@@ -583,7 +587,7 @@ export function TripPlanner({
                 role="tab"
                 aria-selected={inputMode === "prompt"}
                 onClick={() => setInputMode("prompt")}
-                className={`min-h-11 rounded-xl px-3 text-xs font-semibold transition ${inputMode === "prompt" ? "bg-white text-[#0e2d30] shadow-sm" : "text-white/55 hover:text-white"}`}
+                className={`min-h-11 rounded-xl px-3 text-xs font-semibold transition ${inputMode === "prompt" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
               >
                 Describe with AI
               </button>
@@ -595,7 +599,7 @@ export function TripPlanner({
                   setInputMode("places");
                   setPlaceModalOpen(true);
                 }}
-                className={`min-h-11 rounded-xl px-3 text-xs font-semibold transition ${inputMode === "places" ? "bg-white text-[#0e2d30] shadow-sm" : "text-white/55 hover:text-white"}`}
+                className={`min-h-11 rounded-xl px-3 text-xs font-semibold transition ${inputMode === "places" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
               >
                 Choose places
               </button>
@@ -621,8 +625,10 @@ export function TripPlanner({
               <div className="mt-4 rounded-2xl border border-white/12 bg-white/6 p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-xs text-white/45">Selected route</p>
-                    <p className="mt-1 text-sm leading-6 text-white">
+                    <p className="text-muted-foreground text-xs">
+                      Selected route
+                    </p>
+                    <p className="text-foreground mt-1 text-sm leading-6">
                       {places.filter((place) => place.trim()).join(" → ") ||
                         "No places selected"}
                     </p>
@@ -630,12 +636,12 @@ export function TripPlanner({
                   <button
                     type="button"
                     onClick={() => setPlaceModalOpen(true)}
-                    className="shrink-0 rounded-full border border-[#ff7d75]/40 px-3 py-2 text-xs font-semibold text-[#ff9b94] transition hover:bg-[#ff766d] hover:text-[#260808]"
+                    className="border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground hover:text-primary-foreground shrink-0 rounded-full border px-3 py-2 text-xs font-semibold transition"
                   >
                     Edit places
                   </button>
                 </div>
-                <p className="mt-3 text-[10px] leading-4 text-white/35">
+                <p className="text-muted-foreground mt-3 text-[10px] leading-4">
                   CapCar keeps these places in order and adds useful fuel,
                   scenery and photo stops around them.
                 </p>
@@ -643,29 +649,29 @@ export function TripPlanner({
             )}
 
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <label className="text-xs text-[#f5f2e8]/55">
+              <label className="text-muted-foreground text-xs">
                 {t("vehicle")}
                 <input
                   value={vehicle}
                   onChange={(event) => setVehicle(event.target.value)}
-                  className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-white/6 px-4 text-sm text-white outline-none focus:border-[#ff7d75]/60"
+                  className="text-foreground focus:border-primary/60 mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-white/6 px-4 text-sm outline-none"
                 />
               </label>
-              <label className="text-xs text-[#f5f2e8]/55">
+              <label className="text-muted-foreground text-xs">
                 {t("startDate")}
                 <input
                   type="date"
                   value={effectiveStartDate}
                   onChange={(event) => setStartDate(event.target.value)}
-                  className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-white/6 px-4 text-sm text-white [color-scheme:dark] outline-none"
+                  className="text-foreground mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-white/6 px-4 text-sm [color-scheme:dark] outline-none"
                 />
               </label>
-              <label className="text-xs text-[#f5f2e8]/55">
+              <label className="text-muted-foreground text-xs">
                 {t("duration")}
                 <select
                   value={duration}
                   onChange={(event) => setDuration(Number(event.target.value))}
-                  className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-[#173d40] px-4 text-sm text-white outline-none"
+                  className="bg-secondary text-foreground mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm outline-none"
                 >
                   {[2, 3, 4, 5].map((value) => (
                     <option key={value} value={value}>
@@ -674,14 +680,14 @@ export function TripPlanner({
                   ))}
                 </select>
               </label>
-              <label className="text-xs text-[#f5f2e8]/55 sm:col-span-2">
+              <label className="text-muted-foreground text-xs sm:col-span-2">
                 {t("pace")}
                 <select
                   value={pace}
                   onChange={(event) =>
                     setPace(event.target.value as typeof pace)
                   }
-                  className="mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-[#173d40] px-4 text-sm text-white outline-none"
+                  className="bg-secondary text-foreground mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm outline-none"
                 >
                   <option value="scenic">{t("paces.scenic")}</option>
                   <option value="balanced">{t("paces.balanced")}</option>
@@ -691,7 +697,7 @@ export function TripPlanner({
             </div>
 
             <fieldset className="mt-5">
-              <legend className="text-xs text-[#f5f2e8]/55">
+              <legend className="text-muted-foreground text-xs">
                 {t("interests")}
               </legend>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -701,7 +707,7 @@ export function TripPlanner({
                     type="button"
                     aria-pressed={interests.includes(interest)}
                     onClick={() => toggleInterest(interest)}
-                    className={`rounded-full border px-3 py-2 text-xs transition ${interests.includes(interest) ? "border-[#ff7d75]/55 bg-[#6d0101] text-white" : "border-white/12 text-white/55 hover:text-white"}`}
+                    className={`rounded-full border px-3 py-2 text-xs transition ${interests.includes(interest) ? "border-primary/55 bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground border-white/12"}`}
                   >
                     {t(`interest.${interest}`)}
                   </button>
@@ -716,19 +722,19 @@ export function TripPlanner({
                 onChange={(event) =>
                   setUseConnectedContext(event.target.checked)
                 }
-                className="mt-1 size-4 accent-[#ff7d75]"
+                className="accent-primary mt-1 size-4"
               />
               <span>
                 <span className="block text-sm font-medium">
                   {t("useConnections")}
                 </span>
-                <span className="mt-1 block text-xs leading-5 text-white/40">
+                <span className="text-muted-foreground mt-1 block text-xs leading-5">
                   {connection?.connected
                     ? `Connected as ${connection.email ?? "Google account"}. Calendar conflicts and travel-mail metadata can shape this plan.`
                     : t("connectionHint")}{" "}
                   <Link
                     href="/account/connections"
-                    className="text-[#ff9b94] underline underline-offset-2"
+                    className="text-primary underline underline-offset-2"
                   >
                     {connection?.connected
                       ? t("manageConnections")
@@ -743,11 +749,11 @@ export function TripPlanner({
                 className={
                   aiConnection.connected
                     ? "mt-3 flex items-center justify-between gap-3 rounded-2xl border border-emerald-200/15 bg-emerald-200/6 p-4"
-                    : "mt-3 flex items-center justify-between gap-3 rounded-2xl border border-[#ff7d75]/20 bg-[#ff7d75]/8 p-4"
+                    : "border-primary/20 bg-primary/8 mt-3 flex items-center justify-between gap-3 rounded-2xl border p-4"
                 }
               >
                 <div className="flex items-center gap-3">
-                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/8 text-[#ff938c]">
+                  <span className="text-primary grid size-9 shrink-0 place-items-center rounded-full bg-white/8">
                     <Sparkles className="size-4" />
                   </span>
                   <div>
@@ -762,7 +768,7 @@ export function TripPlanner({
                           } connected`
                         : "Connect your AI"}
                     </p>
-                    <p className="mt-1 text-xs leading-5 text-white/40">
+                    <p className="text-muted-foreground mt-1 text-xs leading-5">
                       {aiConnection.connected
                         ? "This plan uses your own API credits."
                         : "Connect Gemini, OpenAI or Claude to generate routes with your own provider."}
@@ -771,7 +777,7 @@ export function TripPlanner({
                 </div>
                 <Link
                   href="/account/connections"
-                  className="shrink-0 text-xs font-semibold text-[#ff9b94] underline underline-offset-2"
+                  className="text-primary shrink-0 text-xs font-semibold underline underline-offset-2"
                 >
                   {aiConnection.connected ? "Manage" : "Connect"}
                 </Link>
@@ -788,7 +794,7 @@ export function TripPlanner({
                   !effectiveStartDate
                 }
                 onClick={() => void createPlan()}
-                className="mt-5 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-xl bg-[#ff766d] px-5 text-sm font-semibold text-[#260808] transition hover:bg-[#ff8f87] disabled:opacity-40"
+                className="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground mt-5 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold transition disabled:opacity-40"
               >
                 {loading ? (
                   <LoaderCircle className="size-4" />
@@ -802,13 +808,13 @@ export function TripPlanner({
 
           <article
             id="capcar-plan"
-            className="scroll-mt-24 rounded-[2rem] border border-[#0e2d30]/10 bg-[#f5f2e8] p-6 shadow-[0_24px_70px_rgba(14,45,48,.07)] sm:p-8"
+            className="border-foreground/10 bg-background scroll-mt-24 rounded-[2rem] border p-6 shadow-[0_24px_70px_rgba(184,199,217,.07)] sm:p-8"
           >
             {plan ? (
               <div>
-                <div className="flex flex-wrap items-start justify-between gap-5 border-b border-[#0e2d30]/12 pb-7">
+                <div className="border-foreground/12 flex flex-wrap items-start justify-between gap-5 border-b pb-7">
                   <div>
-                    <p className="text-xs font-semibold tracking-[0.14em] text-[#6d0101] uppercase">
+                    <p className="text-primary text-xs font-semibold tracking-[0.14em] uppercase">
                       {plan.provider} ·{" "}
                       {plan.researchSources.length
                         ? "web-grounded"
@@ -821,7 +827,7 @@ export function TripPlanner({
                     <h2 className="mt-3 text-3xl font-medium tracking-[-0.045em] sm:text-5xl">
                       {plan.title}
                     </h2>
-                    <div className="mt-4 max-w-2xl text-[#405856]">
+                    <div className="text-muted-foreground mt-4 max-w-2xl">
                       <AIResponse text={plan.summary} />
                     </div>
                   </div>
@@ -830,7 +836,7 @@ export function TripPlanner({
                       type="button"
                       disabled={calendarLoading}
                       onClick={() => void addToCalendar()}
-                      className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#0e2d30]/15 px-4 text-sm font-medium transition hover:bg-[#0e2d30] hover:text-[#f5f2e8] disabled:opacity-40"
+                      className="border-foreground/15 hover:bg-card hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium transition disabled:opacity-40"
                     >
                       {calendarLoading ? (
                         <LoaderCircle className="size-4" />
@@ -842,7 +848,7 @@ export function TripPlanner({
                   ) : (
                     <Link
                       href="/account/connections"
-                      className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#0e2d30]/15 px-4 text-sm font-medium transition hover:bg-[#0e2d30] hover:text-[#f5f2e8]"
+                      className="border-foreground/15 hover:bg-card hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium transition"
                     >
                       <CalendarPlus className="size-4" /> Connect calendar
                     </Link>
@@ -857,13 +863,13 @@ export function TripPlanner({
                   ].map(([Icon, value, label]) => (
                     <div
                       key={label as string}
-                      className="rounded-2xl bg-[#0e2d30]/5 p-4"
+                      className="bg-card/5 rounded-2xl p-4"
                     >
-                      <Icon className="size-4 text-[#6d0101]" />
+                      <Icon className="text-primary size-4" />
                       <strong className="mt-3 block text-xl font-medium">
                         {value as string}
                       </strong>
-                      <span className="mt-1 block text-[10px] text-[#405856] uppercase">
+                      <span className="text-muted-foreground mt-1 block text-[10px] uppercase">
                         {label as string}
                       </span>
                     </div>
@@ -872,7 +878,7 @@ export function TripPlanner({
 
                 <div className="mt-7 flex flex-wrap items-center justify-between gap-3">
                   <div
-                    className="inline-flex rounded-full border border-[#0e2d30]/10 bg-[#0e2d30]/5 p-1"
+                    className="border-foreground/10 bg-card/5 inline-flex rounded-full border p-1"
                     role="tablist"
                     aria-label="Generated plan view"
                   >
@@ -881,7 +887,7 @@ export function TripPlanner({
                       role="tab"
                       aria-selected={planView === "map"}
                       onClick={() => setPlanView("map")}
-                      className={`inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-xs font-semibold transition ${planView === "map" ? "bg-[#0e2d30] text-white shadow-sm" : "text-[#405856] hover:text-[#0e2d30]"}`}
+                      className={`inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-xs font-semibold transition ${planView === "map" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
                     >
                       <MapIcon className="size-4" /> Route map
                     </button>
@@ -890,7 +896,7 @@ export function TripPlanner({
                       role="tab"
                       aria-selected={planView === "details"}
                       onClick={() => setPlanView("details")}
-                      className={`inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-xs font-semibold transition ${planView === "details" ? "bg-[#0e2d30] text-white shadow-sm" : "text-[#405856] hover:text-[#0e2d30]"}`}
+                      className={`inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-xs font-semibold transition ${planView === "details" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
                     >
                       <ListTree className="size-4" /> Detailed plan
                     </button>
@@ -901,10 +907,10 @@ export function TripPlanner({
                 {planView === "map" && (
                   <div className="mt-5" role="tabpanel">
                     {routeLoading && (
-                      <div className="grid min-h-[34rem] place-items-center rounded-[1.7rem] bg-[#0e2d30] text-white">
+                      <div className="bg-card text-foreground grid min-h-[34rem] place-items-center rounded-[1.7rem]">
                         <div className="text-center">
                           <LoaderCircle className="mx-auto size-7" />
-                          <p className="mt-3 text-sm text-white/55">
+                          <p className="text-muted-foreground mt-3 text-sm">
                             Calculating the road between every stop…
                           </p>
                         </div>
@@ -914,14 +920,14 @@ export function TripPlanner({
                     {route && <RouteStopGallery route={route} />}
                     {routeError && !routeLoading && (
                       <div className="rounded-2xl border border-amber-800/15 bg-amber-100/55 p-5">
-                        <p className="flex gap-2 text-sm text-[#5b4516]">
+                        <p className="flex gap-2 text-sm text-amber-200">
                           <AlertTriangle className="mt-0.5 size-4 shrink-0" />
                           {routeError}
                         </p>
                         <button
                           type="button"
                           onClick={() => setPlanView("details")}
-                          className="mt-3 text-xs font-semibold text-[#6d0101] underline underline-offset-2"
+                          className="text-primary mt-3 text-xs font-semibold underline underline-offset-2"
                         >
                           Open the detailed plan
                         </button>
@@ -934,7 +940,7 @@ export function TripPlanner({
                   <div role="tabpanel">
                     <div className="mt-8">
                       <div>
-                        <p className="text-[10px] font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
+                        <p className="text-primary text-[10px] font-semibold tracking-[0.16em] uppercase">
                           The drive
                         </p>
                         <h3 className="mt-1 text-2xl font-medium tracking-[-0.03em]">
@@ -946,9 +952,9 @@ export function TripPlanner({
                       {plan.days.map((day, index) => (
                         <section
                           key={day.date}
-                          className="grid gap-4 rounded-2xl border border-[#0e2d30]/10 bg-white/38 p-5 md:grid-cols-[auto_1fr]"
+                          className="border-foreground/10 bg-card grid gap-4 rounded-2xl border p-5 md:grid-cols-[auto_1fr]"
                         >
-                          <div className="grid size-11 place-items-center rounded-full bg-[#0e2d30] text-sm font-semibold text-[#f5f2e8]">
+                          <div className="bg-card text-foreground grid size-11 place-items-center rounded-full text-sm font-semibold">
                             {index + 1}
                           </div>
                           <div>
@@ -956,47 +962,47 @@ export function TripPlanner({
                               <h3 className="text-lg font-medium">
                                 {day.title}
                               </h3>
-                              <span className="text-xs text-[#405856]">
+                              <span className="text-muted-foreground text-xs">
                                 {day.date} · {day.distanceKm} km
                               </span>
                             </div>
-                            <p className="mt-2 text-sm leading-6 text-[#405856]">
+                            <p className="text-muted-foreground mt-2 text-sm leading-6">
                               {day.routeIdea}
                             </p>
-                            <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[10px] text-[#405856]">
+                            <div className="text-muted-foreground mt-3 flex flex-wrap items-center gap-1.5 text-[10px]">
                               {day.waypoints.map((waypoint, waypointIndex) => (
                                 <span key={waypoint} className="contents">
                                   {waypointIndex > 0 && (
-                                    <ChevronRight className="size-3 text-[#6d0101]/55" />
+                                    <ChevronRight className="text-primary/55 size-3" />
                                   )}
-                                  <span className="rounded-full bg-[#0e2d30]/5 px-2.5 py-1.5">
+                                  <span className="bg-card/5 rounded-full px-2.5 py-1.5">
                                     {waypoint}
                                   </span>
                                 </span>
                               ))}
                             </div>
                             <div className="mt-4 grid gap-2 text-xs sm:grid-cols-3">
-                              <p className="rounded-xl bg-[#0e2d30]/5 p-3">
-                                <strong className="block text-[#0e2d30]">
+                              <p className="bg-card/5 rounded-xl p-3">
+                                <strong className="text-foreground block">
                                   {t("drive")}
                                 </strong>
-                                <span className="mt-1 block text-[#405856]">
+                                <span className="text-muted-foreground mt-1 block">
                                   {day.drivingWindow}
                                 </span>
                               </p>
-                              <p className="rounded-xl bg-[#0e2d30]/5 p-3">
-                                <strong className="block text-[#0e2d30]">
+                              <p className="bg-card/5 rounded-xl p-3">
+                                <strong className="text-foreground block">
                                   {t("highlight")}
                                 </strong>
-                                <span className="mt-1 block text-[#405856]">
+                                <span className="text-muted-foreground mt-1 block">
                                   {day.highlight}
                                 </span>
                               </p>
-                              <p className="rounded-xl bg-[#0e2d30]/5 p-3">
-                                <strong className="block text-[#0e2d30]">
+                              <p className="bg-card/5 rounded-xl p-3">
+                                <strong className="text-foreground block">
                                   {t("evening")}
                                 </strong>
-                                <span className="mt-1 block text-[#405856]">
+                                <span className="text-muted-foreground mt-1 block">
                                   {day.evening}
                                 </span>
                               </p>
@@ -1007,13 +1013,13 @@ export function TripPlanner({
                     </div>
 
                     <section className="mt-8">
-                      <p className="text-[10px] font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
+                      <p className="text-primary text-[10px] font-semibold tracking-[0.16em] uppercase">
                         Route intelligence
                       </p>
                       <h3 className="mt-1 text-2xl font-medium tracking-[-0.03em]">
                         Stops worth making
                       </h3>
-                      <p className="mt-2 max-w-2xl text-sm leading-6 text-[#405856]">
+                      <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-6">
                         Fuel at the right moment, scenery with somewhere
                         sensible to stop, and photo locations you can inspect in
                         your preferred map before the drive.
@@ -1029,42 +1035,42 @@ export function TripPlanner({
                     </section>
 
                     <div className="mt-8 grid gap-5 md:grid-cols-2">
-                      <section className="rounded-2xl bg-[#0e2d30] p-5 text-[#f5f2e8]">
+                      <section className="bg-card text-foreground rounded-2xl p-5">
                         <h3 className="font-medium">{t("checklist")}</h3>
                         <ul className="mt-4 space-y-3">
                           {plan.checklist.map((item) => (
                             <li
                               key={item}
-                              className="flex gap-2 text-xs leading-5 text-white/55"
+                              className="text-muted-foreground flex gap-2 text-xs leading-5"
                             >
-                              <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-[#ff7d75]" />
+                              <CheckCircle2 className="text-primary mt-0.5 size-3.5 shrink-0" />
                               {item}
                             </li>
                           ))}
                         </ul>
                       </section>
-                      <section className="rounded-2xl border border-[#0e2d30]/10 p-5">
+                      <section className="border-foreground/10 rounded-2xl border p-5">
                         <h3 className="font-medium">{t("connectedContext")}</h3>
                         {plan.contextNotes.length ? (
                           <ul className="mt-4 space-y-3">
                             {plan.contextNotes.map((note) => (
                               <li
                                 key={note}
-                                className="flex gap-2 text-xs leading-5 text-[#405856]"
+                                className="text-muted-foreground flex gap-2 text-xs leading-5"
                               >
-                                <Sparkles className="mt-0.5 size-3.5 shrink-0 text-[#6d0101]" />
+                                <Sparkles className="text-primary mt-0.5 size-3.5 shrink-0" />
                                 {note}
                               </li>
                             ))}
                           </ul>
                         ) : (
-                          <p className="mt-4 text-xs leading-5 text-[#405856]">
+                          <p className="text-muted-foreground mt-4 text-xs leading-5">
                             {t("noContext")}
                           </p>
                         )}
                         <Link
                           href="/account/connections"
-                          className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-[#6d0101] underline underline-offset-2"
+                          className="text-primary mt-4 inline-flex items-center gap-1 text-xs font-semibold underline underline-offset-2"
                         >
                           {t("manageConnections")}{" "}
                           <ArrowRight className="size-3" />
@@ -1073,7 +1079,7 @@ export function TripPlanner({
                     </div>
 
                     {plan.researchSources.length > 0 && (
-                      <section className="mt-6 rounded-2xl border border-[#0e2d30]/10 bg-white/30 p-5">
+                      <section className="border-foreground/10 bg-card mt-6 rounded-2xl border p-5">
                         <h3 className="text-sm font-medium">
                           Research used by CapCar AI
                         </h3>
@@ -1084,7 +1090,7 @@ export function TripPlanner({
                               href={source.url}
                               target="_blank"
                               rel="noreferrer"
-                              className="inline-flex max-w-full items-center gap-1 rounded-full border border-[#0e2d30]/10 bg-white/55 px-3 py-2 text-[10px] text-[#405856] hover:text-[#6d0101]"
+                              className="border-foreground/10 bg-card text-muted-foreground hover:text-primary inline-flex max-w-full items-center gap-1 rounded-full border px-3 py-2 text-[10px]"
                             >
                               <span className="truncate">{source.label}</span>
                               <ExternalLink className="size-3 shrink-0" />
@@ -1096,7 +1102,7 @@ export function TripPlanner({
                   </div>
                 )}
 
-                <p className="mt-5 flex gap-2 rounded-xl bg-amber-200/45 p-4 text-xs leading-5 text-[#5b4516]">
+                <p className="mt-5 flex gap-2 rounded-xl bg-amber-300/10 p-4 text-xs leading-5 text-amber-200">
                   <AlertTriangle className="mt-0.5 size-4 shrink-0" />
                   {plan.verificationNote}
                 </p>
@@ -1104,13 +1110,13 @@ export function TripPlanner({
             ) : (
               <div className="flex min-h-[760px] flex-col justify-between">
                 <div>
-                  <p className="text-[10px] font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
+                  <p className="text-primary text-[10px] font-semibold tracking-[0.16em] uppercase">
                     How it flows
                   </p>
                   <h2 className="mt-3 max-w-xl text-4xl leading-[1.02] font-medium tracking-[-0.045em]">
                     From one sentence to a weekend that already feels real.
                   </h2>
-                  <p className="mt-4 max-w-xl leading-7 text-[#405856]">
+                  <p className="text-muted-foreground mt-4 max-w-xl leading-7">
                     CapCar combines your car, pace and interests with planning
                     context you choose to connect.
                   </p>
@@ -1144,33 +1150,33 @@ export function TripPlanner({
                   ].map(([number, Icon, title, copy]) => (
                     <div
                       key={number as string}
-                      className="grid gap-4 rounded-2xl border border-[#0e2d30]/10 bg-white/45 p-5 shadow-[0_10px_30px_rgba(14,45,48,.035)] sm:grid-cols-[auto_auto_1fr] sm:items-center"
+                      className="border-foreground/10 bg-card grid gap-4 rounded-2xl border p-5 shadow-[0_10px_30px_rgba(184,199,217,.035)] sm:grid-cols-[auto_auto_1fr] sm:items-center"
                     >
-                      <span className="text-xs font-semibold text-[#6d0101]">
+                      <span className="text-primary text-xs font-semibold">
                         {number as string}
                       </span>
-                      <span className="grid size-10 place-items-center rounded-xl bg-[#0e2d30] text-[#ff938c]">
+                      <span className="bg-card text-primary grid size-10 place-items-center rounded-xl">
                         <Icon className="size-4" />
                       </span>
                       <div>
                         <h3 className="font-medium">{title as string}</h3>
-                        <p className="mt-1 text-xs leading-5 text-[#405856]">
+                        <p className="text-muted-foreground mt-1 text-xs leading-5">
                           {copy as string}
                         </p>
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className="rounded-[1.5rem] bg-[#0e2d30]/5 p-5">
+                <div className="bg-card/5 rounded-[1.5rem] p-5">
                   <div className="flex items-start gap-3">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#6d0101] text-white">
+                    <span className="bg-primary text-primary-foreground grid size-9 shrink-0 place-items-center rounded-full">
                       <Mail className="size-4" />
                     </span>
                     <div>
                       <p className="text-sm font-medium">
                         Calendar & mail make the flow better.
                       </p>
-                      <p className="mt-1 text-xs leading-5 text-[#405856]">
+                      <p className="text-muted-foreground mt-1 text-xs leading-5">
                         Dates and booking signals help CapCar avoid conflicts.
                         You stay in control of every connection and calendar
                         write.
@@ -1207,7 +1213,7 @@ export function TripPlanner({
 
       {placeModalOpen && (
         <div
-          className="fixed inset-0 z-[1000] grid place-items-center bg-[#07191b]/78 p-4 backdrop-blur-sm"
+          className="bg-background/78 fixed inset-0 z-[1000] grid place-items-center p-4 backdrop-blur-sm"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) setPlaceModalOpen(false);
           }}
@@ -1216,11 +1222,11 @@ export function TripPlanner({
             role="dialog"
             aria-modal="true"
             aria-labelledby="place-picker-title"
-            className="max-h-[90dvh] w-full max-w-xl overflow-y-auto rounded-[1.75rem] bg-[#f5f2e8] p-5 text-[#0e2d30] shadow-[0_35px_100px_rgba(0,0,0,.4)] sm:p-7"
+            className="bg-background text-foreground max-h-[90dvh] w-full max-w-xl overflow-y-auto rounded-[1.75rem] p-5 shadow-[0_35px_100px_rgba(0,0,0,.4)] sm:p-7"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-[10px] font-semibold tracking-[0.14em] text-[#6d0101] uppercase">
+                <p className="text-primary text-[10px] font-semibold tracking-[0.14em] uppercase">
                   Route places
                 </p>
                 <h2
@@ -1234,7 +1240,7 @@ export function TripPlanner({
                 type="button"
                 aria-label="Close place picker"
                 onClick={() => setPlaceModalOpen(false)}
-                className="grid size-10 place-items-center rounded-full border border-[#0e2d30]/10 hover:bg-[#0e2d30] hover:text-white"
+                className="border-foreground/10 hover:bg-card hover:text-foreground grid size-10 place-items-center rounded-full border"
               >
                 <X className="size-4" />
               </button>
@@ -1244,13 +1250,13 @@ export function TripPlanner({
               {places.map((place, index) => (
                 <label
                   key={index}
-                  className="grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border border-[#0e2d30]/10 bg-white/55 p-3"
+                  className="border-foreground/10 bg-card grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border p-3"
                 >
-                  <span className="grid size-8 place-items-center rounded-full bg-[#0e2d30] text-xs font-semibold text-white">
+                  <span className="bg-card text-foreground grid size-8 place-items-center rounded-full text-xs font-semibold">
                     {index + 1}
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-[10px] font-semibold tracking-[0.1em] text-[#6d0101] uppercase">
+                    <span className="text-primary block text-[10px] font-semibold tracking-[0.1em] uppercase">
                       {index === 0
                         ? "Start"
                         : index === places.length - 1
@@ -1269,7 +1275,7 @@ export function TripPlanner({
                         )
                       }
                       placeholder="City, landmark or exact place"
-                      className="mt-1 w-full bg-transparent text-sm outline-none placeholder:text-[#405856]/45"
+                      className="placeholder:text-muted-foreground/45 mt-1 w-full bg-transparent text-sm outline-none"
                     />
                   </span>
                   <button
@@ -1281,7 +1287,7 @@ export function TripPlanner({
                         current.filter((_, itemIndex) => itemIndex !== index),
                       )
                     }
-                    className="grid size-9 place-items-center rounded-full text-[#405856] hover:bg-red-100 hover:text-[#6d0101] disabled:invisible"
+                    className="text-muted-foreground hover:text-primary grid size-9 place-items-center rounded-full hover:bg-red-100 disabled:invisible"
                   >
                     <X className="size-4" />
                   </button>
@@ -1294,7 +1300,7 @@ export function TripPlanner({
                 type="button"
                 disabled={places.length >= 6}
                 onClick={() => setPlaces((current) => [...current, ""])}
-                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#0e2d30]/12 px-4 text-xs font-semibold hover:bg-white disabled:opacity-40"
+                className="border-foreground/12 hover:bg-card inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-xs font-semibold disabled:opacity-40"
               >
                 <Plus className="size-4" /> Add another stop
               </button>
@@ -1302,7 +1308,7 @@ export function TripPlanner({
                 type="button"
                 disabled={places.filter((place) => place.trim()).length < 2}
                 onClick={() => setPlaceModalOpen(false)}
-                className="min-h-11 rounded-full bg-[#ff766d] px-5 text-xs font-semibold text-[#260808] hover:bg-[#ff8f87] disabled:opacity-40"
+                className="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground min-h-11 rounded-full px-5 text-xs font-semibold disabled:opacity-40"
               >
                 Use these places
               </button>

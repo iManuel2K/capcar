@@ -28,16 +28,16 @@ export default async function JournalPage({ params }: Props) {
       <main
         id="main-content"
         lang={locale}
-        className="min-h-dvh bg-[#ebe9dc] px-5 py-16 text-[#0e2d30] sm:px-8 sm:py-24"
+        className="bg-background text-foreground min-h-dvh px-5 py-16 sm:px-8 sm:py-24"
       >
         <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-semibold tracking-[.2em] text-[#79503c] uppercase">
+          <p className="text-primary text-xs font-semibold tracking-[.2em] uppercase">
             CapCar {ui.label} · {ui.language}
           </p>
           <h1 className="mt-6 max-w-4xl text-5xl leading-[1.05] font-medium tracking-[-.05em] whitespace-pre-line sm:text-7xl">
             {ui.headline}
           </h1>
-          <p className="mt-6 mb-12 max-w-2xl text-lg leading-8 text-[#0e2d30]/75">
+          <p className="text-foreground/75 mt-6 mb-12 max-w-2xl text-lg leading-8">
             {ui.intro}
           </p>
           <JournalCards articles={getJournalArticles(locale)} locale={locale} />

@@ -71,19 +71,19 @@ export function MarketingHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-[80] border-b border-[#0e2d30]/10 bg-[#ebe9dc]/92 text-[#0e2d30] shadow-[0_12px_40px_rgba(14,45,48,0.055)] backdrop-blur-2xl [--ring:#6d0101]">
+      <header className="border-foreground/10 bg-background/92 text-foreground sticky top-0 z-[80] border-b shadow-[0_12px_40px_rgba(184,199,217,0.055)] backdrop-blur-2xl [--ring:var(--primary)]">
         <div className="mx-auto flex h-[4.75rem] w-full max-w-[1440px] items-center justify-between gap-5 px-5 sm:h-20 sm:px-8">
           <Link
             href="/"
             aria-label={t("home")}
-            className="shrink-0 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6d0101]"
+            className="focus-visible:outline-primary shrink-0 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4"
           >
             <CapcarWordmark glow={false} />
           </Link>
 
           <nav
             aria-label={t("main")}
-            className="hidden items-center gap-0.5 rounded-full border border-[#0e2d30]/8 bg-white/20 p-1 text-sm text-[#0e2d30]/68 xl:flex"
+            className="border-foreground/8 text-foreground/68 hidden items-center gap-0.5 rounded-full border bg-white/20 p-1 text-sm xl:flex"
           >
             {links.slice(0, 2).map((item) => (
               <Link
@@ -91,8 +91,8 @@ export function MarketingHeader() {
                 aria-current={active(item.href) ? "page" : undefined}
                 className={`inline-flex min-h-11 items-center rounded-full px-3 transition focus-visible:outline-2 focus-visible:outline-offset-2 ${
                   active(item.href)
-                    ? "bg-white/70 font-medium text-[#0e2d30] shadow-[0_2px_12px_rgba(14,45,48,.07)]"
-                    : "hover:bg-[#0e2d30]/5 hover:text-[#6d0101]"
+                    ? "bg-card text-foreground font-medium shadow-[0_2px_12px_rgba(184,199,217,.07)]"
+                    : "hover:bg-card/5 hover:text-primary"
                 }`}
                 href={item.href}
               >
@@ -144,7 +144,7 @@ export function MarketingHeader() {
               <Link
                 href="/login"
                 aria-current={pathname === "/login" ? "page" : undefined}
-                className="inline-flex min-h-11 items-center rounded-full px-3 text-sm transition hover:bg-[#0e2d30]/5 focus-visible:outline-2"
+                className="hover:bg-card/5 inline-flex min-h-11 items-center rounded-full px-3 text-sm transition focus-visible:outline-2"
               >
                 {t("signIn")}
               </Link>
@@ -165,7 +165,7 @@ export function MarketingHeader() {
             aria-expanded={menuOpen}
             aria-controls="mobile-marketing-navigation"
             onClick={() => setMenuOpen(true)}
-            className="grid size-11 place-items-center rounded-full border border-[#0e2d30]/12 text-[#0e2d30] transition hover:bg-[#0e2d30]/5 xl:hidden"
+            className="border-foreground/12 text-foreground hover:bg-card/5 grid size-11 place-items-center rounded-full border transition xl:hidden"
           >
             <Menu className="size-5" aria-hidden="true" />
           </button>
@@ -192,16 +192,16 @@ export function MarketingHeader() {
           />
           <div
             id="mobile-marketing-navigation"
-            className={`${navigationStyles.mobileDrawer} absolute top-0 right-0 flex h-full w-[min(92%,24rem)] flex-col overflow-y-auto overscroll-contain rounded-l-[1.75rem] bg-[#e8e6d7] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] text-[#0e2d30] shadow-[-30px_0_90px_rgba(5,3,6,0.24)]`}
+            className={`${navigationStyles.mobileDrawer} bg-background text-foreground absolute top-0 right-0 flex h-full w-[min(92%,24rem)] flex-col overflow-y-auto overscroll-contain rounded-l-[1.75rem] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[-30px_0_90px_rgba(5,3,6,0.24)]`}
           >
-            <div className="flex items-center justify-between border-b border-[#0e2d30]/10 pb-5">
+            <div className="border-foreground/10 flex items-center justify-between border-b pb-5">
               <CapcarWordmark glow={false} />
               <button
                 type="button"
                 aria-label={t("close")}
                 data-close
                 onClick={() => setMenuOpen(false)}
-                className="grid size-11 shrink-0 place-items-center rounded-full bg-[#0e2d30]/6 transition hover:bg-[#0e2d30]/10"
+                className="bg-card/6 hover:bg-card/10 grid size-11 shrink-0 place-items-center rounded-full transition"
               >
                 <X className="size-4" />
               </button>
@@ -214,10 +214,10 @@ export function MarketingHeader() {
                   href={item.href}
                   aria-current={active(item.href) ? "page" : undefined}
                   onClick={() => setMenuOpen(false)}
-                  className="flex min-h-15 items-center justify-between border-b border-[#0e2d30]/10 text-lg font-medium tracking-[-0.02em]"
+                  className="border-foreground/10 flex min-h-15 items-center justify-between border-b text-lg font-medium tracking-[-0.02em]"
                 >
                   {l(`nav.${item.label}`)}
-                  <ChevronRight className="size-4 text-[#0e2d30]/45" />
+                  <ChevronRight className="text-muted-foreground size-4" />
                 </Link>
               ))}
               <details className="mt-2">
@@ -242,7 +242,7 @@ export function MarketingHeader() {
                       key={href}
                       href={href}
                       onClick={() => setMenuOpen(false)}
-                      className="flex min-h-12 items-center justify-between border-b border-[#0e2d30]/10 text-base focus-visible:outline-2"
+                      className="border-foreground/10 flex min-h-12 items-center justify-between border-b text-base focus-visible:outline-2"
                     >
                       {label === "journal" ? journal.label : footer(label)}
                       <ChevronRight className="size-4" aria-hidden="true" />
@@ -253,13 +253,13 @@ export function MarketingHeader() {
             </nav>
 
             <div className="mt-6">
-              <p className="mb-2 text-xs font-semibold tracking-[0.12em] text-[#0e2d30]/50 uppercase">
+              <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-[0.12em] uppercase">
                 {t("globalSearch")}
               </p>
               <GlobalPartsSearch expanded />
             </div>
 
-            <div className="mt-auto border-t border-[#0e2d30]/10 pt-5">
+            <div className="border-foreground/10 mt-auto border-t pt-5">
               {showSignIn && (
                 <Link
                   href="/login"
@@ -281,7 +281,7 @@ export function MarketingHeader() {
               <div className="mt-4">
                 <LanguageSelector direction="up" />
               </div>
-              <p className="mt-4 text-xs leading-5 text-[#0e2d30]/45">
+              <p className="text-muted-foreground mt-4 text-xs leading-5">
                 {t("privacyNote")}
               </p>
             </div>

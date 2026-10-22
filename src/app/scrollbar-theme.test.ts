@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest";
 
 const css = readFileSync("src/app/globals.css", "utf8");
 describe("CapCar native scrollbar theme", () => {
-  it("reuses the teal and copper palette and supports both scrollbar APIs", () => {
+  it("reuses the Obsidian Chrome palette and supports both scrollbar APIs", () => {
     expect(css).toContain("--capcar-scrollbar-track: var(--background)");
-    expect(css).toContain("--capcar-scrollbar-thumb: var(--capcar-red-soft)");
+    expect(css).toContain("--capcar-scrollbar-thumb: var(--input)");
     expect(css).toContain(
       "scrollbar-color: var(--capcar-scrollbar-thumb) var(--capcar-scrollbar-track)",
     );

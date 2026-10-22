@@ -47,7 +47,7 @@ const statusContent: Record<
 > = {
   unknown: {
     label: "History needed",
-    className: "border-white/10 bg-white/[0.04] text-white/55",
+    className: "border-white/10 bg-white/[0.04] text-muted-foreground",
     icon: Clock3,
   },
   overdue: {
@@ -120,11 +120,11 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
   if (!vehicle) {
     return (
       <div className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center text-center">
-        <Wrench className="size-7 text-white/40" />
+        <Wrench className="text-muted-foreground size-7" />
         <h1 className="mt-6 text-3xl font-medium">Vehicle not found</h1>
         <Link
           href="/garage"
-          className="mt-7 rounded-xl bg-[#e72d45] px-5 py-3 text-sm font-semibold text-[#07101d]"
+          className="bg-primary text-primary-foreground mt-7 rounded-xl px-5 py-3 text-sm font-semibold"
         >
           Return to garage
         </Link>
@@ -200,21 +200,21 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
       <MaintenanceRepairPlans vehicleId={vehicleId} />
       <Link
         href={`/garage/${vehicleId}`}
-        className="mb-7 inline-flex items-center gap-2 text-sm text-white/45 transition hover:text-white"
+        className="text-muted-foreground hover:text-foreground mb-7 inline-flex items-center gap-2 text-sm transition"
       >
         <ArrowLeft className="size-4" /> {vehicle.productionYear} {vehicle.make}{" "}
         {vehicle.model}
       </Link>
 
-      <header className="grid gap-8 rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-9 lg:grid-cols-[1fr_auto] lg:items-end">
+      <header className="bg-card grid gap-8 rounded-[2rem] border border-white/10 p-6 sm:p-9 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
-          <p className="text-xs font-semibold tracking-[0.16em] text-[#ff667a] uppercase">
+          <p className="text-primary text-xs font-semibold tracking-[0.16em] uppercase">
             Maintenance
           </p>
           <h1 className="mt-4 max-w-3xl text-4xl font-medium tracking-[-0.05em] text-balance sm:text-6xl">
             Keep the baseline clear.
           </h1>
-          <p className="mt-5 max-w-2xl leading-7 text-white/50">
+          <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
             Build reliable history for your {vehicle.platform}. Record what was
             done, then CapCar calculates the next planning target.
           </p>
@@ -223,9 +223,9 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
           <button
             type="button"
             onClick={loadExample}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white/65 transition hover:bg-white/[0.08] hover:text-white"
+            className="hover:text-foreground inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white/65 transition hover:bg-white/[0.08]"
           >
-            <Sparkles className="size-4 text-[#ff667a]" /> Use sample history
+            <Sparkles className="text-primary size-4" /> Use sample history
           </button>
         )}
       </header>
@@ -260,11 +260,11 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
         />
       </section>
 
-      <section className="mt-5 overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]">
+      <section className="bg-card mt-5 overflow-hidden rounded-[2rem] border border-white/10">
         <div className="flex flex-col justify-between gap-5 border-b border-white/8 p-5 sm:flex-row sm:items-center sm:p-7">
           <div>
             <h2 className="text-xl font-medium">Maintenance checklist</h2>
-            <p className="mt-1 text-sm text-white/40">
+            <p className="text-muted-foreground mt-1 text-sm">
               {visible.length} of {tasks.length} items shown
             </p>
           </div>
@@ -277,8 +277,8 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
                   onClick={() => setFilter(status)}
                   className={`shrink-0 rounded-full border px-3.5 py-2 text-xs transition ${
                     filter === status
-                      ? "border-[#e72d45]/50 bg-[#e72d45]/12 text-[#b9d1ff]"
-                      : "border-white/8 text-white/40 hover:text-white/70"
+                      ? "border-primary/50 bg-primary/12 text-primary"
+                      : "text-muted-foreground border-white/8 hover:text-white/70"
                   }`}
                 >
                   {status === "all" ? "All" : statusContent[status].label}
@@ -308,15 +308,17 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
           ))}
           {visible.length === 0 && (
             <div className="px-6 py-16 text-center">
-              <Check className="mx-auto size-6 text-white/30" />
-              <p className="mt-4 text-white/50">Nothing in this status.</p>
+              <Check className="text-muted-foreground mx-auto size-6" />
+              <p className="text-muted-foreground mt-4">
+                Nothing in this status.
+              </p>
             </div>
           )}
         </div>
       </section>
 
-      <aside className="mt-5 flex items-start gap-3 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/45">
-        <Info className="mt-0.5 size-4 shrink-0 text-[#ff667a]" />
+      <aside className="border-primary/15 bg-primary/6 text-muted-foreground mt-5 flex items-start gap-3 rounded-2xl border p-5 text-sm leading-6">
+        <Info className="text-primary mt-0.5 size-4 shrink-0" />
         <p>
           These intervals are CapCar planning defaults, not verified
           manufacturer service specifications. Always check the exact owner
@@ -362,7 +364,7 @@ function MaintenanceTaskRow({
   return (
     <article className="p-5 sm:p-7">
       <div className="grid gap-5 md:grid-cols-[auto_1fr_auto] md:items-center">
-        <span className="grid size-11 place-items-center rounded-2xl border border-white/8 bg-white/[0.035] text-white/55">
+        <span className="text-muted-foreground grid size-11 place-items-center rounded-2xl border border-white/8 bg-white/[0.035]">
           <CategoryIcon className="size-4.5" />
         </span>
         <div>
@@ -374,10 +376,10 @@ function MaintenanceTaskRow({
               </span>
             )}
           </div>
-          <p className="mt-1.5 text-sm leading-6 text-white/40">
+          <p className="text-muted-foreground mt-1.5 text-sm leading-6">
             {task.description}
           </p>
-          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-white/30">
+          <div className="text-muted-foreground mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs">
             <span>{task.category}</span>
             {task.intervalKm && (
               <span>Every {task.intervalKm.toLocaleString("en-US")} km</span>
@@ -397,7 +399,7 @@ function MaintenanceTaskRow({
             type="button"
             onClick={onOpen}
             aria-label={`Record service for ${task.title}`}
-            className="grid size-10 place-items-center rounded-xl border border-white/10 text-white/45 transition hover:bg-white/[0.06] hover:text-white"
+            className="text-muted-foreground hover:text-foreground grid size-10 place-items-center rounded-xl border border-white/10 transition hover:bg-white/[0.06]"
           >
             <ChevronRight className="size-4" />
           </button>
@@ -405,7 +407,7 @@ function MaintenanceTaskRow({
       </div>
 
       {task.record && !active && (
-        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/6 pt-4 text-xs text-white/35">
+        <div className="text-muted-foreground mt-4 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/6 pt-4 text-xs">
           <span>Last: {formatDate(task.record.lastCompletedDate)}</span>
           <span>
             {task.record.lastCompletedMileage.toLocaleString("en-US")} km
@@ -431,12 +433,12 @@ function MaintenanceTaskRow({
       {active && (
         <form
           onSubmit={onSubmit}
-          className="mt-6 rounded-2xl border border-[#e72d45]/20 bg-[#e72d45]/6 p-4 sm:p-5"
+          className="border-primary/20 bg-primary/6 mt-6 rounded-2xl border p-4 sm:p-5"
         >
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium">Record completed work</p>
-              <p className="mt-1 text-xs text-white/35">
+              <p className="text-muted-foreground mt-1 text-xs">
                 This recalculates the next planning target.
               </p>
             </div>
@@ -444,23 +446,23 @@ function MaintenanceTaskRow({
               type="button"
               onClick={onClose}
               aria-label="Close form"
-              className="grid size-9 place-items-center rounded-lg text-white/40 hover:bg-white/5 hover:text-white"
+              className="text-muted-foreground hover:text-foreground grid size-9 place-items-center rounded-lg hover:bg-white/5"
             >
               <X className="size-4" />
             </button>
           </div>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            <label className="text-xs text-white/55">
+            <label className="text-muted-foreground text-xs">
               Completed date
               <input
                 type="date"
                 required
                 value={completedDate}
                 onChange={(event) => onDateChange(event.target.value)}
-                className="mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-3 text-sm text-white outline-none focus:border-[#e72d45]/60"
+                className="bg-card text-foreground focus:border-primary/60 mt-2 min-h-11 w-full rounded-xl border border-white/10 px-3 text-sm outline-none"
               />
             </label>
-            <label className="text-xs text-white/55">
+            <label className="text-muted-foreground text-xs">
               Vehicle mileage
               <input
                 type="number"
@@ -469,7 +471,7 @@ function MaintenanceTaskRow({
                 required
                 value={completedMileage}
                 onChange={(event) => onMileageChange(event.target.value)}
-                className="mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-3 text-sm text-white outline-none focus:border-[#e72d45]/60"
+                className="bg-card text-foreground focus:border-primary/60 mt-2 min-h-11 w-full rounded-xl border border-white/10 px-3 text-sm outline-none"
               />
             </label>
           </div>
@@ -479,7 +481,7 @@ function MaintenanceTaskRow({
           <div className="mt-5 flex justify-end">
             <button
               type="submit"
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#e72d45] px-4 text-sm font-semibold text-[#07101d]"
+              className="bg-primary text-primary-foreground inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-sm font-semibold"
             >
               <Check className="size-4" /> Save record
             </button>
@@ -502,15 +504,15 @@ function SummaryCard({
   tone: "neutral" | "red" | "amber" | "green";
 }) {
   const tones = {
-    neutral: "text-white/45",
+    neutral: "text-muted-foreground",
     red: "text-red-200",
     amber: "text-amber-200",
     green: "text-emerald-200",
   };
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#111111] p-5">
+    <div className="bg-card rounded-2xl border border-white/10 p-5">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-white/40">{label}</p>
+        <p className="text-muted-foreground text-sm">{label}</p>
         <Icon className={`size-4 ${tones[tone]}`} />
       </div>
       <p className="mt-8 text-4xl font-medium tracking-[-0.04em]">{value}</p>

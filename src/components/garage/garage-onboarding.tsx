@@ -52,10 +52,10 @@ const GarageShowroomPreview = dynamic(
 const exampleVehicles = getShowroomExamples();
 
 const input =
-  "mt-2 min-h-12 w-full rounded-xl border border-white/20 bg-[#0a2022] px-4 text-base text-white outline-none focus-visible:border-[#d6aa92] focus-visible:ring-2 focus-visible:ring-[#d6aa92]/30";
+  "mt-2 min-h-12 w-full rounded-xl border border-white/20 bg-card px-4 text-base text-foreground outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30";
 export const garageButton =
-  "inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/20 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d6aa92] disabled:opacity-50";
-const primary = `${garageButton.replace("text-white", "text-[#102e30]").replace("hover:bg-white/10", "hover:bg-white")} border-[#e7e5d4] bg-[#e7e5d4]`;
+  "inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/20 px-5 py-3 text-sm font-medium text-foreground transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:opacity-50";
+const primary = `${garageButton.replace("text-foreground", "text-foreground").replace("hover:bg-white/10", "hover:bg-card")} border-foreground bg-background`;
 const steps = ["car", "goal", "action", "save"] as const;
 const subscribe = () => () => undefined;
 export function GarageOnboarding({
@@ -411,7 +411,7 @@ function OnboardingFlow({
       </div>
       {example ? (
         <section aria-label={c.exampleTitle}>
-          <p className="mb-5 text-sm text-[#d6aa92]">{c.exampleHint}</p>
+          <p className="text-primary mb-5 text-sm">{c.exampleHint}</p>
           <GarageShowroomPreview vehicles={exampleVehicles} readOnly />
           <Link className={`${primary} mt-6`} href="/#live-demo">
             {c.exampleOpen}
@@ -421,9 +421,9 @@ function OnboardingFlow({
       ) : savedPath ? (
         <section
           aria-live="polite"
-          className="rounded-3xl border border-[#d6aa92]/30 bg-[#102d30] p-8 sm:p-12"
+          className="border-primary/30 bg-card rounded-3xl border p-8 sm:p-12"
         >
-          <Check className="size-10 text-[#d6aa92]" />
+          <Check className="text-primary size-10" />
           <h1 className="mt-5 text-3xl">{c.saved}</h1>
           <p className="mt-4 text-white/70">{c.savedHint}</p>
           <Link className={`${primary} mt-8`} href={savedPath}>
@@ -441,7 +441,7 @@ function OnboardingFlow({
               <li
                 key={step}
                 aria-current={draft.step === step ? "step" : undefined}
-                className={`border-t-2 pt-3 text-xs sm:text-sm ${index <= steps.indexOf(draft.step) ? "border-[#d6aa92] text-[#ede9d8]" : "border-white/15 text-white/50"}`}
+                className={`border-t-2 pt-3 text-xs sm:text-sm ${index <= steps.indexOf(draft.step) ? "border-primary text-foreground" : "text-muted-foreground border-white/15"}`}
               >
                 <span className="mr-2">0{index + 1}</span>
                 {c[step]}
@@ -450,8 +450,8 @@ function OnboardingFlow({
           </ol>
           {resumed && <p className="mb-4 text-sm text-white/65">{c.resume}</p>}
           <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
-            <section className="min-w-0 rounded-3xl border border-white/15 bg-[#102629] p-5 sm:p-8">
-              <p className="text-[11px] tracking-[0.14em] text-[#d6aa92]">
+            <section className="bg-card min-w-0 rounded-3xl border border-white/15 p-5 sm:p-8">
+              <p className="text-primary text-[11px] tracking-[0.14em]">
                 {c.eyebrow}
               </p>
               <h1
@@ -581,7 +581,7 @@ function OnboardingFlow({
                               draft.model === car.model &&
                               draft.platform === car.platform
                             }
-                            className={`rounded-xl border px-3 py-3 text-left text-sm transition hover:border-[#d6aa92] focus-visible:outline-2 focus-visible:outline-[#d6aa92] ${draft.make === car.make && draft.model === car.model && draft.platform === car.platform ? "border-[#d6aa92] bg-[#d6aa92]/10" : "border-white/10"}`}
+                            className={`hover:border-primary focus-visible:outline-primary rounded-xl border px-3 py-3 text-left text-sm transition focus-visible:outline-2 ${draft.make === car.make && draft.model === car.model && draft.platform === car.platform ? "border-primary bg-primary/10" : "border-white/10"}`}
                             onClick={() =>
                               update({
                                 make: car.make,
@@ -609,7 +609,7 @@ function OnboardingFlow({
                         {c.catalogHint}
                       </p>
                       <button
-                        className="min-h-11 text-sm text-[#d6aa92] underline"
+                        className="text-primary min-h-11 text-sm underline"
                         type="button"
                         onClick={() => {
                           update({
@@ -699,7 +699,7 @@ function OnboardingFlow({
                       <label className="block rounded-xl border border-dashed border-white/20 p-4 text-sm">
                         {c.photo}
                         <input
-                          className="mt-3 block w-full text-xs file:mr-3 file:rounded-lg file:border-0 file:bg-[#e7e5d4] file:px-3 file:py-3 file:text-[#102e30]"
+                          className="file:bg-background file:text-foreground mt-3 block w-full text-xs file:mr-3 file:rounded-lg file:border-0 file:px-3 file:py-3"
                           type="file"
                           accept="image/jpeg,image/png,image/webp"
                           disabled={busy}
@@ -743,7 +743,7 @@ function OnboardingFlow({
                         type="button"
                         key={goal}
                         aria-pressed={draft.goal === goal}
-                        className={`flex min-h-24 w-full items-center gap-4 rounded-2xl border p-4 text-left ${draft.goal === goal ? "border-[#d6aa92] bg-[#d6aa92]/10" : "border-white/15 hover:bg-white/5"}`}
+                        className={`flex min-h-24 w-full items-center gap-4 rounded-2xl border p-4 text-left ${draft.goal === goal ? "border-primary bg-primary/10" : "border-white/15 hover:bg-white/5"}`}
                         onClick={() => {
                           update({
                             goal,
@@ -753,7 +753,7 @@ function OnboardingFlow({
                           });
                         }}
                       >
-                        <Icon className="size-6 shrink-0 text-[#d6aa92]" />
+                        <Icon className="text-primary size-6 shrink-0" />
                         <span>
                           <strong className="block font-medium">
                             {c[goal]}
@@ -874,7 +874,7 @@ function OnboardingFlow({
                     <p className="font-medium">
                       {draft.productionYear} {draft.make} {draft.model}
                     </p>
-                    <p className="mt-2 text-sm text-[#d6aa92]">
+                    <p className="text-primary mt-2 text-sm">
                       {draft.goal ? c[draft.goal] : c.saveLater}
                     </p>
                     <p className="mt-2 text-sm text-white/70">
@@ -957,8 +957,8 @@ function OnboardingFlow({
                 label={`${draft.make} ${draft.model}`}
                 badge={c.selected}
               />
-              <div className="rounded-2xl border border-white/15 bg-[#102629] p-5">
-                <CarFront className="size-5 text-[#d6aa92]" />
+              <div className="bg-card rounded-2xl border border-white/15 p-5">
+                <CarFront className="text-primary size-5" />
                 <h2 className="mt-3 text-xl">
                   {draft.make || "CapCar"} {draft.model}
                 </h2>

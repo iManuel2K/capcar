@@ -13,13 +13,13 @@ export default async function LaunchPage() {
   const readiness = getDeploymentReadiness();
   const t = await getTranslations("Operations");
   return (
-    <main className="min-h-dvh bg-[#0b0e0c] px-5 py-16 text-[#f4f5f2]">
+    <main className="bg-background text-foreground min-h-dvh px-5 py-16">
       <div className="mx-auto max-w-5xl">
-        <Link href="/system" className="text-sm text-[#ff667a]">
+        <Link href="/system" className="text-primary text-sm">
           {t("systemBack")}
         </Link>
-        <header className="mt-12 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(231,45,69,0.22),transparent_30%),#111111] p-7 sm:p-10">
-          <p className="text-xs font-semibold tracking-[0.14em] text-[#ff667a] uppercase">
+        <header className="mt-12 rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_85%_10%,rgba(184,199,217,0.22),transparent_30%),#111111] p-7 sm:p-10">
+          <p className="text-primary text-xs font-semibold tracking-[0.14em] uppercase">
             {t("launchEyebrow")}
           </p>
           <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
@@ -27,7 +27,7 @@ export default async function LaunchPage() {
               state: t(`states.${readiness.state}`),
             })}
           </h1>
-          <p className="mt-5 max-w-2xl leading-7 text-white/45">
+          <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
             {t("launchDescription")}
           </p>
         </header>
@@ -35,7 +35,7 @@ export default async function LaunchPage() {
           {readiness.checks.map((check) => (
             <article
               key={check.key}
-              className="rounded-2xl border border-white/10 bg-[#111111] p-5"
+              className="bg-card rounded-2xl border border-white/10 p-5"
             >
               <div className="flex gap-3">
                 {check.ready ? (
@@ -47,7 +47,7 @@ export default async function LaunchPage() {
                   <h2 className="font-medium text-white/80">
                     {t(`checks.${check.key}.label`)}
                   </h2>
-                  <p className="mt-2 text-sm leading-6 text-white/40">
+                  <p className="text-muted-foreground mt-2 text-sm leading-6">
                     {t(
                       `checks.${check.key}.${check.ready ? "ready" : "pending"}`,
                     )}
@@ -57,11 +57,11 @@ export default async function LaunchPage() {
             </article>
           ))}
         </section>
-        <section className="mt-5 rounded-[2rem] border border-white/10 bg-[#111111] p-6 sm:p-8">
+        <section className="bg-card mt-5 rounded-[2rem] border border-white/10 p-6 sm:p-8">
           <h2 className="flex items-center gap-2 text-xl font-medium">
-            <Rocket className="size-5 text-[#ff667a]" /> {t("activation")}
+            <Rocket className="text-primary size-5" /> {t("activation")}
           </h2>
-          <ol className="mt-6 grid gap-3 text-sm leading-6 text-white/50 sm:grid-cols-2">
+          <ol className="text-muted-foreground mt-6 grid gap-3 text-sm leading-6 sm:grid-cols-2">
             <li className="rounded-xl border border-white/8 p-4">
               1. {t("steps.one")}
             </li>
@@ -82,8 +82,8 @@ export default async function LaunchPage() {
             </li>
           </ol>
         </section>
-        <aside className="mt-5 flex gap-3 rounded-2xl border border-[#e72d45]/15 bg-[#e72d45]/6 p-5 text-sm leading-6 text-white/45">
-          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#9ec2ff]" />
+        <aside className="border-primary/15 bg-primary/6 text-muted-foreground mt-5 flex gap-3 rounded-2xl border p-5 text-sm leading-6">
+          <ShieldCheck className="text-primary mt-0.5 size-4 shrink-0" />
           {t("launchSafety")}
         </aside>
       </div>

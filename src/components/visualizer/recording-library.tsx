@@ -17,7 +17,7 @@ import {
 } from "@/features/visualizer/audio-files";
 
 const field =
-  "min-h-11 w-full rounded-xl border border-white/25 bg-[#152421] px-3 text-white";
+  "min-h-11 w-full rounded-xl border border-white/25 bg-card px-3 text-foreground";
 export function RecordingLibrary() {
   const t = useTranslations("SoundUi");
   const s = useTranslations("StudioPolish");
@@ -120,19 +120,19 @@ export function RecordingLibrary() {
   return (
     <section
       id="archive"
-      className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-[#0e2d30] p-5 text-[#e8e6d7] sm:p-8"
+      className="bg-card text-foreground scroll-mt-28 rounded-[2rem] border border-white/10 p-5 sm:p-8"
       aria-labelledby="recording-library-title"
     >
-      <p className="text-xs font-medium tracking-[.18em] text-[#cfaa96] uppercase">
+      <p className="text-primary text-xs font-medium tracking-[.18em] uppercase">
         03 / {t("archive")}
       </p>
       <h2 id="recording-library-title" className="mt-3 text-3xl font-medium">
         {t("keep")}
       </h2>
-      <p className="mt-3 max-w-3xl text-sm leading-6 text-[#e8e6d7]/70">
+      <p className="text-foreground/70 mt-3 max-w-3xl text-sm leading-6">
         {t("archiveDescription")}
       </p>
-      <p className="mt-3 text-xs text-[#cfaa96]">
+      <p className="text-primary mt-3 text-xs">
         {s("archiveCount", {
           count: records.length,
           size: (
@@ -290,7 +290,7 @@ export function RecordingLibrary() {
         </button>
       )}
       {ready && (!confirmed || !vehicle.trim()) && (
-        <p className="mt-3 text-xs text-[#e8e6d7]/65">{s("addHint")}</p>
+        <p className="text-foreground/65 mt-3 text-xs">{s("addHint")}</p>
       )}
       {records.length >= 20 && <p className="mt-3 text-sm">{t("limit")}</p>}
       <p role="status" className="my-4 text-sm">

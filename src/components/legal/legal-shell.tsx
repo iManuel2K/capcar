@@ -20,35 +20,35 @@ export function LegalShell({
   return (
     <main
       id="main-content"
-      className="min-h-[calc(100dvh-4.5rem)] bg-[#e8e6d7] px-4 py-8 text-[#0e2d30] sm:min-h-[calc(100dvh-5rem)] sm:px-8 sm:py-12"
+      className="bg-background text-foreground min-h-[calc(100dvh-4.5rem)] px-4 py-8 sm:min-h-[calc(100dvh-5rem)] sm:px-8 sm:py-12"
     >
       <div className="mx-auto max-w-5xl">
         {documentLayout ? (
           <section className="mx-auto mt-8 max-w-3xl sm:mt-12">
-            <p className="text-xs font-semibold tracking-[0.18em] text-[#9d5f4c] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-[0.18em] uppercase">
               {eyebrow}
             </p>
             <h1 className="mt-4 text-5xl leading-none font-medium tracking-[-0.06em] sm:text-7xl">
               {title}
             </h1>
-            <aside className="mt-8 rounded-[1.5rem] border border-[#0e2d30]/10 bg-white/24 p-5 sm:p-6">
-              <p className="text-xs font-semibold tracking-[0.12em] text-[#0e2d30] uppercase">
+            <aside className="border-foreground/10 mt-8 rounded-[1.5rem] border bg-white/24 p-5 sm:p-6">
+              <p className="text-foreground text-xs font-semibold tracking-[0.12em] uppercase">
                 {t("notice")}
               </p>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#0e2d30]/58">
+              <p className="text-foreground/58 mt-2 max-w-2xl text-sm leading-6">
                 {description}
               </p>
             </aside>
           </section>
         ) : (
-          <section className="overflow-hidden rounded-[2rem] bg-[#0e2d30] p-6 text-[#e8e6d7] sm:rounded-[2.5rem] sm:p-12 lg:p-16">
-            <p className="text-xs font-semibold tracking-[0.18em] text-[#bf8269] uppercase">
+          <section className="bg-card text-foreground overflow-hidden rounded-[2rem] p-6 sm:rounded-[2.5rem] sm:p-12 lg:p-16">
+            <p className="text-primary text-xs font-semibold tracking-[0.18em] uppercase">
               {eyebrow}
             </p>
             <h1 className="mt-5 max-w-4xl text-4xl leading-[0.94] font-medium tracking-[-0.055em] sm:text-7xl">
               {title}
             </h1>
-            <p className="mt-6 max-w-2xl leading-7 text-white/55">
+            <p className="text-muted-foreground mt-6 max-w-2xl leading-7">
               {description}
             </p>
           </section>
@@ -57,12 +57,12 @@ export function LegalShell({
         <article
           className={`mx-auto max-w-3xl ${documentLayout ? "py-8 sm:py-12" : "py-14 sm:py-20"}`}
         >
-          <div className="space-y-10 text-sm leading-7 text-[#0e2d30]/68 sm:text-base">
+          <div className="text-foreground/68 space-y-10 text-sm leading-7 sm:text-base">
             {children}
           </div>
         </article>
 
-        <footer className="flex flex-col gap-5 border-t border-[#0e2d30]/10 py-10 text-xs text-[#0e2d30]/48 sm:flex-row sm:items-center sm:justify-between">
+        <footer className="border-foreground/10 text-muted-foreground flex flex-col gap-5 border-t py-10 text-xs sm:flex-row sm:items-center sm:justify-between">
           <span>{t("beta")}</span>
           <nav aria-label={t("navigation")} className="flex flex-wrap gap-5">
             <Link href="/privacy">{t("privacy")}</Link>
@@ -86,7 +86,7 @@ export function LegalSection({
 }) {
   return (
     <section id={id} className="scroll-mt-8">
-      <h2 className="text-2xl font-medium tracking-[-0.03em] text-[#0e2d30]">
+      <h2 className="text-foreground text-2xl font-medium tracking-[-0.03em]">
         {title}
       </h2>
       <div className="mt-4 space-y-4">{children}</div>

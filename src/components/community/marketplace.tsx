@@ -47,7 +47,7 @@ export function Marketplace({
         does not take payments or provide escrow.
       </p>
       {error && (
-        <div role="alert" className="rounded-xl border border-[#6d0101]/40 p-4">
+        <div role="alert" className="border-primary/40 rounded-xl border p-4">
           {error}
         </div>
       )}
@@ -64,7 +64,7 @@ export function Marketplace({
           {selectedListing && (
             <div
               role="status"
-              className="space-y-3 rounded-2xl border border-[#0e2d30]/25 p-5"
+              className="border-foreground/25 space-y-3 rounded-2xl border p-5"
             >
               <p>
                 {data.listings.some(
@@ -91,7 +91,7 @@ export function Marketplace({
           <details
             open={listingFormOpen || Boolean(edit)}
             onToggle={(event) => setListingFormOpen(event.currentTarget.open)}
-            className="rounded-2xl border border-[#0e2d30]/20 p-5"
+            className="border-foreground/20 rounded-2xl border p-5"
           >
             <summary className="min-h-11 cursor-pointer py-2 font-medium">
               {edit
@@ -100,7 +100,7 @@ export function Marketplace({
             </summary>
             <form
               key={edit?.id ?? "new"}
-              className="space-y-4 rounded-2xl border border-[#0e2d30]/20 p-5"
+              className="border-foreground/20 space-y-4 rounded-2xl border p-5"
               onSubmit={async (event) => {
                 event.preventDefault();
                 const form = event.currentTarget;
@@ -202,7 +202,7 @@ export function Marketplace({
                 and can legally sell.
               </p>
               {invalidListing && (
-                <p role="alert" className="text-[#6d0101]">
+                <p role="alert" className="text-primary">
                   {trust("invalid")}
                 </p>
               )}
@@ -267,7 +267,7 @@ export function Marketplace({
             {visibleListings.map((item) => (
               <article
                 key={item.id}
-                className="min-w-0 space-y-3 rounded-2xl border border-[#0e2d30]/20 p-5"
+                className="border-foreground/20 min-w-0 space-y-3 rounded-2xl border p-5"
               >
                 <p className="text-xs uppercase">
                   {item.status} · {item.condition} · {item.city}
@@ -304,7 +304,7 @@ export function Marketplace({
                     ? "reviewed by a CapCar moderator; not buyer protection"
                     : "identity not reviewed"}
                 </p>
-                <details className="rounded-xl border border-[#0e2d30]/20 p-3">
+                <details className="border-foreground/20 rounded-xl border p-3">
                   <summary className="min-h-11 cursor-pointer py-2">
                     Before contacting or paying
                   </summary>
@@ -379,7 +379,7 @@ export function Marketplace({
                 )}
                 {moderator && item.seller_id !== data.userId && (
                   <form
-                    className="space-y-3 border-t border-[#0e2d30]/20 pt-3"
+                    className="border-foreground/20 space-y-3 border-t pt-3"
                     onSubmit={async (event) => {
                       event.preventDefault();
                       const form = event.currentTarget;
@@ -449,7 +449,7 @@ export function Marketplace({
               {data.reports.map((report) => (
                 <article
                   key={report.id}
-                  className="my-4 rounded-xl border border-[#0e2d30]/20 p-4"
+                  className="border-foreground/20 my-4 rounded-xl border p-4"
                 >
                   <p>Listing {report.listing_id}</p>
                   <p className="break-words">{report.reason}</p>
@@ -475,7 +475,7 @@ export function Marketplace({
             {data.messages.map((item) => (
               <article
                 key={item.id}
-                className="my-4 space-y-3 rounded-xl border border-[#0e2d30]/20 p-4"
+                className="border-foreground/20 my-4 space-y-3 rounded-xl border p-4"
               >
                 <p className="text-sm">
                   {item.sender_id === data.userId ? "Sent" : "Received"} ·{" "}

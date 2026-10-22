@@ -17,8 +17,8 @@ const ProductDashboardPreview = dynamic(
         aria-hidden="true"
         className="mx-auto max-w-[1320px] px-5 py-16 sm:px-8"
       >
-        <div className="h-12 w-2/3 rounded-xl bg-[#0e2d30]/10 motion-safe:animate-pulse" />
-        <div className="mt-8 h-[480px] rounded-[1.6rem] bg-[#0b2326]/12 motion-safe:animate-pulse" />
+        <div className="bg-card/10 h-12 w-2/3 rounded-xl motion-safe:animate-pulse" />
+        <div className="bg-background/12 mt-8 h-[480px] rounded-[1.6rem] motion-safe:animate-pulse" />
       </div>
     ),
   },
@@ -82,10 +82,10 @@ export function DeferredProductDashboardPreview({
         <section
           id="live-demo"
           aria-labelledby="deferred-demo-title"
-          className="scroll-mt-24 bg-[#e8e6d7] px-5 py-16 text-[#0e2d30] sm:px-8 sm:py-24"
+          className="bg-background text-foreground scroll-mt-24 px-5 py-16 sm:px-8 sm:py-24"
         >
           <div className="mx-auto max-w-[1440px]">
-            <p className="text-xs font-semibold tracking-[0.15em] text-[#80533e] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-[0.15em] uppercase">
               {eyebrow}
             </p>
             <h2
@@ -94,7 +94,7 @@ export function DeferredProductDashboardPreview({
             >
               {title}
             </h2>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-[#405856]">
+            <p className="text-muted-foreground mt-5 max-w-2xl text-base leading-7">
               {description}
             </p>
             <HomepageLink
@@ -106,7 +106,7 @@ export function DeferredProductDashboardPreview({
             </HomepageLink>
             <div
               aria-hidden="true"
-              className="mt-10 min-h-[390px] animate-pulse rounded-[1.6rem] bg-[#0b2326]/12 motion-reduce:animate-none"
+              className="bg-background/12 mt-10 min-h-[390px] animate-pulse rounded-[1.6rem] motion-reduce:animate-none"
             />
           </div>
         </section>

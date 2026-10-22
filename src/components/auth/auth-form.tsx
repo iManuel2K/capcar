@@ -170,13 +170,13 @@ export function AuthForm({
   return (
     <main
       id="main-content"
-      className="capcar-editorial-grid relative min-h-[calc(100dvh-4.5rem)] overflow-hidden bg-[#0b2326] px-4 py-5 text-[#f5f2ed] sm:min-h-[calc(100dvh-5rem)] sm:px-7 sm:py-7"
+      className="capcar-editorial-grid bg-background text-foreground relative min-h-[calc(100dvh-4.5rem)] overflow-hidden px-4 py-5 sm:min-h-[calc(100dvh-5rem)] sm:px-7 sm:py-7"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_17%,rgba(146,100,77,0.22),transparent_28%),radial-gradient(circle_at_18%_88%,rgba(136,152,141,0.14),transparent_26%)]" />
       <div className="relative mx-auto flex min-h-[calc(100dvh-2.5rem)] max-w-7xl flex-col">
         <div className="grid flex-1 items-center gap-10 py-10 lg:grid-cols-[1fr_0.78fr] lg:py-16">
           <section className="hidden max-w-xl lg:block">
-            <p className="text-xs font-semibold tracking-[0.18em] text-[#d6aa92] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-[0.18em] uppercase">
               {t("private")}
             </p>
             <h2 className="mt-6 text-7xl font-medium tracking-[-0.065em] text-balance">
@@ -184,20 +184,20 @@ export function AuthForm({
               <br />
               {t("wholeBuild")}
             </h2>
-            <p className="mt-7 max-w-md text-base leading-7 text-[#e8e6d7]/58">
+            <p className="text-foreground/58 mt-7 max-w-md text-base leading-7">
               {t("accountDescription")}
             </p>
           </section>
 
-          <section className="mx-auto w-full max-w-md rounded-[2rem] border border-white/35 bg-[#f5f2e8]/97 p-6 text-[#0e2d30] shadow-[0_35px_100px_rgba(5,3,6,.3)] backdrop-blur sm:p-8">
-            <div className="mb-7 h-1 w-12 rounded-full bg-[#6d0101]" />
-            <p className="text-[11px] font-semibold tracking-[0.16em] text-[#6d0101] uppercase">
+          <section className="bg-background/97 text-foreground mx-auto w-full max-w-md rounded-[2rem] border border-white/35 p-6 shadow-[0_35px_100px_rgba(5,3,6,.3)] backdrop-blur sm:p-8">
+            <div className="bg-primary text-primary-foreground mb-7 h-1 w-12 rounded-full" />
+            <p className="text-primary text-[11px] font-semibold tracking-[0.16em] uppercase">
               {t(`${mode}.eyebrow`)}
             </p>
             <h1 className="mt-4 text-4xl font-medium tracking-[-0.05em]">
               {t(`${mode}.title`)}
             </h1>
-            <p className="mt-3 text-sm leading-6 text-[#405856]">
+            <p className="text-muted-foreground mt-3 text-sm leading-6">
               {t(`${mode}.description`)}
             </p>
 
@@ -220,7 +220,7 @@ export function AuthForm({
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     placeholder={t("namePlaceholder")}
-                    className="min-h-11 w-full bg-transparent text-base text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
+                    className="text-foreground placeholder:text-muted-foreground min-h-11 w-full bg-transparent text-base outline-none"
                   />
                 </Field>
               )}
@@ -234,7 +234,7 @@ export function AuthForm({
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     placeholder="you@example.com"
-                    className="min-h-11 w-full bg-transparent text-base text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
+                    className="text-foreground placeholder:text-muted-foreground min-h-11 w-full bg-transparent text-base outline-none"
                   />
                 </Field>
               )}
@@ -250,7 +250,7 @@ export function AuthForm({
                         showPassword ? t("hidePassword") : t("showPassword")
                       }
                       onClick={() => setShowPassword((current) => !current)}
-                      className="grid size-11 shrink-0 place-items-center rounded-lg text-[#405856] transition-colors hover:bg-[#0e2d30]/5 hover:text-[#0e2d30] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0e2d30]"
+                      className="text-muted-foreground hover:bg-card/5 hover:text-foreground focus-visible:outline-foreground grid size-11 shrink-0 place-items-center rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
                     >
                       {showPassword ? (
                         <EyeOff className="size-4" />
@@ -270,7 +270,7 @@ export function AuthForm({
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     placeholder={t("passwordPlaceholder")}
-                    className="min-h-11 w-full bg-transparent text-base text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
+                    className="text-foreground placeholder:text-muted-foreground min-h-11 w-full bg-transparent text-base outline-none"
                   />
                 </Field>
               )}
@@ -288,7 +288,7 @@ export function AuthForm({
                     value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
                     placeholder={t("confirmPlaceholder")}
-                    className="min-h-11 w-full bg-transparent text-base text-[#0e2d30] outline-none placeholder:text-[#405856]/40"
+                    className="text-foreground placeholder:text-muted-foreground min-h-11 w-full bg-transparent text-base outline-none"
                   />
                 </Field>
               )}
@@ -297,7 +297,7 @@ export function AuthForm({
                 <div className="flex justify-end">
                   <Link
                     href="/forgot-password"
-                    className="inline-flex min-h-11 items-center rounded text-sm text-[#405856] transition hover:text-[#6d0101]"
+                    className="text-muted-foreground hover:text-primary inline-flex min-h-11 items-center rounded text-sm transition"
                   >
                     {t("forgotLink")}
                   </Link>
@@ -306,7 +306,7 @@ export function AuthForm({
 
               {mode === "register" && (
                 <div className="space-y-3 rounded-xl border border-white/8 bg-white/[0.025] p-4">
-                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-[#405856]">
+                  <label className="text-muted-foreground flex cursor-pointer items-start gap-3 text-xs leading-5">
                     <input
                       required
                       type="checkbox"
@@ -314,11 +314,11 @@ export function AuthForm({
                       onChange={(event) =>
                         setConfirmedMinimumAge(event.target.checked)
                       }
-                      className="mt-0.5 size-4 shrink-0 accent-[#e72d45]"
+                      className="accent-primary mt-0.5 size-4 shrink-0"
                     />
                     <span>{t("confirmAge")}</span>
                   </label>
-                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-[#405856]">
+                  <label className="text-muted-foreground flex cursor-pointer items-start gap-3 text-xs leading-5">
                     <input
                       required
                       type="checkbox"
@@ -326,17 +326,17 @@ export function AuthForm({
                       onChange={(event) =>
                         setAcceptedTerms(event.target.checked)
                       }
-                      className="mt-0.5 size-4 shrink-0 accent-[#e72d45]"
+                      className="accent-primary mt-0.5 size-4 shrink-0"
                     />
                     <span>
                       {t("accept")}{" "}
-                      <Link href="/terms" className="text-[#0e2d30] underline">
+                      <Link href="/terms" className="text-foreground underline">
                         {t("terms")}
                       </Link>{" "}
                       {t("and")}{" "}
                       <Link
                         href="/privacy"
-                        className="text-[#0e2d30] underline"
+                        className="text-foreground underline"
                       >
                         {t("privacy")}
                       </Link>
@@ -349,7 +349,7 @@ export function AuthForm({
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#6d0101] px-5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(109,1,1,.18)] transition hover:-translate-y-0.5 hover:bg-[#830705] disabled:opacity-50"
+                className="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold shadow-[0_12px_28px_rgba(184,199,217,.18)] transition hover:-translate-y-0.5 disabled:opacity-50"
               >
                 {loading ? (
                   <LoaderCircle className="size-4" />
@@ -375,32 +375,32 @@ export function AuthForm({
             )}
 
             {mode === "login" && (
-              <p className="mt-7 text-center text-xs text-[#405856]">
+              <p className="text-muted-foreground mt-7 text-center text-xs">
                 {t("newToCapcar")}{" "}
                 <Link
                   href={`/register?next=${encodeURIComponent(safeAuthNext(nextPath))}`}
-                  className="font-medium text-[#0e2d30] hover:text-[#6d0101]"
+                  className="text-foreground hover:text-primary font-medium"
                 >
                   {t("createAccount")}
                 </Link>
               </p>
             )}
             {mode === "register" && (
-              <p className="mt-7 text-center text-xs text-[#405856]">
+              <p className="text-muted-foreground mt-7 text-center text-xs">
                 {t("haveAccount")}{" "}
                 <Link
                   href={`/login?next=${encodeURIComponent(safeAuthNext(nextPath))}`}
-                  className="font-medium text-[#0e2d30] hover:text-[#6d0101]"
+                  className="text-foreground hover:text-primary font-medium"
                 >
                   {t("signIn")}
                 </Link>
               </p>
             )}
             {(mode === "forgot" || mode === "reset") && (
-              <p className="mt-7 text-center text-xs text-[#405856]">
+              <p className="text-muted-foreground mt-7 text-center text-xs">
                 <Link
                   href={`/login?next=${encodeURIComponent(safeAuthNext(nextPath))}`}
-                  className="font-medium text-[#0e2d30] hover:text-[#6d0101]"
+                  className="text-foreground hover:text-primary font-medium"
                 >
                   {t("backToSignIn")}
                 </Link>
@@ -426,8 +426,8 @@ function Field({
 }) {
   const fieldId = useId();
   return (
-    <div className="block rounded-xl border border-[#0e2d30]/12 bg-white/55 px-4 py-3 transition-colors focus-within:border-[#0e2d30] focus-within:bg-white">
-      <span className="mb-2 flex items-center justify-between text-xs font-semibold tracking-[0.04em] text-[#405856] uppercase">
+    <div className="border-foreground/12 bg-card focus-within:border-foreground focus-within:bg-card block rounded-xl border px-4 py-3 transition-colors">
+      <span className="text-muted-foreground mb-2 flex items-center justify-between text-xs font-semibold tracking-[0.04em] uppercase">
         <label htmlFor={fieldId} className="flex items-center gap-2">
           {icon}
           {label}

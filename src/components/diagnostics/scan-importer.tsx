@@ -104,14 +104,14 @@ function VehicleScanImporter({
   }
 
   return (
-    <section className="mt-5 rounded-2xl border border-white/15 bg-[#111111] p-5 sm:p-6">
+    <section className="bg-card mt-5 rounded-2xl border border-white/15 p-5 sm:p-6">
       <div className="flex items-start gap-3">
-        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#e72d45]/12 text-[#ff667a]">
+        <span className="bg-primary/12 text-primary grid size-10 shrink-0 place-items-center rounded-xl">
           <ScanLine className="size-4" />
         </span>
         <div>
           <h2 className="text-xl font-medium">Smart OBD-II import</h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-white/55">
+          <p className="text-muted-foreground mt-2 max-w-3xl text-sm leading-6">
             Drop plain text, ELM327 logs, CSV, JSON or BimmerLink exports.
             CapCar cleans the file, extracts valid DTCs and opens the native
             Inspector before anything is saved.
@@ -151,13 +151,13 @@ function VehicleScanImporter({
               rows={5}
               spellCheck={false}
               placeholder="Paste fault codes or the complete report from your scanner"
-              className="mt-2 w-full rounded-xl border border-white/20 bg-black/20 p-3 font-mono text-sm text-white focus-visible:outline-2 focus-visible:outline-[#8fbcb0]"
+              className="text-foreground focus-visible:outline-input mt-2 w-full rounded-xl border border-white/20 bg-black/20 p-3 font-mono text-sm focus-visible:outline-2"
             />
           </label>
           <button
             type="submit"
             disabled={!pasted.trim()}
-            className="min-h-11 rounded-xl bg-[#0e2d30] px-5 text-sm font-medium text-[#f6eadb] disabled:opacity-40"
+            className="bg-card text-foreground min-h-11 rounded-xl px-5 text-sm font-medium disabled:opacity-40"
           >
             Inspect scan
           </button>
@@ -171,7 +171,7 @@ function VehicleScanImporter({
           onFile={inspectFile}
         />
       </div>
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-white/35">
+      <div className="text-muted-foreground mt-3 flex flex-wrap items-center justify-between gap-3 text-xs">
         <span>Read-only import · CapCar never clears vehicle faults</span>
         <a href="/examples/obd-scan.json" download className="underline">
           Download sample
@@ -246,12 +246,12 @@ function DiagnosticInspectorDrawer({
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
-      className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none bg-transparent text-white backdrop:bg-black/70"
+      className="text-foreground fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none bg-transparent backdrop:bg-black/70"
     >
-      <aside className="absolute top-0 right-0 flex h-full w-full max-w-2xl flex-col border-l border-white/10 bg-[#0b0e0c] shadow-xl">
+      <aside className="bg-background absolute top-0 right-0 flex h-full w-full max-w-2xl flex-col border-l border-white/10 shadow-xl">
         <header className="flex items-start justify-between gap-5 border-b border-white/8 p-5 sm:p-7">
           <div>
-            <p className="text-xs font-semibold tracking-[0.15em] text-[#ff667a] uppercase">
+            <p className="text-primary text-xs font-semibold tracking-[0.15em] uppercase">
               CapCar Diagnostic Inspector
             </p>
             <h2
@@ -260,7 +260,7 @@ function DiagnosticInspectorDrawer({
             >
               {scan.codes.length} code{scan.codes.length === 1 ? "" : "s"} found
             </h2>
-            <p className="mt-2 text-xs text-white/38">
+            <p className="text-muted-foreground mt-2 text-xs">
               {formatSource(scan.sourceFormat)} ·{" "}
               {new Date(scan.scannedAt).toLocaleString("en-GB")}
               {scan.duplicateCount
@@ -272,7 +272,7 @@ function DiagnosticInspectorDrawer({
             ref={closeRef}
             type="button"
             onClick={onClose}
-            className="grid size-11 shrink-0 place-items-center rounded-xl border border-white/10 text-white/55 hover:bg-white/5 hover:text-white"
+            className="text-muted-foreground hover:text-foreground grid size-11 shrink-0 place-items-center rounded-xl border border-white/10 hover:bg-white/5"
             aria-label="Close Inspector"
           >
             <X className="size-4" />
@@ -286,16 +286,16 @@ function DiagnosticInspectorDrawer({
                 type="button"
                 aria-pressed={selectedCode === code}
                 onClick={() => setSelectedCode(code)}
-                className={`min-h-10 shrink-0 rounded-xl border px-3 font-mono text-sm ${selectedCode === code ? "border-[#e72d45]/50 bg-[#e72d45]/14 text-white" : "border-white/10 text-white/45"}`}
+                className={`min-h-10 shrink-0 rounded-xl border px-3 font-mono text-sm ${selectedCode === code ? "border-primary/50 bg-primary/14 text-foreground" : "text-muted-foreground border-white/10"}`}
               >
                 {code}
               </button>
             ))}
           </div>
-          <article className="mt-5 rounded-[1.75rem] border border-white/10 bg-[#111111] p-5 sm:p-7">
+          <article className="bg-card mt-5 rounded-[1.75rem] border border-white/10 p-5 sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="font-mono text-xl font-semibold text-[#ff667a]">
+                <p className="text-primary font-mono text-xl font-semibold">
                   {insight.code}
                 </p>
                 <h3 className="mt-2 text-xl font-medium">{insight.title}</h3>
@@ -315,14 +315,14 @@ function DiagnosticInspectorDrawer({
               items={insight.causes}
             />
             <div className="mt-6">
-              <p className="text-xs font-semibold tracking-[0.12em] text-white/40 uppercase">
+              <p className="text-muted-foreground text-xs font-semibold tracking-[0.12em] uppercase">
                 Safe next checks
               </p>
               <ol className="mt-3 grid gap-2">
                 {insight.steps.map((step, index) => (
                   <li
                     key={step}
-                    className="flex gap-3 rounded-xl border border-white/8 bg-black/10 p-3 text-sm leading-6 text-white/55"
+                    className="text-muted-foreground flex gap-3 rounded-xl border border-white/8 bg-black/10 p-3 text-sm leading-6"
                   >
                     <span className="grid size-6 shrink-0 place-items-center rounded-full bg-white/7 text-[11px] text-white/70">
                       {index + 1}
@@ -333,7 +333,7 @@ function DiagnosticInspectorDrawer({
               </ol>
             </div>
             <div className="mt-6">
-              <p className="text-xs font-semibold tracking-[0.12em] text-white/40 uppercase">
+              <p className="text-muted-foreground text-xs font-semibold tracking-[0.12em] uppercase">
                 Matching parts research
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -341,7 +341,7 @@ function DiagnosticInspectorDrawer({
                   <Link
                     key={item.query}
                     href={`/parts-search?q=${encodeURIComponent(item.query)}`}
-                    className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 px-3 text-sm text-white/65 hover:border-[#e72d45]/35 hover:text-white"
+                    className="hover:border-primary/35 hover:text-foreground inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/10 px-3 text-sm text-white/65"
                   >
                     {item.label} <ArrowRight className="size-3.5" />
                   </Link>
@@ -356,7 +356,7 @@ function DiagnosticInspectorDrawer({
             needs immediate qualified inspection.
           </aside>
         </div>
-        <footer className="flex flex-col-reverse gap-2 border-t border-white/8 bg-[#0e1211] p-4 sm:flex-row sm:justify-end sm:p-5">
+        <footer className="bg-card flex flex-col-reverse gap-2 border-t border-white/8 p-4 sm:flex-row sm:justify-end sm:p-5">
           <button
             type="button"
             onClick={onClose}
@@ -367,7 +367,7 @@ function DiagnosticInspectorDrawer({
           <button
             type="button"
             onClick={onImport}
-            className="min-h-11 rounded-xl bg-[#e72d45] px-5 text-sm font-semibold text-white"
+            className="bg-primary text-primary-foreground min-h-11 rounded-xl px-5 text-sm font-semibold"
           >
             Import {scan.codes.length} code{scan.codes.length === 1 ? "" : "s"}
           </button>
@@ -380,10 +380,10 @@ function DiagnosticInspectorDrawer({
 function InspectorList({ title, items }: { title: string; items: string[] }) {
   return (
     <div className="mt-6">
-      <p className="text-xs font-semibold tracking-[0.12em] text-white/40 uppercase">
+      <p className="text-muted-foreground text-xs font-semibold tracking-[0.12em] uppercase">
         {title}
       </p>
-      <ul className="mt-3 grid gap-2 text-sm leading-6 text-white/55 sm:grid-cols-2">
+      <ul className="text-muted-foreground mt-3 grid gap-2 text-sm leading-6 sm:grid-cols-2">
         {items.map((item) => (
           <li key={item} className="rounded-xl border border-white/8 p-3">
             {item}
