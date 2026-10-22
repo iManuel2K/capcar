@@ -8,6 +8,12 @@ The linked production project `ojbwkjjjlligfdybgqux` accepted migrations `202610
 
 The organization is on Supabase Free. Leaked-password protection requires Pro or above and remains unavailable on this subscription. No billing changes were made. Older migration timestamp differences still require deliberate reconciliation before any blanket CLI push.
 
+## Published application release — 22 October 2026
+
+Netlify published commit `9077d7e95f2517638e952a8deb2159fec52e7d1f` as deploy `6ada72a6fc56cd902c68b5c1` at 20:33 UTC on https://capcar.dev. It combines the completed design release with the request, quota, upload, map, dependency and cache protections. All 183 test files / 834 tests, typecheck, production build and production dependency audit passed. Lint has zero errors and one existing language-navigation warning.
+
+Post-release production smoke checks all passed. The 15 cross-site, missing-origin and signed-out API probes returned 403/401 with no-store; readiness is healthy and service-worker version 5 is live. Signed-in real-account journeys, backup restores, billing alerts and a production load test were not performed; they are not certified by these checks.
+
 ## Release the security fixes
 
 1. Review the source diff and preserve the user's installed skills and existing changes.
