@@ -56,8 +56,8 @@ export function SiteFooter() {
   ];
   return (
     <footer className="capcar-editorial-grid bg-background text-foreground border-t border-white/8 px-5 py-14 sm:px-8 sm:py-16">
-      <div className="mx-auto grid max-w-[1440px] grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 lg:grid-cols-[2fr_1fr_1fr_1fr]">
-        <div className="col-span-2 md:col-span-1">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-[2fr_1fr_1fr_1fr]">
+        <div className="sm:col-span-2 md:col-span-1">
           <Link
             href="/"
             aria-label={t("home")}

@@ -2,13 +2,12 @@ import type { AppLocale } from "@/i18n/config";
 
 const en = {
   eyebrow: "CapCar — Digital Garage",
-  headline: "Keep your car's plans and history together.",
-  description:
-    "Plan upgrades, track costs, follow DIY guides and keep your car’s history together. Find your next drive when you’re ready to get out.",
+  headline: "See the build. Make it happen.",
+  description: "Visualize upgrades. Plan the parts, budget and work.",
   create: "Create your garage",
   openGarage: "Open garage",
   undo: "Undo completion",
-  explore: "Explore an example garage",
+  explore: "Try the demo",
   support: "Start with the car you already own.",
   account: "Explore freely. Create an account to save your car.",
   sample: "Example garage · Illustrative data",
@@ -103,13 +102,12 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
   en,
   de: {
     eyebrow: "CapCar — Digitale Garage",
-    headline: "Dein Auto. Jede Idee, jede Arbeit, jede Fahrt an einem Ort.",
-    description:
-      "Plane Umbauten, behalte Kosten im Blick, nutze DIY-Anleitungen und sammle die Geschichte deines Autos. Und wenn du losfahren willst, finde deine nächste Tour.",
+    headline: "Sieh den Umbau. Mach ihn möglich.",
+    description: "Visualisiere Ideen. Plane Teile, Budget und Arbeiten.",
     create: "Garage erstellen",
     openGarage: "Garage öffnen",
     undo: "Abschluss rückgängig machen",
-    explore: "Beispielgarage ansehen",
+    explore: "Demo ausprobieren",
     support: "Fang mit dem Auto an, das du schon hast.",
     account: "Ohne Konto umsehen. Mit Konto dein Auto speichern.",
     sample: "Beispielgarage · Illustrative Daten",
@@ -203,14 +201,12 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
   },
   el: {
     eyebrow: "CapCar — Ψηφιακό γκαράζ",
-    headline:
-      "Το αυτοκίνητό σου. Κάθε ιδέα, εργασία και διαδρομή σε ένα μέρος.",
-    description:
-      "Σχεδίασε αναβαθμίσεις, παρακολούθησε έξοδα, ακολούθησε οδηγούς DIY και κράτησε το ιστορικό του αυτοκινήτου σου συγκεντρωμένο. Βρες την επόμενη διαδρομή σου όταν έρθει η ώρα για βόλτα.",
+    headline: "Δες την ιδέα. Κάν’ την πράξη.",
+    description: "Δες τις αλλαγές. Οργάνωσε ανταλλακτικά, κόστος και εργασίες.",
     create: "Δημιούργησε το γκαράζ σου",
     openGarage: "Άνοιγμα γκαράζ",
     undo: "Αναίρεση ολοκλήρωσης",
-    explore: "Δες ένα γκαράζ-παράδειγμα",
+    explore: "Δοκίμασε το demo",
     support: "Ξεκίνα με το αυτοκίνητο που ήδη έχεις.",
     account:
       "Εξερεύνησε ελεύθερα. Δημιούργησε λογαριασμό για να αποθηκεύσεις το αυτοκίνητό σου.",
@@ -307,13 +303,12 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
   },
   sq: {
     eyebrow: "CapCar — Garazh digjital",
-    headline: "Makina jote. Çdo ide, punë dhe udhëtim në një vend.",
-    description:
-      "Planifiko përmirësime, ndiq kostot, përdor udhëzues DIY dhe mbaj bashkë historikun e makinës. Gjej rrugën e radhës kur të jesh gati për të dalë.",
+    headline: "Shihe idenë. Bëje realitet.",
+    description: "Shiko ndryshimet. Planifiko pjesët, buxhetin dhe punën.",
     create: "Krijo garazhin tënd",
     openGarage: "Hap garazhin",
     undo: "Anulo përfundimin",
-    explore: "Shiko një garazh shembull",
+    explore: "Provo demonstrimin",
     support: "Fillo me makinën që ke tashmë.",
     account: "Eksploro lirisht. Krijo llogari për të ruajtur makinën tënde.",
     sample: "Garazh shembull · Të dhëna ilustruese",
@@ -406,13 +401,12 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
   },
   ja: {
     eyebrow: "CapCar — デジタルガレージ",
-    headline: "愛車のアイデアも、整備も、ドライブも。すべてひとつに。",
-    description:
-      "カスタムを計画し、費用を記録し、DIYガイドを参考に。愛車の履歴をまとめて残せます。走りに出たくなったら、次のドライブを見つけましょう。",
+    headline: "理想の一台を、計画から。",
+    description: "カスタムをイメージして、パーツ・予算・作業をひとつに。",
     create: "ガレージを作成",
     openGarage: "ガレージを開く",
     undo: "完了を取り消す",
-    explore: "サンプルガレージを見る",
+    explore: "デモを試す",
     support: "今乗っている車から始めましょう。",
     account: "自由に見て回れます。愛車の保存にはアカウントが必要です。",
     sample: "サンプルガレージ・架空のデータ",

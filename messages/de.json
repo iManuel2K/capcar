@@ -365,6 +365,9 @@
     },
     "visual": {
       "current": "Ausgangspunkt",
+      "pause": "Animation pausieren",
+      "motionStopped": "Animation angehalten",
+      "shortNote": "Konzeptvorschau",
       "concept": "Designidee",
       "label": "Ausgangspunkt und Designidee vergleichen",
       "value": "{value} % Designidee",

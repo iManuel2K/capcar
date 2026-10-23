@@ -365,6 +365,9 @@
     },
     "visual": {
       "current": "スタート",
+      "pause": "アニメーションを停止",
+      "motionStopped": "アニメーション停止中",
+      "shortNote": "コンセプトプレビュー",
       "concept": "コンセプト",
       "label": "スタートとコンセプトを比較",
       "value": "コンセプト {value}%",
