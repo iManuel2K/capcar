@@ -13,3 +13,9 @@ Use Agrumea's spacious product-first presentation as inspiration, keeping CapCar
 ## Section separation · October 22, 2026
 
 Use the refined Chrome surfaces from MASTER. Give homepage sections visibly different planes: light slate for use cases and FAQ, green-blue for the project journey, brighter charcoal for interactive demonstrations, pale blue for the closing CTA. Keep one primary action and readable local text roles per plane.
+
+## First impression · October 23, 2026
+
+User explicitly approved a smooth automatic starting-point → concept reveal in the hero, superseding the prior no-auto rule for this single animation. Run once over 3.2 seconds after both images load and the visual is in view; no looping. Stop on pointer, keyboard/focus, leaving the viewport, hidden tab or reduced-motion preference. Native range and endpoint buttons remain manual controls. Keep a pause control and a concise “Concept preview” caption. Remove car identification, example metadata, task costs and duplicate account text from the hero.
+
+Use a short localized headline and one sentence with one prominent CTA. On phones and tablets use a single column: copy → car comparison → CTA. Use 48px interaction targets and one-column tool, stat and footer groups on small screens. Existing palette, imagery, broader product explanation and all five languages stay intact.

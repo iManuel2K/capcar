@@ -29,7 +29,7 @@ describe("the connected homepage example", () => {
   it("makes the product and its capability limits clear", async () => {
     renderPage();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Keep your car's plans and history together.",
+      "See the build. Make it happen.",
     );
     expect(
       await screen.findByText(/Interactive example · Illustrative data/),
@@ -68,7 +68,7 @@ describe("the connected homepage example", () => {
       within(actions).getByRole("link", { name: /Create your garage/ }),
     ).toHaveAttribute("href", "/garage/new");
     expect(
-      within(actions).getByRole("link", { name: /Explore an example garage/ }),
+      within(actions).getByRole("link", { name: /Try the demo/ }),
     ).toHaveAttribute("href", "#live-demo");
     expect(
       screen
@@ -220,8 +220,7 @@ describe("the connected homepage example", () => {
     expect(slider).toHaveValue("100");
     fireEvent.click(screen.getByRole("button", { name: "Starting point" }));
     expect(slider).toHaveValue("0");
-    fireEvent.click(screen.getByRole("button", { name: "50 / 50" }));
-    expect(slider).toHaveValue("50");
+
     fireEvent.change(slider, { target: { value: "75" } });
     expect(slider).toHaveAttribute("aria-valuetext", "75% concept");
     expect(slider).toHaveAttribute("dir", "ltr");

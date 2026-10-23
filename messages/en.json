@@ -365,6 +365,9 @@
     },
     "visual": {
       "current": "Starting point",
+      "pause": "Pause animation",
+      "motionStopped": "Animation stopped",
+      "shortNote": "Concept preview",
       "concept": "Concept direction",
       "label": "Compare the starting point and concept",
       "value": "{value}% concept",

@@ -365,6 +365,9 @@
     },
     "visual": {
       "current": "Pikënisja",
+      "pause": "Ndalo animacionin",
+      "motionStopped": "Animacioni u ndal",
+      "shortNote": "Pamje koncepti",
       "concept": "Drejtimi i konceptit",
       "label": "Krahaso pikënisjen me konceptin",
       "value": "{value}% koncept",
