@@ -17,7 +17,7 @@ export const analyticsUI: Record<
   en: {
     title: "Optional usage analytics",
     brief:
-      "Allow PostHog (US) to measure visits using a browser identifier? No session recordings. Your choice does not affect your account.",
+      "Optional analytics: PostHog (US) measures visits with a browser ID. No session recordings.",
     details: "How analytics works",
     description:
       "May we use PostHog to understand which pages and features are useful? It stores a browser identifier and sends usage events to PostHog in the US. Session recordings are disabled. Your choice does not affect your account.",
@@ -31,7 +31,7 @@ export const analyticsUI: Record<
   de: {
     title: "Optionale Nutzungsanalyse",
     brief:
-      "Darf PostHog (USA) Besuche mit einer Browser-Kennung messen? Keine Sitzungsaufzeichnungen. Deine Wahl beeinflusst dein Konto nicht.",
+      "Optionale Analyse: PostHog (USA) misst Besuche mit einer Browser-Kennung. Keine Sitzungsaufzeichnungen.",
     details: "So funktioniert die Analyse",
     description:
       "Dürfen wir mit PostHog erfassen, welche Seiten und Funktionen hilfreich sind? Dabei werden eine Browser-Kennung gespeichert und Nutzungsereignisse an PostHog in den USA gesendet. Sitzungsaufzeichnungen sind deaktiviert. Deine Wahl hat keinen Einfluss auf dein Konto.",
@@ -45,7 +45,7 @@ export const analyticsUI: Record<
   el: {
     title: "Προαιρετικά αναλυτικά χρήσης",
     brief:
-      "Να μετρά το PostHog (ΗΠΑ) επισκέψεις με αναγνωριστικό περιήγησης; Χωρίς καταγραφή συνεδριών. Η επιλογή δεν επηρεάζει τον λογαριασμό σου.",
+      "Προαιρετική ανάλυση: το PostHog (ΗΠΑ) μετρά επισκέψεις με αναγνωριστικό περιήγησης. Χωρίς καταγραφή συνεδριών.",
     details: "Πώς λειτουργούν τα αναλυτικά",
     description:
       "Να χρησιμοποιούμε το PostHog για να κατανοούμε ποιες σελίδες και λειτουργίες βοηθούν; Αποθηκεύεται ένα αναγνωριστικό προγράμματος περιήγησης και αποστέλλονται συμβάντα χρήσης στο PostHog στις ΗΠΑ. Η καταγραφή συνεδριών είναι απενεργοποιημένη. Η επιλογή δεν επηρεάζει τον λογαριασμό σου.",
@@ -59,7 +59,7 @@ export const analyticsUI: Record<
   sq: {
     title: "Analiza opsionale të përdorimit",
     brief:
-      "Të masë PostHog (SHBA) vizitat me një identifikues shfletuesi? Pa regjistrime sesioni. Zgjedhja nuk ndikon në llogarinë tënde.",
+      "Analiza opsionale: PostHog (SHBA) mat vizitat me identifikues shfletuesi. Pa regjistrime sesioni.",
     details: "Si funksionojnë analizat",
     description:
       "A mund të përdorim PostHog për të kuptuar cilat faqe dhe funksione janë të dobishme? Ruhet një identifikues i shfletuesit dhe ngjarjet e përdorimit dërgohen te PostHog në SHBA. Regjistrimi i sesioneve është çaktivizuar. Zgjedhja nuk ndikon në llogarinë tënde.",
@@ -73,7 +73,7 @@ export const analyticsUI: Record<
   ja: {
     title: "任意の利用状況分析",
     brief:
-      "ブラウザー識別子による訪問計測を米国のPostHogに許可しますか？セッション録画はありません。選択はアカウントに影響しません。",
+      "任意の分析：米国のPostHogがブラウザー識別子で訪問を計測します。セッション録画はありません。",
     details: "分析の仕組み",
     description:
       "役立つページや機能を把握するため、PostHogの利用を許可しますか？ブラウザー識別子を保存し、利用イベントを米国のPostHogへ送信します。セッション録画は無効です。選択はアカウントの利用に影響しません。",

@@ -146,9 +146,6 @@ export function ProductDashboardPreview() {
             {home.demoText}
           </p>
         </div>
-        <p className="text-muted-foreground mt-4 max-w-3xl text-xs leading-6">
-          {home.demoHint}
-        </p>
         <div className="border-foreground/20 bg-background text-foreground relative mt-8 overflow-hidden rounded-2xl border">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 px-5 py-4 sm:px-7">
             <div>

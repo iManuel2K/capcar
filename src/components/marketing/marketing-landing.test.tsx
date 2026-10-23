@@ -54,6 +54,10 @@ describe("the connected homepage example", () => {
     expect(
       screen.getByRole("heading", { name: "Find your next drive" }),
     ).toBeInTheDocument();
+    const limits = screen.getByText("Access & limits").closest("details");
+    expect(limits).not.toHaveAttribute("open");
+    fireEvent.click(screen.getByText("Access & limits"));
+    expect(limits).toHaveAttribute("open");
     expect(
       screen.getByText(
         /AI trip planning requires an account and a connected AI service/,
