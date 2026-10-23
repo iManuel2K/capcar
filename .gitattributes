@@ -1,0 +1,2 @@
+# Keep pinned third-party skill bytes intact, including Windows launchers.
+.agents/vendor/** -text -whitespace

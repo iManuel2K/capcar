@@ -11,3 +11,6 @@ backups
 backup
 backup-*
 supabase/.temp
+
+# Preserve the exact upstream skill snapshots and their integrity hashes.
+.agents/vendor/
