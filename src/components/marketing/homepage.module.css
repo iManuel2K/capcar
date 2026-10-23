@@ -1481,3 +1481,7 @@
     display: none;
   }
 }
+/* Keep the control geometry stable, but remove inactive chrome after the one-pass reveal. */
+.comparisonPause:disabled {
+  visibility: hidden;
+}
