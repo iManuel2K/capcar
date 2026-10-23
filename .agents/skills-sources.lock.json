@@ -1,0 +1,1493 @@
+{
+  "version": 1,
+  "installedAt": "2026-10-23",
+  "sources": [
+    {
+      "id": "ponytail",
+      "repository": "DietrichGebert/ponytail",
+      "url": "https://github.com/DietrichGebert/ponytail",
+      "commit": "09c434ab73ca43761c5d8b0c5d341926c2fba710",
+      "skills": [
+        {
+          "name": "ponytail",
+          "path": ".agents/skills/ponytail/SKILL.md",
+          "upstreamPath": "skills/ponytail/SKILL.md"
+        },
+        {
+          "name": "ponytail-audit",
+          "path": ".agents/skills/ponytail-audit/SKILL.md",
+          "upstreamPath": "skills/ponytail-audit/SKILL.md"
+        },
+        {
+          "name": "ponytail-debt",
+          "path": ".agents/skills/ponytail-debt/SKILL.md",
+          "upstreamPath": "skills/ponytail-debt/SKILL.md"
+        },
+        {
+          "name": "ponytail-gain",
+          "path": ".agents/skills/ponytail-gain/SKILL.md",
+          "upstreamPath": "skills/ponytail-gain/SKILL.md"
+        },
+        {
+          "name": "ponytail-help",
+          "path": ".agents/skills/ponytail-help/SKILL.md",
+          "upstreamPath": "skills/ponytail-help/SKILL.md"
+        },
+        {
+          "name": "ponytail-review",
+          "path": ".agents/skills/ponytail-review/SKILL.md",
+          "upstreamPath": "skills/ponytail-review/SKILL.md"
+        }
+      ],
+      "files": [
+        {
+          "path": ".agents/licenses/ponytail/LICENSE",
+          "upstreamPath": "LICENSE",
+          "sha256": "fb1bc6909ac3ef82d5c22106e32ef682b0cff66788fa915fb9b53b15c9d2f3ab",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/ponytail-audit/SKILL.md",
+          "upstreamPath": "skills/ponytail-audit/SKILL.md",
+          "sha256": "2b3223a02c386d1263e1b08343cb8eb3a53e444cdafb1d79e26c8ec2a8fcad28",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/ponytail-debt/SKILL.md",
+          "upstreamPath": "skills/ponytail-debt/SKILL.md",
+          "sha256": "b5ec2762f6ba8c4af9ea7173aa6c9f91b88655a25e43f9de0264f6ce8722b25f",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/ponytail-gain/SKILL.md",
+          "upstreamPath": "skills/ponytail-gain/SKILL.md",
+          "sha256": "231034a896d6762e4b5c8468287083422c56b499119976ec9f76821f7d083090",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/ponytail-gain/benchmarks/results/2026-10-07-agentic.md",
+          "upstreamPath": "benchmarks/results/2026-10-07-agentic.md",
+          "sha256": "a985555ce1835e82c17aa425f2d3743e0373345c8e73ad761923a700dcc341e0",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/ponytail-help/SKILL.md",
+          "upstreamPath": "skills/ponytail-help/SKILL.md",
+          "sha256": "86ab0ce0af70cbeeeef499d5c884873b393f87f86401dcc45553662ce2c1eff9",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/ponytail-review/SKILL.md",
+          "upstreamPath": "skills/ponytail-review/SKILL.md",
+          "sha256": "33fe4ebe22a460924e5d4a261e223df22e409cc94ab76182bee9fb91a3ef022e",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/ponytail/SKILL.md",
+          "upstreamPath": "skills/ponytail/SKILL.md",
+          "sha256": "9badd22a32e19cb884e46dfa8d3aae82bb81dfa5484105b8b4f0262df823a509",
+          "mode": "100644"
+        }
+      ]
+    },
+    {
+      "id": "addy-osmani",
+      "repository": "addyosmani/agent-skills",
+      "url": "https://github.com/addyosmani/agent-skills",
+      "commit": "aeac41d4d005999432bb7312f7ff06383a91d59d",
+      "skills": [
+        {
+          "name": "api-and-interface-design",
+          "path": ".agents/skills/api-and-interface-design/SKILL.md",
+          "upstreamPath": "skills/api-and-interface-design/SKILL.md"
+        },
+        {
+          "name": "browser-testing-with-devtools",
+          "path": ".agents/skills/browser-testing-with-devtools/SKILL.md",
+          "upstreamPath": "skills/browser-testing-with-devtools/SKILL.md"
+        },
+        {
+          "name": "ci-cd-and-automation",
+          "path": ".agents/skills/ci-cd-and-automation/SKILL.md",
+          "upstreamPath": "skills/ci-cd-and-automation/SKILL.md"
+        },
+        {
+          "name": "code-review-and-quality",
+          "path": ".agents/skills/code-review-and-quality/SKILL.md",
+          "upstreamPath": "skills/code-review-and-quality/SKILL.md"
+        },
+        {
+          "name": "code-simplification",
+          "path": ".agents/skills/code-simplification/SKILL.md",
+          "upstreamPath": "skills/code-simplification/SKILL.md"
+        },
+        {
+          "name": "constraint-driven-development",
+          "path": ".agents/skills/constraint-driven-development/SKILL.md",
+          "upstreamPath": "skills/constraint-driven-development/SKILL.md"
+        },
+        {
+          "name": "context-engineering",
+          "path": ".agents/skills/context-engineering/SKILL.md",
+          "upstreamPath": "skills/context-engineering/SKILL.md"
+        },
+        {
+          "name": "debugging-and-error-recovery",
+          "path": ".agents/skills/debugging-and-error-recovery/SKILL.md",
+          "upstreamPath": "skills/debugging-and-error-recovery/SKILL.md"
+        },
+        {
+          "name": "deprecation-and-migration",
+          "path": ".agents/skills/deprecation-and-migration/SKILL.md",
+          "upstreamPath": "skills/deprecation-and-migration/SKILL.md"
+        },
+        {
+          "name": "documentation-and-adrs",
+          "path": ".agents/skills/documentation-and-adrs/SKILL.md",
+          "upstreamPath": "skills/documentation-and-adrs/SKILL.md"
+        },
+        {
+          "name": "doubt-driven-development",
+          "path": ".agents/skills/doubt-driven-development/SKILL.md",
+          "upstreamPath": "skills/doubt-driven-development/SKILL.md"
+        },
+        {
+          "name": "frontend-ui-engineering",
+          "path": ".agents/skills/frontend-ui-engineering/SKILL.md",
+          "upstreamPath": "skills/frontend-ui-engineering/SKILL.md"
+        },
+        {
+          "name": "git-workflow-and-versioning",
+          "path": ".agents/skills/git-workflow-and-versioning/SKILL.md",
+          "upstreamPath": "skills/git-workflow-and-versioning/SKILL.md"
+        },
+        {
+          "name": "idea-refine",
+          "path": ".agents/skills/idea-refine/SKILL.md",
+          "upstreamPath": "skills/idea-refine/SKILL.md"
+        },
+        {
+          "name": "incremental-implementation",
+          "path": ".agents/skills/incremental-implementation/SKILL.md",
+          "upstreamPath": "skills/incremental-implementation/SKILL.md"
+        },
+        {
+          "name": "interview-me",
+          "path": ".agents/skills/interview-me/SKILL.md",
+          "upstreamPath": "skills/interview-me/SKILL.md"
+        },
+        {
+          "name": "observability-and-instrumentation",
+          "path": ".agents/skills/observability-and-instrumentation/SKILL.md",
+          "upstreamPath": "skills/observability-and-instrumentation/SKILL.md"
+        },
+        {
+          "name": "performance-optimization",
+          "path": ".agents/skills/performance-optimization/SKILL.md",
+          "upstreamPath": "skills/performance-optimization/SKILL.md"
+        },
+        {
+          "name": "planning-and-task-breakdown",
+          "path": ".agents/skills/planning-and-task-breakdown/SKILL.md",
+          "upstreamPath": "skills/planning-and-task-breakdown/SKILL.md"
+        },
+        {
+          "name": "security-and-hardening",
+          "path": ".agents/skills/security-and-hardening/SKILL.md",
+          "upstreamPath": "skills/security-and-hardening/SKILL.md"
+        },
+        {
+          "name": "shipping-and-launch",
+          "path": ".agents/skills/shipping-and-launch/SKILL.md",
+          "upstreamPath": "skills/shipping-and-launch/SKILL.md"
+        },
+        {
+          "name": "source-driven-development",
+          "path": ".agents/skills/source-driven-development/SKILL.md",
+          "upstreamPath": "skills/source-driven-development/SKILL.md"
+        },
+        {
+          "name": "spec-driven-development",
+          "path": ".agents/skills/spec-driven-development/SKILL.md",
+          "upstreamPath": "skills/spec-driven-development/SKILL.md"
+        },
+        {
+          "name": "test-driven-development",
+          "path": ".agents/skills/test-driven-development/SKILL.md",
+          "upstreamPath": "skills/test-driven-development/SKILL.md"
+        },
+        {
+          "name": "using-agent-skills",
+          "path": ".agents/skills/using-agent-skills/SKILL.md",
+          "upstreamPath": "skills/using-agent-skills/SKILL.md"
+        }
+      ],
+      "files": [
+        {
+          "path": ".agents/licenses/addy-osmani/LICENSE",
+          "upstreamPath": "LICENSE",
+          "sha256": "6f202f8bd568cd730dbb2b0d1f8e243bc74c2fa1f64dbce9b2c7ea08bd5c9fd7",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/references/accessibility-checklist.md",
+          "upstreamPath": "references/accessibility-checklist.md",
+          "sha256": "61c759d94d52296231f5f310b92b401f56c44e4430dc3cc95ebac5d7b1d5ffac",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/references/definition-of-done.md",
+          "upstreamPath": "references/definition-of-done.md",
+          "sha256": "d1c75d2ae65d2c7a9cd01f93fa8de63e00e75f2fe5d08be224d576157054dcee",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/references/observability-checklist.md",
+          "upstreamPath": "references/observability-checklist.md",
+          "sha256": "25fcd0e854596a5ab6f11b002050d245bf78f5ae0fcbd1df699b89451ae0e1e8",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/references/orchestration-patterns.md",
+          "upstreamPath": "references/orchestration-patterns.md",
+          "sha256": "61e543d86f19f86b83074f8c1c769455c7085a2c72dd47b1da21a8c63785be4a",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/references/performance-checklist.md",
+          "upstreamPath": "references/performance-checklist.md",
+          "sha256": "fffc38b8f3b328a973aab8b1a2efdd72b65710d8f4b57f28f8374ddae7f8a88b",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/references/security-checklist.md",
+          "upstreamPath": "references/security-checklist.md",
+          "sha256": "37774056502fe8970dcd2fd27dca5fa31f2a55232649fc3056c89c3af7d62755",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/references/testing-patterns.md",
+          "upstreamPath": "references/testing-patterns.md",
+          "sha256": "f0bf05acd0edcadc27297ad5b74f104c8103ccfedba1a05cd6d6ae4af8364c56",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/api-and-interface-design/SKILL.md",
+          "upstreamPath": "skills/api-and-interface-design/SKILL.md",
+          "sha256": "e83d34f52ff12dd8a7c5134cd7e8140ea4541ec65e204f8a1e4cd366e30c4192",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/browser-testing-with-devtools/SKILL.md",
+          "upstreamPath": "skills/browser-testing-with-devtools/SKILL.md",
+          "sha256": "4e3aacd6a380cd25bc6c2d67fdd1c926a9b22535b8a62109ecd33cefd909e3d9",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/ci-cd-and-automation/SKILL.md",
+          "upstreamPath": "skills/ci-cd-and-automation/SKILL.md",
+          "sha256": "a6ed8ed56456b01ff8314c44eefc69897d9905ae4e06bb2b7036286efb79b5f0",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/code-review-and-quality/SKILL.md",
+          "upstreamPath": "skills/code-review-and-quality/SKILL.md",
+          "sha256": "2db1e850379f255fd3091ef278cde24cd6c7d2ba23e360cc52ea522c40d4396e",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/code-simplification/SKILL.md",
+          "upstreamPath": "skills/code-simplification/SKILL.md",
+          "sha256": "f0c5ed754057eb0c1e027e2587f59de816651feb5e837242296c43ea21cf621d",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/constraint-driven-development/SKILL.md",
+          "upstreamPath": "skills/constraint-driven-development/SKILL.md",
+          "sha256": "06479d4305f286d23cfb99f5dc85695896785269664e1f6a8d800e3b71e70c10",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/constraint-driven-development/references/floor-guard.md",
+          "upstreamPath": "skills/constraint-driven-development/references/floor-guard.md",
+          "sha256": "59715dc6c3c6c36ec9177f9ced65c379e80a4539b36115456666bfabc43a6a9c",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/context-engineering/SKILL.md",
+          "upstreamPath": "skills/context-engineering/SKILL.md",
+          "sha256": "8b736cb9e55b82b265ab6ff78349c0e826e8a6df550deddf665b7fb3ff858b63",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/debugging-and-error-recovery/SKILL.md",
+          "upstreamPath": "skills/debugging-and-error-recovery/SKILL.md",
+          "sha256": "21f3960f5d7ae2cc95c40896545004dbbcbbd752ea65fc2d53962554d4174220",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/deprecation-and-migration/SKILL.md",
+          "upstreamPath": "skills/deprecation-and-migration/SKILL.md",
+          "sha256": "6a624f942e09c69863a4219b9bd5d56975026b67b0c70bc83385ffd2120b6142",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/documentation-and-adrs/SKILL.md",
+          "upstreamPath": "skills/documentation-and-adrs/SKILL.md",
+          "sha256": "b60d503925bbaacee7fd63935db70b9ced5b2514ff5a56a672130e01b9690bc5",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/doubt-driven-development/SKILL.md",
+          "upstreamPath": "skills/doubt-driven-development/SKILL.md",
+          "sha256": "6fa1fcd8420c28daf7e53c5b08b0f20b907911efd2a6d9bce0b9740da20a4008",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/frontend-ui-engineering/SKILL.md",
+          "upstreamPath": "skills/frontend-ui-engineering/SKILL.md",
+          "sha256": "29a3e53d57c0a128831a20730ae874a8c4fda40c001fcdc15f8e9ad4b5f72f1b",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/git-workflow-and-versioning/SKILL.md",
+          "upstreamPath": "skills/git-workflow-and-versioning/SKILL.md",
+          "sha256": "b7465d187935c52546d39fdc7bd6ac36d94eda25a9500ef8c18b767d2eb116ea",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/idea-refine/SKILL.md",
+          "upstreamPath": "skills/idea-refine/SKILL.md",
+          "sha256": "21ef828e3a2144245b67f840cc3805f761e98c9acce9a96670b7cd7441353463",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/idea-refine/examples.md",
+          "upstreamPath": "skills/idea-refine/examples.md",
+          "sha256": "563204bfbf2f80a444151695205af4cb759e722b3d1e5460e08f278a69c89ba1",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/idea-refine/frameworks.md",
+          "upstreamPath": "skills/idea-refine/frameworks.md",
+          "sha256": "161ebc18fdf2d996bc62a87a2d747cf1bf53548354f8925de25c732c27f00309",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/idea-refine/refinement-criteria.md",
+          "upstreamPath": "skills/idea-refine/refinement-criteria.md",
+          "sha256": "1ca2973a4d01b5cb37ab7ddb2eff77fa4e792634a33d0ce44961c068fc88d51a",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/idea-refine/scripts/idea-refine.sh",
+          "upstreamPath": "skills/idea-refine/scripts/idea-refine.sh",
+          "sha256": "f02a52408a4218047c032d221483abfbb48d11f090bb4915965c7419bf2e0e47",
+          "mode": "100755"
+        },
+        {
+          "path": ".agents/skills/incremental-implementation/SKILL.md",
+          "upstreamPath": "skills/incremental-implementation/SKILL.md",
+          "sha256": "df66536610071727feae1ca95f3c391c248ad828041750ccd3699cce763aa00b",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/interview-me/SKILL.md",
+          "upstreamPath": "skills/interview-me/SKILL.md",
+          "sha256": "ace4b675999bb504593d572e0f73f3d7e803ad6fddf318445598c82c11939db2",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/observability-and-instrumentation/SKILL.md",
+          "upstreamPath": "skills/observability-and-instrumentation/SKILL.md",
+          "sha256": "e7fcb0820306d46268de9594d676ad98e35040858926c412b7000faa52a61f87",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/performance-optimization/SKILL.md",
+          "upstreamPath": "skills/performance-optimization/SKILL.md",
+          "sha256": "bd36a30e55a5f84329a6977eba5e1ab7654146e71eaba88e34337d4ee020460f",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/performance-optimization/references/optimization-patterns.md",
+          "upstreamPath": "skills/performance-optimization/references/optimization-patterns.md",
+          "sha256": "fbf724076ffb8ac1a28e1a2773c0b550f5361090024b2dd32e5a682c69b7945f",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/planning-and-task-breakdown/SKILL.md",
+          "upstreamPath": "skills/planning-and-task-breakdown/SKILL.md",
+          "sha256": "ed0f90cc5951ddd4bcab7f871f64efec93a49af9279ef93bc470da77ad8da3f7",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/security-and-hardening/SKILL.md",
+          "upstreamPath": "skills/security-and-hardening/SKILL.md",
+          "sha256": "2e3fc60eed5aba97fe416f3f3c9317fdb014a682925ec70a733c3ff99e4b9858",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/security-and-hardening/references/hardening-patterns.md",
+          "upstreamPath": "skills/security-and-hardening/references/hardening-patterns.md",
+          "sha256": "2e1b93a502b4cdb0258404441f3aab029b0cce4003fbbcc61af9a2de18bab9ab",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/shipping-and-launch/SKILL.md",
+          "upstreamPath": "skills/shipping-and-launch/SKILL.md",
+          "sha256": "726f3e546369db289160b8d42195590f00b6432887e17bf19070dcc9a347fe39",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/source-driven-development/SKILL.md",
+          "upstreamPath": "skills/source-driven-development/SKILL.md",
+          "sha256": "c59faf851377f0eeda45306398d16eb96d77ab1c2fd3e1a7fb58e9a0af33c1e9",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/spec-driven-development/SKILL.md",
+          "upstreamPath": "skills/spec-driven-development/SKILL.md",
+          "sha256": "c4b97ce3d7f24be0e67fd612c7595f65504872e3a9f8d338d098b2363fdb66ef",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/test-driven-development/SKILL.md",
+          "upstreamPath": "skills/test-driven-development/SKILL.md",
+          "sha256": "a3aa6ba95638497025577469eda10ed17918698209615aeafbc26f131bf2469d",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/using-agent-skills/SKILL.md",
+          "upstreamPath": "skills/using-agent-skills/SKILL.md",
+          "sha256": "30787ef2c77bf1a4729fffed0f6523ba6fcbe81bdc436b36371b78c21394d3c3",
+          "mode": "100644"
+        }
+      ]
+    },
+    {
+      "id": "impeccable",
+      "repository": "pbakaus/impeccable",
+      "url": "https://github.com/pbakaus/impeccable",
+      "commit": "ea69c18d9f5308a04cfffb8785670a21d522d810",
+      "skills": [
+        {
+          "name": "impeccable",
+          "path": ".agents/skills/impeccable/SKILL.md",
+          "upstreamPath": ".agents/skills/impeccable/SKILL.md"
+        }
+      ],
+      "files": [
+        {
+          "path": ".agents/licenses/impeccable/LICENSE",
+          "upstreamPath": "LICENSE",
+          "sha256": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/licenses/impeccable/NOTICE.md",
+          "upstreamPath": "NOTICE.md",
+          "sha256": "c60a093c2845fd9fb82f9c6f742ece31f379f8190b535309d32d66c45ccffdcb",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/SKILL.md",
+          "upstreamPath": ".agents/skills/impeccable/SKILL.md",
+          "sha256": "88e9a46a91b6ddd1059f03f578bd0f9bbe6d212d6a395124379b9bb5c97c5cf2",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/agents/impeccable_asset_producer.toml",
+          "upstreamPath": ".agents/skills/impeccable/agents/impeccable_asset_producer.toml",
+          "sha256": "4dbdb0cfdc2466961da6b22d200f3ec7bf8bb47c27448a2e6e3c03cdbf589831",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/agents/impeccable_documenter.toml",
+          "upstreamPath": ".agents/skills/impeccable/agents/impeccable_documenter.toml",
+          "sha256": "2feb3768125ba6469c92a50d516727e6d42f44579165ddfd33409948e2a3803d",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/agents/impeccable_finish_reviewer.toml",
+          "upstreamPath": ".agents/skills/impeccable/agents/impeccable_finish_reviewer.toml",
+          "sha256": "1b80232e22d52b06a7278b9ca1f24f871a181c62cd91f4b18728807e7cf49dbd",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/agents/impeccable_manual_edit_applier.toml",
+          "upstreamPath": ".agents/skills/impeccable/agents/impeccable_manual_edit_applier.toml",
+          "sha256": "6c9ce3e27ec4520ead001da3aad2a2ebba481c4e5cd22873db8890259ee579fe",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/agents/openai.yaml",
+          "upstreamPath": ".agents/skills/impeccable/agents/openai.yaml",
+          "sha256": "ce9967ad70f99cf04456f3347c266723c2fbbb600267d10a822b7cd20562c321",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/adapt.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/adapt.md",
+          "sha256": "9807cdc112b8bcbdeff9cd2516cda4d07129f1d47f29df4d57645344f34950c1",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/adapt.native.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/adapt.native.md",
+          "sha256": "2455a2613e1fa29b986521c73cbad9424ccda70ef6cbe505779dbca5e16272a2",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/android.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/android.md",
+          "sha256": "058f81f256134841875fd3183e06b37a023de0c877fd2b9eecd97011640791fe",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/animate.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/animate.md",
+          "sha256": "d658c48ffbe0031e8e3b318996cad6ceafe29e40aa50d5bb25e4bf1d6839dc7c",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/audit.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/audit.md",
+          "sha256": "4b726d8f13ca1dbb82ca8179cbfefca8c53c13766fef4d7b8870f5d4324da2d6",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/audit.native.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/audit.native.md",
+          "sha256": "2898eff507738f9102107809e671df3e69f889dee30073030fe96fb2483d8ea3",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/bolder.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/bolder.md",
+          "sha256": "05b78fb0595e4d5afbf5f17470c84e89cf82f205fea3a6e9b6d8d779b7c4aab1",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/clarify.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/clarify.md",
+          "sha256": "173dd66abe65633910dcb04a51f40d6ff2a793f87088f022a02fc4cad24dd133",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/colorize.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/colorize.md",
+          "sha256": "bc5f71f1129d0f2c310d913d07c8dc609a1d25644121bd78c308f42d52a0b9e9",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/component-review.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/component-review.md",
+          "sha256": "10489e5265e49a4ef2737cd0e674c149ed41e1f703efe922e53ea3c91e833427",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/craft-floor.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/craft-floor.md",
+          "sha256": "52b523e92b76daff71be2ec8c732c374c670f8d03e1296388738e581479ec1bb",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/craft.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/craft.md",
+          "sha256": "9205e222bc6565b37fb504ceec93233c2d2a456802b69d16e6b1c44723907c4c",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/critique.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/critique.md",
+          "sha256": "c210c9506877c6c8d88880a337fddd95d4315daf70ed6bc631ee6520481f1a0c",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/degraded/asset-producer.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/degraded/asset-producer.md",
+          "sha256": "877d274f41500c780bad25b2bca7fa95eff1a32a7b95397dd388c72848e86a6c",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/degraded/documenter.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/degraded/documenter.md",
+          "sha256": "bcc05ea92faebb5c74037a9d4263a5ce9a56f5ab07c8ab3c59ee704d8cade745",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/degraded/finish-reviewer.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/degraded/finish-reviewer.md",
+          "sha256": "c33c4cfa7f0ce0bedde80d4fc3b595e747d0e9b43a77f06cacb8e899802f709d",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/degraded/manual-edit-applier.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/degraded/manual-edit-applier.md",
+          "sha256": "5fae7f8a2fc3ddd49ad0a413446dc44daedef5b6b7de5eb935bd2fbfad646d58",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/delight.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/delight.md",
+          "sha256": "098a891028ce59c212b747d3c70468dd750aff7053a703d1336045ed31e0da7c",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/distill.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/distill.md",
+          "sha256": "56ca75d680eb8b61ca3a298d18e895cd4a0dcc520c31d7938a4807ff8dcf18ea",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/doctor.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/doctor.md",
+          "sha256": "3dbef3fe606de4de0f1b5cab5f19902799e05cf566eb8223e9aa1632eeb04698",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/document.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/document.md",
+          "sha256": "531d2b6c8c9affc7b794de7904905ff9b73962b986968fd1e90273eb26930b6e",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/extract.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/extract.md",
+          "sha256": "5477ae97189e5c1236cee71a25a5ae50014429a5a2e6da28355c8021a6cdeddd",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/generate.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/generate.md",
+          "sha256": "11385badfb532196cec249e73bac2b7f58ada033ed8c4b02b9f0d64ddb46f0dc",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/harden.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/harden.md",
+          "sha256": "4167eb7fc456cdfe09ff0ac2dbcb5e59cee57e590137aab6cc8ec08aafb6d775",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/hooks.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/hooks.md",
+          "sha256": "4a19b53425643c01332a2f83ae71d58f267f4a1fb72e07378a5310f69c34108e",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/init.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/init.md",
+          "sha256": "51349b3a32c7f907102dd680d8e2df9da27082caf46ee15c673be7ce14a5363b",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/ios.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/ios.md",
+          "sha256": "40c87038b5f75147a5952a96237acf312a327bf70c1bcd8e0a5f064625ae9668",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/layout.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/layout.md",
+          "sha256": "0bc7d7971b3edf2acd0580e847458dc6d84129d90715b452799ace3bed815c7c",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/live-setup.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/live-setup.md",
+          "sha256": "2b5b2fbf5f658f34ea1997fb1aeebe01604d05187f75c6a4f1f55a5bc78520a4",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/live.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/live.md",
+          "sha256": "7caeecefe54d68bc915a7f2978cba5e88eda69a239cb09dcce78c6d94e93df84",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/mode-operate.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/mode-operate.md",
+          "sha256": "7a52dd7a94ee75f6ae89542c86a1b6e1d306812b16e0d9dbf12d4acad44d148b",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/mode-persuade.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/mode-persuade.md",
+          "sha256": "21e78c8a77badb3f83290cd4577ed3b24bd4dd3b57136d7da75733d4f3ee9ac0",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/mode-read.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/mode-read.md",
+          "sha256": "a569989e6a3d6453b4c45e9474e162a15cc54e11732ac6baa7990a6e7cccc0b5",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/new-work.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/new-work.md",
+          "sha256": "2ecb8674f239b5386faf955a52f9cc58c7a064a27d7c91bfc871b63d6a9c9c15",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/onboard.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/onboard.md",
+          "sha256": "a2b8fd01ea12139b39b3285393f805bb8c326e11b2234dbff4c26c17b4e9c280",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/operate.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/operate.md",
+          "sha256": "a9d2203acd45ca33a13d5c68b02b23ed512425ac15f0e8438318ed124b43729d",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/optimize.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/optimize.md",
+          "sha256": "89d679ec08e55fe7661d54addc950c2ff77cf574aa97e593ec6da089fd1efedf",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/overdrive.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/overdrive.md",
+          "sha256": "0a0d4ae6eea720c6d6e1c073fc77192d7c2100f78a44d9a8d262ddf22270cf4d",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/polish.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/polish.md",
+          "sha256": "81666fc7f783b4e3514db6554e713dc0479bd9cdedb06e93d15f8b579aae869a",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/quieter.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/quieter.md",
+          "sha256": "9e03b55c6bbdd4acba28cfa9c3b74ba1a4448cdbd35a7200990ab460c6eecaa0",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/region-map.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/region-map.md",
+          "sha256": "778cedc9199b407d3e23fa1041e38d548b00b1101a33517aa2a2eb299f9d0edc",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/routing.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/routing.md",
+          "sha256": "77ae09542fbc10aa4e8b119d6fd19359908a47c13c30068d6a150bfdb50e3e10",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/shape.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/shape.md",
+          "sha256": "a55f016c046cb6a27c55bd7f346375aeb506a755c4fbca19a5f92dbd42309c23",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/typeset.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/typeset.md",
+          "sha256": "c26c5b4524f3ccb650ed0680c10c25fd18083f8ebfd00a54c4d983c4747aab70",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/reference/visualize.md",
+          "upstreamPath": ".agents/skills/impeccable/reference/visualize.md",
+          "sha256": "1c81a831f9dd28b908306fa06e2f2944ca4595ff3df6570750c10bf806465f00",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/scripts/VERSION",
+          "upstreamPath": ".agents/skills/impeccable/scripts/VERSION",
+          "sha256": "7470694a0b5af87394b523c1a640e2ad099efbe0e6d9e6d2f7a70703e4d04457",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/scripts/command-metadata.json",
+          "upstreamPath": ".agents/skills/impeccable/scripts/command-metadata.json",
+          "sha256": "e8720f3aa41135211cc58cc299a39eeda86c75651f4279cc1ede8db10dcc0584",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/scripts/data/font-index-failures.json",
+          "upstreamPath": ".agents/skills/impeccable/scripts/data/font-index-failures.json",
+          "sha256": "835f19a0a3812f3652dd6979a2ce5597f654fd01f26e1b420b92d5f42b997ce4",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/scripts/data/font-index.json",
+          "upstreamPath": ".agents/skills/impeccable/scripts/data/font-index.json",
+          "sha256": "47edbdfaf27073c47033d1ac7dfee881be49e2dcbda7671d1157300481dde6da",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/scripts/impeccable",
+          "upstreamPath": ".agents/skills/impeccable/scripts/impeccable",
+          "sha256": "f5d9fcd37559ed6af782306f71b7688ad1ec5e1a4f8ae1ef4d3168f42523b1b1",
+          "mode": "100755"
+        },
+        {
+          "path": ".agents/skills/impeccable/scripts/impeccable.cmd",
+          "upstreamPath": ".agents/skills/impeccable/scripts/impeccable.cmd",
+          "sha256": "e6c5f6a1b4cfb5c2d3548ad7581f4bcfa71f44aa04c5a02d40c9e48102980925",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/scripts/live-browser-dom.js",
+          "upstreamPath": ".agents/skills/impeccable/scripts/live-browser-dom.js",
+          "sha256": "4b379aff87ce0f485008a2b6a0dc711d00a869f5cf0ec2459279d6364fbf0c9e",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/scripts/live-browser-ignores.js",
+          "upstreamPath": ".agents/skills/impeccable/scripts/live-browser-ignores.js",
+          "sha256": "c1cb6877ca99a0c1b38ba0c7d59f32702d3022f6821d8045f7133f7c40b6362f",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/scripts/live-browser-session.js",
+          "upstreamPath": ".agents/skills/impeccable/scripts/live-browser-session.js",
+          "sha256": "2b45c12bef4e25d40b673044c9f124d1da6dfa72ef3f0c09ff30fdb419048e5d",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/scripts/live-browser.js",
+          "upstreamPath": ".agents/skills/impeccable/scripts/live-browser.js",
+          "sha256": "8f26a309ae1af52d2413a39a886908721e78c55b468025054e06e8faffe90cf0",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/impeccable/scripts/modern-screenshot.umd.js",
+          "upstreamPath": ".agents/skills/impeccable/scripts/modern-screenshot.umd.js",
+          "sha256": "bb36665889124a0b6e15f16045265737449c3bdcf2712cdb08af3cfa01563e2b",
+          "mode": "100644"
+        }
+      ]
+    },
+    {
+      "id": "matt-pocock",
+      "repository": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "skills": [
+        {
+          "name": "ask-matt",
+          "path": ".agents/skills/ask-matt/SKILL.md",
+          "upstreamPath": "skills/engineering/ask-matt/SKILL.md"
+        },
+        {
+          "name": "code-review",
+          "path": ".agents/skills/code-review/SKILL.md",
+          "upstreamPath": "skills/engineering/code-review/SKILL.md"
+        },
+        {
+          "name": "codebase-design",
+          "path": ".agents/skills/codebase-design/SKILL.md",
+          "upstreamPath": "skills/engineering/codebase-design/SKILL.md"
+        },
+        {
+          "name": "diagnosing-bugs",
+          "path": ".agents/skills/diagnosing-bugs/SKILL.md",
+          "upstreamPath": "skills/engineering/diagnosing-bugs/SKILL.md"
+        },
+        {
+          "name": "domain-modeling",
+          "path": ".agents/skills/domain-modeling/SKILL.md",
+          "upstreamPath": "skills/engineering/domain-modeling/SKILL.md"
+        },
+        {
+          "name": "grill-with-docs",
+          "path": ".agents/skills/grill-with-docs/SKILL.md",
+          "upstreamPath": "skills/engineering/grill-with-docs/SKILL.md"
+        },
+        {
+          "name": "implement",
+          "path": ".agents/skills/implement/SKILL.md",
+          "upstreamPath": "skills/engineering/implement/SKILL.md"
+        },
+        {
+          "name": "implement-spec",
+          "path": ".agents/skills/implement-spec/SKILL.md",
+          "upstreamPath": "skills/engineering/implement-spec/SKILL.md"
+        },
+        {
+          "name": "improve-codebase-architecture",
+          "path": ".agents/skills/improve-codebase-architecture/SKILL.md",
+          "upstreamPath": "skills/engineering/improve-codebase-architecture/SKILL.md"
+        },
+        {
+          "name": "pr",
+          "path": ".agents/skills/pr/SKILL.md",
+          "upstreamPath": "skills/engineering/pr/SKILL.md"
+        },
+        {
+          "name": "prototype",
+          "path": ".agents/skills/prototype/SKILL.md",
+          "upstreamPath": "skills/engineering/prototype/SKILL.md"
+        },
+        {
+          "name": "research",
+          "path": ".agents/skills/research/SKILL.md",
+          "upstreamPath": "skills/engineering/research/SKILL.md"
+        },
+        {
+          "name": "retro",
+          "path": ".agents/skills/retro/SKILL.md",
+          "upstreamPath": "skills/engineering/retro/SKILL.md"
+        },
+        {
+          "name": "setup-matt-pocock-skills",
+          "path": ".agents/skills/setup-matt-pocock-skills/SKILL.md",
+          "upstreamPath": "skills/engineering/setup-matt-pocock-skills/SKILL.md"
+        },
+        {
+          "name": "tdd",
+          "path": ".agents/skills/tdd/SKILL.md",
+          "upstreamPath": "skills/engineering/tdd/SKILL.md"
+        },
+        {
+          "name": "to-spec",
+          "path": ".agents/skills/to-spec/SKILL.md",
+          "upstreamPath": "skills/engineering/to-spec/SKILL.md"
+        },
+        {
+          "name": "to-tickets",
+          "path": ".agents/skills/to-tickets/SKILL.md",
+          "upstreamPath": "skills/engineering/to-tickets/SKILL.md"
+        },
+        {
+          "name": "triage",
+          "path": ".agents/skills/triage/SKILL.md",
+          "upstreamPath": "skills/engineering/triage/SKILL.md"
+        },
+        {
+          "name": "wayfinder",
+          "path": ".agents/skills/wayfinder/SKILL.md",
+          "upstreamPath": "skills/engineering/wayfinder/SKILL.md"
+        },
+        {
+          "name": "wizard",
+          "path": ".agents/skills/wizard/SKILL.md",
+          "upstreamPath": "skills/engineering/wizard/SKILL.md"
+        },
+        {
+          "name": "grill-me",
+          "path": ".agents/skills/grill-me/SKILL.md",
+          "upstreamPath": "skills/productivity/grill-me/SKILL.md"
+        },
+        {
+          "name": "grilling",
+          "path": ".agents/skills/grilling/SKILL.md",
+          "upstreamPath": "skills/productivity/grilling/SKILL.md"
+        },
+        {
+          "name": "handoff",
+          "path": ".agents/skills/handoff/SKILL.md",
+          "upstreamPath": "skills/productivity/handoff/SKILL.md"
+        },
+        {
+          "name": "teach",
+          "path": ".agents/skills/teach/SKILL.md",
+          "upstreamPath": "skills/productivity/teach/SKILL.md"
+        },
+        {
+          "name": "to-questionnaire",
+          "path": ".agents/skills/to-questionnaire/SKILL.md",
+          "upstreamPath": "skills/productivity/to-questionnaire/SKILL.md"
+        },
+        {
+          "name": "wait-what",
+          "path": ".agents/skills/wait-what/SKILL.md",
+          "upstreamPath": "skills/productivity/wait-what/SKILL.md"
+        },
+        {
+          "name": "writing-for-agents",
+          "path": ".agents/skills/writing-for-agents/SKILL.md",
+          "upstreamPath": "skills/productivity/writing-for-agents/SKILL.md"
+        }
+      ],
+      "files": [
+        {
+          "path": ".agents/licenses/matt-pocock/LICENSE",
+          "upstreamPath": "LICENSE",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/ask-matt/PHASE-BOUNDARIES.md",
+          "upstreamPath": "skills/engineering/ask-matt/PHASE-BOUNDARIES.md",
+          "sha256": "a8aa20158609ef39e2b308b6ba0660c91066838d07a867202e63a7744a88a3ed",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/ask-matt/SKILL.md",
+          "upstreamPath": "skills/engineering/ask-matt/SKILL.md",
+          "sha256": "1371f5ce005de0992a44b137748bfb960a56948aa9871b405fe9d90b24332e3c",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/ask-matt/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/ask-matt/agents/openai.yaml",
+          "sha256": "bdffbc5a0a99ed1b6ef3253d251d755fd18162b9845972e380007f844b09b05c",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/code-review/SKILL.md",
+          "upstreamPath": "skills/engineering/code-review/SKILL.md",
+          "sha256": "09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/code-review/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/code-review/agents/openai.yaml",
+          "sha256": "8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/codebase-design/DEEPENING.md",
+          "upstreamPath": "skills/engineering/codebase-design/DEEPENING.md",
+          "sha256": "f3dd099ce99289bd213914d8ee3e2429b78309c3957ca4583f7659551b1d53c1",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/codebase-design/DESIGN-IT-TWICE.md",
+          "upstreamPath": "skills/engineering/codebase-design/DESIGN-IT-TWICE.md",
+          "sha256": "52b52e75655a27aea59c6966b410bac82448968ad46ef1ebb9f07c274e3ae010",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/codebase-design/SKILL.md",
+          "upstreamPath": "skills/engineering/codebase-design/SKILL.md",
+          "sha256": "2c20617f87ec8af6a434859f381b2f061a69b530444e74eb39e78bb016a6d1e2",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/codebase-design/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/codebase-design/agents/openai.yaml",
+          "sha256": "edebc9e4fcfe102114012575eaa9600b9b5fd08c311664f389c36e7bc717740f",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/diagnosing-bugs/SKILL.md",
+          "upstreamPath": "skills/engineering/diagnosing-bugs/SKILL.md",
+          "sha256": "849198df88cdb65fd0d97236604c1fca7ff2f22d2f705f9724a800d0266b118d",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/diagnosing-bugs/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/diagnosing-bugs/agents/openai.yaml",
+          "sha256": "3e430dbe4334a87597488c060cb3dc3786bb00c9182877d6f5ec41f62490e90b",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/diagnosing-bugs/scripts/hitl-loop.template.sh",
+          "upstreamPath": "skills/engineering/diagnosing-bugs/scripts/hitl-loop.template.sh",
+          "sha256": "35103539fc36873eea36074769ad454f9379d6fc8b2dc0e26ce987fd3bfe5503",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/domain-modeling/ADR-FORMAT.md",
+          "upstreamPath": "skills/engineering/domain-modeling/ADR-FORMAT.md",
+          "sha256": "944c92aa790e8fbdc9199640b170979abb8a34ba8d0fe18c2a01a63bce140ca0",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/domain-modeling/GLOSSARY-FORMAT.md",
+          "upstreamPath": "skills/engineering/domain-modeling/GLOSSARY-FORMAT.md",
+          "sha256": "21dcc40cdec8e151a829b98ab1517c1867bc444e3665134a98c6983411996801",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/domain-modeling/SKILL.md",
+          "upstreamPath": "skills/engineering/domain-modeling/SKILL.md",
+          "sha256": "7b925d7b1e341a2eeae33ad68a8a8c0ab889a38ddd22a7598e4c240e5a7556a3",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/domain-modeling/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/domain-modeling/agents/openai.yaml",
+          "sha256": "f6bf2aa996c6e6f53fdd0708e18a0d16a56aed8322cca59fedbe3c0d2c75f06b",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/grill-me/SKILL.md",
+          "upstreamPath": "skills/productivity/grill-me/SKILL.md",
+          "sha256": "caaf8b8de1684f96e26b28f3c29189db5c89cce4b73e1c93d86164f66ef88637",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/grill-me/agents/openai.yaml",
+          "upstreamPath": "skills/productivity/grill-me/agents/openai.yaml",
+          "sha256": "c061e39c3e0f9d865fb1b97556d485704af2a8a58f4b8221a8917a5c2074a32b",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/grill-with-docs/SKILL.md",
+          "upstreamPath": "skills/engineering/grill-with-docs/SKILL.md",
+          "sha256": "7de372c13488f1ee96cc11cd8907b56b6809cc93eef776eeddd37de6b6cbe3fe",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/grill-with-docs/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/grill-with-docs/agents/openai.yaml",
+          "sha256": "94cd0ab161fb468a836349f5ed482ba58ce8e709a05c57ce533d739dbd35cca9",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/grilling/SKILL.md",
+          "upstreamPath": "skills/productivity/grilling/SKILL.md",
+          "sha256": "befdff1e27a1dfe2a294d5871169ac1afe16d983911daa4f32627514a48c1e15",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/grilling/agents/openai.yaml",
+          "upstreamPath": "skills/productivity/grilling/agents/openai.yaml",
+          "sha256": "1411d7df7d99b7e621a1ff8283c8133cc2464be63d064e52d8ce169c6800ee9b",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/handoff/SKILL.md",
+          "upstreamPath": "skills/productivity/handoff/SKILL.md",
+          "sha256": "4cbb043950dad2ffd3662ff1a5a0b51ae676004b5cae10e3787e8ee7a4ee69d3",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/handoff/agents/openai.yaml",
+          "upstreamPath": "skills/productivity/handoff/agents/openai.yaml",
+          "sha256": "5c479fd562c691851690e8b18c8501045bef0943c10743d636b2fae26add1d28",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/implement-spec/SKILL.md",
+          "upstreamPath": "skills/engineering/implement-spec/SKILL.md",
+          "sha256": "7a22dd2e60b8fcece478ced9d2533582adf3520d695acd3ab715341535c9e56d",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/implement-spec/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/implement-spec/agents/openai.yaml",
+          "sha256": "fd41efb42c60c96320d6531be7e4bf15cbf5518cd652d57dff27ccffa46988e9",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/implement/SKILL.md",
+          "upstreamPath": "skills/engineering/implement/SKILL.md",
+          "sha256": "483bdc4ccf4ac31d86ac7beeaa0d0db80313e71e120bb8c59b3196ae5decd53d",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/implement/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/implement/agents/openai.yaml",
+          "sha256": "8970a8596ade0c28ab427f41a4ea242d6bdf6186c59ebf55e1238dbecaab79dc",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/improve-codebase-architecture/HTML-REPORT.md",
+          "upstreamPath": "skills/engineering/improve-codebase-architecture/HTML-REPORT.md",
+          "sha256": "581e8bb5a521e46bbda8ca7e19b15948bed882187108092ebb90c62513b77528",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/improve-codebase-architecture/SKILL.md",
+          "upstreamPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
+          "sha256": "552240a5ab5cec6b67c15dd1ad6e9f6962b1bca6ce870059a8c2713760c20392",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/improve-codebase-architecture/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/improve-codebase-architecture/agents/openai.yaml",
+          "sha256": "c8cb20f68ebf0edb4e497bc11ae5fcaa196004e661cd189015b04f4109ced7f1",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/pr/CREDITS.md",
+          "upstreamPath": "skills/engineering/pr/CREDITS.md",
+          "sha256": "a7a087127665d7298a72280ef6e19c41ad8404523712a788c8dc3ab414bc2497",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/pr/SKILL.md",
+          "upstreamPath": "skills/engineering/pr/SKILL.md",
+          "sha256": "ab63f1cf78647389edcd386c9427c5dfca27ed2836930c24773ffee834c19bcd",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/pr/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/pr/agents/openai.yaml",
+          "sha256": "2295b586624db4ef546f3fd4695492f039d941a46d8a1593a702ce3ca511b8ad",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/prototype/LOGIC.md",
+          "upstreamPath": "skills/engineering/prototype/LOGIC.md",
+          "sha256": "f61c7d249e786a79ef289018901c348271e1798dd0b0bc5607b5c6f4d4a01ab9",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/prototype/SKILL.md",
+          "upstreamPath": "skills/engineering/prototype/SKILL.md",
+          "sha256": "714de632d116bb73f65cdb5a882db15b9369a6713b9a47c0fad827848f0bfbe3",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/prototype/UI.md",
+          "upstreamPath": "skills/engineering/prototype/UI.md",
+          "sha256": "723211e878acbc7b6ff09755263f3295cde724ba902ff0064da41eed51d45ad3",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/prototype/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/prototype/agents/openai.yaml",
+          "sha256": "5af65e43ab41a350436697b81e27b7f848d36782043b73c322bb2c9fa9cc55dc",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/research/SKILL.md",
+          "upstreamPath": "skills/engineering/research/SKILL.md",
+          "sha256": "985569f15739c713d6784887c3d186d4ef9ac85bec5ad9c068d25bf0739928e4",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/research/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/research/agents/openai.yaml",
+          "sha256": "9b4c470d63221c1f68f22df70b83e2f12401b317babe0d1b7b5f24a974474d0d",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/retro/SKILL.md",
+          "upstreamPath": "skills/engineering/retro/SKILL.md",
+          "sha256": "33fbc28568e3146f20fd908b12998bc0ab30aa4f4c87288199a40793efa94696",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/retro/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/retro/agents/openai.yaml",
+          "sha256": "cb6fb9d7e6b4be5975f41f6def1dd00a1255bad5d9b02696b124c924a8b8745c",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/setup-matt-pocock-skills/SKILL.md",
+          "upstreamPath": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
+          "sha256": "f148858ffb7f63c03c06fca06e6fdb1d91a35c6b293244b8fdfacd5f4cc028c4",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/setup-matt-pocock-skills/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/setup-matt-pocock-skills/agents/openai.yaml",
+          "sha256": "9527de0110541c45712319025155aeab8dc7d77c6ed6e5e83271bab1851ab939",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/setup-matt-pocock-skills/domain.md",
+          "upstreamPath": "skills/engineering/setup-matt-pocock-skills/domain.md",
+          "sha256": "593a7042218689f1d24df89df14eaf0a20e19e0d0a7d479a01947ac78f0784b9",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/setup-matt-pocock-skills/issue-tracker-github.md",
+          "upstreamPath": "skills/engineering/setup-matt-pocock-skills/issue-tracker-github.md",
+          "sha256": "f0653fe106dd8ee7b33be27bd7fe3104b40555896cb45f61997aed20467020c3",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/setup-matt-pocock-skills/issue-tracker-gitlab.md",
+          "upstreamPath": "skills/engineering/setup-matt-pocock-skills/issue-tracker-gitlab.md",
+          "sha256": "591a9e7057382aaccdfbed3f7ea3f2ad07e0cd29f012d18b82ee4e485fd81e24",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/setup-matt-pocock-skills/issue-tracker-local.md",
+          "upstreamPath": "skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md",
+          "sha256": "7dcda20a2eb4bdc89b95d1143423c0691309921cadae3132e6424f371030506e",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/setup-matt-pocock-skills/triage-labels.md",
+          "upstreamPath": "skills/engineering/setup-matt-pocock-skills/triage-labels.md",
+          "sha256": "ae512af838c78b8750471c42cd2b20fa32319553e61d84c9a23d171b40ce14aa",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/tdd/SKILL.md",
+          "upstreamPath": "skills/engineering/tdd/SKILL.md",
+          "sha256": "5505d25bbaa8fc14a79e4d20163936958992a2995b7f1dd1d6197edc9ed722e0",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/tdd/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/tdd/agents/openai.yaml",
+          "sha256": "ea6f01cf1b8c06a4b0f5b649d74b1b8ce8685e72af1b38d70d877693e092af0b",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/tdd/mocking.md",
+          "upstreamPath": "skills/engineering/tdd/mocking.md",
+          "sha256": "3ceb807fdf4a47d6a93d4d9a891e5ba6d362a6247bd08adc451feebfc17361ef",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/tdd/tests.md",
+          "upstreamPath": "skills/engineering/tdd/tests.md",
+          "sha256": "859f9e592c188fda4fc7277dd180e4ce9c7a2e13f6efe1f6f29eccc9d28c106a",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/teach/GLOSSARY-FORMAT.md",
+          "upstreamPath": "skills/productivity/teach/GLOSSARY-FORMAT.md",
+          "sha256": "9b99859ec28437668130d8f2ce5a342938970f8a1ed4fd38c3eab4f4b5fff210",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/teach/LEARNING-RECORD-FORMAT.md",
+          "upstreamPath": "skills/productivity/teach/LEARNING-RECORD-FORMAT.md",
+          "sha256": "701fa34b6748aa89e6c960ffb815257f481a7d77fb2900f9028f7edf3fdd6052",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/teach/MISSION-FORMAT.md",
+          "upstreamPath": "skills/productivity/teach/MISSION-FORMAT.md",
+          "sha256": "8cacbb3c0644d3ae0ea4965564797099401a6930a23f7cf462918576587f2418",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/teach/RESOURCES-FORMAT.md",
+          "upstreamPath": "skills/productivity/teach/RESOURCES-FORMAT.md",
+          "sha256": "e9cacf34026e11a8d1c8f9de88abe5bcbf654f4ebdb25cae8c0de0d5f48f44ec",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/teach/SKILL.md",
+          "upstreamPath": "skills/productivity/teach/SKILL.md",
+          "sha256": "550482c2d674b085c9043b87bfdc14a8f2ec453c736119e7fcbb1e9332bffeba",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/teach/agents/openai.yaml",
+          "upstreamPath": "skills/productivity/teach/agents/openai.yaml",
+          "sha256": "5856f3ae8aec742f1499c640aecdd5f1d6af5fa210a7c6ec794de8263a6f733f",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/to-questionnaire/SKILL.md",
+          "upstreamPath": "skills/productivity/to-questionnaire/SKILL.md",
+          "sha256": "b5eb929842ee0e93d867c5e906d183d350f2f2d149eaeaa86967d94d8eda1d3b",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/to-questionnaire/agents/openai.yaml",
+          "upstreamPath": "skills/productivity/to-questionnaire/agents/openai.yaml",
+          "sha256": "9e8a06c38c8842eea8d4922cb9d1ead8e3ace647bab259b943c994a1b4742bc2",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/to-spec/SKILL.md",
+          "upstreamPath": "skills/engineering/to-spec/SKILL.md",
+          "sha256": "43ad9cf318e5e7d3d1fa360253a37021796dc87a0c2e595ad262661a10f85088",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/to-spec/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/to-spec/agents/openai.yaml",
+          "sha256": "1c5b4d1e3d8e52287ef19cc2742fdbbfae1914ac75d33af3e4c8174f08cc55bb",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/to-tickets/SKILL.md",
+          "upstreamPath": "skills/engineering/to-tickets/SKILL.md",
+          "sha256": "56ec23c5b2782785d4e65bff9e315b6d3aeb4ef977c174a219e99489fada1995",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/to-tickets/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/to-tickets/agents/openai.yaml",
+          "sha256": "21bc6215fffcd7614e9f772bb1760e87cc5fc7dcc707e7d282bc9414267a6090",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/triage/AGENT-BRIEF.md",
+          "upstreamPath": "skills/engineering/triage/AGENT-BRIEF.md",
+          "sha256": "7f5f87fed3033df1b06e083c480f3e847b1fbb0647746b8a4c6a50f9f26ef44f",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/triage/OUT-OF-SCOPE.md",
+          "upstreamPath": "skills/engineering/triage/OUT-OF-SCOPE.md",
+          "sha256": "1fbf9b432130c6380aa65813b55553cfda150309b27c595e183f8e335b8a190d",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/triage/SKILL.md",
+          "upstreamPath": "skills/engineering/triage/SKILL.md",
+          "sha256": "917b0baf74be583e74f110857ed45df2766617f75c00baf61fd136d7af515edf",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/triage/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/triage/agents/openai.yaml",
+          "sha256": "2e683717720cf456d165d0bb1a68bb600d0b6a8ccb61841c172e50d26f95351c",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/wait-what/SKILL.md",
+          "upstreamPath": "skills/productivity/wait-what/SKILL.md",
+          "sha256": "d961bb37defd975c539427edb8f450cdbccdcdd552e213c1ece46676a7970905",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/wait-what/agents/openai.yaml",
+          "upstreamPath": "skills/productivity/wait-what/agents/openai.yaml",
+          "sha256": "b41faadf741d51e4ea184148b2d1854d93f947aaf754c7844f70a00f04194999",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/wayfinder/SKILL.md",
+          "upstreamPath": "skills/engineering/wayfinder/SKILL.md",
+          "sha256": "9be7b478c389605a24517d27752f278933588da97a1b5921b165f455edf4c5b7",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/wayfinder/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/wayfinder/agents/openai.yaml",
+          "sha256": "88bc81a11a6d52ac67aeaa76b8b619e387020d47c5133a4dd4927fd15c4ad073",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/wizard/SKILL.md",
+          "upstreamPath": "skills/engineering/wizard/SKILL.md",
+          "sha256": "bdf31d48211ea559878f95a4f344aeabf8d85897488ba564382bab0b000daac1",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/wizard/agents/openai.yaml",
+          "upstreamPath": "skills/engineering/wizard/agents/openai.yaml",
+          "sha256": "98f44d682d58e262f160dc59a8befc365e0aa65820dd0261864af26aa8e59d83",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/wizard/template.sh",
+          "upstreamPath": "skills/engineering/wizard/template.sh",
+          "sha256": "6566f147299bc6f1d941e64591ed04385416d543e11f96f564c7228f5018d0ed",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/writing-for-agents/SKILL-MECHANICS.md",
+          "upstreamPath": "skills/productivity/writing-for-agents/SKILL-MECHANICS.md",
+          "sha256": "c768e6307c7c10728c401c213f2c4ba71c542127eeb7ad2956aabd15a0fa0059",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/writing-for-agents/SKILL.md",
+          "upstreamPath": "skills/productivity/writing-for-agents/SKILL.md",
+          "sha256": "551adca942227b44192edba88acd4e8db911f0121ce58ad16944ccf6a896a74a",
+          "mode": "100644"
+        },
+        {
+          "path": ".agents/skills/writing-for-agents/agents/openai.yaml",
+          "upstreamPath": "skills/productivity/writing-for-agents/agents/openai.yaml",
+          "sha256": "eacb24b2a618cfb81dacb0416f4fdd75ddf3a8060f8ddb99aae1b1e301907e4b",
+          "mode": "100644"
+        }
+      ]
+    }
+  ]
+}
