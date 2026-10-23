@@ -83,37 +83,41 @@ export function AnalyticsProvider() {
         <section
           ref={prompt}
           aria-label={t.title}
-          className="border-input/25 bg-background text-foreground relative z-[100] border-b p-4 sm:fixed sm:right-5 sm:bottom-5 sm:max-h-[80dvh] sm:max-w-md sm:overflow-y-auto sm:rounded-2xl sm:border sm:p-5 sm:shadow-xl"
+          className="border-input/30 bg-background text-foreground relative z-[100] border-b px-4 py-3 sm:fixed sm:inset-x-5 sm:bottom-4 sm:mx-auto sm:max-h-[65dvh] sm:max-w-5xl sm:overflow-y-auto sm:rounded-xl sm:border sm:shadow-lg"
         >
-          <h2 className="text-base font-semibold">{t.title}</h2>
-          <p className="mt-2 text-sm leading-6">{t.brief}</p>
-          <details className="mt-1 text-sm leading-6">
-            <summary className="inline-flex min-h-11 cursor-pointer items-center underline underline-offset-4">
-              {t.details}
-            </summary>
-            <p>{t.description}</p>
-            <Link
-              href="/privacy"
-              className="inline-flex min-h-11 items-center underline"
-            >
-              {t.privacy}
-            </Link>
-          </details>
-          <div className="mt-3 flex flex-wrap gap-3">
-            <button
-              type="button"
-              onClick={() => choose(false)}
-              className="border-foreground/30 min-h-11 flex-1 rounded-xl border px-4 py-2 text-sm font-semibold"
-            >
-              {t.decline}
-            </button>
-            <button
-              type="button"
-              onClick={() => choose(true)}
-              className="border-foreground/30 min-h-11 flex-1 rounded-xl border px-4 py-2 text-sm font-semibold"
-            >
-              {t.accept}
-            </button>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
+            <div className="min-w-0 flex-1">
+              <h2 className="sr-only">{t.title}</h2>
+              <p className="text-sm leading-5">{t.brief}</p>
+              <details className="text-sm leading-6">
+                <summary className="text-muted-foreground inline-flex min-h-11 cursor-pointer items-center rounded underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2">
+                  {t.details}
+                </summary>
+                <p className="max-w-2xl pb-1">{t.description}</p>
+                <Link
+                  href="/privacy"
+                  className="inline-flex min-h-11 items-center rounded underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  {t.privacy}
+                </Link>
+              </details>
+            </div>
+            <div className="grid shrink-0 grid-cols-2 gap-2 sm:self-start">
+              <button
+                type="button"
+                onClick={() => choose(false)}
+                className="border-foreground/30 hover:bg-card min-h-11 rounded-lg border px-3 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                {t.decline}
+              </button>
+              <button
+                type="button"
+                onClick={() => choose(true)}
+                className="border-foreground/30 hover:bg-card min-h-11 rounded-lg border px-3 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                {t.accept}
+              </button>
+            </div>
           </div>
         </section>
       )}

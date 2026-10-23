@@ -69,12 +69,12 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
             <h2 id="use-cases-title" className={styles.title}>
               {c.usesTitle}
             </h2>
+            <p className={styles.fine}>{c.sample}</p>
             <div className={styles.editorialUses}>
               <article className={styles.use}>
                 <div>
                   <h3>{c.maintain}</h3>
                   <p>{c.maintainText}</p>
-                  <p className={styles.fine}>{c.maintainAccess}</p>
                   <div className={styles.actions}>
                     <HomepageLink
                       href="/car-maintenance-tracker"
@@ -95,7 +95,6 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                   </HomepageLink>
                 </div>
                 <div className={styles.mini} aria-label={c.maintain}>
-                  <p>{c.sample} / BMW 318i</p>
                   <div className={styles.miniRow}>
                     <strong>{c.task}</strong>
                     <span>{c.due}</span>
@@ -123,7 +122,6 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                 <div>
                   <h3>{c.build}</h3>
                   <p>{c.buildText}</p>
-                  <p className={styles.fine}>{c.buildAccess}</p>
                   <div className={styles.actions}>
                     <HomepageLink
                       href="/project-car-planner"
@@ -136,7 +134,6 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                   </div>
                 </div>
                 <div className={styles.mini} aria-label={c.build}>
-                  <p>{c.sample} / BMW 318i</p>
                   <div className={styles.editorialCar}>
                     <Image
                       src="/garage/cutouts/bmw-318i.webp"
@@ -165,14 +162,12 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                       <dd>{euro(28)}</dd>
                     </div>
                   </dl>
-                  <p className={styles.fine}>{c.progressNote}</p>
                 </div>
               </article>
               <article className={styles.use}>
                 <div>
                   <h3>{c.drives}</h3>
                   <p>{c.drivesText}</p>
-                  <p className={styles.fine}>{c.drivesAccess}</p>
                   <div className={styles.actions}>
                     <HomepageLink
                       href="/roadbook"
@@ -211,7 +206,6 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                       · <a href="https://openfreemap.org/">OpenFreeMap</a> ·{" "}
                       <a href="https://openmaptiles.org/">OpenMapTiles</a>
                     </p>
-                    <p className={styles.fine}>{c.sample}</p>
                     <strong>{c.route}</strong>
                     <p>{c.routeDetail}</p>
                     <HomepageLink
@@ -229,6 +223,20 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                 </figure>
               </article>
             </div>
+            <details className={styles.accessDetails}>
+              <summary>{c.accessLabel}</summary>
+              <div>
+                <p>
+                  <strong>{c.maintain}.</strong> {c.maintainAccess}
+                </p>
+                <p>
+                  <strong>{c.build}.</strong> {c.buildAccess} {c.progressNote}
+                </p>
+                <p>
+                  <strong>{c.drives}.</strong> {c.drivesAccess}
+                </p>
+              </div>
+            </details>
           </div>
         </section>
         <DeferredProductDashboardPreview

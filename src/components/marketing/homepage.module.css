@@ -1485,3 +1485,44 @@
 .comparisonPause:disabled {
   visibility: hidden;
 }
+
+/* Keep qualifications available without repeating fine print in every preview. */
+.accessDetails {
+  border-top: 1px solid var(--border);
+  margin-top: 1.5rem;
+  color: var(--muted-foreground);
+}
+.accessDetails summary {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  cursor: pointer;
+  width: fit-content;
+  max-width: 100%;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--primary);
+}
+.accessDetails summary::after {
+  content: "+";
+  font-size: 1.25rem;
+}
+.accessDetails[open] summary::after {
+  content: "−";
+}
+.accessDetails summary:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.accessDetails > div {
+  display: grid;
+  gap: 1rem;
+  padding: 0.75rem 0 1.5rem;
+  max-width: 70ch;
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+.accessDetails strong {
+  color: var(--foreground);
+}
