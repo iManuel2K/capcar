@@ -360,3 +360,22 @@
   background: var(--background);
   color: var(--foreground);
 }
+
+.build-preview-progress {
+  appearance: none;
+  border: 0;
+  background: var(--secondary);
+  color: var(--primary);
+}
+.build-preview-progress::-webkit-progress-bar {
+  background: var(--secondary);
+  border-radius: 999px;
+}
+.build-preview-progress::-webkit-progress-value {
+  background: var(--primary);
+  border-radius: 999px;
+}
+.build-preview-progress::-moz-progress-bar {
+  background: var(--primary);
+  border-radius: 999px;
+}

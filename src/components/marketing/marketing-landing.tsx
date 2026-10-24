@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { BuildProgressPreview } from "./build-progress-preview";
 import { aiPreviewCopy } from "@/features/marketing/ai-preview-copy";
 import {
   ArrowRight,
@@ -146,10 +147,7 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                     />
                   </div>
                   <strong>{c.project}</strong>
-                  <div className={styles.bar} aria-hidden="true">
-                    <span />
-                  </div>
-                  <span className="text-xs">{c.progress}</span>
+                  <BuildProgressPreview copy={c} />
                   <dl className={styles.stats}>
                     <div>
                       <dt>{c.budget}</dt>

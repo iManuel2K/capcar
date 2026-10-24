@@ -21,6 +21,11 @@ const en = {
   next: "Next task",
   task: "Replace the cabin filter",
   progress: "1 of 3 tasks completed",
+  buildProgress: "{done} of 3 tasks completed",
+  buildTaskOne: "Check the maintenance baseline",
+  buildTaskTwo: "Compare wheels and tyres",
+  buildTaskThree: "Plan the suspension setup",
+
   progressNote: "Progress counts completed tasks, not money spent.",
   usesEyebrow: "One car. Three starting points.",
   usesTitle: "What would you like to do next?",
@@ -121,6 +126,11 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     next: "Nächste Aufgabe",
     task: "Innenraumfilter wechseln",
     progress: "1 von 3 Aufgaben erledigt",
+    buildProgress: "{done} von 3 Aufgaben erledigt",
+    buildTaskOne: "Wartungszustand prüfen",
+    buildTaskTwo: "Räder und Reifen vergleichen",
+    buildTaskThree: "Fahrwerk planen",
+
     progressNote:
       "Der Fortschritt zählt erledigte Aufgaben, nicht ausgegebenes Geld.",
     usesEyebrow: "Ein Auto. Drei Möglichkeiten.",
@@ -222,6 +232,11 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     next: "Επόμενη εργασία",
     task: "Αλλαγή φίλτρου καμπίνας",
     progress: "Ολοκληρώθηκε 1 από 3 εργασίες",
+    buildProgress: "Ολοκληρώθηκαν {done} από 3 εργασίες",
+    buildTaskOne: "Έλεγχος βασικής συντήρησης",
+    buildTaskTwo: "Σύγκριση ζαντών και ελαστικών",
+    buildTaskThree: "Σχεδιασμός ανάρτησης",
+
     progressNote:
       "Η πρόοδος μετρά ολοκληρωμένες εργασίες, όχι χρήματα που ξοδεύτηκαν.",
     usesEyebrow: "Ένα αυτοκίνητο. Τρεις αφετηρίες.",
@@ -324,6 +339,11 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     next: "Detyra e radhës",
     task: "Ndërro filtrin e kabinës",
     progress: "1 nga 3 detyra të përfunduara",
+    buildProgress: "{done} nga 3 detyra të përfunduara",
+    buildTaskOne: "Kontrollo mirëmbajtjen bazë",
+    buildTaskTwo: "Krahaso disqet dhe gomat",
+    buildTaskThree: "Planifiko amortizimin",
+
     progressNote: "Progresi mat detyrat e përfunduara, jo paratë e shpenzuara.",
     usesEyebrow: "Një makinë. Tre pikënisje.",
     usesTitle: "Çfarë do të bësh më pas?",
@@ -422,6 +442,11 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     next: "次のタスク",
     task: "キャビンフィルターを交換",
     progress: "3件中1件のタスクが完了",
+    buildProgress: "3件中{done}件のタスクが完了",
+    buildTaskOne: "基本整備の状態を確認",
+    buildTaskTwo: "ホイールとタイヤを比較",
+    buildTaskThree: "サスペンションを計画",
+
     progressNote: "進捗は支出額ではなく、完了したタスク数で計算します。",
     usesEyebrow: "1台の愛車。3つの始め方。",
     usesTitle: "次は何をしましょうか？",

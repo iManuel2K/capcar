@@ -84,6 +84,26 @@ describe("the connected homepage example", () => {
     ).toBe(true);
   });
 
+  it("lets visitors complete and reopen build tasks without changing the budget", () => {
+    renderPage();
+    const progress = screen.getByRole("progressbar", {
+      name: "Plan your build",
+    });
+    expect(progress).toHaveAttribute("value", "1");
+    fireEvent.click(
+      screen.getByRole("checkbox", { name: /Compare wheels and tyres/ }),
+    );
+    fireEvent.click(
+      screen.getByRole("checkbox", { name: /Plan the suspension setup/ }),
+    );
+    expect(progress).toHaveAttribute("value", "3");
+    expect(screen.getByText("3 of 3 tasks completed")).toBeVisible();
+    fireEvent.click(
+      screen.getByRole("checkbox", { name: /Compare wheels and tyres/ }),
+    );
+    expect(progress).toHaveAttribute("value", "2");
+  });
+
   it("shows all three editorial use cases without requiring tab interaction", () => {
     renderPage();
     expect(
