@@ -85,6 +85,7 @@ export function BuildProgressPreview({ copy }: { copy: HomepageCopy }) {
         >
           <Image
             src="/capcar-hero-bmw-vision.png"
+            loading="eager"
             alt=""
             fill
             sizes="(max-width: 760px) 90vw, 540px"
