@@ -19,3 +19,10 @@ Read `design-system/capcar/MASTER.md` and the relevant `design-system/capcar/pag
 Ponytail, Addy Osmani's Agent Skills, Impeccable, and Matt Pocock's published engineering/productivity skills are installed in `.agents/skills/`. Use the matching skill when relevant; invoke one explicitly with `$skill-name` in Codex. Project instructions and the CapCar design system above take precedence over generic skill advice. These are project skill files; plugin hooks and automatic updates are not installed.
 
 See `docs/codex-skills.md` for macOS/VS Code setup, verification, scope, and pinned upstream sources. Do not overwrite these packs with a global/plugin installation or an unreviewed bulk skills update.
+
+## CapCar SEO suite
+
+For requests to run the 100 SEO roles, read `.agents/skills/capcar-seo-suite/SKILL.md`.
+Its registry locates every role even when Codex shortens the initial skill list.
+These are custom CapCar workflows; record missing evidence and inapplicable roles
+explicitly, and keep audit-only requests separate from application changes.

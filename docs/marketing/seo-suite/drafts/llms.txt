@@ -1,0 +1,19 @@
+# CapCar — Digital Garage
+
+> Optional navigation draft. Not deployed. No ranking or AI citation benefit is claimed.
+
+CapCar helps owners plan upgrades, track costs and keep maintenance records with
+their car. Explore public tools; an account saves personal vehicles and plans.
+
+## Public pages
+- [CapCar](https://capcar.dev/): Product overview and illustrative garage example.
+- [How it works](https://capcar.dev/platform): Current product workflows and scope.
+- [Project car planner](https://capcar.dev/project-car-planner): Parts, budget and progress planning.
+- [Maintenance tracker](https://capcar.dev/car-maintenance-tracker): Owner-recorded service history.
+- [Journal](https://capcar.dev/en/journal): Practical preparation and documentation articles.
+- [AI trip planner](https://capcar.dev/ai): Public example; own plans require an account and connected service.
+
+Examples are illustrative unless explicitly documented as real. Vehicle records
+are not independent workshop certification. Confirm part fitment, safety and
+applicable instructions separately. Retailer checkout and provider charges may
+apply outside CapCar's core beta garage.

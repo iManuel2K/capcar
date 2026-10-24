@@ -1,0 +1,1374 @@
+{
+  "capture_date": "2026-10-23",
+  "target": "https://capcar.dev",
+  "source_commit": "e3c72a40976eb72ff9d899824a2f5c8869803211",
+  "integration_base_commit": "7b7675f5a1ac1a625e29175111bcac0eb19d61ee",
+  "execution": "Sequential workflow assessment by one assistant using shared HTTP/source/rendered evidence; blocked and inapplicable roles are not claimed complete.",
+  "status_meaning": {
+    "done": "Workflow completed within stated scope; not an SEO pass",
+    "partial": "Available part checked, explicit remainder unverified",
+    "blocked": "Indispensable input unavailable",
+    "not_applicable": "Business/data premise does not apply"
+  },
+  "counts": {
+    "done": 47,
+    "blocked": 17,
+    "partial": 31,
+    "not_applicable": 5
+  },
+  "results": [
+    {
+      "id": 1,
+      "role": "Technical auditor",
+      "division": "Technical SEO",
+      "status": "done",
+      "evidence": [
+        "E01",
+        "E02",
+        "E03"
+      ],
+      "result": "The 115 sitemap pages are HTTP-available and have core metadata; no verified site-wide indexability blocker in this snapshot.",
+      "next_action": "Keep the validated controls and resolve the measurement/content backlog.",
+      "missing_inputs": []
+    },
+    {
+      "id": 2,
+      "role": "Core Web Vitals reader",
+      "division": "Technical SEO",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "No current field CWV export or CrUX measurement was retrieved. HTML response timings do not establish LCP, INP or CLS.",
+      "next_action": "Supply dated field data and test key templates under documented lab conditions.",
+      "missing_inputs": [
+        "CrUX or Search Console CWV data"
+      ]
+    },
+    {
+      "id": 3,
+      "role": "Redirect chain finder",
+      "division": "Technical SEO",
+      "status": "done",
+      "evidence": [
+        "E03"
+      ],
+      "result": "HTTP and www each redirect once with 301; /en, /en/ai and /en/platform use one 308; /journal uses one locale-resolving 307.",
+      "next_action": "Preserve the observed canonical redirects and use final URLs in links.",
+      "missing_inputs": []
+    },
+    {
+      "id": 4,
+      "role": "Canonical checker",
+      "division": "Technical SEO",
+      "status": "done",
+      "evidence": [
+        "E02"
+      ],
+      "result": "All 115 sitemap pages have one self-canonical after normalizing the equivalent root slash. The root slash difference is not a defect.",
+      "next_action": "Check Google-selected canonicals when Search Console becomes available.",
+      "missing_inputs": []
+    },
+    {
+      "id": 5,
+      "role": "JavaScript rendering checker",
+      "division": "Technical SEO",
+      "status": "partial",
+      "evidence": [
+        "E02",
+        "E09"
+      ],
+      "result": "Essential text and schema are in source HTML; the desktop homepage rendered correctly with its newer hero. Earlier HTTP and later browser captures have different hero text; a fresh HTTP fetch and the new master hero commit agree with the newer text.",
+      "next_action": "Use a pinned deployment for matched raw/rendered checks on more templates.",
+      "missing_inputs": [
+        "Matched-deployment rendered sample beyond the homepage"
+      ]
+    },
+    {
+      "id": 6,
+      "role": "Mobile parity checker",
+      "division": "Technical SEO",
+      "status": "blocked",
+      "evidence": [
+        "E09"
+      ],
+      "result": "A 1363x936 desktop view was inspected, but this run has no matching narrow/mobile rendered view.",
+      "next_action": "Compare the homepage, planner and article at narrow and wide viewports.",
+      "missing_inputs": [
+        "Mobile rendered viewport"
+      ]
+    },
+    {
+      "id": 7,
+      "role": "HTTPS and security checker",
+      "division": "Technical SEO",
+      "status": "done",
+      "evidence": [
+        "E02",
+        "E03"
+      ],
+      "result": "Validated HTTPS responses include HSTS, CSP and nosniff on the inspected homepage; HTTP/www canonicalization works. This is not a full security audit or ranking score.",
+      "next_action": "Retain HTTPS and inspect real mixed-content failures if they occur.",
+      "missing_inputs": []
+    },
+    {
+      "id": 8,
+      "role": "Pagination auditor",
+      "division": "Technical SEO",
+      "status": "partial",
+      "evidence": [
+        "E06"
+      ],
+      "result": "Sound Studio's initial HTML contains 12 recording rows and Previous/Next controls for page 1 of 13; no evidence here establishes separately crawlable pages for the full library.",
+      "next_action": "Decide whether individual recordings should be search destinations before implementing crawlable pagination.",
+      "missing_inputs": [
+        "Rendered pagination behavior and intended recording index policy"
+      ]
+    },
+    {
+      "id": 9,
+      "role": "Site speed prioritiser",
+      "division": "Technical SEO",
+      "status": "partial",
+      "evidence": [
+        "E02"
+      ],
+      "result": "The homepage HTML snapshot is 197032 bytes and public feature pages use private/no-store responses. These are investigation inputs, not measured speed or CWV failures.",
+      "next_action": "Measure field/lab behavior before changing caching or media delivery.",
+      "missing_inputs": [
+        "Field or lab performance measurement"
+      ]
+    },
+    {
+      "id": 10,
+      "role": "Technical diff watcher",
+      "division": "Technical SEO",
+      "status": "partial",
+      "evidence": [
+        "E13",
+        "E02"
+      ],
+      "result": "The checked-in prior narrative describes a 115-URL final sitemap; the current inventory agrees. No equivalent prior machine-readable crawl was supplied.",
+      "next_action": "Use this run's JSON baseline for a future like-for-like diff.",
+      "missing_inputs": [
+        "Comparable prior crawl snapshot"
+      ]
+    },
+    {
+      "id": 11,
+      "role": "Index coverage reader",
+      "division": "Crawl & index",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "Search Console discovery found no active authorized connection; actual indexed coverage and selected canonicals were not read.",
+      "next_action": "Finish Search Console authorization or provide a coverage export.",
+      "missing_inputs": [
+        "Authorized indexing/URL Inspection evidence"
+      ]
+    },
+    {
+      "id": 12,
+      "role": "Sitemap auditor",
+      "division": "Crawl & index",
+      "status": "done",
+      "evidence": [
+        "E01",
+        "E02"
+      ],
+      "result": "Sitemap XML lists 115 unique URLs; every destination returned 200 and has coherent canonical/language tags. Dates are retained from published content, not rewritten.",
+      "next_action": "Preserve the sitemap and verify its submitted/processed state in Search Console.",
+      "missing_inputs": []
+    },
+    {
+      "id": 13,
+      "role": "Robots checker",
+      "division": "Crawl & index",
+      "status": "done",
+      "evidence": [
+        "E01"
+      ],
+      "result": "Wildcard robots permits public content and declares the sitemap; private/app paths have explicit disallows. Robots access and noindex are separate controls.",
+      "next_action": "Preserve private boundaries and check crawler-specific needs before edits.",
+      "missing_inputs": []
+    },
+    {
+      "id": 14,
+      "role": "Crawl budget analyser",
+      "division": "Crawl & index",
+      "status": "partial",
+      "evidence": [
+        "E01",
+        "E04"
+      ],
+      "result": "The public inventory is bounded, with no observed unbounded parameter family. No logs or crawl stats quantify crawl-budget allocation.",
+      "next_action": "Read actual crawl stats before prioritizing crawl-budget work.",
+      "missing_inputs": [
+        "Search Console crawl stats or server crawl logs"
+      ]
+    },
+    {
+      "id": 15,
+      "role": "Orphan page finder",
+      "division": "Crawl & index",
+      "status": "done",
+      "evidence": [
+        "E04"
+      ],
+      "result": "No sitemap URL has zero observed public inlinks across the captured graph. Localized subgraphs are separate from the English anchor graph; this is not proof of global orphaning.",
+      "next_action": "Preserve per-language internal links; consider crawlable locale navigation as an enhancement.",
+      "missing_inputs": []
+    },
+    {
+      "id": 16,
+      "role": "Duplicate content finder",
+      "division": "Crawl & index",
+      "status": "partial",
+      "evidence": [
+        "E02",
+        "E06"
+      ],
+      "result": "No duplicate titles exist across 115 sitemap URLs. Shared navigation and translated equivalents are intentional; this is not a full near-duplicate main-text analysis.",
+      "next_action": "Inspect actual same-language intent overlap before consolidation.",
+      "missing_inputs": [
+        "Exhaustive main-content similarity review"
+      ]
+    },
+    {
+      "id": 17,
+      "role": "Parameter handler",
+      "division": "Crawl & index",
+      "status": "partial",
+      "evidence": [
+        "E03"
+      ],
+      "result": "One Sound Studio A/B parameter URL returns 200 with the clean /sound-studio canonical. Other parameter families were not exhaustively tested.",
+      "next_action": "Extend the parameter policy only for observed search/filter families.",
+      "missing_inputs": [
+        "Complete parameter inventory"
+      ]
+    },
+    {
+      "id": 18,
+      "role": "Internal link mapper",
+      "division": "Crawl & index",
+      "status": "done",
+      "evidence": [
+        "E04"
+      ],
+      "result": "A normalized public-anchor graph was built from 123 successful HTML responses, retaining 2011 directed edges across the sampled nodes.",
+      "next_action": "Use the baseline graph for targeted link changes; untested destinations remain unknown.",
+      "missing_inputs": []
+    },
+    {
+      "id": 19,
+      "role": "Click depth auditor",
+      "division": "Crawl & index",
+      "status": "done",
+      "evidence": [
+        "E04"
+      ],
+      "result": "The English homepage graph reaches 23 sitemap URLs at depth 0-2. The other 92 are localized subgraphs reached via locale roots/sitemap alternates rather than English HTML anchors.",
+      "next_action": "Consider real locale anchor links; do not report a universal three-click violation.",
+      "missing_inputs": []
+    },
+    {
+      "id": 20,
+      "role": "Index bloat finder",
+      "division": "Crawl & index",
+      "status": "partial",
+      "evidence": [
+        "E01",
+        "E10"
+      ],
+      "result": "The sitemap is limited to public feature, legal and journal pages; no measured index bloat is established without actual indexed-URL evidence.",
+      "next_action": "Inspect indexed exclusions/parameter URLs before any noindex changes.",
+      "missing_inputs": [
+        "Actual index coverage"
+      ]
+    },
+    {
+      "id": 21,
+      "role": "Keyword clusterer",
+      "division": "Keywords",
+      "status": "done",
+      "evidence": [
+        "E06",
+        "E14"
+      ],
+      "result": "Task-derived clusters map garage ownership, build planning, maintenance records and scenic planning to existing feature pages. Seed terms have no claimed search volumes.",
+      "next_action": "Validate the seed groups against real queries before expanding content.",
+      "missing_inputs": []
+    },
+    {
+      "id": 22,
+      "role": "Intent classifier",
+      "division": "Keywords",
+      "status": "done",
+      "evidence": [
+        "E06",
+        "E14"
+      ],
+      "result": "Garage/planner/tracker pages serve tool-evaluation tasks; journal supports preparation; /specialists serves directory intent but shows no published profiles.",
+      "next_action": "Keep tasks distinct and avoid promoting an empty directory as a workshop-finding success.",
+      "missing_inputs": []
+    },
+    {
+      "id": 23,
+      "role": "Page type matcher",
+      "division": "Keywords",
+      "status": "done",
+      "evidence": [
+        "E06",
+        "E14"
+      ],
+      "result": "The existing planner, tracker, platform and journal already cover the core page types. No additional generic landing-page family is justified by this run.",
+      "next_action": "Improve proof and current pages before creating duplicates.",
+      "missing_inputs": []
+    },
+    {
+      "id": 24,
+      "role": "Longtail miner",
+      "division": "Keywords",
+      "status": "done",
+      "evidence": [
+        "E14"
+      ],
+      "result": "A bounded seed set covers BMW 318i project budgets, maintenance records, workspace preparation and scenic-weekend planning. These are unmeasured user-task hypotheses.",
+      "next_action": "Filter with Search Console/user questions before treating them as demand.",
+      "missing_inputs": []
+    },
+    {
+      "id": 25,
+      "role": "Competitor gap analyser",
+      "division": "Keywords",
+      "status": "partial",
+      "evidence": [
+        "E11"
+      ],
+      "result": "A different CapCar used-car business was verified as a name collision, not a like-for-like product competitor. No defined task-matched software competitor sample was audited.",
+      "next_action": "Choose comparable garage/planning products and inspect their task pages.",
+      "missing_inputs": [
+        "Defined comparable competitors and pages"
+      ]
+    },
+    {
+      "id": 26,
+      "role": "Cannibalisation finder",
+      "division": "Keywords",
+      "status": "partial",
+      "evidence": [
+        "E06",
+        "E10"
+      ],
+      "result": "Homepage, platform, planner and tracker have distinguishable purposes. No query-by-page data establishes cannibalisation.",
+      "next_action": "Inspect same-query page overlap before merging URLs.",
+      "missing_inputs": [
+        "Query-by-page Search Console export"
+      ]
+    },
+    {
+      "id": 27,
+      "role": "Seasonality reader",
+      "division": "Keywords",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "No suitable seasonal query or traffic time series was retrieved.",
+      "next_action": "Provide sufficiently long matching locale/query history.",
+      "missing_inputs": [
+        "Seasonal time series"
+      ]
+    },
+    {
+      "id": 28,
+      "role": "Brand vs non-brand splitter",
+      "division": "Keywords",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "No query metrics were available to split branded and non-branded traffic; exact CapCar terms also need disambiguation from the French business.",
+      "next_action": "Apply a documented brand rule to authorized query rows.",
+      "missing_inputs": [
+        "Search query clicks/impressions export"
+      ]
+    },
+    {
+      "id": 29,
+      "role": "Zero-click assessor",
+      "division": "Keywords",
+      "status": "partial",
+      "evidence": [
+        "E06",
+        "E10"
+      ],
+      "result": "Some informational planning questions may be answered in search, while saving a vehicle plan requires the app. No query-specific zero-click rate was measured.",
+      "next_action": "Compare observed SERPs with real query CTR rather than guessing rates.",
+      "missing_inputs": [
+        "Query-level SERP and click evidence"
+      ]
+    },
+    {
+      "id": 30,
+      "role": "Priority scorer",
+      "division": "Keywords",
+      "status": "done",
+      "evidence": [
+        "E14"
+      ],
+      "result": "The backlog prioritizes measurement, useful directory availability, localized instructions, original evidence and brand clarity; no overall SEO score or traffic gain is invented.",
+      "next_action": "Follow the owners/dependencies/success checks in the report.",
+      "missing_inputs": []
+    },
+    {
+      "id": 31,
+      "role": "Content brief writer",
+      "division": "Content",
+      "status": "done",
+      "evidence": [
+        "E14"
+      ],
+      "result": "A brief improves the existing maintenance-record article using a real redacted owner entry, vehicle context and an app screenshot, with source/account boundaries.",
+      "next_action": "Gather the required original evidence before publication.",
+      "missing_inputs": []
+    },
+    {
+      "id": 32,
+      "role": "Content verdict giver",
+      "division": "Content",
+      "status": "done",
+      "evidence": [
+        "E06",
+        "E14"
+      ],
+      "result": "Retain the six English journal articles and core feature pages: their tasks and caveats are useful. Improve original evidence and directory fulfillment; no mass rewrite is warranted.",
+      "next_action": "Apply the specific editorial brief and verify real task completion separately.",
+      "missing_inputs": []
+    },
+    {
+      "id": 33,
+      "role": "SERP gap finder",
+      "division": "Content",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "Brand discovery queries were sampled, but no locale-specific task SERP/competitor-page sample suitable for a content gap analysis was collected.",
+      "next_action": "Collect a bounded task-query SERP sample.",
+      "missing_inputs": [
+        "Task-level SERP sample and inspected competing pages"
+      ]
+    },
+    {
+      "id": 34,
+      "role": "Content refresher",
+      "division": "Content",
+      "status": "partial",
+      "evidence": [
+        "E06",
+        "E14"
+      ],
+      "result": "The Rheingau article labels its 17 October visitor notice and links official venue sources; the cable-car/renovation details require current revalidation before refreshing.",
+      "next_action": "Check the cited operators; update only claims that actually changed.",
+      "missing_inputs": [
+        "Current verification of linked visitor notices"
+      ]
+    },
+    {
+      "id": 35,
+      "role": "Anti-slop editor",
+      "division": "Content",
+      "status": "done",
+      "evidence": [
+        "E14"
+      ],
+      "result": "An optional concise introductory rewrite is supplied, preserving account, fitment and illustrative-data limits. No AI detector or authorship accusation was used.",
+      "next_action": "Review the proposed wording against the live hero before any edit.",
+      "missing_inputs": []
+    },
+    {
+      "id": 36,
+      "role": "Originality adder",
+      "division": "Content",
+      "status": "done",
+      "evidence": [
+        "E06",
+        "E14"
+      ],
+      "result": "The current budget/maintenance examples are openly illustrative. The evidence brief specifies a real redacted vehicle record and actual costs rather than invented experience.",
+      "next_action": "Capture an actual owner workflow and obtain publication consent.",
+      "missing_inputs": []
+    },
+    {
+      "id": 37,
+      "role": "Topic cluster planner",
+      "division": "Content",
+      "status": "done",
+      "evidence": [
+        "E14"
+      ],
+      "result": "A bounded hub map links build planning and maintenance tracking to the existing six guides, with Roadbook/AI as the driving cluster.",
+      "next_action": "Improve depth within these clusters before adding page families.",
+      "missing_inputs": []
+    },
+    {
+      "id": 38,
+      "role": "Readability checker",
+      "division": "Content",
+      "status": "partial",
+      "evidence": [
+        "E06",
+        "E07"
+      ],
+      "result": "English planning articles use task-based headings and explain uncertainty. German Sound Studio retains English instructional sentences; all-language linguistic quality was not certified.",
+      "next_action": "Translate the specific leftovers and seek target-language review.",
+      "missing_inputs": [
+        "Comprehensive native-level review of all five languages"
+      ]
+    },
+    {
+      "id": 39,
+      "role": "Content decay finder",
+      "division": "Content",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "No comparable historical page-performance periods were retrieved, so content decay cannot be diagnosed.",
+      "next_action": "Compare complete periods with release dates and tracking changes.",
+      "missing_inputs": [
+        "Historical page performance"
+      ]
+    },
+    {
+      "id": 40,
+      "role": "CTA matcher",
+      "division": "Content",
+      "status": "partial",
+      "evidence": [
+        "E06",
+        "E09"
+      ],
+      "result": "Planner/tracker CTAs lead to vehicle onboarding, journal checklists disclose sign-in, and AI discloses account/provider needs. Desktop hero CTA is visible; account creation was not exercised.",
+      "next_action": "Verify signed-out-to-saved-task flows in an authorized product QA session.",
+      "missing_inputs": [
+        "End-to-end account activation test"
+      ]
+    },
+    {
+      "id": 41,
+      "role": "On-page auditor",
+      "division": "On-page",
+      "status": "done",
+      "evidence": [
+        "E02",
+        "E06"
+      ],
+      "result": "The sitemap-wide metadata checks and representative main-content review found appropriate distinct topics; directory fulfillment and translation remain the main on-page issues.",
+      "next_action": "Use the deduplicated findings rather than 100 duplicate action items.",
+      "missing_inputs": []
+    },
+    {
+      "id": 42,
+      "role": "Title writer",
+      "division": "On-page",
+      "status": "done",
+      "evidence": [
+        "E02",
+        "E14"
+      ],
+      "result": "Retain current purpose-specific planner, tracker and Sound Studio titles; all 115 sitemap titles are unique. No blanket title rewrite is needed.",
+      "next_action": "Measure query/snippet performance before changing accurate titles.",
+      "missing_inputs": []
+    },
+    {
+      "id": 43,
+      "role": "Meta description writer",
+      "division": "On-page",
+      "status": "done",
+      "evidence": [
+        "E02",
+        "E14"
+      ],
+      "result": "All 115 sitemap pages provide descriptions. Retain accurate current descriptions; an optional proof-focused draft is provided for later review.",
+      "next_action": "Keep product and account claims aligned with real behavior.",
+      "missing_inputs": []
+    },
+    {
+      "id": 44,
+      "role": "Heading structure fixer",
+      "division": "On-page",
+      "status": "done",
+      "evidence": [
+        "E02"
+      ],
+      "result": "Every sitemap page has exactly one H1 in source HTML. Representative H2/H3 sections organize real tasks; no numeric heading defect was demonstrated.",
+      "next_action": "Preserve semantic structure and recheck when templates change.",
+      "missing_inputs": []
+    },
+    {
+      "id": 45,
+      "role": "Schema generator",
+      "division": "On-page",
+      "status": "partial",
+      "evidence": [
+        "E02",
+        "E05",
+        "E12"
+      ],
+      "result": "Homepage JSON-LD parses as WebSite/Organization/SoftwareApplication; articles use BlogPosting with stable identities. Genuine app ratings/reviews are not supplied, so software rich-result eligibility is not claimed.",
+      "next_action": "Run external validators and add only real visible facts.",
+      "missing_inputs": [
+        "External vocabulary/rich-result validation"
+      ]
+    },
+    {
+      "id": 46,
+      "role": "Image optimiser",
+      "division": "On-page",
+      "status": "partial",
+      "evidence": [
+        "E02",
+        "E09"
+      ],
+      "result": "The hero's descriptive image has meaningful alt and high fetch priority; the paired comparison image is decorative. Responsive delivery is used; image bytes/CWV and all asset purposes were not measured.",
+      "next_action": "Measure selected image delivery on real viewports before tuning.",
+      "missing_inputs": [
+        "Asset-level delivery measurements and full image-purpose review"
+      ]
+    },
+    {
+      "id": 47,
+      "role": "Internal link adder",
+      "division": "On-page",
+      "status": "done",
+      "evidence": [
+        "E06",
+        "E14"
+      ],
+      "result": "Existing guides already link into planner/tracker/checklist workflows. Specific placements for the real owner example and editorial explanation are proposed in drafts.",
+      "next_action": "Add only the verified task-relevant placements after editorial review.",
+      "missing_inputs": []
+    },
+    {
+      "id": 48,
+      "role": "Above-fold auditor",
+      "division": "On-page",
+      "status": "partial",
+      "evidence": [
+        "E09"
+      ],
+      "result": "At 1363x936 the rendered hero shows the whole car, a clear primary CTA and supporting text with no observed horizontal overflow. Narrow viewport and fresh consent state were not tested.",
+      "next_action": "Repeat the first-view check on mobile and with a new consent state.",
+      "missing_inputs": [
+        "Mobile and first-visit rendered views"
+      ]
+    },
+    {
+      "id": 49,
+      "role": "Featured snippet optimiser",
+      "division": "On-page",
+      "status": "done",
+      "evidence": [
+        "E14",
+        "E12"
+      ],
+      "result": "A concise factual answer to What is CapCar is drafted for reader clarity. No featured snippet or FAQ rich-result appearance is promised.",
+      "next_action": "Use only if it improves the page, then measure real search outcomes.",
+      "missing_inputs": []
+    },
+    {
+      "id": 50,
+      "role": "Page experience checker",
+      "division": "On-page",
+      "status": "partial",
+      "evidence": [
+        "E09"
+      ],
+      "result": "Desktop hero renders and keyboard Home/ArrowRight move the comparison slider; no site-origin error appeared in the sampled log, while extension-origin errors were excluded. Broader app flows were not tested.",
+      "next_action": "Test mobile, forms and key saved-record journeys separately.",
+      "missing_inputs": [
+        "Broader rendered task sample"
+      ]
+    },
+    {
+      "id": 51,
+      "role": "E-E-A-T auditor",
+      "division": "E-E-A-T & authority",
+      "status": "done",
+      "evidence": [
+        "E06",
+        "E14"
+      ],
+      "result": "Publisher/byline and product caveats are present. Missing real owner evidence and a clearer editorial process limit demonstrated experience; this is a qualitative review, not an E-E-A-T score.",
+      "next_action": "Publish accountable editorial methods and real examples when available.",
+      "missing_inputs": []
+    },
+    {
+      "id": 52,
+      "role": "Author page builder",
+      "division": "E-E-A-T & authority",
+      "status": "done",
+      "evidence": [
+        "E14"
+      ],
+      "result": "A truthful editorial/about outline covers operator role, beta scope, research vs owner reports, review/corrections process and verified links, with no invented credentials.",
+      "next_action": "Confirm editorial responsibilities before creating or expanding the page.",
+      "missing_inputs": []
+    },
+    {
+      "id": 53,
+      "role": "First-hand evidence finder",
+      "division": "E-E-A-T & authority",
+      "status": "done",
+      "evidence": [
+        "E06",
+        "E14"
+      ],
+      "result": "No private records were accessed. Public examples are labeled illustrative; the next evidence should be a consented redacted record from actual use.",
+      "next_action": "Gather the listed date/mileage/cost/photo/source details from a real job.",
+      "missing_inputs": []
+    },
+    {
+      "id": 54,
+      "role": "Citation checker",
+      "division": "E-E-A-T & authority",
+      "status": "partial",
+      "evidence": [
+        "E06"
+      ],
+      "result": "The trip article cites primary tourism/city/operator pages and labels planning assumptions, but those live venue claims were not independently revalidated in this run.",
+      "next_action": "Revisit each linked operator before changing visitor advice.",
+      "missing_inputs": [
+        "Live revalidation of travel source claims"
+      ]
+    },
+    {
+      "id": 55,
+      "role": "Brand mention finder",
+      "division": "E-E-A-T & authority",
+      "status": "partial",
+      "evidence": [
+        "E11"
+      ],
+      "result": "The bounded public search sample chiefly surfaced a different CapCar business. No independently verified endorsement of capcar.dev was established by that sample.",
+      "next_action": "Use exact-domain/product qualifiers and inspect any candidate mentions.",
+      "missing_inputs": [
+        "Comprehensive mention sample"
+      ]
+    },
+    {
+      "id": 56,
+      "role": "Trust signal auditor",
+      "division": "E-E-A-T & authority",
+      "status": "done",
+      "evidence": [
+        "E06"
+      ],
+      "result": "Imprint/contact, privacy, terms and explicit beta/fitment/provider limitations are public. Their presence is not a legal compliance certification.",
+      "next_action": "Keep offer and operator context consistent; improve editorial explanation.",
+      "missing_inputs": []
+    },
+    {
+      "id": 57,
+      "role": "Review presence checker",
+      "division": "E-E-A-T & authority",
+      "status": "partial",
+      "evidence": [
+        "E02",
+        "E11"
+      ],
+      "result": "No genuine app review dataset or visible app rating was supplied. Reviews of the French used-car business are unrelated and cannot support CapCar app schema.",
+      "next_action": "Collect attributable feedback about this app; never reuse another entity's stars.",
+      "missing_inputs": [
+        "Verified CapCar app review evidence"
+      ]
+    },
+    {
+      "id": 58,
+      "role": "YMYL checker",
+      "division": "E-E-A-T & authority",
+      "status": "partial",
+      "evidence": [
+        "E06"
+      ],
+      "result": "Inspected planning articles avoid torque/repair prescriptions and distinguish owner records from certification. The full vehicle-guide catalog was not clinically/legally or technically certified.",
+      "next_action": "Require source/qualified review for safety-critical repair instructions.",
+      "missing_inputs": [
+        "Guide-by-guide accountable technical review"
+      ]
+    },
+    {
+      "id": 59,
+      "role": "About page auditor",
+      "division": "E-E-A-T & authority",
+      "status": "done",
+      "evidence": [
+        "E06",
+        "E14"
+      ],
+      "result": "Platform explains workflow and imprint identifies the operator; an editorial-method explanation and real use evidence would add useful about context without requiring a new generic page.",
+      "next_action": "Expand the appropriate existing context page using confirmed facts.",
+      "missing_inputs": []
+    },
+    {
+      "id": 60,
+      "role": "Authority gap reader",
+      "division": "E-E-A-T & authority",
+      "status": "partial",
+      "evidence": [
+        "E06",
+        "E11"
+      ],
+      "result": "First-hand proof and brand disambiguation are observable opportunities. No backlink authority score or task-matched competitive authority comparison was available.",
+      "next_action": "Build attributable original evidence, then compare relevant sources.",
+      "missing_inputs": [
+        "Comparable competitor authority evidence"
+      ]
+    },
+    {
+      "id": 61,
+      "role": "Backlink profile reader",
+      "division": "Links",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "No backlink provider/export was available for CapCar.",
+      "next_action": "Supply a dated referring-domain/link export.",
+      "missing_inputs": [
+        "Backlink profile dataset"
+      ]
+    },
+    {
+      "id": 62,
+      "role": "Backlink gap finder",
+      "division": "Links",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "No comparable CapCar/competitor backlink datasets were available.",
+      "next_action": "Use one provider/date scope for a relevant gap review.",
+      "missing_inputs": [
+        "Comparable competitor backlink datasets"
+      ]
+    },
+    {
+      "id": 63,
+      "role": "Link opportunity qualifier",
+      "division": "Links",
+      "status": "partial",
+      "evidence": [
+        "E14"
+      ],
+      "result": "Opportunity criteria target real enthusiast/software audiences and a useful canonical landing page; no specific publisher placement was verified.",
+      "next_action": "Verify candidates and editorial relevance before outreach or submission.",
+      "missing_inputs": [
+        "Verified candidate publishers/pages"
+      ]
+    },
+    {
+      "id": 64,
+      "role": "Broken link finder",
+      "division": "Links",
+      "status": "partial",
+      "evidence": [
+        "E02",
+        "E03",
+        "E04"
+      ],
+      "result": "All sitemap destinations resolve; marketplace and verified-work samples also return 200. /faq returns 404 but observed FAQ links point to /#faq, so it is not an observed broken internal link.",
+      "next_action": "Complete the remaining account/action and external-target link sample.",
+      "missing_inputs": [
+        "Exhaustive linked-target checks"
+      ]
+    },
+    {
+      "id": 65,
+      "role": "Unlinked mention converter",
+      "division": "Links",
+      "status": "blocked",
+      "evidence": [
+        "E11"
+      ],
+      "result": "No verified unlinked mention of this CapCar app was identified, so there is no valid outreach target.",
+      "next_action": "Provide or verify an actual unlinked app mention.",
+      "missing_inputs": [
+        "Verified unlinked mention and appropriate publisher contact"
+      ]
+    },
+    {
+      "id": 66,
+      "role": "Digital PR angle finder",
+      "division": "Links",
+      "status": "done",
+      "evidence": [
+        "E14"
+      ],
+      "result": "Three evidence-led angles are drafted: planned-vs-actual owner costs, an accountable maintenance record, and a documented scenic plan. All require actual material before a case-study claim.",
+      "next_action": "Capture real evidence; no outreach was sent.",
+      "missing_inputs": []
+    },
+    {
+      "id": 67,
+      "role": "Internal equity router",
+      "division": "Links",
+      "status": "done",
+      "evidence": [
+        "E04",
+        "E14"
+      ],
+      "result": "Core English feature pages are one observed anchor hop from home; guides connect through the journal. Improve contextual proof links rather than claiming calculated PageRank.",
+      "next_action": "Add the specific article-to-feature placements where they help the task.",
+      "missing_inputs": []
+    },
+    {
+      "id": 68,
+      "role": "Competitor link velocity",
+      "division": "Links",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "No dated competitor backlink snapshots exist in the available evidence.",
+      "next_action": "Obtain comparable new/lost link history.",
+      "missing_inputs": [
+        "Competitor backlink time series"
+      ]
+    },
+    {
+      "id": 69,
+      "role": "Toxic link assessor",
+      "division": "Links",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "No backlink evidence or verified manual-action context supports a toxicity assessment.",
+      "next_action": "Review real link patterns first; do not create a disavow file.",
+      "missing_inputs": [
+        "Backlink evidence and any relevant manual-action context"
+      ]
+    },
+    {
+      "id": 70,
+      "role": "Link report writer",
+      "division": "Links",
+      "status": "partial",
+      "evidence": [
+        "E04",
+        "E14"
+      ],
+      "result": "The internal public graph and sampled HTTP targets are documented. External profile totals, link quality distribution and lost/new trends remain unknown.",
+      "next_action": "Add a dated backlink dataset for the external portion.",
+      "missing_inputs": [
+        "Backlink profile"
+      ]
+    },
+    {
+      "id": 71,
+      "role": "Citability scorer",
+      "division": "AI search & GEO",
+      "status": "done",
+      "evidence": [
+        "E06",
+        "E14"
+      ],
+      "result": "The reviewed pages give clear product boundaries and attributed planning advice; original evidence would improve answer usefulness. No numeric AI-citation probability is asserted.",
+      "next_action": "Add accountable proof and test real AI answer samples separately.",
+      "missing_inputs": []
+    },
+    {
+      "id": 72,
+      "role": "First-forty-words rewriter",
+      "division": "AI search & GEO",
+      "status": "done",
+      "evidence": [
+        "E14"
+      ],
+      "result": "A short alternative opening identifies CapCar as a digital garage for upgrades, budgets, maintenance and records; it is a reviewable draft, not an applied hero change.",
+      "next_action": "Review against current design/copy before any publication.",
+      "missing_inputs": []
+    },
+    {
+      "id": 73,
+      "role": "Prompt alignment checker",
+      "division": "AI search & GEO",
+      "status": "done",
+      "evidence": [
+        "E06",
+        "E14"
+      ],
+      "result": "The prompt truth table maps build budgets and maintenance history to real features, flags exact-fitment guarantees as unsupported, and states AI account/provider requirements.",
+      "next_action": "Keep public prompts within those supported boundaries.",
+      "missing_inputs": []
+    },
+    {
+      "id": 74,
+      "role": "AI crawler checker",
+      "division": "AI search & GEO",
+      "status": "partial",
+      "evidence": [
+        "E01",
+        "E12"
+      ],
+      "result": "Wildcard robots permits public paths with no explicit AI-user-agent deny in the fetched file. This does not test provider-specific CDN access, training policy or citations.",
+      "next_action": "Inspect provider-specific evidence only if needed; do not equate access with citation.",
+      "missing_inputs": [
+        "Provider-level crawl observations"
+      ]
+    },
+    {
+      "id": 75,
+      "role": "llms.txt builder",
+      "division": "AI search & GEO",
+      "status": "done",
+      "evidence": [
+        "E01",
+        "E12",
+        "E14"
+      ],
+      "result": "/llms.txt returns 404. An optional canonical-navigation draft is saved under docs, not published; Google says no special AI text file is required.",
+      "next_action": "Treat the draft as optional convenience, below indexing/content priorities.",
+      "missing_inputs": []
+    },
+    {
+      "id": 76,
+      "role": "Entity clarity checker",
+      "division": "AI search & GEO",
+      "status": "done",
+      "evidence": [
+        "E02",
+        "E11",
+        "E14"
+      ],
+      "result": "Schema and titles consistently identify a digital garage; a different same-named used-car business creates genuine entity ambiguity. This is not proof of the cause of any ranking position.",
+      "next_action": "Use CapCar Digital Garage / capcar.dev consistently on verified profiles.",
+      "missing_inputs": []
+    },
+    {
+      "id": 77,
+      "role": "Source attribution auditor",
+      "division": "AI search & GEO",
+      "status": "done",
+      "evidence": [
+        "E06"
+      ],
+      "result": "Inspected articles distinguish hypothetical costs and researched trips from completed work. Sources and editorial attribution are visible; no fabricated experience was found in that sample.",
+      "next_action": "Retain those labels when adding real owner examples.",
+      "missing_inputs": []
+    },
+    {
+      "id": 78,
+      "role": "AI share of voice",
+      "division": "AI search & GEO",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "No repeated, model/locale/prompt-controlled AI answer sample was collected.",
+      "next_action": "Define prompts, competitors, models and dates, then collect observable answers.",
+      "missing_inputs": [
+        "Reproducible AI answer/citation sample"
+      ]
+    },
+    {
+      "id": 79,
+      "role": "FAQ coverage checker",
+      "division": "AI search & GEO",
+      "status": "done",
+      "evidence": [
+        "E06",
+        "E09"
+      ],
+      "result": "Homepage FAQs cover identity, account needs, fitment, visualizer limitations, retailer checkout, privacy, unmodified cars and beta cost. FAQ navigation uses /#faq.",
+      "next_action": "Preserve useful answers and update actual availability changes.",
+      "missing_inputs": []
+    },
+    {
+      "id": 80,
+      "role": "GEO vs SEO reconciler",
+      "division": "AI search & GEO",
+      "status": "done",
+      "evidence": [
+        "E12",
+        "E14"
+      ],
+      "result": "The unified plan prioritizes discoverable useful pages, truthful schema, attributable examples and separate measurement of search/AI outcomes.",
+      "next_action": "Do not spend the first effort on speculative AI-only files or mass content.",
+      "missing_inputs": []
+    },
+    {
+      "id": 81,
+      "role": "GBP auditor",
+      "division": "Local & international",
+      "status": "not_applicable",
+      "evidence": [
+        "E06"
+      ],
+      "result": "CapCar is a software app, with no confirmed eligible owner-operated local workshop/GBP supplied. Directory listings do not make the app a local repair business.",
+      "next_action": "Apply a GBP audit only to a separately identified eligible workshop.",
+      "missing_inputs": []
+    },
+    {
+      "id": 82,
+      "role": "NAP consistency checker",
+      "division": "Local & international",
+      "status": "not_applicable",
+      "evidence": [
+        "E06"
+      ],
+      "result": "No local-business citation campaign for a confirmed workshop is in scope. The app's public operator information must not be mixed with specialist profiles.",
+      "next_action": "Do not invent a phone/address citation footprint for local rankings.",
+      "missing_inputs": []
+    },
+    {
+      "id": 83,
+      "role": "Local pack analyser",
+      "division": "Local & international",
+      "status": "not_applicable",
+      "evidence": [
+        "E06"
+      ],
+      "result": "No eligible local workshop, location and local-pack query set was specified; CapCar's directory is a different product task.",
+      "next_action": "Use a local-pack audit only for a defined workshop/location.",
+      "missing_inputs": []
+    },
+    {
+      "id": 84,
+      "role": "Review velocity tracker",
+      "division": "Local & international",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "No timestamped verified app-review series was supplied.",
+      "next_action": "Provide attributable reviews with dates before calculating velocity.",
+      "missing_inputs": [
+        "Timestamped genuine review dataset"
+      ]
+    },
+    {
+      "id": 85,
+      "role": "Service area mapper",
+      "division": "Local & international",
+      "status": "not_applicable",
+      "evidence": [
+        "E06"
+      ],
+      "result": "A multilingual enthusiast app and its Roadbook destinations do not constitute local repair service areas.",
+      "next_action": "Avoid templated city service pages without genuine distinct service coverage.",
+      "missing_inputs": []
+    },
+    {
+      "id": 86,
+      "role": "Multi-location auditor",
+      "division": "Local & international",
+      "status": "not_applicable",
+      "evidence": [
+        "E06"
+      ],
+      "result": "No CapCar physical branch network is established by the evidence.",
+      "next_action": "Use this role only if genuine separate business locations are supplied.",
+      "missing_inputs": []
+    },
+    {
+      "id": 87,
+      "role": "Hreflang auditor",
+      "division": "Local & international",
+      "status": "done",
+      "evidence": [
+        "E01",
+        "E02",
+        "E04"
+      ],
+      "result": "All 115 pages expose the five language alternates plus x-default; target responses and reciprocal annotations agree in the captured graph.",
+      "next_action": "Retest after URL-policy changes; annotation quality is separate from translation.",
+      "missing_inputs": []
+    },
+    {
+      "id": 88,
+      "role": "International structure reader",
+      "division": "Local & international",
+      "status": "done",
+      "evidence": [
+        "E03",
+        "E05"
+      ],
+      "result": "English public features prefer unprefixed URLs via 308 aliases; journal keeps /en/journal. Other languages use explicit prefixes; /journal resolves via 307.",
+      "next_action": "Keep this intentional distinction consistent in navigation and sitemap.",
+      "missing_inputs": []
+    },
+    {
+      "id": 89,
+      "role": "Translation quality checker",
+      "division": "Local & international",
+      "status": "partial",
+      "evidence": [
+        "E07"
+      ],
+      "result": "German Sound Studio contains Choose a common start point for quick A/B listening and Original preserved; MP3 copy provided for playback. Proper car/model names were not treated as translation defects.",
+      "next_action": "Translate those instruction/credit-explanation strings and review other locales.",
+      "missing_inputs": [
+        "Comprehensive target-language review"
+      ]
+    },
+    {
+      "id": 90,
+      "role": "Currency and format checker",
+      "division": "Local & international",
+      "status": "partial",
+      "evidence": [
+        "E06",
+        "E07"
+      ],
+      "result": "Reviewed English and German illustrative budgets use EUR and make assumptions clear. Technical record labels and the 150-recording library are not live market prices; all locale formatting was not exhaustively audited.",
+      "next_action": "Review numeric/date formatting in each language, preserving factual currency.",
+      "missing_inputs": [
+        "Exhaustive locale format sample"
+      ]
+    },
+    {
+      "id": 91,
+      "role": "SEO diagnostician",
+      "division": "Reporting & ops",
+      "status": "done",
+      "evidence": [
+        "E02",
+        "E11",
+        "E14"
+      ],
+      "result": "Core public technical controls are present; stronger proof, directory availability, localized instructions and brand distinction are actionable. Actual Google coverage/rank causes remain unknown.",
+      "next_action": "Resolve evidence gaps before attributing poor discovery to a technical blocker.",
+      "missing_inputs": []
+    },
+    {
+      "id": 92,
+      "role": "Baseline recorder",
+      "division": "Reporting & ops",
+      "status": "done",
+      "evidence": [
+        "E01",
+        "E02",
+        "E03",
+        "E04",
+        "E09"
+      ],
+      "result": "A dated public HTTP/graph baseline plus a separate desktop observation is saved, tied to the reviewed source commit. Cookies, auth material and private records are excluded.",
+      "next_action": "Capture a matching baseline after approved changes.",
+      "missing_inputs": []
+    },
+    {
+      "id": 93,
+      "role": "Change logger",
+      "division": "Reporting & ops",
+      "status": "done",
+      "evidence": [
+        "E14"
+      ],
+      "result": "The change log contains new skill instructions, a verifier, an AGENTS.md discovery pointer and audit documents/baseline/drafts. No product code, dependencies or global Codex config was edited.",
+      "next_action": "Review the PR scope and run local Codex discovery after checkout.",
+      "missing_inputs": []
+    },
+    {
+      "id": 94,
+      "role": "SEO drift watcher",
+      "division": "Reporting & ops",
+      "status": "partial",
+      "evidence": [
+        "E13",
+        "E02",
+        "E09"
+      ],
+      "result": "Current 115-URL structure matches the prior narrative; empty specialist supply and German text leftovers remain observable. Master advanced to 7b7675f with the new hero during this run; the later browser and fresh HTTP agree with that source, so this is capture/deployment drift.",
+      "next_action": "Use pinned deployments and comparable JSON for subsequent drift checks.",
+      "missing_inputs": [
+        "Comparable prior machine-readable snapshot"
+      ]
+    },
+    {
+      "id": 95,
+      "role": "Ranking reporter",
+      "division": "Reporting & ops",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "No authorized query/position export or controlled ranking sample was retrieved. Generic search results are not a ranking report.",
+      "next_action": "Connect Search Console or supply a dated country/device query report.",
+      "missing_inputs": [
+        "Ranking/query metrics"
+      ]
+    },
+    {
+      "id": 96,
+      "role": "Traffic attributer",
+      "division": "Reporting & ops",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "Public pages disclose PostHog consent, but no authorized acquisition/conversion report was retrieved; no organic traffic attribution can be calculated.",
+      "next_action": "Provide consent-aware PostHog or equivalent acquisition/event exports.",
+      "missing_inputs": [
+        "Analytics acquisition and activation data"
+      ]
+    },
+    {
+      "id": 97,
+      "role": "Forecast builder",
+      "division": "Reporting & ops",
+      "status": "blocked",
+      "evidence": [
+        "E10"
+      ],
+      "result": "No adequate historical demand/click/activation baseline supports a numerical forecast.",
+      "next_action": "Establish a measured baseline before scenario modeling.",
+      "missing_inputs": [
+        "Historical search and activation metrics"
+      ]
+    },
+    {
+      "id": 98,
+      "role": "Weekly SEO report",
+      "division": "Reporting & ops",
+      "status": "partial",
+      "evidence": [
+        "E14"
+      ],
+      "result": "A one-off weekly work snapshot is included; matching prior-week traffic, ranking and conversion data is absent. No recurring job is created.",
+      "next_action": "Add complete comparable periods when account data becomes available.",
+      "missing_inputs": [
+        "Comparable weekly performance periods"
+      ]
+    },
+    {
+      "id": 99,
+      "role": "Quarterly roadmap",
+      "division": "Reporting & ops",
+      "status": "done",
+      "evidence": [
+        "E14"
+      ],
+      "result": "A 90-day roadmap sequences measurement and current defects, real owner proof and localized quality, then evidence-led distribution and iteration.",
+      "next_action": "Assign the listed owner roles and assess observable outcomes at each stage.",
+      "missing_inputs": []
+    },
+    {
+      "id": 100,
+      "role": "Client SEO report",
+      "division": "Reporting & ops",
+      "status": "done",
+      "evidence": [
+        "E14"
+      ],
+      "result": "The report, complete 100-role disposition ledger, public baseline and prioritized backlog are produced. Blocked checks are explicitly separated from completed scopes.",
+      "next_action": "Review the PR and complete the local Mac discovery check.",
+      "missing_inputs": []
+    }
+  ]
+}
