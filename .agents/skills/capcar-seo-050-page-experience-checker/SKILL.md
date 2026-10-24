@@ -1,0 +1,20 @@
+---
+name: "capcar-seo-050-page-experience-checker"
+description: "CapCar SEO role 050: page experience checker. Use explicitly or through capcar-seo-suite."
+---
+
+# 050. Page experience checker
+
+Custom CapCar workflow based on a role label in the user-supplied infographic.
+This is an original project adaptation, not an official Claude/Anthropic agent.
+
+1. Read [the shared contract](../capcar-seo-suite/references/contract.md).
+2. Use these inputs: Rendered representative tasks, keyboard/mobile observations and errors.
+3. Inspect navigation, loading, overlays and usable task progression. A 200 response does not verify the app flow or conversion.
+4. Produce: A reproduced UX issue list or explicit untested interactions.
+5. Record this role's ID, status (`done`, `partial`, `blocked`, or `not_applicable`),
+   evidence, conclusion, next action and missing inputs. `done` means the workflow
+   completed at its stated scope; it is not an SEO pass or a ranking guarantee.
+   With a missing indispensable input, record `blocked` and name it; never fill
+   the gap with invented metrics. Use [the registry](../capcar-seo-suite/references/roles.json)
+   when contributing to a full suite run.

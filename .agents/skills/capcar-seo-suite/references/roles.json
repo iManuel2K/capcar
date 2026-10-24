@@ -1,0 +1,706 @@
+{
+  "version": 1,
+  "origin": "Custom CapCar adaptations of labels from the user-supplied 100 Claude Agents for SEO infographic; no official installable source verified.",
+  "roles": [
+    {
+      "id": 1,
+      "title": "Technical auditor",
+      "division": "Technical SEO",
+      "skill": "capcar-seo-001-technical-auditor",
+      "path": ".agents/skills/capcar-seo-001-technical-auditor/SKILL.md"
+    },
+    {
+      "id": 2,
+      "title": "Core Web Vitals reader",
+      "division": "Technical SEO",
+      "skill": "capcar-seo-002-core-web-vitals-reader",
+      "path": ".agents/skills/capcar-seo-002-core-web-vitals-reader/SKILL.md"
+    },
+    {
+      "id": 3,
+      "title": "Redirect chain finder",
+      "division": "Technical SEO",
+      "skill": "capcar-seo-003-redirect-chain-finder",
+      "path": ".agents/skills/capcar-seo-003-redirect-chain-finder/SKILL.md"
+    },
+    {
+      "id": 4,
+      "title": "Canonical checker",
+      "division": "Technical SEO",
+      "skill": "capcar-seo-004-canonical-checker",
+      "path": ".agents/skills/capcar-seo-004-canonical-checker/SKILL.md"
+    },
+    {
+      "id": 5,
+      "title": "JavaScript rendering checker",
+      "division": "Technical SEO",
+      "skill": "capcar-seo-005-javascript-rendering-checker",
+      "path": ".agents/skills/capcar-seo-005-javascript-rendering-checker/SKILL.md"
+    },
+    {
+      "id": 6,
+      "title": "Mobile parity checker",
+      "division": "Technical SEO",
+      "skill": "capcar-seo-006-mobile-parity-checker",
+      "path": ".agents/skills/capcar-seo-006-mobile-parity-checker/SKILL.md"
+    },
+    {
+      "id": 7,
+      "title": "HTTPS and security checker",
+      "division": "Technical SEO",
+      "skill": "capcar-seo-007-https-and-security-checker",
+      "path": ".agents/skills/capcar-seo-007-https-and-security-checker/SKILL.md"
+    },
+    {
+      "id": 8,
+      "title": "Pagination auditor",
+      "division": "Technical SEO",
+      "skill": "capcar-seo-008-pagination-auditor",
+      "path": ".agents/skills/capcar-seo-008-pagination-auditor/SKILL.md"
+    },
+    {
+      "id": 9,
+      "title": "Site speed prioritiser",
+      "division": "Technical SEO",
+      "skill": "capcar-seo-009-site-speed-prioritiser",
+      "path": ".agents/skills/capcar-seo-009-site-speed-prioritiser/SKILL.md"
+    },
+    {
+      "id": 10,
+      "title": "Technical diff watcher",
+      "division": "Technical SEO",
+      "skill": "capcar-seo-010-technical-diff-watcher",
+      "path": ".agents/skills/capcar-seo-010-technical-diff-watcher/SKILL.md"
+    },
+    {
+      "id": 11,
+      "title": "Index coverage reader",
+      "division": "Crawl & index",
+      "skill": "capcar-seo-011-index-coverage-reader",
+      "path": ".agents/skills/capcar-seo-011-index-coverage-reader/SKILL.md"
+    },
+    {
+      "id": 12,
+      "title": "Sitemap auditor",
+      "division": "Crawl & index",
+      "skill": "capcar-seo-012-sitemap-auditor",
+      "path": ".agents/skills/capcar-seo-012-sitemap-auditor/SKILL.md"
+    },
+    {
+      "id": 13,
+      "title": "Robots checker",
+      "division": "Crawl & index",
+      "skill": "capcar-seo-013-robots-checker",
+      "path": ".agents/skills/capcar-seo-013-robots-checker/SKILL.md"
+    },
+    {
+      "id": 14,
+      "title": "Crawl budget analyser",
+      "division": "Crawl & index",
+      "skill": "capcar-seo-014-crawl-budget-analyser",
+      "path": ".agents/skills/capcar-seo-014-crawl-budget-analyser/SKILL.md"
+    },
+    {
+      "id": 15,
+      "title": "Orphan page finder",
+      "division": "Crawl & index",
+      "skill": "capcar-seo-015-orphan-page-finder",
+      "path": ".agents/skills/capcar-seo-015-orphan-page-finder/SKILL.md"
+    },
+    {
+      "id": 16,
+      "title": "Duplicate content finder",
+      "division": "Crawl & index",
+      "skill": "capcar-seo-016-duplicate-content-finder",
+      "path": ".agents/skills/capcar-seo-016-duplicate-content-finder/SKILL.md"
+    },
+    {
+      "id": 17,
+      "title": "Parameter handler",
+      "division": "Crawl & index",
+      "skill": "capcar-seo-017-parameter-handler",
+      "path": ".agents/skills/capcar-seo-017-parameter-handler/SKILL.md"
+    },
+    {
+      "id": 18,
+      "title": "Internal link mapper",
+      "division": "Crawl & index",
+      "skill": "capcar-seo-018-internal-link-mapper",
+      "path": ".agents/skills/capcar-seo-018-internal-link-mapper/SKILL.md"
+    },
+    {
+      "id": 19,
+      "title": "Click depth auditor",
+      "division": "Crawl & index",
+      "skill": "capcar-seo-019-click-depth-auditor",
+      "path": ".agents/skills/capcar-seo-019-click-depth-auditor/SKILL.md"
+    },
+    {
+      "id": 20,
+      "title": "Index bloat finder",
+      "division": "Crawl & index",
+      "skill": "capcar-seo-020-index-bloat-finder",
+      "path": ".agents/skills/capcar-seo-020-index-bloat-finder/SKILL.md"
+    },
+    {
+      "id": 21,
+      "title": "Keyword clusterer",
+      "division": "Keywords",
+      "skill": "capcar-seo-021-keyword-clusterer",
+      "path": ".agents/skills/capcar-seo-021-keyword-clusterer/SKILL.md"
+    },
+    {
+      "id": 22,
+      "title": "Intent classifier",
+      "division": "Keywords",
+      "skill": "capcar-seo-022-intent-classifier",
+      "path": ".agents/skills/capcar-seo-022-intent-classifier/SKILL.md"
+    },
+    {
+      "id": 23,
+      "title": "Page type matcher",
+      "division": "Keywords",
+      "skill": "capcar-seo-023-page-type-matcher",
+      "path": ".agents/skills/capcar-seo-023-page-type-matcher/SKILL.md"
+    },
+    {
+      "id": 24,
+      "title": "Longtail miner",
+      "division": "Keywords",
+      "skill": "capcar-seo-024-longtail-miner",
+      "path": ".agents/skills/capcar-seo-024-longtail-miner/SKILL.md"
+    },
+    {
+      "id": 25,
+      "title": "Competitor gap analyser",
+      "division": "Keywords",
+      "skill": "capcar-seo-025-competitor-gap-analyser",
+      "path": ".agents/skills/capcar-seo-025-competitor-gap-analyser/SKILL.md"
+    },
+    {
+      "id": 26,
+      "title": "Cannibalisation finder",
+      "division": "Keywords",
+      "skill": "capcar-seo-026-cannibalisation-finder",
+      "path": ".agents/skills/capcar-seo-026-cannibalisation-finder/SKILL.md"
+    },
+    {
+      "id": 27,
+      "title": "Seasonality reader",
+      "division": "Keywords",
+      "skill": "capcar-seo-027-seasonality-reader",
+      "path": ".agents/skills/capcar-seo-027-seasonality-reader/SKILL.md"
+    },
+    {
+      "id": 28,
+      "title": "Brand vs non-brand splitter",
+      "division": "Keywords",
+      "skill": "capcar-seo-028-brand-vs-non-brand-splitter",
+      "path": ".agents/skills/capcar-seo-028-brand-vs-non-brand-splitter/SKILL.md"
+    },
+    {
+      "id": 29,
+      "title": "Zero-click assessor",
+      "division": "Keywords",
+      "skill": "capcar-seo-029-zero-click-assessor",
+      "path": ".agents/skills/capcar-seo-029-zero-click-assessor/SKILL.md"
+    },
+    {
+      "id": 30,
+      "title": "Priority scorer",
+      "division": "Keywords",
+      "skill": "capcar-seo-030-priority-scorer",
+      "path": ".agents/skills/capcar-seo-030-priority-scorer/SKILL.md"
+    },
+    {
+      "id": 31,
+      "title": "Content brief writer",
+      "division": "Content",
+      "skill": "capcar-seo-031-content-brief-writer",
+      "path": ".agents/skills/capcar-seo-031-content-brief-writer/SKILL.md"
+    },
+    {
+      "id": 32,
+      "title": "Content verdict giver",
+      "division": "Content",
+      "skill": "capcar-seo-032-content-verdict-giver",
+      "path": ".agents/skills/capcar-seo-032-content-verdict-giver/SKILL.md"
+    },
+    {
+      "id": 33,
+      "title": "SERP gap finder",
+      "division": "Content",
+      "skill": "capcar-seo-033-serp-gap-finder",
+      "path": ".agents/skills/capcar-seo-033-serp-gap-finder/SKILL.md"
+    },
+    {
+      "id": 34,
+      "title": "Content refresher",
+      "division": "Content",
+      "skill": "capcar-seo-034-content-refresher",
+      "path": ".agents/skills/capcar-seo-034-content-refresher/SKILL.md"
+    },
+    {
+      "id": 35,
+      "title": "Anti-slop editor",
+      "division": "Content",
+      "skill": "capcar-seo-035-anti-slop-editor",
+      "path": ".agents/skills/capcar-seo-035-anti-slop-editor/SKILL.md"
+    },
+    {
+      "id": 36,
+      "title": "Originality adder",
+      "division": "Content",
+      "skill": "capcar-seo-036-originality-adder",
+      "path": ".agents/skills/capcar-seo-036-originality-adder/SKILL.md"
+    },
+    {
+      "id": 37,
+      "title": "Topic cluster planner",
+      "division": "Content",
+      "skill": "capcar-seo-037-topic-cluster-planner",
+      "path": ".agents/skills/capcar-seo-037-topic-cluster-planner/SKILL.md"
+    },
+    {
+      "id": 38,
+      "title": "Readability checker",
+      "division": "Content",
+      "skill": "capcar-seo-038-readability-checker",
+      "path": ".agents/skills/capcar-seo-038-readability-checker/SKILL.md"
+    },
+    {
+      "id": 39,
+      "title": "Content decay finder",
+      "division": "Content",
+      "skill": "capcar-seo-039-content-decay-finder",
+      "path": ".agents/skills/capcar-seo-039-content-decay-finder/SKILL.md"
+    },
+    {
+      "id": 40,
+      "title": "CTA matcher",
+      "division": "Content",
+      "skill": "capcar-seo-040-cta-matcher",
+      "path": ".agents/skills/capcar-seo-040-cta-matcher/SKILL.md"
+    },
+    {
+      "id": 41,
+      "title": "On-page auditor",
+      "division": "On-page",
+      "skill": "capcar-seo-041-on-page-auditor",
+      "path": ".agents/skills/capcar-seo-041-on-page-auditor/SKILL.md"
+    },
+    {
+      "id": 42,
+      "title": "Title writer",
+      "division": "On-page",
+      "skill": "capcar-seo-042-title-writer",
+      "path": ".agents/skills/capcar-seo-042-title-writer/SKILL.md"
+    },
+    {
+      "id": 43,
+      "title": "Meta description writer",
+      "division": "On-page",
+      "skill": "capcar-seo-043-meta-description-writer",
+      "path": ".agents/skills/capcar-seo-043-meta-description-writer/SKILL.md"
+    },
+    {
+      "id": 44,
+      "title": "Heading structure fixer",
+      "division": "On-page",
+      "skill": "capcar-seo-044-heading-structure-fixer",
+      "path": ".agents/skills/capcar-seo-044-heading-structure-fixer/SKILL.md"
+    },
+    {
+      "id": 45,
+      "title": "Schema generator",
+      "division": "On-page",
+      "skill": "capcar-seo-045-schema-generator",
+      "path": ".agents/skills/capcar-seo-045-schema-generator/SKILL.md"
+    },
+    {
+      "id": 46,
+      "title": "Image optimiser",
+      "division": "On-page",
+      "skill": "capcar-seo-046-image-optimiser",
+      "path": ".agents/skills/capcar-seo-046-image-optimiser/SKILL.md"
+    },
+    {
+      "id": 47,
+      "title": "Internal link adder",
+      "division": "On-page",
+      "skill": "capcar-seo-047-internal-link-adder",
+      "path": ".agents/skills/capcar-seo-047-internal-link-adder/SKILL.md"
+    },
+    {
+      "id": 48,
+      "title": "Above-fold auditor",
+      "division": "On-page",
+      "skill": "capcar-seo-048-above-fold-auditor",
+      "path": ".agents/skills/capcar-seo-048-above-fold-auditor/SKILL.md"
+    },
+    {
+      "id": 49,
+      "title": "Featured snippet optimiser",
+      "division": "On-page",
+      "skill": "capcar-seo-049-featured-snippet-optimiser",
+      "path": ".agents/skills/capcar-seo-049-featured-snippet-optimiser/SKILL.md"
+    },
+    {
+      "id": 50,
+      "title": "Page experience checker",
+      "division": "On-page",
+      "skill": "capcar-seo-050-page-experience-checker",
+      "path": ".agents/skills/capcar-seo-050-page-experience-checker/SKILL.md"
+    },
+    {
+      "id": 51,
+      "title": "E-E-A-T auditor",
+      "division": "E-E-A-T & authority",
+      "skill": "capcar-seo-051-e-e-a-t-auditor",
+      "path": ".agents/skills/capcar-seo-051-e-e-a-t-auditor/SKILL.md"
+    },
+    {
+      "id": 52,
+      "title": "Author page builder",
+      "division": "E-E-A-T & authority",
+      "skill": "capcar-seo-052-author-page-builder",
+      "path": ".agents/skills/capcar-seo-052-author-page-builder/SKILL.md"
+    },
+    {
+      "id": 53,
+      "title": "First-hand evidence finder",
+      "division": "E-E-A-T & authority",
+      "skill": "capcar-seo-053-first-hand-evidence-finder",
+      "path": ".agents/skills/capcar-seo-053-first-hand-evidence-finder/SKILL.md"
+    },
+    {
+      "id": 54,
+      "title": "Citation checker",
+      "division": "E-E-A-T & authority",
+      "skill": "capcar-seo-054-citation-checker",
+      "path": ".agents/skills/capcar-seo-054-citation-checker/SKILL.md"
+    },
+    {
+      "id": 55,
+      "title": "Brand mention finder",
+      "division": "E-E-A-T & authority",
+      "skill": "capcar-seo-055-brand-mention-finder",
+      "path": ".agents/skills/capcar-seo-055-brand-mention-finder/SKILL.md"
+    },
+    {
+      "id": 56,
+      "title": "Trust signal auditor",
+      "division": "E-E-A-T & authority",
+      "skill": "capcar-seo-056-trust-signal-auditor",
+      "path": ".agents/skills/capcar-seo-056-trust-signal-auditor/SKILL.md"
+    },
+    {
+      "id": 57,
+      "title": "Review presence checker",
+      "division": "E-E-A-T & authority",
+      "skill": "capcar-seo-057-review-presence-checker",
+      "path": ".agents/skills/capcar-seo-057-review-presence-checker/SKILL.md"
+    },
+    {
+      "id": 58,
+      "title": "YMYL checker",
+      "division": "E-E-A-T & authority",
+      "skill": "capcar-seo-058-ymyl-checker",
+      "path": ".agents/skills/capcar-seo-058-ymyl-checker/SKILL.md"
+    },
+    {
+      "id": 59,
+      "title": "About page auditor",
+      "division": "E-E-A-T & authority",
+      "skill": "capcar-seo-059-about-page-auditor",
+      "path": ".agents/skills/capcar-seo-059-about-page-auditor/SKILL.md"
+    },
+    {
+      "id": 60,
+      "title": "Authority gap reader",
+      "division": "E-E-A-T & authority",
+      "skill": "capcar-seo-060-authority-gap-reader",
+      "path": ".agents/skills/capcar-seo-060-authority-gap-reader/SKILL.md"
+    },
+    {
+      "id": 61,
+      "title": "Backlink profile reader",
+      "division": "Links",
+      "skill": "capcar-seo-061-backlink-profile-reader",
+      "path": ".agents/skills/capcar-seo-061-backlink-profile-reader/SKILL.md"
+    },
+    {
+      "id": 62,
+      "title": "Backlink gap finder",
+      "division": "Links",
+      "skill": "capcar-seo-062-backlink-gap-finder",
+      "path": ".agents/skills/capcar-seo-062-backlink-gap-finder/SKILL.md"
+    },
+    {
+      "id": 63,
+      "title": "Link opportunity qualifier",
+      "division": "Links",
+      "skill": "capcar-seo-063-link-opportunity-qualifier",
+      "path": ".agents/skills/capcar-seo-063-link-opportunity-qualifier/SKILL.md"
+    },
+    {
+      "id": 64,
+      "title": "Broken link finder",
+      "division": "Links",
+      "skill": "capcar-seo-064-broken-link-finder",
+      "path": ".agents/skills/capcar-seo-064-broken-link-finder/SKILL.md"
+    },
+    {
+      "id": 65,
+      "title": "Unlinked mention converter",
+      "division": "Links",
+      "skill": "capcar-seo-065-unlinked-mention-converter",
+      "path": ".agents/skills/capcar-seo-065-unlinked-mention-converter/SKILL.md"
+    },
+    {
+      "id": 66,
+      "title": "Digital PR angle finder",
+      "division": "Links",
+      "skill": "capcar-seo-066-digital-pr-angle-finder",
+      "path": ".agents/skills/capcar-seo-066-digital-pr-angle-finder/SKILL.md"
+    },
+    {
+      "id": 67,
+      "title": "Internal equity router",
+      "division": "Links",
+      "skill": "capcar-seo-067-internal-equity-router",
+      "path": ".agents/skills/capcar-seo-067-internal-equity-router/SKILL.md"
+    },
+    {
+      "id": 68,
+      "title": "Competitor link velocity",
+      "division": "Links",
+      "skill": "capcar-seo-068-competitor-link-velocity",
+      "path": ".agents/skills/capcar-seo-068-competitor-link-velocity/SKILL.md"
+    },
+    {
+      "id": 69,
+      "title": "Toxic link assessor",
+      "division": "Links",
+      "skill": "capcar-seo-069-toxic-link-assessor",
+      "path": ".agents/skills/capcar-seo-069-toxic-link-assessor/SKILL.md"
+    },
+    {
+      "id": 70,
+      "title": "Link report writer",
+      "division": "Links",
+      "skill": "capcar-seo-070-link-report-writer",
+      "path": ".agents/skills/capcar-seo-070-link-report-writer/SKILL.md"
+    },
+    {
+      "id": 71,
+      "title": "Citability scorer",
+      "division": "AI search & GEO",
+      "skill": "capcar-seo-071-citability-scorer",
+      "path": ".agents/skills/capcar-seo-071-citability-scorer/SKILL.md"
+    },
+    {
+      "id": 72,
+      "title": "First-forty-words rewriter",
+      "division": "AI search & GEO",
+      "skill": "capcar-seo-072-first-forty-words-rewriter",
+      "path": ".agents/skills/capcar-seo-072-first-forty-words-rewriter/SKILL.md"
+    },
+    {
+      "id": 73,
+      "title": "Prompt alignment checker",
+      "division": "AI search & GEO",
+      "skill": "capcar-seo-073-prompt-alignment-checker",
+      "path": ".agents/skills/capcar-seo-073-prompt-alignment-checker/SKILL.md"
+    },
+    {
+      "id": 74,
+      "title": "AI crawler checker",
+      "division": "AI search & GEO",
+      "skill": "capcar-seo-074-ai-crawler-checker",
+      "path": ".agents/skills/capcar-seo-074-ai-crawler-checker/SKILL.md"
+    },
+    {
+      "id": 75,
+      "title": "llms.txt builder",
+      "division": "AI search & GEO",
+      "skill": "capcar-seo-075-llms-txt-builder",
+      "path": ".agents/skills/capcar-seo-075-llms-txt-builder/SKILL.md"
+    },
+    {
+      "id": 76,
+      "title": "Entity clarity checker",
+      "division": "AI search & GEO",
+      "skill": "capcar-seo-076-entity-clarity-checker",
+      "path": ".agents/skills/capcar-seo-076-entity-clarity-checker/SKILL.md"
+    },
+    {
+      "id": 77,
+      "title": "Source attribution auditor",
+      "division": "AI search & GEO",
+      "skill": "capcar-seo-077-source-attribution-auditor",
+      "path": ".agents/skills/capcar-seo-077-source-attribution-auditor/SKILL.md"
+    },
+    {
+      "id": 78,
+      "title": "AI share of voice",
+      "division": "AI search & GEO",
+      "skill": "capcar-seo-078-ai-share-of-voice",
+      "path": ".agents/skills/capcar-seo-078-ai-share-of-voice/SKILL.md"
+    },
+    {
+      "id": 79,
+      "title": "FAQ coverage checker",
+      "division": "AI search & GEO",
+      "skill": "capcar-seo-079-faq-coverage-checker",
+      "path": ".agents/skills/capcar-seo-079-faq-coverage-checker/SKILL.md"
+    },
+    {
+      "id": 80,
+      "title": "GEO vs SEO reconciler",
+      "division": "AI search & GEO",
+      "skill": "capcar-seo-080-geo-vs-seo-reconciler",
+      "path": ".agents/skills/capcar-seo-080-geo-vs-seo-reconciler/SKILL.md"
+    },
+    {
+      "id": 81,
+      "title": "GBP auditor",
+      "division": "Local & international",
+      "skill": "capcar-seo-081-gbp-auditor",
+      "path": ".agents/skills/capcar-seo-081-gbp-auditor/SKILL.md"
+    },
+    {
+      "id": 82,
+      "title": "NAP consistency checker",
+      "division": "Local & international",
+      "skill": "capcar-seo-082-nap-consistency-checker",
+      "path": ".agents/skills/capcar-seo-082-nap-consistency-checker/SKILL.md"
+    },
+    {
+      "id": 83,
+      "title": "Local pack analyser",
+      "division": "Local & international",
+      "skill": "capcar-seo-083-local-pack-analyser",
+      "path": ".agents/skills/capcar-seo-083-local-pack-analyser/SKILL.md"
+    },
+    {
+      "id": 84,
+      "title": "Review velocity tracker",
+      "division": "Local & international",
+      "skill": "capcar-seo-084-review-velocity-tracker",
+      "path": ".agents/skills/capcar-seo-084-review-velocity-tracker/SKILL.md"
+    },
+    {
+      "id": 85,
+      "title": "Service area mapper",
+      "division": "Local & international",
+      "skill": "capcar-seo-085-service-area-mapper",
+      "path": ".agents/skills/capcar-seo-085-service-area-mapper/SKILL.md"
+    },
+    {
+      "id": 86,
+      "title": "Multi-location auditor",
+      "division": "Local & international",
+      "skill": "capcar-seo-086-multi-location-auditor",
+      "path": ".agents/skills/capcar-seo-086-multi-location-auditor/SKILL.md"
+    },
+    {
+      "id": 87,
+      "title": "Hreflang auditor",
+      "division": "Local & international",
+      "skill": "capcar-seo-087-hreflang-auditor",
+      "path": ".agents/skills/capcar-seo-087-hreflang-auditor/SKILL.md"
+    },
+    {
+      "id": 88,
+      "title": "International structure reader",
+      "division": "Local & international",
+      "skill": "capcar-seo-088-international-structure-reader",
+      "path": ".agents/skills/capcar-seo-088-international-structure-reader/SKILL.md"
+    },
+    {
+      "id": 89,
+      "title": "Translation quality checker",
+      "division": "Local & international",
+      "skill": "capcar-seo-089-translation-quality-checker",
+      "path": ".agents/skills/capcar-seo-089-translation-quality-checker/SKILL.md"
+    },
+    {
+      "id": 90,
+      "title": "Currency and format checker",
+      "division": "Local & international",
+      "skill": "capcar-seo-090-currency-and-format-checker",
+      "path": ".agents/skills/capcar-seo-090-currency-and-format-checker/SKILL.md"
+    },
+    {
+      "id": 91,
+      "title": "SEO diagnostician",
+      "division": "Reporting & ops",
+      "skill": "capcar-seo-091-seo-diagnostician",
+      "path": ".agents/skills/capcar-seo-091-seo-diagnostician/SKILL.md"
+    },
+    {
+      "id": 92,
+      "title": "Baseline recorder",
+      "division": "Reporting & ops",
+      "skill": "capcar-seo-092-baseline-recorder",
+      "path": ".agents/skills/capcar-seo-092-baseline-recorder/SKILL.md"
+    },
+    {
+      "id": 93,
+      "title": "Change logger",
+      "division": "Reporting & ops",
+      "skill": "capcar-seo-093-change-logger",
+      "path": ".agents/skills/capcar-seo-093-change-logger/SKILL.md"
+    },
+    {
+      "id": 94,
+      "title": "SEO drift watcher",
+      "division": "Reporting & ops",
+      "skill": "capcar-seo-094-seo-drift-watcher",
+      "path": ".agents/skills/capcar-seo-094-seo-drift-watcher/SKILL.md"
+    },
+    {
+      "id": 95,
+      "title": "Ranking reporter",
+      "division": "Reporting & ops",
+      "skill": "capcar-seo-095-ranking-reporter",
+      "path": ".agents/skills/capcar-seo-095-ranking-reporter/SKILL.md"
+    },
+    {
+      "id": 96,
+      "title": "Traffic attributer",
+      "division": "Reporting & ops",
+      "skill": "capcar-seo-096-traffic-attributer",
+      "path": ".agents/skills/capcar-seo-096-traffic-attributer/SKILL.md"
+    },
+    {
+      "id": 97,
+      "title": "Forecast builder",
+      "division": "Reporting & ops",
+      "skill": "capcar-seo-097-forecast-builder",
+      "path": ".agents/skills/capcar-seo-097-forecast-builder/SKILL.md"
+    },
+    {
+      "id": 98,
+      "title": "Weekly SEO report",
+      "division": "Reporting & ops",
+      "skill": "capcar-seo-098-weekly-seo-report",
+      "path": ".agents/skills/capcar-seo-098-weekly-seo-report/SKILL.md"
+    },
+    {
+      "id": 99,
+      "title": "Quarterly roadmap",
+      "division": "Reporting & ops",
+      "skill": "capcar-seo-099-quarterly-roadmap",
+      "path": ".agents/skills/capcar-seo-099-quarterly-roadmap/SKILL.md"
+    },
+    {
+      "id": 100,
+      "title": "Client SEO report",
+      "division": "Reporting & ops",
+      "skill": "capcar-seo-100-client-seo-report",
+      "path": ".agents/skills/capcar-seo-100-client-seo-report/SKILL.md"
+    }
+  ]
+}
