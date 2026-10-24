@@ -378,7 +378,7 @@
       "eyebrow": "Inside the Build Wall",
       "title": "One car. A clearer next step.",
       "description": "Choose a goal, compare an example part and see the budget and record change together. No account needed.",
-      "sample": "Interactive example · Illustrative data · Not a live offer",
+      "sample": "Interactive example · Nothing is bought or saved.",
       "plan": "Build plan",
       "parts": "Parts comparison",
       "visual": "Visual direction",
@@ -440,7 +440,7 @@
       "entryOne": "Vehicle added · Owner-provided details",
       "entryTwo": "Maintenance review · Service date not recorded",
       "empty": "Choose an example part to see it appear here.",
-      "session": "Example only · Changes reset when you leave.",
+      "session": "Resets when you leave.",
       "save": "Save your own build",
       "realSearch": "Search live listings",
       "visualText": "Explore the overall direction. This concept does not render the selected listing or prove its fitment."

@@ -5,7 +5,12 @@ import assert from "node:assert/strict";
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE ?? "playwright");
 const base = process.env.HOMEPAGE_QA_URL ?? "http://localhost:3116";
-const browser = await chromium.launch({ channel: "msedge", headless: true });
+const browser = await chromium.launch({
+  headless: true,
+  ...(process.env.HOMEPAGE_QA_BROWSER_CHANNEL
+    ? { channel: process.env.HOMEPAGE_QA_BROWSER_CHANNEL }
+    : {}),
+});
 const report = { checks: [], errors: [], layouts: [], resources: [] };
 let failed = false;
 await mkdir("artifacts/homepage", { recursive: true });
@@ -14,6 +19,8 @@ try {
     ["en", 1440, 1000],
     ["en", 390, 844],
     ["en", 320, 568],
+    ["en", 768, 1100],
+    ["en", 1024, 1100],
     ["de", 390, 844],
     ["el", 390, 844],
     ["sq", 390, 844],
@@ -22,6 +29,8 @@ try {
     const context = await browser.newContext({
       viewport: { width, height },
       reducedMotion: "reduce",
+      isMobile: width <= 390,
+      hasTouch: width <= 390,
       locale: "en-GB",
     });
     await context.addCookies([
@@ -38,9 +47,15 @@ try {
     const primary = actions.locator('a[href="/garage/new"]');
     const rect = await primary.boundingBox();
     assert.ok(
-      rect && rect.y + rect.height <= height,
-      `${locale}/${width}: primary CTA above fold`,
+      rect && rect.height >= 48,
+      `${locale}/${width}: primary CTA has a touch-sized target`,
     );
+    if (height >= 844) {
+      assert.ok(
+        rect.y + rect.height <= height,
+        `${locale}/${width}: primary CTA above fold`,
+      );
+    }
     assert.equal(
       await page.evaluate(
         () => document.documentElement.scrollWidth > innerWidth + 1,
@@ -100,8 +115,10 @@ try {
       await page
         .getByRole("tab", { name: "Vehicle Passport", exact: true })
         .click();
-      await page.getByText("Rear lighting · €225", { exact: true }).waitFor();
-      assert.equal(await page.getByText("€47", { exact: true }).count(), 1);
+      await page
+        .getByText("Replace the cabin filter · €30", { exact: true })
+        .waitFor();
+      assert.equal(await page.getByText("€270", { exact: true }).count(), 1);
       assert.deepEqual(
         await page.evaluate(() =>
           Object.fromEntries(
@@ -175,6 +192,52 @@ try {
         "Mobile navigation opens, traps focus and dismisses with Escape",
       );
     }
+    // Stable server markup keeps downstream anchors from moving during mounting.
+    assert.ok(await page.locator("#live-demo [role=tabpanel]").count());
+    const order = await page
+      .locator("#live-demo")
+      .evaluate(
+        (demo) =>
+          !!(
+            demo.compareDocumentPosition(document.getElementById("platform")) &
+            Node.DOCUMENT_POSITION_FOLLOWING
+          ),
+      );
+    assert.equal(order, true, "Demo precedes the long-form use cases");
+    if (width < 1280) {
+      await page
+        .locator('button[aria-controls="mobile-marketing-navigation"]')
+        .click();
+      const actionRect = await page
+        .locator('dialog a[href="/garage/new"]')
+        .boundingBox();
+      assert.ok(
+        actionRect && actionRect.y + actionRect.height < Math.min(height, 300),
+        `${locale}/${width}: drawer CTA visible without scrolling`,
+      );
+      await page.keyboard.press("Escape");
+    }
+    if (width >= 1280) {
+      await page.locator('header a[href$="#projects"]').click();
+    } else {
+      await page
+        .locator('button[aria-controls="mobile-marketing-navigation"]')
+        .click();
+      await page.locator('dialog a[href$="#projects"]').click();
+    }
+    await page.waitForFunction(
+      () => {
+        const top = document
+          .getElementById("projects")
+          .getBoundingClientRect().top;
+        return top >= 80 && top <= 112;
+      },
+      undefined,
+      { timeout: 8000 },
+    );
+    report.checks.push(
+      `${locale}/${width}: stable project anchor and early demo`,
+    );
     await page.locator("#live-demo").scrollIntoViewIfNeeded();
     await page.getByRole("tab").first().waitFor();
     assert.equal(
@@ -194,7 +257,7 @@ try {
   await page.goto(base);
   assert.match(
     await page.getByRole("heading", { level: 1 }).innerText(),
-    /Your car/,
+    /See the build/,
   );
   assert.ok(
     await page

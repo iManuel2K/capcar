@@ -15,7 +15,7 @@ import {
 import { homepageCopy } from "@/features/marketing/homepage-copy";
 import { journalArticlePath } from "@/features/journal/routes";
 import type { AppLocale } from "@/i18n/config";
-import { DeferredProductDashboardPreview } from "./deferred-marketing-demos";
+import { ProductDashboardPreview } from "./product-dashboard-preview";
 import { MarketingHero } from "./marketing-hero";
 import { HomepageLink } from "./homepage-link";
 import { MarketingFaq } from "./marketing-faq";
@@ -60,6 +60,7 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
     <div className={styles.page}>
       <main id="main-content">
         <MarketingHero locale={locale} />
+        <ProductDashboardPreview />
         <section
           id="platform"
           className={`capcar-light-section ${styles.useCases}`}
@@ -239,12 +240,6 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
             </details>
           </div>
         </section>
-        <DeferredProductDashboardPreview
-          eyebrow={c.sample}
-          title={c.demoTitle}
-          description={c.demoText}
-          action={c.create}
-        />
         <section
           id="projects"
           className={styles.story}

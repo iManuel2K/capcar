@@ -4,6 +4,7 @@ import {
   fireEvent,
   render,
   screen,
+  within,
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
@@ -119,6 +120,25 @@ describe("Navbar sign-in visibility", () => {
     expect(screen.getAllByRole("link", { name: "Sign in" })).toHaveLength(2);
     expect(screen.queryByRole("link", { name: "Open garage" })).toBeNull();
     expect(auth.subscribe).not.toHaveBeenCalled();
+  });
+  it("puts the garage action before navigation and returns focus after selection", () => {
+    render(<MarketingHeader />);
+    emit("INITIAL_SESSION", null);
+    const opener = screen.getByRole("button", { name: "Open navigation" });
+    opener.focus();
+    openMobile();
+    const dialog = screen.getByRole("dialog");
+    const primary = within(dialog).getByRole("link", {
+      name: "Create your garage",
+    });
+    const navigation = within(dialog).getByRole("navigation");
+    expect(
+      primary.compareDocumentPosition(navigation) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    fireEvent.click(primary);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(opener).toHaveFocus();
   });
   it("unsubscribes when the navbar unmounts", () => {
     const { unmount } = render(<MarketingHeader />);
