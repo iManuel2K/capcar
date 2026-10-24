@@ -378,7 +378,7 @@
       "eyebrow": "Brenda garazhit të projektit",
       "title": "Një makinë. Një hap i qartë përpara.",
       "description": "Zgjidh një synim, krahaso një pjesë shembull dhe shiko buxhetin e historikun të ndryshojnë bashkë. Pa llogari.",
-      "sample": "Shembull interaktiv · Të dhëna ilustruese · Jo ofertë reale",
+      "sample": "Shembull interaktiv · Asgjë nuk blihet ose ruhet.",
       "plan": "Plani i projektit",
       "parts": "Krahasimi i pjesëve",
       "visual": "Drejtimi vizual",
@@ -441,7 +441,7 @@
       "entryOne": "Automjeti u shtua · Të dhëna nga pronari",
       "entryTwo": "Rishikim mirëmbajtjeje · Data e shërbimit mungon",
       "empty": "Zgjidh një pjesë shembull që të shfaqet këtu.",
-      "session": "Vetëm shembull · Ndryshimet rivendosen kur largohesh.",
+      "session": "Rivendoset kur largohesh.",
       "save": "Ruaj projektin tënd",
       "realSearch": "Kërko oferta reale",
       "visualText": "Eksploro drejtimin e përgjithshëm. Koncepti nuk paraqet ofertën e zgjedhur dhe nuk provon përshtatjen."

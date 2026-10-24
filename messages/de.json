@@ -378,7 +378,7 @@
       "eyebrow": "Ein Blick in die Projektgarage",
       "title": "Ein Auto. Ein klarer nächster Schritt.",
       "description": "Wähle ein Ziel, vergleiche ein Beispielteil und sieh, wie sich Budget und Verlauf gemeinsam ändern. Ohne Konto.",
-      "sample": "Interaktives Beispiel · Beispieldaten · Kein Live-Angebot",
+      "sample": "Interaktives Beispiel · Kein Kauf und keine Speicherung.",
       "plan": "Build-Plan",
       "parts": "Teilevergleich",
       "visual": "Visuelle Richtung",
@@ -441,7 +441,7 @@
       "entryOne": "Fahrzeug angelegt · Angaben des Besitzers",
       "entryTwo": "Wartung geprüft · Servicedatum nicht erfasst",
       "empty": "Wähle ein Beispielteil, damit es hier erscheint.",
-      "session": "Nur ein Beispiel · Änderungen werden beim Verlassen zurückgesetzt.",
+      "session": "Wird beim Verlassen zurückgesetzt.",
       "save": "Eigenes Projekt speichern",
       "realSearch": "Live-Angebote suchen",
       "visualText": "Erkunde die Gesamtrichtung. Das Konzept zeigt nicht das gewählte Angebot und bestätigt keine Passform."

@@ -73,8 +73,7 @@ const en = {
   ownerRecorded:
     "Owner-recorded work, not professional verification. Sharing stays optional.",
   demoTitle: "Try a build plan.",
-  demoText:
-    "Compare a part and see how it changes the BMW build budget. This uses example data; nothing is bought or saved.",
+  demoText: "Choose a job, compare parts and see how the budget changes.",
   demoHint:
     "Open Vehicle Passport to see the planned part in the example record.",
   toolsEyebrow: "There when you need them",
@@ -178,7 +177,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Vom Halter dokumentiert, nicht fachlich verifiziert. Teilen ist freiwillig.",
     demoTitle: "Teste einen Projektplan.",
     demoText:
-      "Vergleiche ein Teil und sieh, wie sich das BMW-Budget ändert. Nur Beispieldaten; kein Kauf und keine Speicherung.",
+      "Wähle eine Aufgabe, vergleiche Teile und sieh, wie sich das Budget ändert.",
     demoHint:
       "Öffne den Fahrzeugpass und sieh das geplante Teil im Beispieleintrag.",
     toolsEyebrow: "Da, wenn du sie brauchst",
@@ -280,7 +279,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
       "Καταγραφή ιδιοκτήτη, όχι επαγγελματική επαλήθευση. Η κοινοποίηση είναι προαιρετική.",
     demoTitle: "Δοκίμασε ένα πλάνο.",
     demoText:
-      "Σύγκρινε ένα ανταλλακτικό και δες τον προϋπολογισμό της BMW να αλλάζει. Μόνο ενδεικτικά δεδομένα· χωρίς αγορά ή αποθήκευση.",
+      "Διάλεξε μια εργασία, σύγκρινε ανταλλακτικά και δες πώς αλλάζει ο προϋπολογισμός.",
     demoHint:
       "Άνοιξε το Διαβατήριο οχήματος για να δεις το προγραμματισμένο ανταλλακτικό στην εγγραφή-παράδειγμα.",
     toolsEyebrow: "Εκεί όταν τα χρειάζεσαι",
@@ -379,8 +378,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     ownerRecorded:
       "Punë e regjistruar nga pronari, jo verifikim profesional. Ndarja është fakultative.",
     demoTitle: "Provo një plan.",
-    demoText:
-      "Krahaso një pjesë dhe shiko si ndryshon buxheti i BMW-së. Vetëm të dhëna shembull; asgjë nuk blihet ose ruhet.",
+    demoText: "Zgjidh një punë, krahaso pjesët dhe shiko si ndryshon buxheti.",
     demoHint:
       "Hap Pasaportën e makinës për të parë pjesën e planifikuar në regjistrin shembull.",
     toolsEyebrow: "Aty kur të duhen",
@@ -477,8 +475,7 @@ export const homepageCopy: Record<AppLocale, HomepageCopy> = {
     ownerRecorded:
       "オーナーによる記録で、専門家の認証ではありません。共有は任意です。",
     demoTitle: "カスタム計画を試す。",
-    demoText:
-      "パーツを比較してBMWの予算がどう変わるか試せます。参考データのみで、購入や保存は行いません。",
+    demoText: "作業を選び、パーツを比較して予算の変化を確認できます。",
     demoHint: "車両パスポートを開くと、予定のパーツが記録の例に表示されます。",
     toolsEyebrow: "必要なときに、必要な道具を",
     toolsTitle: "モデル、サウンド、車両記録",

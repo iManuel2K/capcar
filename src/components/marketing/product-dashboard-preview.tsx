@@ -55,7 +55,6 @@ export function ProductDashboardPreview() {
   const id = useId();
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const [view, setView] = useState<View>("plan");
-  const [goal, setGoal] = useState("oem");
   const [modification, setModification] = useState<Modification>("service");
   const [offer, setOffer] = useState(0);
   const [planned, setPlanned] = useState<PlannedItem[]>([]);
@@ -133,11 +132,10 @@ export function ProductDashboardPreview() {
   return (
     <section
       id="live-demo"
-      className={`${styles.deferredSection} bg-background text-foreground scroll-mt-24`}
+      className="bg-background text-foreground scroll-mt-24"
       aria-labelledby="demo-title"
     >
       <div className={styles.section}>
-        <p className={`${styles.eyebrow} text-primary!`}>{t("demo.eyebrow")}</p>
         <div className="mt-3 grid gap-5 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <h2 id="demo-title" className={styles.title}>
             {home.demoTitle}
@@ -162,7 +160,6 @@ export function ProductDashboardPreview() {
                   demo_action: "reset",
                 });
                 setPlanned([]);
-                setGoal("oem");
                 setModification("service");
                 setCompleted(false);
                 setOffer(0);
@@ -235,21 +232,7 @@ export function ProductDashboardPreview() {
                       className="object-contain"
                     />
                   </div>
-                  <p className="text-foreground mt-2 text-xs">
-                    {t("visual.note")}
-                  </p>
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                    <label className="text-sm">
-                      {t("demo.goal")}
-                      <select
-                        className={styles.field}
-                        value={goal}
-                        onChange={(event) => setGoal(event.target.value)}
-                      >
-                        <option value="oem">{t("demo.oem")}</option>
-                        <option value="restore">{t("demo.restore")}</option>
-                      </select>
-                    </label>
+                  <div className="mt-4">
                     <label className="text-sm">
                       {t("demo.modification")}
                       <select

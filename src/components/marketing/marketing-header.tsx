@@ -165,7 +165,7 @@ export function MarketingHeader() {
             aria-expanded={menuOpen}
             aria-controls="mobile-marketing-navigation"
             onClick={() => setMenuOpen(true)}
-            className="border-foreground/12 text-foreground hover:bg-card/5 grid size-11 place-items-center rounded-full border transition xl:hidden"
+            className="border-foreground/12 text-foreground hover:bg-card/5 grid size-12 place-items-center rounded-full border transition xl:hidden"
           >
             <Menu className="size-5" aria-hidden="true" />
           </button>
@@ -201,10 +201,22 @@ export function MarketingHeader() {
                 aria-label={t("close")}
                 data-close
                 onClick={() => setMenuOpen(false)}
-                className="bg-card/6 hover:bg-card/10 grid size-11 shrink-0 place-items-center rounded-full transition"
+                className="bg-card/6 hover:bg-card/10 grid size-12 shrink-0 place-items-center rounded-full transition"
               >
                 <X className="size-4" />
               </button>
+            </div>
+
+            <div className="pt-5">
+              <HomepageLink
+                href={garageHref}
+                placement="header"
+                onClick={() => setMenuOpen(false)}
+                className={`${styles.primary} w-full`}
+              >
+                {garageLabel}{" "}
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </HomepageLink>
             </div>
 
             <nav aria-label={t("mobileMain")} className="mt-4">
@@ -269,15 +281,6 @@ export function MarketingHeader() {
                   {t("signIn")}
                 </Link>
               )}
-              <HomepageLink
-                href={garageHref}
-                placement="header"
-                onClick={() => setMenuOpen(false)}
-                className={`${styles.primary} mt-2 w-full`}
-              >
-                {garageLabel}{" "}
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </HomepageLink>
               <div className="mt-4">
                 <LanguageSelector direction="up" />
               </div>

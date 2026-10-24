@@ -6,6 +6,7 @@ import {
   within,
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { renderToString } from "react-dom/server";
 import { MarketingLanding } from "./marketing-landing";
 import { MarketingHeader } from "./marketing-header";
 import { ProductDashboardPreview } from "./product-dashboard-preview";
@@ -32,7 +33,9 @@ describe("the connected homepage example", () => {
       "See the build. Make it happen.",
     );
     expect(
-      await screen.findByText(/Interactive example · Illustrative data/),
+      await screen.findByText(
+        /Interactive example · Nothing is bought or saved/,
+      ),
     ).toBeInTheDocument();
     expect(screen.queryByText("Verified builder")).not.toBeInTheDocument();
     expect(
@@ -95,6 +98,36 @@ describe("the connected homepage example", () => {
     expect(
       screen.getByRole("heading", { name: "Find your next drive" }),
     ).toBeVisible();
+  });
+
+  it("renders the working demo before the use cases without a deferred height placeholder", () => {
+    const html = renderToString(<MarketingLanding />);
+    expect(html).toContain('id="homepage-title"');
+    expect(html.indexOf('id="homepage-title"')).toBeLessThan(
+      html.indexOf('id="live-demo"'),
+    );
+    expect(html.indexOf('id="live-demo"')).toBeLessThan(
+      html.indexOf('id="platform"'),
+    );
+    expect(html).toContain('role="tabpanel"');
+    expect(html).not.toContain("deferred-demo-title");
+  });
+
+  it("offers a meaningful job selection without an inactive goal control", () => {
+    renderInteractiveDemo();
+    expect(screen.queryByLabelText("Build goal")).not.toBeInTheDocument();
+    fireEvent.change(
+      screen.getByRole("combobox", { name: "Next modification" }),
+      {
+        target: { value: "wheels" },
+      },
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "Parts comparison" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Add to the example plan" }),
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "Vehicle Passport" }));
+    expect(screen.getByText("Wheel refresh · €465")).toBeInTheDocument();
   });
 
   it("connects the chosen part, estimated budget and planned passport record", () => {
