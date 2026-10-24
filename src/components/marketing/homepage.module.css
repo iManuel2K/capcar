@@ -1529,3 +1529,14 @@
 .accessDetails strong {
   color: var(--foreground);
 }
+
+.driveAnimation {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+.driveAnimation img {
+  display: block;
+  width: 100%;
+  height: auto;
+}

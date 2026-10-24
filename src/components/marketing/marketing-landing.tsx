@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { aiPreviewCopy } from "@/features/marketing/ai-preview-copy";
 import {
   ArrowRight,
   BookOpen,
@@ -189,23 +190,27 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                   </HomepageLink>
                 </div>
                 <figure className={`${styles.mini} ${styles.drive}`}>
-                  <div className={styles.drivePhoto}>
-                    <Image
-                      src="/previews/roadbook.png"
-                      alt={c.drivePhoto}
-                      fill
-                      sizes="(min-width: 1320px) 590px, (min-width: 761px) 45vw, 100vw"
-                      quality={65}
+                  <picture className={styles.driveAnimation}>
+                    <source
+                      media="(prefers-reduced-motion: reduce)"
+                      srcSet="/previews/roadbook.png"
                     />
-                  </div>
+                    <Image
+                      src="/ai/capcar-route-demo.gif"
+                      alt={aiPreviewCopy[locale].routeAlt}
+                      width={713}
+                      height={470}
+                      unoptimized
+                      loading="lazy"
+                      className="h-auto w-full"
+                    />
+                  </picture>
                   <figcaption className={styles.driveCaption}>
                     <p className={styles.fine}>
                       ©{" "}
                       <a href="https://www.openstreetmap.org/copyright">
                         OpenStreetMap
-                      </a>{" "}
-                      · <a href="https://openfreemap.org/">OpenFreeMap</a> ·{" "}
-                      <a href="https://openmaptiles.org/">OpenMapTiles</a>
+                      </a>
                     </p>
                     <strong>{c.route}</strong>
                     <p>{c.routeDetail}</p>
