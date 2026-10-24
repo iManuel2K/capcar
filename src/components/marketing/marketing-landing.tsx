@@ -137,16 +137,6 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
                   </div>
                 </div>
                 <div className={styles.mini} aria-label={c.build}>
-                  <div className={styles.editorialCar}>
-                    <Image
-                      src="/garage/cutouts/bmw-318i.webp"
-                      alt=""
-                      fill
-                      sizes="(max-width: 760px) 90vw, 540px"
-                      className="object-contain"
-                    />
-                  </div>
-                  <strong>{c.project}</strong>
                   <BuildProgressPreview copy={c} />
                   <dl className={styles.stats}>
                     <div>
