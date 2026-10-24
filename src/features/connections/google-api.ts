@@ -17,6 +17,8 @@ const googleUserSchema = z.object({
 });
 
 const calendarEventsSchema = z.object({
+  timeZone: z.string(),
+  nextPageToken: z.string().optional(),
   items: z
     .array(
       z.object({
@@ -137,12 +139,64 @@ export async function revokeGoogleToken(accessToken: string) {
     );
 }
 
-function dateOnly(value: string | undefined) {
-  if (!value) return undefined;
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.valueOf())
-    ? value.slice(0, 10)
-    : parsed.toISOString().slice(0, 10);
+function calendarBusyDates(
+  calendar: z.infer<typeof calendarEventsSchema>,
+  from: Date,
+  through: Date,
+) {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: calendar.timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const dateOnly = (value: Date) => {
+    const parts = formatter.formatToParts(value);
+    return ["year", "month", "day"]
+      .map((type) => parts.find((part) => part.type === type)!.value)
+      .join("-");
+  };
+  const firstDate = dateOnly(from);
+  const lastDate = dateOnly(new Date(through.valueOf() - 1));
+  const busy = new Set<string>();
+  for (const event of calendar.items) {
+    if (!event.start.date && !event.start.dateTime) continue;
+    const start = event.start.date ?? dateOnly(new Date(event.start.dateTime!));
+    // Google's end is exclusive, including midnight and all-day boundaries.
+    const end = event.end?.date
+      ? new Date(Date.parse(`${event.end.date}T00:00:00Z`) - 1)
+          .toISOString()
+          .slice(0, 10)
+      : event.end?.dateTime
+        ? dateOnly(new Date(Date.parse(event.end.dateTime) - 1))
+        : start;
+    // Work in civil dates so DST cannot skip or duplicate a calendar day.
+    // Clamp long-running events to the same bounded window requested from Google.
+    let day = start < firstDate ? firstDate : start;
+    const last = end > lastDate ? lastDate : end;
+    while (day <= last) {
+      busy.add(day);
+      const next = new Date(`${day}T00:00:00Z`);
+      next.setUTCDate(next.getUTCDate() + 1);
+      day = next.toISOString().slice(0, 10);
+    }
+  }
+  return [...busy].sort();
+}
+
+async function getPlanningCalendar(url: URL, accessToken: string) {
+  let result: z.infer<typeof calendarEventsSchema> | undefined;
+  // Bound provider work; never describe a truncated calendar as conflict-free.
+  for (let page = 0; page < 4; page++) {
+    const calendar = await googleRequest(url, calendarEventsSchema, {
+      headers: authorization(accessToken),
+    });
+    result ??= { timeZone: calendar.timeZone, items: [] };
+    result.items.push(...calendar.items);
+    if (!calendar.nextPageToken) return result;
+    url.searchParams.set("pageToken", calendar.nextPageToken);
+  }
+  throw new Error("Calendar sync exceeded its supported event count.");
 }
 
 export async function getGooglePlanningContext(accessToken: string) {
@@ -156,16 +210,14 @@ export async function getGooglePlanningContext(accessToken: string) {
   calendarUrl.searchParams.set("timeMax", horizon.toISOString());
   calendarUrl.searchParams.set("singleEvents", "true");
   calendarUrl.searchParams.set("orderBy", "startTime");
-  calendarUrl.searchParams.set("maxResults", "100");
+  calendarUrl.searchParams.set("maxResults", "2500");
   calendarUrl.searchParams.set(
     "fields",
-    "items(id,summary,start(date,dateTime),end(date,dateTime))",
+    "timeZone,nextPageToken,items(id,summary,start(date,dateTime),end(date,dateTime))",
   );
 
   const [calendar, gmail] = await Promise.all([
-    googleRequest(calendarUrl, calendarEventsSchema, {
-      headers: authorization(accessToken),
-    }),
+    getPlanningCalendar(calendarUrl, accessToken),
     googleRequest(
       "https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=30&includeSpamTrash=false",
       gmailListSchema,
@@ -200,13 +252,7 @@ export async function getGooglePlanningContext(accessToken: string) {
     .slice(0, 8);
 
   return {
-    busyDates: [
-      ...new Set(
-        calendar.items
-          .map((event) => dateOnly(event.start.dateTime || event.start.date))
-          .filter((value): value is string => Boolean(value)),
-      ),
-    ],
+    busyDates: calendarBusyDates(calendar, now, horizon),
     calendarEventCount: calendar.items.length,
     mailSignals,
     mailScannedCount: messages.length,

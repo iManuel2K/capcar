@@ -316,7 +316,13 @@ export function ProductDashboardPreview() {
                       <h4 className="font-medium">
                         {t("demo.offer", { number: index + 1 })}
                       </h4>
-                      <p className={`${styles.label} mt-1`}>{t("demo.used")}</p>
+                      <p className={`${styles.label} mt-1`}>
+                        {t(
+                          modification === "service"
+                            ? "demo.newFilter"
+                            : "demo.used",
+                        )}
+                      </p>
                       <dl className="my-5 space-y-2 text-sm">
                         <Row
                           label={t("demo.item")}

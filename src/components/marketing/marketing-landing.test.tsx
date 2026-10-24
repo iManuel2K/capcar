@@ -132,6 +132,30 @@ describe("the connected homepage example", () => {
     expect(screen.getAllByText("€300").length).toBeGreaterThan(0);
   });
 
+  it("uses new-filter condition copy for maintenance without relabelling used upgrades", () => {
+    renderInteractiveDemo();
+    fireEvent.click(screen.getByRole("tab", { name: "Parts comparison" }));
+    expect(screen.getAllByText("New · Replacement filter")).toHaveLength(2);
+    expect(
+      screen.queryByText("Used · Condition needs checking"),
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("tab", { name: "Build plan" }));
+    fireEvent.change(
+      screen.getByRole("combobox", { name: "Next modification" }),
+      {
+        target: { value: "lights" },
+      },
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "Parts comparison" }));
+    expect(screen.getAllByText("Used · Condition needs checking")).toHaveLength(
+      2,
+    );
+    expect(
+      screen.queryByText("New · Replacement filter"),
+    ).not.toBeInTheDocument();
+  });
+
   it("does not present an incomplete price as a final budget balance", () => {
     renderInteractiveDemo();
     fireEvent.click(screen.getByRole("tab", { name: "Parts comparison" }));
