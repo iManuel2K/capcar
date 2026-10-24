@@ -13,21 +13,34 @@ export function BuildProgressPreview({ copy }: { copy: HomepageCopy }) {
     if (ready !== 3) return;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let started = false;
+    let current = 0;
     const timers: ReturnType<typeof setTimeout>[] = [];
-    const stop = () => timers.forEach(clearTimeout);
+    const stop = () => {
+      timers.forEach(clearTimeout);
+      started = false;
+    };
     const finish = () => {
       stop();
+      current = 3;
       setDone(3);
     };
     const begin = () => {
-      if (started || document.hidden) return;
+      if (started || current === 3 || document.hidden) return;
       started = true;
       if (motion.matches) {
         finish();
         return;
       }
-      for (let stage = 1; stage <= 3; stage++)
-        timers.push(setTimeout(() => setDone(stage), stage * 1500));
+      for (let stage = current + 1; stage <= 3; stage++)
+        timers.push(
+          setTimeout(
+            () => {
+              current = stage;
+              setDone(stage);
+            },
+            (stage - current) * 1500,
+          ),
+        );
     };
     const visibility = () => {
       if (document.hidden) stop();
