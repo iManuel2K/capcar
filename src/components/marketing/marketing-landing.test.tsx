@@ -84,24 +84,15 @@ describe("the connected homepage example", () => {
     ).toBe(true);
   });
 
-  it("lets visitors complete and reopen build tasks without changing the budget", () => {
+  it("shows a hands-free build preview rather than task choices", () => {
     renderPage();
-    const progress = screen.getByRole("progressbar", {
-      name: "Plan your build",
-    });
-    expect(progress).toHaveAttribute("value", "1");
-    fireEvent.click(
-      screen.getByRole("checkbox", { name: /Compare wheels and tyres/ }),
-    );
-    fireEvent.click(
-      screen.getByRole("checkbox", { name: /Plan the suspension setup/ }),
-    );
-    expect(progress).toHaveAttribute("value", "3");
-    expect(screen.getByText("3 of 3 tasks completed")).toBeVisible();
-    fireEvent.click(
-      screen.getByRole("checkbox", { name: /Compare wheels and tyres/ }),
-    );
-    expect(progress).toHaveAttribute("value", "2");
+    expect(
+      screen.getByRole("progressbar", { name: "Plan your build" }),
+    ).toHaveAttribute("value", "0");
+    expect(
+      screen.queryByRole("checkbox", { name: /Compare wheels and tyres/ }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("Illustrative build progression")).toBeVisible();
   });
 
   it("shows all three editorial use cases without requiring tab interaction", () => {
