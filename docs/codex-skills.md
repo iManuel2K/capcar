@@ -19,15 +19,16 @@ All upstream files are copied byte for byte. `.agents/skills-sources.lock.json` 
 
 ## macOS and VS Code
 
-From your existing CapCar checkout, switch to the PR branch to use the skills before merging:
+The installation is merged into `master`. From your existing CapCar checkout:
 
 ```bash
 git fetch origin
-git switch chore/codex-project-skills
+git switch master
+git pull --ff-only
 node .agents/tools/verify-skills.mjs
 ```
 
-If Git reports local changes, commit or stash your own work before switching branches. Once the PR is merged, use your normal `master` checkout and `git pull --ff-only` instead.
+If Git reports local changes, commit or stash your own work before switching branches.
 
 1. Open the **CapCar repository folder** in VS Code.
 2. Install or update **Codex by OpenAI** (`openai.chatgpt`), recommended in `.vscode/extensions.json`. Sign in if needed. With the VS Code `code` command installed, you can use `code --install-extension openai.chatgpt`. If `code` is missing, use the Extensions view, or run **Shell Command: Install 'code' command in PATH** from the macOS Command Palette.
@@ -70,7 +71,7 @@ This is the project skill installation. Ponytail's plugin session hooks, Claude 
 
 ## Verify with Codex's real loader
 
-The first command below checks installed file hashes, executable bits, presence and project skill name uniqueness. The second additionally starts a local Codex app server and requests `skills/list` with `forceReload: true`, checking every new skill's exact path, enabled state and `REPO` scope. It does not start a model turn, send application source to a model, or require API credits.
+The first command below checks installed file hashes, executable bits, presence and project skill name uniqueness. The second additionally starts a local Codex app server and requests `skills/list` with `forceReload: true`, checking every new skill's exact path, enabled state and `REPO` scope from both the repository root and `src/`. It does not start a model turn, send application source to a model, or require API credits.
 
 ```bash
 node .agents/tools/verify-skills.mjs
@@ -87,11 +88,11 @@ node .agents/tools/verify-skills.mjs --codex
 
 Alternatively, `CODEX_BIN=/absolute/path/to/codex node .agents/tools/verify-skills.mjs --codex` selects an existing binary.
 
-Validated in the installation environment with Codex CLI **0.159.2**, Node **24.19.0**, Linux:
+Validated in the installation environment with Codex CLI **0.159.2**, Node **24.19.0**, Linux, and rechecked after PR #79 with Codex CLI **0.164.0**:
 
 - All **59/59** additions were discovered, enabled and reported at `REPO` scope by Codex, with no project loader errors.
 - All **192** installed upstream files matched their recorded hashes; the launcher retained its executable bit.
-- All 120 project skill folders had unique names. Codex also discovered 60/61 pre-existing skills; `humanizer` was absent from this environment's returned inventory without a loader error. Its files were not changed. The verification reports that existing issue separately.
+- All 120 project skill folders had unique names. Codex 0.164.0 discovered all 61 pre-existing skills by their project paths. It displays `humanizer` as `humanizer:humanizer`, so the verifier matches existing skills by path to avoid a false missing-skill report. Its files are unchanged.
 - All 24 checked Addy shared-reference links resolved.
 - The Impeccable engine downloaded, passed checksum verification and returned `impeccable-engine 0.1.16`.
 - Node syntax and launcher shell syntax passed. Isolated negative checks rejected altered content, missing files and duplicate skill names.

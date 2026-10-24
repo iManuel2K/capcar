@@ -85,24 +85,29 @@ async function verifyCodex(projectSkills) {
       clientInfo: { name: "capcar-skills-check", version: "1.0.0" },
     });
     child.stdin.write(`${JSON.stringify({ method: "initialized" })}\n`);
-    const result = await request("skills/list", { cwds: [root], forceReload: true });
-    const entry = result.data.find((item) => path.resolve(item.cwd) === path.resolve(root));
-    assert.ok(entry, "Codex did not return this repository's skill inventory.");
-    const projectErrors = entry.errors.filter((error) => path.resolve(error.path).startsWith(path.join(root, ".agents") + path.sep));
-    assert.deepEqual(projectErrors, [], "Codex reported invalid project skills.");
-    for (const skill of expected) {
-      const found = entry.skills.find((item) => item.name === skill.name && path.resolve(item.path) === path.join(root, skill.path));
-      assert.ok(found, `Codex did not discover ${skill.name} at its project path. Same-name results: ${JSON.stringify(entry.skills.filter((item) => item.name === skill.name).map((item) => ({ path: item.path, scope: item.scope })))}`);
-      assert.equal(found.enabled, true, `Codex has disabled ${skill.name}.`);
-      assert.equal(found.scope.toLowerCase(), "repo", `Wrong scope for ${skill.name}.`);
+    const cwds = [root, path.join(root, "src")];
+    const result = await request("skills/list", { cwds, forceReload: true });
+    for (const cwd of cwds) {
+      const entry = result.data.find((item) => path.resolve(item.cwd) === path.resolve(cwd));
+      assert.ok(entry, "Codex did not return this repository's skill inventory.");
+      const projectErrors = entry.errors.filter((error) => path.resolve(error.path).startsWith(path.join(root, ".agents") + path.sep));
+      assert.deepEqual(projectErrors, [], "Codex reported invalid project skills.");
+      for (const skill of expected) {
+        const found = entry.skills.find((item) => item.name === skill.name && path.resolve(item.path) === path.join(root, skill.path));
+        assert.ok(found, `Codex did not discover ${skill.name} at its project path. Same-name results: ${JSON.stringify(entry.skills.filter((item) => item.name === skill.name).map((item) => ({ path: item.path, scope: item.scope })))}`);
+        assert.equal(found.enabled, true, `Codex has disabled ${skill.name}.`);
+        assert.equal(found.scope.toLowerCase(), "repo", `Wrong scope for ${skill.name}.`);
+      }
+      console.log(`PASS: Codex discovered and enabled all ${expected.length} pinned additions at REPO scope from ${path.relative(root, cwd) || "repository root"}.`);
+      const otherSkills = projectSkills.filter((skill) => !expected.some((addition) => addition.name === skill.name));
+      // Codex can namespace existing skills from their own plugin metadata.
+      // Match their exact project paths so this does not report them as missing.
+      const missing = otherSkills.filter((skill) => !entry.skills.some((item) => path.resolve(item.path) === path.join(root, skill.path) && item.enabled));
+      console.log(`Existing project skills discovered: ${otherSkills.length - missing.length}/${otherSkills.length}.`);
+      if (missing.length) console.warn(`Existing skills absent from Codex's inventory (not changed by this installation): ${missing.map((skill) => skill.name).join(", ")}.`);
+      if (entry.errors.length) console.warn(`${entry.errors.length} unrelated user/system skill error(s) were excluded from the project check.`);
     }
-    console.log(`PASS: Codex discovered and enabled all ${expected.length} pinned additions at REPO scope.`);
-    const otherSkills = projectSkills.filter((skill) => !expected.some((addition) => addition.name === skill.name));
-    const missing = otherSkills.filter((skill) => !entry.skills.some((item) => item.name === skill.name && path.resolve(item.path) === path.join(root, skill.path)));
-    console.log(`Existing project skills discovered: ${otherSkills.length - missing.length}/${otherSkills.length}.`);
-    if (missing.length) console.warn(`Existing skills absent from Codex's inventory (not changed by this installation): ${missing.map((skill) => skill.name).join(", ")}.`);
     console.log(`Codex app-server: ${initialization.userAgent || "initialized"}`);
-    if (entry.errors.length) console.warn(`${entry.errors.length} unrelated user/system skill error(s) were excluded from the project check.`);
   } finally {
     clearTimeout(timeout);
     lines.close();
