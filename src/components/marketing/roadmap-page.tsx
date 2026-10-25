@@ -66,7 +66,6 @@ const stages = [
       "roadbook",
       "photoSpots",
       "events",
-      "tripPlanning",
     ],
   },
   {
@@ -75,7 +74,7 @@ const stages = [
     tone: "var(--primary)",
     surface: "bg-background",
     icon: Sparkles,
-    items: ["ai", "calendarMail", "twowheels", "more"],
+    items: ["ai", "tripPlanning", "dashcam", "drivingStyle", "carFlipping", "calendarMail", "twowheels", "more"],
   },
 ] as const;
 
