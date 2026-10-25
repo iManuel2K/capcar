@@ -237,10 +237,10 @@ export function RoadmapPage() {
                       {t(`${stage.key}.itemStatus`)}
                     </p>
                   </header>
-                  <details className="p-2" open={stage.key === "hardening"}>
-                    <summary className="border-foreground/15 flex min-h-12 cursor-pointer items-center border-b px-5 text-sm font-semibold underline underline-offset-4">
+                  <div className="p-2">
+                    <p className="border-foreground/15 flex min-h-12 items-center border-b px-5 text-sm font-semibold">
                       {t("milestoneCount", { count: stage.items.length })}
-                    </summary>
+                    </p>
                     <ol className="grid sm:grid-cols-2">
                       {stage.items.map((item, itemIndex) => {
                         return (
@@ -271,7 +271,7 @@ export function RoadmapPage() {
                         );
                       })}
                     </ol>
-                  </details>
+                  </div>
                 </div>
               </article>
             );
