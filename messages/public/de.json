@@ -289,8 +289,8 @@
       "description": "Wenn das Autoerlebnis verlässlich ist, kann dieselbe durchdachte Akte Entdeckung, Zweiräder und weitere Ausrüstung unterstützen.",
       "itemStatus": "Später",
       "ai": {
-        "title": "KI-Build-Richtung",
-        "description": "Erzeuge sinnvolle Upgrade-Ideen und visuelle Konzepte rund um dein eigenes Fahrzeug."
+        "title": "Ein intelligenterer CoPilot",
+        "description": "Fahrzeugdaten, Wartungshistorie, Umbauziele und Budget für bessere Rückfragen und nachvollziehbare nächste Schritte nutzen."
       },
       "calendarMail": {
         "title": "Kalender- und E-Mail-Synchronisierung",
@@ -303,6 +303,22 @@
       "more": {
         "title": "Surfbretter und mehr",
         "description": "Mache CapCar zu einem durchdachten Zuhause für Projekte und Ausrüstung, die dir wichtig sind."
+      },
+      "dashcam": {
+        "title": "Dashcam-Aufnahmen als nützliche Daten",
+        "description": "Freigegebene Aufnahmen in Fahrtverläufe, Straßenkontext und überprüfbare Ereignisse umwandeln. Speichern, Löschen und Teilen bleiben unter deiner Kontrolle."
+      },
+      "drivingStyle": {
+        "title": "Deinen Fahrstil kennenlernen",
+        "description": "Mit optionalen Fahrt- und Dashcam-Daten Vorlieben erkennen und Vorschläge anpassen. Unsicherheit zeigen; Lernen prüfen, zurücksetzen oder deaktivieren."
+      },
+      "carFlipping": {
+        "title": "Autos aufbereiten und weiterverkaufen",
+        "description": "Kauf, Zustand, Reparaturen und Gesamtkosten planen und eine transparente Verkaufshistorie vorbereiten. Schätzungen mit tatsächlichen Kosten vergleichen; keine Gewinngarantie."
+      },
+      "tripPlanning": {
+        "title": "Bessere Reisen mit CapCar AI",
+        "description": "Fahrten nach Auto, Interessen, Zeit, Budget, Wetter und sinnvollen Stopps planen. Route und aktuelle Bedingungen vor der Abfahrt prüfen."
       }
     },
     "decisionEyebrow": "Wie wir entscheiden",

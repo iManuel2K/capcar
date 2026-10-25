@@ -289,8 +289,8 @@
       "description": "Once the car experience is dependable, the same considered record can support discovery, two wheels and other enthusiast equipment.",
       "itemStatus": "Later",
       "ai": {
-        "title": "AI build direction",
-        "description": "Generate useful upgrade ideas and visual concepts around the vehicle you own."
+        "title": "Smarter CoPilot",
+        "description": "Give CoPilot better vehicle context, maintenance history, build goals and budgets so it asks better questions and explains useful next steps."
       },
       "calendarMail": {
         "title": "Calendar and mail sync",
@@ -303,6 +303,22 @@
       "more": {
         "title": "Surfboards and more",
         "description": "Turn CapCar into one considered home for the projects and equipment you care about."
+      },
+      "dashcam": {
+        "title": "Dashcam footage into useful data",
+        "description": "Explore owner-approved footage to extract trip timelines, road context and reviewable driving events. Keep retention, deletion and sharing under the owner's control."
+      },
+      "drivingStyle": {
+        "title": "Learn your driving style",
+        "description": "Use optional trip and dashcam insights to learn preferences over time and personalize suggestions. Show uncertainty and let owners review, reset or disable learning."
+      },
+      "carFlipping": {
+        "title": "Car flipping workspace",
+        "description": "Plan a purchase, record condition and repairs, track the full investment and prepare a transparent sale history. Compare estimates with actual costs; no guaranteed profit."
+      },
+      "tripPlanning": {
+        "title": "Better trips with CapCar AI",
+        "description": "Improve trip plans around your car, interests, available time, budget, weather and practical stops. Review routes and current conditions before setting off."
       }
     },
     "decisionEyebrow": "How we decide",

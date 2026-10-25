@@ -289,8 +289,8 @@
       "description": "Kur përvoja e makinës të jetë e besueshme, i njëjti regjistër mund të mbështesë zbulimin, dy rrotat dhe pajisje të tjera.",
       "itemStatus": "Më vonë",
       "ai": {
-        "title": "Drejtimi i build-it me AI",
-        "description": "Gjenero ide të dobishme për përmirësime dhe koncepte vizuale rreth makinës tënde."
+        "title": "CoPilot më i zgjuar",
+        "description": "Përdor të dhënat e makinës, historikun, qëllimet dhe buxhetin për pyetje më të mira dhe hapa të qartë."
       },
       "calendarMail": {
         "title": "Sinkronizim kalendari dhe emaili",
@@ -303,6 +303,22 @@
       "more": {
         "title": "Dërrasa sërfi dhe më shumë",
         "description": "Ktheje CapCar në një shtëpi të organizuar për projektet dhe pajisjet që të interesojnë."
+      },
+      "dashcam": {
+        "title": "Të dhëna të dobishme nga dashcam",
+        "description": "Me miratimin e pronarit, kthe videot në historik udhëtimi, kontekst rruge dhe ngjarje për shqyrtim. Ruajtja, fshirja dhe ndarja mbeten në kontrollin tënd."
+      },
+      "drivingStyle": {
+        "title": "Mëson stilin tënd të drejtimit",
+        "description": "Të dhëna opsionale nga udhëtimet dhe dashcam për të mësuar preferencat dhe përshtatur sugjerimet. Mund ta shqyrtosh, rivendosësh ose çaktivizosh mësimin."
+      },
+      "carFlipping": {
+        "title": "Blerje, përmirësim dhe rishitje makinash",
+        "description": "Planifiko blerjen, gjendjen, riparimet dhe investimin e plotë me historik transparent shitjeje. Krahaso vlerësimet me kostot reale; pa garanci fitimi."
+      },
+      "tripPlanning": {
+        "title": "Udhëtime më të mira me CapCar AI",
+        "description": "Plane sipas makinës, interesave, kohës, buxhetit, motit dhe ndalesave praktike. Kontrollo itinerarin dhe kushtet para nisjes."
       }
     },
     "decisionEyebrow": "Si vendosim",
