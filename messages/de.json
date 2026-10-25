@@ -590,6 +590,23 @@
     "errors": {
       "plan": "Die Reise konnte nicht geplant werden.",
       "calendar": "Die Reise konnte nicht zu Google Kalender hinzugefügt werden."
+    },
+    "brief": {
+      "title": "Dein Reiseprofil",
+      "assumptions": "Bearbeitbare Annahmen zum Start, keine geprüften Reiseoptionen. Dein Text und gewählte Orte bleiben Teil der Anfrage.",
+      "origin": "Wo startest du?",
+      "needOrigin": "Gib deinen Startort an, damit die Fahrt realistisch geplant werden kann.",
+      "quick": "Kurze Auszeit",
+      "scenic": "Malerischer Nachmittag",
+      "full": "Gemeinsamer Tagesausflug",
+      "styleHours": "{hours} Stunden · anpassbar",
+      "hours": "Verfügbare Stunden pro Tag, inklusive Stopps",
+      "return": "Zum Startort zurückkehren",
+      "usePrompt": "Tag und Datum aus meinem Text übernehmen",
+      "timeFits": "Geschätzte Gesamtdauer passt ins Zeitbudget",
+      "timeOver": "Diese Route überschreitet dein Zeitbudget",
+      "timeDetail": "Fahrt {driving} Min. + Stopps {stops} Min. + Pausen {breaks} Min. = {total} Min. / {available} Min. verfügbar.",
+      "timeNote": "Stopps und Pausen sind geschätzt. Die Gesamtdauer bestätigt weder einzelne Tage noch Öffnungszeiten, Parkplätze, Verkehr oder erlaubten Zugang. Kürze die Fahrt bei Bedarf."
     }
   },
   "Connections": {

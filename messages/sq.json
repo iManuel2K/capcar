@@ -590,6 +590,23 @@
     "errors": {
       "plan": "Udhëtimi nuk mund të planifikohej.",
       "calendar": "Udhëtimi nuk mund të shtohej në Google Calendar."
+    },
+    "brief": {
+      "title": "Plani yt i udhëtimit",
+      "assumptions": "Supozime fillestare që mund t’i ndryshosh, jo itinerare të verifikuara. Teksti dhe vendet e zgjedhura mbeten në kërkesë.",
+      "origin": "Nga do të nisesh?",
+      "needOrigin": "Shto qytetin e nisjes për një plan praktik.",
+      "quick": "Dalje e shkurtër",
+      "scenic": "Pasdite panoramike",
+      "full": "Ditë e plotë së bashku",
+      "styleHours": "{hours} orë · ndryshohet",
+      "hours": "Orë në dispozicion në ditë, përfshirë ndalesat",
+      "return": "Kthim te pika e nisjes",
+      "usePrompt": "Përdor ditën dhe datën nga teksti im",
+      "timeFits": "Koha e vlerësuar përputhet me planin",
+      "timeOver": "Itinerari tejkalon kohën tënde",
+      "timeDetail": "Drejtim {driving} min + ndalesa {stops} min + pushime {breaks} min = {total} min / {available} min në dispozicion.",
+      "timeNote": "Ndalesat dhe pushimet janë vlerësime. Totali nuk verifikon çdo ditë, oraret, parkimin, trafikun ose hyrjen e lejuar. Shkurtoje udhëtimin nëse duhet."
     }
   },
   "Connections": {

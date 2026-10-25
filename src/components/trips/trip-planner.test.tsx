@@ -20,12 +20,10 @@ afterEach(() => {
 });
 describe("Trip planner composer", () => {
   it("submits the shared input to the existing provider endpoint and preserves a failed draft", async () => {
-    const fetch = vi
-      .fn()
-      .mockResolvedValue({
-        ok: false,
-        json: async () => ({ error: "Test provider unavailable" }),
-      });
+    const fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      json: async () => ({ error: "Test provider unavailable" }),
+    });
     vi.stubGlobal("fetch", fetch);
     render(
       <TripPlanner
@@ -39,6 +37,9 @@ describe("Trip planner composer", () => {
     const field = screen.getByRole("textbox", { name: "Ask CapCar" });
     fireEvent.change(field, {
       target: { value: "Plan a quiet Black Forest weekend" },
+    });
+    fireEvent.change(screen.getByLabelText("Where are you starting?"), {
+      target: { value: "Rüsselsheim, Germany" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Send message" }));
     await waitFor(() =>
@@ -60,5 +61,35 @@ describe("Trip planner composer", () => {
       />,
     );
     expect(screen.getByRole("button", { name: "Send message" })).toBeDisabled();
+  });
+  it("asks for the missing start without spending AI credits and applies short-prompt day hints", async () => {
+    const fetch = vi.fn().mockResolvedValue({ ok: false });
+    vi.stubGlobal("fetch", fetch);
+    render(
+      <TripPlanner
+        initialAiConnection={{
+          configured: true,
+          connected: true,
+          provider: "gemini",
+        }}
+      />,
+    );
+    fireEvent.change(screen.getByRole("textbox", { name: "Ask CapCar" }), {
+      target: { value: "Sunday drive with friends" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Send message" }));
+    expect(
+      screen.getByText(
+        "Add your starting town so CapCar can keep the trip practical.",
+      ),
+    ).toBeVisible();
+    expect(screen.getByLabelText("Where are you starting?")).toHaveFocus();
+    expect(fetch.mock.calls.some(([url]) => url === "/api/ai/trips")).toBe(
+      false,
+    );
+    fireEvent.click(screen.getByRole("button", { name: /Quick escape/ }));
+    expect(
+      screen.getByLabelText("Hours available per day, including stops"),
+    ).toHaveValue(3);
   });
 });

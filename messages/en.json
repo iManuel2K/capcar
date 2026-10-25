@@ -590,6 +590,23 @@
     "errors": {
       "plan": "The trip could not be planned.",
       "calendar": "The trip could not be added to Google Calendar."
+    },
+    "brief": {
+      "title": "Your trip brief",
+      "assumptions": "These are editable starting assumptions, not verified trip options. Your prompt and selected places remain part of the request.",
+      "origin": "Where are you starting?",
+      "needOrigin": "Add your starting town so CapCar can keep the trip practical.",
+      "quick": "Quick escape",
+      "scenic": "Scenic afternoon",
+      "full": "Full day together",
+      "styleHours": "{hours} hours · editable",
+      "hours": "Hours available per day, including stops",
+      "return": "Return to the starting point",
+      "usePrompt": "Use day and date mentioned in my prompt",
+      "timeFits": "Estimated total fits your time budget",
+      "timeOver": "This route exceeds your time budget",
+      "timeDetail": "Driving {driving} min + stops {stops} min + breaks {breaks} min = {total} min / {available} min available.",
+      "timeNote": "Stop times and breaks are estimates. This total does not verify each day, opening hours, parking, traffic or legal access. Shorten the trip if it does not fit."
     }
   },
   "Connections": {

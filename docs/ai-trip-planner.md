@@ -1,5 +1,29 @@
 # CapCar AI trip planner
 
+## Short-prompt planning
+
+CapCar owns the trip brief and validation rules while the user's connected AI
+generates the itinerary. Prompt mode asks for an explicit starting town, an
+editable daily time budget, and whether to return to the start. Quick, Scenic
+and Full are three starting profiles (3, 6 and 9 hours), not three pre-generated
+itineraries. Common day-trip and relative-date wording suggests visible dates;
+the user can edit those assumptions before generating. One-day trips are supported.
+
+For one-day trips with an origin and `GEOAPIFY_API_KEY`, CapCar retrieves up to
+30 nearby places within a bounded 10–100 km radius, rejects malformed,
+duplicate and out-of-radius records, and supplies up to 12 interest-ranked
+candidates to the AI. Discovery failure is disclosed without preventing a draft.
+The brief and shortlist are sent to native OpenAI, Gemini and Anthropic
+providers; custom external providers receive the request and planning context.
+
+Generated dates must match the brief. CapCar ensures the requested origin is
+included in routing and adds the return when requested. Once route calculation
+succeeds, prompt-mode plans show an aggregate estimate of driving, visits and
+breaks against the daily budget multiplied by the number of days. Calendar
+export is disabled when that estimate exceeds the budget. This is not a
+per-day feasibility, traffic, opening-hours, parking or access verification.
+No preference learning, model training or automatic booking is implemented.
+
 The `/ai` flow has four independent layers so a temporary provider failure does
 not remove the whole feature:
 
