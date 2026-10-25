@@ -26,8 +26,9 @@ describe("RoadmapPage", () => {
     expect(screen.getByText("Community marketplace")).toBeInTheDocument();
     expect(screen.getByText("Direct merchant checkout")).toBeInTheDocument();
     expect(screen.getByText("Motorcycles and bicycles")).toBeInTheDocument();
-    expect(screen.getByText("AI scenic weekend planning")).toBeInTheDocument();
+    expect(screen.getByText("Better trips with CapCar AI")).toBeInTheDocument();
+    expect(screen.getByText("Smarter CoPilot")).toBeInTheDocument();
     expect(screen.getByText("Calendar and mail sync")).toBeInTheDocument();
-    expect(screen.getAllByText("31").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("34").length).toBeGreaterThan(0);
   });
 });

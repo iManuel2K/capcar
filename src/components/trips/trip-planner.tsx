@@ -40,7 +40,13 @@ import { MotionLoader as LoaderCircle } from "@/components/ui/motion-loader";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  assessTripSchedule,
+  suggestTripBrief,
+  tripStyles,
+  type TripStyle,
+} from "@/features/trips/trip-intelligence";
 
 import { TripRouteMapLoader } from "@/components/trips/trip-route-map-loader";
 
@@ -290,6 +296,13 @@ export function TripPlanner({
   );
   const [startDate, setStartDate] = useState("");
   const effectiveStartDate = startDate || (hydrated ? upcomingFriday() : "");
+  const [origin, setOrigin] = useState("");
+  const [hoursPerDay, setHoursPerDay] = useState(6);
+  const [style, setStyle] = useState<TripStyle>("scenic");
+  const [returnToStart, setReturnToStart] = useState(true);
+  const [briefError, setBriefError] = useState(false);
+  const [schedule, setSchedule] =
+    useState<ReturnType<typeof assessTripSchedule>>();
   const [duration, setDuration] = useState(initialJournalTrip ? 1 : 3);
   const [pace, setPace] = useState<"scenic" | "balanced" | "driving">("scenic");
   const [interests, setInterests] = useState<
@@ -305,6 +318,7 @@ export function TripPlanner({
   const [aiConnection, setAiConnection] = useState<
     AiPlannerConnectionStatus | undefined
   >(initialAiConnection);
+  const planningSequence = useRef(0);
   const [loading, setLoading] = useState(false);
   const [calendarLoading, setCalendarLoading] = useState(false);
   const [error, setError] = useState("");
@@ -383,6 +397,14 @@ export function TripPlanner({
       (inputMode === "places" && selectedPlaces.length < 2)
     )
       return;
+    if (inputMode === "prompt" && origin.trim().length < 2) {
+      setBriefError(true);
+      document.getElementById("trip-origin")?.focus();
+      return;
+    }
+    const sequence = ++planningSequence.current;
+    setBriefError(false);
+    setSchedule(undefined);
     setLoading(true);
     setError("");
     setCalendarMessage("");
@@ -400,6 +422,9 @@ export function TripPlanner({
           pace,
           interests,
           useConnectedContext,
+          ...(inputMode === "prompt"
+            ? { origin: origin.trim(), hoursPerDay, style, returnToStart }
+            : {}),
         }),
       });
       const body = (await response.json()) as TripPlan | { error?: string };
@@ -443,6 +468,26 @@ export function TripPlanner({
                 ? routeBody.error
                 : "The calculated route is unavailable.",
             );
+          if (sequence !== planningSequence.current) return;
+          setSchedule(
+            inputMode === "prompt"
+              ? assessTripSchedule({
+                  drivingMinutes: routeBody.durationMinutes,
+                  stopKinds: body.stops
+                    .filter(
+                      (stop) =>
+                        !(
+                          stop.mapQuery.toLowerCase() ===
+                            origin.trim().toLowerCase() &&
+                          ["Departure", "Return"].includes(stop.timing)
+                        ),
+                    )
+                    .map((stop) => stop.kind),
+                  days: body.days.length,
+                  hoursPerDay,
+                })
+              : undefined,
+          );
           setRoute(routeBody);
           setPlan((current) =>
             current === body
@@ -450,14 +495,18 @@ export function TripPlanner({
               : current,
           );
         })
-        .catch((routeFailure) =>
-          setRouteError(
-            routeFailure instanceof Error
-              ? routeFailure.message
-              : "The calculated route is unavailable.",
-          ),
+        .catch(
+          (routeFailure) =>
+            sequence === planningSequence.current &&
+            setRouteError(
+              routeFailure instanceof Error
+                ? routeFailure.message
+                : "The calculated route is unavailable.",
+            ),
         )
-        .finally(() => setRouteLoading(false));
+        .finally(() => {
+          if (sequence === planningSequence.current) setRouteLoading(false);
+        });
       window.setTimeout(() =>
         document.getElementById("capcar-plan")?.scrollIntoView({
           behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -609,7 +658,15 @@ export function TripPlanner({
               <div className="mt-4">
                 <AIInput
                   value={prompt}
-                  onValueChange={setPrompt}
+                  onValueChange={(value) => {
+                    setPrompt(value);
+                    const draft = suggestTripBrief(
+                      value,
+                      new Date().toLocaleDateString("en-CA"),
+                    );
+                    if (draft.duration) setDuration(draft.duration);
+                    if (draft.startDate) setStartDate(draft.startDate);
+                  }}
                   maxLength={600}
                   busy={loading}
                   disabled={
@@ -648,6 +705,103 @@ export function TripPlanner({
               </div>
             )}
 
+            {inputMode === "prompt" && (
+              <fieldset className="mt-5 space-y-4">
+                <legend className="text-sm font-semibold">
+                  {t("brief.title")}
+                </legend>
+                <p className="text-muted-foreground text-xs leading-5">
+                  {t("brief.assumptions")}
+                </p>
+                <label className="block text-sm" htmlFor="trip-origin">
+                  {t("brief.origin")}
+                </label>
+                <input
+                  id="trip-origin"
+                  value={origin}
+                  onChange={(event) => {
+                    setOrigin(event.target.value);
+                    setBriefError(false);
+                  }}
+                  maxLength={120}
+                  aria-invalid={briefError}
+                  aria-describedby={
+                    briefError ? "trip-origin-error" : undefined
+                  }
+                  className="bg-secondary text-foreground min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm"
+                />
+                {briefError && (
+                  <p
+                    id="trip-origin-error"
+                    role="alert"
+                    className="text-destructive text-sm"
+                  >
+                    {t("brief.needOrigin")}
+                  </p>
+                )}
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                  {(Object.keys(tripStyles) as TripStyle[]).map((value) => (
+                    <button
+                      key={value}
+                      type="button"
+                      aria-pressed={style === value}
+                      onClick={() => {
+                        setStyle(value);
+                        setHoursPerDay(tripStyles[value].hours);
+                        setDuration(1);
+                      }}
+                      className={`min-h-12 rounded-xl border px-3 py-3 text-left text-xs ${style === value ? "border-primary bg-primary/10" : "border-white/12"}`}
+                    >
+                      <span className="block font-semibold">
+                        {t(`brief.${value}`)}
+                      </span>
+                      <span className="text-muted-foreground">
+                        {t("brief.styleHours", {
+                          hours: tripStyles[value].hours,
+                        })}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                <label className="block text-sm">
+                  {t("brief.hours")}
+                  <input
+                    type="number"
+                    min={1}
+                    max={12}
+                    step={0.5}
+                    value={hoursPerDay}
+                    onChange={(event) => {
+                      const n = Number(event.target.value);
+                      if (n >= 1 && n <= 12) setHoursPerDay(n);
+                    }}
+                    className="bg-secondary mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4"
+                  />
+                </label>
+                <label className="flex min-h-12 items-center gap-3 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={returnToStart}
+                    onChange={(event) => setReturnToStart(event.target.checked)}
+                  />
+                  {t("brief.return")}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const draft = suggestTripBrief(
+                      prompt,
+                      new Date().toLocaleDateString("en-CA"),
+                    );
+                    if (draft.duration) setDuration(draft.duration);
+                    if (draft.startDate) setStartDate(draft.startDate);
+                  }}
+                  className="text-primary min-h-12 text-sm underline underline-offset-4"
+                >
+                  {t("brief.usePrompt")}
+                </button>
+              </fieldset>
+            )}
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <label className="text-muted-foreground text-xs">
                 {t("vehicle")}
@@ -673,7 +827,7 @@ export function TripPlanner({
                   onChange={(event) => setDuration(Number(event.target.value))}
                   className="bg-secondary text-foreground mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm outline-none"
                 >
-                  {[2, 3, 4, 5].map((value) => (
+                  {[1, 2, 3, 4, 5].map((value) => (
                     <option key={value} value={value}>
                       {t("days", { count: value })}
                     </option>
@@ -810,6 +964,26 @@ export function TripPlanner({
             id="capcar-plan"
             className="border-foreground/10 bg-background scroll-mt-24 rounded-[2rem] border p-6 shadow-[0_24px_70px_rgba(184,199,217,.07)] sm:p-8"
           >
+            {schedule && (
+              <div
+                role="status"
+                className={`mb-6 rounded-xl border p-4 ${schedule.fits ? "border-primary/30" : "border-destructive text-destructive"}`}
+              >
+                <p className="font-semibold">
+                  {t(schedule.fits ? "brief.timeFits" : "brief.timeOver")}
+                </p>
+                <p className="mt-2 text-sm">
+                  {t("brief.timeDetail", {
+                    driving: schedule.drivingMinutes,
+                    stops: schedule.visitMinutes,
+                    breaks: schedule.breakMinutes,
+                    total: schedule.totalMinutes,
+                    available: schedule.availableMinutes,
+                  })}
+                </p>
+                <p className="mt-2 text-xs">{t("brief.timeNote")}</p>
+              </div>
+            )}
             {plan ? (
               <div>
                 <div className="border-foreground/12 flex flex-wrap items-start justify-between gap-5 border-b pb-7">
@@ -834,7 +1008,7 @@ export function TripPlanner({
                   {connection?.connected ? (
                     <button
                       type="button"
-                      disabled={calendarLoading}
+                      disabled={calendarLoading || schedule?.fits === false}
                       onClick={() => void addToCalendar()}
                       className="border-foreground/15 hover:bg-card hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium transition disabled:opacity-40"
                     >

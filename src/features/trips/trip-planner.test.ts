@@ -21,6 +21,22 @@ const request = tripPlannerRequestSchema.parse({
 describe("trip planner", () => {
   afterEach(() => vi.unstubAllGlobals());
 
+  it("supports one-day requests and includes explicit departure/return in routing", async () => {
+    const oneDay = tripPlannerRequestSchema.parse({
+      ...request,
+      duration: 1,
+      origin: "Rüsselsheim",
+      returnToStart: true,
+      hoursPerDay: 3,
+    });
+    const plan = await planScenicTrip(oneDay, undefined, {});
+    expect(plan.days).toHaveLength(1);
+    expect(plan.stops.every((stop) => stop.day === 1)).toBe(true);
+    expect(plan.stops[0].mapQuery).toBe("Rüsselsheim");
+    expect(plan.stops.at(-1)?.mapQuery).toBe("Rüsselsheim");
+    expect(plan.contextNotes.join(" ")).not.toContain("Calendar sync found");
+    expect(plan.contextNotes.join(" ")).toContain("discovery unavailable");
+  });
   it("builds a bounded multi-day draft", async () => {
     const plan = await planScenicTrip(request, {
       busyDates: ["2026-10-17"],
