@@ -55,12 +55,10 @@ describe("Trip planner composer", () => {
     expect(field).toHaveValue("Plan a quiet Black Forest weekend");
   });
   it("keeps text and places together, with optional settings", async () => {
-    const fetch = vi
-      .fn()
-      .mockResolvedValue({
-        ok: false,
-        json: async () => ({ error: "Test draft" }),
-      });
+    const fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      json: async () => ({ error: "Test draft" }),
+    });
     vi.stubGlobal("fetch", fetch);
     render(
       <TripPlanner
@@ -98,6 +96,46 @@ describe("Trip planner composer", () => {
       region: "Pristina, Peje",
       prompt: expect.stringContaining("Quiet photo stops"),
     });
+  });
+  it("uses departure, vehicle and duration already written in the prompt", async () => {
+    const fetch = vi
+      .fn()
+      .mockResolvedValue({
+        ok: false,
+        json: async () => ({ error: "Test draft" }),
+      });
+    vi.stubGlobal("fetch", fetch);
+    render(
+      <TripPlanner
+        initialAiConnection={{
+          configured: true,
+          connected: true,
+          provider: "gemini",
+        }}
+      />,
+    );
+    fireEvent.change(screen.getByRole("textbox", { name: "Ask CapCar" }), {
+      target: {
+        value:
+          "we are starting from pristina. 5 people driving a 7 seater across Kosovo. We would love to visit capital + 3 other scenic places. 2 day vacation.",
+      },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Send message" }));
+    await waitFor(() =>
+      expect(fetch.mock.calls.some(([url]) => url === "/api/ai/trips")).toBe(
+        true,
+      ),
+    );
+    const call = fetch.mock.calls.find(([url]) => url === "/api/ai/trips");
+    expect(JSON.parse(call![1].body)).toMatchObject({
+      origin: "pristina",
+      duration: 2,
+      vehicle: "7 seater",
+    });
+    expect(screen.getByRole("button", { name: "Settings" })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
   });
   it("requires the existing connected service rather than showing a working send control", () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false }));

@@ -39,8 +39,31 @@ export function assessTripSchedule(input: {
   };
 }
 
+/** Extract only explicitly stated details; never infer a city from a country or destination. */
+export function extractTripDetails(prompt: string) {
+  const originMatch = prompt.match(
+    /(?:\b(?:starting|departing|leaving|start)\s+(?:from|in|at)|\bfrom|\b(?:starten|start)\s+(?:in|aus)|\b(?:nisemi|nisje)\s+nga|ξεκινάμε\s+από)\s+([\p{L}][\p{L}\p{M} .’'−-]*?)(?=[,.;!?\n]|\s+(?:to|with|for|and|across|nach|mit|für|und|me|drejt)\b|$)/iu,
+  );
+  const days = prompt.match(
+    /\b([1-5])\s*[- ]?\s*(?:days?|tage?|ditë)\b|([1-5])\s*(?:日間|μέρες|ημέρες)/iu,
+  );
+  const hours = prompt.match(
+    /\b(\d{1,2}(?:\.5)?)\s*[- ]?\s*(?:hours?|hrs?|stunden?|orë)\b/iu,
+  );
+  const vehicle = prompt.match(/\b\d{1,2}[- ]seater\b/iu)?.[0];
+  const duration = days ? Number(days[1] || days[2]) : undefined;
+  const h = hours ? Number(hours[1]) : undefined;
+  return {
+    origin: originMatch?.[1].trim(),
+    duration,
+    hoursPerDay: h && h <= 12 ? h : undefined,
+    vehicle,
+  };
+}
+
 /** Conservative suggestions only. Never extracts/guesses a location from vague prose. */
 export function suggestTripBrief(prompt: string, today: string) {
+  const explicitDuration = extractTripDetails(prompt).duration;
   const oneDay =
     /\b(sunday|saturday|tomorrow|today|afternoon|day trip|sonntag|samstag|morgen|heute|tagesausflug|nesër|sot)\b|αύριο|σήμερα|κυριακή|日帰り|明日/u.test(
       prompt.toLowerCase(),
@@ -58,9 +81,12 @@ export function suggestTripBrief(prompt: string, today: string) {
         ? 6
         : undefined;
     if (weekday === undefined)
-      return { duration: oneDay ? 1 : undefined, startDate: undefined };
+      return {
+        duration: explicitDuration ?? (oneDay ? 1 : undefined),
+        startDate: undefined,
+      };
     date.setUTCDate(date.getUTCDate() + ((weekday - date.getUTCDay() + 7) % 7));
   }
   const startDate = date.toISOString().slice(0, 10);
-  return { duration: oneDay ? 1 : undefined, startDate };
+  return { duration: explicitDuration ?? (oneDay ? 1 : undefined), startDate };
 }

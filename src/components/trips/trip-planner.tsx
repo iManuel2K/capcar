@@ -43,6 +43,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
   assessTripSchedule,
+  extractTripDetails,
   suggestTripBrief,
 } from "@/features/trips/trip-intelligence";
 
@@ -259,17 +260,16 @@ export function TripPlanner({
   const t = useTranslations("AIPlanner");
   const { vehicles } = useVehicles();
   const selectedVehicle = vehicles.find((item) => item.id === initialVehicleId);
-  const [vehicleInput, setVehicle] = useState(
-    initialVehicleId ? "" : "2011 BMW E90 318i",
-  );
+  const [prompt, setPrompt] = useState("");
+  const promptDetails = extractTripDetails(prompt);
+  const [vehicleInput, setVehicle] = useState("");
   const vehicle =
     vehicleInput ||
     (selectedVehicle
       ? `${selectedVehicle.productionYear} ${selectedVehicle.make} ${selectedVehicle.model}`
       : initialVehicleId
         ? ""
-        : "2011 BMW E90 318i");
-  const [prompt, setPrompt] = useState("");
+        : promptDetails.vehicle || "2011 BMW E90 318i");
   const [places, setPlaces] = useState(
     initialJournalTrip
       ? [
@@ -291,15 +291,23 @@ export function TripPlanner({
     () => false,
   );
   const [startDate, setStartDate] = useState("");
-  const effectiveStartDate = startDate || (hydrated ? upcomingFriday() : "");
-  const [origin, setOrigin] = useState("");
-  const [hoursPerDay, setHoursPerDay] = useState(6);
+  const promptBrief = hydrated
+    ? suggestTripBrief(prompt, new Date().toLocaleDateString("en-CA"))
+    : { duration: undefined, startDate: undefined };
+  const effectiveStartDate =
+    startDate || promptBrief.startDate || (hydrated ? upcomingFriday() : "");
+  const [originInput, setOrigin] = useState("");
+  const origin = originInput || promptDetails.origin || "";
+  const [hoursInput, setHoursPerDay] = useState<number>();
+  const hoursPerDay = hoursInput ?? promptDetails.hoursPerDay ?? 6;
   const style = "scenic";
   const [returnToStart, setReturnToStart] = useState(true);
   const [briefError, setBriefError] = useState(false);
   const [schedule, setSchedule] =
     useState<ReturnType<typeof assessTripSchedule>>();
-  const [duration, setDuration] = useState(initialJournalTrip ? 1 : 3);
+  const [durationInput, setDuration] = useState<number>();
+  const duration =
+    durationInput ?? promptBrief.duration ?? (initialJournalTrip ? 1 : 3);
   const [pace, setPace] = useState<"scenic" | "balanced" | "driving">("scenic");
   const [interests, setInterests] = useState<
     Array<(typeof interestOptions)[number]>
@@ -628,15 +636,7 @@ export function TripPlanner({
               <AIInput
                 allowEmpty={inputMode === "places"}
                 value={prompt}
-                onValueChange={(value) => {
-                  setPrompt(value);
-                  const draft = suggestTripBrief(
-                    value,
-                    new Date().toLocaleDateString("en-CA"),
-                  );
-                  if (draft.duration) setDuration(draft.duration);
-                  if (draft.startDate) setStartDate(draft.startDate);
-                }}
+                onValueChange={setPrompt}
                 maxLength={600}
                 busy={loading}
                 disabled={
