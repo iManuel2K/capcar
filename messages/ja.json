@@ -610,7 +610,8 @@
     },
     "simple": {
       "choosePlaces": "場所を選ぶ",
-      "settings": "設定"
+      "settings": "設定",
+      "planning": "接続したAIがルートを作成しています。このページを開いたままお待ちください。結果はここに表示されます。"
     }
   },
   "Connections": {

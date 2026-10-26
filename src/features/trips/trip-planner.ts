@@ -1208,7 +1208,11 @@ async function requestGeminiPlan(
 ) {
   const status = getTripPlannerStatus(environment);
   const generationSignal = AbortSignal.any([
-    AbortSignal.timeout(45_000),
+    AbortSignal.timeout(
+      environment.CAPCAR_TRIP_PLANNER_TIMEOUT_MS === "120000"
+        ? 120_000
+        : 45_000,
+    ),
     ...(signal ? [signal] : []),
   ]);
   const requestWithoutRegion = {

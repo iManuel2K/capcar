@@ -49,6 +49,7 @@ describe("Trip planner composer", () => {
     const request = fetch.mock.calls.find(([url]) => url === "/api/ai/trips");
     expect(request).toBeDefined();
     expect(request![1].headers.accept).toBe("application/x-ndjson");
+    expect(request![1].headers.prefer).toBe("respond-async");
     expect(JSON.parse(request![1].body)).toMatchObject({
       prompt: "Plan a quiet Black Forest weekend",
       inputMode: "prompt",
