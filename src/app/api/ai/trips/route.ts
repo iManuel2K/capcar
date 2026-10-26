@@ -21,6 +21,8 @@ import {
 import { createAdminClient } from "@/lib/supabase/admin";
 import { currentUser } from "@/lib/supabase/current-user";
 
+import { createTripPlanStream } from "@/features/trips/trip-plan-stream";
+
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
@@ -68,6 +70,27 @@ export async function POST(request: Request) {
           mailSignals: connection.sync_summary.mailSignals ?? [],
         };
       }
+    }
+    if (request.headers.get("accept")?.includes("application/x-ndjson")) {
+      return createTripPlanStream(
+        (signal) =>
+          planScenicTripWithFallback(
+            input,
+            context,
+            plannerEnvironment,
+            signal,
+          ),
+        (error) => {
+          console.error("Trip planning stream failed", error);
+          return error instanceof TripPlannerServiceError
+            ? { error: error.message, code: error.code, status: error.status }
+            : {
+                error: "Trip planning request failed. Please try again.",
+                code: "planning_failed",
+                status: 503,
+              };
+        },
+      );
     }
     const plan = await planScenicTripWithFallback(
       input,

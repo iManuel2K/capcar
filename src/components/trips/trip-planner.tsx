@@ -7,6 +7,8 @@ import {
 
 import { TripNavigationLinks } from "@/components/trips/trip-navigation-links";
 
+import { readTripPlanResponse } from "@/features/trips/trip-plan-stream";
+
 import { AIInput, AIResponse } from "@/components/ui/ai-conversation";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
 import { trackAnalytics } from "@/features/analytics/client";
@@ -417,7 +419,10 @@ export function TripPlanner({
     try {
       const response = await fetch("/api/ai/trips", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          accept: "application/x-ndjson",
+        },
         body: JSON.stringify({
           prompt: effectivePrompt,
           inputMode,
@@ -433,7 +438,7 @@ export function TripPlanner({
             : {}),
         }),
       });
-      const body = (await response.json()) as TripPlan | { error?: string };
+      const body = await readTripPlanResponse(response);
       if (!response.ok || !("days" in body))
         throw new Error(
           "error" in body && body.error ? body.error : t("errors.plan"),

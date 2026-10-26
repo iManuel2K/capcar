@@ -853,6 +853,7 @@ async function requestOpenAiPlan(
   request: TripPlannerRequest,
   context: ConnectedPlanningContext | undefined,
   environment: TripPlannerEnvironment,
+  signal?: AbortSignal,
 ) {
   const status = getTripPlannerStatus(environment);
   const userOwned = environment.CAPCAR_TRIP_PLANNER_CREDENTIAL_OWNER === "user";
@@ -907,7 +908,10 @@ async function requestOpenAiPlan(
         authorization: `Bearer ${environment.OPENAI_API_KEY}`,
         "content-type": "application/json",
       },
-      signal: AbortSignal.timeout(useWebSearch ? 28_000 : 25_000),
+      signal: AbortSignal.any([
+        AbortSignal.timeout(useWebSearch ? 28_000 : 25_000),
+        ...(signal ? [signal] : []),
+      ]),
       body: JSON.stringify({
         model: status.model,
         store: false,
@@ -1042,6 +1046,7 @@ async function requestAnthropicPlan(
   request: TripPlannerRequest,
   context: ConnectedPlanningContext | undefined,
   environment: TripPlannerEnvironment,
+  signal?: AbortSignal,
 ) {
   const status = getTripPlannerStatus(environment);
   const userOwned = environment.CAPCAR_TRIP_PLANNER_CREDENTIAL_OWNER === "user";
@@ -1084,7 +1089,10 @@ async function requestAnthropicPlan(
         "content-type": "application/json",
         "x-api-key": environment.ANTHROPIC_API_KEY!,
       },
-      signal: AbortSignal.timeout(28_000),
+      signal: AbortSignal.any([
+        AbortSignal.timeout(28_000),
+        ...(signal ? [signal] : []),
+      ]),
       body: JSON.stringify({
         model: status.model,
         max_tokens: 6000,
@@ -1196,8 +1204,13 @@ async function requestGeminiPlan(
   request: TripPlannerRequest,
   context: ConnectedPlanningContext | undefined,
   environment: TripPlannerEnvironment,
+  signal?: AbortSignal,
 ) {
   const status = getTripPlannerStatus(environment);
+  const generationSignal = AbortSignal.any([
+    AbortSignal.timeout(45_000),
+    ...(signal ? [signal] : []),
+  ]);
   const requestWithoutRegion = {
     prompt: request.prompt,
     inputMode: request.inputMode,
@@ -1238,7 +1251,7 @@ async function requestGeminiPlan(
           "content-type": "application/json",
           "x-goog-api-key": environment.GEMINI_API_KEY!,
         },
-        signal: AbortSignal.timeout(28_000),
+        signal: generationSignal,
         body: JSON.stringify({
           systemInstruction: {
             parts: [{ text: tripPlannerSystemPrompt }],
@@ -1256,6 +1269,8 @@ async function requestGeminiPlan(
                       mailSignals: [],
                     },
                     requirements: {
+                      conciseOutput:
+                        "Keep descriptions short. Avoid repeating the same advice across stops, days and checklist.",
                       exactDayCount: request.duration,
                       exactFirstDate: request.startDate,
                       includeAtLeast:
@@ -1346,6 +1361,7 @@ async function generatePlan(
   request: TripPlannerRequest,
   context?: ConnectedPlanningContext,
   environment: TripPlannerEnvironment = process.env,
+  signal?: AbortSignal,
 ): Promise<TripPlan> {
   const status = getTripPlannerStatus(environment);
   if (status.mode === "deterministic")
@@ -1353,11 +1369,11 @@ async function generatePlan(
   if (!status.configured)
     throw new Error(`${status.providerName} is not fully configured.`);
   if (status.mode === "gemini")
-    return requestGeminiPlan(request, context, environment);
+    return requestGeminiPlan(request, context, environment, signal);
   if (status.mode === "openai")
-    return requestOpenAiPlan(request, context, environment);
+    return requestOpenAiPlan(request, context, environment, signal);
   if (status.mode === "anthropic")
-    return requestAnthropicPlan(request, context, environment);
+    return requestAnthropicPlan(request, context, environment, signal);
   const response = await requestExternalProvider<
     TripPlannerRequest & { connectedContext?: ConnectedPlanningContext },
     Omit<TripPlan, "provider" | "source" | "mapLinks" | "researchSources"> & {
@@ -1383,6 +1399,7 @@ export async function planScenicTrip(
   request: TripPlannerRequest,
   context?: ConnectedPlanningContext,
   environment: TripPlannerEnvironment = process.env,
+  signal?: AbortSignal,
 ): Promise<TripPlan> {
   const placeDiscovery = await discoverTripPlaces(request, environment);
   const plan = await generatePlan(
@@ -1396,6 +1413,7 @@ export async function planScenicTrip(
           placeDiscovery,
         },
     environment,
+    signal,
   );
   if (
     plan.days.length !== request.duration ||
@@ -1468,10 +1486,11 @@ export async function planScenicTripWithFallback(
   request: TripPlannerRequest,
   context?: ConnectedPlanningContext,
   environment: TripPlannerEnvironment = process.env,
+  signal?: AbortSignal,
 ): Promise<TripPlan> {
   const status = getTripPlannerStatus(environment);
   try {
-    return await planScenicTrip(request, context, environment);
+    return await planScenicTrip(request, context, environment, signal);
   } catch (error) {
     if (status.mode === "deterministic") throw error;
     if (request.inputMode === "prompt") throw error;
