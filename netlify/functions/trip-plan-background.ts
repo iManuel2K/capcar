@@ -17,8 +17,24 @@ export default async function tripPlanBackground(request: Request) {
   // Safe operational probe: validate bindings without reading users or calling an AI.
   if (request.method === "GET") {
     try {
-      createAdminClient();
+      const admin = createAdminClient();
       getAiConnectionEncryptionKey();
+      const probe = new URL(request.url).searchParams.get("probe");
+      if (probe && /^[a-f0-9-]{36}$/i.test(probe)) {
+        // Only an admin-created, explicitly marked readiness fixture can be updated.
+        // This branch never loads a user or calls an AI provider.
+        const checked = await admin
+          .from("trip_planning_jobs")
+          .update({
+            status: "completed",
+            result: { worker_ready: true },
+            input: null,
+          })
+          .eq("id", probe)
+          .eq("status", "queued")
+          .contains("input", { kind: "worker-readiness-probe" });
+        if (checked.error) throw checked.error;
+      }
       console.info("Trip planner background worker configuration ready");
     } catch {
       console.error("Trip planner background worker configuration missing");
