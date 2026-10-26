@@ -8,6 +8,7 @@ import { journalPath, resolveJournalLocale } from "@/features/journal/routes";
 import { journalUI } from "@/features/journal/ui";
 import { HomepageLink } from "./homepage-link";
 import { featureDiscoveryCopy } from "@/features/marketing/feature-discovery-copy";
+import { pricingCopy } from "@/features/marketing/pricing-copy";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
 import styles from "./homepage.module.css";
 
@@ -40,6 +41,7 @@ export function SiteFooter() {
           journalLocale === "en" ? "/platform" : `/${journalLocale}/platform`,
         ],
         [l("nav.projects"), "/#projects"],
+        [pricingCopy[journalLocale].nav, "/pricing"],
         [t("roadmap"), "/roadmap"],
         [journal.label, journalPath(journalLocale)],
         [t("faq"), "/#faq"],
