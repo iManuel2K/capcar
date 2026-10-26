@@ -98,12 +98,10 @@ describe("Trip planner composer", () => {
     });
   });
   it("uses departure, vehicle and duration already written in the prompt", async () => {
-    const fetch = vi
-      .fn()
-      .mockResolvedValue({
-        ok: false,
-        json: async () => ({ error: "Test draft" }),
-      });
+    const fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      json: async () => ({ error: "Test draft" }),
+    });
     vi.stubGlobal("fetch", fetch);
     render(
       <TripPlanner
@@ -136,6 +134,52 @@ describe("Trip planner composer", () => {
       "aria-expanded",
       "false",
     );
+  });
+  it("submits the screenshot wording with Frankfurt as departure, without asking again", async () => {
+    const fetch = vi
+      .fn()
+      .mockResolvedValue({
+        ok: false,
+        json: async () => ({ error: "Test draft" }),
+      });
+    vi.stubGlobal("fetch", fetch);
+    render(
+      <TripPlanner
+        initialAiConnection={{
+          configured: true,
+          connected: true,
+          provider: "gemini",
+        }}
+      />,
+    );
+    fireEvent.change(screen.getByRole("textbox", { name: "Ask CapCar" }), {
+      target: {
+        value:
+          "i am in frankfurt. i have a 7 seater and i will drive to pristina. 2 days in Kosovo. i want to visit capital and 3 other beautiful scenic spots.",
+      },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Send message" }));
+    await waitFor(() =>
+      expect(fetch.mock.calls.some(([url]) => url === "/api/ai/trips")).toBe(
+        true,
+      ),
+    );
+    const call = fetch.mock.calls.find(([url]) => url === "/api/ai/trips");
+    expect(JSON.parse(call![1].body)).toMatchObject({
+      origin: "frankfurt",
+      duration: 2,
+      vehicle: "7 seater",
+      prompt: expect.stringContaining("drive to pristina"),
+    });
+    expect(screen.getByRole("button", { name: "Settings" })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+    expect(
+      screen.queryByText(
+        "Add your starting town so CapCar can keep the trip practical.",
+      ),
+    ).not.toBeInTheDocument();
   });
   it("requires the existing connected service rather than showing a working send control", () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false }));
