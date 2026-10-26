@@ -14,7 +14,7 @@ The project uses `src/`, so the requested `/components/ui` belongs under `src/co
 import { SignInPage, type Testimonial } from "@/components/ui/sign-in";
 ```
 
-The supplied component is adapted to use CapCar's existing font and semantic palette. Its page gradient mixes `background`, `secondary` and `primary`; images use contain framing, and testimonials sit below the image. Entrance animations run only when reduced motion is not requested.
+The supplied component is adapted to use CapCar's existing font and semantic palette. Its visible page gradient mixes `background`, `accent`, `primary` and `mint-accent`, with darkened color stops to keep muted text readable; images use contain framing, and testimonials sit below the image. Entrance animations run only when reduced motion is not requested.
 
 The production form retains existing authentication, errors, localized labels and destination handling. Google and remember-me controls render only when their handlers are supplied. The isolated demo only updates a status message; it never logs or sends credentials. Sample customer endorsements are not displayed on the production page.
 

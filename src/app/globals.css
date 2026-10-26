@@ -105,14 +105,15 @@
 .capcar-sign-in {
   background-image:
     radial-gradient(
-      ellipse at 85% 12%,
-      color-mix(in srgb, var(--primary) 13%, transparent),
-      transparent 48%
+      ellipse at 90% 15%,
+      color-mix(in srgb, var(--primary) 30%, var(--background)),
+      transparent 70%
     ),
     linear-gradient(
       135deg,
-      var(--background) 30%,
-      color-mix(in srgb, var(--secondary) 55%, var(--background))
+      var(--background) 15%,
+      var(--accent) 62%,
+      color-mix(in srgb, var(--mint-accent) 25%, var(--background))
     );
 }
 
