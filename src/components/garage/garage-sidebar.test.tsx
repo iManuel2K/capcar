@@ -67,12 +67,14 @@ describe("selected vehicle sidebar", () => {
     ).not.toHaveAttribute("aria-current");
     route.pathname = "/garage/ford/parts";
     view.rerender(<GarageShell>Vehicle content</GarageShell>);
-    expect(
-      screen.getByRole("link", { name: "Parts", exact: true }),
-    ).toHaveAttribute("href", "/garage/ford/parts");
-    expect(
-      screen.getByRole("link", { name: "Parts", exact: true }),
-    ).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: /^Parts$/ })).toHaveAttribute(
+      "href",
+      "/garage/ford/parts",
+    );
+    expect(screen.getByRole("link", { name: /^Parts$/ })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
   });
   it("opens tools for a deep-linked tool and makes collapsed links inert", () => {
     route.pathname = "/garage/bmw/guides/a-guide";

@@ -42,10 +42,14 @@ type SidebarItem = {
 };
 
 // Interaction inspired by unlumen Sidebar 001; uses CapCar's existing routes and tokens.
-const SidebarMotion = createContext({
+const SidebarMotion = createContext<{
+  enabled: boolean;
+  hovered: string;
+  setHovered: (href: string) => void;
+}>({
   enabled: false,
   hovered: "",
-  setHovered: (_href: string) => {},
+  setHovered: () => {},
 });
 const sidebarSpring = { type: "spring", stiffness: 400, damping: 35 } as const;
 
