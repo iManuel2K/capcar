@@ -101,6 +101,69 @@
   color-scheme: dark;
 }
 
+/* Sign-in gradients follow the shared Chrome palette; the car stays uncovered. */
+.capcar-sign-in {
+  background-image:
+    radial-gradient(
+      ellipse at 85% 12%,
+      color-mix(in srgb, var(--primary) 13%, transparent),
+      transparent 48%
+    ),
+    linear-gradient(
+      135deg,
+      var(--background) 30%,
+      color-mix(in srgb, var(--secondary) 55%, var(--background))
+    );
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRightIn {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+  }
+}
+
+@keyframes testimonialIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .capcar-sign-in-element {
+    animation: fadeSlideIn 400ms ease-out both;
+  }
+  .capcar-sign-in-hero {
+    animation: slideRightIn 450ms 100ms ease-out both;
+  }
+  .capcar-sign-in-testimonial {
+    animation: testimonialIn 400ms ease-out both;
+  }
+}
+
 @keyframes capcar-hero-drift {
   from {
     transform: scale(1.015);

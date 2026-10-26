@@ -27,6 +27,7 @@ import {
 } from "react";
 
 import { createClient } from "@/lib/supabase/client";
+import { SignInPage } from "@/components/ui/sign-in";
 
 type AuthMode = "login" | "register" | "forgot" | "reset";
 
@@ -167,6 +168,58 @@ export function AuthForm({
   const needsEmail = mode !== "reset";
   const needsPassword = mode !== "forgot";
 
+  if (mode === "login") {
+    return (
+      <SignInPage
+        eyebrow={t("login.eyebrow")}
+        title={t("login.title")}
+        description={t("login.description")}
+        heroImageSrc="/garage/cutouts/bmw-318i.webp"
+        heroContent={
+          <div>
+            <p className="text-primary text-xs font-semibold tracking-[0.18em] uppercase">
+              {t("private")}
+            </p>
+            <h2 className="mt-5 text-4xl font-medium tracking-tight text-balance lg:text-6xl">
+              {t("oneAccount")}
+              <br />
+              {t("wholeBuild")}
+            </h2>
+            <p className="text-muted-foreground mt-5 max-w-md text-base leading-7">
+              {t("accountDescription")}
+            </p>
+          </div>
+        }
+        labels={{
+          email: t("email"),
+          emailPlaceholder: "you@example.com",
+          password: t("password"),
+          passwordPlaceholder: t("passwordPlaceholder"),
+          showPassword: t("showPassword"),
+          hidePassword: t("hidePassword"),
+          resetPassword: t("forgotLink"),
+          signIn: t("login.action"),
+          newAccount: t("newToCapcar"),
+          createAccount: t("createAccount"),
+        }}
+        email={email}
+        password={password}
+        onEmailChange={setEmail}
+        onPasswordChange={setPassword}
+        onSignIn={submit}
+        onInvalid={(event) => {
+          const field = event.target as HTMLInputElement;
+          setError(field.validationMessage || t("errors.invalid"));
+        }}
+        resetPasswordHref="/forgot-password"
+        createAccountHref={`/register?next=${encodeURIComponent(safeAuthNext(nextPath))}`}
+        loading={loading}
+        message={message}
+        error={error}
+      />
+    );
+  }
+
   return (
     <main
       id="main-content"
@@ -264,9 +317,7 @@ export function AuthForm({
                     required
                     minLength={8}
                     type={showPassword ? "text" : "password"}
-                    autoComplete={
-                      mode === "login" ? "current-password" : "new-password"
-                    }
+                    autoComplete="new-password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     placeholder={t("passwordPlaceholder")}
@@ -291,17 +342,6 @@ export function AuthForm({
                     className="text-foreground placeholder:text-muted-foreground min-h-11 w-full bg-transparent text-base outline-none"
                   />
                 </Field>
-              )}
-
-              {mode === "login" && (
-                <div className="flex justify-end">
-                  <Link
-                    href="/forgot-password"
-                    className="text-muted-foreground hover:text-primary inline-flex min-h-11 items-center rounded text-sm transition"
-                  >
-                    {t("forgotLink")}
-                  </Link>
-                </div>
               )}
 
               {mode === "register" && (
@@ -374,17 +414,6 @@ export function AuthForm({
               </p>
             )}
 
-            {mode === "login" && (
-              <p className="text-muted-foreground mt-7 text-center text-xs">
-                {t("newToCapcar")}{" "}
-                <Link
-                  href={`/register?next=${encodeURIComponent(safeAuthNext(nextPath))}`}
-                  className="text-foreground hover:text-primary font-medium"
-                >
-                  {t("createAccount")}
-                </Link>
-              </p>
-            )}
             {mode === "register" && (
               <p className="text-muted-foreground mt-7 text-center text-xs">
                 {t("haveAccount")}{" "}
