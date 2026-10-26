@@ -93,6 +93,9 @@
     "demo": "Live demo"
   },
   "GarageNav": {
+    "sidebarWidth": "Sidebar width",
+    "narrowerSidebar": "Narrower sidebar",
+    "widerSidebar": "Wider sidebar",
     "label": "Garage navigation",
     "garage": "Garage",
     "maintenance": "Maintenance",
