@@ -83,7 +83,7 @@ export function MarketingHeader() {
 
           <nav
             aria-label={t("main")}
-            className="border-foreground/8 text-foreground/68 hidden items-center gap-0.5 rounded-full border bg-white/20 p-1 text-sm xl:flex"
+            className="border-foreground/8 text-foreground/68 bg-card/65 hidden items-center gap-0.5 rounded-full border p-1 text-sm xl:flex"
           >
             {links.slice(0, 2).map((item) => (
               <Link
