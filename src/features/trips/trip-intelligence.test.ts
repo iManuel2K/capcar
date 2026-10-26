@@ -47,6 +47,27 @@ describe("short trip briefs", () => {
       extractTripDetails("Wir starten in Frankfurt mit Freunden. 2 Tage"),
     ).toMatchObject({ origin: "Frankfurt", duration: 2 });
   });
+  it.each([
+    [
+      "i am in frankfurt. i have a 7 seater and i will drive to pristina. 2 days in Kosovo.",
+      "frankfurt",
+    ],
+    ["I'm in Frankfurt and will drive to Pristina", "Frankfurt"],
+    [
+      "We’re currently in Rüsselsheim am Main. Drive to Mainz",
+      "Rüsselsheim am Main",
+    ],
+    ["Wir sind gerade in Frankfurt und fahren nach Mainz", "Frankfurt"],
+    ["I am in Frankfurt. We are starting from Mainz to Pristina", "Mainz"],
+  ])("recognizes the departure in %s", (prompt, origin) => {
+    expect(extractTripDetails(prompt).origin).toBe(origin);
+  });
+  it("does not use a destination or another person's location as the start", () => {
+    expect(
+      extractTripDetails("I will drive to Pristina. My friend is in Frankfurt")
+        .origin,
+    ).toBeUndefined();
+  });
   it("counts visits and rest breaks instead of checking driving time alone", () => {
     expect(
       assessTripSchedule({

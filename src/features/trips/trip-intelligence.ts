@@ -41,9 +41,14 @@ export function assessTripSchedule(input: {
 
 /** Extract only explicitly stated details; never infer a city from a country or destination. */
 export function extractTripDetails(prompt: string) {
-  const originMatch = prompt.match(
+  const departureMatch = prompt.match(
     /(?:\b(?:starting|departing|leaving|start)\s+(?:from|in|at)|\bfrom|\b(?:starten|start)\s+(?:in|aus)|\b(?:nisemi|nisje)\s+nga|ξεκινάμε\s+από)\s+([\p{L}][\p{L}\p{M} .’'−-]*?)(?=[,.;!?\n]|\s+(?:to|with|for|and|across|nach|mit|für|und|me|drejt)\b|$)/iu,
   );
+  // Prefer an explicit departure over a current location elsewhere in the prompt.
+  const currentLocationMatch = prompt.match(
+    /(?:\b(?:i\s+am|we\s+are|i[’']m|we[’']re)\s+(?:(?:currently|now)\s+)?in|\b(?:ich\s+bin|wir\s+sind)\s+(?:(?:gerade|jetzt)\s+)?in)\s+([\p{L}][\p{L}\p{M} .’'−-]*?)(?=[,.;!?\n]|\s+(?:to|with|for|and|across|nach|mit|für|und)\b|$)/iu,
+  );
+  const originMatch = departureMatch ?? currentLocationMatch;
   const days = prompt.match(
     /\b([1-5])\s*[- ]?\s*(?:days?|tage?|ditë)\b|([1-5])\s*(?:日間|μέρες|ημέρες)/iu,
   );
