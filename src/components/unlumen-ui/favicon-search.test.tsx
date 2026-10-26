@@ -53,6 +53,8 @@ it("debounces favicon loading and falls back when the image fails", async () => 
   const image = container.querySelector("img")!;
   expect(image).toHaveAttribute("src", getFaviconUrl("ebay.de"));
   expect(image).toHaveAttribute("referrerpolicy", "no-referrer");
+  fireEvent.load(image);
+  expect(image).toHaveClass("opacity-100");
   fireEvent.error(image);
   expect(container.querySelector("img")).toBeNull();
 });

@@ -65,8 +65,10 @@ function SiteIcon({ domain }: { domain: string | null }) {
             height={20}
             referrerPolicy="no-referrer"
             className={cn(
-              "absolute size-5 rounded-sm object-contain",
-              state !== "ready" && "opacity-0",
+              "absolute size-5 rounded-sm object-contain motion-safe:transition-[opacity,transform] motion-safe:duration-200",
+              state === "ready"
+                ? "scale-100 opacity-100"
+                : "scale-75 opacity-0",
             )}
             onLoad={() => setState("ready")}
             onError={() => setState("error")}
