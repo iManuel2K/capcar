@@ -108,6 +108,7 @@ export function AIInput({
   busy = false,
   disabled = false,
   maxLength = 2000,
+  allowEmpty = false,
   label,
   placeholder,
 }: {
@@ -118,6 +119,7 @@ export function AIInput({
   busy?: boolean;
   disabled?: boolean;
   maxLength?: number;
+  allowEmpty?: boolean;
   label?: string;
   placeholder?: string;
 }) {
@@ -132,7 +134,8 @@ export function AIInput({
     }
   }, [value]);
   const submit = () => {
-    if (!disabled && !busy && value.trim().length >= 2) onSubmit();
+    if (!disabled && !busy && (allowEmpty || value.trim().length >= 2))
+      onSubmit();
   };
   return (
     <div className={styles.composer}>
@@ -167,7 +170,11 @@ export function AIInput({
         <button
           type="button"
           className={styles.send}
-          disabled={busy ? !onStop : disabled || value.trim().length < 2}
+          disabled={
+            busy
+              ? !onStop
+              : disabled || (!allowEmpty && value.trim().length < 2)
+          }
           onClick={busy && onStop ? onStop : submit}
           aria-label={busy && onStop ? c.stop : c.send}
         >

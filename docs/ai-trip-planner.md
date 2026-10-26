@@ -3,11 +3,13 @@
 ## Short-prompt planning
 
 CapCar owns the trip brief and validation rules while the user's connected AI
-generates the itinerary. Prompt mode asks for an explicit starting town, an
-editable daily time budget, and whether to return to the start. Quick, Scenic
-and Full are three starting profiles (3, 6 and 9 hours), not three pre-generated
-itineraries. Common day-trip and relative-date wording suggests visible dates;
-the user can edit those assumptions before generating. One-day trips are supported.
+generates the itinerary. A shared composer accepts optional text alongside ordered
+places. The place picker and a single Settings button stay next to the composer;
+vehicle, dates, daily time budget, return preference and connected context live in
+Settings. Missing departure information opens Settings and focuses the starting
+town before any AI request. Text-only planning needs an explicit starting town;
+selected routes use their first place as departure. Common day-trip and relative
+date wording suggests editable dates. One-day trips are supported.
 
 For one-day trips with an origin and `GEOAPIFY_API_KEY`, CapCar retrieves up to
 30 nearby places within a bounded 10–100 km radius, rejects malformed,
