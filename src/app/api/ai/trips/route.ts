@@ -21,6 +21,7 @@ import {
 import { createAdminClient } from "@/lib/supabase/admin";
 import { currentUser } from "@/lib/supabase/current-user";
 
+import { startTripJob } from "@/features/trips/trip-jobs";
 import { createTripPlanStream } from "@/features/trips/trip-plan-stream";
 
 export const runtime = "nodejs";
@@ -70,6 +71,19 @@ export async function POST(request: Request) {
           mailSignals: connection.sync_summary.mailSignals ?? [],
         };
       }
+    }
+    if (request.headers.get("prefer") === "respond-async") {
+      const jobId = await startTripJob(
+        admin,
+        user.id,
+        input,
+        context,
+        new URL(request.url).origin,
+      );
+      return NextResponse.json(
+        { jobId },
+        { status: 202, headers: { "Cache-Control": "no-store" } },
+      );
     }
     if (request.headers.get("accept")?.includes("application/x-ndjson")) {
       return createTripPlanStream(

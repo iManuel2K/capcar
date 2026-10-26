@@ -610,7 +610,8 @@
     },
     "simple": {
       "choosePlaces": "Choose places",
-      "settings": "Settings"
+      "settings": "Settings",
+      "planning": "Your AI is planning the route. Keep this page open; the result will appear here."
     }
   },
   "Connections": {

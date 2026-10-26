@@ -74,6 +74,39 @@ export function createTripPlanStream(
 export async function readTripPlanResponse(
   response: Response,
 ): Promise<TripPlan | { error: string }> {
+  if (response.status === 202) {
+    const { jobId } = await response.json();
+    if (typeof jobId !== "string" || !/^[a-f0-9-]{36}$/i.test(jobId))
+      throw new Error("The planner could not start. Please try again.");
+    const deadline = Date.now() + 180000;
+    while (Date.now() < deadline) {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      let status: Response;
+      try {
+        status = await fetch(`/api/ai/trips/jobs/${jobId}`, {
+          cache: "no-store",
+          signal: AbortSignal.timeout(10000),
+        });
+      } catch {
+        continue;
+      }
+      if (status.status >= 500) continue;
+      let job;
+      try {
+        job = await status.json();
+      } catch {
+        continue;
+      }
+      if (!status.ok || job.status === "failed")
+        return {
+          error: job.error || "Trip planning failed. Please try again.",
+        };
+      if (job.status === "completed") return job.result;
+    }
+    throw new Error(
+      "The AI provider did not finish this trip. Please try again.",
+    );
+  }
   if (!response.headers?.get("content-type")?.includes("application/x-ndjson"))
     return response.json();
   if (!response.body)

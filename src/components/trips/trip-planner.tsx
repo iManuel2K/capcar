@@ -422,6 +422,7 @@ export function TripPlanner({
         headers: {
           "content-type": "application/json",
           accept: "application/x-ndjson",
+          prefer: "respond-async",
         },
         body: JSON.stringify({
           prompt: effectivePrompt,
@@ -652,6 +653,11 @@ export function TripPlanner({
                 onSubmit={() => void createPlan()}
               />
             </div>
+            {loading && (
+              <p role="status" className="text-muted-foreground mt-3 text-sm">
+                {t("simple.planning")}
+              </p>
+            )}
             <div className="mt-4 flex flex-wrap gap-3">
               <button
                 type="button"

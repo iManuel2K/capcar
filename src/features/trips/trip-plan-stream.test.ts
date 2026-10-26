@@ -16,7 +16,10 @@ const failure = () => ({
   code: "gemini_timeout",
   status: 504,
 });
-afterEach(() => vi.useRealTimers());
+afterEach(() => {
+  vi.useRealTimers();
+  vi.unstubAllGlobals();
+});
 describe("trip planning transport", () => {
   it("starts immediately, stays alive beyond 30 seconds and delivers the real plan", async () => {
     const plan = await planScenicTrip(request, undefined, {});
@@ -80,6 +83,47 @@ describe("trip planning transport", () => {
     expect(signal?.aborted).toBe(true);
     finish(plan);
     await Promise.resolve();
+  });
+  it("polls background work past 30 seconds and tolerates a transient status failure", async () => {
+    vi.useFakeTimers();
+    const started = Date.now();
+    const fetch = vi.fn(async () =>
+      Date.now() - started < 35000
+        ? new Response(null, { status: 503 })
+        : Response.json({
+            status: "completed",
+            result: { title: "Completed by AI" },
+          }),
+    );
+    vi.stubGlobal("fetch", fetch);
+    const result = readTripPlanResponse(
+      Response.json(
+        { jobId: "11111111-1111-4111-8111-111111111111" },
+        { status: 202 },
+      ),
+    );
+    await vi.advanceTimersByTimeAsync(36000);
+    expect(await result).toEqual({ title: "Completed by AI" });
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/ai/trips/jobs/11111111-1111-4111-8111-111111111111",
+      expect.any(Object),
+    );
+  });
+  it("reports a background provider error without submitting another paid generation", async () => {
+    vi.useFakeTimers();
+    const fetch = vi.fn(async () =>
+      Response.json({ status: "failed", error: "Provider quota reached" }),
+    );
+    vi.stubGlobal("fetch", fetch);
+    const result = readTripPlanResponse(
+      Response.json(
+        { jobId: "11111111-1111-4111-8111-111111111111" },
+        { status: 202 },
+      ),
+    );
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(await result).toEqual({ error: "Provider quota reached" });
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
   it("keeps buffered JSON errors compatible and rejects interrupted streams", async () => {
     expect(

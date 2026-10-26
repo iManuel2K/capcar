@@ -109,18 +109,25 @@ user list can connect.
   that Blitzer should run separately, but must not present fabricated live radar
   data.
 
-## Generation timeouts and transport
+## Generation jobs and timeouts
 
-The app requests NDJSON from `/api/ai/trips`. Account, connection and rate-limit
-checks retain normal HTTP errors before streaming begins. A progress frame is
-sent immediately after those checks and every five seconds while generation is
-pending. The final frame carries either the real itinerary or a provider error
-with its code and original status. Errors after streaming starts travel in that
-frame because HTTP headers have already been sent. Clients without the NDJSON
-Accept header retain the buffered JSON contract.
+The app sends `Prefer: respond-async` to `/api/ai/trips`. After account,
+connection and rate-limit checks, the route saves a short-lived private job,
+dispatches the signed `trip-plan-background` function and returns a job ID with
+HTTP 202. The browser polls its authenticated status endpoint through short
+requests. It does not keep a long connection open or resubmit generation when
+one poll fails. The result is generated using the requesting user's stored AI
+connection, not a shared user key.
 
-The stream has a 52-second deadline and aborts native provider requests on expiry
-or disconnect. Gemini generation and its possible location-repair attempt share
-one 45-second budget. This prevents each attempt starting a fresh wait. Slow or
-unavailable providers can still return an error; no itinerary is fabricated to
-hide a timeout.
+The worker atomically claims queued jobs so repeated delivery cannot start a
+second paid generation. It reloads the owner's connection, generates the plan,
+and saves completion or a provider failure. Provider keys never enter the job
+payload or response. Pending input/context are cleared on completion/failure;
+expired jobs are removed when new jobs start. The table is service-only with RLS;
+status lookups additionally match the signed-in owner and expiry. Jobs expire
+after one hour. The browser reports a stalled job after three minutes.
+
+Gemini background generation and its possible location repair share a two-minute
+budget. Worker requests are cancelled at 125 seconds. Buffered JSON and earlier
+NDJSON clients remain compatible, but the current app uses background jobs to
+avoid the deployment's observed 30-second connection limit.

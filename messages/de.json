@@ -610,7 +610,8 @@
     },
     "simple": {
       "choosePlaces": "Orte auswählen",
-      "settings": "Einstellungen"
+      "settings": "Einstellungen",
+      "planning": "Deine KI plant die Route. Lass die Seite geöffnet; das Ergebnis erscheint hier."
     }
   },
   "Connections": {

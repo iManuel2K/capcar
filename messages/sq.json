@@ -610,7 +610,8 @@
     },
     "simple": {
       "choosePlaces": "Zgjidh vendet",
-      "settings": "Cilësimet"
+      "settings": "Cilësimet",
+      "planning": "AI-ja jote po planifikon rrugën. Mbaje faqen hapur; rezultati do të shfaqet këtu."
     }
   },
   "Connections": {
