@@ -134,6 +134,7 @@
   },
   "GlobalSearch": {
     "label": "Kërko pjesë, përshtatshmëri dhe referenca",
+    "clear": "Pastro kërkimin",
     "placeholder": "Numër pjese, emër, shasi…",
     "searching": "Duke kërkuar…",
     "find": "Gjej",

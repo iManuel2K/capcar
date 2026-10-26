@@ -134,6 +134,7 @@
   },
   "GlobalSearch": {
     "label": "パーツ、適合情報、互換品番を検索",
+    "clear": "検索をクリア",
     "placeholder": "品番、名称、車台型式…",
     "searching": "検索中…",
     "find": "検索",

@@ -1,5 +1,5 @@
 "use client";
-import { Search } from "lucide-react";
+import { FaviconSearch } from "@/components/unlumen-ui/favicon-search";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useId, useState } from "react";
 
@@ -39,25 +39,21 @@ export function GlobalPartsSearch({
         {t("label")}
       </label>
       <div
-        className={`flex min-h-11 items-center rounded-full border px-3 transition focus-within:ring-2 ${dark ? "focus-within:ring-primary/40 border-white/10 bg-white/[0.04]" : "border-foreground/14 bg-card focus-within:ring-primary/25"}`}
+        className={`flex min-h-11 items-center rounded-full border px-1 transition focus-within:ring-2 ${dark ? "focus-within:ring-primary/40 border-white/10 bg-white/[0.04]" : "border-foreground/14 bg-card focus-within:ring-primary/25"}`}
       >
-        <Search
-          className={`size-4 shrink-0 ${dark ? "text-muted-foreground" : "text-muted-foreground"}`}
-          aria-hidden="true"
-        />
-        <input
+        <FaviconSearch
           id={id}
           defaultValue={initialQuery}
           name="q"
-          type="search"
           maxLength={80}
           placeholder={t("placeholder")}
-          className={`min-w-0 flex-1 bg-transparent px-2 text-sm outline-none ${dark ? "text-foreground placeholder:text-muted-foreground" : "text-foreground placeholder:text-muted-foreground"}`}
+          clearLabel={t("clear")}
+          inputClassName="border-0 bg-transparent text-sm focus-visible:ring-0"
         />
         <button
           type="submit"
           disabled={pending}
-          className={`rounded-full px-2 py-1 text-[10px] font-semibold uppercase ${dark ? "text-primary" : "text-primary"}`}
+          className={`min-h-12 shrink-0 rounded-full px-3 py-1 text-xs font-semibold uppercase ${dark ? "text-primary" : "text-primary"}`}
         >
           {pending ? t("searching") : t("find")}
         </button>

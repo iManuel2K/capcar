@@ -134,6 +134,7 @@
   },
   "GlobalSearch": {
     "label": "Teile, Passgenauigkeit und Vergleichsnummern suchen",
+    "clear": "Suche löschen",
     "placeholder": "Teilenr., Name, Baureihe…",
     "searching": "Suche…",
     "find": "Suchen",

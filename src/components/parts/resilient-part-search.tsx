@@ -9,6 +9,8 @@ import {
 import { requestRetail, SearchFailure } from "@/features/retail/search-client";
 import { ebaySearchUrl } from "@/features/retail/retail-contracts";
 
+import { FaviconSearch } from "@/components/unlumen-ui/favicon-search";
+
 import styles from "./part-search-theme.module.css";
 import marketing from "@/components/marketing/homepage.module.css";
 
@@ -44,6 +46,7 @@ export function ResilientPartSearch({
   vehicle,
 }: Props) {
   const t = useTranslations("PartsSearch");
+  const search = useTranslations("GlobalSearch");
   const errors = useTranslations("Hardening.Search");
   const locale = useLocale();
   const timeoutMessage = t("timeout");
@@ -185,9 +188,10 @@ export function ResilientPartSearch({
         }}
         className="grid gap-4 rounded-2xl border border-[color:var(--parts-border,rgba(184,199,217,0.20))] bg-[var(--parts-surface,rgba(255,255,255,0.25))] p-5 sm:grid-cols-2"
       >
-        <label htmlFor={id} className="sm:col-span-2">
-          {t("query")}
-          <input
+        <div className="sm:col-span-2">
+          <label htmlFor={id}>{t("query")}</label>
+          <FaviconSearch
+            clearLabel={search("clear")}
             id={id}
             type="search"
             name="query"
@@ -200,12 +204,11 @@ export function ResilientPartSearch({
               setComposing(true);
             }}
             onCompositionEnd={() => setComposing(false)}
-            onChange={(event) =>
-              change({ ...input, query: event.target.value, page: 0 })
-            }
-            className={field}
+            onChange={(query) => change({ ...input, query, page: 0 })}
+            className="mt-2"
+            inputClassName={`${field} mt-0! pr-12! pl-11!`}
           />
-        </label>
+        </div>
         <p id={`${id}-hint`} className="text-sm sm:col-span-2">
           {submitted && !valid ? t("invalidQuery") : t("queryHint")}
         </p>

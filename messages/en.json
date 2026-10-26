@@ -134,6 +134,7 @@
   },
   "GlobalSearch": {
     "label": "Search parts, fitment and cross-references",
+    "clear": "Clear search",
     "placeholder": "Part no., name, chassis…",
     "searching": "Searching…",
     "find": "Find",
