@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { assessTripSchedule, suggestTripBrief } from "./trip-intelligence";
+import {
+  assessTripSchedule,
+  extractTripDetails,
+  suggestTripBrief,
+} from "./trip-intelligence";
 
 describe("short trip briefs", () => {
   it("interprets tomorrow across a month boundary without guessing a location", () => {
@@ -24,6 +28,24 @@ describe("short trip briefs", () => {
       duration: 1,
       startDate: "2026-10-26",
     });
+  });
+  it("extracts explicit details without treating destinations or passenger counts as departure or duration", () => {
+    expect(
+      extractTripDetails(
+        "Starting from Rüsselsheim am Main to Mainz. 2 days, 4 hours per day",
+      ),
+    ).toMatchObject({
+      origin: "Rüsselsheim am Main",
+      duration: 2,
+      hoursPerDay: 4,
+    });
+    expect(extractTripDetails("Visit Pristina with 5 people")).toMatchObject({
+      origin: undefined,
+      duration: undefined,
+    });
+    expect(
+      extractTripDetails("Wir starten in Frankfurt mit Freunden. 2 Tage"),
+    ).toMatchObject({ origin: "Frankfurt", duration: 2 });
   });
   it("counts visits and rest breaks instead of checking driving time alone", () => {
     expect(
