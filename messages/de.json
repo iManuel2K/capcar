@@ -607,6 +607,10 @@
       "timeOver": "Diese Route überschreitet dein Zeitbudget",
       "timeDetail": "Fahrt {driving} Min. + Stopps {stops} Min. + Pausen {breaks} Min. = {total} Min. / {available} Min. verfügbar.",
       "timeNote": "Stopps und Pausen sind geschätzt. Die Gesamtdauer bestätigt weder einzelne Tage noch Öffnungszeiten, Parkplätze, Verkehr oder erlaubten Zugang. Kürze die Fahrt bei Bedarf."
+    },
+    "simple": {
+      "choosePlaces": "Orte auswählen",
+      "settings": "Einstellungen"
     }
   },
   "Connections": {

@@ -38,6 +38,7 @@ describe("Trip planner composer", () => {
     fireEvent.change(field, {
       target: { value: "Plan a quiet Black Forest weekend" },
     });
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     fireEvent.change(screen.getByLabelText("Where are you starting?"), {
       target: { value: "Rüsselsheim, Germany" },
     });
@@ -52,6 +53,51 @@ describe("Trip planner composer", () => {
       inputMode: "prompt",
     });
     expect(field).toHaveValue("Plan a quiet Black Forest weekend");
+  });
+  it("keeps text and places together, with optional settings", async () => {
+    const fetch = vi
+      .fn()
+      .mockResolvedValue({
+        ok: false,
+        json: async () => ({ error: "Test draft" }),
+      });
+    vi.stubGlobal("fetch", fetch);
+    render(
+      <TripPlanner
+        initialAiConnection={{
+          configured: true,
+          connected: true,
+          provider: "gemini",
+        }}
+      />,
+    );
+    expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Where are you starting?")).not.toBeVisible();
+    fireEvent.change(screen.getByRole("textbox", { name: "Ask CapCar" }), {
+      target: { value: "Quiet photo stops" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Choose places" }));
+    const fields = screen.getAllByPlaceholderText(
+      "City, landmark or exact place",
+    );
+    fireEvent.change(fields[0], { target: { value: "Pristina" } });
+    fireEvent.change(fields[1], { target: { value: "Peje" } });
+    fireEvent.click(screen.getByRole("button", { name: "Use these places" }));
+    expect(screen.getByRole("textbox", { name: "Ask CapCar" })).toHaveValue(
+      "Quiet photo stops",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Send message" }));
+    await waitFor(() =>
+      expect(fetch.mock.calls.some(([url]) => url === "/api/ai/trips")).toBe(
+        true,
+      ),
+    );
+    const call = fetch.mock.calls.find(([url]) => url === "/api/ai/trips");
+    expect(JSON.parse(call![1].body)).toMatchObject({
+      inputMode: "places",
+      region: "Pristina, Peje",
+      prompt: expect.stringContaining("Quiet photo stops"),
+    });
   });
   it("requires the existing connected service rather than showing a working send control", () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false }));
@@ -83,13 +129,15 @@ describe("Trip planner composer", () => {
         "Add your starting town so CapCar can keep the trip practical.",
       ),
     ).toBeVisible();
-    expect(screen.getByLabelText("Where are you starting?")).toHaveFocus();
+    await waitFor(() =>
+      expect(screen.getByLabelText("Where are you starting?")).toHaveFocus(),
+    );
     expect(fetch.mock.calls.some(([url]) => url === "/api/ai/trips")).toBe(
       false,
     );
-    fireEvent.click(screen.getByRole("button", { name: /Quick escape/ }));
+
     expect(
       screen.getByLabelText("Hours available per day, including stops"),
-    ).toHaveValue(3);
+    ).toHaveValue(6);
   });
 });

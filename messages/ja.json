@@ -607,6 +607,10 @@
       "timeOver": "この経路は時間を超えています",
       "timeDetail": "走行{driving}分＋立ち寄り{stops}分＋休憩{breaks}分＝{total}分／利用可能{available}分。",
       "timeNote": "滞在・休憩時間は目安です。日ごとの予定、営業時間、駐車、交通、立ち入り可否の確認ではありません。必要に応じて短縮してください。"
+    },
+    "simple": {
+      "choosePlaces": "場所を選ぶ",
+      "settings": "設定"
     }
   },
   "Connections": {

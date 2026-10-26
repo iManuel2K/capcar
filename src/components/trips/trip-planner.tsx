@@ -44,8 +44,6 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
   assessTripSchedule,
   suggestTripBrief,
-  tripStyles,
-  type TripStyle,
 } from "@/features/trips/trip-intelligence";
 
 import { TripRouteMapLoader } from "@/components/trips/trip-route-map-loader";
@@ -271,12 +269,7 @@ export function TripPlanner({
       : initialVehicleId
         ? ""
         : "2011 BMW E90 318i");
-  const [inputMode, setInputMode] = useState<"prompt" | "places">(
-    initialJournalTrip ? "places" : "prompt",
-  );
-  const [prompt, setPrompt] = useState(
-    "Plan me a long scenic weekend with my BMW in the Black Forest. I want great roads, quiet photo spots and sensible fuel stops.",
-  );
+  const [prompt, setPrompt] = useState("");
   const [places, setPlaces] = useState(
     initialJournalTrip
       ? [
@@ -288,6 +281,9 @@ export function TripPlanner({
         ]
       : ["", ""],
   );
+  const inputMode =
+    places.filter((place) => place.trim()).length >= 2 ? "places" : "prompt";
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [placeModalOpen, setPlaceModalOpen] = useState(false);
   const hydrated = useSyncExternalStore(
     () => () => undefined,
@@ -298,7 +294,7 @@ export function TripPlanner({
   const effectiveStartDate = startDate || (hydrated ? upcomingFriday() : "");
   const [origin, setOrigin] = useState("");
   const [hoursPerDay, setHoursPerDay] = useState(6);
-  const [style, setStyle] = useState<TripStyle>("scenic");
+  const style = "scenic";
   const [returnToStart, setReturnToStart] = useState(true);
   const [briefError, setBriefError] = useState(false);
   const [schedule, setSchedule] =
@@ -375,16 +371,14 @@ export function TripPlanner({
       !effectiveStartDate ||
       loading ||
       vehicle.trim().length < 2 ||
-      (inputMode === "prompt" &&
-        aiConnection?.configured === true &&
-        !aiConnection.connected)
+      (aiConnection?.configured === true && !aiConnection.connected)
     )
       return;
     const selectedPlaces = places.map((place) => place.trim()).filter(Boolean);
     const effectivePrompt =
       inputMode === "prompt"
         ? prompt.trim()
-        : `Plan a scenic trip visiting these places in this order: ${selectedPlaces.join(" → ")}. Keep every named place in the route and include practical parking and safe regrouping stops.`.slice(
+        : `${prompt.trim()} Plan a scenic trip visiting these places in this order: ${selectedPlaces.join(" → ")}. Keep every named place in the route and include practical parking and safe regrouping stops.`.slice(
             0,
             600,
           );
@@ -398,8 +392,12 @@ export function TripPlanner({
     )
       return;
     if (inputMode === "prompt" && origin.trim().length < 2) {
+      setSettingsOpen(true);
       setBriefError(true);
-      document.getElementById("trip-origin")?.focus();
+      window.setTimeout(
+        () => document.getElementById("trip-origin")?.focus(),
+        0,
+      );
       return;
     }
     const sequence = ++planningSequence.current;
@@ -626,338 +624,252 @@ export function TripPlanner({
               <Sparkles className="text-primary size-6" />
             </div>
 
-            <div
-              className="mt-7 grid grid-cols-2 rounded-2xl border border-white/10 bg-black/10 p-1"
-              role="tablist"
-              aria-label="Trip input method"
-            >
+            <div className="mt-4">
+              <AIInput
+                allowEmpty={inputMode === "places"}
+                value={prompt}
+                onValueChange={(value) => {
+                  setPrompt(value);
+                  const draft = suggestTripBrief(
+                    value,
+                    new Date().toLocaleDateString("en-CA"),
+                  );
+                  if (draft.duration) setDuration(draft.duration);
+                  if (draft.startDate) setStartDate(draft.startDate);
+                }}
+                maxLength={600}
+                busy={loading}
+                disabled={
+                  !effectiveStartDate ||
+                  vehicle.trim().length < 2 ||
+                  (aiConnection?.configured === true && !aiConnection.connected)
+                }
+                onSubmit={() => void createPlan()}
+              />
+            </div>
+            <div className="mt-4 flex flex-wrap gap-3">
               <button
                 type="button"
-                role="tab"
-                aria-selected={inputMode === "prompt"}
-                onClick={() => setInputMode("prompt")}
-                className={`min-h-11 rounded-xl px-3 text-xs font-semibold transition ${inputMode === "prompt" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+                onClick={() => setPlaceModalOpen(true)}
+                className="border-foreground/15 min-h-12 rounded-xl border px-4 text-sm font-medium"
               >
-                Describe with AI
+                {t("simple.choosePlaces")}
               </button>
               <button
                 type="button"
-                role="tab"
-                aria-selected={inputMode === "places"}
-                onClick={() => {
-                  setInputMode("places");
-                  setPlaceModalOpen(true);
-                }}
-                className={`min-h-11 rounded-xl px-3 text-xs font-semibold transition ${inputMode === "places" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+                aria-expanded={settingsOpen}
+                aria-controls="trip-settings"
+                onClick={() => setSettingsOpen(!settingsOpen)}
+                className="border-foreground/15 min-h-12 rounded-xl border px-4 text-sm font-medium"
               >
-                Choose places
+                {t("simple.settings")}
               </button>
             </div>
-
-            {inputMode === "prompt" ? (
-              <div className="mt-4">
-                <AIInput
-                  value={prompt}
-                  onValueChange={(value) => {
-                    setPrompt(value);
-                    const draft = suggestTripBrief(
-                      value,
-                      new Date().toLocaleDateString("en-CA"),
-                    );
-                    if (draft.duration) setDuration(draft.duration);
-                    if (draft.startDate) setStartDate(draft.startDate);
-                  }}
-                  maxLength={600}
-                  busy={loading}
-                  disabled={
-                    !effectiveStartDate ||
-                    vehicle.trim().length < 2 ||
-                    (aiConnection?.configured === true &&
-                      !aiConnection.connected)
-                  }
-                  onSubmit={() => void createPlan()}
-                />
-              </div>
-            ) : (
-              <div className="mt-4 rounded-2xl border border-white/12 bg-white/6 p-4">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-muted-foreground text-xs">
-                      Selected route
-                    </p>
-                    <p className="text-foreground mt-1 text-sm leading-6">
-                      {places.filter((place) => place.trim()).join(" → ") ||
-                        "No places selected"}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setPlaceModalOpen(true)}
-                    className="border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground hover:text-primary-foreground shrink-0 rounded-full border px-3 py-2 text-xs font-semibold transition"
-                  >
-                    Edit places
-                  </button>
-                </div>
-                <p className="text-muted-foreground mt-3 text-[10px] leading-4">
-                  CapCar keeps these places in order and adds useful fuel,
-                  scenery and photo stops around them.
-                </p>
-              </div>
+            {places.some((place) => place.trim()) && (
+              <p className="mt-3 text-sm leading-6">
+                {places.filter((place) => place.trim()).join(" → ")}
+              </p>
             )}
-
-            {inputMode === "prompt" && (
-              <fieldset className="mt-5 space-y-4">
-                <legend className="text-sm font-semibold">
-                  {t("brief.title")}
-                </legend>
-                <p className="text-muted-foreground text-xs leading-5">
-                  {t("brief.assumptions")}
-                </p>
-                <label className="block text-sm" htmlFor="trip-origin">
-                  {t("brief.origin")}
-                </label>
-                <input
-                  id="trip-origin"
-                  value={origin}
-                  onChange={(event) => {
-                    setOrigin(event.target.value);
-                    setBriefError(false);
-                  }}
-                  maxLength={120}
-                  aria-invalid={briefError}
-                  aria-describedby={
-                    briefError ? "trip-origin-error" : undefined
-                  }
-                  className="bg-secondary text-foreground min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm"
-                />
-                {briefError && (
-                  <p
-                    id="trip-origin-error"
-                    role="alert"
-                    className="text-destructive text-sm"
-                  >
-                    {t("brief.needOrigin")}
+            <div id="trip-settings" hidden={!settingsOpen}>
+              {inputMode === "prompt" && (
+                <fieldset className="mt-5 space-y-4">
+                  <legend className="text-sm font-semibold">
+                    {t("brief.title")}
+                  </legend>
+                  <p className="text-muted-foreground text-xs leading-5">
+                    {t("brief.assumptions")}
                   </p>
-                )}
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-                  {(Object.keys(tripStyles) as TripStyle[]).map((value) => (
-                    <button
-                      key={value}
-                      type="button"
-                      aria-pressed={style === value}
-                      onClick={() => {
-                        setStyle(value);
-                        setHoursPerDay(tripStyles[value].hours);
-                        setDuration(1);
-                      }}
-                      className={`min-h-12 rounded-xl border px-3 py-3 text-left text-xs ${style === value ? "border-primary bg-primary/10" : "border-white/12"}`}
+                  <label className="block text-sm" htmlFor="trip-origin">
+                    {t("brief.origin")}
+                  </label>
+                  <input
+                    id="trip-origin"
+                    value={origin}
+                    onChange={(event) => {
+                      setOrigin(event.target.value);
+                      setBriefError(false);
+                    }}
+                    maxLength={120}
+                    aria-invalid={briefError}
+                    aria-describedby={
+                      briefError ? "trip-origin-error" : undefined
+                    }
+                    className="bg-secondary text-foreground min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm"
+                  />
+                  {briefError && (
+                    <p
+                      id="trip-origin-error"
+                      role="alert"
+                      className="text-destructive text-sm"
                     >
-                      <span className="block font-semibold">
-                        {t(`brief.${value}`)}
-                      </span>
-                      <span className="text-muted-foreground">
-                        {t("brief.styleHours", {
-                          hours: tripStyles[value].hours,
-                        })}
-                      </span>
+                      {t("brief.needOrigin")}
+                    </p>
+                  )}
+                  <label className="block text-sm">
+                    {t("brief.hours")}
+                    <input
+                      type="number"
+                      min={1}
+                      max={12}
+                      step={0.5}
+                      value={hoursPerDay}
+                      onChange={(event) => {
+                        const n = Number(event.target.value);
+                        if (n >= 1 && n <= 12) setHoursPerDay(n);
+                      }}
+                      className="bg-secondary mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4"
+                    />
+                  </label>
+                  <label className="flex min-h-12 items-center gap-3 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={returnToStart}
+                      onChange={(event) =>
+                        setReturnToStart(event.target.checked)
+                      }
+                    />
+                    {t("brief.return")}
+                  </label>
+                </fieldset>
+              )}
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <label className="text-muted-foreground text-xs">
+                  {t("vehicle")}
+                  <input
+                    value={vehicle}
+                    onChange={(event) => setVehicle(event.target.value)}
+                    className="text-foreground focus:border-primary/60 mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-white/6 px-4 text-sm outline-none"
+                  />
+                </label>
+                <label className="text-muted-foreground text-xs">
+                  {t("startDate")}
+                  <input
+                    type="date"
+                    value={effectiveStartDate}
+                    onChange={(event) => setStartDate(event.target.value)}
+                    className="text-foreground mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-white/6 px-4 text-sm [color-scheme:dark] outline-none"
+                  />
+                </label>
+                <label className="text-muted-foreground text-xs">
+                  {t("duration")}
+                  <select
+                    value={duration}
+                    onChange={(event) =>
+                      setDuration(Number(event.target.value))
+                    }
+                    className="bg-secondary text-foreground mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm outline-none"
+                  >
+                    {[1, 2, 3, 4, 5].map((value) => (
+                      <option key={value} value={value}>
+                        {t("days", { count: value })}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="text-muted-foreground text-xs sm:col-span-2">
+                  {t("pace")}
+                  <select
+                    value={pace}
+                    onChange={(event) =>
+                      setPace(event.target.value as typeof pace)
+                    }
+                    className="bg-secondary text-foreground mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm outline-none"
+                  >
+                    <option value="scenic">{t("paces.scenic")}</option>
+                    <option value="balanced">{t("paces.balanced")}</option>
+                    <option value="driving">{t("paces.driving")}</option>
+                  </select>
+                </label>
+              </div>
+
+              <fieldset className="mt-5">
+                <legend className="text-muted-foreground text-xs">
+                  {t("interests")}
+                </legend>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {interestOptions.map((interest) => (
+                    <button
+                      key={interest}
+                      type="button"
+                      aria-pressed={interests.includes(interest)}
+                      onClick={() => toggleInterest(interest)}
+                      className={`min-h-11 rounded-full border px-3 py-2 text-xs transition ${interests.includes(interest) ? "border-primary/55 bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground border-white/12"}`}
+                    >
+                      {t(`interest.${interest}`)}
                     </button>
                   ))}
                 </div>
-                <label className="block text-sm">
-                  {t("brief.hours")}
-                  <input
-                    type="number"
-                    min={1}
-                    max={12}
-                    step={0.5}
-                    value={hoursPerDay}
-                    onChange={(event) => {
-                      const n = Number(event.target.value);
-                      if (n >= 1 && n <= 12) setHoursPerDay(n);
-                    }}
-                    className="bg-secondary mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4"
-                  />
-                </label>
-                <label className="flex min-h-12 items-center gap-3 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={returnToStart}
-                    onChange={(event) => setReturnToStart(event.target.checked)}
-                  />
-                  {t("brief.return")}
-                </label>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const draft = suggestTripBrief(
-                      prompt,
-                      new Date().toLocaleDateString("en-CA"),
-                    );
-                    if (draft.duration) setDuration(draft.duration);
-                    if (draft.startDate) setStartDate(draft.startDate);
-                  }}
-                  className="text-primary min-h-12 text-sm underline underline-offset-4"
-                >
-                  {t("brief.usePrompt")}
-                </button>
               </fieldset>
-            )}
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <label className="text-muted-foreground text-xs">
-                {t("vehicle")}
+
+              <label className="mt-6 flex cursor-pointer gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
                 <input
-                  value={vehicle}
-                  onChange={(event) => setVehicle(event.target.value)}
-                  className="text-foreground focus:border-primary/60 mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-white/6 px-4 text-sm outline-none"
-                />
-              </label>
-              <label className="text-muted-foreground text-xs">
-                {t("startDate")}
-                <input
-                  type="date"
-                  value={effectiveStartDate}
-                  onChange={(event) => setStartDate(event.target.value)}
-                  className="text-foreground mt-2 min-h-12 w-full rounded-xl border border-white/12 bg-white/6 px-4 text-sm [color-scheme:dark] outline-none"
-                />
-              </label>
-              <label className="text-muted-foreground text-xs">
-                {t("duration")}
-                <select
-                  value={duration}
-                  onChange={(event) => setDuration(Number(event.target.value))}
-                  className="bg-secondary text-foreground mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm outline-none"
-                >
-                  {[1, 2, 3, 4, 5].map((value) => (
-                    <option key={value} value={value}>
-                      {t("days", { count: value })}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="text-muted-foreground text-xs sm:col-span-2">
-                {t("pace")}
-                <select
-                  value={pace}
+                  type="checkbox"
+                  checked={useConnectedContext}
                   onChange={(event) =>
-                    setPace(event.target.value as typeof pace)
+                    setUseConnectedContext(event.target.checked)
                   }
-                  className="bg-secondary text-foreground mt-2 min-h-12 w-full rounded-xl border border-white/12 px-4 text-sm outline-none"
-                >
-                  <option value="scenic">{t("paces.scenic")}</option>
-                  <option value="balanced">{t("paces.balanced")}</option>
-                  <option value="driving">{t("paces.driving")}</option>
-                </select>
-              </label>
-            </div>
-
-            <fieldset className="mt-5">
-              <legend className="text-muted-foreground text-xs">
-                {t("interests")}
-              </legend>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {interestOptions.map((interest) => (
-                  <button
-                    key={interest}
-                    type="button"
-                    aria-pressed={interests.includes(interest)}
-                    onClick={() => toggleInterest(interest)}
-                    className={`rounded-full border px-3 py-2 text-xs transition ${interests.includes(interest) ? "border-primary/55 bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground border-white/12"}`}
-                  >
-                    {t(`interest.${interest}`)}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-
-            <label className="mt-6 flex cursor-pointer gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
-              <input
-                type="checkbox"
-                checked={useConnectedContext}
-                onChange={(event) =>
-                  setUseConnectedContext(event.target.checked)
-                }
-                className="accent-primary mt-1 size-4"
-              />
-              <span>
-                <span className="block text-sm font-medium">
-                  {t("useConnections")}
+                  className="accent-primary mt-1 size-4"
+                />
+                <span>
+                  <span className="block text-sm font-medium">
+                    {t("useConnections")}
+                  </span>
+                  <span className="text-muted-foreground mt-1 block text-xs leading-5">
+                    {connection?.connected
+                      ? `Connected as ${connection.email ?? "Google account"}. Calendar conflicts and travel-mail metadata can shape this plan.`
+                      : t("connectionHint")}{" "}
+                    <Link
+                      href="/account/connections"
+                      className="text-primary underline underline-offset-2"
+                    >
+                      {connection?.connected
+                        ? t("manageConnections")
+                        : "Connect Google"}
+                    </Link>
+                  </span>
                 </span>
-                <span className="text-muted-foreground mt-1 block text-xs leading-5">
-                  {connection?.connected
-                    ? `Connected as ${connection.email ?? "Google account"}. Calendar conflicts and travel-mail metadata can shape this plan.`
-                    : t("connectionHint")}{" "}
+              </label>
+
+              {aiConnection ? (
+                <div
+                  className={
+                    aiConnection.connected
+                      ? "mt-3 flex items-center justify-between gap-3 rounded-2xl border border-emerald-200/15 bg-emerald-200/6 p-4"
+                      : "border-primary/20 bg-primary/8 mt-3 flex items-center justify-between gap-3 rounded-2xl border p-4"
+                  }
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-primary grid size-9 shrink-0 place-items-center rounded-full bg-white/8">
+                      <Sparkles className="size-4" />
+                    </span>
+                    <div>
+                      <p className="text-sm font-medium">
+                        {aiConnection.connected
+                          ? `${
+                              aiConnection.provider === "gemini"
+                                ? "Gemini"
+                                : aiConnection.provider === "anthropic"
+                                  ? "Claude"
+                                  : "OpenAI"
+                            } connected`
+                          : "Connect your AI"}
+                      </p>
+                      <p className="text-muted-foreground mt-1 text-xs leading-5">
+                        {aiConnection.connected
+                          ? "This plan uses your own API credits."
+                          : "Connect Gemini, OpenAI or Claude to generate routes with your own provider."}
+                      </p>
+                    </div>
+                  </div>
                   <Link
                     href="/account/connections"
-                    className="text-primary underline underline-offset-2"
+                    className="text-primary shrink-0 text-xs font-semibold underline underline-offset-2"
                   >
-                    {connection?.connected
-                      ? t("manageConnections")
-                      : "Connect Google"}
+                    {aiConnection.connected ? "Manage" : "Connect"}
                   </Link>
-                </span>
-              </span>
-            </label>
-
-            {aiConnection ? (
-              <div
-                className={
-                  aiConnection.connected
-                    ? "mt-3 flex items-center justify-between gap-3 rounded-2xl border border-emerald-200/15 bg-emerald-200/6 p-4"
-                    : "border-primary/20 bg-primary/8 mt-3 flex items-center justify-between gap-3 rounded-2xl border p-4"
-                }
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-primary grid size-9 shrink-0 place-items-center rounded-full bg-white/8">
-                    <Sparkles className="size-4" />
-                  </span>
-                  <div>
-                    <p className="text-sm font-medium">
-                      {aiConnection.connected
-                        ? `${
-                            aiConnection.provider === "gemini"
-                              ? "Gemini"
-                              : aiConnection.provider === "anthropic"
-                                ? "Claude"
-                                : "OpenAI"
-                          } connected`
-                        : "Connect your AI"}
-                    </p>
-                    <p className="text-muted-foreground mt-1 text-xs leading-5">
-                      {aiConnection.connected
-                        ? "This plan uses your own API credits."
-                        : "Connect Gemini, OpenAI or Claude to generate routes with your own provider."}
-                    </p>
-                  </div>
                 </div>
-                <Link
-                  href="/account/connections"
-                  className="text-primary shrink-0 text-xs font-semibold underline underline-offset-2"
-                >
-                  {aiConnection.connected ? "Manage" : "Connect"}
-                </Link>
-              </div>
-            ) : null}
-
-            {inputMode === "places" && (
-              <button
-                type="button"
-                disabled={
-                  loading ||
-                  vehicle.trim().length < 2 ||
-                  places.filter((place) => place.trim()).length < 2 ||
-                  !effectiveStartDate
-                }
-                onClick={() => void createPlan()}
-                className="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground mt-5 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold transition disabled:opacity-40"
-              >
-                {loading ? (
-                  <LoaderCircle className="size-4" />
-                ) : (
-                  <Sparkles className="size-4" />
-                )}
-                {loading ? "CapCar is composing your route…" : t("create")}
-              </button>
-            )}
+              ) : null}
+            </div>
           </aside>
 
           <article

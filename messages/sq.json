@@ -607,6 +607,10 @@
       "timeOver": "Itinerari tejkalon kohën tënde",
       "timeDetail": "Drejtim {driving} min + ndalesa {stops} min + pushime {breaks} min = {total} min / {available} min në dispozicion.",
       "timeNote": "Ndalesat dhe pushimet janë vlerësime. Totali nuk verifikon çdo ditë, oraret, parkimin, trafikun ose hyrjen e lejuar. Shkurtoje udhëtimin nëse duhet."
+    },
+    "simple": {
+      "choosePlaces": "Zgjidh vendet",
+      "settings": "Cilësimet"
     }
   },
   "Connections": {

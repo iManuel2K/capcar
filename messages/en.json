@@ -607,6 +607,10 @@
       "timeOver": "This route exceeds your time budget",
       "timeDetail": "Driving {driving} min + stops {stops} min + breaks {breaks} min = {total} min / {available} min available.",
       "timeNote": "Stop times and breaks are estimates. This total does not verify each day, opening hours, parking, traffic or legal access. Shorten the trip if it does not fit."
+    },
+    "simple": {
+      "choosePlaces": "Choose places",
+      "settings": "Settings"
     }
   },
   "Connections": {
