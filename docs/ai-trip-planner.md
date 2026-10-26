@@ -108,3 +108,19 @@ user list can connect.
 - Blitzer cannot be embedded through a supported public API. CapCar can explain
   that Blitzer should run separately, but must not present fabricated live radar
   data.
+
+## Generation timeouts and transport
+
+The app requests NDJSON from `/api/ai/trips`. Account, connection and rate-limit
+checks retain normal HTTP errors before streaming begins. A progress frame is
+sent immediately after those checks and every five seconds while generation is
+pending. The final frame carries either the real itinerary or a provider error
+with its code and original status. Errors after streaming starts travel in that
+frame because HTTP headers have already been sent. Clients without the NDJSON
+Accept header retain the buffered JSON contract.
+
+The stream has a 52-second deadline and aborts native provider requests on expiry
+or disconnect. Gemini generation and its possible location-repair attempt share
+one 45-second budget. This prevents each attempt starting a fresh wait. Slow or
+unavailable providers can still return an error; no itinerary is fabricated to
+hide a timeout.

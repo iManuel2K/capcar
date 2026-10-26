@@ -48,6 +48,7 @@ describe("Trip planner composer", () => {
     );
     const request = fetch.mock.calls.find(([url]) => url === "/api/ai/trips");
     expect(request).toBeDefined();
+    expect(request![1].headers.accept).toBe("application/x-ndjson");
     expect(JSON.parse(request![1].body)).toMatchObject({
       prompt: "Plan a quiet Black Forest weekend",
       inputMode: "prompt",
@@ -136,12 +137,10 @@ describe("Trip planner composer", () => {
     );
   });
   it("submits the screenshot wording with Frankfurt as departure, without asking again", async () => {
-    const fetch = vi
-      .fn()
-      .mockResolvedValue({
-        ok: false,
-        json: async () => ({ error: "Test draft" }),
-      });
+    const fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      json: async () => ({ error: "Test draft" }),
+    });
     vi.stubGlobal("fetch", fetch);
     render(
       <TripPlanner

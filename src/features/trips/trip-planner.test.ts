@@ -131,6 +131,56 @@ describe("trip planner", () => {
     expect(plan.researchSources).toEqual([]);
   });
 
+  it("shares one timeout and cancellation signal across Gemini location repair", async () => {
+    const plan = await planScenicTrip(request, undefined, {});
+    const generated = JSON.parse(JSON.stringify(plan)) as typeof plan;
+    for (const key of ["provider", "source", "researchSources", "mapLinks"])
+      Reflect.deleteProperty(generated, key);
+    const timeout = vi.spyOn(AbortSignal, "timeout");
+    const signals: Array<AbortSignal | null | undefined> = [];
+    const fetchMock = vi.fn(
+      async (_input: RequestInfo | URL, init?: RequestInit) => {
+        signals.push(init?.signal);
+        return Response.json({
+          candidates: [
+            {
+              content: {
+                parts: [
+                  {
+                    text: JSON.stringify(
+                      signals.length === 1
+                        ? {
+                            ...generated,
+                            stops: generated.stops.map((stop) => ({
+                              ...stop,
+                              mapQuery: "specified region",
+                            })),
+                          }
+                        : generated,
+                    ),
+                  },
+                ],
+              },
+            },
+          ],
+        });
+      },
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    try {
+      const result = await planScenicTrip(request, undefined, {
+        CAPCAR_TRIP_PLANNER_MODE: "gemini",
+        GEMINI_API_KEY: "test-key",
+      });
+      expect(result.source).toBe("gemini");
+      expect(signals).toHaveLength(2);
+      expect(signals[0]).toBe(signals[1]);
+      expect(timeout).toHaveBeenCalledExactlyOnceWith(45000);
+    } finally {
+      timeout.mockRestore();
+    }
+  });
+
   it("requests a web-grounded structured plan from OpenAI", async () => {
     const fallback = await planScenicTrip(request);
     const generated = JSON.parse(JSON.stringify(fallback)) as Record<
