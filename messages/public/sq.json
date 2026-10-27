@@ -358,6 +358,11 @@
     "title": "Dëgjo ndryshimin."
   },
   "Auth": {
+    "photos": {
+      "label": "Fotografi nga bota e makinave",
+      "previous": "Fotografia e mëparshme",
+      "next": "Fotografia tjetër"
+    },
     "home": "Kreu i CapCar",
     "back": "Kthehu te CapCar",
     "private": "Privat si parazgjedhje",

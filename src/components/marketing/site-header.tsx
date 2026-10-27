@@ -7,6 +7,8 @@ import { MarketingHeader } from "@/components/marketing/marketing-header";
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
 
-  // The garage has its own compact workspace header and responsive drawer.
-  return pathname.startsWith("/garage") ? null : <MarketingHeader />;
+  // Garage and login supply their own navigation within their dedicated layouts.
+  return pathname.startsWith("/garage") || pathname === "/login" ? null : (
+    <MarketingHeader />
+  );
 }

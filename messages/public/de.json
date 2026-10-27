@@ -358,6 +358,11 @@
     "title": "Hör den Unterschied."
   },
   "Auth": {
+    "photos": {
+      "label": "Fotos aus der Autoszene",
+      "previous": "Vorheriges Foto",
+      "next": "Nächstes Foto"
+    },
     "home": "CapCar Startseite",
     "back": "Zurück zu CapCar",
     "private": "Standardmäßig privat",

@@ -22,6 +22,39 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
+it("shows the five approved photos without losing entered credentials when browsing", () => {
+  render(<AuthForm mode="login" configured={false} />);
+  expect(
+    screen.getByRole("link", { name: "Nejc Soklič / Unsplash" }),
+  ).toHaveAttribute("href", "https://unsplash.com/photos/JUiftQpriyo");
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "owner@example.com" },
+  });
+  fireEvent.change(screen.getByLabelText("Password", { exact: true }), {
+    target: { value: "example-password" },
+  });
+  for (const photographer of [
+    "Abhinand Venugopal",
+    "Frankie Cordoba",
+    "Pedro Oliveira",
+    "Sawyer Griffin",
+    "Nejc Soklič",
+  ]) {
+    fireEvent.click(screen.getByRole("button", { name: "Next photo" }));
+    expect(
+      screen.getByRole("link", { name: `${photographer} / Unsplash` }),
+    ).toBeVisible();
+    expect(screen.getByLabelText("Email")).toHaveValue("owner@example.com");
+    expect(screen.getByLabelText("Password", { exact: true })).toHaveValue(
+      "example-password",
+    );
+  }
+  fireEvent.click(screen.getByRole("button", { name: "Previous photo" }));
+  expect(
+    screen.getByRole("link", { name: "Sawyer Griffin / Unsplash" }),
+  ).toBeVisible();
+});
+
 it("submits the new sign-in form through existing auth and retains navigation and password controls", async () => {
   const next = "/garage/journal?locale=de";
   render(<AuthForm mode="login" configured nextPath={next} />);

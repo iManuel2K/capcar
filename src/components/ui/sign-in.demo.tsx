@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { SignInPage } from "@/components/ui/sign-in";
+import { signInPhotos } from "@/components/auth/sign-in-photos";
 
 // Isolated visual demo. Production /login uses AuthForm's existing authentication.
 export default function SignInPageDemo() {
@@ -14,12 +15,7 @@ export default function SignInPageDemo() {
     <SignInPage
       title="Open your garage."
       description="Component preview — use /login to access your account."
-      heroImageSrc="/garage/cutouts/bmw-318i.webp"
-      heroContent={
-        <h2 className="text-4xl font-medium tracking-tight">
-          One account. Your whole build.
-        </h2>
-      }
+      photos={signInPhotos}
       onSignIn={handleSignIn}
       onGoogleSignIn={() =>
         setMessage("Demo Google action. No authentication was started.")

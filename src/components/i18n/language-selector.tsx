@@ -19,7 +19,7 @@ export function LanguageSelector({
 }: {
   compact?: boolean;
   direction?: "up" | "down";
-  align?: "start" | "end";
+  align?: "start" | "end" | "center";
 }) {
   const locale = useLocale();
   const t = useTranslations("Language");
@@ -148,7 +148,7 @@ export function LanguageSelector({
             buttons[next]?.focus();
           }}
           aria-label={t("label")}
-          className={`border-foreground/12 bg-background text-foreground absolute z-[80] flex w-max gap-1 rounded-xl border p-1.5 shadow-[0_18px_50px_rgba(5,3,6,0.2)] ${direction === "up" ? "bottom-[calc(100%+0.55rem)]" : "top-[calc(100%+0.55rem)]"} ${(align ?? (direction === "up" ? "start" : "end")) === "end" ? "right-0" : "left-0"}`}
+          className={`border-foreground/12 bg-background text-foreground absolute z-[80] flex w-max gap-1 rounded-xl border p-1.5 shadow-[0_18px_50px_rgba(5,3,6,0.2)] ${direction === "up" ? "bottom-[calc(100%+0.55rem)]" : "top-[calc(100%+0.55rem)]"} ${align === "center" ? "left-1/2 -translate-x-1/2" : (align ?? (direction === "up" ? "start" : "end")) === "end" ? "right-0" : "left-0"}`}
         >
           {locales.map((option) => (
             <button

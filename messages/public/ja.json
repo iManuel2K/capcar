@@ -358,6 +358,11 @@
     "title": "違いを聴く。"
   },
   "Auth": {
+    "photos": {
+      "label": "カーカルチャーの写真",
+      "previous": "前の写真",
+      "next": "次の写真"
+    },
     "home": "CapCar ホーム",
     "back": "CapCar に戻る",
     "private": "初期設定から非公開",

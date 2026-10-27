@@ -358,6 +358,11 @@
     "title": "Listen to the difference."
   },
   "Auth": {
+    "photos": {
+      "label": "Car culture photos",
+      "previous": "Previous photo",
+      "next": "Next photo"
+    },
     "home": "CapCar home",
     "back": "Back to CapCar",
     "private": "Private by default",

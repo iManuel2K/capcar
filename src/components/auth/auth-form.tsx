@@ -28,6 +28,9 @@ import {
 
 import { createClient } from "@/lib/supabase/client";
 import { SignInPage } from "@/components/ui/sign-in";
+import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
+import { LanguageSelector } from "@/components/i18n/language-selector";
+import { signInPhotos } from "./sign-in-photos";
 
 type AuthMode = "login" | "register" | "forgot" | "reset";
 
@@ -171,30 +174,20 @@ export function AuthForm({
   if (mode === "login") {
     return (
       <SignInPage
-        eyebrow={t("login.eyebrow")}
-        title={t("login.title")}
+        title={t("login.eyebrow")}
         description={t("login.description")}
-        heroImageSrc="/garage/cutouts/bmw-318i.webp"
-        heroContent={
-          <div>
-            <p className="text-primary text-xs font-semibold tracking-[0.18em] uppercase">
-              {t("private")}
-            </p>
-            <h2 className="mt-5 text-4xl font-medium tracking-tight text-balance lg:text-6xl">
-              {t("oneAccount")}
-              <br />
-              {t("wholeBuild")}
-            </h2>
-            <p className="text-muted-foreground mt-5 max-w-md text-base leading-7">
-              {t("accountDescription")}
-            </p>
-          </div>
+        photos={signInPhotos}
+        brand={
+          <Link href="/" aria-label={t("home")}>
+            <CapcarWordmark glow={false} />
+          </Link>
         }
+        footer={<LanguageSelector compact direction="up" align="center" />}
         labels={{
           email: t("email"),
-          emailPlaceholder: "you@example.com",
+          emailPlaceholder: "",
           password: t("password"),
-          passwordPlaceholder: t("passwordPlaceholder"),
+          passwordPlaceholder: "",
           showPassword: t("showPassword"),
           hidePassword: t("hidePassword"),
           resetPassword: t("forgotLink"),

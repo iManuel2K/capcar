@@ -4,6 +4,8 @@ import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useId, useState, type FormEvent, type ReactNode } from "react";
+import { SignInPhotoPanel, type SignInPhoto } from "./sign-in-photo-panel";
+import styles from "./sign-in.module.css";
 
 export interface Testimonial {
   avatarSrc: string;
@@ -36,6 +38,9 @@ export interface SignInPageProps {
   heroImageAlt?: string;
   heroContent?: ReactNode;
   testimonials?: Testimonial[];
+  photos?: readonly SignInPhoto[];
+  brand?: ReactNode;
+  footer?: ReactNode;
   labels?: Partial<typeof defaultLabels>;
   email?: string;
   password?: string;
@@ -79,7 +84,7 @@ function GoogleIcon() {
 
 function GlassInputWrapper({ children }: { children: ReactNode }) {
   return (
-    <div className="border-input bg-card/65 focus-within:border-primary focus-within:ring-primary/30 rounded-2xl border backdrop-blur-sm transition-colors focus-within:ring-2">
+    <div className="border-input bg-background/35 focus-within:border-primary focus-within:ring-primary/30 rounded-lg border transition-colors focus-within:ring-2">
       {children}
     </div>
   );
@@ -126,6 +131,9 @@ export function SignInPage({
   heroImageAlt = "",
   heroContent,
   testimonials = [],
+  photos,
+  brand,
+  footer,
   labels,
   email,
   password,
@@ -146,22 +154,52 @@ export function SignInPage({
   const [showPassword, setShowPassword] = useState(false);
   const id = useId();
   const copy = { ...defaultLabels, ...labels };
-  const hasHero = Boolean(heroImageSrc || heroContent || testimonials.length);
+  const hasHero = Boolean(
+    photos?.length || heroImageSrc || heroContent || testimonials.length,
+  );
   const actionClass =
     "text-primary hover:text-primary-hover inline-flex min-h-11 items-center rounded text-sm underline-offset-4 hover:underline";
 
   return (
-    <main
-      id="main-content"
-      className="capcar-sign-in bg-background text-foreground relative isolate min-h-[calc(100dvh-5rem)] w-full px-4 py-8 sm:px-8 lg:py-12"
-    >
-      <div
-        className={`relative mx-auto grid min-h-[calc(100dvh-11rem)] max-w-7xl items-center gap-10 ${hasHero ? "md:grid-cols-2" : ""}`}
+    <main id="main-content" className={styles.page} data-has-photo={hasHero}>
+      {photos?.length ? (
+        <SignInPhotoPanel photos={photos} />
+      ) : (
+        hasHero && (
+          <section className={styles.fallbackHero}>
+            {heroContent}
+            {heroImageSrc && (
+              <div className="relative aspect-[4/3] w-full">
+                <Image
+                  src={heroImageSrc}
+                  alt={heroImageAlt}
+                  fill
+                  unoptimized={!heroImageSrc.startsWith("/")}
+                  sizes="(max-width: 1023px) 100vw, 53vw"
+                  className="object-contain"
+                />
+              </div>
+            )}
+            {testimonials.length > 0 && (
+              <div className="grid gap-4 xl:grid-cols-2">
+                {testimonials.slice(0, 3).map((testimonial, index) => (
+                  <TestimonialCard
+                    key={`${testimonial.name}-${index}`}
+                    testimonial={testimonial}
+                    index={index}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+        )
+      )}
+      <section
+        aria-labelledby={`${id}-title`}
+        className={`capcar-sign-in ${styles.formPanel}`}
       >
-        <section
-          aria-labelledby={`${id}-title`}
-          className="mx-auto w-full max-w-md py-4 sm:py-8"
-        >
+        {brand && <div className={styles.brand}>{brand}</div>}
+        <div className={styles.formContent}>
           <div className="capcar-sign-in-element">
             {eyebrow && (
               <p className="text-primary mb-5 text-xs font-semibold tracking-[0.16em] uppercase">
@@ -170,11 +208,11 @@ export function SignInPage({
             )}
             <h1
               id={`${id}-title`}
-              className="text-4xl leading-tight font-medium tracking-tight text-balance lg:text-5xl"
+              className="text-3xl leading-tight font-semibold tracking-tight text-balance md:text-4xl"
             >
               {title}
             </h1>
-            <p className="text-muted-foreground mt-4 text-base leading-7">
+            <p className="text-muted-foreground mt-3 text-sm leading-6 md:text-base">
               {description}
             </p>
           </div>
@@ -187,7 +225,7 @@ export function SignInPage({
             onInvalid={onInvalid}
             aria-busy={loading}
             aria-describedby={error ? `${id}-error` : undefined}
-            className="capcar-sign-in-element mt-8 space-y-5"
+            className="capcar-sign-in-element mt-7 space-y-4"
             style={{ animationDelay: "50ms" }}
           >
             <div className="space-y-2">
@@ -207,7 +245,7 @@ export function SignInPage({
                   value={email}
                   onChange={(event) => onEmailChange?.(event.target.value)}
                   placeholder={copy.emailPlaceholder}
-                  className="placeholder:text-muted-foreground min-h-14 w-full rounded-2xl bg-transparent p-4 text-base focus:outline-none"
+                  className="placeholder:text-muted-foreground min-h-12 w-full rounded-lg bg-transparent p-3 text-base focus:outline-none"
                 />
               </GlassInputWrapper>
             </div>
@@ -230,7 +268,7 @@ export function SignInPage({
                     value={password}
                     onChange={(event) => onPasswordChange?.(event.target.value)}
                     placeholder={copy.passwordPlaceholder}
-                    className="placeholder:text-muted-foreground min-h-14 w-full rounded-2xl bg-transparent p-4 pr-16 text-base focus:outline-none"
+                    className="placeholder:text-muted-foreground min-h-12 w-full rounded-lg bg-transparent p-3 pr-16 text-base focus:outline-none"
                   />
                   <button
                     type="button"
@@ -302,7 +340,7 @@ export function SignInPage({
             <button
               type="submit"
               disabled={loading || !onSignIn}
-              className="bg-primary text-primary-foreground hover:bg-primary-hover min-h-14 w-full rounded-2xl px-5 py-4 font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover min-h-12 w-full rounded-lg px-5 py-3 font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading && (
                 <span
@@ -356,37 +394,9 @@ export function SignInPage({
               )}
             </p>
           )}
-        </section>
-
-        {hasHero && (
-          <section className="capcar-sign-in-hero hidden min-w-0 flex-col gap-8 py-8 md:flex lg:pl-6">
-            {heroContent}
-            {heroImageSrc && (
-              <div className="relative aspect-[4/3] w-full">
-                <Image
-                  src={heroImageSrc}
-                  alt={heroImageAlt}
-                  fill
-                  unoptimized={!heroImageSrc.startsWith("/")}
-                  sizes="(max-width: 767px) 1px, (max-width: 1280px) 45vw, 600px"
-                  className="object-contain"
-                />
-              </div>
-            )}
-            {testimonials.length > 0 && (
-              <div className="grid gap-4 xl:grid-cols-2">
-                {testimonials.slice(0, 3).map((testimonial, index) => (
-                  <TestimonialCard
-                    key={`${testimonial.name}-${index}`}
-                    testimonial={testimonial}
-                    index={index}
-                  />
-                ))}
-              </div>
-            )}
-          </section>
-        )}
-      </div>
+        </div>
+        {footer && <footer className={styles.footer}>{footer}</footer>}
+      </section>
     </main>
   );
 }

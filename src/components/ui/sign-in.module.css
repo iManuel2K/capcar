@@ -1,0 +1,145 @@
+.page {
+  --photo-height: clamp(12rem, 28svh, 17rem);
+  min-height: 100svh;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.photoPanel {
+  position: relative;
+  height: var(--photo-height);
+  margin: 0;
+  overflow: hidden;
+  background: var(--card);
+}
+
+.photo {
+  object-fit: cover;
+}
+
+.photoFooter {
+  position: absolute;
+  right: 1rem;
+  bottom: 2rem;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.credit,
+.photoControls {
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--background) 85%, transparent);
+  color: var(--foreground);
+}
+
+.credit {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.photoControls {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.photoControls button {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.photoControls button:hover {
+  background: rgb(255 255 255 / 15%);
+}
+
+.formPanel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: calc(100svh - var(--photo-height) + 1.5rem);
+  flex-direction: column;
+  margin-top: -1.5rem;
+  padding: 1.25rem 1.125rem;
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+.brand {
+  margin-bottom: 1.5rem;
+}
+
+.formContent {
+  width: 100%;
+  max-width: 25rem;
+  margin-inline: auto;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  padding-top: 2rem;
+}
+
+.fallbackHero {
+  padding: 2rem;
+}
+
+.page:not([data-has-photo="true"]) .formPanel {
+  min-height: 100svh;
+  margin-top: 0;
+  border-radius: 0;
+}
+
+@media (min-width: 1024px) {
+  .page[data-has-photo="true"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  }
+
+  .photoPanel {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    align-self: start;
+  }
+
+  .photoFooter {
+    right: 1.5rem;
+    bottom: 1.5rem;
+    left: 1.5rem;
+  }
+
+  .formPanel {
+    min-height: 100svh;
+    margin-top: 0;
+    padding: 2.5rem clamp(2rem, 4vw, 5rem);
+    border-radius: 0;
+  }
+
+  .brand {
+    margin-bottom: 0;
+  }
+
+  .formContent {
+    margin-block: auto;
+    padding-block: 3rem;
+  }
+
+  .footer {
+    margin-top: 0;
+    padding-top: 0;
+  }
+}
