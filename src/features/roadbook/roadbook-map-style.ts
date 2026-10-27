@@ -257,7 +257,9 @@ export function isRoadbookMapMode(value: unknown): value is RoadbookMapMode {
 
 export function readRoadbookMapStyle(
   storage?: Pick<Storage, "getItem">,
+  requestedStyle?: unknown,
 ): RoadbookMapMode {
+  if (isRoadbookMapMode(requestedStyle)) return requestedStyle;
   if (!storage) return ROADBOOK_DEFAULT_STYLE;
   try {
     const value = storage.getItem(ROADBOOK_STYLE_STORAGE_KEY);

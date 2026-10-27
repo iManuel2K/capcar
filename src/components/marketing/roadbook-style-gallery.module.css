@@ -1,0 +1,189 @@
+/* Hallmark · pre-emit critique: P4 H4 E4 S5 R5 V4
+ * Component: hover-expand map gallery · theme: existing Obsidian Chrome
+ * Native buttons, spring reveal, shared tokens. No page/chrome overrides.
+ */
+.section {
+  background: var(--background);
+  color: var(--foreground);
+}
+.inner {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding: var(--capcar-editorial-section) var(--capcar-editorial-gutter);
+}
+.intro {
+  max-width: 44rem;
+  margin-bottom: 2rem;
+}
+.intro h2 {
+  font-family: var(--capcar-editorial-display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+.intro p {
+  margin-top: 1rem;
+  line-height: 1.75;
+  color: var(--muted-foreground);
+}
+.intro .hint {
+  font-size: 0.875rem;
+}
+.row {
+  border-top: 1px solid var(--border);
+  overflow-anchor: none;
+}
+.list {
+  min-width: 0;
+}
+.row:last-child {
+  border-bottom: 1px solid var(--border);
+}
+.trigger {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+  min-height: 68px;
+  padding: 1rem 0.25rem;
+  text-align: start;
+  cursor: pointer;
+  color: var(--foreground);
+}
+.name {
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+.caption {
+  display: none;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+.trigger:focus-visible,
+.link:focus-visible,
+.retry:focus-visible,
+.credit a:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 4px;
+}
+.trigger:active {
+  color: var(--primary);
+}
+.trigger:disabled,
+.retry:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.plus {
+  color: var(--muted-foreground);
+  transition: transform 250ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.row[data-open="true"] .plus {
+  transform: rotate(45deg);
+  color: var(--primary);
+}
+.row[data-open="true"] .name {
+  color: var(--primary);
+}
+.reveal {
+  overflow: hidden;
+}
+.content {
+  padding-bottom: 1rem;
+}
+.picture {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  background: var(--card);
+  color: var(--foreground);
+  overflow: hidden;
+  border-radius: 4px;
+}
+.picture > p {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 200ms linear;
+}
+.picture[data-state="ready"] .image {
+  opacity: 1;
+}
+.picture[data-state="error"] {
+  border: 1px solid var(--destructive);
+}
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+}
+.link,
+.retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  color: var(--primary);
+  font-size: 0.875rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  white-space: nowrap;
+}
+.credit {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: var(--muted-foreground);
+}
+.credit a {
+  display: inline-block;
+  min-height: 44px;
+  align-content: center;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (min-width: 640px) {
+  .trigger {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 2rem;
+  }
+  .caption {
+    display: block;
+  }
+  .picture {
+    max-height: 360px;
+  }
+}
+@media (hover: hover) {
+  .trigger:hover .name,
+  .link:hover,
+  .retry:hover {
+    color: var(--primary);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plus,
+  .image {
+    transition: none;
+  }
+}

@@ -77,6 +77,9 @@ export function RoadbookExperience() {
   const [mode, setMode] = useState<RoadbookMapMode>(() =>
     readRoadbookMapStyle(
       typeof window === "undefined" ? undefined : window.localStorage,
+      typeof window === "undefined"
+        ? undefined
+        : new URLSearchParams(window.location.search).get("style"),
     ),
   );
   const [center, setCenter] = useState(defaultCenter);

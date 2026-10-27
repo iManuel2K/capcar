@@ -1,0 +1,131 @@
+{
+  "captured": "2026-10-27T14:45:42.001Z",
+  "previews": [
+    {
+      "mode": "konstanz",
+      "source": "CapCar Roadbook vector renderer",
+      "viewport": [
+        1200,
+        600
+      ],
+      "center": [
+        50.1,
+        10.4
+      ],
+      "zoom": 4,
+      "attribution": "OpenStreetMap / OpenFreeMap / OpenMapTiles"
+    },
+    {
+      "mode": "reykjavik",
+      "source": "CapCar Roadbook vector renderer",
+      "viewport": [
+        1200,
+        600
+      ],
+      "center": [
+        50.1,
+        10.4
+      ],
+      "zoom": 4,
+      "attribution": "OpenStreetMap / OpenFreeMap / OpenMapTiles"
+    },
+    {
+      "mode": "lissabon",
+      "source": "CapCar Roadbook vector renderer",
+      "viewport": [
+        1200,
+        600
+      ],
+      "center": [
+        50.1,
+        10.4
+      ],
+      "zoom": 4,
+      "attribution": "OpenStreetMap / OpenFreeMap / OpenMapTiles"
+    },
+    {
+      "mode": "wien",
+      "source": "CapCar Roadbook vector renderer",
+      "viewport": [
+        1200,
+        600
+      ],
+      "center": [
+        50.1,
+        10.4
+      ],
+      "zoom": 4,
+      "attribution": "OpenStreetMap / OpenFreeMap / OpenMapTiles"
+    },
+    {
+      "mode": "zurich",
+      "source": "CapCar Roadbook vector renderer",
+      "viewport": [
+        1200,
+        600
+      ],
+      "center": [
+        50.1,
+        10.4
+      ],
+      "zoom": 4,
+      "attribution": "OpenStreetMap / OpenFreeMap / OpenMapTiles"
+    },
+    {
+      "mode": "venedig",
+      "source": "CapCar Roadbook vector renderer",
+      "viewport": [
+        1200,
+        600
+      ],
+      "center": [
+        50.1,
+        10.4
+      ],
+      "zoom": 4,
+      "attribution": "OpenStreetMap / OpenFreeMap / OpenMapTiles"
+    },
+    {
+      "mode": "kyoto",
+      "source": "CapCar Roadbook vector renderer",
+      "viewport": [
+        1200,
+        600
+      ],
+      "center": [
+        50.1,
+        10.4
+      ],
+      "zoom": 4,
+      "attribution": "OpenStreetMap / OpenFreeMap / OpenMapTiles"
+    },
+    {
+      "mode": "marrakesch",
+      "source": "CapCar Roadbook vector renderer",
+      "viewport": [
+        1200,
+        600
+      ],
+      "center": [
+        50.1,
+        10.4
+      ],
+      "zoom": 4,
+      "attribution": "OpenStreetMap / OpenFreeMap / OpenMapTiles"
+    },
+    {
+      "mode": "tokyo",
+      "source": "CapCar Roadbook vector renderer",
+      "viewport": [
+        1200,
+        600
+      ],
+      "center": [
+        50.1,
+        10.4
+      ],
+      "zoom": 4,
+      "attribution": "OpenStreetMap / OpenFreeMap / OpenMapTiles"
+    }
+  ]
+}

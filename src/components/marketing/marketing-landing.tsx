@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { BuildProgressPreview } from "./build-progress-preview";
 import { aiPreviewCopy } from "@/features/marketing/ai-preview-copy";
+import { RoadbookStyleGallery } from "./roadbook-style-gallery";
+import { roadbookGalleryCopy } from "@/features/marketing/roadbook-gallery-copy";
 import {
   ArrowRight,
   BookOpen,
@@ -233,6 +235,7 @@ export function MarketingLanding({ locale = "en" }: { locale?: AppLocale }) {
             </details>
           </div>
         </section>
+        <RoadbookStyleGallery copy={roadbookGalleryCopy[locale]} />
         <section
           id="projects"
           className={styles.story}
