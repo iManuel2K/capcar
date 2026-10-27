@@ -1,10 +1,12 @@
 import { safeAuthNext } from "@/features/auth/next-path";
+import { randomInt } from "node:crypto";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { pageMetadata } from "@/features/seo/public-metadata";
 
 import { AuthForm } from "@/components/auth/auth-form";
 import { getAuthStatus } from "@/features/auth/auth-config";
+import { signInPhotos } from "@/components/auth/sign-in-photos";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Metadata");
@@ -22,11 +24,13 @@ export default async function LoginPage({
   searchParams: Promise<{ next?: string }>;
 }) {
   const query = await searchParams;
+  const photo = signInPhotos[randomInt(signInPhotos.length)];
   return (
     <AuthForm
       mode="login"
       configured={getAuthStatus().configured}
       nextPath={safeAuthNext(query.next)}
+      photo={photo}
     />
   );
 }

@@ -15,7 +15,7 @@ export default function SignInPageDemo() {
     <SignInPage
       title="Open your garage."
       description="Component preview — use /login to access your account."
-      photos={signInPhotos}
+      photo={signInPhotos[0]}
       onSignIn={handleSignIn}
       onGoogleSignIn={() =>
         setMessage("Demo Google action. No authentication was started.")

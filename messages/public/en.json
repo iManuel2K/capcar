@@ -359,9 +359,7 @@
   },
   "Auth": {
     "photos": {
-      "label": "Car culture photos",
-      "previous": "Previous photo",
-      "next": "Next photo"
+      "label": "Car culture photos"
     },
     "home": "CapCar home",
     "back": "Back to CapCar",

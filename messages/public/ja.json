@@ -359,9 +359,7 @@
   },
   "Auth": {
     "photos": {
-      "label": "カーカルチャーの写真",
-      "previous": "前の写真",
-      "next": "次の写真"
+      "label": "カーカルチャーの写真"
     },
     "home": "CapCar ホーム",
     "back": "CapCar に戻る",

@@ -4,7 +4,8 @@ export const signInPhotos = [
     src: "/auth/porsche-track.webp",
     photographer: "Nejc Soklič",
     href: "https://unsplash.com/photos/JUiftQpriyo",
-    position: "50% 65%",
+    position: "50% 50%",
+    fit: "contain",
   },
   {
     src: "/auth/ferrari-garage.webp",

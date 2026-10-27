@@ -38,7 +38,7 @@ export interface SignInPageProps {
   heroImageAlt?: string;
   heroContent?: ReactNode;
   testimonials?: Testimonial[];
-  photos?: readonly SignInPhoto[];
+  photo?: SignInPhoto;
   brand?: ReactNode;
   footer?: ReactNode;
   labels?: Partial<typeof defaultLabels>;
@@ -131,7 +131,7 @@ export function SignInPage({
   heroImageAlt = "",
   heroContent,
   testimonials = [],
-  photos,
+  photo,
   brand,
   footer,
   labels,
@@ -155,15 +155,15 @@ export function SignInPage({
   const id = useId();
   const copy = { ...defaultLabels, ...labels };
   const hasHero = Boolean(
-    photos?.length || heroImageSrc || heroContent || testimonials.length,
+    photo || heroImageSrc || heroContent || testimonials.length,
   );
   const actionClass =
     "text-primary hover:text-primary-hover inline-flex min-h-11 items-center rounded text-sm underline-offset-4 hover:underline";
 
   return (
     <main id="main-content" className={styles.page} data-has-photo={hasHero}>
-      {photos?.length ? (
-        <SignInPhotoPanel photos={photos} />
+      {photo ? (
+        <SignInPhotoPanel photo={photo} />
       ) : (
         hasHero && (
           <section className={styles.fallbackHero}>
@@ -196,7 +196,7 @@ export function SignInPage({
       )}
       <section
         aria-labelledby={`${id}-title`}
-        className={`capcar-sign-in ${styles.formPanel}`}
+        className={`capcar-light-section ${styles.formPanel}`}
       >
         {brand && <div className={styles.brand}>{brand}</div>}
         <div className={styles.formContent}>

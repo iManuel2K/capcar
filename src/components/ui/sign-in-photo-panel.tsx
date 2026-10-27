@@ -1,9 +1,7 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import styles from "./sign-in.module.css";
 
 export interface SignInPhoto {
@@ -11,17 +9,11 @@ export interface SignInPhoto {
   photographer: string;
   href: string;
   position?: string;
+  fit?: "cover" | "contain";
 }
 
-export function SignInPhotoPanel({
-  photos,
-}: {
-  photos: readonly SignInPhoto[];
-}) {
+export function SignInPhotoPanel({ photo }: { photo: SignInPhoto }) {
   const t = useTranslations("Auth.photos");
-  const [index, setIndex] = useState(0);
-  const photo = photos[index];
-  if (!photo) return null;
 
   return (
     <figure className={styles.photoPanel} aria-label={t("label")}>
@@ -33,7 +25,7 @@ export function SignInPhotoPanel({
         loading="eager"
         sizes="100vw"
         className={styles.photo}
-        style={{ objectPosition: photo.position }}
+        style={{ objectPosition: photo.position, objectFit: photo.fit }}
       />
       <figcaption className={styles.photoFooter}>
         <a
@@ -44,37 +36,6 @@ export function SignInPhotoPanel({
         >
           {photo.photographer} / Unsplash
         </a>
-        {photos.length > 1 && (
-          <div className={styles.photoControls}>
-            <button
-              type="button"
-              aria-label={t("previous")}
-              onClick={() =>
-                setIndex(
-                  (current) => (current + photos.length - 1) % photos.length,
-                )
-              }
-            >
-              <ChevronLeft aria-hidden="true" className="size-4" />
-            </button>
-            <span
-              className="text-xs tabular-nums"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              {index + 1} / {photos.length}
-            </span>
-            <button
-              type="button"
-              aria-label={t("next")}
-              onClick={() =>
-                setIndex((current) => (current + 1) % photos.length)
-              }
-            >
-              <ChevronRight aria-hidden="true" className="size-4" />
-            </button>
-          </div>
-        )}
       </figcaption>
     </figure>
   );

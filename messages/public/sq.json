@@ -359,9 +359,7 @@
   },
   "Auth": {
     "photos": {
-      "label": "Fotografi nga bota e makinave",
-      "previous": "Fotografia e mëparshme",
-      "next": "Fotografia tjetër"
+      "label": "Fotografi nga bota e makinave"
     },
     "home": "Kreu i CapCar",
     "back": "Kthehu te CapCar",

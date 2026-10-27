@@ -31,6 +31,7 @@ import { SignInPage } from "@/components/ui/sign-in";
 import { CapcarWordmark } from "@/components/brand/capcar-wordmark";
 import { LanguageSelector } from "@/components/i18n/language-selector";
 import { signInPhotos } from "./sign-in-photos";
+import type { SignInPhoto } from "@/components/ui/sign-in-photo-panel";
 
 type AuthMode = "login" | "register" | "forgot" | "reset";
 
@@ -51,10 +52,12 @@ export function AuthForm({
   mode,
   configured,
   nextPath = "/garage",
+  photo = signInPhotos[0],
 }: {
   mode: AuthMode;
   configured: boolean;
   nextPath?: string;
+  photo?: SignInPhoto;
 }) {
   const t = useTranslations("Auth");
   const router = useRouter();
@@ -176,7 +179,7 @@ export function AuthForm({
       <SignInPage
         title={t("login.eyebrow")}
         description={t("login.description")}
-        photos={signInPhotos}
+        photo={photo}
         brand={
           <Link href="/" aria-label={t("home")}>
             <CapcarWordmark glow={false} />

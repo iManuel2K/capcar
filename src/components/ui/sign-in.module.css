@@ -28,8 +28,7 @@
   gap: 0.5rem;
 }
 
-.credit,
-.photoControls {
+.credit {
   border-radius: 0.5rem;
   background: color-mix(in srgb, var(--background) 85%, transparent);
   color: var(--foreground);
@@ -46,23 +45,11 @@
   text-underline-offset: 3px;
 }
 
-.photoControls {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-}
-
-.photoControls button {
-  display: grid;
-  width: 44px;
-  height: 44px;
-  place-items: center;
-  border-radius: 0.5rem;
-  cursor: pointer;
-}
-
-.photoControls button:hover {
-  background: rgb(255 255 255 / 15%);
+.page .formPanel {
+  --background: #f7f5f0;
+  --destructive: #a32238;
+  --input: #738496;
+  background: #f7f5f0;
 }
 
 .formPanel {

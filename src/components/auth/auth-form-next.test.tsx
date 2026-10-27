@@ -22,37 +22,41 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-it("shows the five approved photos without losing entered credentials when browsing", () => {
-  render(<AuthForm mode="login" configured={false} />);
+it("keeps the request-selected photo stable while entering credentials, with no photo controls", () => {
+  render(
+    <AuthForm
+      mode="login"
+      configured={false}
+      photo={{
+        src: "/auth/tandem-drift.webp",
+        photographer: "Pedro Oliveira",
+        href: "https://unsplash.com/photos/kQTlLVcylv8",
+      }}
+    />,
+  );
   expect(
-    screen.getByRole("link", { name: "Nejc Soklič / Unsplash" }),
-  ).toHaveAttribute("href", "https://unsplash.com/photos/JUiftQpriyo");
+    screen.getByRole("link", { name: "Pedro Oliveira / Unsplash" }),
+  ).toBeVisible();
+  expect(
+    screen.queryByRole("button", { name: "Next photo" }),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "Previous photo" }),
+  ).not.toBeInTheDocument();
   fireEvent.change(screen.getByLabelText("Email"), {
     target: { value: "owner@example.com" },
   });
   fireEvent.change(screen.getByLabelText("Password", { exact: true }), {
     target: { value: "example-password" },
   });
-  for (const photographer of [
-    "Abhinand Venugopal",
-    "Frankie Cordoba",
-    "Pedro Oliveira",
-    "Sawyer Griffin",
-    "Nejc Soklič",
-  ]) {
-    fireEvent.click(screen.getByRole("button", { name: "Next photo" }));
-    expect(
-      screen.getByRole("link", { name: `${photographer} / Unsplash` }),
-    ).toBeVisible();
-    expect(screen.getByLabelText("Email")).toHaveValue("owner@example.com");
-    expect(screen.getByLabelText("Password", { exact: true })).toHaveValue(
-      "example-password",
-    );
-  }
-  fireEvent.click(screen.getByRole("button", { name: "Previous photo" }));
+  fireEvent.click(screen.getByRole("button", { name: "Show password" }));
   expect(
-    screen.getByRole("link", { name: "Sawyer Griffin / Unsplash" }),
+    screen.getByRole("link", { name: "Pedro Oliveira / Unsplash" }),
   ).toBeVisible();
+  expect(screen.getByLabelText("Email")).toHaveValue("owner@example.com");
+  expect(screen.getByLabelText("Password", { exact: true })).toHaveValue(
+    "example-password",
+  );
 });
 
 it("submits the new sign-in form through existing auth and retains navigation and password controls", async () => {
