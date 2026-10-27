@@ -43,6 +43,7 @@ export async function startTripJob(
     .from("trip_planning_jobs")
     .insert({ id, user_id: userId, input, context: context ?? null });
   if (error) throw error;
+  let rejected = false;
   try {
     const target = new URL(
       "/.netlify/functions/trip-plan-background",
@@ -54,11 +55,14 @@ export async function startTripJob(
       body: JSON.stringify({ id, signature: signTripJob(id) }),
       signal: AbortSignal.timeout(8000),
     });
-    if (response.status !== 202)
-      throw new Error(
-        "The background planner could not start. Please try again.",
-      );
-  } catch (error) {
+    rejected = response.status !== 202;
+  } catch {
+    // A missing acknowledgement does not prove dispatch failed. The worker may
+    // already be running (and charging the provider). Keep polling this job;
+    // never encourage another paid submission on an ambiguous network failure.
+    return id;
+  }
+  if (rejected) {
     await admin
       .from("trip_planning_jobs")
       .update({
@@ -70,7 +74,6 @@ export async function startTripJob(
       })
       .eq("id", id)
       .eq("status", "queued");
-    throw error;
   }
   return id;
 }

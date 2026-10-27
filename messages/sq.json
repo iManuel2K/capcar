@@ -549,7 +549,7 @@
     "connected": "Kalendari + emaili gati",
     "eyebrow": "Pyet CapCar AI",
     "title": "Ktheje një fundjavë të lirë në një rrugë që mbahet mend.",
-    "description": "CapCar gjen rrugën më të mirë duke krahasuar Google Maps, Apple Maps dhe Waze, përdor BlitzzerApp për njoftimet e radarëve dhe merr parasysh motin.",
+    "description": "Planifiko me AI-në tënde të lidhur dhe kontrollo itinerarin rrugor të llogaritur, kur është i disponueshëm. Lidhjet hapin Google Maps, Apple Maps ose Waze; CapCar nuk i krahason itineraret e tyre dhe nuk ofron njoftime të drejtpërdrejta për radarët.",
     "vehicleContext": "I ndërtuar rreth makinës tënde",
     "calendarMail": "Kontekst vetëm me leje",
     "ask": "Kërkesa jote",
@@ -612,6 +612,7 @@
     "simple": {
       "choosePlaces": "Zgjidh vendet",
       "settings": "Cilësimet",
+      "retryRoute": "Llogarit përsëri itinerarin",
       "planning": "AI-ja jote po planifikon rrugën. Mbaje faqen hapur; rezultati do të shfaqet këtu."
     }
   },

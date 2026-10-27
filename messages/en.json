@@ -549,7 +549,7 @@
     "connected": "Calendar + mail ready",
     "eyebrow": "Ask CapCar AI",
     "title": "Turn a free weekend into a road worth remembering.",
-    "description": "CapCar finds the best route by comparing Google Maps, Apple Maps and Waze, uses Blitzer App for radar notifications and takes the weather into account.",
+    "description": "Plan with your connected AI and review the calculated road route when available. Navigation links open Google Maps, Apple Maps or Waze; CapCar does not compare their routes or provide live radar alerts.",
     "vehicleContext": "Built around your car",
     "calendarMail": "Permission-based context",
     "ask": "Your prompt",
@@ -612,6 +612,7 @@
     "simple": {
       "choosePlaces": "Choose places",
       "settings": "Settings",
+      "retryRoute": "Retry route calculation",
       "planning": "Your AI is planning the route. Keep this page open; the result will appear here."
     }
   },

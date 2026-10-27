@@ -549,7 +549,7 @@
     "connected": "Kalender + E-Mail bereit",
     "eyebrow": "CapCar KI fragen",
     "title": "Mach aus einem freien Wochenende eine unvergessliche Strecke.",
-    "description": "CapCar findet die beste Route, indem es Google Maps, Apple Maps und Waze vergleicht, nutzt BlitzzerApp für Radarwarnungen und berücksichtigt das Wetter.",
+    "description": "Plane mit deiner verbundenen KI und prüfe die berechnete Straßenroute, sofern verfügbar. Navigationslinks öffnen Google Maps, Apple Maps oder Waze; CapCar vergleicht deren Routen nicht und bietet keine Live-Blitzerwarnungen.",
     "vehicleContext": "Rund um dein Auto",
     "calendarMail": "Kontext nur mit Freigabe",
     "ask": "Dein Prompt",
@@ -612,6 +612,7 @@
     "simple": {
       "choosePlaces": "Orte auswählen",
       "settings": "Einstellungen",
+      "retryRoute": "Route erneut berechnen",
       "planning": "Deine KI plant die Route. Lass die Seite geöffnet; das Ergebnis erscheint hier."
     }
   },

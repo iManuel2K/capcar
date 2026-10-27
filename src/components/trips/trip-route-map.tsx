@@ -1,5 +1,7 @@
 "use client";
 
+import { trackAnalytics } from "@/features/analytics/client";
+
 import { brandPalette } from "@/features/ui/brand-palette";
 
 import L, { type Map as LeafletMap, type TileLayer } from "leaflet";
@@ -108,6 +110,8 @@ export function TripRouteMap({ route }: { route: TripRoute }) {
       }).addTo(instance);
     });
 
+    // The route geometry and stop markers have actually been added to the map.
+    trackAnalytics("trip_route_displayed");
     map.current = instance;
     raster.current = tiles;
     return () => {
