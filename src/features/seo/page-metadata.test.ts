@@ -41,7 +41,11 @@ describe("route metadata", () => {
 
     for (const entry of entries) {
       const isJournal = entry.url.includes("/journal");
-      expect(entry.lastModified).toMatch(/^2026-10-(16|17|21)$/);
+      if (new URL(entry.url).pathname.endsWith("/pricing")) {
+        expect(entry.lastModified).toBe("2026-10-26");
+      } else {
+        expect(entry.lastModified).toMatch(/^2026-10-(16|17|21)$/);
+      }
       expect(entry).not.toHaveProperty("changeFrequency");
       expect(entry).not.toHaveProperty("priority");
       if (isJournal) {
