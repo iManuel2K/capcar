@@ -18,6 +18,7 @@ export const PUBLIC_INDEXABLE_ROUTES = [
   "/movie-cars",
   "/parts-search",
   "/platform",
+  "/pricing",
   "/privacy",
   "/roadbook",
   "/roadmap",

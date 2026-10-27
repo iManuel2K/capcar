@@ -21,9 +21,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const alternates = { languages: publicLanguageAlternates(route) };
     const shared = {
       lastModified:
-        route === "" || route === "/platform"
-          ? HOMEPAGE_LAST_MODIFIED
-          : PUBLIC_CONTENT_LAST_MODIFIED,
+        route === "/pricing"
+          ? "2026-10-26"
+          : route === "" || route === "/platform"
+            ? HOMEPAGE_LAST_MODIFIED
+            : PUBLIC_CONTENT_LAST_MODIFIED,
       alternates,
     };
 

@@ -24,6 +24,9 @@ import PartsSearchPage, {
 import PlatformPage, {
   generateMetadata as platformMetadata,
 } from "@/app/platform/page";
+import PricingPage, {
+  generateMetadata as pricingMetadata,
+} from "@/app/pricing/page";
 import PrivacyPage, {
   generateMetadata as privacyMetadata,
 } from "@/app/privacy/page";
@@ -87,6 +90,8 @@ async function routeMetadata(route: PublicIndexableRoute): Promise<Metadata> {
       return partsSearchMetadata();
     case "/platform":
       return platformMetadata();
+    case "/pricing":
+      return pricingMetadata();
     case "/privacy":
       return privacyMetadata();
     case "/roadbook":
@@ -145,6 +150,8 @@ export default async function LocalizedPublicPage({
       return <PartsSearchPage searchParams={query} />;
     case "/platform":
       return <PlatformPage />;
+    case "/pricing":
+      return <PricingPage />;
     case "/privacy":
       return <PrivacyPage />;
     case "/roadbook":
