@@ -153,7 +153,7 @@ to reserve time for saving before the job deadline. Buffered JSON and earlier
 NDJSON clients remain compatible, but the current app uses background jobs to
 avoid the deployment's observed 30-second connection limit.
 
-Apply `20261026220745_harden_trip_job_recovery.sql` before deploying this change.
+Apply `20261027144842_harden_trip_job_recovery.sql` before deploying this change.
 It adds nullable request-hash and dispatch-time fields without changing access
 policies. Old clients without an idempotency key remain compatible. To roll back,
 restore the previous application and leave the additive columns in place.
