@@ -6,6 +6,10 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import {
+  planScenicTrip,
+  tripPlannerRequestSchema,
+} from "@/features/trips/trip-planner";
 import { TripPlanner } from "./trip-planner";
 
 vi.mock("@/components/trips/trip-route-map-loader", () => ({
@@ -221,5 +225,55 @@ describe("Trip planner composer", () => {
     expect(
       screen.getByLabelText("Hours available per day, including stops"),
     ).toHaveValue(6);
+  });
+  it("retries only road calculation after a generated itinerary, without paying for another AI plan", async () => {
+    const plan = await planScenicTrip(
+      tripPlannerRequestSchema.parse({
+        vehicle: "BMW 318i",
+        region: "Black Forest",
+        startDate: "2026-10-30",
+        duration: 1,
+        pace: "scenic",
+        interests: [],
+      }),
+      undefined,
+      {},
+    );
+    const fetch = vi.fn(async (url: string) => {
+      if (url === "/api/ai/trips") return Response.json(plan);
+      if (url === "/api/ai/trips/route-map")
+        return Response.json({ error: "Routing unavailable" }, { status: 503 });
+      return Response.json({}, { status: 401 });
+    });
+    vi.stubGlobal("fetch", fetch);
+    Element.prototype.scrollIntoView = vi.fn();
+    vi.stubGlobal("matchMedia", () => ({ matches: true }));
+    render(
+      <TripPlanner
+        initialAiConnection={{
+          configured: true,
+          connected: true,
+          provider: "gemini",
+        }}
+      />,
+    );
+    fireEvent.change(screen.getByRole("textbox", { name: "Ask CapCar" }), {
+      target: { value: "Starting from Frankfurt. Scenic day trip." },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Send message" }));
+    const retry = await screen.findByRole("button", {
+      name: "Retry route calculation",
+    });
+    fireEvent.click(retry);
+    await waitFor(() =>
+      expect(
+        fetch.mock.calls.filter(([url]) => url === "/api/ai/trips/route-map"),
+      ).toHaveLength(2),
+    );
+    expect(
+      fetch.mock.calls.filter(([url]) => url === "/api/ai/trips"),
+    ).toHaveLength(1);
+    expect(await screen.findByText("Routing unavailable")).toBeVisible();
+    expect(screen.getByText(plan.title)).toBeVisible();
   });
 });

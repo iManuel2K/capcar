@@ -325,6 +325,8 @@ export function TripPlanner({
     AiPlannerConnectionStatus | undefined
   >(initialAiConnection);
   const planningSequence = useRef(0);
+  const routeRetry = useRef<(() => void) | undefined>(undefined);
+  const submitting = useRef(false);
   const [loading, setLoading] = useState(false);
   const [calendarLoading, setCalendarLoading] = useState(false);
   const [error, setError] = useState("");
@@ -380,6 +382,7 @@ export function TripPlanner({
     if (
       !effectiveStartDate ||
       loading ||
+      submitting.current ||
       vehicle.trim().length < 2 ||
       (aiConnection?.configured === true && !aiConnection.connected)
     )
@@ -410,7 +413,9 @@ export function TripPlanner({
       );
       return;
     }
+    submitting.current = true;
     const sequence = ++planningSequence.current;
+    routeRetry.current = undefined;
     setBriefError(false);
     setSchedule(undefined);
     setLoading(true);
@@ -447,78 +452,8 @@ export function TripPlanner({
       trackAnalytics("trip_plan_created");
       setPlan(body);
       setPlanView("map");
-      setRoute(undefined);
-      setRouteError("");
-      setRouteLoading(true);
-      const generatedRegion = [
-        ...new Set(body.stops.map((stop) => stop.area.trim()).filter(Boolean)),
-      ]
-        .join(", ")
-        .slice(0, 120);
-      void fetch("/api/ai/trips/route-map", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          region: generatedRegion || planningRegion,
-          preserveStopOrder: preserveExplicitStopOrder(inputMode, prompt),
-          startDate: effectiveStartDate,
-          stops: body.stops.map(({ day, kind, name, area, mapQuery }) => ({
-            day,
-            kind,
-            name,
-            area,
-            mapQuery,
-          })),
-        }),
-      })
-        .then(async (routeResponse) => {
-          const routeBody = (await routeResponse.json()) as
-            TripRoute | { error?: string };
-          if (!routeResponse.ok || !("geometry" in routeBody))
-            throw new Error(
-              "error" in routeBody && routeBody.error
-                ? routeBody.error
-                : "The calculated route is unavailable.",
-            );
-          if (sequence !== planningSequence.current) return;
-          setSchedule(
-            inputMode === "prompt"
-              ? assessTripSchedule({
-                  drivingMinutes: routeBody.durationMinutes,
-                  stopKinds: body.stops
-                    .filter(
-                      (stop) =>
-                        !(
-                          stop.mapQuery.toLowerCase() ===
-                            origin.trim().toLowerCase() &&
-                          ["Departure", "Return"].includes(stop.timing)
-                        ),
-                    )
-                    .map((stop) => stop.kind),
-                  days: body.days.length,
-                  hoursPerDay,
-                })
-              : undefined,
-          );
-          setRoute(routeBody);
-          setPlan((current) =>
-            current === body
-              ? alignTripPlanWithRoute(current, routeBody)
-              : current,
-          );
-        })
-        .catch(
-          (routeFailure) =>
-            sequence === planningSequence.current &&
-            setRouteError(
-              routeFailure instanceof Error
-                ? routeFailure.message
-                : "The calculated route is unavailable.",
-            ),
-        )
-        .finally(() => {
-          if (sequence === planningSequence.current) setRouteLoading(false);
-        });
+      routeRetry.current = () => calculateRoute(body, planningRegion, sequence);
+      routeRetry.current();
       window.setTimeout(() =>
         document.getElementById("capcar-plan")?.scrollIntoView({
           behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -531,8 +466,90 @@ export function TripPlanner({
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : t("errors.plan"));
     } finally {
+      submitting.current = false;
       setLoading(false);
     }
+  }
+
+  function calculateRoute(
+    body: TripPlan,
+    planningRegion: string,
+    sequence: number,
+  ) {
+    setRoute(undefined);
+    setRouteError("");
+    setRouteLoading(true);
+    const generatedRegion = [
+      ...new Set(body.stops.map((stop) => stop.area.trim()).filter(Boolean)),
+    ]
+      .join(", ")
+      .slice(0, 120);
+    void fetch("/api/ai/trips/route-map", {
+      signal: AbortSignal.timeout(45000),
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        region: generatedRegion || planningRegion,
+        preserveStopOrder: preserveExplicitStopOrder(inputMode, prompt),
+        startDate: effectiveStartDate,
+        stops: body.stops.map(({ day, kind, name, area, mapQuery }) => ({
+          day,
+          kind,
+          name,
+          area,
+          mapQuery,
+        })),
+      }),
+    })
+      .then(async (routeResponse) => {
+        const routeBody = (await routeResponse.json()) as
+          TripRoute | { error?: string };
+        if (!routeResponse.ok || !("geometry" in routeBody))
+          throw new Error(
+            "error" in routeBody && routeBody.error
+              ? routeBody.error
+              : "The calculated route is unavailable.",
+          );
+        if (sequence !== planningSequence.current) return;
+        trackAnalytics("trip_route_calculated");
+        setSchedule(
+          inputMode === "prompt"
+            ? assessTripSchedule({
+                drivingMinutes: routeBody.durationMinutes,
+                stopKinds: body.stops
+                  .filter(
+                    (stop) =>
+                      !(
+                        stop.mapQuery.toLowerCase() ===
+                          origin.trim().toLowerCase() &&
+                        ["Departure", "Return"].includes(stop.timing)
+                      ),
+                  )
+                  .map((stop) => stop.kind),
+                days: body.days.length,
+                hoursPerDay,
+              })
+            : undefined,
+        );
+        setRoute(routeBody);
+        setPlan((current) =>
+          current === body
+            ? alignTripPlanWithRoute(current, routeBody)
+            : current,
+        );
+      })
+      .catch((routeFailure) => {
+        if (sequence !== planningSequence.current) return;
+        trackAnalytics("trip_route_failed");
+        setRouteError(
+          routeFailure instanceof Error
+            ? routeFailure.message
+            : t("errors.plan"),
+        );
+      })
+      .finally(() => {
+        if (sequence === planningSequence.current) setRouteLoading(false);
+      });
   }
 
   async function addToCalendar() {
@@ -1004,7 +1021,11 @@ export function TripPlanner({
                 {planView === "map" && (
                   <div className="mt-5" role="tabpanel">
                     {routeLoading && (
-                      <div className="bg-card text-foreground grid min-h-[34rem] place-items-center rounded-[1.7rem]">
+                      <div
+                        role="status"
+                        aria-live="polite"
+                        className="bg-card text-foreground grid min-h-[34rem] place-items-center rounded-[1.7rem]"
+                      >
                         <div className="text-center">
                           <LoaderCircle className="mx-auto size-7" />
                           <p className="text-muted-foreground mt-3 text-sm">
@@ -1016,11 +1037,18 @@ export function TripPlanner({
                     {route && <TripRouteMapLoader route={route} />}
                     {route && <RouteStopGallery route={route} />}
                     {routeError && !routeLoading && (
-                      <div className="rounded-2xl border border-amber-800/15 bg-amber-100/55 p-5">
-                        <p className="flex gap-2 text-sm text-amber-200">
+                      <div className="rounded-2xl border border-amber-300/30 bg-amber-300/6 p-5">
+                        <p className="flex gap-2 text-sm text-amber-100">
                           <AlertTriangle className="mt-0.5 size-4 shrink-0" />
                           {routeError}
                         </p>
+                        <button
+                          type="button"
+                          onClick={() => routeRetry.current?.()}
+                          className="text-primary mt-3 mr-5 inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-2"
+                        >
+                          {t("simple.retryRoute")}
+                        </button>
                         <button
                           type="button"
                           onClick={() => setPlanView("details")}

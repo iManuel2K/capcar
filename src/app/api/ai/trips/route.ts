@@ -95,7 +95,12 @@ export async function POST(request: Request) {
             signal,
           ),
         (error) => {
-          console.error("Trip planning stream failed", error);
+          console.error("Trip planning stream failed", {
+            code:
+              error instanceof TripPlannerServiceError
+                ? error.code
+                : "planning_failed",
+          });
           return error instanceof TripPlannerServiceError
             ? { error: error.message, code: error.code, status: error.status }
             : {
@@ -115,7 +120,12 @@ export async function POST(request: Request) {
       headers: { "Cache-Control": "no-store" },
     });
   } catch (error) {
-    console.error("Trip planning request failed", error);
+    console.error("Trip planning request failed", {
+      code:
+        error instanceof TripPlannerServiceError
+          ? error.code
+          : "planning_failed",
+    });
     if (error instanceof TripPlannerServiceError)
       return NextResponse.json(
         { error: error.message, code: error.code },

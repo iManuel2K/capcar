@@ -27,6 +27,7 @@ import {
   markGarageSynced,
   readSyncMetadata,
 } from "@/features/sync/sync-metadata";
+import { createSerialTask } from "@/features/sync/serial-task";
 import { createClient } from "@/lib/supabase/client";
 
 export const ACTIVE_GARAGE_USER_KEY = "capcar.active-garage-user.v1";
@@ -49,44 +50,69 @@ export function GarageAccountBoundary({
     configured ? "loading" : "offline",
   );
   const lastPayload = useRef("");
+  const [serializeUpload] = useState(createSerialTask);
   const applyingSnapshot = useRef(false);
   const uploadTimer = useRef<number | undefined>(undefined);
 
-  const upload = useCallback(async (activeUserId: string) => {
-    if (!navigator.onLine) {
-      setSyncState("offline");
-      return false;
-    }
+  const upload = useCallback(
+    (activeUserId: string) =>
+      serializeUpload(async () => {
+        try {
+          // A queued save must never read the next signed-in owner's snapshot.
+          if (localStorage.getItem(ACTIVE_GARAGE_USER_KEY) !== activeUserId)
+            return false;
+          if (!navigator.onLine) {
+            setSyncState("offline");
+            return false;
+          }
 
-    const snapshot = collectLocalSnapshot(window.localStorage);
-    const serialized = JSON.stringify(snapshot.data);
-    if (serialized === lastPayload.current) {
-      setSyncState("synced");
-      return true;
-    }
+          const snapshot = collectLocalSnapshot(window.localStorage);
+          const serialized = JSON.stringify(snapshot.data);
+          if (serialized === lastPayload.current) {
+            setSyncState("synced");
+            return true;
+          }
 
-    setSyncState("saving");
-    const syncedAt = new Date().toISOString();
-    const { error: uploadError } = await createClient()
-      .from("garage_snapshots")
-      .upsert({
-        user_id: activeUserId,
-        payload: snapshot,
-        updated_at: syncedAt,
-      });
+          setSyncState("saving");
+          const syncedAt = new Date().toISOString();
+          const { error: uploadError } = await createClient()
+            .from("garage_snapshots")
+            .upsert({
+              user_id: activeUserId,
+              payload: snapshot,
+              updated_at: syncedAt,
+            });
 
-    if (uploadError) {
-      setError(uploadError.message);
-      setSyncState("error");
-      return false;
-    }
+          if (localStorage.getItem(ACTIVE_GARAGE_USER_KEY) !== activeUserId)
+            return false;
+          if (uploadError) {
+            setError(uploadError.message);
+            setSyncState("error");
+            return false;
+          }
 
-    lastPayload.current = serialized;
-    markGarageSynced(activeUserId, window.localStorage, syncedAt);
-    setError("");
-    setSyncState("synced");
-    return true;
-  }, []);
+          lastPayload.current = serialized;
+          // Edits made while the request was in flight are still unsaved. Do not
+          // stamp them as synced: reload reconciliation must preserve those edits.
+          if (
+            JSON.stringify(collectLocalSnapshot(window.localStorage).data) !==
+            serialized
+          ) {
+            setSyncState("unsaved");
+            return false;
+          }
+          markGarageSynced(activeUserId, window.localStorage, syncedAt);
+          setError("");
+          setSyncState("synced");
+          return true;
+        } catch {
+          setError("Garage sync failed. Your changes remain on this device.");
+          setSyncState("error");
+          return false;
+        }
+      }),
+    [serializeUpload],
+  );
 
   useEffect(() => {
     if (!configured) return;

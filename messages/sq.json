@@ -612,6 +612,7 @@
     "simple": {
       "choosePlaces": "Zgjidh vendet",
       "settings": "Cilësimet",
+      "retryRoute": "Llogarit përsëri itinerarin",
       "planning": "AI-ja jote po planifikon rrugën. Mbaje faqen hapur; rezultati do të shfaqet këtu."
     }
   },
