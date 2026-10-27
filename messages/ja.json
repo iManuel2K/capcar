@@ -549,7 +549,7 @@
     "connected": "カレンダー + メール対応",
     "eyebrow": "CapCar AIに相談",
     "title": "空いた週末を、記憶に残る道へ。",
-    "description": "CapCarは、Googleマップ、Appleマップ、Wazeを比較して最適なルートを見つけ、レーダー通知にはBlitzzerAppを利用し、天気も考慮します。",
+    "description": "接続したAIで旅程を作成し、利用可能な場合は計算された道路ルートを確認できます。ナビゲーションリンクはGoogle Maps、Apple Maps、Wazeを開きます。CapCarは各アプリのルート比較やリアルタイムの速度取締り警告を提供しません。",
     "vehicleContext": "あなたの車を中心に計画",
     "calendarMail": "許可した情報だけを利用",
     "ask": "プロンプト",
