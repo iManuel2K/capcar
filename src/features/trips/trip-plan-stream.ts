@@ -6,6 +6,22 @@ type Frame =
   | { type: "result"; plan: TripPlan }
   | ({ type: "error" } & Failure);
 
+function waitForPoll(signal?: AbortSignal) {
+  signal?.throwIfAborted();
+  return new Promise<void>((resolve, reject) => {
+    const abort = () => {
+      clearTimeout(timer);
+      signal?.removeEventListener("abort", abort);
+      reject(signal?.reason);
+    };
+    const timer = setTimeout(() => {
+      signal?.removeEventListener("abort", abort);
+      resolve();
+    }, 2000);
+    signal?.addEventListener("abort", abort, { once: true });
+  });
+}
+
 /** Send real progress heartbeats while waiting, with a bounded overall lifetime. */
 export function createTripPlanStream(
   work: (signal: AbortSignal) => Promise<TripPlan>,
@@ -73,21 +89,27 @@ export function createTripPlanStream(
 /** Buffered clients keep their existing JSON behavior; streaming clients consume the final frame. */
 export async function readTripPlanResponse(
   response: Response,
+  options: { signal?: AbortSignal; onTerminal?: () => void } = {},
 ): Promise<TripPlan | { error: string }> {
+  const { signal, onTerminal } = options;
   if (response.status === 202) {
     const { jobId } = await response.json();
     if (typeof jobId !== "string" || !/^[a-f0-9-]{36}$/i.test(jobId))
       throw new Error("The planner could not start. Please try again.");
     const deadline = Date.now() + 180000;
     while (Date.now() < deadline) {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await waitForPoll(signal);
       let status: Response;
       try {
         status = await fetch(`/api/ai/trips/jobs/${jobId}`, {
           cache: "no-store",
-          signal: AbortSignal.timeout(10000),
+          signal: AbortSignal.any([
+            AbortSignal.timeout(10000),
+            ...(signal ? [signal] : []),
+          ]),
         });
       } catch {
+        signal?.throwIfAborted();
         continue;
       }
       if (status.status >= 500) continue;
@@ -95,8 +117,12 @@ export async function readTripPlanResponse(
       try {
         job = await status.json();
       } catch {
+        signal?.throwIfAborted();
         continue;
       }
+      signal?.throwIfAborted();
+      if (status.ok && ["failed", "completed"].includes(job.status))
+        onTerminal?.();
       if (!status.ok || job.status === "failed")
         return {
           error: job.error || "Trip planning failed. Please try again.",

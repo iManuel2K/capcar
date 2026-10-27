@@ -111,13 +111,23 @@ user list can connect.
 
 ## Generation jobs and timeouts
 
-The app sends `Prefer: respond-async` to `/api/ai/trips`. After account,
-connection and rate-limit checks, the route saves a short-lived private job,
+The app sends `Prefer: respond-async` and a UUID `Idempotency-Key` to
+`/api/ai/trips`. After account, connection and rate-limit checks for new work,
+the route saves a short-lived private job,
 dispatches the signed `trip-plan-background` function and returns a job ID with
 HTTP 202. The browser polls its authenticated status endpoint through short
 requests. It does not keep a long connection open or resubmit generation when
-one poll fails. The result is generated using the requesting user's stored AI
-connection, not a shared user key.
+one poll fails. Repeated submissions of the same ID and request return the
+existing owner's job before consuming another rate-limit allowance. Reusing an
+ID for different input or another owner's job is rejected. The result is
+generated using the requesting user's stored AI connection, not a shared user key.
+
+Before submission, the browser stores the ID and request brief under an
+account-specific local-storage key. Returning to the planner resumes that ID;
+leaving the page cancels polling without cancelling the paid job. An ambiguous
+creation response or temporary polling outage keeps the saved request for retry.
+Confirmed completion/failure clears it. Local recovery requires browser storage;
+no AI keys or connected Google metadata are stored there.
 
 The worker atomically claims queued jobs so repeated delivery cannot start a
 second paid generation. It reloads the owner's connection, generates the plan,
@@ -125,9 +135,25 @@ and saves completion or a provider failure. Provider keys never enter the job
 payload or response. Pending input/context are cleared on completion/failure;
 expired jobs are removed when new jobs start. The table is service-only with RLS;
 status lookups additionally match the signed-in owner and expiry. Jobs expire
-after one hour. The browser reports a stalled job after three minutes.
+after one hour. After three minutes, polling or a repeated worker delivery
+conditionally persists a terminal timeout and clears pending input/context.
+Claims and completion writes also enforce that deadline, so late work cannot
+start or overwrite a terminal failure. Unacknowledged dispatches remain queued;
+status polling retries signed delivery at most once per 15 seconds.
+
+The worker retries result persistence separately from generation (three bounded
+writes), so a transient database failure neither discards a completed result nor
+starts another paid call. A crash after claim or a persistent database outage is
+reconciled to a terminal failure; CapCar never automatically repeats an unknown
+paid generation. The owner can explicitly start a new request after that failure.
 
 Gemini background generation and its possible location repair share a two-minute
-budget. Worker requests are cancelled at 125 seconds. Buffered JSON and earlier
+budget. Worker requests are cancelled within 125 seconds, shortened when needed
+to reserve time for saving before the job deadline. Buffered JSON and earlier
 NDJSON clients remain compatible, but the current app uses background jobs to
 avoid the deployment's observed 30-second connection limit.
+
+Apply `20261027144842_harden_trip_job_recovery.sql` before deploying this change.
+It adds nullable request-hash and dispatch-time fields without changing access
+policies. Old clients without an idempotency key remain compatible. To roll back,
+restore the previous application and leave the additive columns in place.

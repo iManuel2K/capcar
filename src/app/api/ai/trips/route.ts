@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import {
   planScenicTripWithFallback,
@@ -21,7 +22,11 @@ import {
 import { createAdminClient } from "@/lib/supabase/admin";
 import { currentUser } from "@/lib/supabase/current-user";
 
-import { startTripJob } from "@/features/trips/trip-jobs";
+import {
+  findTripJobForRequest,
+  startTripJob,
+  TripJobConflictError,
+} from "@/features/trips/trip-jobs";
 import { createTripPlanStream } from "@/features/trips/trip-plan-stream";
 
 export const runtime = "nodejs";
@@ -41,6 +46,21 @@ export async function POST(request: Request) {
         { status: 401, headers: { "Cache-Control": "no-store" } },
       );
     const admin = createAdminClient();
+    const requestId = request.headers.get("idempotency-key");
+    if (requestId !== null && !z.uuid().safeParse(requestId).success)
+      return NextResponse.json(
+        { error: "Invalid trip request ID." },
+        { status: 400, headers: { "Cache-Control": "no-store" } },
+      );
+    if (
+      request.headers.get("prefer") === "respond-async" &&
+      requestId &&
+      (await findTripJobForRequest(admin, requestId, user.id, input))
+    )
+      return NextResponse.json(
+        { jobId: requestId },
+        { status: 202, headers: { "Cache-Control": "no-store" } },
+      );
     const aiConnection = await getAiConnection(admin, user.id);
     if (!aiConnection)
       return NextResponse.json(
@@ -79,6 +99,7 @@ export async function POST(request: Request) {
         input,
         context,
         new URL(request.url).origin,
+        requestId ?? undefined,
       );
       return NextResponse.json(
         { jobId },
@@ -120,6 +141,11 @@ export async function POST(request: Request) {
       headers: { "Cache-Control": "no-store" },
     });
   } catch (error) {
+    if (error instanceof TripJobConflictError)
+      return NextResponse.json(
+        { error: error.message, code: "trip_job_conflict" },
+        { status: 409, headers: { "Cache-Control": "no-store" } },
+      );
     console.error("Trip planning request failed", {
       code:
         error instanceof TripPlannerServiceError

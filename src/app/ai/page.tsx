@@ -52,6 +52,8 @@ export default async function AIPlannerPage({
 
   return (
     <TripPlanner
+      key={user.id}
+      ownerId={user.id}
       initialJournalTrip={journalTrip}
       initialVehicleId={journalTrip ? query.vehicle : undefined}
       initialAiConnection={{

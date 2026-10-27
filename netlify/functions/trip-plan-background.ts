@@ -4,13 +4,55 @@ import {
   tripPlannerEnvironmentForConnection,
   getAiConnectionEncryptionKey,
 } from "../../src/features/connections/ai-connection";
-import { verifyTripJob } from "../../src/features/trips/trip-jobs";
+import {
+  expireTripJob,
+  tripJobCutoff,
+  TRIP_JOB_TIMEOUT_MS,
+  verifyTripJob,
+} from "../../src/features/trips/trip-jobs";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   planScenicTripWithFallback,
   tripPlannerRequestSchema,
   TripPlannerServiceError,
   type ConnectedPlanningContext,
+  type TripPlan,
 } from "../../src/features/trips/trip-planner";
+
+type TripJobOutcome =
+  | { status: "completed"; result: TripPlan }
+  | { status: "failed"; error: string; error_code: string };
+
+async function saveOutcome(
+  admin: SupabaseClient,
+  id: string,
+  outcome: TripJobOutcome,
+) {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const saved = await admin
+        .from("trip_planning_jobs")
+        .update({ ...outcome, input: null, context: null })
+        .eq("id", id)
+        .eq("status", "running")
+        .gt("created_at", tripJobCutoff())
+        .select("id")
+        .abortSignal(AbortSignal.timeout(5000))
+        .maybeSingle();
+      if (saved.error) throw saved.error;
+      if (!saved.data) await expireTripJob(admin, id);
+      return Boolean(saved.data);
+    } catch (error) {
+      lastError = error;
+      if (attempt < 2)
+        await new Promise((resolve) =>
+          setTimeout(resolve, 500 * (attempt + 1)),
+        );
+    }
+  }
+  throw lastError;
+}
 
 // The suffix enables Netlify background invocation (immediate 202, separate execution).
 export default async function tripPlanBackground(request: Request) {
@@ -51,11 +93,18 @@ export default async function tripPlanBackground(request: Request) {
     .update({ status: "running" })
     .eq("id", body.id)
     .eq("status", "queued")
+    .gt("created_at", tripJobCutoff())
     .gt("expires_at", new Date().toISOString())
-    .select("id,user_id,input,context")
+    .select("id,user_id,input,context,created_at")
+    .abortSignal(AbortSignal.timeout(5000))
     .maybeSingle();
   if (error) throw error;
-  if (!job) return new Response(null, { status: 202 });
+  if (!job) {
+    // Delivery retries reconcile crashed jobs without repeating an unknown paid call.
+    await expireTripJob(admin, body.id);
+    return new Response(null, { status: 202 });
+  }
+  let outcome: TripJobOutcome;
   try {
     const input = tripPlannerRequestSchema.parse(job.input);
     const connection = await getAiConnection(admin, job.user_id);
@@ -65,43 +114,42 @@ export default async function tripPlanBackground(request: Request) {
       ...tripPlannerEnvironmentForConnection(connection),
       CAPCAR_TRIP_PLANNER_TIMEOUT_MS: "120000",
     };
-    const plan = await planScenicTripWithFallback(
-      input,
-      job.context as ConnectedPlanningContext | undefined,
-      environment,
-      AbortSignal.timeout(125000),
-    );
-    const saved = await admin
-      .from("trip_planning_jobs")
-      .update({ status: "completed", result: plan, input: null, context: null })
-      .eq("id", job.id)
-      .eq("status", "running");
-    if (saved.error) throw saved.error;
-    console.info("Trip planning job completed", { jobId: job.id });
+    const remaining =
+      Date.parse(job.created_at) + TRIP_JOB_TIMEOUT_MS - Date.now();
+    if (remaining <= 15_000) {
+      outcome = {
+        status: "failed",
+        error: "The AI provider did not finish this trip. Please try again.",
+        error_code: "job_timeout",
+      };
+    } else {
+      const plan = await planScenicTripWithFallback(
+        input,
+        job.context as ConnectedPlanningContext | undefined,
+        environment,
+        AbortSignal.timeout(Math.min(125000, remaining - 15_000)),
+      );
+      outcome = { status: "completed", result: plan };
+    }
   } catch (error) {
     const message =
       error instanceof TripPlannerServiceError
         ? error.message
         : "Trip planning failed. Check your AI connection and try again.";
-    const saved = await admin
-      .from("trip_planning_jobs")
-      .update({
-        status: "failed",
-        input: null,
-        context: null,
-        error: message,
-        error_code:
-          error instanceof TripPlannerServiceError
-            ? error.code
-            : "planning_failed",
-      })
-      .eq("id", job.id)
-      .eq("status", "running");
-    if (saved.error) throw saved.error;
-    console.error("Trip planning job failed", {
-      jobId: job.id,
+    outcome = {
+      status: "failed",
       error: message,
-    });
+      error_code:
+        error instanceof TripPlannerServiceError
+          ? error.code
+          : "planning_failed",
+    };
   }
+  // Persistence errors must never be mistaken for provider failures or lose the plan.
+  const saved = await saveOutcome(admin, job.id, outcome);
+  console.info("Trip planning job finalized", {
+    jobId: job.id,
+    status: saved ? outcome.status : "already_terminal_or_expired",
+  });
   return new Response(null, { status: 202 });
 }

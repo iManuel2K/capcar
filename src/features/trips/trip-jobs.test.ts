@@ -28,6 +28,9 @@ function database() {
     update: vi.fn().mockReturnThis(),
     eq: vi.fn().mockReturnThis(),
     gt: vi.fn().mockReturnThis(),
+    in: vi.fn().mockReturnThis(),
+    lte: vi.fn().mockReturnThis(),
+    abortSignal: vi.fn().mockReturnThis(),
     select: vi.fn().mockReturnThis(),
     maybeSingle: vi.fn(),
     then: (resolve: (result: { error: null }) => void) =>
@@ -81,9 +84,11 @@ describe("private trip jobs", () => {
             pace: "scenic",
           },
           context: null,
+          created_at: new Date().toISOString(),
         },
         error: null,
       })
+      .mockResolvedValueOnce({ data: { id }, error: null })
       .mockResolvedValueOnce({ data: null, error: null });
     const result = { title: "Provider itinerary" } as Awaited<
       ReturnType<typeof planScenicTripWithFallback>
@@ -126,6 +131,11 @@ describe("background dispatch acknowledgement", () => {
       delete: vi.fn().mockReturnThis(),
       lt: vi.fn().mockReturnThis(),
       insert: vi.fn().mockReturnThis(),
+      gt: vi.fn().mockReturnThis(),
+      or: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      abortSignal: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn(async () => ({ data: { id }, error: null })),
       update: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       then: (resolve: (result: { error: null }) => void) =>
@@ -160,7 +170,9 @@ describe("background dispatch acknowledgement", () => {
       "https://capcar.dev",
     );
     expect(verifyTripJob(jobId, signTripJob(jobId))).toBe(true);
-    expect(chain.update).not.toHaveBeenCalled();
+    expect(chain.update).not.toHaveBeenCalledWith(
+      expect.objectContaining({ status: "failed" }),
+    );
     expect(fetch).toHaveBeenCalledTimes(1);
   });
   it("marks a rejected queued dispatch failed, without changing running jobs", async () => {

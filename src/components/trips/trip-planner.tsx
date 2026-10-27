@@ -7,7 +7,10 @@ import {
 
 import { TripNavigationLinks } from "@/components/trips/trip-navigation-links";
 
-import { readTripPlanResponse } from "@/features/trips/trip-plan-stream";
+import {
+  readPendingTripJob,
+  requestTripPlan,
+} from "@/features/trips/trip-job-client";
 
 import { AIInput, AIResponse } from "@/components/ui/ai-conversation";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
@@ -42,7 +45,13 @@ import { MotionLoader as LoaderCircle } from "@/components/ui/motion-loader";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import {
   assessTripSchedule,
   extractTripDetails,
@@ -55,6 +64,7 @@ import {
   createStopMapLinks,
   type TripPlan,
   type TripStop,
+  type TripPlannerRequest,
 } from "@/features/trips/trip-planner";
 import {
   createRoutedMapLinks,
@@ -251,10 +261,12 @@ function RouteStopGallery({ route }: { route: TripRoute }) {
 }
 
 export function TripPlanner({
+  ownerId,
   initialAiConnection,
   initialJournalTrip = false,
   initialVehicleId,
 }: {
+  ownerId?: string;
   initialAiConnection?: AiPlannerConnectionStatus;
   initialJournalTrip?: boolean;
   initialVehicleId?: string;
@@ -327,6 +339,7 @@ export function TripPlanner({
   const planningSequence = useRef(0);
   const routeRetry = useRef<(() => void) | undefined>(undefined);
   const submitting = useRef(false);
+  const planningController = useRef<AbortController | null>(null);
   const [loading, setLoading] = useState(false);
   const [calendarLoading, setCalendarLoading] = useState(false);
   const [error, setError] = useState("");
@@ -378,13 +391,15 @@ export function TripPlanner({
     );
   }
 
-  async function createPlan() {
+  async function createPlan(resumed?: TripPlannerRequest) {
+    resumed ??= ownerId ? readPendingTripJob(ownerId)?.input : undefined;
     if (
-      !effectiveStartDate ||
-      loading ||
       submitting.current ||
-      vehicle.trim().length < 2 ||
-      (aiConnection?.configured === true && !aiConnection.connected)
+      (!resumed &&
+        (!effectiveStartDate ||
+          loading ||
+          vehicle.trim().length < 2 ||
+          (aiConnection?.configured === true && !aiConnection.connected)))
     )
       return;
     const selectedPlaces = places.map((place) => place.trim()).filter(Boolean);
@@ -400,11 +415,12 @@ export function TripPlanner({
         ? prompt.trim().slice(0, 120)
         : selectedPlaces.join(", ").slice(0, 120);
     if (
-      effectivePrompt.length < 2 ||
-      (inputMode === "places" && selectedPlaces.length < 2)
+      !resumed &&
+      (effectivePrompt.length < 2 ||
+        (inputMode === "places" && selectedPlaces.length < 2))
     )
       return;
-    if (inputMode === "prompt" && origin.trim().length < 2) {
+    if (!resumed && inputMode === "prompt" && origin.trim().length < 2) {
       setSettingsOpen(true);
       setBriefError(true);
       window.setTimeout(
@@ -413,8 +429,25 @@ export function TripPlanner({
       );
       return;
     }
+    const input: TripPlannerRequest = resumed ?? {
+      prompt: effectivePrompt,
+      inputMode,
+      vehicle,
+      region: planningRegion,
+      startDate: effectiveStartDate,
+      duration,
+      pace,
+      interests,
+      useConnectedContext,
+      ...(inputMode === "prompt"
+        ? { origin: origin.trim(), hoursPerDay, style, returnToStart }
+        : {}),
+    };
     submitting.current = true;
     const sequence = ++planningSequence.current;
+    planningController.current?.abort();
+    const controller = new AbortController();
+    planningController.current = controller;
     routeRetry.current = undefined;
     setBriefError(false);
     setSchedule(undefined);
@@ -422,37 +455,18 @@ export function TripPlanner({
     setError("");
     setCalendarMessage("");
     try {
-      const response = await fetch("/api/ai/trips", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          accept: "application/x-ndjson",
-          prefer: "respond-async",
-        },
-        body: JSON.stringify({
-          prompt: effectivePrompt,
-          inputMode,
-          vehicle,
-          region: planningRegion,
-          startDate: effectiveStartDate,
-          duration,
-          pace,
-          interests,
-          useConnectedContext,
-          ...(inputMode === "prompt"
-            ? { origin: origin.trim(), hoursPerDay, style, returnToStart }
-            : {}),
-        }),
-      });
-      const body = await readTripPlanResponse(response);
-      if (!response.ok || !("days" in body))
+      const body = await requestTripPlan(input, ownerId, controller.signal);
+      if (controller.signal.aborted || sequence !== planningSequence.current)
+        return;
+      if (!("days" in body))
         throw new Error(
           "error" in body && body.error ? body.error : t("errors.plan"),
         );
       trackAnalytics("trip_plan_created");
       setPlan(body);
       setPlanView("map");
-      routeRetry.current = () => calculateRoute(body, planningRegion, sequence);
+      routeRetry.current = () =>
+        calculateRoute(body, input, sequence, controller.signal);
       routeRetry.current();
       window.setTimeout(() =>
         document.getElementById("capcar-plan")?.scrollIntoView({
@@ -464,17 +478,21 @@ export function TripPlanner({
         }),
       );
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : t("errors.plan"));
+      if (!controller.signal.aborted && sequence === planningSequence.current)
+        setError(caught instanceof Error ? caught.message : t("errors.plan"));
     } finally {
-      submitting.current = false;
-      setLoading(false);
+      if (sequence === planningSequence.current) {
+        submitting.current = false;
+        if (!controller.signal.aborted) setLoading(false);
+      }
     }
   }
 
   function calculateRoute(
     body: TripPlan,
-    planningRegion: string,
+    input: TripPlannerRequest,
     sequence: number,
+    signal: AbortSignal,
   ) {
     setRoute(undefined);
     setRouteError("");
@@ -485,13 +503,16 @@ export function TripPlanner({
       .join(", ")
       .slice(0, 120);
     void fetch("/api/ai/trips/route-map", {
-      signal: AbortSignal.timeout(45000),
+      signal: AbortSignal.any([AbortSignal.timeout(45000), signal]),
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        region: generatedRegion || planningRegion,
-        preserveStopOrder: preserveExplicitStopOrder(inputMode, prompt),
-        startDate: effectiveStartDate,
+        region: generatedRegion || input.region,
+        preserveStopOrder: preserveExplicitStopOrder(
+          input.inputMode,
+          input.prompt ?? "",
+        ),
+        startDate: input.startDate,
         stops: body.stops.map(({ day, kind, name, area, mapQuery }) => ({
           day,
           kind,
@@ -510,10 +531,10 @@ export function TripPlanner({
               ? routeBody.error
               : "The calculated route is unavailable.",
           );
-        if (sequence !== planningSequence.current) return;
+        if (signal.aborted || sequence !== planningSequence.current) return;
         trackAnalytics("trip_route_calculated");
         setSchedule(
-          inputMode === "prompt"
+          input.inputMode === "prompt"
             ? assessTripSchedule({
                 drivingMinutes: routeBody.durationMinutes,
                 stopKinds: body.stops
@@ -521,13 +542,13 @@ export function TripPlanner({
                     (stop) =>
                       !(
                         stop.mapQuery.toLowerCase() ===
-                          origin.trim().toLowerCase() &&
+                          input.origin?.trim().toLowerCase() &&
                         ["Departure", "Return"].includes(stop.timing)
                       ),
                   )
                   .map((stop) => stop.kind),
                 days: body.days.length,
-                hoursPerDay,
+                hoursPerDay: input.hoursPerDay ?? 6,
               })
             : undefined,
         );
@@ -539,7 +560,7 @@ export function TripPlanner({
         );
       })
       .catch((routeFailure) => {
-        if (sequence !== planningSequence.current) return;
+        if (signal.aborted || sequence !== planningSequence.current) return;
         trackAnalytics("trip_route_failed");
         setRouteError(
           routeFailure instanceof Error
@@ -548,9 +569,40 @@ export function TripPlanner({
         );
       })
       .finally(() => {
-        if (sequence === planningSequence.current) setRouteLoading(false);
+        if (!signal.aborted && sequence === planningSequence.current)
+          setRouteLoading(false);
       });
   }
+
+  const resumePending = useEffectEvent(() => {
+    if (!ownerId) return;
+    const pending = readPendingTripJob(ownerId);
+    if (!pending) return;
+    setPrompt(pending.input.prompt ?? "");
+    setVehicle(pending.input.vehicle);
+    setStartDate(pending.input.startDate);
+    setOrigin(pending.input.origin ?? "");
+    setHoursPerDay(pending.input.hoursPerDay);
+    setDuration(pending.input.duration);
+    setPace(pending.input.pace);
+    setInterests(pending.input.interests);
+    setReturnToStart(pending.input.returnToStart ?? true);
+    setUseConnectedContext(pending.input.useConnectedContext);
+    if (pending.input.inputMode === "places")
+      setPlaces(pending.input.region.split(", "));
+    void createPlan(pending.input);
+  });
+  const cancelPlanning = useEffectEvent(() => {
+    planningController.current?.abort();
+    submitting.current = false;
+  });
+  useEffect(() => {
+    const resume = window.setTimeout(() => resumePending(), 0);
+    return () => {
+      window.clearTimeout(resume);
+      cancelPlanning();
+    };
+  }, [ownerId]);
 
   async function addToCalendar() {
     if (!plan) return;
