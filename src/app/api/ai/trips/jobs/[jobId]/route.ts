@@ -5,7 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getTripJob } from "@/features/trips/trip-jobs";
 export const runtime = "nodejs";
 export async function GET(
-  _request: Request,
+  request: Request,
   context: { params: Promise<{ jobId: string }> },
 ) {
   const headers = { "Cache-Control": "private, no-store" };
@@ -22,7 +22,12 @@ export async function GET(
       { status: 404, headers },
     );
   try {
-    const job = await getTripJob(createAdminClient(), jobId, user.id);
+    const job = await getTripJob(
+      createAdminClient(),
+      jobId,
+      user.id,
+      new URL(request.url).origin,
+    );
     return job
       ? NextResponse.json(job, { headers })
       : NextResponse.json(

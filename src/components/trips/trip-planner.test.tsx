@@ -20,9 +20,63 @@ vi.mock("@/features/vehicles/use-vehicles", () => ({
 }));
 afterEach(() => {
   cleanup();
+  localStorage.clear();
   vi.unstubAllGlobals();
 });
 describe("Trip planner composer", () => {
+  it("automatically resumes the signed-in owner's saved job with its original ID and route brief", async () => {
+    vi.stubGlobal("matchMedia", () => ({ matches: true }));
+    Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
+      configurable: true,
+      value: vi.fn(),
+    });
+    const { planScenicTrip, tripPlannerRequestSchema } =
+      await import("@/features/trips/trip-planner");
+    const input = tripPlannerRequestSchema.parse({
+      vehicle: "BMW 318i",
+      region: "Black Forest",
+      startDate: "2026-10-30",
+      duration: 2,
+      pace: "scenic",
+      interests: ["nature"],
+      prompt: "A quiet weekend",
+      inputMode: "places",
+    });
+    const plan = await planScenicTrip(input, undefined, {});
+    const id = "11111111-1111-4111-8111-111111111111";
+    localStorage.setItem(
+      "capcar:trip-job:owner",
+      JSON.stringify({ id, input, createdAt: Date.now() }),
+    );
+    const fetch = vi.fn(async (url: string) =>
+      url === "/api/ai/trips"
+        ? Response.json(plan)
+        : Response.json({ error: "Map unavailable" }, { status: 503 }),
+    );
+    vi.stubGlobal("fetch", fetch);
+    render(
+      <TripPlanner
+        ownerId="owner"
+        initialAiConnection={{
+          configured: true,
+          connected: true,
+          provider: "gemini",
+        }}
+      />,
+    );
+    await waitFor(() =>
+      expect(screen.getByRole("heading", { name: plan.title })).toBeVisible(),
+    );
+    const calls = fetch.mock.calls as unknown as Array<[string, RequestInit]>;
+    const generation = calls.filter(([url]) => url === "/api/ai/trips");
+    expect(generation).toHaveLength(1);
+    expect(generation[0][1].headers).toMatchObject({ "idempotency-key": id });
+    expect(JSON.parse(generation[0][1].body as string)).toEqual(input);
+    const route = calls.find(([url]) => url === "/api/ai/trips/route-map");
+    expect(JSON.parse(route![1].body as string).startDate).toBe(
+      input.startDate,
+    );
+  });
   it("submits the shared input to the existing provider endpoint and preserves a failed draft", async () => {
     const fetch = vi.fn().mockResolvedValue({
       ok: false,
