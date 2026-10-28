@@ -93,6 +93,9 @@
     "demo": "Ζωντανή επίδειξη"
   },
   "GarageNav": {
+    "sidebarWidth": "Πλάτος πλαϊνού μενού",
+    "narrowerSidebar": "Πιο στενό πλαϊνό μενού",
+    "widerSidebar": "Πιο πλατύ πλαϊνό μενού",
     "label": "Πλοήγηση γκαράζ",
     "garage": "Γκαράζ",
     "maintenance": "Συντήρηση",
