@@ -1,4 +1,5 @@
 import { garageCarCatalog } from "@/features/vehicles/garage-car-catalog";
+import { everydayGarageCars } from "@/features/vehicles/everyday-garage-cars";
 import { carModels } from "@/features/visualizer/car-model-catalog";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 
@@ -10,6 +11,14 @@ type SourceMapping = {
   reason?: "market" | "concept" | "historic";
 };
 export const problemSourceMappings: Record<string, SourceMapping> = {
+  // These additions have European identities; keep US lookup unavailable until
+  // exact model-year equivalence is reviewed. DIY checks remain available.
+  ...Object.fromEntries(
+    everydayGarageCars.map((car) => [
+      car.id,
+      { models: [], reason: "market" as const },
+    ]),
+  ),
   "bmw-318i-e90": { models: [], reason: "market" },
   "golf-vii": { models: ["GOLF"], years: [2015, 2020] },
   "fiesta-ja8": { models: ["FIESTA"], years: [2011, 2017] },

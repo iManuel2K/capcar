@@ -1,5 +1,6 @@
 "use client";
 
+import { CommonCheckPlanLink } from "@/components/problems/common-check-plan-link";
 import { useLocale } from "next-intl";
 import { isAppLocale } from "@/i18n/config";
 import { buildProgressCopy } from "@/features/builds/build-progress-copy";
@@ -456,6 +457,11 @@ export function BuildDetail({
                               {item.priority}
                             </span>
                           </div>
+                          <CommonCheckPlanLink
+                            vehicle={vehicle}
+                            itemId={item.id}
+                            locale={isAppLocale(locale) ? locale : "en"}
+                          />
                           {item.note && (
                             <p className="text-muted-foreground mt-2 text-sm leading-6">
                               {item.note}
