@@ -14,7 +14,12 @@ let cachedRaw: string | null | undefined;
 let cachedPlans: TuningPlan[] = emptySnapshot;
 
 function getSnapshot() {
-  const raw = window.localStorage.getItem(TUNING_STORAGE_KEY);
+  let raw: string | null;
+  try {
+    raw = window.localStorage.getItem(TUNING_STORAGE_KEY);
+  } catch {
+    return emptySnapshot;
+  }
   if (raw !== cachedRaw) {
     cachedRaw = raw;
     cachedPlans = readTuningPlans(window.localStorage);
