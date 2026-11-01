@@ -146,7 +146,7 @@ describe("personalized garage onboarding", () => {
     expect(readBuildState(storage).items).toHaveLength(1);
   });
   it("offers the existing 25 visual models plus cars with published research, without faking coverage", () => {
-    expect(garageCarCatalog.length).toBeGreaterThanOrEqual(31);
+    expect(garageCarCatalog.length).toBeGreaterThan(50);
     expect(
       garageCarCoverage({
         ...onboardingVehicleInput(draft()),
@@ -163,7 +163,7 @@ describe("personalized garage onboarding", () => {
         id: "car",
         createdAt: new Date().toISOString(),
       }),
-    ).toEqual({ parts: 0, problems: 0 });
+    ).toEqual({ parts: 0, problems: 0, checks: 4 });
   });
   it("has complete copy for all five supported languages", () => {
     for (const copy of Object.values(garageCopy))

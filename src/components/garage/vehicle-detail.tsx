@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useLocale } from "next-intl";
+import { commonCheckCopy } from "@/features/problems/common-check-copy";
 import { checklistUI } from "@/features/journal/checklist-ui";
 import { isAppLocale } from "@/i18n/config";
 import { useRouter } from "next/navigation";
@@ -320,7 +321,7 @@ export function VehicleDetail({ vehicleId }: { vehicleId: string }) {
           <ProfileLink
             href={`/garage/${vehicleId}/known-problems`}
             icon={CircleAlert}
-            label="Known problems"
+            label={commonCheckCopy[isAppLocale(locale) ? locale : "en"].title}
           />
           <ProfileLink
             href={`/garage/${vehicleId}/tuning`}
