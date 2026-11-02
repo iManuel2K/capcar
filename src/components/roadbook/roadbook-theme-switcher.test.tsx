@@ -28,8 +28,6 @@ function StatefulSwitcher() {
       onChange={setMode}
       label="Map style"
       labels={labels}
-      headline="Nine Roadbook styles."
-      description="Choose how your roads should feel."
       compatibility={false}
       compatibilityLabel="Compatibility map"
     />
@@ -37,10 +35,13 @@ function StatefulSwitcher() {
 }
 
 describe("RoadbookThemeSwitcher", () => {
-  it("renders nine real style choices with visual swatches", () => {
+  it("exposes nine labeled icon choices without opening a dropdown", () => {
     render(<StatefulSwitcher />);
     expect(screen.getAllByRole("radio")).toHaveLength(9);
-    expect(document.querySelectorAll(".roadbook-style-chip__swatch")).toHaveLength(9);
+    expect(document.querySelector("details, summary, select")).toBeNull();
+    for (const choice of screen.getAllByRole("radio")) {
+      expect(choice.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
+    }
   });
 
   it("changes the selected style with roving keyboard navigation", () => {
@@ -55,6 +56,23 @@ describe("RoadbookThemeSwitcher", () => {
       "aria-checked",
       "true",
     );
+    fireEvent.keyDown(screen.getByRole("radio", { name: "Tokyo" }), {
+      key: "ArrowRight",
+    });
+    expect(konstanz).toHaveAttribute("aria-checked", "true");
+    expect(konstanz).toHaveFocus();
+  });
+
+  it("selects directly by click and keeps one choice in the tab sequence", () => {
+    render(<StatefulSwitcher />);
+    const kyoto = screen.getByRole("radio", { name: "Kyoto" });
+    fireEvent.click(kyoto);
+    expect(kyoto).toHaveAttribute("aria-checked", "true");
+    expect(kyoto).toHaveAttribute("tabindex", "0");
+    expect(
+      screen.getAllByRole("radio").filter((button) => button.tabIndex === 0),
+    ).toEqual([kyoto]);
+    expect(screen.queryByRole("status")).toBeNull();
   });
 
   it("announces compatibility mode only when it is active", () => {
@@ -65,8 +83,6 @@ describe("RoadbookThemeSwitcher", () => {
         onChange={onChange}
         label="Map style"
         labels={labels}
-        headline="Nine Roadbook styles."
-        description="Choose how your roads should feel."
         compatibility
         compatibilityLabel="Original OpenStreetMap tiles"
       />,

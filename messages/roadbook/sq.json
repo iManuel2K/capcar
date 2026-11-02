@@ -64,6 +64,8 @@
       "credit": "Foto · {photographer}"
     },
     "places": {
+      "browse": "Shfleto vendet",
+      "catalogTotal": "{count, plural, =1 {# vend në katalog} other {# vende në katalog}}",
       "action": "Vende · {count}",
       "images": "{count} foto",
       "eyebrow": "Roadbook vizual",
@@ -89,7 +91,7 @@
       "label": "Harta e përputhshmërisë",
       "description": "Roadbook po përdor hartën e lehtë rezervë. Detajet dhe vizitat e ruajtura vazhdojnë të funksionojnë."
     },
-    "resultCount": "{count, plural, =1 {Një vend në hartë} other {# vende në hartë}}",
+    "resultCount": "{count, plural, =1 {Një vend në këtë zonë} other {# vende në këtë zonë}}",
     "retry": "Provo përsëri",
     "categories": {
       "drift_circuit": "Pista drift-i",
@@ -101,7 +103,7 @@
       "autobahn_context": "Kontekst Autobahn"
     },
     "modes": {
-      "label": "Stili i hartës së qytetit",
+      "label": "Stili i hartës",
       "headline": "Nëntë stile Roadbook.",
       "description": "Nga drita e kthjellët e punishtes te nata e Tokios, zgjidh si do të ndihen rrugët e tua.",
       "konstanz": "Konstanz",

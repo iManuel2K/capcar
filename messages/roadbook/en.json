@@ -59,6 +59,8 @@
       "credit": "Photo · {photographer}"
     },
     "places": {
+      "browse": "Browse places",
+      "catalogTotal": "{count, plural, =1 {# place in the catalog} other {# places in the catalog}}",
       "action": "Places · {count}",
       "images": "{count} photos",
       "eyebrow": "Visual Roadbook",
@@ -84,7 +86,7 @@
       "label": "Compatibility map",
       "description": "Roadbook is using its lightweight fallback. Venue details and saved visits still work."
     },
-    "resultCount": "{count, plural, =1 {One place in view} other {# places in view}}",
+    "resultCount": "{count, plural, =1 {One place in this area} other {# places in this area}}",
     "retry": "Try again",
     "categories": {
       "drift_circuit": "Drift circuits",
@@ -96,7 +98,7 @@
       "autobahn_context": "Autobahn context"
     },
     "modes": {
-      "label": "City map style",
+      "label": "Map style",
       "headline": "Nine Roadbook styles.",
       "description": "From clear workshop daylight to Tokyo night, choose how your roads should feel.",
       "konstanz": "Konstanz",

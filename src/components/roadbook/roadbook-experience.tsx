@@ -24,6 +24,7 @@ import { RoadbookThemeSwitcher } from "@/components/roadbook/roadbook-theme-swit
 import { RoadbookVenueDrawer } from "@/components/roadbook/roadbook-venue-drawer";
 import {
   fetchRoadbookVenues,
+  fetchRoadbookCatalogCount,
   fetchRoadbookEvents,
   recordRoadbookVisit,
   reportRoadbookVenue,
@@ -86,6 +87,7 @@ export function RoadbookExperience() {
   const [radiusKm, setRadiusKm] = useState(2500);
   const [userPosition, setUserPosition] = useState<RoadbookCenter>();
   const [loading, setLoading] = useState(true);
+  const [catalogCount, setCatalogCount] = useState<number>();
   const [error, setError] = useState("");
   const [mapError, setMapError] = useState("");
   const [mapReady, setMapReady] = useState(false);
@@ -100,6 +102,26 @@ export function RoadbookExperience() {
   const fetchSequence = useRef(0);
   const fetchController = useRef<AbortController | null>(null);
   const fuelFetchController = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(
+      () => controller.abort(),
+      ROADBOOK_DATA_TIMEOUT_MS,
+    );
+    void fetchRoadbookCatalogCount(controller.signal)
+      .then((count) => {
+        if (!controller.signal.aborted) setCatalogCount(count);
+      })
+      .catch(() => {
+        /* The map remains usable if the optional total is unavailable. */
+      })
+      .finally(() => window.clearTimeout(timeout));
+    return () => {
+      controller.abort();
+      window.clearTimeout(timeout);
+    };
+  }, []);
 
   useEffect(() => {
     const update = () => setVisits(readRoadbookVisits(window.localStorage));
@@ -339,6 +361,9 @@ export function RoadbookExperience() {
           </label>
           <RoadbookDiscoveryRail
             venues={visibleVenues}
+            catalogCount={catalogCount}
+            loading={loading}
+            loadError={Boolean(error)}
             events={events}
             open={discoveryPanel}
             onOpenChange={setDiscoveryPanel}
@@ -346,18 +371,6 @@ export function RoadbookExperience() {
               setSelectedVenue(venue);
               setDiscoveryPanel(undefined);
             }}
-          />
-        </div>
-        <div className="mt-2 lg:hidden">
-          <RoadbookThemeSwitcher
-            mode={mode}
-            onChange={updateMode}
-            label={t("modes.label")}
-            labels={modeLabels}
-            headline={t("modes.headline")}
-            description={t("modes.description")}
-            compatibility={!vectorReady}
-            compatibilityLabel={t("fallback.styles")}
           />
         </div>
       </div>
@@ -373,10 +386,10 @@ export function RoadbookExperience() {
       </div>
 
       <div
-        className={`absolute bottom-[5.35rem] z-20 hidden lg:block ${
+        className={`absolute right-2 left-2 z-20 sm:right-5 sm:left-5 ${fuelEnabled ? "bottom-[8.75rem]" : "bottom-[5.35rem]"} ${
           selectedVenue || selectedFuelStation
-            ? "right-[28rem] left-5 w-auto translate-x-0"
-            : "left-1/2 w-[min(64rem,calc(100%-8rem))] -translate-x-1/2"
+            ? "lg:right-[28rem]"
+            : "lg:right-auto lg:left-1/2 lg:w-[min(56rem,calc(100%-8rem))] lg:-translate-x-1/2"
         }`}
       >
         <RoadbookThemeSwitcher
@@ -384,8 +397,6 @@ export function RoadbookExperience() {
           onChange={updateMode}
           label={t("modes.label")}
           labels={modeLabels}
-          headline={t("modes.headline")}
-          description={t("modes.description")}
           compatibility={!vectorReady}
           compatibilityLabel={t("fallback.styles")}
         />
@@ -443,17 +454,12 @@ export function RoadbookExperience() {
         </button>
       </div>
 
-      <div className="absolute top-[27rem] left-3 z-20 hidden sm:block lg:top-[16.5rem] lg:left-5">
-        <div className="bg-background/82 text-muted-foreground rounded-xl border border-white/10 px-3 py-2 text-[11px] shadow-lg backdrop-blur-xl">
-          {loading
-            ? t("loading")
-            : t("resultCount", { count: visibleVenues.length })}
-        </div>
-      </div>
       <span className="sr-only" role="status" aria-live="polite">
         {loading
           ? t("loading")
-          : t("resultCount", { count: visibleVenues.length })}
+          : error
+            ? t("errors.load")
+            : t("resultCount", { count: visibleVenues.length })}
       </span>
 
       {(error || mapError || fuelError) && (

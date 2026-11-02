@@ -15,6 +15,25 @@ import { createClient } from "@/lib/supabase/client";
 
 export type RoadbookCenter = { latitude: number; longitude: number };
 
+let catalogCountCache: { count: number; expiresAt: number } | undefined;
+
+// Count published rows only, without downloading venue records. A short cache
+// avoids repeating this independent request when people return to Roadbook.
+export async function fetchRoadbookCatalogCount(signal?: AbortSignal) {
+  if (catalogCountCache && catalogCountCache.expiresAt > Date.now())
+    return catalogCountCache.count;
+  const query = createClient()
+    .from("roadbook_venues")
+    .select("id", { count: "exact", head: true })
+    .eq("published", true);
+  if (signal) query.abortSignal(signal);
+  const { count, error } = await query;
+  if (error || count === null || !Number.isSafeInteger(count) || count < 0)
+    throw new Error("ROADBOOK_COUNT_UNAVAILABLE");
+  catalogCountCache = { count, expiresAt: Date.now() + 5 * 60 * 1000 };
+  return count;
+}
+
 export async function fetchRoadbookVenues(input: {
   center: RoadbookCenter;
   radiusKm: number;
