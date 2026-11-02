@@ -10,7 +10,9 @@ const report = { checks: [], errors: [] };
 const browser = await chromium.launch({ channel: "msedge", headless: true });
 try {
   await mkdir(out, { recursive: true });
-  for (const width of [320, 375, 414, 768, 1024, 1440]) {
+  for (const width of process.env.ROADBOOK_QA_WIDTHS?.split(",").map(
+    Number,
+  ) ?? [320, 375, 414, 768, 1024, 1440]) {
     const context = await browser.newContext({
       viewport: { width, height: width < 768 ? 740 : 1000 },
       reducedMotion: width === 1440 ? "no-preference" : "reduce",
@@ -42,13 +44,16 @@ try {
     );
     const first = picker.getByRole("radio", { name: "Konstanz", exact: true });
     await first.focus();
+    // Let the browser finish bringing the initial keyboard target into view.
+    await page.waitForTimeout(500);
     const scrollY = await page.evaluate(() => window.scrollY);
     await first.press("End");
+    await page.waitForTimeout(500);
     const tokyo = picker.getByRole("radio", { name: "Tokyo", exact: true });
     assert.equal(await tokyo.getAttribute("aria-checked"), "true");
     assert(
       Math.abs((await page.evaluate(() => window.scrollY)) - scrollY) < 2,
-      "Arrow selection must not move the page",
+      `Arrow selection must not move the page (before ${scrollY}, after ${await page.evaluate(() => window.scrollY)})`,
     );
     await page
       .locator('.roadbook-map-shell[data-roadbook-style="tokyo"]')
@@ -74,19 +79,26 @@ try {
           zoomBox.x + zoomBox.width <= pickerBox.x,
         "Style choices must not cover zoom",
       );
+      const initialCount = await page
+        .locator("[data-roadbook-place-count]")
+        .innerText();
+      const initialCatalog = initialCount.split(" · ")[0];
       await page
         .getByRole("button", { name: "Scenic routes", exact: true })
         .click();
-      await page.waitForFunction(() => {
-        const value =
-          document.querySelector("[data-roadbook-place-count]")?.textContent ??
-          "";
-        return (
-          value.includes("125 places in the catalog") &&
-          /\d+ places in this area/.test(value) &&
-          !value.includes("121 places in this area")
-        );
-      });
+      await page.waitForFunction(
+        ({ initialCatalog, initialCount }) => {
+          const value =
+            document.querySelector("[data-roadbook-place-count]")
+              ?.textContent ?? "";
+          return (
+            value.includes(initialCatalog) &&
+            /\d+ places in this area/.test(value) &&
+            value !== initialCount
+          );
+        },
+        { initialCatalog, initialCount },
+      );
       await page
         .getByRole("button", { name: "Fuel stations", exact: true })
         .click();
@@ -107,7 +119,9 @@ try {
     });
     await context.close();
   }
-  for (const locale of ["de", "el", "sq", "ja"]) {
+  for (const locale of process.env.ROADBOOK_QA_WIDTHS
+    ? []
+    : ["de", "el", "sq", "ja"]) {
     const context = await browser.newContext({
       viewport: { width: 375, height: 812 },
       reducedMotion: "reduce",
