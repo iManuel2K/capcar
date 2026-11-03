@@ -93,9 +93,9 @@
     "demo": "Demo live"
   },
   "GarageNav": {
-    "sidebarWidth": "Gjerësia e menusë anësore",
-    "narrowerSidebar": "Menu anësore më e ngushtë",
-    "widerSidebar": "Menu anësore më e gjerë",
+    "sidebarToggle": "Menuja anësore",
+    "sidebarOn": "Aktive",
+    "sidebarOff": "Joaktive",
     "label": "Navigimi i garazhit",
     "garage": "Garazhi",
     "maintenance": "Mirëmbajtja",
