@@ -61,10 +61,12 @@ describe("Copilot conversation integration", () => {
       .fn()
       .mockResolvedValueOnce({
         ok: true,
+        headers: new Headers({ "content-type": "application/json" }),
         json: async () => ({ ...reply, followUp }),
       })
       .mockResolvedValueOnce({
         ok: true,
+        headers: new Headers({ "content-type": "application/json" }),
         json: async () => ({
           ...reply,
           answer: "I will compare the options using that country.",
@@ -130,7 +132,11 @@ describe("Copilot conversation integration", () => {
     fireEvent.change(field, { target: { value: "My next question" } });
     fireEvent.keyDown(field, { key: "Enter" });
     expect(fetch).toHaveBeenCalledOnce();
-    finish({ ok: true, json: async () => reply });
+    finish({
+      ok: true,
+      headers: new Headers({ "content-type": "application/json" }),
+      json: async () => reply,
+    });
     await waitFor(() => expect(screen.getByText(reply.answer)).toBeVisible());
     expect(field).toHaveValue("My next question");
     expect(
@@ -138,6 +144,7 @@ describe("Copilot conversation integration", () => {
     ).toHaveAttribute("href", "/garage/test-car/maintenance");
     fetch.mockResolvedValue({
       ok: true,
+      headers: new Headers({ "content-type": "application/json" }),
       json: async () => ({ ...reply, answer: "A second real response." }),
     });
     fireEvent.click(screen.getByRole("button", { name: "Send message" }));

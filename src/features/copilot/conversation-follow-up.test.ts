@@ -19,6 +19,14 @@ const response = {
   nextActions: [],
 };
 describe("clarification contract", () => {
+  it("preserves an entire answer when only follow-up JSON was cut off", () => {
+    expect(
+      parseCopilotAnswer(
+        '{"answer":"The actual complete answer.","followUp":{"question":',
+      ),
+    ).toEqual({ answer: "The actual complete answer.", incomplete: true });
+    expect(() => parseCopilotAnswer('{"answer":"Cut off')).toThrow();
+  });
   it("parses one optional question and rejects invalid question metadata without exposing JSON", () => {
     expect(parseCopilotAnswer(JSON.stringify(response))).toEqual({
       answer: response.answer,
