@@ -1,6 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import {
+  CopilotResearchSources,
+  researchCopy,
+} from "@/components/copilot/copilot-research";
 import { useEffect, useRef, useState } from "react";
 import {
   copilotResponseSchema,
@@ -24,6 +28,7 @@ export function TuningAiAssistant({
   locale: AppLocale;
 }) {
   const c = (key: keyof typeof tuningAiCopy) => tuningAiCopy[key][locale];
+  const [research, setResearch] = useState(false);
   const [question, setQuestion] = useState("");
   const [original, setOriginal] = useState<string>();
   const [selectedStage, setSelectedStage] = useState<string>();
@@ -51,10 +56,13 @@ export function TuningAiAssistant({
         headers: { "content-type": "application/json" },
         signal: AbortSignal.any([
           controller.signal,
-          AbortSignal.timeout(35_000),
+          AbortSignal.timeout(
+            intent === "tuning_review" && research ? 55_000 : 35_000,
+          ),
         ]),
         body: JSON.stringify({
           intent,
+          research: intent === "tuning_review" && research,
           locale,
           message,
           tuningContext: tuningAiContext(plan, selectedStage),
@@ -170,6 +178,16 @@ export function TuningAiAssistant({
       <p className="text-muted-foreground mt-2 text-sm leading-6">
         {c("disclosure")}
       </p>
+      <label className="text-muted-foreground mt-3 flex min-h-11 items-center gap-3 text-sm">
+        <input
+          type="checkbox"
+          checked={research}
+          disabled={busy}
+          onChange={(event) => setResearch(event.target.checked)}
+          className="accent-primary size-5"
+        />
+        {researchCopy[locale].option}
+      </label>
       <div className="mt-4 flex flex-wrap gap-3">
         <button
           type="button"
@@ -223,6 +241,7 @@ export function TuningAiAssistant({
           <p className="mt-4 leading-7 whitespace-pre-wrap">
             {response.answer}
           </p>
+          <CopilotResearchSources response={response} locale={locale} />
           <ul className="text-muted-foreground mt-4 space-y-2 text-sm leading-6">
             {response.warnings.map((warning) => (
               <li key={warning}>{warning}</li>

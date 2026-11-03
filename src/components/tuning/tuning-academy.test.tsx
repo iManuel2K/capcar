@@ -4,6 +4,7 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TuningAcademy } from "./tuning-academy";
@@ -66,12 +67,14 @@ describe("tuning planner journey", () => {
     fireEvent.click(screen.getByRole("button", { name: "Preview roadmap" }));
     expect(readTuningPlans(localStorage)).toEqual([]);
     expect(
-      screen
+      within(screen.getByRole("region", { name: "Preview roadmap" }))
         .getAllByRole("checkbox")
         .every((box) => box.hasAttribute("disabled")),
     ).toBe(true);
     fireEvent.click(screen.getByRole("button", { name: "Save this roadmap" }));
-    const checks = screen.getAllByRole("checkbox");
+    const checks = within(
+      screen.getByRole("region", { name: "Preview roadmap" }),
+    ).getAllByRole("checkbox");
     expect(checks[0]).toBeEnabled();
     expect(checks[3]).toBeDisabled();
     fireEvent.click(checks[0]);
@@ -87,7 +90,11 @@ describe("tuning planner journey", () => {
       screen.getByRole("button", { name: "Weekend drives" }),
     ).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("spinbutton")).toHaveValue(7301);
-    expect(screen.getAllByRole("checkbox")[0]).toBeChecked();
+    expect(
+      within(
+        screen.getByRole("region", { name: "Preview roadmap" }),
+      ).getAllByRole("checkbox")[0],
+    ).toBeChecked();
   });
   it("keeps an existing plan until a replacement is explicitly saved", () => {
     saveTuningPlan(
