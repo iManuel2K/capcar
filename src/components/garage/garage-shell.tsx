@@ -113,23 +113,14 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
               role="switch"
               aria-checked={sidebarOn}
               aria-label={t("sidebarToggle")}
+              title={t("sidebarToggle")}
               aria-controls={
                 sidebarOn ? "desktop-garage-navigation" : undefined
               }
               onClick={() => setSidebarOn((on) => !on)}
-              className="text-muted-foreground hover:text-foreground focus-visible:outline-primary hidden min-h-11 shrink-0 items-center gap-2 rounded-xl border border-white/15 px-3 py-2 focus-visible:outline-2 focus-visible:outline-offset-2 lg:inline-flex"
+              className={`hover:text-foreground focus-visible:outline-primary hidden size-11 shrink-0 items-center justify-center rounded-xl border focus-visible:outline-2 focus-visible:outline-offset-2 lg:inline-flex ${sidebarOn ? "text-primary border-primary/30 bg-primary/10" : "text-muted-foreground border-white/15"}`}
             >
               <PanelLeft aria-hidden="true" className="size-4" />
-              <span>{t("sidebarToggle")}</span>
-              <span
-                className={
-                  sidebarOn
-                    ? "bg-primary text-primary-foreground rounded-md px-2 py-0.5 text-xs"
-                    : "bg-card rounded-md px-2 py-0.5 text-xs"
-                }
-              >
-                {t(sidebarOn ? "sidebarOn" : "sidebarOff")}
-              </span>
             </button>
 
             <div className="hidden min-w-0 lg:block">
