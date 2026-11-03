@@ -4,6 +4,7 @@ import {
 } from "@/features/connections/ai-connection";
 import type { CopilotRequest, CopilotResponse } from "./copilot-schema";
 
+import { parseCopilotAnswer } from "./conversation-follow-up";
 import { researchSources } from "./research-sources";
 
 export class CopilotProviderError extends Error {
@@ -28,9 +29,14 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
   const tuningInstructions = input.tuningContext
     ? "\nReview the supplied tuning roadmap rather than giving a generic reply. Interpret short or misspelled prompts using its goal, usage, budget, reserve, experience and completed checks. Preserve the user's intent; never silently invent constraints or missing facts. Focus on selectedStage if supplied. Explain next actions, dependencies, DIY versus workshop work, and checks before buying parts. Stage amounts are allocations, not quotes. Keep the reserve separate. Ask only for genuinely missing information that changes the recommendation. Your suggestions do not alter saved settings or mark checks complete."
     : "";
+  const dialogueInstructions =
+    input.intent === "tuning_prompt"
+      ? ""
+      : '\nDIALOGUE CONTRACT: Return a JSON object with an "answer" string and optionally one "followUp" object {"question":"one question only","reason":"brief explanation of why it changes the next decision","choices":["choice one","choice two"]}. Do not wrap it in Markdown. Normally give a recommendation. Ask a follow-up only when a genuinely missing detail changes the next useful action; do not turn every request into a questionnaire. Check vehicle, tuningContext, history and clarifications first; never re-ask known details or previously answered questions. If the user has already said software-only/no hardware, treat that as a remap constraint; do not ask whether they want a hardware tuning box. Do not request an ECU read or specialist-only information merely to begin helping. If the user says they do not know, continue with explicit assumptions or compare alternatives rather than repeating the question. Do not research merely to ask a question. A clarification response has a short answer, the single followUp question, a reason and two or three short choices in the requested language; do not repeat that question inside answer. Users can also reply in free text. Once enough is known, omit followUp and give useful advice or research results. Treat clarification replies as user-provided, not verified facts.';
   const instructions =
     system +
     tuningInstructions +
+    dialogueInstructions +
     (input.intent === "tuning_prompt"
       ? "\nTASK OVERRIDE: Rewrite only the user's latest prompt to be clearer, correcting spelling and organising the request. Preserve every constraint, number and uncertainty; use the supplied car/roadmap context without inventing new goals. Do not answer the tuning question or recommend work. Return only the improved prompt in the requested language, under 1000 characters. The user will review it before choosing to send it."
       : "");
@@ -48,6 +54,7 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
     history: input.history ?? [],
     message: input.message,
     tuningContext: input.tuningContext,
+    clarifications: input.clarifications ?? [],
   });
   const provider = connection.provider;
   const url =
@@ -167,6 +174,27 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
       "Your AI provider returned no answer. No automatic retry was made.",
       502,
     );
+  let dialogue: Pick<CopilotResponse, "answer" | "followUp">;
+  try {
+    dialogue =
+      input.intent === "tuning_prompt"
+        ? { answer: answer.slice(0, 6000) }
+        : parseCopilotAnswer(answer);
+  } catch {
+    throw new CopilotProviderError(
+      "Your AI provider returned an unreadable response. No automatic retry was made.",
+      502,
+    );
+  }
+  if (
+    dialogue.followUp &&
+    input.clarifications?.some(
+      (item) =>
+        item.question.toLocaleLowerCase().trim() ===
+        dialogue.followUp?.question.toLocaleLowerCase().trim(),
+    )
+  )
+    delete dialogue.followUp;
   const citations = research
     ? researchSources(provider, data)
     : { sources: [], searchSuggestions: undefined };
@@ -174,7 +202,7 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
     ...citations,
     provider: `Your ${provider === "openai" ? "OpenAI" : provider === "anthropic" ? "Claude" : "Gemini"}`,
     source: "external",
-    answer: answer.slice(0, 6000),
+    ...dialogue,
     evidence: [
       `${vehicle.productionYear} ${vehicle.make ?? ""} ${vehicle.model} · ${vehicle.engineCode}`,
       `${input.buildItems.length} saved build items; ${input.history?.length ?? 0} recent conversation turns. User-provided context, not verified sources.`,

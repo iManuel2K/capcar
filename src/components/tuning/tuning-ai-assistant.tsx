@@ -1,6 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { CopilotFollowUp } from "@/components/copilot/copilot-follow-up";
+import {
+  clarificationContext,
+  conversationAnswer,
+} from "@/features/copilot/conversation-follow-up";
 import {
   CopilotResearchSources,
   researchCopy,
@@ -28,6 +33,9 @@ export function TuningAiAssistant({
   locale: AppLocale;
 }) {
   const c = (key: keyof typeof tuningAiCopy) => tuningAiCopy[key][locale];
+  const [clarifications, setClarifications] = useState<
+    { question: string; answer: string }[]
+  >([]);
   const [research, setResearch] = useState(false);
   const [question, setQuestion] = useState("");
   const [original, setOriginal] = useState<string>();
@@ -42,14 +50,21 @@ export function TuningAiAssistant({
   const request = useRef<AbortController | null>(null);
   useEffect(() => () => request.current?.abort(), []);
 
-  async function send(intent: "tuning_prompt" | "tuning_review") {
+  async function send(
+    intent: "tuning_prompt" | "tuning_review",
+    reply?: string,
+  ) {
     if (request.current) return;
     const controller = new AbortController();
     request.current = controller;
     setBusy(true);
     setError("");
     setStatus("");
-    const message = question.trim() || c("defaultQuestion");
+    const message = reply ?? (question.trim() || c("defaultQuestion"));
+    const nextClarifications =
+      intent === "tuning_review"
+        ? clarificationContext(clarifications, response, message)
+        : clarifications;
     try {
       const result = await fetch("/api/copilot/chat", {
         method: "POST",
@@ -62,6 +77,7 @@ export function TuningAiAssistant({
         ]),
         body: JSON.stringify({
           intent,
+          clarifications: nextClarifications,
           research: intent === "tuning_review" && research,
           locale,
           message,
@@ -103,9 +119,11 @@ export function TuningAiAssistant({
         setStatus(c("improved"));
       } else {
         setResponse(body);
+        setClarifications(nextClarifications);
+        setQuestion((draft) => (draft.trim() === message ? "" : draft));
         setHistory((current) => [
           ...current.slice(-7),
-          { question: message, answer: body.answer.slice(0, 6000) },
+          { question: message, answer: conversationAnswer(body) },
         ]);
       }
     } catch {
@@ -137,6 +155,7 @@ export function TuningAiAssistant({
             setSelectedStage(undefined);
             setResponse(undefined);
             setHistory([]);
+            setClarifications([]);
           }}
           className={button}
         >
@@ -152,6 +171,7 @@ export function TuningAiAssistant({
               setSelectedStage(stage.id);
               setResponse(undefined);
               setHistory([]);
+              setClarifications([]);
             }}
             className={`${button} ${selectedStage === stage.id ? "bg-primary/10 text-primary" : ""}`}
           >
@@ -241,6 +261,12 @@ export function TuningAiAssistant({
           <p className="mt-4 leading-7 whitespace-pre-wrap">
             {response.answer}
           </p>
+          <CopilotFollowUp
+            followUp={response.followUp}
+            locale={locale}
+            busy={busy}
+            onReply={(reply) => void send("tuning_review", reply)}
+          />
           <CopilotResearchSources response={response} locale={locale} />
           <ul className="text-muted-foreground mt-4 space-y-2 text-sm leading-6">
             {response.warnings.map((warning) => (

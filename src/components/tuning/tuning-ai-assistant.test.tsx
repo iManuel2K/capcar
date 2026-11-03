@@ -39,6 +39,47 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 describe("tuning AI", () => {
+  it("continues a roadmap review from an unknown quick reply without changing the plan", async () => {
+    const followUp = {
+      question: "How much of the budget is for calibration?",
+      reason: "The plan budget covers other work too.",
+      choices: ["Part of it", "All available upgrade budget"],
+    };
+    const fetch = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ ...reply, followUp })),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            ...reply,
+            answer:
+              "I will compare alternatives without assuming a calibration budget.",
+          }),
+        ),
+      );
+    vi.stubGlobal("fetch", fetch);
+    const original = JSON.stringify(plan);
+    render(<TuningAiAssistant vehicle={vehicle} plan={plan} locale="en" />);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Ask AI about this plan" }),
+    );
+    await waitFor(() =>
+      expect(
+        screen.getByRole("button", { name: "I don’t know — help me decide" }),
+      ).toBeEnabled(),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: "I don’t know — help me decide" }),
+    );
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
+    const sent = JSON.parse(fetch.mock.calls[1][1].body);
+    expect(sent.message).toBe("I don’t know — help me decide");
+    expect(sent.clarifications[0].question).toBe(followUp.question);
+    expect(sent.tuningContext.budget).toBe(5000);
+    expect(JSON.stringify(plan)).toBe(original);
+  });
   it("retains the original prompt when the provider rejects a request", async () => {
     vi.stubGlobal(
       "fetch",
