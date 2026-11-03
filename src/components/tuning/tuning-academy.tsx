@@ -27,6 +27,8 @@ import {
 } from "@/features/tuning/tuning-storage";
 import { useTuningPlans } from "@/features/tuning/use-tuning-plans";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
+import { TuningAiAssistant } from "./tuning-ai-assistant";
+import { tuningAiCopy } from "@/features/tuning/tuning-ai-copy";
 
 const control =
   "min-h-11 rounded-xl border px-3 py-2 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
@@ -220,6 +222,14 @@ function TuningEditor({
           {vehicle.productionYear} {vehicle.make} {vehicle.model} ·{" "}
           {vehicle.engineCode}
         </p>
+        {plan && (
+          <a
+            href="#tuning-ai-title"
+            className={`${button} text-primary mt-5 inline-flex`}
+          >
+            {tuningAiCopy.title[locale]}
+          </a>
+        )}
       </header>
       <p role="status" className="text-primary mt-4 empty:hidden">
         {status}
@@ -506,6 +516,23 @@ function TuningEditor({
           )}
         </section>
       </div>
+      {plan && (
+        <TuningAiAssistant
+          key={JSON.stringify([
+            plan.generatedAt,
+            plan.goal,
+            plan.budget,
+            plan.usage,
+            plan.experience,
+            plan.reserveBudget,
+            plan.completedChecks,
+            locale,
+          ])}
+          vehicle={vehicle}
+          plan={plan}
+          locale={locale}
+        />
+      )}
       {plan && (
         <aside className="bg-card mt-5 rounded-2xl border border-white/15 p-5">
           <ul className="text-muted-foreground space-y-3 text-sm leading-6">

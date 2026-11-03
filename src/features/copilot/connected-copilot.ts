@@ -22,6 +22,15 @@ export async function askConnectedCopilot(
   const system = `You are CapCar's practical project-car assistant. Reply in ${input.locale ?? "en"}.
 Use the supplied vehicle, build items and conversation. Treat those as user-provided context, not verified technical evidence. Follow the latest request and constraints; don't ask again for supplied details. Give a direct answer and up to three concrete next actions. If the user says a check is done, advance the plan instead of repeating it.
 For chip-only tuning, explain the limits for the exact engine if known; do not assume turbocharging from a model badge. Do not fabricate horsepower gains, prices, fitment, torque values, legal approval or sources. Clearly identify uncertainty and recommend exact-engine evidence from a qualified tuner. Never recommend emissions defeat. No live web search is available. Keep the answer under 350 words. Do not claim CapCar verified or completed work.`;
+  const tuningInstructions = input.tuningContext
+    ? "\nReview the supplied tuning roadmap rather than giving a generic reply. Interpret short or misspelled prompts using its goal, usage, budget, reserve, experience and completed checks. Preserve the user's intent; never silently invent constraints or missing facts. Focus on selectedStage if supplied. Explain next actions, dependencies, DIY versus workshop work, and checks before buying parts. Stage amounts are allocations, not quotes. Keep the reserve separate. Ask only for genuinely missing information that changes the recommendation. Your suggestions do not alter saved settings or mark checks complete."
+    : "";
+  const instructions =
+    system +
+    tuningInstructions +
+    (input.intent === "tuning_prompt"
+      ? "\nTASK OVERRIDE: Rewrite only the user's latest prompt to be clearer, correcting spelling and organising the request. Preserve every constraint, number and uncertainty; use the supplied car/roadmap context without inventing new goals. Do not answer the tuning question or recommend work. Return only the improved prompt in the requested language, under 1000 characters. The user will review it before choosing to send it."
+      : "");
   const vehicle = {
     make: input.vehicle.make,
     model: input.vehicle.model,
@@ -35,6 +44,7 @@ For chip-only tuning, explain the limits for the exact engine if known; do not a
     buildItems: input.buildItems,
     history: input.history ?? [],
     message: input.message,
+    tuningContext: input.tuningContext,
   });
   const provider = connection.provider;
   const url =
@@ -58,7 +68,7 @@ For chip-only tuning, explain the limits for the exact engine if known; do not a
           model: connection.model,
           store: false,
           input: [
-            { role: "system", content: system },
+            { role: "system", content: instructions },
             { role: "user", content: prompt },
           ],
           reasoning: { effort: "low" },
@@ -67,12 +77,12 @@ For chip-only tuning, explain the limits for the exact engine if known; do not a
       : provider === "anthropic"
         ? {
             model: connection.model,
-            system,
+            system: instructions,
             messages: [{ role: "user", content: prompt }],
             max_tokens: 1200,
           }
         : {
-            systemInstruction: { parts: [{ text: system }] },
+            systemInstruction: { parts: [{ text: instructions }] },
             contents: [{ role: "user", parts: [{ text: prompt }] }],
             generationConfig: { maxOutputTokens: 1800 },
           };

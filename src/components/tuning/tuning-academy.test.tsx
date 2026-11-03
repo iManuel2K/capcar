@@ -136,7 +136,11 @@ describe("tuning planner journey", () => {
     );
     await waitFor(() =>
       expect(
-        (screen.getByRole("textbox") as HTMLTextAreaElement).value,
+        (
+          screen.getByRole("textbox", {
+            name: "Copy brief for GPT, Gemini or Copilot",
+          }) as HTMLTextAreaElement
+        ).value,
       ).toContain("2011 BMW 318i"),
     );
     expect(fetch).not.toHaveBeenCalled();

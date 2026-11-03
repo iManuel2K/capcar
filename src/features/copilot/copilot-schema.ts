@@ -1,7 +1,37 @@
 import { z } from "zod";
 import { safeAuthNext } from "@/features/auth/next-path";
+import {
+  tuningGoals,
+  tuningExperience,
+  tuningUsage,
+} from "@/features/tuning/tuning-roadmap";
 
 export const copilotRequestSchema = z.object({
+  intent: z.enum(["tuning_review", "tuning_prompt"]).optional(),
+  tuningContext: z
+    .object({
+      goal: z.enum(tuningGoals),
+      experience: z.enum(tuningExperience),
+      usage: z.enum(tuningUsage),
+      budget: z.number().int().min(500).max(100_000),
+      reserveBudget: z.number().int().min(0).max(100_000),
+      selectedStage: z.string().max(80).optional(),
+      stages: z
+        .array(
+          z.object({
+            id: z.string().max(80),
+            title: z.string().max(200),
+            budget: z.number().int().min(0).max(100_000),
+            checks: z
+              .array(
+                z.object({ text: z.string().max(1000), done: z.boolean() }),
+              )
+              .max(10),
+          }),
+        )
+        .max(6),
+    })
+    .optional(),
   locale: z.enum(["en", "de", "el", "sq", "ja"]).optional(),
   history: z
     .array(
