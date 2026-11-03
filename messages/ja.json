@@ -93,9 +93,9 @@
     "demo": "ライブデモ"
   },
   "GarageNav": {
-    "sidebarWidth": "サイドバーの幅",
-    "narrowerSidebar": "サイドバーを狭くする",
-    "widerSidebar": "サイドバーを広くする",
+    "sidebarToggle": "サイドバー",
+    "sidebarOn": "オン",
+    "sidebarOff": "オフ",
     "label": "ガレージナビゲーション",
     "garage": "ガレージ",
     "maintenance": "メンテナンス",

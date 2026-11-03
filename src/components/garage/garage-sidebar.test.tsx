@@ -91,27 +91,35 @@ describe("selected vehicle sidebar", () => {
       document.getElementById(toggle.getAttribute("aria-controls")!),
     ).toHaveAttribute("inert");
   });
-  it("resizes with buttons and keyboard, clamps bounds and preserves width across routes", () => {
+  it("toggles the desktop sidebar off and on without losing the page or route", () => {
     const view = shell();
-    const handle = screen.getByRole("separator", { name: "Sidebar width" });
-    fireEvent.click(screen.getByRole("button", { name: "Wider sidebar" }));
-    expect(handle).toHaveAttribute("aria-valuenow", "296");
-    fireEvent.keyDown(handle, { key: "End" });
-    expect(handle).toHaveAttribute("aria-valuenow", "360");
+    const toggle = screen.getByRole("switch", { name: "Sidebar" });
+    expect(toggle).toHaveAttribute("aria-checked", "true");
+    expect(screen.queryByRole("separator")).not.toBeInTheDocument();
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute("aria-checked", "false");
     expect(
-      screen.getByRole("button", { name: "Wider sidebar" }),
-    ).toBeDisabled();
-    fireEvent.keyDown(handle, { key: "Home" });
-    fireEvent.keyDown(handle, { key: "ArrowLeft" });
-    expect(handle).toHaveAttribute("aria-valuenow", "240");
+      screen.queryByRole("navigation", { name: "Active vehicle navigation" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Vehicle content" }),
+    ).toBeVisible();
+    expect(view.container.firstElementChild).toHaveClass("lg:grid-cols-1");
     route.pathname = "/garage/bmw/parts";
-    view.rerender(<GarageShell>Vehicle content</GarageShell>);
-    expect(handle).toHaveAttribute("aria-valuenow", "240");
-    expect(view.container.firstElementChild).toHaveStyle({
-      "--garage-sidebar-width": "240px",
-    });
+    view.rerender(
+      <GarageShell>
+        <h1>Vehicle content</h1>
+      </GarageShell>,
+    );
+    expect(toggle).toHaveAttribute("aria-checked", "false");
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute("aria-checked", "true");
+    expect(screen.getByRole("link", { name: /^Parts$/ })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
   });
-  it("does not show vehicle tools or resize controls before choosing a car", () => {
+  it("does not show vehicle tools before choosing a car", () => {
     route.pathname = "/garage";
     shell();
     expect(screen.queryByRole("separator")).not.toBeInTheDocument();
@@ -119,8 +127,9 @@ describe("selected vehicle sidebar", () => {
       screen.queryByRole("navigation", { name: "Active vehicle navigation" }),
     ).not.toBeInTheDocument();
   });
-  it("keeps the mobile drawer dismissal and focus return", () => {
+  it("keeps the mobile drawer usable when desktop navigation is off, with dismissal and focus return", () => {
     shell();
+    fireEvent.click(screen.getByRole("switch", { name: "Sidebar" }));
     const trigger = screen.getByRole("button", {
       name: "Open garage navigation",
     });
