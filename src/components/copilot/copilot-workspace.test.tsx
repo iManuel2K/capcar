@@ -51,6 +51,20 @@ afterEach(() => {
 });
 
 describe("Copilot conversation integration", () => {
+  it("shows a saved provider and a direct connection path", () => {
+    render(
+      <CopilotWorkspace
+        vehicleId="test-car"
+        status={{ mode: "external", providerName: "Your Gemini" }}
+      />,
+    );
+    expect(screen.getByText("Your Gemini")).toBeVisible();
+    expect(screen.getByText("Connected AI")).toBeVisible();
+    expect(
+      screen.getByRole("link", { name: "Connect or manage your AI" }),
+    ).toHaveAttribute("href", "/account/connections");
+    expect(screen.queryByText("No external AI active")).toBeNull();
+  });
   it("keeps previous answers, prevents parallel requests and preserves a draft typed during a response", async () => {
     let finish: (value: unknown) => void = () => {};
     const fetch = vi.fn().mockImplementation(
@@ -89,6 +103,9 @@ describe("Copilot conversation integration", () => {
     expect(screen.getByText(reply.answer)).toBeVisible();
     expect(field).toHaveValue("");
     expect(JSON.parse(fetch.mock.calls[0][1].body)).not.toHaveProperty("vin");
+    expect(JSON.parse(fetch.mock.calls[1][1].body).history).toEqual([
+      { question: "What should I check first?", answer: reply.answer },
+    ]);
   });
   it("aborts the real request without erasing the question or showing a failure", async () => {
     vi.stubGlobal(

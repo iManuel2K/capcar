@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/ai-conversation";
 import { useLocale } from "next-intl";
 import { resolveJournalLocale } from "@/features/journal/routes";
+import { copilotCopy } from "@/features/copilot/copilot-copy";
 import { interactionCopy } from "@/features/ui/interaction-copy";
 
 import { useBuildState } from "@/features/builds/use-builds";
@@ -31,12 +32,32 @@ const starters = [
   "What should I check before buying wheels?",
 ] as const;
 
-export function CopilotWorkspace({ vehicleId }: { vehicleId: string }) {
-  return <CopilotSession key={vehicleId} vehicleId={vehicleId} />;
+type Status = {
+  mode: "deterministic" | "external" | "unavailable";
+  providerName: string;
+};
+export function CopilotWorkspace({
+  vehicleId,
+  status = { mode: "deterministic", providerName: "CapCar rules copilot" },
+}: {
+  vehicleId: string;
+  status?: Status;
+}) {
+  return (
+    <CopilotSession key={vehicleId} vehicleId={vehicleId} status={status} />
+  );
 }
 
-function CopilotSession({ vehicleId }: { vehicleId: string }) {
-  const c = interactionCopy[resolveJournalLocale(useLocale())];
+function CopilotSession({
+  vehicleId,
+  status,
+}: {
+  vehicleId: string;
+  status: Status;
+}) {
+  const locale = resolveJournalLocale(useLocale());
+  const c = interactionCopy[locale];
+  const copy = (key: keyof typeof copilotCopy) => copilotCopy[key][locale];
   const hydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -84,11 +105,19 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
     setError("");
     try {
       const apiResponse = await fetch("/api/copilot/chat", {
-        signal: controller.signal,
+        signal: AbortSignal.any([
+          controller.signal,
+          AbortSignal.timeout(35_000),
+        ]),
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           message: question,
+          locale,
+          history: turns.slice(-8).map((turn) => ({
+            question: turn.question,
+            answer: turn.answer.slice(0, 6000),
+          })),
           vehicle: {
             id: vehicle.id,
             make: vehicle.make,
@@ -141,19 +170,44 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
       <header className="bg-card rounded-[2rem] border border-white/10 p-5 sm:p-7">
         <div className="flex flex-wrap items-center gap-2">
           <span className="border-primary/25 bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] uppercase">
-            <Bot className="size-3" /> CapCar rules copilot
+            <Bot className="size-3" />{" "}
+            {response?.provider ?? status.providerName}
           </span>
           <span className="rounded-full border border-amber-300/20 bg-amber-300/8 px-3 py-1.5 text-[10px] text-amber-100/65 uppercase">
-            No external AI active
+            {response
+              ? copy(response.source === "external" ? "connected" : "rules")
+              : copy(
+                  status.mode === "external"
+                    ? "connected"
+                    : status.mode === "unavailable"
+                      ? "unavailable"
+                      : "rules",
+                )}
           </span>
         </div>
         <h1 className="mt-5 max-w-4xl text-2xl font-medium tracking-[-0.04em] sm:text-4xl">
           {c.overview}
         </h1>
         <p className="text-muted-foreground mt-3 max-w-2xl text-sm leading-6">
-          The current copilot uses conservative rules and your saved
-          vehicle/build context. An external AI adapter can be activated later.
+          {copy(
+            (
+              response
+                ? response.source === "external"
+                : status.mode === "external"
+            )
+              ? "active"
+              : status.mode === "unavailable"
+                ? "unavailable"
+                : "limited",
+          )}
         </p>
+        <Link
+          href="/account/connections"
+          className="text-primary border-primary/30 mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl border px-4 py-2 focus-visible:outline-2"
+        >
+          {copy("connect")}
+          <ArrowRight aria-hidden="true" className="size-4" />
+        </Link>
       </header>
 
       <section className="mt-5">
@@ -165,6 +219,19 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
               </AIMessage>,
               <AIMessage key={`${index}-assistant`} role="assistant">
                 <AIResponse text={turn.answer} />
+                {index === turns.length - 1 && response && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {response.nextActions.map((action) => (
+                      <Link
+                        key={action.href}
+                        href={action.href}
+                        className="text-primary border-primary/30 inline-flex min-h-11 items-center rounded-xl border px-3 py-2"
+                      >
+                        {action.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </AIMessage>,
             ])}
             {pending && (
@@ -256,22 +323,13 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
                   </ul>
                 </div>
               </div>
-              <div className="mt-6 flex flex-wrap gap-3">
-                {response.nextActions.map((action) => (
-                  <Link
-                    key={action.href}
-                    href={action.href}
-                    className="hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60"
-                  >
-                    {action.label}
-                    <ArrowRight className="size-3.5" />
-                  </Link>
-                ))}
-              </div>
             </>
           ) : null}
           {error && (
-            <p className="mt-5 flex gap-2 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-sm text-red-100/70">
+            <p
+              role="alert"
+              className="mt-5 flex gap-2 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-sm text-red-100/70"
+            >
               <AlertTriangle className="mt-0.5 size-4 shrink-0" />
               {error}
             </p>
