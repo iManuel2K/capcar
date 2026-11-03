@@ -19,6 +19,33 @@ const request = {
 };
 
 describe("copilot provider", () => {
+  it("routes AI connection questions before repair guidance", async () => {
+    const response = await askCopilot(
+      { ...request, message: "how to connect to AI" },
+      {},
+    );
+    expect(response.answer).toContain("API key");
+    expect(response.nextActions[0].href).toBe("/account/connections");
+  });
+  it("advances a chip-only follow-up using previous user context", async () => {
+    const response = await askCopilot(
+      {
+        ...request,
+        message: "i did. now what?",
+        history: [
+          {
+            question:
+              "I want more power with just a chip upgrade, no mechanical changes",
+            answer: "Check maintenance first",
+          },
+        ],
+      },
+      {},
+    );
+    expect(response.answer).toContain("baseline checks are done");
+    expect(response.answer).toContain("without mechanical changes");
+    expect(response.answer).toContain("N43");
+  });
   it("uses a safe deterministic provider without credentials", async () => {
     expect(getCopilotStatus({}).mode).toBe("deterministic");
     const response = await askCopilot(request, {});

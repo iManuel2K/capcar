@@ -2,6 +2,16 @@ import { z } from "zod";
 import { safeAuthNext } from "@/features/auth/next-path";
 
 export const copilotRequestSchema = z.object({
+  locale: z.enum(["en", "de", "el", "sq", "ja"]).optional(),
+  history: z
+    .array(
+      z.object({
+        question: z.string().max(1000),
+        answer: z.string().max(6000),
+      }),
+    )
+    .max(8)
+    .optional(),
   message: z.string().trim().min(2).max(1000),
   vehicle: z.object({
     id: z.string(),
