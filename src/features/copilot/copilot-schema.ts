@@ -7,6 +7,12 @@ import {
 } from "@/features/tuning/tuning-roadmap";
 
 export const copilotRequestSchema = z.object({
+  clarifications: z
+    .array(
+      z.object({ question: z.string().max(400), answer: z.string().max(1000) }),
+    )
+    .max(12)
+    .optional(),
   research: z.boolean().optional(),
   intent: z.enum(["tuning_review", "tuning_prompt"]).optional(),
   tuningContext: z
@@ -65,7 +71,13 @@ export const copilotRequestSchema = z.object({
     .max(100),
 });
 
+export const copilotFollowUpSchema = z.object({
+  question: z.string().trim().min(1).max(400),
+  reason: z.string().trim().min(1).max(400),
+  choices: z.array(z.string().trim().min(1).max(150)).min(2).max(3),
+});
 export const copilotResponseSchema = z.object({
+  followUp: copilotFollowUpSchema.optional(),
   sources: z
     .array(
       z.object({

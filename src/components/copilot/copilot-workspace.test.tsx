@@ -51,6 +51,50 @@ afterEach(() => {
 });
 
 describe("Copilot conversation integration", () => {
+  it("offers quick replies and sends the actual clarification and prior question back", async () => {
+    const followUp = {
+      question: "Where is the car registered?",
+      reason: "This changes road-use requirements.",
+      choices: ["Germany", "Another country"],
+    };
+    const fetch = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ ...reply, followUp }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          ...reply,
+          answer: "I will compare the options using that country.",
+        }),
+      });
+    vi.stubGlobal("fetch", fetch);
+    render(<CopilotWorkspace vehicleId="test-car" />);
+    fireEvent.change(screen.getByRole("textbox"), {
+      target: { value: "More power, software only" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Send message" }));
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: "Germany" })).toBeEnabled(),
+    );
+    expect(screen.getByText(followUp.reason)).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: "I don’t know — help me decide" }),
+    ).toBeEnabled();
+    fireEvent.click(screen.getByRole("button", { name: "Germany" }));
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
+    const body = JSON.parse(fetch.mock.calls[1][1].body);
+    expect(body.message).toBe("Germany");
+    expect(body.clarifications).toEqual([
+      { question: followUp.question, answer: "Germany" },
+    ]);
+    expect(body.history[0].answer).toContain(followUp.question);
+    await waitFor(() =>
+      expect(screen.queryByRole("button", { name: "Germany" })).toBeNull(),
+    );
+  });
   it("shows a saved provider and a direct connection path", () => {
     render(
       <CopilotWorkspace

@@ -26,6 +26,49 @@ const input = {
 };
 afterEach(() => vi.unstubAllGlobals());
 describe("connected copilot", () => {
+  it.each(["openai", "anthropic", "gemini"] as const)(
+    "parses a structured follow-up from %s and passes previous clarifications",
+    async (provider) => {
+      const followUp = {
+        question: "Where is it registered?",
+        reason: "This changes the approval requirements.",
+        choices: ["Germany", "Another country"],
+      };
+      const text = JSON.stringify({
+        answer: "Software-only constraint understood.",
+        followUp,
+      });
+      const body =
+        provider === "openai"
+          ? { output: [{ content: [{ type: "output_text", text }] }] }
+          : provider === "anthropic"
+            ? { content: [{ type: "text", text }] }
+            : { candidates: [{ content: { parts: [{ text }] } }] };
+      const fetch = vi
+        .fn()
+        .mockImplementation(async () => new Response(JSON.stringify(body)));
+      vi.stubGlobal("fetch", fetch);
+      const connection = { provider, model: "test" } as AiConnectionRecord;
+      const reply = await askConnectedCopilot(
+        {
+          ...input,
+          clarifications: [{ question: "Budget?", answer: "I do not know" }],
+        },
+        connection,
+      );
+      expect(reply.followUp).toEqual(followUp);
+      expect(reply.answer).toBe("Software-only constraint understood.");
+      expect(fetch.mock.calls[0][1].body).toContain("I do not know");
+      const repeated = await askConnectedCopilot(
+        {
+          ...input,
+          clarifications: [{ question: followUp.question, answer: "Germany" }],
+        },
+        connection,
+      );
+      expect(repeated.followUp).toBeUndefined();
+    },
+  );
   it.each(["openai", "gemini", "anthropic"] as const)(
     "enables provider-native research only when requested for %s",
     async (provider) => {

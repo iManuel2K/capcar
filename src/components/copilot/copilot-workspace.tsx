@@ -1,6 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { CopilotFollowUp } from "./copilot-follow-up";
+import {
+  clarificationContext,
+  conversationAnswer,
+} from "@/features/copilot/conversation-follow-up";
 import { CopilotResearchSources, researchCopy } from "./copilot-research";
 import {
   AlertTriangle,
@@ -75,14 +80,22 @@ function CopilotSession({
   const buildItems = builds.items.filter((item) =>
     vehicleBuildIds.has(item.buildId),
   );
+  const [clarifications, setClarifications] = useState<
+    { question: string; answer: string }[]
+  >([]);
   const [research, setResearch] = useState(false);
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState<CopilotResponse>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [turns, setTurns] = useState<{ question: string; answer: string }[]>(
-    [],
-  );
+  const [turns, setTurns] = useState<
+    {
+      question: string;
+      answer: string;
+      contextAnswer?: string;
+      followUp?: CopilotResponse["followUp"];
+    }[]
+  >([]);
   const [pending, setPending] = useState("");
   const request = useRef<AbortController | null>(null);
   useEffect(() => () => request.current?.abort(), []);
@@ -102,6 +115,11 @@ function CopilotSession({
     if (!vehicle || question.trim().length < 2 || request.current) return;
     const controller = new AbortController();
     request.current = controller;
+    const nextClarifications = clarificationContext(
+      clarifications,
+      response,
+      question,
+    );
     setPending(question);
     setLoading(true);
     setError("");
@@ -116,10 +134,11 @@ function CopilotSession({
         body: JSON.stringify({
           message: question,
           research,
+          clarifications: nextClarifications,
           locale,
           history: turns.slice(-8).map((turn) => ({
             question: turn.question,
-            answer: turn.answer.slice(0, 6000),
+            answer: (turn.contextAnswer ?? turn.answer).slice(0, 6000),
           })),
           vehicle: {
             id: vehicle.id,
@@ -148,7 +167,16 @@ function CopilotSession({
         );
       if (controller.signal.aborted) return;
       setResponse(body);
-      setTurns((current) => [...current, { question, answer: body.answer }]);
+      setTurns((current) => [
+        ...current,
+        {
+          question,
+          answer: body.answer,
+          contextAnswer: conversationAnswer(body),
+          followUp: body.followUp,
+        },
+      ]);
+      setClarifications(nextClarifications);
       setMessage((draft) => (draft === question ? "" : draft));
     } catch (caught) {
       if (controller.signal.aborted) return;
@@ -222,6 +250,19 @@ function CopilotSession({
               </AIMessage>,
               <AIMessage key={`${index}-assistant`} role="assistant">
                 <AIResponse text={turn.answer} />
+                {index !== turns.length - 1 && turn.followUp && (
+                  <p className="text-muted-foreground mt-3 leading-7">
+                    {turn.followUp.question}
+                  </p>
+                )}
+                {index === turns.length - 1 && (
+                  <CopilotFollowUp
+                    followUp={response?.followUp}
+                    locale={locale}
+                    busy={loading}
+                    onReply={(reply) => void submit(reply)}
+                  />
+                )}
                 {index === turns.length - 1 && response && (
                   <CopilotResearchSources response={response} locale={locale} />
                 )}
