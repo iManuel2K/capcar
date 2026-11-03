@@ -26,6 +26,56 @@ const input = {
 };
 afterEach(() => vi.unstubAllGlobals());
 describe("connected copilot", () => {
+  it("uses a separate rewrite instruction with the actual tuning context", async () => {
+    const fetch = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            output: [
+              {
+                content: [
+                  {
+                    type: "output_text",
+                    text: "Keep hardware unchanged and review software options.",
+                  },
+                ],
+              },
+            ],
+          }),
+        ),
+      );
+    vi.stubGlobal("fetch", fetch);
+    await askConnectedCopilot(
+      {
+        ...input,
+        intent: "tuning_prompt",
+        tuningContext: {
+          goal: "power",
+          experience: "beginner",
+          usage: "daily",
+          budget: 5000,
+          reserveBudget: 1000,
+          selectedStage: "power",
+          stages: [
+            {
+              id: "power",
+              title: "Plan",
+              budget: 1000,
+              checks: [{ text: "Health checked", done: true }],
+            },
+          ],
+        },
+      },
+      { provider: "openai", model: "saved" } as AiConnectionRecord,
+    );
+    const body = JSON.parse(fetch.mock.calls[0][1].body);
+    expect(body.input[0].content).toContain("Rewrite only");
+    expect(body.input[0].content).toContain("Do not answer");
+    expect(body.input[1].content).toContain('"reserveBudget":1000');
+    expect(body.input[1].content).toContain('"done":true');
+    expect(fetch).toHaveBeenCalledOnce();
+  });
   it.each(["openai", "anthropic", "gemini"] as const)(
     "uses the owner's %s connection and preserves context",
     async (provider) => {

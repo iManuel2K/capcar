@@ -37,14 +37,14 @@ const payload = {
   },
   buildItems: [],
 };
-const request = () =>
+const request = (body: Record<string, unknown> = payload) =>
   new Request("https://capcar.dev/api/copilot/chat", {
     method: "POST",
     headers: {
       origin: "https://capcar.dev",
       "content-type": "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(body),
   });
 beforeEach(() => {
   vi.clearAllMocks();
@@ -53,6 +53,16 @@ beforeEach(() => {
   mocks.rules.mockResolvedValue({ answer: "Rules answer" });
 });
 describe("copilot authentication and dispatch", () => {
+  it("requires a connected provider for tuning reviews and prompt improvement", async () => {
+    mocks.connection.mockResolvedValue(null);
+    for (const intent of ["tuning_prompt", "tuning_review"]) {
+      const response = await POST(request({ ...payload, intent }));
+      expect(response.status).toBe(409);
+      expect((await response.json()).code).toBe("ai_connection_required");
+    }
+    expect(mocks.rules).not.toHaveBeenCalled();
+    expect(mocks.connected).not.toHaveBeenCalled();
+  });
   it("loads credentials only for the authenticated account and uses its provider", async () => {
     const connection = { provider: "gemini", model: "saved" };
     mocks.connection.mockResolvedValue(connection);

@@ -39,6 +39,15 @@ export async function POST(request: Request) {
         );
       }
     })();
+    if (input.intent && !connection)
+      return NextResponse.json(
+        {
+          error:
+            "Connect Gemini, OpenAI or Claude under Account → Connections to review your tuning roadmap with AI.",
+          code: "ai_connection_required",
+        },
+        { status: 409, headers: { "Cache-Control": "no-store" } },
+      );
     return NextResponse.json(
       connection
         ? await askConnectedCopilot(input, connection, request.signal)
