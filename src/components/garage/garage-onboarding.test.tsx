@@ -90,8 +90,9 @@ describe("garage onboarding UI", () => {
     fireEvent.change(screen.getByRole("searchbox"), {
       target: { value: "zzzz-no-match" },
     });
-    expect(screen.getByRole("status")).toHaveTextContent(
-      "No cars match your search",
+    expect(screen.getByText(/No cars match your search/)).toHaveAttribute(
+      "role",
+      "status",
     );
     cleanup();
     localStorage.setItem(

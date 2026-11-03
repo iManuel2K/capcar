@@ -39,7 +39,7 @@ describe("expanded garage and common checks", () => {
     const production = garageCarCatalog.filter(
       (entry) => entry.id !== "nissan-proto",
     );
-    expect(production.length).toBeGreaterThan(50);
+    expect(production.length).toBeGreaterThanOrEqual(100);
     expect(new Set(garageCarCatalog.map((entry) => entry.id)).size).toBe(
       garageCarCatalog.length,
     );
