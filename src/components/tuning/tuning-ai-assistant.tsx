@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { readCopilotResponse } from "@/features/copilot/chat-transport";
 import { CopilotFollowUp } from "@/components/copilot/copilot-follow-up";
 import {
   clarificationContext,
@@ -11,10 +12,7 @@ import {
   researchCopy,
 } from "@/components/copilot/copilot-research";
 import { useEffect, useRef, useState } from "react";
-import {
-  copilotResponseSchema,
-  type CopilotResponse,
-} from "@/features/copilot/copilot-schema";
+import { type CopilotResponse } from "@/features/copilot/copilot-schema";
 import { tuningAiContext } from "@/features/tuning/tuning-ai";
 import { tuningAiCopy } from "@/features/tuning/tuning-ai-copy";
 import type { TuningPlan } from "@/features/tuning/tuning-roadmap";
@@ -68,12 +66,13 @@ export function TuningAiAssistant({
     try {
       const result = await fetch("/api/copilot/chat", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          accept: "application/x-ndjson",
+        },
         signal: AbortSignal.any([
           controller.signal,
-          AbortSignal.timeout(
-            intent === "tuning_review" && research ? 55_000 : 35_000,
-          ),
+          AbortSignal.timeout(65_000),
         ]),
         body: JSON.stringify({
           intent,
@@ -96,10 +95,12 @@ export function TuningAiAssistant({
         }),
       });
       if (result.status === 409) {
+        setQuestion((draft) => (draft.trim() ? draft : message));
         setError(c("setup"));
         return;
       }
       if (!result.ok) {
+        setQuestion((draft) => (draft.trim() ? draft : message));
         const failure = await result.json().catch(() => null);
         setError(
           c("failure") +
@@ -109,7 +110,7 @@ export function TuningAiAssistant({
         );
         return;
       }
-      const body = copilotResponseSchema.parse(await result.json());
+      const body = await readCopilotResponse(result);
       if (body.source !== "external") throw new Error("AI provider required");
       if (controller.signal.aborted) return;
       if (intent === "tuning_prompt") {
@@ -126,8 +127,13 @@ export function TuningAiAssistant({
           { question: message, answer: conversationAnswer(body) },
         ]);
       }
-    } catch {
-      if (!controller.signal.aborted) setError(c("failure"));
+    } catch (caught) {
+      if (!controller.signal.aborted)
+        setQuestion((draft) => (draft.trim() ? draft : message));
+      if (!controller.signal.aborted)
+        setError(
+          c("failure") + (caught instanceof Error ? " " + caught.message : ""),
+        );
     } finally {
       request.current = null;
       setBusy(false);

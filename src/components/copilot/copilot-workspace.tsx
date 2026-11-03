@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { readCopilotResponse } from "@/features/copilot/chat-transport";
 import { CopilotFollowUp } from "./copilot-follow-up";
 import {
   clarificationContext,
@@ -127,10 +128,13 @@ function CopilotSession({
       const apiResponse = await fetch("/api/copilot/chat", {
         signal: AbortSignal.any([
           controller.signal,
-          AbortSignal.timeout(research ? 55_000 : 35_000),
+          AbortSignal.timeout(65_000),
         ]),
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          accept: "application/x-ndjson",
+        },
         body: JSON.stringify({
           message: question,
           research,
@@ -157,14 +161,7 @@ function CopilotSession({
           })),
         }),
       });
-      const body = (await apiResponse.json()) as
-        CopilotResponse | { error?: string };
-      if (!apiResponse.ok || !("answer" in body))
-        throw new Error(
-          "error" in body && body.error
-            ? body.error
-            : "Copilot request failed.",
-        );
+      const body = await readCopilotResponse(apiResponse);
       if (controller.signal.aborted) return;
       setResponse(body);
       setTurns((current) => [
@@ -180,6 +177,7 @@ function CopilotSession({
       setMessage((draft) => (draft === question ? "" : draft));
     } catch (caught) {
       if (controller.signal.aborted) return;
+      setMessage((draft) => (draft.trim() ? draft : question));
       setError(
         caught instanceof Error ? caught.message : "Copilot request failed.",
       );

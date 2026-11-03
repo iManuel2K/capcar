@@ -25,6 +25,7 @@ vi.mock("@/features/copilot/copilot-provider", () => ({
   askCopilot: mocks.rules,
 }));
 import { POST } from "./route";
+import { readCopilotResponse } from "@/features/copilot/chat-transport";
 const payload = {
   message: "Help with chip tuning",
   vehicle: {
@@ -53,6 +54,33 @@ beforeEach(() => {
   mocks.rules.mockResolvedValue({ answer: "Rules answer" });
 });
 describe("copilot authentication and dispatch", () => {
+  it("streams a real connected reply without changing the account boundary", async () => {
+    mocks.connection.mockResolvedValue({ provider: "gemini", model: "saved" });
+    mocks.connected.mockResolvedValue({
+      answer: "Actual reply",
+      source: "external",
+      provider: "Your Gemini",
+      evidence: [],
+      warnings: [],
+      nextActions: [],
+    });
+    const input = request();
+    input.headers.set("accept", "application/x-ndjson");
+    const response = await POST(input);
+    expect(response.headers.get("content-type")).toContain(
+      "application/x-ndjson",
+    );
+    expect((await readCopilotResponse(response)).answer).toBe("Actual reply");
+    expect(mocks.connection.mock.calls[0][1]).toBe("authenticated-owner");
+    expect(mocks.connected).toHaveBeenCalledOnce();
+  });
+  it("handles account-service exceptions as a clear service failure", async () => {
+    mocks.guard.mockRejectedValueOnce(new Error("private account failure"));
+    const response = await POST(request());
+    expect(response.status).toBe(503);
+    expect((await response.json()).code).toBe("account_guard_unavailable");
+    expect(mocks.connected).not.toHaveBeenCalled();
+  });
   it("requires a connected provider for tuning reviews and prompt improvement", async () => {
     mocks.connection.mockResolvedValue(null);
     for (const intent of ["tuning_prompt", "tuning_review"]) {

@@ -11,6 +11,8 @@ export class CopilotProviderError extends Error {
   constructor(
     message: string,
     readonly status: number,
+    readonly code = "provider_failure",
+    readonly upstreamStatus?: number,
   ) {
     super(message);
   }
@@ -82,7 +84,7 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
             { role: "user", content: prompt },
           ],
           reasoning: { effort: "low" },
-          max_output_tokens: 1800,
+          max_output_tokens: 4096,
           ...(research
             ? { tools: [{ type: "web_search", search_context_size: "low" }] }
             : {}),
@@ -92,7 +94,7 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
             model: connection.model,
             system: instructions,
             messages: [{ role: "user", content: prompt }],
-            max_tokens: 1200,
+            max_tokens: 2048,
             ...(research
               ? {
                   tools: [
@@ -108,7 +110,14 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
         : {
             systemInstruction: { parts: [{ text: instructions }] },
             contents: [{ role: "user", parts: [{ text: prompt }] }],
-            generationConfig: { maxOutputTokens: 1800 },
+            generationConfig: {
+              maxOutputTokens: 4096,
+              ...(/^gemini-3/.test(connection.model)
+                ? { thinkingConfig: { thinkingLevel: "low" } }
+                : /^gemini-2\.5.*flash/.test(connection.model)
+                  ? { thinkingConfig: { thinkingBudget: 0 } }
+                  : {}),
+            },
             ...(research ? { tools: [{ google_search: {} }] } : {}),
           };
   let response: Response;
@@ -118,7 +127,7 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
       headers,
       body: JSON.stringify(body),
       signal: AbortSignal.any([
-        AbortSignal.timeout(research ? 45_000 : 25_000),
+        AbortSignal.timeout(48_000),
         ...(signal ? [signal] : []),
       ]),
     });
@@ -126,6 +135,7 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
     throw new CopilotProviderError(
       "The AI request was interrupted or timed out. No automatic retry was made.",
       504,
+      "provider_timeout",
     );
   }
   if (!response.ok) {
@@ -142,12 +152,21 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
     throw new CopilotProviderError(
       message,
       response.status === 429 ? 429 : 502,
+      "provider_http_error",
+      response.status,
     );
   }
-  const data = await response.json().catch(() => {
+  const data = await response.json().catch((error: unknown) => {
+    if (error instanceof Error && /abort|timeout/i.test(error.name))
+      throw new CopilotProviderError(
+        "Your AI reply timed out while loading. Your question is kept; please try again.",
+        504,
+        "provider_body_timeout",
+      );
     throw new CopilotProviderError(
       "Your AI provider returned an unreadable answer. No automatic retry was made.",
       502,
+      "provider_invalid_json",
     );
   });
   const answer: unknown =
@@ -169,12 +188,21 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
             ?.filter((item: { thought?: boolean }) => !item.thought)
             .map((item: { text?: string }) => item.text ?? "")
             .join("\n");
+  const outputLimited =
+    data?.status === "incomplete" ||
+    data?.stop_reason === "max_tokens" ||
+    data?.candidates?.[0]?.finishReason === "MAX_TOKENS";
   if (typeof answer !== "string" || !answer.trim())
     throw new CopilotProviderError(
-      "Your AI provider returned no answer. No automatic retry was made.",
+      outputLimited
+        ? "Your AI provider reached its output limit before returning an answer. Try a shorter question or another model."
+        : "Your AI provider returned no answer. No automatic retry was made.",
       502,
+      outputLimited ? "provider_output_limit" : "provider_empty_answer",
     );
-  let dialogue: Pick<CopilotResponse, "answer" | "followUp">;
+  let dialogue: Pick<CopilotResponse, "answer" | "followUp"> & {
+    incomplete?: boolean;
+  };
   try {
     dialogue =
       input.intent === "tuning_prompt"
@@ -182,8 +210,9 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
         : parseCopilotAnswer(answer);
   } catch {
     throw new CopilotProviderError(
-      "Your AI provider returned an unreadable response. No automatic retry was made.",
+      "Your AI reply was incomplete or could not be read. Your question is kept; please try again.",
       502,
+      "provider_invalid_answer",
     );
   }
   if (
@@ -198,16 +227,22 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
   const citations = research
     ? researchSources(provider, data)
     : { sources: [], searchSuggestions: undefined };
+  const { incomplete, ...content } = dialogue;
   return {
     ...citations,
     provider: `Your ${provider === "openai" ? "OpenAI" : provider === "anthropic" ? "Claude" : "Gemini"}`,
     source: "external",
-    ...dialogue,
+    ...content,
     evidence: [
       `${vehicle.productionYear} ${vehicle.make ?? ""} ${vehicle.model} · ${vehicle.engineCode}`,
       `${input.buildItems.length} saved build items; ${input.history?.length ?? 0} recent conversation turns. User-provided context, not verified sources.`,
     ],
     warnings: [
+      ...(incomplete || outputLimited
+        ? [
+            "The provider reply was cut short. Only the complete answer text is shown; ask to continue if needed.",
+          ]
+        : []),
       citations.sources.length
         ? "Provider-returned sources are linked; their claims and applicability are not independently verified by CapCar. AI advice is not a diagnosis, fitment check or legal approval."
         : research
