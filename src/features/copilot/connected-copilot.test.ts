@@ -26,30 +26,56 @@ const input = {
 };
 afterEach(() => vi.unstubAllGlobals());
 describe("connected copilot", () => {
+  it.each(["openai", "gemini", "anthropic"] as const)(
+    "enables provider-native research only when requested for %s",
+    async (provider) => {
+      const body =
+        provider === "openai"
+          ? {
+              output: [
+                { content: [{ type: "output_text", text: "Unverified" }] },
+              ],
+            }
+          : provider === "gemini"
+            ? { candidates: [{ content: { parts: [{ text: "Unverified" }] } }] }
+            : { content: [{ type: "text", text: "Unverified" }] };
+      const fetch = vi
+        .fn()
+        .mockResolvedValue(new Response(JSON.stringify(body)));
+      vi.stubGlobal("fetch", fetch);
+      const result = await askConnectedCopilot({ ...input, research: true }, {
+        provider,
+        model: "test",
+      } as AiConnectionRecord);
+      expect(JSON.parse(fetch.mock.calls[0][1].body).tools).toHaveLength(1);
+      expect(result.sources).toEqual([]);
+      expect(result.warnings.join(" ")).toContain("no usable source citations");
+      expect(fetch).toHaveBeenCalledOnce();
+    },
+  );
   it("uses a separate rewrite instruction with the actual tuning context", async () => {
-    const fetch = vi
-      .fn()
-      .mockResolvedValue(
-        new Response(
-          JSON.stringify({
-            output: [
-              {
-                content: [
-                  {
-                    type: "output_text",
-                    text: "Keep hardware unchanged and review software options.",
-                  },
-                ],
-              },
-            ],
-          }),
-        ),
-      );
+    const fetch = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          output: [
+            {
+              content: [
+                {
+                  type: "output_text",
+                  text: "Keep hardware unchanged and review software options.",
+                },
+              ],
+            },
+          ],
+        }),
+      ),
+    );
     vi.stubGlobal("fetch", fetch);
     await askConnectedCopilot(
       {
         ...input,
         intent: "tuning_prompt",
+        research: true,
         tuningContext: {
           goal: "power",
           experience: "beginner",
@@ -70,6 +96,7 @@ describe("connected copilot", () => {
       { provider: "openai", model: "saved" } as AiConnectionRecord,
     );
     const body = JSON.parse(fetch.mock.calls[0][1].body);
+    expect(body.tools).toBeUndefined();
     expect(body.input[0].content).toContain("Rewrite only");
     expect(body.input[0].content).toContain("Do not answer");
     expect(body.input[1].content).toContain('"reserveBudget":1000');

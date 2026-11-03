@@ -39,7 +39,7 @@ export async function POST(request: Request) {
         );
       }
     })();
-    if (input.intent && !connection)
+    if ((input.intent || input.research) && !connection)
       return NextResponse.json(
         {
           error:

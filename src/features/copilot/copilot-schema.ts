@@ -7,6 +7,7 @@ import {
 } from "@/features/tuning/tuning-roadmap";
 
 export const copilotRequestSchema = z.object({
+  research: z.boolean().optional(),
   intent: z.enum(["tuning_review", "tuning_prompt"]).optional(),
   tuningContext: z
     .object({
@@ -65,6 +66,19 @@ export const copilotRequestSchema = z.object({
 });
 
 export const copilotResponseSchema = z.object({
+  sources: z
+    .array(
+      z.object({
+        title: z.string().max(500),
+        url: z
+          .string()
+          .url()
+          .refine((value) => /^https:\/\//i.test(value)),
+      }),
+    )
+    .max(12)
+    .optional(),
+  searchSuggestions: z.string().max(100_000).optional(),
   provider: z.string(),
   source: z.enum(["deterministic", "external"]),
   answer: z.string(),

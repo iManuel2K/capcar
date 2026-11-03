@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { CopilotResearchSources, researchCopy } from "./copilot-research";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -74,6 +75,7 @@ function CopilotSession({
   const buildItems = builds.items.filter((item) =>
     vehicleBuildIds.has(item.buildId),
   );
+  const [research, setResearch] = useState(false);
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState<CopilotResponse>();
   const [loading, setLoading] = useState(false);
@@ -107,12 +109,13 @@ function CopilotSession({
       const apiResponse = await fetch("/api/copilot/chat", {
         signal: AbortSignal.any([
           controller.signal,
-          AbortSignal.timeout(35_000),
+          AbortSignal.timeout(research ? 55_000 : 35_000),
         ]),
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           message: question,
+          research,
           locale,
           history: turns.slice(-8).map((turn) => ({
             question: turn.question,
@@ -220,6 +223,9 @@ function CopilotSession({
               <AIMessage key={`${index}-assistant`} role="assistant">
                 <AIResponse text={turn.answer} />
                 {index === turns.length - 1 && response && (
+                  <CopilotResearchSources response={response} locale={locale} />
+                )}
+                {index === turns.length - 1 && response && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {response.nextActions.map((action) => (
                       <Link
@@ -253,6 +259,16 @@ function CopilotSession({
           </AIConversation>
           <div className="mt-4 border-t border-white/10 pt-4">
             <div className="mt-4">
+              <label className="text-muted-foreground mb-3 flex min-h-11 items-center gap-3 text-sm">
+                <input
+                  type="checkbox"
+                  checked={research}
+                  disabled={loading}
+                  onChange={(event) => setResearch(event.target.checked)}
+                  className="accent-primary size-5"
+                />
+                {researchCopy[locale].option}
+              </label>
               <AIInput
                 value={message}
                 onValueChange={setMessage}
