@@ -1,5 +1,6 @@
 import { garageCarCatalog } from "@/features/vehicles/garage-car-catalog";
 import { everydayGarageCars } from "@/features/vehicles/everyday-garage-cars";
+import { additionalGarageCars } from "@/features/vehicles/additional-garage-cars";
 import { carModels } from "@/features/visualizer/car-model-catalog";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 
@@ -14,7 +15,7 @@ export const problemSourceMappings: Record<string, SourceMapping> = {
   // These additions have European identities; keep US lookup unavailable until
   // exact model-year equivalence is reviewed. DIY checks remain available.
   ...Object.fromEntries(
-    everydayGarageCars.map((car) => [
+    [...everydayGarageCars, ...additionalGarageCars].map((car) => [
       car.id,
       { models: [], reason: "market" as const },
     ]),

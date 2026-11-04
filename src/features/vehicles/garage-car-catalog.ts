@@ -3,6 +3,8 @@ import { problemsForVehicle } from "@/features/problems/problem-catalog";
 import { dailyProblemsForVehicle } from "@/features/problems/daily-car-coverage";
 import { partCatalog } from "@/features/parts/part-catalog";
 import { everydayGarageCars } from "./everyday-garage-cars";
+import { additionalGarageCars } from "./additional-garage-cars";
+import { modelProblemProfileForVehicle } from "@/features/problems/model-problem-profiles";
 import { commonChecksForVehicle } from "@/features/problems/common-checks";
 import type { Vehicle } from "./vehicle-schema";
 
@@ -67,6 +69,7 @@ export const garageCarCatalog: GarageCarChoice[] = [
     visual: false,
   },
   ...everydayGarageCars,
+  ...additionalGarageCars,
   ...carModels.map((car) => ({
     id: car.id,
     make: car.make,
@@ -80,10 +83,9 @@ export const garageCarCatalog: GarageCarChoice[] = [
 export function garageCarCoverage(vehicle: Vehicle) {
   return {
     checks: commonChecksForVehicle(vehicle).length,
-    problems: [
-      ...problemsForVehicle(vehicle),
-      ...dailyProblemsForVehicle(vehicle),
-    ].length,
+    problems:
+      [...problemsForVehicle(vehicle), ...dailyProblemsForVehicle(vehicle)]
+        .length + (modelProblemProfileForVehicle(vehicle)?.issues.length ?? 0),
     // These are catalog planning references, not a promise of exact fitment.
     parts: partCatalog.filter((part) =>
       part.fitmentRules.some((rule) =>

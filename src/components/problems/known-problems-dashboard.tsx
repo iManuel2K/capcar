@@ -7,6 +7,8 @@ import { useLocale } from "next-intl";
 import { isAppLocale } from "@/i18n/config";
 import { OfficialProblemRecords } from "./official-problem-records";
 import { CommonCheckCards } from "./common-check-cards";
+import { ModelProblemCards } from "./model-problem-cards";
+import { modelProblemProfileForVehicle } from "@/features/problems/model-problem-profiles";
 import { findProblemProfile } from "@/features/problems/source-profiles";
 import { commonCheckCopy } from "@/features/problems/common-check-copy";
 import {
@@ -43,6 +45,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
     ...dailyProblemsForVehicle(vehicle),
   ];
   const profile = findProblemProfile(vehicle);
+  const modelProfile = modelProblemProfileForVehicle(vehicle);
   const engineUnknown = /UNKNOWN|UNCONFIRMED|NOT KNOWN/.test(
     vehicle.engineCode.toUpperCase(),
   );
@@ -68,8 +71,6 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
           {c.intro}
         </p>
       </header>
-      <CommonCheckCards key={vehicle.id} vehicle={vehicle} locale={locale} />
-
       <section
         className="mt-12 border-t border-white/15 pt-8"
         aria-labelledby="model-notes"
@@ -80,7 +81,7 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
         <p className="text-muted-foreground mt-3 max-w-3xl text-base leading-7">
           {c.modelNote}
         </p>
-        {profile?.catalogSource && (
+        {profile?.catalogSource && !modelProfile && (
           <a
             href={profile.catalogSource}
             target="_blank"
@@ -100,11 +101,12 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
             {c.engine}
           </p>
         )}
-        {problems.length === 0 ? (
+        <ModelProblemCards vehicle={vehicle} locale={locale} />
+        {problems.length === 0 && !modelProfile ? (
           <p className="bg-card text-muted-foreground mt-5 rounded-xl p-5 text-base leading-7">
             {c.noModelNotes}
           </p>
-        ) : (
+        ) : problems.length > 0 ? (
           <>
             {locale !== "en" && (
               <p className="text-muted-foreground mt-3 text-sm">
@@ -194,8 +196,9 @@ export function KnownProblemsDashboard({ vehicleId }: { vehicleId: string }) {
               })}
             </div>
           </>
-        )}
+        ) : null}
       </section>
+      <CommonCheckCards key={vehicle.id} vehicle={vehicle} locale={locale} />
       <OfficialProblemRecords
         key={`${vehicle.make}:${vehicle.model}:${vehicle.platform}:${vehicle.productionYear}`}
         vehicle={vehicle}
