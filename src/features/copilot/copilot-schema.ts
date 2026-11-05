@@ -14,6 +14,7 @@ export const copilotRequestSchema = z.object({
     .max(12)
     .optional(),
   research: z.boolean().optional(),
+  rulesOnly: z.boolean().optional(),
   intent: z.enum(["tuning_review", "tuning_prompt"]).optional(),
   tuningContext: z
     .object({

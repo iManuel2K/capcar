@@ -4,6 +4,7 @@ const mocks = vi.hoisted(() => ({
   connection: vi.fn(),
   connected: vi.fn(),
   rules: vi.fn(),
+  explicitRules: vi.fn(),
   admin: vi.fn(),
 }));
 vi.mock("@/lib/api/guard", async (importOriginal) => ({
@@ -23,6 +24,7 @@ vi.mock("@/features/copilot/connected-copilot", async (importOriginal) => ({
 }));
 vi.mock("@/features/copilot/copilot-provider", () => ({
   askCopilot: mocks.rules,
+  askCopilotRules: mocks.explicitRules,
 }));
 import { POST } from "./route";
 import { readCopilotResponse } from "@/features/copilot/chat-transport";
@@ -114,6 +116,31 @@ describe("copilot authentication and dispatch", () => {
     mocks.connection.mockResolvedValue(null);
     expect((await POST(request())).status).toBe(200);
     expect(mocks.rules).toHaveBeenCalledOnce();
+    expect(mocks.connected).not.toHaveBeenCalled();
+  });
+  it("runs explicitly selected CapCar checks without reading provider credentials", async () => {
+    mocks.explicitRules.mockReturnValue({
+      answer: "Review maintenance first.",
+      source: "deterministic",
+    });
+    const response = await POST(request({ ...payload, rulesOnly: true }));
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ source: "deterministic" });
+    expect(mocks.guard).toHaveBeenCalledOnce();
+    expect(mocks.explicitRules).toHaveBeenCalledOnce();
+    expect(mocks.admin).not.toHaveBeenCalled();
+    expect(mocks.connection).not.toHaveBeenCalled();
+    expect(mocks.connected).not.toHaveBeenCalled();
+  });
+  it("does not use CapCar checks for tuning intents or web research", async () => {
+    for (const options of [{ intent: "tuning_review" }, { research: true }]) {
+      const response = await POST(
+        request({ ...payload, ...options, rulesOnly: true }),
+      );
+      expect(response.status).toBe(400);
+      expect((await response.json()).code).toBe("rules_scope_mismatch");
+    }
+    expect(mocks.explicitRules).not.toHaveBeenCalled();
     expect(mocks.connected).not.toHaveBeenCalled();
   });
   it("does not silently fall back when connection lookup fails", async () => {

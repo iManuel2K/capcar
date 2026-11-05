@@ -1,7 +1,10 @@
 import { createCopilotStream } from "@/features/copilot/chat-transport";
 import { NextResponse } from "next/server";
 
-import { askCopilot } from "@/features/copilot/copilot-provider";
+import {
+  askCopilot,
+  askCopilotRules,
+} from "@/features/copilot/copilot-provider";
 import { copilotRequestSchema } from "@/features/copilot/copilot-schema";
 import {
   askConnectedCopilot,
@@ -37,6 +40,19 @@ export async function POST(request: Request) {
     );
     if (!guard.ok) return guard.response;
     const input = await readJsonRequest(request, copilotRequestSchema, 100_000);
+    if (input.rulesOnly) {
+      if (input.intent || input.research)
+        return NextResponse.json(
+          {
+            error: "CapCar checks do not support AI tuning reviews or web research.",
+            code: "rules_scope_mismatch",
+          },
+          { status: 400, headers: { "Cache-Control": "no-store" } },
+        );
+      return NextResponse.json(askCopilotRules(input), {
+        headers: { "Cache-Control": "no-store" },
+      });
+    }
     const connection = await (async () => {
       if (!guard.userId || !getAiConnectionSetup().configured) return null;
       try {
