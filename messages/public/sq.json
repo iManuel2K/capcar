@@ -422,7 +422,7 @@
       "invalid": "Kontrollo këtë fushë dhe provo përsëri."
     },
     "messages": {
-      "created": "Llogaria u krijua. Kontrollo emailin.",
+      "confirmationInstructions": "Nëse duhet të konfirmosh adresën e emailit, kontrollo kutinë hyrëse dhe dosjen e mesazheve të padëshiruara. Nëse ke tashmë një llogari, hyr ose rivendos fjalëkalimin.",
       "resetSent": "Lidhja u dërgua. Kontrollo emailin.",
       "updated": "Fjalëkalimi u përditësua. Po hapet garazhi…"
     }
