@@ -33,7 +33,7 @@ export function getCopilotStatus(
   };
 }
 
-function deterministicResponse(request: CopilotRequest): CopilotResponse {
+export function askCopilotRules(request: CopilotRequest): CopilotResponse {
   const current = request.message.toLowerCase();
   const followUp =
     /^(i did|done|now what|what next|yes|okay|ok|erledigt|fertig)\b/.test(
@@ -113,7 +113,7 @@ export async function askCopilot(
   environment: CopilotEnvironment = process.env,
 ): Promise<CopilotResponse> {
   const status = getCopilotStatus(environment);
-  if (status.mode === "deterministic") return deterministicResponse(request);
+  if (status.mode === "deterministic") return askCopilotRules(request);
   if (!status.configured)
     throw new Error("External copilot is not fully configured.");
   const response = await requestExternalProvider<

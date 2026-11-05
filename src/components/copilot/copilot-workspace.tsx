@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { readCopilotResponse } from "@/features/copilot/chat-transport";
+import {
+  CopilotResponseError,
+  readCopilotResponse,
+} from "@/features/copilot/chat-transport";
 import { CopilotFollowUp } from "./copilot-follow-up";
 import {
   clarificationContext,
@@ -88,7 +91,10 @@ function CopilotSession({
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState<CopilotResponse>();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<{
+    message: string;
+    fallbackQuestion?: string;
+  }>();
   const [turns, setTurns] = useState<
     {
       question: string;
@@ -112,7 +118,7 @@ function CopilotSession({
       </div>
     );
 
-  async function submit(question = message) {
+  async function submit(question = message, rulesOnly = false) {
     if (!vehicle || question.trim().length < 2 || request.current) return;
     const controller = new AbortController();
     request.current = controller;
@@ -123,7 +129,7 @@ function CopilotSession({
     );
     setPending(question);
     setLoading(true);
-    setError("");
+    setError(undefined);
     try {
       const apiResponse = await fetch("/api/copilot/chat", {
         signal: AbortSignal.any([
@@ -137,7 +143,8 @@ function CopilotSession({
         },
         body: JSON.stringify({
           message: question,
-          research,
+          research: !rulesOnly && research,
+          ...(rulesOnly ? { rulesOnly: true } : {}),
           clarifications: nextClarifications,
           locale,
           history: turns.slice(-8).map((turn) => ({
@@ -178,9 +185,16 @@ function CopilotSession({
     } catch (caught) {
       if (controller.signal.aborted) return;
       setMessage((draft) => (draft.trim() ? draft : question));
-      setError(
-        caught instanceof Error ? caught.message : "Copilot request failed.",
-      );
+      setError({
+        message:
+          caught instanceof Error ? caught.message : "Copilot request failed.",
+        fallbackQuestion:
+          !rulesOnly &&
+          caught instanceof CopilotResponseError &&
+          caught.code === "provider_unavailable"
+            ? question
+            : undefined,
+      });
     } finally {
       request.current = null;
       setPending("");
@@ -227,7 +241,9 @@ function CopilotSession({
               ? "active"
               : status.mode === "unavailable"
                 ? "unavailable"
-                : "limited",
+                : status.mode === "external"
+                  ? "checksReply"
+                  : "limited",
           )}
         </p>
         <Link
@@ -309,16 +325,24 @@ function CopilotSession({
                 {researchCopy[locale].option}
               </label>
               {error && (
-                <p
-                  role="alert"
-                  className="mb-3 flex gap-2 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-sm text-red-100"
-                >
-                  <AlertTriangle
-                    aria-hidden="true"
-                    className="mt-0.5 size-4 shrink-0"
-                  />
-                  {error}
-                </p>
+                <div className="mb-3 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-sm text-red-100">
+                  <p role="alert" className="flex gap-2">
+                    <AlertTriangle
+                      aria-hidden="true"
+                      className="mt-0.5 size-4 shrink-0"
+                    />
+                    {error.message}
+                  </p>
+                  {error.fallbackQuestion && (
+                    <button
+                      type="button"
+                      className="border-primary/30 text-foreground focus-visible:outline-primary mt-3 min-h-11 rounded-xl border px-3 py-2 text-left focus-visible:outline-2"
+                      onClick={() => void submit(error.fallbackQuestion, true)}
+                    >
+                      {copy("useChecks")}
+                    </button>
+                  )}
+                </div>
               )}
               <AIInput
                 value={message}

@@ -1,5 +1,14 @@
 import { copilotResponseSchema, type CopilotResponse } from "./copilot-schema";
 type Failure = { error: string; code: string; status: number };
+
+export class CopilotResponseError extends Error {
+  constructor(
+    message: string,
+    readonly code?: string,
+  ) {
+    super(message);
+  }
+}
 type Frame =
   | { type: "progress" }
   | { type: "result"; response: CopilotResponse }
@@ -76,10 +85,11 @@ export async function readCopilotResponse(
 ): Promise<CopilotResponse> {
   if (!response.ok) {
     const error = await response.json().catch(() => null);
-    throw new Error(
+    throw new CopilotResponseError(
       typeof error?.error === "string"
         ? error.error
         : "The chat connection failed. Your question is kept; please try again.",
+      typeof error?.code === "string" ? error.code : undefined,
     );
   }
   if (!response.headers.get("content-type")?.includes("application/x-ndjson"))
@@ -109,7 +119,8 @@ export async function readCopilotResponse(
         pending = pending.slice(newline + 1);
         if (!line.trim()) continue;
         const frame = JSON.parse(line) as Frame;
-        if (frame.type === "error") throw new Error(frame.error);
+        if (frame.type === "error")
+          throw new CopilotResponseError(frame.error, frame.code);
         if (frame.type === "result")
           return copilotResponseSchema.parse(frame.response);
       }

@@ -42,6 +42,20 @@ export const copilotCopy = {
     "Përdor ofruesin e lidhur, makinën, pjesët e ruajtura dhe tetë shkëmbimet e fundit. Mund të ketë kosto API. Pa riprovime automatike.",
     "この車、保存済みカスタム項目、直近8往復を接続先AIに送信します。API料金が発生する場合があります。自動再試行はしません。",
   ),
+  useChecks: t(
+    "Use CapCar checks instead",
+    "Stattdessen CapCar-Checks nutzen",
+    "Χρήση ελέγχων CapCar",
+    "Përdor kontrollet e CapCar",
+    "代わりにCapCarのチェックを使う",
+  ),
+  checksReply: t(
+    "This reply uses CapCar’s built-in checks, without web research. Send still uses your connected AI.",
+    "Diese Antwort nutzt CapCars integrierte Checks ohne Websuche. Beim Senden wird weiterhin deine verbundene KI genutzt.",
+    "Αυτή η απάντηση χρησιμοποιεί τους ελέγχους του CapCar χωρίς αναζήτηση στο διαδίκτυο. Η αποστολή συνεχίζει να χρησιμοποιεί τη συνδεδεμένη AI.",
+    "Kjo përgjigje përdor kontrollet e CapCar pa kërkim në internet. Dërgimi vazhdon të përdorë AI-në e lidhur.",
+    "この回答はWeb検索なしでCapCarのチェックを使っています。通常の送信では引き続き接続済みAIを使います。",
+  ),
   unavailable: t(
     "AI status unavailable. Check your connection before sending.",
     "KI-Status nicht verfügbar. Prüfe deine Verbindung.",
