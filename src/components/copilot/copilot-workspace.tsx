@@ -308,6 +308,18 @@ function CopilotSession({
                 />
                 {researchCopy[locale].option}
               </label>
+              {error && (
+                <p
+                  role="alert"
+                  className="mb-3 flex gap-2 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-sm text-red-100"
+                >
+                  <AlertTriangle
+                    aria-hidden="true"
+                    className="mt-0.5 size-4 shrink-0"
+                  />
+                  {error}
+                </p>
+              )}
               <AIInput
                 value={message}
                 onValueChange={setMessage}
@@ -380,15 +392,6 @@ function CopilotSession({
               </div>
             </>
           ) : null}
-          {error && (
-            <p
-              role="alert"
-              className="mt-5 flex gap-2 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-sm text-red-100/70"
-            >
-              <AlertTriangle className="mt-0.5 size-4 shrink-0" />
-              {error}
-            </p>
-          )}
         </article>
       </section>
     </div>

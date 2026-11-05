@@ -139,6 +139,13 @@ For chip-only tuning, preserve software-only/no-hardware constraints explicitly.
     );
   }
   if (!response.ok) {
+    if (response.status === 503 || response.status === 529)
+      throw new CopilotProviderError(
+        "Your connected AI is temporarily unavailable. Your question is kept. Wait a moment, then send it again. No automatic retry was made.",
+        503,
+        "provider_unavailable",
+        response.status,
+      );
     const message =
       response.status === 401 || response.status === 403
         ? "Your AI provider rejected access. Check your connection under Account → Connections."
