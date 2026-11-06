@@ -19,12 +19,15 @@ website does not update its Auth dashboard.
 
 ## Brand the emails
 
-In **Authentication → Emails → Templates**, paste the HTML from
+In [Authentication → Emails → Templates](https://supabase.com/dashboard/project/ojbwkjjjlligfdybgqux/auth/templates), paste the HTML from
 [recovery.html](../supabase/templates/recovery.html) under Reset Password and
 [confirmation.html](../supabase/templates/confirmation.html) under Confirm
 Sign Up. Set their subjects to **Reset your CapCar password** and
 **Confirm your CapCar email**, respectively. Keep the `{{ .ConfirmationURL }}`
-placeholder; Supabase generates a new link for each request.
+placeholder; Supabase generates a new link for each request. Save each
+template in Supabase, then request a fresh reset email to check the logo,
+sender, and button. Resend's SMTP integration delivers the HTML Supabase
+provides; saving the templates in GitHub or Resend does not activate them.
 
 To change the From identity, connect a verified transactional SMTP sender
 under **Authentication → Emails → SMTP Settings**. Suggested identity:
@@ -34,10 +37,11 @@ use a From address on that verified subdomain. Enter credentials directly in
 Supabase; keep them out of the repository. Disable email click tracking for
 one-time auth links if the provider enables it.
 
-The PNG in the template controls the logo inside the message. The sender
-avatar in Gmail is separate: it is chosen by the mail client, and Gmail's
-domain branding option is BIMI. Do not promise an inbox avatar until the
-sending domain meets the mail client's requirements.
+The CapCar mark is a public PNG inside the message. The CapCar wordmark
+remains readable when the mail client blocks remote images. The sender
+avatar in Gmail is separate: Gmail's domain branding option is BIMI. Treat
+inbox branding as a separate setup and leave the existing mail policy
+alone when applying the HTML templates.
 
 References: [Supabase redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls),
 [custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp),
