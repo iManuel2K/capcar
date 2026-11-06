@@ -19,15 +19,27 @@ website does not update its Auth dashboard.
 
 ## Brand the emails
 
-In [Authentication → Emails → Templates](https://supabase.com/dashboard/project/ojbwkjjjlligfdybgqux/auth/templates), paste the HTML from
-[recovery.html](../supabase/templates/recovery.html) under Reset Password and
-[confirmation.html](../supabase/templates/confirmation.html) under Confirm
-Sign Up. Set their subjects to **Reset your CapCar password** and
-**Confirm your CapCar email**, respectively. Keep the `{{ .ConfirmationURL }}`
-placeholder; Supabase generates a new link for each request. Save each
-template in Supabase, then request a fresh reset email to check the logo,
-sender, and button. Resend's SMTP integration delivers the HTML Supabase
-provides; saving the templates in GitHub or Resend does not activate them.
+In [Authentication → Emails → Templates](https://supabase.com/dashboard/project/ojbwkjjjlligfdybgqux/auth/templates),
+set each subject and paste the entire HTML file into its Body field:
+
+| Supabase template | Subject | Body |
+| --- | --- | --- |
+| Reset Password | Reset your CapCar password | [recovery.html](../supabase/templates/recovery.html) |
+| Confirm Sign Up | Confirm your CapCar email | [confirmation.html](../supabase/templates/confirmation.html) |
+| Invite user | You’re invited to CapCar | [invite.html](../supabase/templates/invite.html) |
+| Magic link or OTP | Your CapCar sign-in link | [magic-link.html](../supabase/templates/magic-link.html) |
+| Change email address | Confirm your new CapCar email | [email-change.html](../supabase/templates/email-change.html) |
+| Reauthentication | Your CapCar verification code | [reauthentication.html](../supabase/templates/reauthentication.html) |
+
+Keep the template variables intact. CapCar's passwordless account page uses
+a sign-in link, so the **Magic link or OTP** template sends the generated
+link. **Reauthentication** uses a code in the body. Keep the subject free
+of the code so it is not part of the subject line in notifications.
+
+Save each template in Supabase, then request a fresh reset email to check
+the logo, sender, and button. Resend's SMTP integration delivers the HTML
+Supabase provides; saving the templates in GitHub or Resend does not
+activate them. Installing a template does not enable a new account flow.
 
 To change the From identity, connect a verified transactional SMTP sender
 under **Authentication → Emails → SMTP Settings**. Suggested identity:
