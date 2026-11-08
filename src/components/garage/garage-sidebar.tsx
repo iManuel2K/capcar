@@ -20,6 +20,7 @@ import {
   SearchCheck,
   Settings2,
   ShieldQuestion,
+  ScanEye,
   ShoppingBag,
   Stethoscope,
   UserCircle,
@@ -71,6 +72,7 @@ export function GarageSidebar({
   onClose?: () => void;
 }) {
   const t = useTranslations("GarageNav");
+  const driving = useTranslations("DrivingReview");
   const instanceId = useId();
   const [hovered, setHovered] = useState("");
   const coreItems: SidebarItem[] = vehicleId
@@ -105,6 +107,11 @@ export function GarageSidebar({
     : [];
   const moreItems: SidebarItem[] = vehicleId
     ? [
+        {
+          href: `/garage/${vehicleId}/driving-review`,
+          label: driving("nav"),
+          icon: ScanEye,
+        },
         {
           href: `/garage/${vehicleId}/wishlist`,
           label: t("wishlist"),
@@ -432,7 +439,7 @@ function SidebarTools({
         <span>{label}</span>
         <ChevronDown
           aria-hidden="true"
-          className={`size-3.5 shrink-0 ${reduced ? "" : "transition-transform"} ${open ? "rotate-180" : ""}`}
+          className={`size-3.5 shrink-0 motion-safe:transition-transform ${open ? "rotate-180" : ""}`}
         />
       </button>
       <motion.div

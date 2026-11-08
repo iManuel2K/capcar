@@ -1,3 +1,6 @@
+import DrivingReviewIntro, {
+  generateMetadata as drivingReviewMetadata,
+} from "@/app/driving-review/page";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -74,6 +77,8 @@ async function routeMetadata(route: PublicIndexableRoute): Promise<Metadata> {
   switch (route) {
     case "":
       return homeMetadata();
+    case "/driving-review":
+      return drivingReviewMetadata();
     case "/ai":
       return aiMetadata();
     case "/project-car-planner":
@@ -128,6 +133,8 @@ export default async function LocalizedPublicPage({
   switch (route) {
     case "":
       return <HomePage locale={locale} />;
+    case "/driving-review":
+      return <DrivingReviewIntro />;
     case "/ai":
       return (
         <AIPlannerPage

@@ -27,7 +27,7 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
   const unread = notifications.filter((item) => !item.readAt).length;
   const vehicleMatch = pathname.match(/^\/garage\/([^/]+)/);
   const vehicleId =
-    vehicleMatch?.[1] && vehicleMatch[1] !== "new"
+    vehicleMatch?.[1] && !["new", "driving-review"].includes(vehicleMatch[1])
       ? vehicleMatch[1]
       : undefined;
   const vehicle = vehicles.find((item) => item.id === vehicleId);

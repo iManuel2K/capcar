@@ -1,4 +1,8 @@
 import {
+  DRIVING_REVIEW_KEY,
+  DRIVING_REVIEW_EVENT,
+} from "@/features/driving-review/storage";
+import {
   JOURNAL_CHECKLIST_KEY,
   JOURNAL_CHECKLIST_EVENT,
 } from "@/features/journal/checklists";
@@ -71,6 +75,7 @@ import {
 } from "@/features/roadbook/roadbook-storage";
 
 export const snapshotKeys = [
+  DRIVING_REVIEW_KEY,
   ONBOARDING_KEY,
   JOURNAL_CHECKLIST_KEY,
   VEHICLE_STORAGE_KEY,
@@ -92,6 +97,7 @@ export const snapshotKeys = [
 ] as const;
 
 export const garageStorageEvents = [
+  DRIVING_REVIEW_EVENT,
   ONBOARDING_EVENT,
   JOURNAL_CHECKLIST_EVENT,
   PASSPORT_PROFILE_STORAGE_EVENT,

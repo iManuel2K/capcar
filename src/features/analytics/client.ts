@@ -35,7 +35,14 @@ export type AnalyticsEvent =
   | "build_progress_updated"
   | "build_timeline_viewed"
   | "build_share_card_created"
-  | "build_share_requested";
+  | "build_share_requested"
+  | "driving_clip_prepared"
+  | "driving_review_started"
+  | "driving_review_completed"
+  | "driving_review_saved"
+  | "driving_preference_approved"
+  | "driving_learning_changed"
+  | "driving_learning_reset";
 
 type Properties = Record<string, string>;
 let client: PostHog | undefined;
@@ -77,6 +84,7 @@ export function analyticsPath(pathname: string) {
     "login",
     "ai",
     "roadbook",
+    "driving-review",
     "parts-search",
     "studio",
     "sound-studio",

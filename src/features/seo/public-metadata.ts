@@ -11,6 +11,7 @@ export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-10-16";
 export const PUBLIC_INDEXABLE_ROUTES = [
   "",
   "/ai",
+  "/driving-review",
   "/project-car-planner",
   "/car-maintenance-tracker",
   "/connected-parts",
