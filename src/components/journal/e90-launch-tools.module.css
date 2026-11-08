@@ -1,0 +1,19 @@
+@media print {
+  :global(body):has(.printChecklist) {
+    background: white;
+  }
+
+  :global(body):has(.printChecklist)
+    :not(:has(.printChecklist), .printChecklist, .printChecklist *) {
+    display: none !important;
+  }
+
+  .printChecklist {
+    position: absolute;
+    inset: 0 0 auto;
+    width: 100%;
+    border-color: #ddd;
+    background: white;
+    color: black;
+  }
+}

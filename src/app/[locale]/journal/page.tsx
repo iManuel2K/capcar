@@ -41,7 +41,9 @@ export default async function JournalPage({ params }: Props) {
           </header>
           <div className={editorial.index}>
             <JournalCards
-              articles={getJournalArticles(locale)}
+              articles={[...getJournalArticles(locale)].sort((a, b) =>
+                b.published.localeCompare(a.published),
+              )}
               locale={locale}
             />
           </div>
