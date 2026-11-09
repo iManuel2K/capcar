@@ -17,7 +17,7 @@ import {
 import { PUBLIC_SITE_URL } from "@/features/seo/public-metadata";
 
 import { isAppLocale, locales } from "@/i18n/config";
-import { isGermanJournalGuide } from "@/features/journal/routes";
+import { isBilingualJournalGuide } from "@/features/journal/routes";
 import { journalMetadata } from "@/features/journal/metadata";
 import { journalUI, journalReadingTime } from "@/features/journal/ui";
 import { journalStructuredData } from "@/features/journal/structured-data";
@@ -128,7 +128,7 @@ export default async function JournalArticlePage({ params }: Props) {
             {article.slug === "bmw-318i-e90-kosten" && (
               <E90LaunchTools locale={locale} />
             )}
-            {!isGermanJournalGuide(article.slug) && (
+            {!isBilingualJournalGuide(article.slug) && (
               <JournalChecklist slug={article.slug} locale={locale} />
             )}
           </div>

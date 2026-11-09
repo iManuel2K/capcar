@@ -14,12 +14,12 @@ export function journalArticlePath(slug: string, locale: AppLocale = "de") {
   return `${journalPath(locale)}/${slug}`;
 }
 
-export function isGermanJournalGuide(slug: string) {
+export function isBilingualJournalGuide(slug: string) {
   return germanGuideSlugs.includes(slug);
 }
 
 export function isJournalSlug(slug: string) {
-  return slugs.includes(slug) || isGermanJournalGuide(slug);
+  return slugs.includes(slug) || isBilingualJournalGuide(slug);
 }
 
 export function isJournalRoute(route: string) {

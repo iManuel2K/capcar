@@ -1,5 +1,5 @@
 import {
-  isGermanJournalGuide,
+  isBilingualJournalGuide,
   isJournalRoute,
 } from "@/features/journal/routes";
 import type { Metadata } from "next";
@@ -75,7 +75,11 @@ export function localizePublicPathname(
   const route = routeSegments.length ? `/${routeSegments.join("/")}` : "";
 
   if (isJournalRoute(route)) {
-    if (locale !== "de" && isGermanJournalGuide(route.slice(9)))
+    if (
+      locale !== "de" &&
+      locale !== "en" &&
+      isBilingualJournalGuide(route.slice(9))
+    )
       return `/${locale}/journal`;
     return `/${locale}${route}`;
   }

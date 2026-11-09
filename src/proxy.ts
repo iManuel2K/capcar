@@ -8,7 +8,7 @@ import el from "../messages/hardening/el.json";
 import sq from "../messages/hardening/sq.json";
 import ja from "../messages/hardening/ja.json";
 import {
-  isGermanJournalGuide,
+  isBilingualJournalGuide,
   isJournalSlug,
   journalPath,
 } from "@/features/journal/routes";
@@ -132,7 +132,9 @@ export async function proxy(request: NextRequest) {
     (!isAppLocale(journal[1]) ||
       (journal[2] &&
         (!isJournalSlug(journal[2]) ||
-          (journal[1] !== "de" && isGermanJournalGuide(journal[2])))))
+          (journal[1] !== "de" &&
+            journal[1] !== "en" &&
+            isBilingualJournalGuide(journal[2])))))
   ) {
     const locale = isAppLocale(journal[1]) ? journal[1] : "en";
     const ui = journalUI[locale];
