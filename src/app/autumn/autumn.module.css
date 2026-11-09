@@ -1,24 +1,54 @@
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/autumn/fonts/instrument-serif.woff2") format("woff2");
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/autumn/fonts/instrument-serif-italic.woff2") format("woff2");
+  font-style: italic;
+  font-display: swap;
+}
 
 .page {
-  color: #fff8ed;
-  background: #080807;
-  overflow: clip;
+  --background: #100d0a;
+  --foreground: #fff5e7;
+  --card: #211810;
+  --muted: #2c2118;
+  --muted-foreground: #d2c0ae;
+  --primary: #efbd88;
+  --primary-foreground: #21140c;
+  --primary-hover: #ffe0ba;
+  --border: #675041;
+  --secondary: #37271b;
+  --ring: var(--primary);
+  color: var(--foreground);
+  background: var(--background);
   font-family: system-ui, sans-serif;
 }
-.page :is(h1, h2) {
+.content
+  :is(
+    .heroCopy h1,
+    .about h2,
+    .sceneCopy h2,
+    .product > h2,
+    .projects h2,
+    .closing h2
+  ) {
   font-family: "Instrument Serif", Georgia, serif;
   font-weight: 400;
   letter-spacing: -0.045em;
   line-height: 0.92;
 }
-.page h1 {
+.heroCopy h1 {
   font-size: clamp(4rem, 11vw, 10rem);
 }
-.page h2 {
+.content
+  :is(.about h2, .sceneCopy h2, .product > h2, .projects h2, .closing h2) {
   font-size: clamp(3rem, 7vw, 6.2rem);
 }
-.page em {
+.content em {
   color: #f0bf88;
 }
 .page :is(a, button):focus-visible {
@@ -94,15 +124,17 @@
 }
 .nav {
   z-index: 2;
-  width: min(100%, 68rem);
+  width: min(100%, 55rem);
   margin-inline: auto;
   border-radius: 2rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr);
   align-items: center;
-  justify-content: space-between;
   gap: 0.4rem 1rem;
   padding: 0.45rem 0.8rem 0.45rem 1rem;
-  background-color: #17141172;
+  background-color: #241910a8;
+  backdrop-filter: blur(12px);
+  overflow: visible;
 }
 .brand,
 .links,
@@ -116,6 +148,7 @@
   min-height: 44px;
 }
 .brand {
+  justify-self: start;
   font-weight: 700;
 }
 .links {
@@ -128,6 +161,7 @@
   font-size: 0.88rem;
 }
 .login {
+  justify-self: end;
   border: 1px solid #ffffff30;
   border-radius: 99px;
   padding-inline: 0.9rem;
@@ -316,10 +350,11 @@
 }
 @media (max-width: 650px) {
   .nav {
-    flex-wrap: wrap;
+    grid-template-columns: 1fr 1fr;
   }
   .links {
-    order: 3;
+    grid-column: 1 / -1;
+    grid-row: 2;
     justify-content: center;
     width: 100%;
   }
@@ -364,5 +399,58 @@
         transform: translateY(0);
       }
     }
+  }
+}
+
+.content {
+  overflow: clip;
+}
+.page > footer {
+  background-color: #17100c;
+  background-image: none;
+}
+.projects {
+  display: grid;
+  grid-template-columns: 1fr minmax(15rem, 0.65fr);
+  gap: 2rem;
+  align-items: center;
+  padding-bottom: clamp(4rem, 8vw, 7rem);
+  scroll-margin-top: 2rem;
+}
+.projects h2 + p {
+  margin-top: 1rem;
+  color: var(--muted-foreground);
+}
+.projectLink {
+  display: grid;
+  gap: 0.6rem;
+  border-radius: 1.2rem;
+  padding: 1.4rem;
+}
+.projectLink span:nth-child(2) {
+  font-size: 1.2rem;
+}
+.projectLink .eyebrow {
+  margin-bottom: 0;
+}
+@media (max-width: 650px) {
+  .projects {
+    grid-template-columns: 1fr;
+  }
+  .links {
+    min-height: 40px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.page) {
+    scroll-behavior: smooth;
+  }
+  .nav a {
+    transition:
+      color 0.18s ease,
+      background-color 0.18s ease;
+  }
+  .nav a:hover {
+    color: #ffd5a4;
   }
 }

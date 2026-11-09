@@ -15,13 +15,13 @@ const questions = [
   "seven",
   "eight",
 ] as const;
-export function MarketingFaq() {
+export function MarketingFaq({ light = true }: { light?: boolean } = {}) {
   const t = useTranslations("Launch.faq");
   const nav = useTranslations("Navigation");
   return (
     <section
       id="faq"
-      className="capcar-light-section border-border scroll-mt-8 border-y"
+      className={`border-border scroll-mt-8 border-y ${light ? "capcar-light-section" : "bg-card"}`}
       aria-labelledby="faq-title"
     >
       <div className={`${styles.section} grid gap-8 lg:grid-cols-[.7fr_1.3fr]`}>

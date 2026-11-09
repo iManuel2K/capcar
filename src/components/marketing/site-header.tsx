@@ -7,9 +7,11 @@ import { MarketingHeader } from "@/components/marketing/marketing-header";
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
 
-  // Garage and login supply their own navigation within their dedicated layouts.
+  // The cinematic homepage and workspace routes provide their own navigation.
   return pathname.startsWith("/garage") ||
     pathname === "/login" ||
+    pathname === "/" ||
+    pathname === "/en" ||
     pathname === "/autumn" ? null : (
     <MarketingHeader />
   );
