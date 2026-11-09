@@ -45,6 +45,7 @@ const scenes = [
 ] as const;
 
 const motionQuery = "(prefers-reduced-motion: reduce)";
+const slideDuration = 8000;
 
 function subscribeToMotionPreference(callback: () => void) {
   const query = window.matchMedia?.(motionQuery);
@@ -64,13 +65,12 @@ export function PlatformTour({ locale }: { locale: AppLocale }) {
     () => false,
   );
   const playing = autoplay ?? !reducedMotion;
-  const finalFromNext = useRef(false);
   const copy = platformTourCopy[locale];
   const status = platformCopy[locale];
   const step = copy.steps[index];
   const scene = scenes[index];
   const Mark = scene.mark;
-  const last = index === copy.steps.length - 1;
+  const total = copy.steps.length;
   useEffect(() => {
     if (!section.current || typeof IntersectionObserver === "undefined") return;
     const observer = new IntersectionObserver(
@@ -82,7 +82,7 @@ export function PlatformTour({ locale }: { locale: AppLocale }) {
   }, []);
 
   useEffect(() => {
-    if (!playing || !visible || last) return;
+    if (!playing || !visible) return;
     const timer = window.setTimeout(() => {
       if (
         section.current?.contains(document.activeElement) &&
@@ -91,10 +91,10 @@ export function PlatformTour({ locale }: { locale: AppLocale }) {
         setAutoplay(false);
         return;
       }
-      setIndex(index + 1);
-    }, 12000);
+      setIndex((index + 1) % total);
+    }, slideDuration);
     return () => window.clearTimeout(timer);
-  }, [index, last, playing, visible]);
+  }, [index, playing, total, visible]);
 
   const selectStep = (stepIndex: number) => {
     setAutoplay(false);
@@ -138,7 +138,7 @@ export function PlatformTour({ locale }: { locale: AppLocale }) {
             ))}
           </ol>
           <div
-            aria-live={playing && !last ? "off" : "polite"}
+            aria-live={playing ? "off" : "polite"}
             aria-atomic="true"
             className={styles.slide}
             data-tour-slide
@@ -146,7 +146,7 @@ export function PlatformTour({ locale }: { locale: AppLocale }) {
             <div className={styles.meta} data-tour-meta>
               <p>{stepText(index)}</p>
               <p className={styles.status} data-tour-status>
-                {last ? status.planned : status.available}
+                {index === total - 1 ? status.planned : status.available}
               </p>
             </div>
             <h2 data-tour-title>{step.title}</h2>
@@ -222,60 +222,42 @@ export function PlatformTour({ locale }: { locale: AppLocale }) {
         <div className={styles.controls} data-tour-controls>
           <button
             type="button"
-            disabled={index === 0}
             className={styles.secondary}
-            onClick={() => selectStep(index - 1)}
+            onClick={() => selectStep((index + total - 1) % total)}
           >
             <ArrowLeft size={17} aria-hidden="true" />
             {copy.back}
           </button>
-          {last ? (
-            <div
-              className={styles.finish}
-              ref={(element) => {
-                if (element && finalFromNext.current) {
-                  element.querySelector("a")?.focus({ preventScroll: true });
-                  finalFromNext.current = false;
-                }
-              }}
-            >
-              <Link
-                href="/garage/new"
-                prefetch={false}
-                className={styles.primary}
-              >
-                {copy.start}
-                <ArrowRight size={17} aria-hidden="true" />
-              </Link>
-            </div>
-          ) : (
-            <button
-              type="button"
-              className={styles.primary}
-              onClick={() => {
-                finalFromNext.current = index === copy.steps.length - 2;
-                selectStep(index + 1);
-              }}
-            >
-              {copy.next}
-              <ArrowRight size={17} aria-hidden="true" />
-            </button>
-          )}
+          <button
+            type="button"
+            className={styles.primary}
+            onClick={() => selectStep((index + 1) % total)}
+          >
+            {copy.next}
+            <ArrowRight size={17} aria-hidden="true" />
+          </button>
           <button
             type="button"
             className={styles.secondary}
             data-tour-playback
-            onClick={() => {
-              if (last) setIndex(0);
-              setAutoplay(last || !playing);
-            }}
+            onClick={() => setAutoplay(!playing)}
           >
-            {last ? copy.replay : playing ? copy.pause : copy.play}
+            {playing ? copy.pause : copy.play}
           </button>
-          <a className={styles.skip} href="#connected-car">
-            {copy.skip}
-            <ArrowDown size={16} aria-hidden="true" />
-          </a>
+          <div className={styles.destinations}>
+            <Link
+              className={styles.textLink}
+              href="/garage/new"
+              prefetch={false}
+            >
+              {copy.start}
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+            <a className={styles.textLink} href="#connected-car">
+              {copy.skip}
+              <ArrowDown size={16} aria-hidden="true" />
+            </a>
+          </div>
         </div>
       </div>
     </section>

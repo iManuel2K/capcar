@@ -279,21 +279,26 @@
   color: var(--foreground);
 }
 
-.controls button:disabled {
-  opacity: 0.45;
-}
-
-.controls button:not(:disabled) {
+.controls button {
   cursor: pointer;
 }
 
-.controls .skip {
+.destinations {
+  display: flex;
+  flex: 1 0 100%;
+  flex-wrap: wrap;
+  gap: 0 0.75rem;
+}
+
+.controls .textLink {
+  justify-content: flex-start;
+  padding-inline: 0;
   color: var(--muted-foreground);
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
 
-.controls :is(.primary, .secondary):not(:disabled):hover {
+.controls :is(.primary, .secondary):hover {
   box-shadow: inset 0 0 0 1px currentColor;
 }
 

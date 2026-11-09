@@ -13,7 +13,6 @@ type TourCopy = {
   back: string;
   play: string;
   pause: string;
-  replay: string;
   next: string;
   skip: string;
   start: string;
@@ -27,7 +26,6 @@ export const platformTourCopy: Record<AppLocale, TourCopy> = {
     back: "Back",
     play: "Play",
     pause: "Pause",
-    replay: "Replay",
     next: "Next",
     skip: "Skip to the tools",
     start: "Start your garage",
@@ -73,7 +71,6 @@ export const platformTourCopy: Record<AppLocale, TourCopy> = {
     back: "Zurück",
     play: "Abspielen",
     pause: "Pausieren",
-    replay: "Erneut abspielen",
     next: "Weiter",
     skip: "Direkt zu den Werkzeugen",
     start: "Deine Garage starten",
@@ -119,7 +116,6 @@ export const platformTourCopy: Record<AppLocale, TourCopy> = {
     back: "Πίσω",
     play: "Αναπαραγωγή",
     pause: "Παύση",
-    replay: "Αναπαραγωγή ξανά",
     next: "Επόμενο",
     skip: "Μετάβαση στα εργαλεία",
     start: "Άνοιξε το γκαράζ σου",
@@ -173,7 +169,6 @@ export const platformTourCopy: Record<AppLocale, TourCopy> = {
     back: "Mbrapa",
     play: "Luaj",
     pause: "Ndalo përkohësisht",
-    replay: "Luaj përsëri",
     next: "Përpara",
     skip: "Kalo te mjetet",
     start: "Krijo garazhin tënd",
@@ -223,7 +218,6 @@ export const platformTourCopy: Record<AppLocale, TourCopy> = {
     back: "戻る",
     play: "再生",
     pause: "一時停止",
-    replay: "最初から再生",
     next: "次へ",
     skip: "機能一覧へ",
     start: "ガレージを作る",
