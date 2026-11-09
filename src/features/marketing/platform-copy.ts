@@ -36,7 +36,6 @@ const en = {
   privacy: "Your garage. Your choice of what to share.",
   privacyText:
     "Personal vehicle records are private by default. Public examples use illustrative data. Passport sharing is optional, and owner-recorded work is not professional verification.",
-  final: "Add your car to the garage.",
 };
 export const platformCopy: Record<AppLocale, typeof en> = {
   en,
@@ -77,7 +76,6 @@ export const platformCopy: Record<AppLocale, typeof en> = {
     privacy: "Deine Garage. Du entscheidest, was du teilst.",
     privacyText:
       "Persönliche Fahrzeugeinträge sind standardmäßig privat. Öffentliche Beispiele nutzen illustrative Daten. Das Teilen des Passports ist freiwillig; selbst dokumentierte Arbeiten sind keine fachliche Bestätigung.",
-    final: "Fang mit deinem Auto an. Der Rest wächst mit.",
   },
   el: {
     label: "Η πλατφόρμα",
@@ -117,7 +115,6 @@ export const platformCopy: Record<AppLocale, typeof en> = {
     privacy: "Το γκαράζ σου. Εσύ επιλέγεις τι μοιράζεσαι.",
     privacyText:
       "Οι προσωπικές εγγραφές είναι ιδιωτικές από προεπιλογή. Τα δημόσια παραδείγματα έχουν ενδεικτικά δεδομένα. Η κοινοποίηση Passport είναι προαιρετική· οι εργασίες του ιδιοκτήτη δεν αποτελούν επαγγελματική πιστοποίηση.",
-    final: "Ξεκίνα με το αυτοκίνητό σου. Συνέχισε από εκεί.",
   },
   sq: {
     label: "Platforma",
@@ -157,7 +154,6 @@ export const platformCopy: Record<AppLocale, typeof en> = {
     privacy: "Garazhi yt. Ti zgjedh çfarë ndan.",
     privacyText:
       "Të dhënat personale janë private si parazgjedhje. Shembujt publikë përdorin të dhëna ilustruese. Ndarja e Passport është opsionale; punët e regjistruara nga pronari nuk janë verifikim profesional.",
-    final: "Fillo me makinën tënde. Vazhdo prej andej.",
   },
   ja: {
     label: "プラットフォーム",
@@ -197,6 +193,5 @@ export const platformCopy: Record<AppLocale, typeof en> = {
     privacy: "あなたのガレージ。共有するものは自分で選ぶ。",
     privacyText:
       "個人の車両記録は標準で非公開です。公開サンプルは説明用データを使っています。Passportの共有は任意です。オーナーの記録は専門家による確認を意味しません。",
-    final: "愛車から始めよう。その先へ、少しずつ。",
   },
 };

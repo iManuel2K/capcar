@@ -455,19 +455,6 @@
   margin-top: 20px;
   line-height: 1.8;
 }
-.final {
-  background: var(--card);
-  color: var(--foreground);
-}
-.final .section {
-  text-align: center;
-}
-.final h2 {
-  margin: 0 auto 30px;
-}
-.final .fine {
-  margin-inline: auto;
-}
 @media (max-width: 1000px) {
   .heroInner {
     grid-template-columns: 1fr;
@@ -584,7 +571,6 @@
 .page,
 .hero,
 .journey,
-.final,
 .privacy {
   background: var(--capcar-editorial-paper);
   color: var(--capcar-editorial-ink);
@@ -641,13 +627,6 @@
 .privacy {
   border-color: var(--capcar-editorial-rule);
 }
-.final .section {
-  text-align: left;
-}
-.final h2,
-.final .fine {
-  margin-inline: 0;
-}
 @media (max-width: 1000px) {
   .heroInner {
     grid-template-columns: minmax(0, 1fr);
@@ -687,8 +666,4 @@
 }
 .privacy svg {
   color: var(--mint-accent);
-}
-.final {
-  background: var(--secondary);
-  border-top: 1px solid var(--border);
 }

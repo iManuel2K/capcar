@@ -22,7 +22,9 @@ import { platformCopy } from "@/features/marketing/platform-copy";
 import type { AppLocale } from "@/i18n/config";
 import { BuildTransformation } from "./build-transformation";
 import { HomepageLink } from "./homepage-link";
+import { PlatformTour } from "./platform-tour";
 import { SiteFooter } from "./site-footer";
+import { platformTourCopy } from "@/features/marketing/platform-tour-copy";
 import shared from "./homepage.module.css";
 import styles from "./platform.module.css";
 const icons = [CarFront, WandSparkles, Layers3, Wrench, IdCard, MapPinned];
@@ -88,8 +90,8 @@ export function PlatformOverview({ locale = "en" }: { locale?: AppLocale }) {
                   {c.create}
                   <ArrowRight size={17} aria-hidden="true" />
                 </HomepageLink>
-                <a href="#connected-car" className={shared.secondary}>
-                  {p.explore}
+                <a href="#capcar-tour" className={shared.secondary}>
+                  {platformTourCopy[locale].label}
                   <ArrowDown size={16} aria-hidden="true" />
                 </a>
               </div>
@@ -151,6 +153,7 @@ export function PlatformOverview({ locale = "en" }: { locale?: AppLocale }) {
             </div>
           </div>
         </section>
+        <PlatformTour locale={locale} />
         <section
           id="connected-car"
           aria-labelledby="connected-heading"
@@ -411,20 +414,6 @@ export function PlatformOverview({ locale = "en" }: { locale?: AppLocale }) {
               <h2>{p.privacy}</h2>
               <p>{p.privacyText}</p>
             </div>
-          </div>
-        </section>
-        <section className={styles.final}>
-          <div className={styles.section}>
-            <h2>{p.final}</h2>
-            <HomepageLink
-              href="/garage/new"
-              placement="final"
-              className={shared.primary}
-            >
-              {c.create}
-              <ArrowRight size={17} aria-hidden="true" />
-            </HomepageLink>
-            <p className={styles.fine}>{c.account}</p>
           </div>
         </section>
       </main>
