@@ -10,7 +10,7 @@ import { JournalContent } from "@/components/journal/journal-content";
 import { getJournalArticles, journalArticlePath } from "./articles";
 import { locales } from "@/i18n/config";
 import { localizePublicPathname } from "@/features/seo/public-metadata";
-import { isGermanJournalGuide } from "./routes";
+import { isBilingualJournalGuide } from "./routes";
 import { journalLanguageAlternates } from "./metadata";
 
 afterEach(cleanup);
@@ -18,11 +18,11 @@ afterEach(cleanup);
 describe("the multilingual ownership journal", () => {
   it("publishes every translated article and in-app checklist with matching canonicals and language alternates", async () => {
     const entries = sitemap().filter((item) => item.url.includes("/journal"));
-    expect(entries).toHaveLength(50);
-    expect(generateStaticParams()).toHaveLength(45);
+    expect(entries).toHaveLength(60);
+    expect(generateStaticParams()).toHaveLength(55);
     for (const locale of locales) {
       const articles = getJournalArticles(locale).filter(
-        (article) => !isGermanJournalGuide(article.slug),
+        (article) => !isBilingualJournalGuide(article.slug),
       );
       expect(articles).toHaveLength(7);
       for (const article of articles) {
@@ -71,7 +71,9 @@ describe("the multilingual ownership journal", () => {
               target,
             ),
           ).toBe(
-            isGermanJournalGuide(article.slug) && target !== "de"
+            isBilingualJournalGuide(article.slug) &&
+              target !== "de" &&
+              target !== "en"
               ? `/${target}/journal`
               : journalArticlePath(article.slug, target),
           );
@@ -82,23 +84,28 @@ describe("the multilingual ownership journal", () => {
 
   it("publishes the ten German guides without advertising untranslated pages", async () => {
     const guides = getJournalArticles("de").filter(({ slug }) =>
-      isGermanJournalGuide(slug),
+      isBilingualJournalGuide(slug),
     );
     expect(guides).toHaveLength(10);
     for (const guide of guides) {
       const canonical = `https://capcar.dev${journalArticlePath(guide.slug, "de")}`;
+      const english = `https://capcar.dev${journalArticlePath(guide.slug, "en")}`;
+      const translated = await generateMetadata({
+        params: Promise.resolve({ locale: "en", articleSlug: guide.slug }),
+      });
+      expect(translated.alternates?.canonical).toBe(english);
       const metadata = await generateMetadata({
         params: Promise.resolve({ locale: "de", articleSlug: guide.slug }),
       });
       expect(metadata.alternates).toEqual({
         canonical,
-        languages: { de: canonical },
+        languages: { de: canonical, en: english, "x-default": english },
       });
       expect(
         sitemap()
           .filter((entry) => entry.url.endsWith(`/${guide.slug}`))
           .map((entry) => entry.url),
-      ).toEqual([canonical]);
+      ).toEqual(expect.arrayContaining([canonical, english]));
       expect(existsSync(`public${guide.image}`)).toBe(true);
       expect(guide.body).not.toContain("**Redaktion:**");
     }

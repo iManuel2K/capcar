@@ -1,4 +1,5 @@
 import articles from "./articles.json";
+import englishGuides from "./en-guides.json";
 import germanGuides from "./de-guides.json";
 import en from "./translations/en.json";
 import el from "./translations/el.json";
@@ -12,7 +13,7 @@ export const journalArticles = articles;
 export type JournalArticle = (typeof articles)[number];
 const translations: Record<AppLocale, JournalArticle[]> = {
   de: [...articles, ...germanGuides],
-  en,
+  en: [...en, ...englishGuides],
   el,
   sq,
   ja,
