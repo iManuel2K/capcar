@@ -17,11 +17,11 @@ afterEach(cleanup);
 describe("the multilingual ownership journal", () => {
   it("publishes every translated article and in-app checklist with matching canonicals and language alternates", async () => {
     const entries = sitemap().filter((item) => item.url.includes("/journal"));
-    expect(entries).toHaveLength(35);
-    expect(generateStaticParams()).toHaveLength(30);
+    expect(entries).toHaveLength(40);
+    expect(generateStaticParams()).toHaveLength(35);
     for (const locale of locales) {
       const articles = getJournalArticles(locale);
-      expect(articles).toHaveLength(6);
+      expect(articles).toHaveLength(7);
       for (const article of articles) {
         const metadata = await generateMetadata({
           params: Promise.resolve({ locale, articleSlug: article.slug }),

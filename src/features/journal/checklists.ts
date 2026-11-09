@@ -111,7 +111,11 @@ export function journalFeaturePath(slug: string, vehicleId: string) {
   const root = `/garage/${encodeURIComponent(vehicleId)}`;
   if (slug === "ruesselsheim-rheingau-tagesausflug")
     return `/ai?journal=ruesselsheim-rheingau-tagesausflug&vehicle=${encodeURIComponent(vehicleId)}`;
-  if (slug === "bmw-diy-wartung-dokumentieren") return `${root}/maintenance`;
+  if (
+    slug === "bmw-diy-wartung-dokumentieren" ||
+    slug === "bmw-318i-e90-kosten"
+  )
+    return `${root}/maintenance`;
   if (slug === "bmw-wartung-ohne-garage" || slug === "guide-to-vehicle-history")
     return `${root}/guides`;
   return `${root}/builds/new?journal=${encodeURIComponent(slug)}`;

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { E90LaunchTools } from "@/components/journal/e90-launch-tools";
 import { JournalChecklist } from "@/components/journal/journal-checklist";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
@@ -123,6 +124,9 @@ export default async function JournalArticlePage({ params }: Props) {
           </div>
           <div className="mx-auto max-w-3xl">
             <JournalContent text={article.body} />
+            {article.slug === "bmw-318i-e90-kosten" && (
+              <E90LaunchTools locale={locale} />
+            )}
             <JournalChecklist slug={article.slug} locale={locale} />
           </div>
           <section aria-labelledby="related-title" className="mt-20">
