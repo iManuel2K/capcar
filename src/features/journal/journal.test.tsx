@@ -10,6 +10,7 @@ import { JournalContent } from "@/components/journal/journal-content";
 import { getJournalArticles, journalArticlePath } from "./articles";
 import { locales } from "@/i18n/config";
 import { localizePublicPathname } from "@/features/seo/public-metadata";
+import { isGermanJournalGuide } from "./routes";
 import { journalLanguageAlternates } from "./metadata";
 
 afterEach(cleanup);
@@ -17,10 +18,12 @@ afterEach(cleanup);
 describe("the multilingual ownership journal", () => {
   it("publishes every translated article and in-app checklist with matching canonicals and language alternates", async () => {
     const entries = sitemap().filter((item) => item.url.includes("/journal"));
-    expect(entries).toHaveLength(40);
-    expect(generateStaticParams()).toHaveLength(35);
+    expect(entries).toHaveLength(50);
+    expect(generateStaticParams()).toHaveLength(45);
     for (const locale of locales) {
-      const articles = getJournalArticles(locale);
+      const articles = getJournalArticles(locale).filter(
+        (article) => !isGermanJournalGuide(article.slug),
+      );
       expect(articles).toHaveLength(7);
       for (const article of articles) {
         const metadata = await generateMetadata({
@@ -67,10 +70,55 @@ describe("the multilingual ownership journal", () => {
               journalArticlePath(article.slug, source),
               target,
             ),
-          ).toBe(journalArticlePath(article.slug, target));
+          ).toBe(
+            isGermanJournalGuide(article.slug) && target !== "de"
+              ? `/${target}/journal`
+              : journalArticlePath(article.slug, target),
+          );
         }
       }
     expect(localizePublicPathname("/journal/missing", "de")).toBeNull();
+  });
+
+  it("publishes the ten German guides without advertising untranslated pages", async () => {
+    const guides = getJournalArticles("de").filter(({ slug }) =>
+      isGermanJournalGuide(slug),
+    );
+    expect(guides).toHaveLength(10);
+    for (const guide of guides) {
+      const canonical = `https://capcar.dev${journalArticlePath(guide.slug, "de")}`;
+      const metadata = await generateMetadata({
+        params: Promise.resolve({ locale: "de", articleSlug: guide.slug }),
+      });
+      expect(metadata.alternates).toEqual({
+        canonical,
+        languages: { de: canonical },
+      });
+      expect(
+        sitemap()
+          .filter((entry) => entry.url.endsWith(`/${guide.slug}`))
+          .map((entry) => entry.url),
+      ).toEqual([canonical]);
+      expect(existsSync(`public${guide.image}`)).toBe(true);
+      expect(guide.body).not.toContain("**Redaktion:**");
+    }
+  });
+
+  it("renders reusable prompts, worksheets and numbered steps as readable content", () => {
+    const { container } = render(
+      <JournalContent
+        text={
+          "> Copy this prompt\n\n```text\nService record:\nMileage:\n```\n\n1. Check the route\n2. Check parking"
+        }
+      />,
+    );
+    expect(container.querySelector("blockquote")).toHaveTextContent(
+      "Copy this prompt",
+    );
+    expect(container.querySelector("pre")?.textContent).toBe(
+      "Service record:\nMileage:",
+    );
+    expect(container.querySelectorAll("ol li")).toHaveLength(2);
   });
 
   it("rejects missing articles and unsupported locales", async () => {

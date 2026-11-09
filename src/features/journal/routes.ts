@@ -1,4 +1,5 @@
 import slugs from "./article-slugs.json";
+import germanGuideSlugs from "./de-guide-slugs.json";
 import { isAppLocale, type AppLocale } from "@/i18n/config";
 
 export function resolveJournalLocale(locale: string): AppLocale {
@@ -13,8 +14,12 @@ export function journalArticlePath(slug: string, locale: AppLocale = "de") {
   return `${journalPath(locale)}/${slug}`;
 }
 
+export function isGermanJournalGuide(slug: string) {
+  return germanGuideSlugs.includes(slug);
+}
+
 export function isJournalSlug(slug: string) {
-  return slugs.includes(slug);
+  return slugs.includes(slug) || isGermanJournalGuide(slug);
 }
 
 export function isJournalRoute(route: string) {

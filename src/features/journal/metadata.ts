@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
 import { locales, type AppLocale } from "@/i18n/config";
 import { PUBLIC_SITE_URL, pageMetadata } from "@/features/seo/public-metadata";
-import { journalArticlePath, journalPath } from "./routes";
+import {
+  isGermanJournalGuide,
+  journalArticlePath,
+  journalPath,
+} from "./routes";
 
 export function journalLanguageAlternates(slug?: string) {
   const path = (locale: AppLocale) =>
     slug ? journalArticlePath(slug, locale) : journalPath(locale);
+  if (slug && isGermanJournalGuide(slug))
+    return { de: new URL(path("de"), PUBLIC_SITE_URL).toString() };
   return {
     ...Object.fromEntries(
       locales.map((locale) => [

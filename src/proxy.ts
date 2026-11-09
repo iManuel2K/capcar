@@ -7,7 +7,11 @@ import de from "../messages/hardening/de.json";
 import el from "../messages/hardening/el.json";
 import sq from "../messages/hardening/sq.json";
 import ja from "../messages/hardening/ja.json";
-import { isJournalSlug, journalPath } from "@/features/journal/routes";
+import {
+  isGermanJournalGuide,
+  isJournalSlug,
+  journalPath,
+} from "@/features/journal/routes";
 import { journalUI } from "@/features/journal/ui";
 import { isPublicIndexableRoute } from "@/features/seo/public-metadata";
 
@@ -125,7 +129,10 @@ export async function proxy(request: NextRequest) {
   );
   if (
     journal &&
-    (!isAppLocale(journal[1]) || (journal[2] && !isJournalSlug(journal[2])))
+    (!isAppLocale(journal[1]) ||
+      (journal[2] &&
+        (!isJournalSlug(journal[2]) ||
+          (journal[1] !== "de" && isGermanJournalGuide(journal[2])))))
   ) {
     const locale = isAppLocale(journal[1]) ? journal[1] : "en";
     const ui = journalUI[locale];
