@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import type { AppLocale } from "@/i18n/config";
 import { getTranslations } from "next-intl/server";
 
+import AutumnLanding from "@/app/autumn/autumn-landing";
 import { MarketingLanding } from "@/components/marketing/marketing-landing";
 import { CapCarStructuredData } from "@/components/seo/capcar-structured-data";
 import {
@@ -16,17 +17,11 @@ import {
 export const dynamic = "force-static";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const [metadata, launch] = await Promise.all([
-    getTranslations("Metadata"),
-    getTranslations("Launch"),
-  ]);
+  const metadata = await getTranslations("Metadata");
   const title = metadata("siteTitle");
   const description = metadata("siteDescription");
   const canonical = PUBLIC_SITE_URL.toString();
-  const shareImage = new URL(
-    "/capcar-hero-bmw-garage.png",
-    PUBLIC_SITE_URL,
-  ).toString();
+  const shareImage = new URL("/autumn/forest.webp", PUBLIC_SITE_URL).toString();
 
   return {
     ...canonicalMetadata(""),
@@ -41,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [
         {
           url: shareImage,
-          alt: launch("visual.alt"),
+          alt: "A black BMW on a road through an autumn forest",
         },
       ],
     },
@@ -60,7 +55,11 @@ export default function Home({ locale = "en" }: { locale?: AppLocale } = {}) {
       <Suspense fallback={null}>
         <CapCarStructuredData />
       </Suspense>
-      <MarketingLanding locale={locale} />
+      {locale === "en" ? (
+        <AutumnLanding />
+      ) : (
+        <MarketingLanding locale={locale} />
+      )}
     </>
   );
 }
