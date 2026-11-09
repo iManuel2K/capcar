@@ -8,6 +8,7 @@ import {
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
+import { AutumnAccountLink } from "@/app/autumn/autumn-account-link";
 import { MarketingHeader } from "./marketing-header";
 
 const auth = vi.hoisted(() => ({
@@ -145,4 +146,20 @@ describe("Navbar sign-in visibility", () => {
     unmount();
     expect(auth.unsubscribe).toHaveBeenCalledOnce();
   });
+});
+
+it("shows My Garage on the autumn homepage after session restoration", () => {
+  render(<AutumnAccountLink />);
+  expect(screen.queryByRole("link", { name: "Log in" })).toBeNull();
+  emit("INITIAL_SESSION", session);
+  expect(screen.getByRole("link", { name: "My Garage" })).toHaveAttribute(
+    "href",
+    "/garage",
+  );
+  expect(screen.queryByRole("link", { name: "Log in" })).toBeNull();
+  emit("SIGNED_OUT", null);
+  expect(screen.getByRole("link", { name: "Log in" })).toHaveAttribute(
+    "href",
+    "/login",
+  );
 });
