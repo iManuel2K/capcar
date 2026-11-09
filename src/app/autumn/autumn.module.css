@@ -1,0 +1,368 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+
+.page {
+  color: #fff8ed;
+  background: #080807;
+  overflow: clip;
+  font-family: system-ui, sans-serif;
+}
+.page :is(h1, h2) {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+}
+.page h1 {
+  font-size: clamp(4rem, 11vw, 10rem);
+}
+.page h2 {
+  font-size: clamp(3rem, 7vw, 6.2rem);
+}
+.page em {
+  color: #f0bf88;
+}
+.page :is(a, button):focus-visible {
+  outline: 2px solid #ffd69f;
+  outline-offset: 4px;
+}
+.hero,
+.closing {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  overflow: hidden;
+}
+.hero {
+  min-height: 100svh;
+  grid-template-rows: auto 1fr auto;
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+.hero > img,
+.closing > img,
+.sceneMedia > img,
+.sceneMedia > video,
+.film {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero > img,
+.film {
+  object-position: 65% 63%;
+}
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #080807aa,
+    #0808078a 34%,
+    transparent 67%,
+    #080807bd 100%
+  );
+  pointer-events: none;
+}
+.glass {
+  position: relative;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.035);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.1);
+}
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.4px;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    #ffffff73,
+    #ffffff26 20%,
+    transparent 40% 60%,
+    #ffffff26 80%,
+    #ffffff73
+  );
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.nav {
+  z-index: 2;
+  width: min(100%, 68rem);
+  margin-inline: auto;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  padding: 0.45rem 0.8rem 0.45rem 1rem;
+  background-color: #17141172;
+}
+.brand,
+.links,
+.login,
+.primary,
+.button,
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+}
+.brand {
+  font-weight: 700;
+}
+.links {
+  gap: clamp(0.8rem, 3vw, 2rem);
+}
+.links a {
+  display: grid;
+  min-height: 44px;
+  place-items: center;
+  font-size: 0.88rem;
+}
+.login {
+  border: 1px solid #ffffff30;
+  border-radius: 99px;
+  padding-inline: 0.9rem;
+  white-space: nowrap;
+}
+.heroCopy {
+  z-index: 1;
+  align-self: start;
+  text-align: center;
+  padding-block: clamp(2.8rem, 10svh, 7rem) 14rem;
+}
+.heroCopy > p:not(.eyebrow) {
+  margin: 1rem auto;
+  max-width: 30rem;
+  color: #fff4e3;
+  line-height: 1.6;
+}
+.eyebrow,
+.chapter {
+  font-size: 0.7rem;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  font-weight: 650;
+  color: #efc49a;
+}
+.eyebrow {
+  margin-bottom: 1rem;
+}
+.chapter {
+  z-index: 1;
+  margin: 0 0 0.15rem;
+}
+.actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.5rem;
+}
+.primary,
+.button {
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border-radius: 99px;
+  font-weight: 650;
+  font-size: 0.88rem;
+}
+.primary {
+  background: #f7e2c5;
+  color: #1a130e;
+}
+.button {
+  color: #fff8ed;
+  background-color: #17141180;
+}
+.primary:hover {
+  background: #fff4e5;
+}
+.button:hover,
+.login:hover {
+  background-color: #ffffff25;
+}
+.wrap {
+  width: min(100% - 2.5rem, 72rem);
+  margin-inline: auto;
+}
+.about {
+  padding-block: clamp(5rem, 11vw, 10rem);
+  text-align: center;
+}
+.about > p:last-child {
+  max-width: 34rem;
+  margin: 1.4rem auto 0;
+  color: #c6baac;
+  line-height: 1.8;
+}
+.scene {
+  position: relative;
+}
+.sceneMedia {
+  position: relative;
+  min-height: 26rem;
+  aspect-ratio: 16/8;
+  overflow: hidden;
+  border-radius: 1.7rem;
+  background: #1a1410;
+}
+.sceneMedia > img {
+  object-position: 62% 60%;
+}
+.sceneCopy {
+  border-radius: 1.4rem;
+  padding: 1.6rem;
+  width: min(100%, 34rem);
+  margin: -4rem 1.3rem 0 auto;
+  background-color: #14100de8;
+}
+.sceneCopy h2 {
+  font-size: clamp(2.7rem, 5vw, 4.6rem);
+}
+.sceneCopy > p:not(.eyebrow),
+.card p {
+  color: #d0c4b7;
+  margin-top: 0.7rem;
+  line-height: 1.6;
+}
+.textLink {
+  color: #f0bf88;
+  margin-top: 0.45rem;
+  font-weight: 650;
+}
+.textLink:hover {
+  text-decoration: underline;
+}
+.product {
+  padding-block: clamp(5rem, 10vw, 9rem);
+  scroll-margin-top: 2rem;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.6rem;
+}
+.card {
+  border-radius: 1.4rem;
+  padding: 1.45rem;
+}
+.card h3 {
+  font-size: 1.55rem;
+  font-weight: 600;
+}
+.dashboard,
+.trip {
+  background: #151310;
+  border: 1px solid #ffffff1a;
+  border-radius: 1.4rem;
+  overflow: hidden;
+  min-width: 0;
+  margin-top: 1rem;
+}
+.dashboard > section {
+  scroll-margin: 0;
+}
+.trip img {
+  width: 100%;
+  height: auto;
+}
+.trip figcaption {
+  padding: 1rem;
+  color: #c6baac;
+  font-size: 0.8rem;
+}
+.closing {
+  min-height: 29rem;
+  place-items: center;
+  text-align: center;
+}
+.closing > img {
+  object-position: 65% 58%;
+}
+.closing .shade {
+  background: #08080799;
+}
+.closingCopy {
+  z-index: 1;
+  padding: 2rem 1rem;
+}
+.closingCopy .primary {
+  margin-top: 1.4rem;
+}
+.film {
+  opacity: 0;
+}
+.filmControl {
+  z-index: 3;
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #171411a0;
+}
+@media (max-width: 650px) {
+  .nav {
+    flex-wrap: wrap;
+  }
+  .links {
+    order: 3;
+    justify-content: center;
+    width: 100%;
+  }
+  .heroCopy {
+    padding-top: 3rem;
+  }
+  .sceneMedia {
+    min-height: 19rem;
+  }
+  .sceneCopy {
+    width: 100%;
+    margin: 0.65rem 0 0;
+  }
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .film,
+  .filmControl {
+    display: none;
+  }
+}
+
+.hero:has(.film[data-active="true"]) > img {
+  visibility: hidden;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .about > * {
+      animation: enter linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 27%;
+    }
+    @keyframes enter {
+      from {
+        opacity: 0.35;
+        transform: translateY(1rem);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+}

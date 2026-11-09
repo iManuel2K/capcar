@@ -8,7 +8,9 @@ export function SiteHeader() {
   const pathname = usePathname() ?? "/";
 
   // Garage and login supply their own navigation within their dedicated layouts.
-  return pathname.startsWith("/garage") || pathname === "/login" ? null : (
+  return pathname.startsWith("/garage") ||
+    pathname === "/login" ||
+    pathname === "/autumn" ? null : (
     <MarketingHeader />
   );
 }
