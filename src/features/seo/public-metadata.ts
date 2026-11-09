@@ -1,4 +1,7 @@
-import { isJournalRoute } from "@/features/journal/routes";
+import {
+  isGermanJournalGuide,
+  isJournalRoute,
+} from "@/features/journal/routes";
 import type { Metadata } from "next";
 
 import { isAppLocale, type AppLocale, locales } from "@/i18n/config";
@@ -71,7 +74,11 @@ export function localizePublicPathname(
   const routeSegments = isAppLocale(segments[0]) ? segments.slice(1) : segments;
   const route = routeSegments.length ? `/${routeSegments.join("/")}` : "";
 
-  if (isJournalRoute(route)) return `/${locale}${route}`;
+  if (isJournalRoute(route)) {
+    if (locale !== "de" && isGermanJournalGuide(route.slice(9)))
+      return `/${locale}/journal`;
+    return `/${locale}${route}`;
+  }
   return isPublicIndexableRoute(route)
     ? localizedPublicPath(route, locale)
     : null;
