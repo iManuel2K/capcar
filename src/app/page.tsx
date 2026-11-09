@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import type { AppLocale } from "@/i18n/config";
+import { HomepageContent } from "@/components/marketing/homepage-content";
 import { getTranslations } from "next-intl/server";
 
-import AutumnLanding from "@/app/autumn/autumn-landing";
-import { MarketingLanding } from "@/components/marketing/marketing-landing";
-import { CapCarStructuredData } from "@/components/seo/capcar-structured-data";
 import {
   canonicalMetadata,
   PUBLIC_SITE_URL,
@@ -49,17 +45,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function Home({ locale = "en" }: { locale?: AppLocale } = {}) {
-  return (
-    <>
-      <Suspense fallback={null}>
-        <CapCarStructuredData />
-      </Suspense>
-      {locale === "en" ? (
-        <AutumnLanding />
-      ) : (
-        <MarketingLanding locale={locale} />
-      )}
-    </>
-  );
+export default function Home() {
+  return <HomepageContent />;
 }

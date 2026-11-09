@@ -13,7 +13,8 @@ import ImprintPage, {
 import MovieCarsPage, {
   generateMetadata as movieCarsMetadata,
 } from "@/app/movie-cars/page";
-import HomePage, { generateMetadata as homeMetadata } from "@/app/page";
+import { generateMetadata as homeMetadata } from "@/app/page";
+import { HomepageContent } from "@/components/marketing/homepage-content";
 import AIPlannerPage, { generateMetadata as aiMetadata } from "@/app/ai/page";
 import ProjectPlannerPage, {
   generateMetadata as plannerMetadata,
@@ -132,7 +133,7 @@ export default async function LocalizedPublicPage({
 
   switch (route) {
     case "":
-      return <HomePage locale={locale} />;
+      return <HomepageContent locale={locale} />;
     case "/driving-review":
       return <DrivingReviewIntro />;
     case "/ai":

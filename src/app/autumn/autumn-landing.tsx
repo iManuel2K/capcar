@@ -6,6 +6,7 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { MarketingFaq } from "@/components/marketing/marketing-faq";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
+import { AutumnAccountLink } from "./autumn-account-link";
 import { ForestFilm } from "./forest-film";
 import styles from "./autumn.module.css";
 
@@ -41,9 +42,7 @@ export default function AutumnLanding() {
               <Link href="/roadbook">Roadbook</Link>
               <Link href="/en/journal">Journal</Link>
             </div>
-            <Link href="/login" className={styles.login}>
-              Log in
-            </Link>
+            <AutumnAccountLink />
           </nav>
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>Built for the long way home</p>
@@ -63,7 +62,6 @@ export default function AutumnLanding() {
               </Link>
             </div>
           </div>
-          <p className={styles.chapter}>01 / THE LONG WAY HOME</p>
         </section>
 
         <section className={`${styles.wrap} ${styles.about}`}>
