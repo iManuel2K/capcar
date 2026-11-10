@@ -10,6 +10,7 @@ import styles from "./autumn.module.css";
 
 const still = "/autumn/forest.webp";
 const roadFilm = "/autumn/road-drive.mp4";
+const heroFilm = "/autumn/road-drive-1080p.mp4";
 const roadPoster = "/autumn/road-drive.webp";
 
 export default function AutumnLanding() {
@@ -25,7 +26,7 @@ export default function AutumnLanding() {
             sizes="100vw"
             className={styles.backdrop}
           />
-          <ForestFilm source={roadFilm} />
+          <ForestFilm source={heroFilm} />
           <div className={styles.shade} />
           <nav className={`${styles.glass} ${styles.nav}`} aria-label="CapCar">
             <Link href="/" className={styles.brand}>
