@@ -18,17 +18,17 @@ const additionalPublicPages = new Set([
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
 
-  // The cinematic homepage and workspace routes provide their own navigation.
+  // Workspace and sign-in routes provide their own navigation.
   return pathname.startsWith("/garage") ||
     pathname === "/login" ||
-    pathname === "/" ||
-    pathname === "/en" ||
     pathname === "/autumn" ? null : (
     <>
-      {(localizePublicPathname(pathname, "en") !== null ||
-        additionalPublicPages.has(pathname)) && (
-        <span className={seasonal.pageMarker} data-autumn-public hidden />
-      )}
+      {pathname !== "/" &&
+        pathname !== "/en" &&
+        (localizePublicPathname(pathname, "en") !== null ||
+          additionalPublicPages.has(pathname)) && (
+          <span className={seasonal.pageMarker} data-autumn-public hidden />
+        )}
       <MarketingHeader />
     </>
   );

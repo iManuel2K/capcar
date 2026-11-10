@@ -4,7 +4,6 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { MarketingFaq } from "@/components/marketing/marketing-faq";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
-import { MarketingHeader } from "@/components/marketing/marketing-header";
 import { ForestFilm } from "./forest-film";
 import styles from "./autumn.module.css";
 
@@ -27,9 +26,6 @@ export default function AutumnLanding() {
           />
           <ForestFilm source={heroFilm} />
           <div className={styles.shade} />
-          <div className={styles.heroNavigation}>
-            <MarketingHeader />
-          </div>
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>Built for the long way home</p>
             <h1 id="autumn-title">

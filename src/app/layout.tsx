@@ -37,9 +37,9 @@ export default async function RootLayout({
     <html lang={locale} data-scroll-behavior="smooth">
       <body className="min-h-dvh font-sans antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <AnalyticsProvider />
           <SkipToContent />
           <SiteHeader />
+          <AnalyticsProvider />
           {children}
           <AppRuntimeBootstrap />
         </NextIntlClientProvider>
