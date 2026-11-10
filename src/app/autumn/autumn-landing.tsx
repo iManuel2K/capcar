@@ -4,7 +4,7 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { MarketingFaq } from "@/components/marketing/marketing-faq";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { ProductDashboardPreview } from "@/components/marketing/product-dashboard-preview";
-import { AutumnAccountLink } from "./autumn-account-link";
+import { MarketingHeader } from "@/components/marketing/marketing-header";
 import { ForestFilm } from "./forest-film";
 import styles from "./autumn.module.css";
 
@@ -27,18 +27,9 @@ export default function AutumnLanding() {
           />
           <ForestFilm source={heroFilm} />
           <div className={styles.shade} />
-          <nav className={`${styles.glass} ${styles.nav}`} aria-label="CapCar">
-            <Link href="/" className={styles.brand}>
-              <Image src="/capcar-mark-192.png" alt="" width={26} height={26} />
-              CapCar
-            </Link>
-            <div className={styles.links}>
-              <Link href="/garage">Garage</Link>
-              <Link href="/roadbook">Roadbook</Link>
-              <Link href="/en/journal">Journal</Link>
-            </div>
-            <AutumnAccountLink />
-          </nav>
+          <div className={styles.heroNavigation}>
+            <MarketingHeader />
+          </div>
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>Built for the long way home</p>
             <h1 id="autumn-title">
