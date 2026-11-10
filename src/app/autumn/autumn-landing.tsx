@@ -1,5 +1,3 @@
-import { existsSync } from "node:fs";
-import { join } from "node:path";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
@@ -11,28 +9,23 @@ import { ForestFilm } from "./forest-film";
 import styles from "./autumn.module.css";
 
 const still = "/autumn/forest.webp";
-const film = "/autumn/forest.mp4";
 const roadFilm = "/autumn/road-drive.mp4";
 const roadPoster = "/autumn/road-drive.webp";
 
 export default function AutumnLanding() {
-  const video = existsSync(join(process.cwd(), "public", film))
-    ? film
-    : undefined;
-
   return (
     <div className={styles.page} lang="en">
       <main id="main-content" className={styles.content}>
         <section className={styles.hero} aria-labelledby="autumn-title">
           <Image
-            src={still}
+            src={roadPoster}
             alt=""
             fill
             preload
             sizes="100vw"
             className={styles.backdrop}
           />
-          {video && <ForestFilm source={video} />}
+          <ForestFilm source={roadFilm} />
           <div className={styles.shade} />
           <nav className={`${styles.glass} ${styles.nav}`} aria-label="CapCar">
             <Link href="/" className={styles.brand}>

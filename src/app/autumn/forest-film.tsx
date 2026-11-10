@@ -13,6 +13,7 @@ export function ForestFilm({ source }: { source: string }) {
     const video = ref.current;
     if (!video || failed) return;
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
+    let inView = typeof IntersectionObserver === "undefined";
     let frame = 0;
     let restart = 0;
     let fadingOut = false;
@@ -30,7 +31,7 @@ export function ForestFilm({ source }: { source: string }) {
     }
 
     const play = () => {
-      if (motion.matches || paused || document.hidden) return;
+      if (!inView || motion.matches || paused || document.hidden) return;
       void video.play().catch(() => {
         if (!video.paused) return;
         video.style.opacity = "0";
@@ -38,7 +39,7 @@ export function ForestFilm({ source }: { source: string }) {
       });
     };
     const sync = () => {
-      if (motion.matches || paused || document.hidden) {
+      if (!inView || motion.matches || paused || document.hidden) {
         video.pause();
         cancelAnimationFrame(frame);
         clearTimeout(restart);
@@ -72,6 +73,17 @@ export function ForestFilm({ source }: { source: string }) {
       }, 100);
     };
 
+    const observer =
+      typeof IntersectionObserver === "undefined"
+        ? null
+        : new IntersectionObserver(
+            ([entry]) => {
+              inView = entry.isIntersecting && entry.intersectionRatio >= 0.05;
+              sync();
+            },
+            { threshold: 0.05 },
+          );
+    observer?.observe(video);
     video.addEventListener("playing", onPlaying);
     video.addEventListener("timeupdate", onTime);
     video.addEventListener("ended", onEnded);
@@ -79,6 +91,7 @@ export function ForestFilm({ source }: { source: string }) {
     motion.addEventListener("change", sync);
     sync();
     return () => {
+      observer?.disconnect();
       video.pause();
       video.removeEventListener("playing", onPlaying);
       video.removeEventListener("timeupdate", onTime);
