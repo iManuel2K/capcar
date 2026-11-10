@@ -8,3 +8,55 @@
   --ring: var(--primary);
   border-color: #675041;
 }
+
+@font-face {
+  font-family: "CapCar Autumn Serif";
+  src: url("/autumn/fonts/instrument-serif.woff2") format("woff2");
+  font-display: swap;
+}
+
+.pageMarker {
+  display: none;
+}
+
+:global(body):has(.pageMarker) {
+  --background: #100d0a;
+  --foreground: #fff5e7;
+  --card: #211810;
+  --popover: #2a2018;
+  --secondary: #37271b;
+  --muted: #2c2118;
+  --muted-foreground: #d2c0ae;
+  --accent: #493423;
+  --primary: #efbd88;
+  --primary-foreground: #21140c;
+  --primary-hover: #ffe0ba;
+  --border: #675041;
+  --input: #98785d;
+  --section-tint: #2e2118;
+  --light-surface: #f4e6d5;
+  --light-foreground: #302116;
+  --light-muted: #625044;
+  --light-primary: #744725;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+:global(body):has(.pageMarker) :global(main h1) {
+  font-family: "CapCar Autumn Serif", Georgia, serif;
+  font-weight: 400;
+  line-height: 1.03;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+
+:global(body):has(.pageMarker) :global(.capcar-light-section) {
+  --card: #fff7ee;
+  --secondary: #ead8c5;
+  --muted: #ead8c5;
+  --primary-foreground: #fff7ee;
+  --primary-hover: #5a331a;
+  --border: #b99e86;
+  --input: #977a63;
+  --capcar-editorial-rule: #cdb29a;
+}
