@@ -86,6 +86,15 @@ export function JournalContent({ text }: { text: string }) {
             </ol>
           );
         }
+        if (lines.every((line) => /^[-*] /.test(line))) {
+          return (
+            <ul key={index} className="list-disc space-y-2 ps-6">
+              {lines.map((line, itemIndex) => (
+                <li key={itemIndex}>{inline(line.slice(2))}</li>
+              ))}
+            </ul>
+          );
+        }
         if (block.startsWith("|")) {
           const rows = block
             .split("\n")

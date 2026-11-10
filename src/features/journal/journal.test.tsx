@@ -10,7 +10,7 @@ import { JournalContent } from "@/components/journal/journal-content";
 import { getJournalArticles, journalArticlePath } from "./articles";
 import { locales } from "@/i18n/config";
 import { localizePublicPathname } from "@/features/seo/public-metadata";
-import { isBilingualJournalGuide } from "./routes";
+import { isBilingualJournalGuide, isEnglishOnlyJournalPost } from "./routes";
 import { journalLanguageAlternates } from "./metadata";
 
 afterEach(cleanup);
@@ -18,11 +18,13 @@ afterEach(cleanup);
 describe("the multilingual ownership journal", () => {
   it("publishes every translated article and in-app checklist with matching canonicals and language alternates", async () => {
     const entries = sitemap().filter((item) => item.url.includes("/journal"));
-    expect(entries).toHaveLength(60);
-    expect(generateStaticParams()).toHaveLength(55);
+    expect(entries).toHaveLength(75);
+    expect(generateStaticParams()).toHaveLength(70);
     for (const locale of locales) {
       const articles = getJournalArticles(locale).filter(
-        (article) => !isBilingualJournalGuide(article.slug),
+        (article) =>
+          !isBilingualJournalGuide(article.slug) &&
+          !isEnglishOnlyJournalPost(article.slug),
       );
       expect(articles).toHaveLength(7);
       for (const article of articles) {
@@ -71,9 +73,10 @@ describe("the multilingual ownership journal", () => {
               target,
             ),
           ).toBe(
-            isBilingualJournalGuide(article.slug) &&
+            (isBilingualJournalGuide(article.slug) &&
               target !== "de" &&
-              target !== "en"
+              target !== "en") ||
+              (isEnglishOnlyJournalPost(article.slug) && target !== "en")
               ? `/${target}/journal`
               : journalArticlePath(article.slug, target),
           );
@@ -108,6 +111,27 @@ describe("the multilingual ownership journal", () => {
       ).toEqual(expect.arrayContaining([canonical, english]));
       expect(existsSync(`public${guide.image}`)).toBe(true);
       expect(guide.body).not.toContain("**Redaktion:**");
+    }
+  });
+
+  it("publishes fifteen English originals with real images and English-only alternates", () => {
+    const originals = getJournalArticles("en").filter(({ slug }) =>
+      isEnglishOnlyJournalPost(slug),
+    );
+    expect(originals).toHaveLength(15);
+    for (const article of originals) {
+      const en = "https://capcar.dev/en/journal/" + article.slug;
+      expect(journalLanguageAlternates(article.slug)).toEqual({
+        en,
+        "x-default": en,
+      });
+      expect(
+        sitemap()
+          .filter(({ url }) => url.endsWith("/" + article.slug))
+          .map(({ url }) => url),
+      ).toEqual([en]);
+      expect(existsSync("public" + article.image)).toBe(true);
+      expect(article.body).not.toMatch(/^# /);
     }
   });
 
