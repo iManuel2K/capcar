@@ -16,7 +16,7 @@ export default async function Page() {
   ]);
   return (
     <div className="bg-background text-foreground min-h-dvh">
-      <main className="mx-auto max-w-5xl px-5 py-12 sm:py-20">
+      <main id="main-content" className="mx-auto max-w-5xl px-5 py-12 sm:py-20">
         <h1 className="mb-8 text-4xl font-medium tracking-tight sm:text-6xl">
           {t("title")}
         </h1>

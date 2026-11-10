@@ -13,6 +13,9 @@ import { journalUI } from "@/features/journal/ui";
 import { GlobalPartsSearch } from "@/components/parts/global-parts-search";
 import { HomepageLink } from "./homepage-link";
 import styles from "./homepage.module.css";
+import { featureDiscoveryCopy } from "@/features/marketing/feature-discovery-copy";
+import { pricingCopy } from "@/features/marketing/pricing-copy";
+import seasonal from "./autumn-navigation.module.css";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
 import { ExpandableNavigation } from "./expandable-navigation";
 import navigationStyles from "./expandable-navigation.module.css";
@@ -32,6 +35,8 @@ export function MarketingHeader() {
   const journalLocale = resolveJournalLocale(useLocale());
   const journal = journalUI[journalLocale];
   const home = homepageCopy[journalLocale];
+  const features = featureDiscoveryCopy[journalLocale];
+  const pricing = pricingCopy[journalLocale];
   const garageHref = signedIn ? "/garage" : "/garage/new";
   const garageLabel = signedIn ? home.openGarage : home.create;
   const ui = interactionCopy[journalLocale];
@@ -71,7 +76,12 @@ export function MarketingHeader() {
 
   return (
     <>
-      <header className="border-foreground/10 bg-background/92 text-foreground sticky top-0 z-[80] border-b shadow-[0_12px_40px_rgba(184,199,217,0.055)] backdrop-blur-2xl [--ring:var(--primary)]">
+      <header
+        className={
+          seasonal.surface +
+          " border-foreground/10 bg-background/92 text-foreground sticky top-0 z-[80] border-b shadow-[0_12px_40px_rgba(184,199,217,0.055)] backdrop-blur-2xl [--ring:var(--primary)]"
+        }
+      >
         <div className="mx-auto flex h-[4.75rem] w-full max-w-[1440px] items-center justify-between gap-5 px-5 sm:h-20 sm:px-8">
           <Link
             href="/"
@@ -108,6 +118,14 @@ export function MarketingHeader() {
                     { href: garageHref, label: garageLabel },
                     { href: "/#projects", label: l("nav.projects") },
                     { href: "/connected-parts", label: l("nav.parts") },
+                    {
+                      href: "/project-car-planner",
+                      label: features.plannerLabel,
+                    },
+                    {
+                      href: "/car-maintenance-tracker",
+                      label: features.maintenanceLabel,
+                    },
                     { href: "/marketplace", label: footer("marketplace") },
                   ],
                 },
@@ -128,6 +146,7 @@ export function MarketingHeader() {
                     { href: "/sound-studio", label: footer("soundStudio") },
                     { href: "/movie-cars", label: footer("movieCars") },
                     { href: "/roadmap", label: footer("roadmap") },
+                    { href: "/pricing", label: pricing.nav },
                     { href: "/#faq", label: footer("faq") },
                   ],
                 },
@@ -192,7 +211,7 @@ export function MarketingHeader() {
           />
           <div
             id="mobile-marketing-navigation"
-            className={`${navigationStyles.mobileDrawer} bg-background text-foreground absolute top-0 right-0 flex h-full w-[min(92%,24rem)] flex-col overflow-y-auto overscroll-contain rounded-l-[1.75rem] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[-30px_0_90px_rgba(5,3,6,0.24)]`}
+            className={`${navigationStyles.mobileDrawer} ${seasonal.surface} bg-background text-foreground absolute top-0 right-0 flex h-full w-[min(92%,24rem)] flex-col overflow-y-auto overscroll-contain rounded-l-[1.75rem] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[-30px_0_90px_rgba(5,3,6,0.24)]`}
           >
             <div className="border-foreground/10 flex items-center justify-between border-b pb-5">
               <CapcarWordmark glow={false} />
@@ -240,6 +259,9 @@ export function MarketingHeader() {
                 <div className="pl-3">
                   {" "}
                   {[
+                    ["projectPlanner", "/project-car-planner"],
+                    ["maintenance", "/car-maintenance-tracker"],
+                    ["pricing", "/pricing"],
                     ["conceptStudio", "/studio"],
                     ["soundStudio", "/sound-studio"],
                     ["movieCars", "/movie-cars"],
@@ -256,7 +278,15 @@ export function MarketingHeader() {
                       onClick={() => setMenuOpen(false)}
                       className="border-foreground/10 flex min-h-12 items-center justify-between border-b text-base focus-visible:outline-2"
                     >
-                      {label === "journal" ? journal.label : footer(label)}
+                      {label === "journal"
+                        ? journal.label
+                        : label === "projectPlanner"
+                          ? features.plannerLabel
+                          : label === "maintenance"
+                            ? features.maintenanceLabel
+                            : label === "pricing"
+                              ? pricing.nav
+                              : footer(label)}
                       <ChevronRight className="size-4" aria-hidden="true" />
                     </Link>
                   ))}

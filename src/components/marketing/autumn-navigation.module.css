@@ -1,0 +1,10 @@
+.surface {
+  --background: #19130f;
+  --foreground: #fff5e7;
+  --card: #2a2018;
+  --muted-foreground: #d2c0ae;
+  --primary: #efbd88;
+  --primary-foreground: #21140c;
+  --ring: var(--primary);
+  border-color: #675041;
+}
