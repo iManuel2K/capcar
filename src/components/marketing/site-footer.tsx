@@ -10,6 +10,7 @@ import { HomepageLink } from "./homepage-link";
 import { featureDiscoveryCopy } from "@/features/marketing/feature-discovery-copy";
 import { pricingCopy } from "@/features/marketing/pricing-copy";
 import { homepageCopy } from "@/features/marketing/homepage-copy";
+import seasonal from "./autumn-navigation.module.css";
 import styles from "./homepage.module.css";
 
 export function SiteFooter() {
@@ -57,7 +58,12 @@ export function SiteFooter() {
     },
   ];
   return (
-    <footer className="capcar-editorial-grid bg-background text-foreground border-t border-white/8 px-5 py-14 sm:px-8 sm:py-16">
+    <footer
+      className={
+        seasonal.surface +
+        " capcar-editorial-grid bg-background text-foreground border-t border-white/8 px-5 py-14 sm:px-8 sm:py-16"
+      }
+    >
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-[2fr_1fr_1fr_1fr]">
         <div className="sm:col-span-2 md:col-span-1">
           <Link
