@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
+import { isEnglishOnlyJournalPost } from "@/features/journal/routes";
 import { getJournalArticles } from "@/features/journal/articles";
 import { locales } from "@/i18n/config";
 
@@ -57,6 +58,13 @@ describe("route metadata", () => {
         expect(entry.url).toMatch(
           /^https:\/\/capcar\.dev\/(en|de|el|sq|ja)\/journal/,
         );
+      }
+      if (isEnglishOnlyJournalPost(entry.url.split("/").at(-1) ?? "")) {
+        expect(entry.alternates?.languages).toEqual({
+          en: entry.url,
+          "x-default": entry.url,
+        });
+        continue;
       }
       expect(entry.alternates?.languages?.de).toMatch(
         /^https:\/\/capcar\.dev\/de/,

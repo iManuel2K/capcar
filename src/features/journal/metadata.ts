@@ -3,6 +3,7 @@ import { locales, type AppLocale } from "@/i18n/config";
 import { PUBLIC_SITE_URL, pageMetadata } from "@/features/seo/public-metadata";
 import {
   isBilingualJournalGuide,
+  isEnglishOnlyJournalPost,
   journalArticlePath,
   journalPath,
 } from "./routes";
@@ -10,6 +11,10 @@ import {
 export function journalLanguageAlternates(slug?: string) {
   const path = (locale: AppLocale) =>
     slug ? journalArticlePath(slug, locale) : journalPath(locale);
+  if (slug && isEnglishOnlyJournalPost(slug)) {
+    const english = new URL(path("en"), PUBLIC_SITE_URL).toString();
+    return { en: english, "x-default": english };
+  }
   if (slug && isBilingualJournalGuide(slug))
     return {
       de: new URL(path("de"), PUBLIC_SITE_URL).toString(),

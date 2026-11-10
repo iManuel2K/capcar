@@ -6,6 +6,7 @@ import {
   type JournalArticle,
 } from "@/features/journal/articles";
 
+import { isEnglishOnlyJournalPost } from "@/features/journal/routes";
 import type { AppLocale } from "@/i18n/config";
 import { journalUI, journalReadingTime } from "@/features/journal/ui";
 
@@ -22,7 +23,7 @@ export function JournalCards({
         <Link
           key={article.slug}
           href={journalArticlePath(article.slug, locale)}
-          className={`group border-foreground/20 hover:border-primary border-b pb-8 transition focus-visible:outline-2 focus-visible:outline-offset-4 ${index === 0 ? "md:col-span-2 md:grid md:grid-cols-[1.2fr_1fr] md:items-center md:gap-10" : "grid grid-cols-[96px_1fr] items-start gap-5 sm:grid-cols-[160px_1fr]"}`}
+          className={`group border-foreground/20 hover:border-primary border-b pb-8 transition focus-visible:outline-2 focus-visible:outline-offset-4 ${index === 0 ? "md:col-span-2 md:grid md:grid-cols-[1.2fr_1fr] md:items-center md:gap-10" : "grid grid-cols-[80px_minmax(0,1fr)] items-start gap-5 sm:grid-cols-[160px_1fr]"}`}
         >
           <div
             className={`relative bg-transparent ${index === 0 ? "aspect-[16/9]" : "aspect-square"}`}
@@ -34,12 +35,12 @@ export function JournalCards({
               sizes={
                 index === 0
                   ? "(max-width: 768px) 100vw, 60vw"
-                  : "(max-width: 640px) 96px, 160px"
+                  : "(max-width: 640px) 80px, 160px"
               }
               className="object-contain"
             />
           </div>
-          <div className={index === 0 ? "pt-5 md:pt-0" : ""}>
+          <div className={index === 0 ? "min-w-0 pt-5 md:pt-0" : "min-w-0"}>
             <p className="text-primary text-xs font-semibold tracking-widest uppercase">
               {article.category} · {journalReadingTime(locale, article.minutes)}
             </p>
@@ -56,7 +57,10 @@ export function JournalCards({
               {article.description}
             </p>
             <p className="mt-6 text-sm font-semibold">
-              {journalUI[locale].readArticle} →
+              {isEnglishOnlyJournalPost(article.slug)
+                ? "Read the article"
+                : journalUI[locale].readArticle}{" "}
+              →
             </p>
           </div>
         </Link>

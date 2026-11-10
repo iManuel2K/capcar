@@ -17,7 +17,10 @@ import {
 import { PUBLIC_SITE_URL } from "@/features/seo/public-metadata";
 
 import { isAppLocale, locales } from "@/i18n/config";
-import { isBilingualJournalGuide } from "@/features/journal/routes";
+import {
+  isBilingualJournalGuide,
+  isEnglishOnlyJournalPost,
+} from "@/features/journal/routes";
 import { journalMetadata } from "@/features/journal/metadata";
 import { journalUI, journalReadingTime } from "@/features/journal/ui";
 import { journalStructuredData } from "@/features/journal/structured-data";
@@ -66,7 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       }[locale],
       publishedTime: article.published,
       modifiedTime: article.updated ?? article.published,
-      images: [{ url: image, alt: "CapCar BMW Journal" }],
+      images: [{ url: image, alt: article.title }],
     },
     twitter: { ...base.twitter, images: [image] },
   };
@@ -128,9 +131,10 @@ export default async function JournalArticlePage({ params }: Props) {
             {article.slug === "bmw-318i-e90-kosten" && (
               <E90LaunchTools locale={locale} />
             )}
-            {!isBilingualJournalGuide(article.slug) && (
-              <JournalChecklist slug={article.slug} locale={locale} />
-            )}
+            {!isBilingualJournalGuide(article.slug) &&
+              !isEnglishOnlyJournalPost(article.slug) && (
+                <JournalChecklist slug={article.slug} locale={locale} />
+              )}
           </div>
           <section aria-labelledby="related-title" className="mt-20">
             <h2
