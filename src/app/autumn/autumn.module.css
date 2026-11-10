@@ -69,8 +69,6 @@
 }
 .hero > img,
 .closing > img,
-.sceneMedia > img,
-.sceneMedia > video,
 .film {
   position: absolute;
   inset: 0;
@@ -242,28 +240,32 @@
   position: relative;
 }
 .sceneMedia {
-  position: relative;
-  min-height: 26rem;
-  aspect-ratio: 16/8;
   overflow: hidden;
   border-radius: 1.7rem;
   background: #1a1410;
 }
-.sceneMedia > img {
-  object-position: 62% 60%;
+.sceneMedia > video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+.sceneMedia > video:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -4px;
 }
 .sceneCopy {
   border-radius: 1.4rem;
   padding: 1.6rem;
   width: min(100%, 34rem);
-  margin: -4rem 1.3rem 0 auto;
+  margin: 1rem 0 0 auto;
   background-color: #14100de8;
 }
 .sceneCopy h2 {
   font-size: clamp(2.7rem, 5vw, 4.6rem);
 }
 .sceneCopy > p:not(.eyebrow),
-.card p {
+.featureCopy p {
   color: #d0c4b7;
   margin-top: 0.7rem;
   line-height: 1.6;
@@ -280,40 +282,82 @@
   padding-block: clamp(5rem, 10vw, 9rem);
   scroll-margin-top: 2rem;
 }
-.cards {
+.product > h2 {
+  max-width: 17ch;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+.features {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin-top: 1.6rem;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  margin-top: clamp(1.6rem, 4vw, 3.25rem);
 }
-.card {
-  border-radius: 1.4rem;
-  padding: 1.45rem;
-}
-.card h3 {
-  font-size: 1.55rem;
-  font-weight: 600;
-}
-.dashboard,
-.trip {
-  background: #151310;
-  border: 1px solid #ffffff1a;
-  border-radius: 1.4rem;
-  overflow: hidden;
+.feature {
   min-width: 0;
-  margin-top: 1rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: clamp(1.25rem, 3vw, 2rem);
+  background: var(--card);
+}
+.featureCopy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 1.5rem;
+  min-width: 0;
+}
+.featureCopy h3 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(2.3rem, 4vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.05;
+}
+.featureCopy p {
+  max-width: 32rem;
+}
+.featureCopy .textLink {
+  margin-top: 0;
+}
+.dashboard {
+  min-width: 0;
+  margin-top: clamp(1rem, 2.5vw, 1.75rem);
 }
 .dashboard > section {
+  border-radius: 1rem;
   scroll-margin: 0;
 }
+.tripFeature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.15rem, 3vw, 2.5rem);
+}
+.tripFeature .featureCopy {
+  display: grid;
+  justify-items: start;
+}
+.trip {
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--background);
+}
 .trip img {
+  display: block;
   width: 100%;
   height: auto;
 }
 .trip figcaption {
-  padding: 1rem;
-  color: #c6baac;
-  font-size: 0.8rem;
+  padding: 0.75rem 1rem;
+  color: var(--muted-foreground);
+  font-size: 0.85rem;
+}
+@media (min-width: 900px) {
+  .tripFeature {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+  }
 }
 .closing {
   min-height: 29rem;
@@ -361,15 +405,9 @@
   .heroCopy {
     padding-top: 3rem;
   }
-  .sceneMedia {
-    min-height: 19rem;
-  }
   .sceneCopy {
     width: 100%;
     margin: 0.65rem 0 0;
-  }
-  .cards {
-    grid-template-columns: 1fr;
   }
 }
 @media (prefers-reduced-motion: reduce) {
