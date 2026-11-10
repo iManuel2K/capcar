@@ -12,6 +12,8 @@ import styles from "./autumn.module.css";
 
 const still = "/autumn/forest.webp";
 const film = "/autumn/forest.mp4";
+const roadFilm = "/autumn/road-drive.mp4";
+const roadPoster = "/autumn/road-drive.webp";
 
 export default function AutumnLanding() {
   const video = existsSync(join(process.cwd(), "public", film))
@@ -81,23 +83,16 @@ export default function AutumnLanding() {
           aria-labelledby="roadbook-title"
         >
           <div className={styles.sceneMedia}>
-            <Image
-              src={still}
-              alt="A black BMW on an autumn forest road"
-              fill
-              sizes="(max-width: 768px) 100vw, 1100px"
+            <video
+              src={roadFilm}
+              controls
+              playsInline
+              preload="none"
+              poster={roadPoster}
+              width={832}
+              height={468}
+              aria-label="A black BMW driving along an autumn forest road"
             />
-            {video && (
-              <video
-                src={video}
-                controls
-                muted
-                playsInline
-                preload="none"
-                poster={still}
-                aria-label="BMW autumn forest drive"
-              />
-            )}
           </div>
           <div className={`${styles.glass} ${styles.sceneCopy}`}>
             <p className={styles.eyebrow}>02 / Roadbook</p>
@@ -114,37 +109,53 @@ export default function AutumnLanding() {
           </div>
         </section>
 
-        <section className={`${styles.wrap} ${styles.product}`} id="product">
+        <section
+          className={`${styles.wrap} ${styles.product}`}
+          id="product"
+          aria-labelledby="autumn-tools"
+        >
           <p className={styles.eyebrow}>03 / The tools</p>
-          <h2>
+          <h2 id="autumn-tools">
             In the garage. <em>Out on the road.</em>
           </h2>
-          <div className={styles.cards}>
-            <article className={`${styles.glass} ${styles.card}`}>
-              <h3>Garage</h3>
-              <p>Keep service records and the work you’ve done in one place.</p>
-              <Link href="/garage" className={styles.textLink}>
-                Open Garage <ArrowUpRight size={17} aria-hidden />
-              </Link>
+          <div className={styles.features}>
+            <article className={styles.feature} aria-labelledby="autumn-garage">
+              <div className={styles.featureCopy}>
+                <div>
+                  <h3 id="autumn-garage">Garage</h3>
+                  <p>Keep service records and completed work in one place.</p>
+                </div>
+                <Link href="/garage" className={styles.textLink}>
+                  Open Garage <ArrowUpRight size={17} aria-hidden />
+                </Link>
+              </div>
               <div className={styles.dashboard}>
-                <ProductDashboardPreview />
+                <ProductDashboardPreview embedded />
               </div>
             </article>
-            <article className={`${styles.glass} ${styles.card}`}>
-              <h3>AI Trip Planner</h3>
-              <p>
-                Give your drive a starting point, a time limit, and a few stops
-                worth making.
-              </p>
-              <Link href="/ai" className={styles.textLink}>
-                Open Trip Planner <ArrowUpRight size={17} aria-hidden />
-              </Link>
+            <article
+              className={`${styles.feature} ${styles.tripFeature}`}
+              aria-labelledby="autumn-trip-planner"
+            >
+              <div className={styles.featureCopy}>
+                <div>
+                  <h3 id="autumn-trip-planner">AI Trip Planner</h3>
+                  <p>
+                    Give your drive a starting point, a time limit, and a few
+                    stops worth making.
+                  </p>
+                </div>
+                <Link href="/ai" className={styles.textLink}>
+                  Open Trip Planner <ArrowUpRight size={17} aria-hidden />
+                </Link>
+              </div>
               <figure className={styles.trip}>
                 <Image
                   src="/autumn/trip-planner.webp"
                   alt="CapCar trip planning walkthrough showing the route interface"
                   width={713}
                   height={470}
+                  sizes="(min-width: 900px) 690px, 100vw"
                 />
                 <figcaption>CapCar Trip Planner walkthrough</figcaption>
               </figure>
