@@ -64,7 +64,6 @@
 }
 .hero {
   min-height: 100svh;
-  grid-template-rows: auto 1fr;
   padding: clamp(1rem, 3vw, 2.5rem);
 }
 .hero > img,
@@ -170,10 +169,6 @@
   border-radius: 99px;
   padding-inline: 0.9rem;
   white-space: nowrap;
-}
-.heroNavigation {
-  z-index: 4;
-  min-width: 0;
 }
 .heroCopy {
   z-index: 1;
