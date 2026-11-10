@@ -69,6 +69,7 @@
 }
 .hero > img,
 .closing > img,
+.sceneMedia > img,
 .film {
   position: absolute;
   inset: 0;
@@ -240,25 +241,21 @@
   position: relative;
 }
 .sceneMedia {
+  position: relative;
+  min-height: 26rem;
+  aspect-ratio: 16/8;
   overflow: hidden;
   border-radius: 1.7rem;
   background: #1a1410;
 }
-.sceneMedia > video {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-}
-.sceneMedia > video:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: -4px;
+.sceneMedia > img {
+  object-position: 62% 60%;
 }
 .sceneCopy {
   border-radius: 1.4rem;
   padding: 1.6rem;
   width: min(100%, 34rem);
-  margin: 1rem 0 0 auto;
+  margin: -4rem 1.3rem 0 auto;
   background-color: #14100de8;
 }
 .sceneCopy h2 {
@@ -404,6 +401,9 @@
   }
   .heroCopy {
     padding-top: 3rem;
+  }
+  .sceneMedia {
+    min-height: 19rem;
   }
   .sceneCopy {
     width: 100%;

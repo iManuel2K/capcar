@@ -9,7 +9,6 @@ import { ForestFilm } from "./forest-film";
 import styles from "./autumn.module.css";
 
 const still = "/autumn/forest.webp";
-const roadFilm = "/autumn/road-drive.mp4";
 const heroFilm = "/autumn/road-drive-1080p.mp4";
 const roadPoster = "/autumn/road-drive.webp";
 
@@ -77,15 +76,11 @@ export default function AutumnLanding() {
           aria-labelledby="roadbook-title"
         >
           <div className={styles.sceneMedia}>
-            <video
-              src={roadFilm}
-              controls
-              playsInline
-              preload="none"
-              poster={roadPoster}
-              width={832}
-              height={468}
-              aria-label="A black BMW driving along an autumn forest road"
+            <Image
+              src={still}
+              alt="A black BMW on an autumn forest road"
+              fill
+              sizes="(max-width: 768px) 100vw, 1100px"
             />
           </div>
           <div className={`${styles.glass} ${styles.sceneCopy}`}>
