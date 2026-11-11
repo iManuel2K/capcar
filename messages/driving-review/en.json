@@ -125,7 +125,9 @@
       "help": "Pause at the moment you want reviewed, then mark it to sample frames before and after it.",
       "selected": "Marked at {time}. Check the new frame selection before submitting.",
       "report": "Marked moment · {time}",
-      "unassessed": "The review did not assess this moment. Check the frames around it before drawing a conclusion."
+      "unassessed": "The review did not assess this moment. Check the frames around it before drawing a conclusion.",
+      "crashTime": "Crash time in clip (seconds)",
+      "applyTime": "Set crash time"
     }
   }
 }

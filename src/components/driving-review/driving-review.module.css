@@ -636,3 +636,26 @@
   align-items: center;
   gap: 5px;
 }
+
+.crashTimeForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 10px;
+}
+
+.crashTimeLabel {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.crashTimeLabel input {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+}
