@@ -126,7 +126,7 @@ describe("driving review account boundaries", () => {
         selector: "summary",
       }),
     );
-    fireEvent.change(screen.getByLabelText("Road conditions"), {
+    fireEvent.change(screen.getByLabelText(/Road conditions/), {
       target: { value: "Wet road" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Add a timestamp" }));

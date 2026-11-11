@@ -39,7 +39,7 @@
     "parked": "Për të mësuar pas udhëtimit. Përdore kur je i parkuar. Për një vlerësim profesional, drejtoju një instruktori të kualifikuar.",
     "result": "Raporti i drejtimit",
     "observation": "Çfarë duket në video",
-    "suggestion": "Çfarë mund të provosh në një udhëtim tjetër",
+    "suggestion": "Çfarë të bësh herën tjetër",
     "confidence": {
       "low": "Siguri e ulët",
       "medium": "Siguri mesatare"
@@ -85,7 +85,7 @@
     "details": {
       "title": "Të dhëna shtesë (opsionale)",
       "help": "Shëno kushtet e rrugës ose deri në katër momente në sekonda nga fillimi i klipit. Mos përfshi emra, targa ose adresa.",
-      "conditions": "Kushtet e rrugës",
+      "conditions": "Kushtet e rrugës (moti, sipërfaqja, dukshmëria)",
       "conditionsExample": "Për shembull, rrugë e lagur ose pamje e kufizuar",
       "moment": "Momenti {number}",
       "time": "Koha në klip (sekonda)",
@@ -117,6 +117,15 @@
       "exporting": "Po përgatitet imazhi…",
       "exportError": "Imazhi i raportit nuk u shkarkua. Provo përsëri.",
       "publicHelp": "Shih pikat e forta, ushtrimet dhe kufizimet me kohët në video. Shkarko raportin si imazh."
+    },
+    "moment": {
+      "mark": "Shëno këtë çast",
+      "clear": "Hiq shenjën",
+      "sampling": "Pamjet po përditësohen…",
+      "help": "Ndalo videon te çasti që do të shqyrtosh dhe shënoje për të zgjedhur pamje para dhe pas tij.",
+      "selected": "Shënuar në {time}. Kontrollo pamjet e reja përpara dërgimit.",
+      "report": "Çasti i shënuar · {time}",
+      "unassessed": "Ky çast nuk u vlerësua në rishikim. Shiko pamjet përreth përpara se të nxjerrësh përfundim."
     }
   }
 }

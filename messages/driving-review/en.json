@@ -39,7 +39,7 @@
     "parked": "For learning after a drive. Use while parked. For a professional assessment, work with a qualified driving instructor.",
     "result": "Driving review report",
     "observation": "What the footage shows",
-    "suggestion": "What to try on a future drive",
+    "suggestion": "What to do next time",
     "confidence": {
       "low": "Low confidence",
       "medium": "Moderate confidence"
@@ -85,7 +85,7 @@
     "details": {
       "title": "Supporting details (optional)",
       "help": "Add road conditions or mark up to four moments using seconds from the start of the clip. Leave out names, plates and addresses.",
-      "conditions": "Road conditions",
+      "conditions": "Road conditions (weather, surface, visibility)",
       "conditionsExample": "For example, wet road or limited visibility",
       "moment": "Moment {number}",
       "time": "Time in clip (seconds)",
@@ -117,6 +117,15 @@
       "exporting": "Preparing image…",
       "exportError": "The report image could not be downloaded. Try again.",
       "publicHelp": "See strengths, practice points and limitations with video timestamps. Download your report as an image."
+    },
+    "moment": {
+      "mark": "Mark this moment",
+      "clear": "Clear marker",
+      "sampling": "Updating the frame selection…",
+      "help": "Pause at the moment you want reviewed, then mark it to sample frames before and after it.",
+      "selected": "Marked at {time}. Check the new frame selection before submitting.",
+      "report": "Marked moment · {time}",
+      "unassessed": "The review did not assess this moment. Check the frames around it before drawing a conclusion."
     }
   }
 }

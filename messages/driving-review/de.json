@@ -39,7 +39,7 @@
     "parked": "Zum Lernen nach der Fahrt. Bitte nur im Stand verwenden. Für eine fachliche Beurteilung wende dich an eine qualifizierte Fahrlehrkraft.",
     "result": "Bericht zur Fahranalyse",
     "observation": "Was im Video zu sehen ist",
-    "suggestion": "Was du bei einer späteren Fahrt ausprobieren kannst",
+    "suggestion": "Was du beim nächsten Mal tun kannst",
     "confidence": {
       "low": "Geringe Sicherheit",
       "medium": "Mittlere Sicherheit"
@@ -85,7 +85,7 @@
     "details": {
       "title": "Ergänzende Angaben (optional)",
       "help": "Ergänze die Straßenverhältnisse oder markiere bis zu vier Stellen in Sekunden ab Clipbeginn. Lass Namen, Kennzeichen und Adressen weg.",
-      "conditions": "Straßenverhältnisse",
+      "conditions": "Straßenbedingungen (Wetter, Fahrbahn, Sicht)",
       "conditionsExample": "Zum Beispiel nasse Fahrbahn oder eingeschränkte Sicht",
       "moment": "Stelle {number}",
       "time": "Zeit im Clip (Sekunden)",
@@ -117,6 +117,15 @@
       "exporting": "Bild wird erstellt …",
       "exportError": "Das Berichtsbild konnte nicht heruntergeladen werden. Versuch es erneut.",
       "publicHelp": "Sieh Stärken, Übungshinweise und Grenzen der Auswertung mit Zeitmarken. Lade den Bericht als Bild herunter."
+    },
+    "moment": {
+      "mark": "Diese Stelle markieren",
+      "clear": "Markierung entfernen",
+      "sampling": "Einzelbilder werden aktualisiert …",
+      "help": "Pausiere an der Stelle, die du prüfen möchtest. Die Markierung wählt Bilder davor und danach aus.",
+      "selected": "Markiert bei {time}. Prüfe die neue Bildauswahl vor dem Senden.",
+      "report": "Markierte Stelle · {time}",
+      "unassessed": "Diese Stelle wurde nicht beurteilt. Prüfe die Einzelbilder rund um die Markierung, bevor du Schlüsse ziehst."
     }
   }
 }

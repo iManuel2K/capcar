@@ -14,6 +14,7 @@ import {
   ArrowLeft,
   ArrowUpRight,
   Film,
+  Flag,
   ScanEye,
   ShieldCheck,
   Sparkles,
@@ -36,6 +37,7 @@ import {
 import { sampleDrivingClip, ClipError } from "@/features/driving-review/frames";
 import {
   emptyContextDraft,
+  formatClipTime,
   parseContextDraft,
   type ContextDraft,
   type ContextIssue,
@@ -169,6 +171,7 @@ function DrivingReviewSession({
   const [clipUrl, setClipUrl] = useState("");
   const [excluded, setExcluded] = useState<number[]>([]);
   const [duration, setDuration] = useState(0);
+  const [markedTime, setMarkedTime] = useState<number>();
   const [contextDraft, setContextDraft] = useState(emptyContextDraft);
   const [contextIssue, setContextIssue] = useState<ContextIssue>();
   const [focus, setFocus] = useState<ReviewFocus>("awareness");
@@ -184,6 +187,7 @@ function DrivingReviewSession({
   const dialog = useRef<HTMLDialogElement>(null);
   const controller = useRef<AbortController | null>(null);
   const input = useRef<HTMLInputElement>(null);
+  const clipFile = useRef<File | undefined>(undefined);
   const clipPlayer = useRef<HTMLVideoElement>(null);
   const resultHeading = useRef<HTMLHeadingElement>(null);
   const returnTo = `/garage/${vehicleId}/driving-review`;
@@ -267,26 +271,52 @@ function DrivingReviewSession({
     setFrames([]);
     setExcluded([]);
     setDuration(0);
+    setMarkedTime(undefined);
+    clipFile.current = undefined;
     setContextDraft(emptyContextDraft);
     setContextIssue(undefined);
     invalidate();
     if (input.current) input.current.value = "";
   }
-  async function choose(file?: File) {
+  function choose(file?: File) {
     clear();
     setError("");
-    if (!file) return;
+    if (file) void prepare(file);
+  }
+
+  async function prepare(file: File, mark?: number) {
+    if (controller.current) return;
+    setError("");
+    const previousClip = clipFile.current;
     const task = new AbortController();
     controller.current = task;
     setBusy("prepare");
     setProgress(0);
     try {
-      const sampled = await sampleDrivingClip(file, task.signal, setProgress);
+      const sampled = await sampleDrivingClip(
+        file,
+        task.signal,
+        setProgress,
+        mark,
+      );
       if (!task.signal.aborted) {
-        setClipUrl(URL.createObjectURL(file));
+        if (!clipFile.current) {
+          clipFile.current = file;
+          setClipUrl(URL.createObjectURL(file));
+          trackAnalytics("driving_clip_prepared");
+        }
+        const omitted = new Set(
+          previousClip ? excluded.map((index) => frames[index].time) : [],
+        );
+        setExcluded(
+          sampled.frames.flatMap((frame, index) =>
+            omitted.has(frame.time) ? [index] : [],
+          ),
+        );
         setFrames(sampled.frames);
         setDuration(sampled.duration);
-        trackAnalytics("driving_clip_prepared");
+        setMarkedTime(mark);
+        invalidate();
       }
     } catch (caught) {
       if (!task.signal.aborted)
@@ -328,7 +358,18 @@ function DrivingReviewSession({
       !connection?.connected
     )
       return;
-    const { context, issue } = parseContextDraft(contextDraft, duration);
+    const { context: details, issue } = parseContextDraft(
+      contextDraft,
+      duration,
+    );
+    const context =
+      markedTime === undefined
+        ? details
+        : {
+            ...details,
+            moments: details?.moments ?? [],
+            focusTime: markedTime,
+          };
     if (issue) {
       setContextIssue(issue);
       return;
@@ -544,6 +585,44 @@ function DrivingReviewSession({
                 preload="metadata"
                 tabIndex={0}
               />
+              <div className={styles.momentControls}>
+                <div className={styles.actions}>
+                  <button
+                    type="button"
+                    className={styles.quiet}
+                    disabled={Boolean(busy)}
+                    onClick={() => {
+                      const player = clipPlayer.current;
+                      if (!player || !clipFile.current) return;
+                      player.pause();
+                      void prepare(clipFile.current, player.currentTime);
+                    }}
+                  >
+                    <Flag size={16} aria-hidden="true" /> {t("moment.mark")}
+                  </button>
+                  {markedTime !== undefined && (
+                    <button
+                      type="button"
+                      className={styles.quiet}
+                      disabled={Boolean(busy)}
+                      onClick={() =>
+                        clipFile.current && void prepare(clipFile.current)
+                      }
+                    >
+                      {t("moment.clear")}
+                    </button>
+                  )}
+                </div>
+                <p className={styles.note} role="status">
+                  {busy === "prepare"
+                    ? t("moment.sampling")
+                    : markedTime === undefined
+                      ? t("moment.help")
+                      : t("moment.selected", {
+                          time: formatClipTime(markedTime),
+                        })}
+                </p>
+              </div>
               <p className={styles.note}>{t("frameHelp")}</p>
               <p className={styles.note}>{t("privacy")}</p>
               <fieldset className={styles.frames} disabled={Boolean(busy)}>
@@ -552,6 +631,10 @@ function DrivingReviewSession({
                   <label
                     className={styles.frame}
                     data-selected={!excluded.includes(index)}
+                    data-near-marker={
+                      markedTime !== undefined &&
+                      Math.abs(frame.time - markedTime) <= 1.5
+                    }
                     key={frame.time}
                   >
                     <Image
@@ -676,6 +759,7 @@ function DrivingReviewSession({
                 item={result}
                 canDownload={isCurrentOwner}
                 onSeek={seekToFrame}
+                frames={selected}
                 onDismiss={dismiss}
                 onApprove={profile.learning ? approve : undefined}
                 preferences={profile.preferences}
