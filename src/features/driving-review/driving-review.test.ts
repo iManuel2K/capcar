@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { drivingReviewRequestSchema, drivingReviewSchema } from "./contracts";
 import { parseContextDraft } from "./review-context";
+import { drivingSampleTimes } from "./frames";
 import {
   emptyDrivingProfile,
   saveDrivingProfile,
@@ -359,4 +360,61 @@ describe("personal provider adapters", () => {
       } as AiConnectionRecord),
     ).rejects.toMatchObject({ code: "quota", message: "quota" });
   });
+});
+
+describe("marked review moments", () => {
+  it.each([0, 19, 21.4])(
+    "samples around the mark at %s within the existing budget",
+    (time) => {
+      const frames = drivingSampleTimes(21.4, time);
+      expect(frames.length).toBeLessThanOrEqual(12);
+      expect(frames).toEqual([...new Set(frames)].sort((a, b) => a - b));
+      expect(frames.every((frame) => frame >= 0 && frame < 21.4)).toBe(true);
+      expect(frames.some((frame) => Math.abs(time - frame) < 0.05)).toBe(true);
+      if (time === 19)
+        expect(frames).toEqual(
+          expect.arrayContaining([17.5, 18.6, 19, 19.4, 20.5]),
+        );
+    },
+  );
+
+  it("rejects an out-of-clip marker", () => {
+    expect(
+      drivingReviewRequestSchema.safeParse({
+        ...input,
+        context: { moments: [], focusTime: 11 },
+      }).success,
+    ).toBe(false);
+  });
+
+  it.each([1, 2])(
+    "accepts only marker citations near the requested time (frame %s)",
+    async (frame) => {
+      const markedMoment = {
+        observation: "The closest frame shows a car.",
+        frame,
+      };
+      const provider = vi.fn().mockResolvedValue(
+        Response.json({
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify({ ...currentReview, markedMoment }),
+            },
+          ],
+        }),
+      );
+      vi.stubGlobal("fetch", provider);
+      const result = await reviewDrivingFrames(
+        { ...input, context: { moments: [], focusTime: 6 } },
+        { provider: "anthropic", model: "test" } as AiConnectionRecord,
+      );
+      expect(result.markedMoment).toEqual(
+        frame === 2 ? markedMoment : undefined,
+      );
+      expect(JSON.parse(provider.mock.calls[0][1].body).system).toContain(
+        "marked 6.00 seconds",
+      );
+    },
+  );
 });

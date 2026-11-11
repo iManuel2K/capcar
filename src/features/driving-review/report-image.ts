@@ -1,5 +1,6 @@
 export type ReportSection = {
   heading: string;
+  tone?: "moment" | "improvement" | "strength";
   paragraphs?: string[];
   entries?: {
     heading: string;
@@ -11,13 +12,25 @@ type ReportImage = {
   title: string;
   coverage: string;
   summary: string;
+  timeline?: { duration: number; times: number[]; focusTime?: number };
   sections: ReportSection[];
   footer: string;
 };
 
+const sectionTones = {
+  moment: { fill: "#e8f2ff", accent: "#2665a0" },
+  improvement: { fill: "#fbf0e2", accent: "#985a21" },
+  strength: { fill: "#e7f4ed", accent: "#39715b" },
+};
+
 const typography = {
-  brand: { font: "700 22px system-ui, sans-serif", line: 31, color: "#815128" },
-  title: { font: "650 52px system-ui, sans-serif", line: 65, color: "#192329" },
+  brand: { font: "700 22px system-ui, sans-serif", line: 31, color: "#efbd91" },
+  title: { font: "650 52px system-ui, sans-serif", line: 65, color: "#f6f8fa" },
+  headerMeta: {
+    font: "500 22px system-ui, sans-serif",
+    line: 31,
+    color: "#becbda",
+  },
   heading: {
     font: "650 32px system-ui, sans-serif",
     line: 42,
@@ -77,15 +90,30 @@ export function createDrivingReportImage(report: ReportImage, locale: string) {
     typeof Intl.Segmenter === "function"
       ? new Intl.Segmenter(locale, { granularity: "grapheme" })
       : undefined;
-  const lines: { text: string; style: keyof typeof typography; y: number }[] =
-    [];
+  const lines: {
+    text: string;
+    style: keyof typeof typography;
+    y: number;
+    x: number;
+  }[] = [];
   const rules: number[] = [];
+  const cards: {
+    top: number;
+    bottom: number;
+    tone: keyof typeof sectionTones;
+  }[] = [];
   let y = margin;
+  let inset = 0;
 
   const append = (text: string, style: keyof typeof typography, gap = 0) => {
     context.font = typography[style].font;
-    for (const line of wrapText(context, text, contentWidth, segmenter)) {
-      lines.push({ text: line, style, y });
+    for (const line of wrapText(
+      context,
+      text,
+      contentWidth - 2 * inset,
+      segmenter,
+    )) {
+      lines.push({ text: line, style, y, x: margin + inset });
       y += typography[style].line;
     }
     y += gap;
@@ -99,10 +127,20 @@ export function createDrivingReportImage(report: ReportImage, locale: string) {
 
   append("CAPCAR", "brand", 12);
   append(report.title, "title", 6);
-  append(report.coverage, "meta", 18);
-  append(report.summary, "body", 14);
+  append(report.coverage, "headerMeta", 16);
+  const timelineY = y;
+  if (report.timeline) y += 20;
+  const headerHeight = y + 22;
+  y = headerHeight + 28;
+  if (report.summary) append(report.summary, "body", 14);
   for (const section of report.sections) {
-    divider();
+    const top = y;
+    if (section.tone) {
+      inset = 24;
+      y += 24;
+    } else {
+      divider();
+    }
     append(section.heading, "heading", 10);
     for (const paragraph of section.paragraphs ?? [])
       append(paragraph, "body", 10);
@@ -113,6 +151,12 @@ export function createDrivingReportImage(report: ReportImage, locale: string) {
         append(field.text, "body", 10);
       }
       y += 6;
+    }
+    if (section.tone) {
+      y += 12;
+      cards.push({ top, bottom: y, tone: section.tone });
+      y += 18;
+      inset = 0;
     }
   }
   divider();
@@ -125,15 +169,37 @@ export function createDrivingReportImage(report: ReportImage, locale: string) {
   context.scale(scale, scale);
   context.fillStyle = "#fbfaf7";
   context.fillRect(0, 0, canvas.width / scale, canvas.height / scale);
-  context.fillStyle = "#c89159";
+  context.fillStyle = "#151d28";
+  context.fillRect(0, 0, width, headerHeight);
+  context.fillStyle = "#efbd91";
   context.fillRect(0, 0, width, 8);
+  if (report.timeline) {
+    const { times, duration, focusTime } = report.timeline;
+    const position = (time: number) =>
+      margin + (time / duration) * contentWidth;
+    context.fillStyle = "#516078";
+    context.fillRect(margin, timelineY, contentWidth, 3);
+    context.fillStyle = "#a7ceff";
+    for (const time of times)
+      context.fillRect(position(time) - 2, timelineY - 5, 4, 13);
+    if (focusTime !== undefined) {
+      context.fillStyle = "#efbd91";
+      context.fillRect(position(focusTime) - 4, timelineY - 10, 8, 23);
+    }
+  }
+  for (const { top, bottom, tone } of cards) {
+    context.fillStyle = sectionTones[tone].fill;
+    context.fillRect(margin, top, contentWidth, bottom - top);
+    context.fillStyle = sectionTones[tone].accent;
+    context.fillRect(margin, top, 5, bottom - top);
+  }
   context.fillStyle = "#d5d7d4";
   for (const rule of rules) context.fillRect(margin, rule, contentWidth, 1);
   context.textBaseline = "top";
   for (const line of lines) {
     context.font = typography[line.style].font;
     context.fillStyle = typography[line.style].color;
-    context.fillText(line.text, margin, line.y);
+    context.fillText(line.text, line.x, line.y);
   }
 
   return new Promise<Blob>((resolve, reject) => {

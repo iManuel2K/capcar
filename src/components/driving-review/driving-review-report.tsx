@@ -1,8 +1,12 @@
-import { Check, Download, Play, Sparkles, X } from "lucide-react";
+import Image from "next/image";
+import { Check, Download, Flag, Play, Sparkles, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { downloadFile } from "@/features/export/download";
-import type { ReviewFocus } from "@/features/driving-review/contracts";
+import type {
+  ReviewFocus,
+  ReviewFrame,
+} from "@/features/driving-review/contracts";
 import type { ReportSection } from "@/features/driving-review/report-image";
 import { formatClipTime } from "@/features/driving-review/review-context";
 import type { SavedDrivingReview } from "@/features/driving-review/storage";
@@ -13,6 +17,7 @@ export function DrivingReviewReport({
   actions,
   canDownload,
   onSeek,
+  frames,
   onDismiss,
   onApprove,
   preferences,
@@ -20,6 +25,7 @@ export function DrivingReviewReport({
   item: SavedDrivingReview;
   actions: ReactNode;
   canDownload: () => boolean;
+  frames?: ReviewFrame[];
   onSeek?: (time: number) => void;
   onDismiss?: (index: number) => void;
   onApprove?: (focus: ReviewFocus) => void;
@@ -38,6 +44,19 @@ export function DrivingReviewReport({
   ]
     .filter(Boolean)
     .join(" · ");
+  const focusTime = item.context?.focusTime;
+  const clipDuration = item.duration;
+  const marked = item.review.markedMoment;
+  const markedTimes = [marked?.frame, marked?.relatedFrame].flatMap((index) => {
+    const time = index === undefined ? undefined : item.frameTimes[index - 1];
+    return time === undefined ? [] : [time];
+  });
+  const markedHeading =
+    focusTime === undefined
+      ? undefined
+      : t("moment.report", { time: formatClipTime(focusTime) });
+  const markedText = marked?.observation ?? t("moment.unassessed");
+
   const findings = item.review.tips.map((tip, index) => {
     const times = [tip.frame, tip.relatedFrame].flatMap((frame) => {
       const time = frame === undefined ? undefined : item.frameTimes[frame - 1];
@@ -59,7 +78,7 @@ export function DrivingReviewReport({
   });
   const legacyOnly =
     findings.length > 0 && findings.every(({ tip }) => !tip.kind);
-  const groups = (["strength", "improvement", "legacy"] as const)
+  const groups = (["improvement", "strength", "legacy"] as const)
     .map((kind) => ({
       kind,
       heading: t(`report.${kind}`),
@@ -103,6 +122,7 @@ export function DrivingReviewReport({
       const sections: ReportSection[] = groups.map(
         ({ kind, heading, findings }) => ({
           heading,
+          tone: kind === "legacy" ? undefined : kind,
           paragraphs: findings.length
             ? []
             : [
@@ -118,6 +138,21 @@ export function DrivingReviewReport({
           })),
         }),
       );
+      if (markedHeading) {
+        sections.unshift({
+          heading: markedHeading,
+          tone: "moment",
+          paragraphs: [markedText],
+          entries: markedTimes.length
+            ? [
+                {
+                  heading: markedTimes.map(formatClipTime).join(" · "),
+                  fields: [],
+                },
+              ]
+            : [],
+        });
+      }
       sections.push(
         {
           heading: t("report.userDetails"),
@@ -141,7 +176,10 @@ export function DrivingReviewReport({
         {
           title: t("result"),
           coverage,
-          summary: item.review.summary,
+          summary: marked && markedHeading ? "" : item.review.summary,
+          timeline: item.duration
+            ? { duration: item.duration, times: item.frameTimes, focusTime }
+            : undefined,
           sections,
           footer: t("parked"),
         },
@@ -163,8 +201,37 @@ export function DrivingReviewReport({
 
   return (
     <div className={styles.report}>
-      <p className={styles.note}>{coverage}</p>
-      <p className={styles.lead}>{item.review.summary}</p>
+      <div className={styles.reportOverview}>
+        <p className={styles.note}>{coverage}</p>
+        {clipDuration && (
+          <div className={styles.timeline} aria-hidden="true">
+            {item.frameTimes.map((time) => (
+              <span
+                key={time}
+                style={{ left: `${(time / clipDuration) * 100}%` }}
+              />
+            ))}
+            {focusTime !== undefined && (
+              <span
+                data-marker
+                style={{ left: `${(focusTime / clipDuration) * 100}%` }}
+              />
+            )}
+          </div>
+        )}
+        {!(marked && markedHeading) && (
+          <p className={styles.lead}>{item.review.summary}</p>
+        )}
+      </div>
+      {markedHeading && (
+        <div className={styles.markedFinding}>
+          <h3>
+            <Flag size={18} aria-hidden="true" /> {markedHeading}
+          </h3>
+          <p>{markedText}</p>
+          <Evidence times={markedTimes} frames={frames} onSeek={onSeek} />
+        </div>
+      )}
       {groups.map(({ kind, heading, findings }) => (
         <div key={kind} className={styles.findings}>
           <h3>{heading}</h3>
@@ -180,33 +247,17 @@ export function DrivingReviewReport({
           {findings.map(({ tip, index, times, confidence, fields }) => {
             const approved = preferences?.includes(tip.focus);
             return (
-              <article className={styles.tip} key={index}>
+              <article className={styles.tip} data-kind={kind} key={index}>
                 <div className={styles.tipMeta}>
-                  <div className={styles.timeLinks}>
-                    {times.map((time) =>
-                      onSeek ? (
-                        <button
-                          key={time}
-                          type="button"
-                          aria-label={t("report.jumpTo", {
-                            time: formatClipTime(time),
-                          })}
-                          className={styles.timeLink}
-                          onClick={() => onSeek(time)}
-                        >
-                          <Play size={14} aria-hidden="true" />{" "}
-                          {formatClipTime(time)}
-                        </button>
-                      ) : (
-                        <span key={time}>{formatClipTime(time)}</span>
-                      ),
-                    )}
-                  </div>
+                  <Evidence times={times} frames={frames} onSeek={onSeek} />
                   <span>{confidence}</span>
                 </div>
                 <dl className={styles.reportFields}>
                   {fields.map(({ label, text }) => (
-                    <div key={label}>
+                    <div
+                      key={label}
+                      data-practice={label === t("suggestion") || undefined}
+                    >
                       <dt>{label}</dt>
                       <dd>{text}</dd>
                     </div>
@@ -292,6 +343,50 @@ export function DrivingReviewReport({
           {t("report.exportError")}
         </p>
       )}
+    </div>
+  );
+}
+
+function Evidence({
+  times,
+  frames,
+  onSeek,
+}: {
+  times: number[];
+  frames?: ReviewFrame[];
+  onSeek?: (time: number) => void;
+}) {
+  const t = useTranslations("DrivingReview.report");
+  return (
+    <div className={styles.timeLinks}>
+      {times.map((time) => {
+        const frame = frames?.find((frame) => frame.time === time);
+        const label = formatClipTime(time);
+        return onSeek ? (
+          <button
+            key={time}
+            type="button"
+            className={styles.timeLink}
+            aria-label={t("jumpTo", { time: label })}
+            onClick={() => onSeek(time)}
+          >
+            {frame && (
+              <Image
+                src={frame.image}
+                alt=""
+                width={112}
+                height={63}
+                unoptimized
+              />
+            )}
+            <span>
+              <Play size={13} aria-hidden="true" /> {label}
+            </span>
+          </button>
+        ) : (
+          <span key={time}>{label}</span>
+        );
+      })}
     </div>
   );
 }

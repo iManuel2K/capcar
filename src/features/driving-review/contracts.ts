@@ -15,6 +15,7 @@ export const clipDurationSchema = z.number().finite().min(1).max(60);
 
 export const reviewContextSchema = z
   .object({
+    focusTime: clipTimeSchema.optional(),
     roadConditions: z.string().trim().min(1).max(160).optional(),
     moments: z
       .array(
@@ -68,10 +69,14 @@ export const drivingReviewRequestSchema = z
         message: "Frames must be chronological and within the clip.",
       });
     }
-    if (data.context?.moments.some((moment) => moment.time > data.duration)) {
+    if (
+      (data.context?.focusTime !== undefined &&
+        data.context.focusTime > data.duration) ||
+      data.context?.moments.some((moment) => moment.time > data.duration)
+    ) {
       ctx.addIssue({
         code: "custom",
-        path: ["context", "moments"],
+        path: ["context"],
         message: "Supporting details must be within the clip.",
       });
     }
@@ -96,6 +101,13 @@ export const drivingReviewSchema = z.object({
   summary: z.string().trim().min(1).max(600),
   limitations: z.array(z.string().trim().min(1).max(300)).min(1).max(5),
   tips: z.array(tipSchema).max(3),
+  markedMoment: z
+    .object({
+      observation: z.string().trim().min(1).max(450),
+      frame: frameIndexSchema,
+      relatedFrame: frameIndexSchema.optional(),
+    })
+    .optional(),
 });
 
 export const generatedDrivingReviewSchema = drivingReviewSchema.extend({

@@ -549,3 +549,90 @@
 .page h2 {
   scroll-margin-top: 110px;
 }
+
+.momentControls {
+  border-block-start: 1px solid var(--border);
+  padding-block: 12px;
+}
+
+.frame[data-near-marker="true"][data-selected="true"] {
+  border-color: var(--primary);
+  box-shadow: inset 0 -2px var(--primary);
+}
+
+.reportOverview {
+  margin-block: 16px;
+}
+
+.timeline {
+  position: relative;
+  height: 3px;
+  border-radius: 3px;
+  margin: 24px 6px;
+  background: var(--border);
+}
+
+.timeline span {
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--primary);
+  transform: translate(-50%, -50%);
+}
+
+.timeline span[data-marker] {
+  width: 8px;
+  height: 20px;
+  background: var(--foreground);
+  outline: 2px solid var(--background);
+}
+
+.markedFinding,
+.tip[data-kind] {
+  padding: clamp(14px, 3vw, 20px);
+  border-radius: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-inline-start: 3px solid var(--primary);
+}
+
+.markedFinding {
+  margin-bottom: 24px;
+}
+
+.markedFinding h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.markedFinding p {
+  margin-block: 8px 14px;
+}
+
+.tip [data-practice] {
+  background: var(--background);
+  padding: 12px 14px;
+  border-radius: 8px;
+}
+
+.timeLink:has(img) {
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+  padding: 6px;
+}
+
+.timeLink img {
+  border-radius: 4px;
+  object-fit: cover;
+  max-width: 100%;
+}
+
+.timeLink span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
