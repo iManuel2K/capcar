@@ -4,6 +4,10 @@ export function downloadTextFile(
   type = "application/json",
 ) {
   const blob = new Blob([content], { type: `${type};charset=utf-8` });
+  downloadFile(filename, blob);
+}
+
+export function downloadFile(filename: string, blob: Blob) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
@@ -11,7 +15,7 @@ export function downloadTextFile(
   document.body.append(anchor);
   anchor.click();
   anchor.remove();
-  URL.revokeObjectURL(url);
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export function csvCell(value: unknown) {

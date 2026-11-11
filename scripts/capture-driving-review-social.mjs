@@ -74,7 +74,7 @@ try {
     .getByRole("button", { name: "Review selected frames", exact: true })
     .click();
   await page
-    .getByRole("heading", { name: "Your reflection", exact: true })
+    .getByRole("heading", { name: "Driving review report", exact: true })
     .waitFor();
   await page.waitForTimeout(400);
   await page.getByRole("switch").check();

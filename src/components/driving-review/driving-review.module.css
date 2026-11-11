@@ -166,7 +166,7 @@
 .quiet:hover:not(:disabled) {
   filter: brightness(1.08);
 }
-.page :is(button, a, input, summary):focus-visible {
+.page :is(button, a, input, select, summary, video):focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 4px;
 }
@@ -175,6 +175,16 @@
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 22px;
+}
+.clipPlayer {
+  display: block;
+  width: 100%;
+  max-height: min(50vh, 420px);
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  border-radius: 12px;
+  background: var(--background);
+  margin: 12px 0 18px;
 }
 .frames {
   display: grid;
@@ -241,6 +251,67 @@
   background: var(--secondary);
   border-color: var(--primary);
 }
+.contextFields {
+  border-block: 1px solid var(--border);
+  padding: 4px 0;
+}
+.contextFields summary {
+  min-height: 44px;
+  padding: 11px 0;
+  cursor: pointer;
+  color: var(--primary);
+}
+.contextInputs,
+.momentFields {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+.contextInputs {
+  margin: 12px 0 18px;
+}
+.contextInputs label {
+  display: grid;
+  align-content: end;
+  gap: 6px;
+  min-width: 0;
+  font-size: 0.9rem;
+}
+.contextInputs :is(input, select) {
+  min-height: 44px;
+  min-width: 0;
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+.contextInputs input::placeholder {
+  color: var(--muted-foreground);
+}
+.contextInputs input[aria-invalid="true"] {
+  border-color: var(--destructive);
+}
+.contextInputs button {
+  justify-self: start;
+}
+.momentFields {
+  padding: 12px 14px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.momentFields legend {
+  padding-inline: 6px;
+  color: var(--muted-foreground);
+  font-size: 0.9rem;
+}
+.momentNumbers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
 .consent {
   display: flex;
   gap: 12px;
@@ -297,42 +368,79 @@
   flex-shrink: 0;
   cursor: pointer;
 }
-.tips {
-  margin: 24px 0;
+.report {
+  overflow-wrap: anywhere;
+}
+.findings {
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+}
+.findings > h3 {
+  font-size: 1.2rem;
 }
 .tip {
   border-left: 2px solid var(--primary);
   padding: 0 0 4px 20px;
-  margin: 28px 0;
-}
-.tip p {
-  font-size: 1rem;
-  line-height: 1.65;
+  margin: 18px 0 28px;
 }
 .tipMeta {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
   flex-wrap: wrap;
-  font-size: 0.8rem;
-  color: var(--primary);
+  font-size: 0.85rem;
+  color: var(--muted-foreground);
 }
-.limits {
+.timeLinks {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-variant-numeric: tabular-nums;
+}
+.timeLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--primary);
+  cursor: pointer;
+}
+.timeLink:hover {
+  background: var(--secondary);
+}
+.reportFields > div {
+  margin-top: 12px;
+}
+.reportFields dt {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.reportFields dd {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+.reportPanel {
   background: var(--card);
   padding: 20px;
   border-radius: 10px;
   margin: 24px 0;
 }
-.limits h3 {
+.reportPanel h3 {
   margin-top: 0;
 }
-.limits p,
-.limits li {
+.reportPanel p,
+.reportPanel li {
   font-size: 0.9rem;
   line-height: 1.7;
   color: var(--muted-foreground);
 }
-.limits ul {
+.reportPanel ul {
   list-style: disc;
   padding-left: 20px;
   margin-top: 12px;
@@ -426,6 +534,12 @@
   }
   .tip {
     padding-left: 14px;
+  }
+  .momentNumbers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .momentNumbers label:first-child {
+    grid-column: 1 / -1;
   }
   .learning {
     padding: 20px;

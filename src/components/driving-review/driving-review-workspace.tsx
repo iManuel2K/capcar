@@ -13,7 +13,6 @@ import {
 import {
   ArrowLeft,
   ArrowUpRight,
-  Check,
   Film,
   ScanEye,
   ShieldCheck,
@@ -36,6 +35,12 @@ import {
 } from "@/features/driving-review/contracts";
 import { sampleDrivingClip, ClipError } from "@/features/driving-review/frames";
 import {
+  emptyContextDraft,
+  parseContextDraft,
+  type ContextDraft,
+  type ContextIssue,
+} from "@/features/driving-review/review-context";
+import {
   DRIVING_REVIEW_KEY,
   DRIVING_REVIEW_EVENT,
   readDrivingProfiles,
@@ -45,6 +50,8 @@ import {
   type DrivingProfile,
   type SavedDrivingReview,
 } from "@/features/driving-review/storage";
+import { DrivingReviewReport } from "./driving-review-report";
+import { ReviewContextFields } from "./review-context-fields";
 import styles from "./driving-review.module.css";
 
 const subscribe = (listener: () => void) => {
@@ -159,8 +166,11 @@ function DrivingReviewSession({
     provider?: keyof typeof providerNames;
   }>();
   const [frames, setFrames] = useState<ReviewFrame[]>([]);
+  const [clipUrl, setClipUrl] = useState("");
   const [excluded, setExcluded] = useState<number[]>([]);
   const [duration, setDuration] = useState(0);
+  const [contextDraft, setContextDraft] = useState(emptyContextDraft);
+  const [contextIssue, setContextIssue] = useState<ContextIssue>();
   const [focus, setFocus] = useState<ReviewFocus>("awareness");
   const [consent, setConsent] = useState(false);
   const [busy, setBusy] = useState<"prepare" | "review" | null>(null);
@@ -174,6 +184,7 @@ function DrivingReviewSession({
   const dialog = useRef<HTMLDialogElement>(null);
   const controller = useRef<AbortController | null>(null);
   const input = useRef<HTMLInputElement>(null);
+  const clipPlayer = useRef<HTMLVideoElement>(null);
   const resultHeading = useRef<HTMLHeadingElement>(null);
   const returnTo = `/garage/${vehicleId}/driving-review`;
   const connectionHref = `/account/connections?next=${encodeURIComponent(returnTo)}`;
@@ -181,6 +192,10 @@ function DrivingReviewSession({
   const isSaved = Boolean(
     result && profile.reviews.some((item) => item.id === result.id),
   );
+
+  useEffect(() => {
+    if (clipUrl) return () => URL.revokeObjectURL(clipUrl);
+  }, [clipUrl]);
 
   useEffect(() => {
     const abort = new AbortController();
@@ -210,14 +225,23 @@ function DrivingReviewSession({
     if (ownerMismatch) controller.current?.abort();
   }, [ownerMismatch]);
 
+  const isCurrentOwner = useCallback(() => {
+    try {
+      return (
+        !configured ||
+        Boolean(
+          userId && localStorage.getItem(ACTIVE_GARAGE_USER_KEY) === userId,
+        )
+      );
+    } catch {
+      return false;
+    }
+  }, [configured, userId]);
+
   const write = useCallback(
     (next: DrivingProfile) => {
       try {
-        if (
-          configured &&
-          (!userId || localStorage.getItem(ACTIVE_GARAGE_USER_KEY) !== userId)
-        )
-          throw new Error("Account changed");
+        if (!isCurrentOwner()) throw new Error("Account changed");
         saveDrivingProfile(next, localStorage);
         window.dispatchEvent(new Event(DRIVING_REVIEW_EVENT));
         setError("");
@@ -227,7 +251,7 @@ function DrivingReviewSession({
         return false;
       }
     },
-    [configured, userId, t],
+    [isCurrentOwner, t],
   );
 
   function invalidate() {
@@ -239,9 +263,12 @@ function DrivingReviewSession({
     controller.current?.abort();
     controller.current = null;
     setBusy(null);
+    setClipUrl("");
     setFrames([]);
     setExcluded([]);
     setDuration(0);
+    setContextDraft(emptyContextDraft);
+    setContextIssue(undefined);
     invalidate();
     if (input.current) input.current.value = "";
   }
@@ -256,6 +283,7 @@ function DrivingReviewSession({
     try {
       const sampled = await sampleDrivingClip(file, task.signal, setProgress);
       if (!task.signal.aborted) {
+        setClipUrl(URL.createObjectURL(file));
         setFrames(sampled.frames);
         setDuration(sampled.duration);
         trackAnalytics("driving_clip_prepared");
@@ -274,17 +302,37 @@ function DrivingReviewSession({
       }
     }
   }
+  function changeContext(value: ContextDraft) {
+    setContextDraft(value);
+    setContextIssue(undefined);
+    invalidate();
+  }
+  function seekToFrame(time: number) {
+    const player = clipPlayer.current;
+    if (!player) return;
+    player.pause();
+    player.currentTime = time;
+    player.focus({ preventScroll: true });
+    player.scrollIntoView({ block: "center" });
+  }
   async function review() {
-    if (
-      configured &&
-      (!userId || localStorage.getItem(ACTIVE_GARAGE_USER_KEY) !== userId)
-    ) {
+    if (!isCurrentOwner()) {
       clear();
       setError(t("errors.account"));
       return;
     }
-    if (!consent || selected.length < 2 || busy || !connection?.connected)
+    if (
+      !consent ||
+      selected.length < 2 ||
+      controller.current ||
+      !connection?.connected
+    )
       return;
+    const { context, issue } = parseContextDraft(contextDraft, duration);
+    if (issue) {
+      setContextIssue(issue);
+      return;
+    }
     const task = new AbortController();
     controller.current = task;
     setBusy("review");
@@ -307,6 +355,7 @@ function DrivingReviewSession({
           frames: selected,
           focus,
           preferences: profile.learning ? profile.preferences : [],
+          context,
         }),
       });
       const data = await response.json();
@@ -320,10 +369,7 @@ function DrivingReviewSession({
         );
       const valid = reviewResponseSchema.parse(data);
       if (task.signal.aborted) return;
-      if (
-        configured &&
-        localStorage.getItem(ACTIVE_GARAGE_USER_KEY) !== userId
-      ) {
+      if (!isCurrentOwner()) {
         clear();
         setError(t("errors.account"));
         return;
@@ -333,6 +379,8 @@ function DrivingReviewSession({
         createdAt: new Date().toISOString(),
         provider: valid.provider,
         frameTimes: selected.map((frame) => frame.time),
+        duration,
+        context,
         review: valid.review,
       });
       trackAnalytics("driving_review_completed");
@@ -394,72 +442,6 @@ function DrivingReviewSession({
     if (isSaved && !write(saveDrivingResult(profile, updated))) return;
     setResult(updated);
   }
-  const renderReview = (item: SavedDrivingReview, editable = false) => (
-    <>
-      <p className={styles.lead}>{item.review.summary}</p>
-      {!item.review.tips.length && <p className={styles.note}>{t("noTips")}</p>}
-      <div className={styles.tips}>
-        {item.review.tips.map((tip, index) => (
-          <article className={styles.tip} key={`${tip.frame}:${index}`}>
-            <div className={styles.tipMeta}>
-              <span>
-                {t("frame", {
-                  number: tip.frame,
-                  time: item.frameTimes[tip.frame - 1]?.toFixed(1) ?? "—",
-                })}
-              </span>
-              <span>{t(`confidence.${tip.confidence}`)}</span>
-            </div>
-            <h3>{t("observation")}</h3>
-            <p>{tip.observation}</p>
-            <h3>{t("suggestion")}</h3>
-            <p>{tip.suggestion}</p>
-            {editable && (
-              <div className={styles.actions}>
-                {profile.learning && (
-                  <button
-                    type="button"
-                    className={styles.quiet}
-                    disabled={profile.preferences.includes(tip.focus)}
-                    onClick={() => approve(tip.focus)}
-                  >
-                    {profile.preferences.includes(tip.focus) ? (
-                      <Check size={16} aria-hidden="true" />
-                    ) : (
-                      <Sparkles size={16} aria-hidden="true" />
-                    )}
-                    {t(
-                      profile.preferences.includes(tip.focus)
-                        ? "approved"
-                        : "approve",
-                    )}{" "}
-                    · {t(`focuses.${tip.focus}`)}
-                  </button>
-                )}
-                <button
-                  type="button"
-                  className={styles.quiet}
-                  onClick={() => dismiss(index)}
-                >
-                  <X size={16} aria-hidden="true" />
-                  {t("dismiss")}
-                </button>
-              </div>
-            )}
-          </article>
-        ))}
-      </div>
-      <div className={styles.limits}>
-        <h3>{t("limits")}</h3>
-        <p>{t("fixedLimit")}</p>
-        <ul>
-          {item.review.limitations.map((limit, i) => (
-            <li key={i}>{limit}</li>
-          ))}
-        </ul>
-      </div>
-    </>
-  );
   if (ownerMismatch)
     return (
       <div className={styles.page}>
@@ -552,6 +534,16 @@ function DrivingReviewSession({
                   {t("removeClip")}
                 </button>
               </div>
+              <video
+                ref={clipPlayer}
+                src={clipUrl}
+                className={styles.clipPlayer}
+                aria-label={t("report.preview")}
+                controls
+                playsInline
+                preload="metadata"
+                tabIndex={0}
+              />
               <p className={styles.note}>{t("frameHelp")}</p>
               <p className={styles.note}>{t("privacy")}</p>
               <fieldset className={styles.frames} disabled={Boolean(busy)}>
@@ -609,6 +601,12 @@ function DrivingReviewSession({
                   </label>
                 ))}
               </fieldset>
+              <ReviewContextFields
+                value={contextDraft}
+                issue={contextIssue}
+                disabled={Boolean(busy)}
+                onChange={changeContext}
+              />
               <label className={styles.consent}>
                 <input
                   type="checkbox"
@@ -673,15 +671,25 @@ function DrivingReviewSession({
               <h2 id="reflection-title" tabIndex={-1} ref={resultHeading}>
                 {t("result")}
               </h2>
-              {renderReview(result, true)}
-              <button
-                type="button"
-                className={styles.primary}
-                disabled={isSaved}
-                onClick={save}
-              >
-                {t(isSaved ? "saved" : "save")}
-              </button>
+              <DrivingReviewReport
+                key={result.id}
+                item={result}
+                canDownload={isCurrentOwner}
+                onSeek={seekToFrame}
+                onDismiss={dismiss}
+                onApprove={profile.learning ? approve : undefined}
+                preferences={profile.preferences}
+                actions={
+                  <button
+                    type="button"
+                    className={styles.quiet}
+                    disabled={isSaved}
+                    onClick={save}
+                  >
+                    {t(isSaved ? "saved" : "save")}
+                  </button>
+                }
+              />
             </section>
           )}
           <section className={styles.section}>
@@ -699,15 +707,20 @@ function DrivingReviewSession({
                   }).format(new Date(item.createdAt))}{" "}
                   · {providerNames[item.provider]}
                 </summary>
-                {renderReview(item)}
-                <button
-                  type="button"
-                  className={styles.quiet}
-                  onClick={() => setConfirmation(item)}
-                >
-                  <Trash2 size={16} aria-hidden="true" />
-                  {t("delete")}
-                </button>
+                <DrivingReviewReport
+                  item={item}
+                  canDownload={isCurrentOwner}
+                  actions={
+                    <button
+                      type="button"
+                      className={styles.quiet}
+                      onClick={() => setConfirmation(item)}
+                    >
+                      <Trash2 size={16} aria-hidden="true" />
+                      {t("delete")}
+                    </button>
+                  }
+                />
               </details>
             ))}
           </section>
