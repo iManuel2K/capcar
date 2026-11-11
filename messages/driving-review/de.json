@@ -125,7 +125,9 @@
       "help": "Pausiere an der Stelle, die du prüfen möchtest. Die Markierung wählt Bilder davor und danach aus.",
       "selected": "Markiert bei {time}. Prüfe die neue Bildauswahl vor dem Senden.",
       "report": "Markierte Stelle · {time}",
-      "unassessed": "Diese Stelle wurde nicht beurteilt. Prüfe die Einzelbilder rund um die Markierung, bevor du Schlüsse ziehst."
+      "unassessed": "Diese Stelle wurde nicht beurteilt. Prüfe die Einzelbilder rund um die Markierung, bevor du Schlüsse ziehst.",
+      "crashTime": "Unfallzeit im Clip (Sekunden)",
+      "applyTime": "Unfallzeit festlegen"
     }
   }
 }

@@ -125,7 +125,9 @@
       "help": "Ndalo videon te çasti që do të shqyrtosh dhe shënoje për të zgjedhur pamje para dhe pas tij.",
       "selected": "Shënuar në {time}. Kontrollo pamjet e reja përpara dërgimit.",
       "report": "Çasti i shënuar · {time}",
-      "unassessed": "Ky çast nuk u vlerësua në rishikim. Shiko pamjet përreth përpara se të nxjerrësh përfundim."
+      "unassessed": "Ky çast nuk u vlerësua në rishikim. Shiko pamjet përreth përpara se të nxjerrësh përfundim.",
+      "crashTime": "Koha e përplasjes në klip (sekonda)",
+      "applyTime": "Cakto kohën e përplasjes"
     }
   }
 }

@@ -172,6 +172,7 @@ function DrivingReviewSession({
   const [excluded, setExcluded] = useState<number[]>([]);
   const [duration, setDuration] = useState(0);
   const [markedTime, setMarkedTime] = useState<number>();
+  const [crashTime, setCrashTime] = useState("");
   const [contextDraft, setContextDraft] = useState(emptyContextDraft);
   const [contextIssue, setContextIssue] = useState<ContextIssue>();
   const [focus, setFocus] = useState<ReviewFocus>("awareness");
@@ -272,6 +273,7 @@ function DrivingReviewSession({
     setExcluded([]);
     setDuration(0);
     setMarkedTime(undefined);
+    setCrashTime("");
     clipFile.current = undefined;
     setContextDraft(emptyContextDraft);
     setContextIssue(undefined);
@@ -586,6 +588,48 @@ function DrivingReviewSession({
                 tabIndex={0}
               />
               <div className={styles.momentControls}>
+                <form
+                  className={styles.crashTimeForm}
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    const time = Number(crashTime);
+                    if (
+                      !crashTime ||
+                      !Number.isFinite(time) ||
+                      time < 0 ||
+                      time > duration ||
+                      !clipFile.current
+                    )
+                      return;
+                    clipPlayer.current?.pause();
+                    if (clipPlayer.current)
+                      clipPlayer.current.currentTime = time;
+                    void prepare(clipFile.current, time);
+                  }}
+                >
+                  <label className={styles.crashTimeLabel}>
+                    {t("moment.crashTime")}
+                    <input
+                      type="number"
+                      inputMode="decimal"
+                      min={0}
+                      max={duration}
+                      step="any"
+                      value={crashTime}
+                      placeholder="19"
+                      disabled={Boolean(busy)}
+                      onChange={(event) => setCrashTime(event.target.value)}
+                      required
+                    />
+                  </label>
+                  <button
+                    type="submit"
+                    className={styles.quiet}
+                    disabled={Boolean(busy) || !crashTime}
+                  >
+                    {t("moment.applyTime")}
+                  </button>
+                </form>
                 <div className={styles.actions}>
                   <button
                     type="button"
