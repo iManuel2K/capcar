@@ -47,7 +47,7 @@
     "limits": "Çfarë nuk tregon ky rishikim",
     "fixedLimit": "Shqyrtimi bazohet te pamje të përzgjedhura. Ato nuk matin shpejtësinë, frenimin ose distancën nga makina përpara dhe mund të mos kapin çfarë ndodh mes tyre. Një klip jep pak informacion për zakonet e drejtimit.",
     "save": "Ruaje te kjo makinë",
-    "saved": "U ruajt në garazhin privat",
+    "saved": "U ruajt te rishikimet e ruajtura për këtë makinë",
     "dismiss": "Hiq këshillën",
     "approve": "Mbaje mend këtë temë",
     "approved": "Tema u ruajt",
@@ -76,7 +76,7 @@
       "quota": "Është arritur kufiri i ofruesit. Kontrollo llogarinë dhe provo më vonë.",
       "provider": "Ofruesi nuk i rishikoi imazhet. Kontrollo lidhjen dhe modelin.",
       "invalid_result": "Përgjigjja nuk u validua. Nuk u ruajt asgjë. Provo sërish.",
-      "unavailable": "Rishikimi nuk është i disponueshëm tani. Videoja nuk u ruajt. Provo më vonë.",
+      "unavailable": "Rishikimi nuk u krijua. Nëse klipi është ende i zgjedhur, mund të provosh sërish nga kjo faqe.",
       "invalid": "Kuadrot nuk u dërguan. Zgjidh videon sërish."
     },
     "previewTitle": "Një video e shkurtër. Një hap më i qartë.",

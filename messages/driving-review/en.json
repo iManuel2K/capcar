@@ -47,7 +47,7 @@
     "limits": "What this review cannot tell",
     "fixedLimit": "This review uses selected stills. They cannot measure speed, braking or following distance, and may miss events between frames. One clip offers limited context about driving habits.",
     "save": "Save reflection to this car",
-    "saved": "Saved to your private garage",
+    "saved": "Saved under Saved reflections for this car",
     "dismiss": "Dismiss tip",
     "approve": "Remember this coaching topic",
     "approved": "Topic remembered",
@@ -76,7 +76,7 @@
       "quota": "Your provider’s quota or request limit was reached. Check your account and try later.",
       "provider": "Your provider could not review these images. Check your connection and model access.",
       "invalid_result": "The AI response could not be validated. No review was saved. Try again.",
-      "unavailable": "Review is unavailable right now. Your clip has not been saved. Try again later.",
+      "unavailable": "Could not generate a review. If the clip is still selected, you can retry from this page.",
       "invalid": "The selected frames could not be submitted. Choose the clip again."
     },
     "previewTitle": "A short clip. A clearer next step.",

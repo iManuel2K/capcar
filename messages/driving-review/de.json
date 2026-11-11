@@ -47,7 +47,7 @@
     "limits": "Was dieser Rückblick nicht sagen kann",
     "fixedLimit": "Die Auswertung stützt sich auf ausgewählte Einzelbilder. Geschwindigkeit, Bremsvorgänge und Abstand lassen sich daraus nicht messen. Zwischen den Bildern können Ereignisse fehlen. Ein Clip gibt nur begrenzt Aufschluss über Fahrgewohnheiten.",
     "save": "Rückblick zu diesem Auto speichern",
-    "saved": "In deiner privaten Garage gespeichert",
+    "saved": "Unter Gespeicherte Rückblicke für dieses Auto gespeichert",
     "dismiss": "Tipp verwerfen",
     "approve": "Coaching-Thema merken",
     "approved": "Thema gemerkt",
@@ -76,7 +76,7 @@
       "quota": "Das Kontingent oder Anfragelimit ist erreicht. Prüfe dein Konto und versuche es später.",
       "provider": "Dein Anbieter konnte die Bilder nicht prüfen. Prüfe Verbindung und Modellzugriff.",
       "invalid_result": "Die KI-Antwort konnte nicht validiert werden. Nichts wurde gespeichert. Versuche es erneut.",
-      "unavailable": "Der Rückblick ist derzeit nicht verfügbar. Dein Clip wurde nicht gespeichert. Versuche es später.",
+      "unavailable": "Der Rückblick konnte nicht erstellt werden. Wenn der Clip noch ausgewählt ist, kannst du es auf dieser Seite erneut versuchen.",
       "invalid": "Die Bilder konnten nicht gesendet werden. Wähle den Clip erneut."
     },
     "previewTitle": "Ein kurzer Clip. Ein klarer nächster Schritt.",
