@@ -125,7 +125,7 @@ try {
       .click();
     await page
       .getByRole("button", {
-        name: "Saved to your private garage",
+        name: "Saved under Saved reflections for this car",
         exact: true,
       })
       .waitFor();
