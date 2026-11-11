@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { drivingReviewRequestSchema, drivingReviewSchema } from "./contracts";
+import { parseContextDraft } from "./review-context";
 import {
   emptyDrivingProfile,
   saveDrivingProfile,
@@ -66,6 +67,21 @@ const saved = {
   frameTimes: [1, 6],
   review,
 };
+const currentReview = {
+  ...review,
+  tips: [
+    {
+      ...review.tips[0],
+      kind: "improvement",
+      explanation: "A junction can limit the view of crossing traffic.",
+      relatedFrame: 2,
+    },
+  ],
+};
+const supportingDetails = {
+  roadConditions: "Road reported as wet",
+  moments: [{ time: 1.5, speed: { value: 30, unit: "km/h" as const } }],
+};
 function memoryStore() {
   const data = new Map<string, string>();
   return {
@@ -114,6 +130,47 @@ describe("bounded, consented requests", () => {
       expect(
         drivingReviewRequestSchema.safeParse({ ...input, frames }).success,
       ).toBe(false);
+  });
+  it("accepts only bounded supporting details and clip-relative timestamps", () => {
+    expect(
+      drivingReviewRequestSchema.parse({ ...input, context: supportingDetails })
+        .context,
+    ).toEqual(supportingDetails);
+    for (const moment of [
+      { time: 11 },
+      { time: 0, speed: { value: -10, unit: "km/h" } },
+      { time: 0, speed: { value: 30, unit: "knots" } },
+      { time: 0, note: "x".repeat(201) },
+      { time: 0, verified: true },
+    ]) {
+      expect(
+        drivingReviewRequestSchema.safeParse({
+          ...input,
+          context: { moments: [moment] },
+        }).success,
+      ).toBe(false);
+    }
+  });
+  it("supports decimal commas, timestamp-only markers and zero speed", () => {
+    const moment = {
+      id: "first",
+      time: "1,5",
+      speed: "0",
+      unit: "mph" as const,
+      note: "",
+    };
+    const draft = {
+      roadConditions: "",
+      moments: [moment, { ...moment, id: "second", time: "0", speed: "" }],
+    };
+    expect(parseContextDraft(draft, 4).context?.moments).toEqual([
+      { time: 0 },
+      { time: 1.5, speed: { value: 0, unit: "mph" } },
+    ]);
+    expect(parseContextDraft(draft, 1).issue).toEqual({
+      index: 0,
+      field: "time",
+    });
   });
   it("bounds JPEG dimensions and rejects fake and truncated images", () => {
     expect(isBoundedJpeg(jpeg())).toBe(true);
@@ -167,8 +224,9 @@ describe("garage persistence", () => {
   });
   it("participates in account snapshot sync and sign-out cleanup", () => {
     const store = memoryStore();
+    const withDetails = { ...saved, context: supportingDetails, duration: 10 };
     saveDrivingProfile(
-      saveDrivingResult(emptyDrivingProfile("a"), saved),
+      saveDrivingResult(emptyDrivingProfile("a"), withDetails),
       store,
     );
     const snapshot = collectLocalSnapshot(store);
@@ -176,7 +234,7 @@ describe("garage persistence", () => {
     clearLocalSnapshot(store);
     expect(readDrivingProfiles(store)).toEqual([]);
     applyLocalSnapshot(snapshot, store);
-    expect(readDrivingProfiles(store)[0].reviews).toHaveLength(1);
+    expect(readDrivingProfiles(store)[0].reviews).toEqual([withDetails]);
   });
   it("can reset learning without deleting saved reflections", () => {
     const store = memoryStore();
@@ -198,37 +256,49 @@ describe("garage persistence", () => {
 });
 describe("personal provider adapters", () => {
   it.each(["gemini", "openai", "anthropic"] as const)(
-    "submits only selected images to %s and validates its response",
+    "submits selected images and separately labeled context to %s",
     async (provider) => {
-      const fetcher = vi
-        .fn()
-        .mockResolvedValue(
-          Response.json(
-            provider === "gemini"
+      const fetcher = vi.fn().mockResolvedValue(
+        Response.json(
+          provider === "gemini"
+            ? {
+                candidates: [
+                  {
+                    content: {
+                      parts: [{ text: JSON.stringify(currentReview) }],
+                    },
+                  },
+                ],
+              }
+            : provider === "openai"
               ? {
-                  candidates: [
-                    { content: { parts: [{ text: JSON.stringify(review) }] } },
+                  output: [
+                    {
+                      content: [
+                        {
+                          type: "output_text",
+                          text: JSON.stringify(currentReview),
+                        },
+                      ],
+                    },
                   ],
                 }
-              : provider === "openai"
-                ? {
-                    output: [
-                      {
-                        content: [
-                          { type: "output_text", text: JSON.stringify(review) },
-                        ],
-                      },
-                    ],
-                  }
-                : { content: [{ type: "text", text: JSON.stringify(review) }] },
-          ),
-        );
+              : {
+                  content: [
+                    { type: "text", text: JSON.stringify(currentReview) },
+                  ],
+                },
+        ),
+      );
       vi.stubGlobal("fetch", fetcher);
-      const result = await reviewDrivingFrames(input, {
-        provider,
-        model: "configured-model",
-      } as AiConnectionRecord);
-      expect(result).toEqual(review);
+      const result = await reviewDrivingFrames(
+        { ...input, context: supportingDetails },
+        {
+          provider,
+          model: "configured-model",
+        } as AiConnectionRecord,
+      );
+      expect(result).toEqual(currentReview);
       const [url, request] = fetcher.mock.calls[0];
       expect(url).toMatch(
         /^https:\/\/(api.openai.com|api.anthropic.com|generativelanguage.googleapis.com)\//,
@@ -236,35 +306,43 @@ describe("personal provider adapters", () => {
       const body = JSON.parse(request.body);
       expect(request.body).toContain("Frame 2");
       expect(request.body).not.toContain("vehicleId");
+      const system = body.instructions ?? body.system ?? body.systemInstruction;
+      const user = body.input ?? body.messages ?? body.contents;
+      expect(JSON.stringify(system)).not.toContain("Road reported as wet");
+      expect(JSON.stringify(user)).toContain(
+        "Unverified user-supplied context",
+      );
+      expect(JSON.stringify(user)).toContain("Road reported as wet");
       if (provider === "openai") expect(body.store).toBe(false);
     },
   );
-  it("rejects invented frame citations", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi
-        .fn()
-        .mockResolvedValue(
+  it.each([{ frame: 12 }, { relatedFrame: 12 }, { relatedFrame: 1 }])(
+    "rejects invalid frame citations %j",
+    async (citation) => {
+      vi.stubGlobal(
+        "fetch",
+        vi.fn().mockResolvedValue(
           Response.json({
             content: [
               {
                 type: "text",
                 text: JSON.stringify({
-                  ...review,
-                  tips: [{ ...review.tips[0], frame: 12 }],
+                  ...currentReview,
+                  tips: [{ ...currentReview.tips[0], ...citation }],
                 }),
               },
             ],
           }),
         ),
-    );
-    await expect(
-      reviewDrivingFrames(input, {
-        provider: "anthropic",
-        model: "test",
-      } as AiConnectionRecord),
-    ).rejects.toMatchObject({ code: "invalid_result" });
-  });
+      );
+      await expect(
+        reviewDrivingFrames(input, {
+          provider: "anthropic",
+          model: "test",
+        } as AiConnectionRecord),
+      ).rejects.toMatchObject({ code: "invalid_result" });
+    },
+  );
   it("does not return upstream errors or credentials", async () => {
     vi.stubGlobal(
       "fetch",

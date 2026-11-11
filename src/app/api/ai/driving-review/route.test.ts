@@ -81,6 +81,13 @@ describe("private driving review API", () => {
     );
     expect(mocks.connection).not.toHaveBeenCalled();
   });
+  it("rejects a supporting timestamp outside the clip before looking up credentials", async () => {
+    expect(
+      (await POST(request({ ...input, context: { moments: [{ time: 11 }] } })))
+        .status,
+    ).toBe(400);
+    expect(mocks.connection).not.toHaveBeenCalled();
+  });
   it("rejects oversized bodies", async () => {
     expect(
       (await POST(request({ payload: "x".repeat(2_200_001) }))).status,

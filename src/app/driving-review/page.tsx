@@ -31,7 +31,7 @@ export default async function DrivingReviewIntro() {
           {[
             { icon: Film, title: "step1", body: "uploadHelp" },
             { icon: ScanEye, title: "step2", body: "local" },
-            { icon: Sparkles, title: "step3", body: "learningHelp" },
+            { icon: Sparkles, title: "step3", body: "report.publicHelp" },
           ].map(({ icon: Icon, title, body }) => (
             <div key={title}>
               <Icon className="text-primary mb-5" aria-hidden="true" />

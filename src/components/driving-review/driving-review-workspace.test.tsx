@@ -46,6 +46,13 @@ const saved = {
 beforeEach(() => {
   localStorage.clear();
   localStorage.setItem("capcar.active-garage-user.v1", "owner-a");
+  vi.stubGlobal(
+    "URL",
+    class extends URL {
+      static createObjectURL = () => "blob:local-test-video";
+      static revokeObjectURL = () => {};
+    },
+  );
   mocks.sample.mockResolvedValue({
     duration: 4,
     frames: [
@@ -87,7 +94,7 @@ describe("driving review account boundaries", () => {
       screen.queryByText("Private reflection for owner A"),
     ).not.toBeInTheDocument();
   });
-  it("keeps submission disabled without consent and carries the current owner", async () => {
+  it("requires consent and keeps user details separate from observations", async () => {
     const fetcher = vi
       .fn()
       .mockImplementation((url) =>
@@ -115,6 +122,21 @@ describe("driving review account boundaries", () => {
     });
     expect(submit).toBeDisabled();
     fireEvent.click(
+      screen.getByText("Supporting details (optional)", {
+        selector: "summary",
+      }),
+    );
+    fireEvent.change(screen.getByLabelText("Road conditions"), {
+      target: { value: "Wet road" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Add a timestamp" }));
+    fireEvent.change(screen.getByLabelText("Time in clip (seconds)"), {
+      target: { value: "1,5" },
+    });
+    fireEvent.change(screen.getByLabelText("Speed (optional)"), {
+      target: { value: "25" },
+    });
+    fireEvent.click(
       screen.getByRole("checkbox", { name: /I have permission/ }),
     );
     fireEvent.click(submit);
@@ -123,7 +145,16 @@ describe("driving review account boundaries", () => {
       (args) => args[0] === "/api/ai/driving-review",
     );
     expect(call?.[1].headers["x-capcar-owner"]).toBe("owner-a");
-    expect(JSON.parse(call?.[1].body).preferences).toEqual([]);
+    const body = JSON.parse(call?.[1].body);
+    expect(body.preferences).toEqual([]);
+    expect(body.context).toEqual({
+      roadConditions: "Wet road",
+      moments: [{ time: 1.5, speed: { value: 25, unit: "km/h" } }],
+    });
+    expect(screen.getByText("Reported speed 25 km/h")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Details you provided" }),
+    ).toBeInTheDocument();
     expect(localStorage.getItem(DRIVING_REVIEW_KEY)).toBeNull();
   });
   it("aborts in-flight analysis when the page unmounts", async () => {

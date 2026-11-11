@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { drivingReviewSchema, focusSchema } from "./contracts";
+import {
+  clipDurationSchema,
+  drivingReviewSchema,
+  focusSchema,
+  reviewContextSchema,
+} from "./contracts";
 
 export const DRIVING_REVIEW_KEY = "capcar.driving-reviews.v1";
 export const DRIVING_REVIEW_EVENT = "capcar:driving-reviews-changed";
@@ -8,6 +13,8 @@ export const savedReviewSchema = z.object({
   createdAt: z.string().datetime(),
   provider: z.enum(["gemini", "openai", "anthropic"]),
   frameTimes: z.array(z.number().min(0).max(60)).min(2).max(12),
+  duration: clipDurationSchema.optional(),
+  context: reviewContextSchema.optional(),
   review: drivingReviewSchema,
 });
 export const drivingProfileSchema = z.object({

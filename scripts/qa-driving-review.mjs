@@ -101,7 +101,7 @@ try {
       .getByRole("button", { name: "Review selected frames", exact: true })
       .click();
     await page
-      .getByRole("heading", { name: "Your reflection", exact: true })
+      .getByRole("heading", { name: "Driving review report", exact: true })
       .waitFor();
     assert.equal(requestBody.frames.length, 3);
     assert.deepEqual(requestBody.preferences, []);
@@ -148,7 +148,7 @@ try {
       .getByRole("button", { name: "Review selected frames", exact: true })
       .click();
     await page
-      .getByRole("heading", { name: "Your reflection", exact: true })
+      .getByRole("heading", { name: "Driving review report", exact: true })
       .waitFor();
     assert.deepEqual(requestBody.preferences, ["awareness"]);
     await page.getByRole("switch").uncheck();
@@ -156,7 +156,7 @@ try {
       .getByRole("button", { name: "Review selected frames", exact: true })
       .click();
     await page
-      .getByRole("heading", { name: "Your reflection", exact: true })
+      .getByRole("heading", { name: "Driving review report", exact: true })
       .waitFor();
     assert.deepEqual(requestBody.preferences, []);
     await page
