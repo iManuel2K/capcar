@@ -1,5 +1,6 @@
 import { CommunityShell } from "@/components/community/community-shell";
 import { RetailSearch } from "@/components/community/retail-search";
+import { getAuthStatus } from "@/features/auth/auth-config";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { publicTitle } from "@/features/seo/public-titles";
@@ -24,7 +25,11 @@ export default async function Page({
     typeof params.q === "string" ? params.q.trim().slice(0, 80) : "";
   return (
     <CommunityShell titleKey="connectedTitle">
-      <RetailSearch key={query} initialQuery={query} />
+      <RetailSearch
+        key={query}
+        initialQuery={query}
+        garageSyncConfigured={getAuthStatus().configured}
+      />
     </CommunityShell>
   );
 }

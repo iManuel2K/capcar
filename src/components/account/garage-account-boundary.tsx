@@ -36,13 +36,16 @@ export const useGarageAccount = () => useContext(GarageAccountContext);
 
 export function GarageAccountBoundary({
   configured,
+  allowGuest = false,
   children,
 }: {
   configured: boolean;
+  allowGuest?: boolean;
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const allowGuest = usePathname() === "/garage/new";
+  const pathname = usePathname();
+  const guestAllowed = allowGuest || pathname === "/garage/new";
   const [ready, setReady] = useState(!configured);
   const [userId, setUserId] = useState("");
   const [error, setError] = useState("");
@@ -126,13 +129,16 @@ export function GarageAccountBoundary({
         if (!data.user) {
           if (authError && authError.name !== "AuthSessionMissingError")
             throw authError;
-          if (!cancelled) {
-            setReady(true);
-            if (!allowGuest)
-              router.replace(
-                `/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`,
-              );
+          if (cancelled) return;
+          const hasAccountSnapshot =
+            allowGuest && Boolean(localStorage.getItem(ACTIVE_GARAGE_USER_KEY));
+          if (!guestAllowed || hasAccountSnapshot) {
+            router.replace(
+              `/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`,
+            );
+            return;
           }
+          setReady(true);
           return;
         }
 
@@ -212,7 +218,7 @@ export function GarageAccountBoundary({
     return () => {
       cancelled = true;
     };
-  }, [configured, router, upload, allowGuest]);
+  }, [configured, router, upload, allowGuest, guestAllowed]);
 
   useEffect(() => {
     if (!configured || !ready || !userId) return;
@@ -287,7 +293,7 @@ export function GarageAccountBoundary({
           onRetry={() => void upload(userId)}
         />
       )}
-      {!configured || userId || (allowGuest && !error) ? (
+      {!configured || userId || (guestAllowed && !error) ? (
         children
       ) : (
         <p role="alert" className="p-6 text-white/70">

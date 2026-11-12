@@ -237,7 +237,7 @@
     "next": "Next"
   },
   "Retail": {
-    "intro": "Search current eBay listings by exact part number or description. Choose a market and delivery country. Purchases are completed at the retailer; CapCar does not take payment.",
+    "intro": "Search for a car part by part number or description. Compare offers by condition, price and shipping. Purchases are completed on the seller’s website.",
     "saveOptional": "Save results to a vehicle (optional)",
     "chooseVehicle": "Choose vehicle",
     "savingNote": "Searching and merchant checkout do not require a vehicle. Saving does not confirm fitment or place an order.",
@@ -248,12 +248,76 @@
     "notSupplied": "not supplied",
     "affiliate": "Affiliate link: CapCar may earn a commission if you purchase.",
     "direct": "Direct retailer link. No CapCar affiliate campaign applied.",
-    "view": "View at eBay ↗",
+    "view": "View listing ↗",
     "saved": "Saved to this vehicle’s wishlist. Existing duplicates were kept unchanged.",
     "saveError": "Could not save this listing. Check your selected vehicle and browser storage.",
     "save": "Save to vehicle",
     "previous": "Previous page",
-    "next": "Next page"
+    "next": "Next page",
+    "openComparison": "View saved comparisons",
+    "itemPrice": "Item price",
+    "total": "Price with shipping",
+    "retailer": "Retailer",
+    "searchKleinanzeigen": "Search on Kleinanzeigen"
+  },
+  "RetailSave": {
+    "title": "Save to a vehicle",
+    "description": "Choose a car from your garage or add one to save this listing to its wishlist.",
+    "vehicle": "Vehicle",
+    "chooseVehicle": "Choose a vehicle",
+    "empty": "Your garage is empty. Add a car to save this listing.",
+    "addVehicle": "Add a vehicle",
+    "save": "Save to wishlist",
+    "saveError": "This listing couldn’t be saved. Check your vehicle and try again.",
+    "savedTitle": "Listing saved",
+    "savedDescription": "This listing is on the wishlist for {vehicle}.",
+    "savedStatus": "Saved to your garage",
+    "done": "Done",
+    "viewWishlist": "Open wishlist",
+    "cancel": "Cancel",
+    "back": "Back",
+    "createVehicle": "Add to garage",
+    "make": "Make",
+    "model": "Model",
+    "productionYear": "Production year",
+    "optionalDetails": "More vehicle details (optional)",
+    "platform": "Chassis code",
+    "engineCode": "Engine code",
+    "bodyStyle": "Body style",
+    "invalidVehicle": "Check the make, model and production year, then try again.",
+    "createError": "This vehicle couldn’t be added. Check your browser storage and try again.",
+    "mismatchDetails": "Details that differ: {fields}.",
+    "fitment": {
+      "exact": {
+        "title": "Vehicle details match",
+        "description": "The fitment data matches this car’s details. Confirm the part number with the seller before buying."
+      },
+      "mismatch": {
+        "title": "Some vehicle details differ",
+        "description": "The fitment data differs from this car’s details. Check with the seller before buying."
+      },
+      "unverified": {
+        "title": "Fitment unverified",
+        "description": "Check the part number and vehicle compatibility with the seller before buying."
+      }
+    },
+    "axes": {
+      "make": "make",
+      "platform": "chassis code",
+      "engine": "engine code",
+      "production year": "production year",
+      "body style": "body style"
+    },
+    "bodyStyles": {
+      "Sedan": "Sedan",
+      "Touring": "Estate / wagon",
+      "Coupe": "Coupé",
+      "Convertible": "Convertible",
+      "Hatchback": "Hatchback",
+      "Pickup": "Pickup",
+      "SUV": "SUV",
+      "Unknown": "Unknown"
+    }
   },
   "Expansion": {
     "open3d": "Open interactive model",

@@ -237,7 +237,7 @@
     "next": "次へ"
   },
   "Retail": {
-    "intro": "正確な品番または説明から、現在のeBay出品を検索できます。出品市場と配送先を選択してください。購入と支払いは販売サイトで行われ、CapCarは決済を扱いません。",
+    "intro": "部品番号や説明から車の部品を検索できます。状態、価格、送料を比較し、購入は販売元のサイトで行います。",
     "saveOptional": "車両に検索結果を保存（任意）",
     "chooseVehicle": "車両を選択",
     "savingNote": "検索と販売サイトでの購入に車両登録は不要です。保存しても適合や注文は確定しません。",
@@ -248,12 +248,76 @@
     "notSupplied": "記載なし",
     "affiliate": "アフィリエイトリンク：購入時にCapCarが手数料を受け取る場合があります。",
     "direct": "販売サイトへの直接リンクです。CapCarのアフィリエイトは適用されていません。",
-    "view": "eBayで見る ↗",
+    "view": "出品を見る ↗",
     "saved": "この車両のウィッシュリストに保存しました。既存の重複項目は変更していません。",
     "saveError": "出品を保存できませんでした。選択した車両とブラウザーの保存領域を確認してください。",
     "save": "車両に保存",
     "previous": "前のページ",
-    "next": "次のページ"
+    "next": "次のページ",
+    "openComparison": "保存した比較を見る",
+    "itemPrice": "商品価格",
+    "total": "送料込みの価格",
+    "retailer": "販売元",
+    "searchKleinanzeigen": "Kleinanzeigenで検索"
+  },
+  "RetailSave": {
+    "title": "車両に保存",
+    "description": "ガレージにある車両を選ぶか、新しく追加して、この商品をその車両のウィッシュリストに保存します。",
+    "vehicle": "車両",
+    "chooseVehicle": "車両を選択",
+    "empty": "ガレージに車両がありません。この商品を保存するには、車両を追加してください。",
+    "addVehicle": "車両を追加",
+    "save": "ウィッシュリストに保存",
+    "saveError": "商品を保存できませんでした。車両を確認して、もう一度お試しください。",
+    "savedTitle": "商品を保存しました",
+    "savedDescription": "{vehicle}のウィッシュリストに保存しました。",
+    "savedStatus": "ガレージに保存済み",
+    "done": "完了",
+    "viewWishlist": "ウィッシュリストを開く",
+    "cancel": "キャンセル",
+    "back": "戻る",
+    "createVehicle": "ガレージに追加",
+    "make": "メーカー",
+    "model": "車種",
+    "productionYear": "製造年",
+    "optionalDetails": "車両の詳細（任意）",
+    "platform": "シャシーコード",
+    "engineCode": "エンジン型式",
+    "bodyStyle": "ボディタイプ",
+    "invalidVehicle": "メーカー、車種、製造年を確認して、もう一度お試しください。",
+    "createError": "車両を追加できませんでした。ブラウザーの保存設定を確認して、もう一度お試しください。",
+    "mismatchDetails": "一致しない項目：{fields}。",
+    "fitment": {
+      "exact": {
+        "title": "車両情報が一致しています",
+        "description": "適合データと車両情報が一致しています。購入前に、部品番号を販売者に確認してください。"
+      },
+      "mismatch": {
+        "title": "一部の車両情報が一致していません",
+        "description": "適合データと車両情報に違いがあります。購入前に、販売者に適合を確認してください。"
+      },
+      "unverified": {
+        "title": "適合は未確認です",
+        "description": "購入前に、部品番号と車両への適合を販売者に確認してください。"
+      }
+    },
+    "axes": {
+      "make": "メーカー",
+      "platform": "シャシーコード",
+      "engine": "エンジン型式",
+      "production year": "製造年",
+      "body style": "ボディタイプ"
+    },
+    "bodyStyles": {
+      "Sedan": "セダン",
+      "Touring": "ステーションワゴン",
+      "Coupe": "クーペ",
+      "Convertible": "コンバーチブル",
+      "Hatchback": "ハッチバック",
+      "Pickup": "ピックアップ",
+      "SUV": "SUV",
+      "Unknown": "不明"
+    }
   },
   "Expansion": {
     "open3d": "3Dモデルを開く",
