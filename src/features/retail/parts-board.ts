@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   safeEbayUrl,
+  safeRetailImageUrl,
   safeRetailUrl,
   retailRequestSchema,
   type RetailItem,
@@ -19,6 +20,7 @@ export const boardEntry = z
     retailer: z.string().max(80).optional(),
     provider: z.enum(["ebay", "partner"]).optional(),
     providerItemId: z.string().max(220).optional(),
+    imageUrl: z.string().max(2048).refine(safeRetailImageUrl).optional(),
     affiliate: z.boolean(),
     input: retailRequestSchema,
     checkedAt: z.iso.datetime(),

@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   RETAIL_STREAM_TYPE,
   retailVehicleMatchSchema,
+  safeRetailImageUrl,
   safeRetailUrl,
   type RetailRequest,
   type RetailResponse,
@@ -23,6 +24,7 @@ const responseSchema = z.object({
         shipping: z.number().finite().nonnegative().nullable(),
         country: z.string().nullable(),
         condition: z.string(),
+        imageUrl: z.string().max(2048).refine(safeRetailImageUrl).optional(),
         affiliate: z.boolean(),
         url: z.string().refine(safeRetailUrl),
         retailer: z.string().max(80).optional(),

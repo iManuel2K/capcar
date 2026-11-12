@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   evaluateRetailVehicleMatch,
   safeEbayUrl,
+  safeRetailImageUrl,
   type RetailRequest,
   type RetailResponse,
 } from "./retail-contracts";
@@ -21,6 +22,7 @@ const responseSchema = z.object({
         title: z.string(),
         price: money,
         itemWebUrl: z.string(),
+        image: z.object({ imageUrl: z.string().optional() }).nullish(),
         itemAffiliateWebUrl: z.string().optional(),
         condition: z.string().optional(),
         itemLocation: z.object({ country: z.string().optional() }).optional(),
@@ -274,6 +276,7 @@ export async function searchEbay(
       const target = affiliate ? item.itemAffiliateWebUrl! : item.itemWebUrl;
       if (!safeEbayUrl(target)) return [];
       const shipping = item.shippingOptions?.[0]?.shippingCost;
+      const imageUrl = item.image?.imageUrl;
       return [
         {
           id: item.itemId,
@@ -287,6 +290,11 @@ export async function searchEbay(
           country: item.itemLocation?.country ?? null,
           condition: item.condition ?? "Not specified",
           url: target,
+          ...(imageUrl &&
+          imageUrl.length <= 2048 &&
+          safeRetailImageUrl(imageUrl)
+            ? { imageUrl }
+            : {}),
           affiliate,
           retailer: "eBay",
           provider: "ebay",

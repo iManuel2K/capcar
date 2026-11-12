@@ -126,6 +126,7 @@ export type RetailItem = {
   country: string | null;
   condition: string;
   url: string;
+  imageUrl?: string;
   affiliate: boolean;
   retailer?: string;
   provider?: "ebay" | "partner";
@@ -219,4 +220,18 @@ export function ebaySearchUrl(input: EbaySearchLinkInput) {
   if (input.sort && input.sort !== "bestMatch")
     url.searchParams.set("_sop", sortCodes[input.sort]);
   return url.href;
+}
+
+export function safeRetailImageUrl(value: string) {
+  try {
+    const url = new URL(value);
+    return (
+      url.origin === "https://i.ebayimg.com" &&
+      !url.username &&
+      !url.password &&
+      url.pathname.startsWith("/images/")
+    );
+  } catch {
+    return false;
+  }
 }

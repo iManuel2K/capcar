@@ -8,6 +8,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import Image from "next/image";
+import { Package } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import {
   addToBoard,
@@ -21,10 +23,7 @@ import {
   type RetailRequest,
   type RetailResponse,
 } from "@/features/retail/retail-contracts";
-import {
-  actionClass,
-  fieldClass,
-} from "@/components/community/community-shell";
+import { actionClass } from "@/components/community/community-shell";
 import {
   useBrowserValue,
   writeBrowserValue,
@@ -56,14 +55,11 @@ export function PartsBoardProvider({ children }: { children: ReactNode }) {
     return parsed.success ? parsed.data : [];
   }, [raw]);
   const [message, setMessage] = useState("");
-  const [review, setReview] = useState(false);
-  const [confirmed, setConfirmed] = useState(false);
   const write = useCallback(
     (next: BoardEntry[]) => {
       try {
         const checked = boardSchema.parse(next);
         writeBrowserValue(KEY, JSON.stringify(checked));
-        setConfirmed(false);
         setMessage("");
       } catch {
         setMessage(t("storageError"));
@@ -116,192 +112,94 @@ export function PartsBoardProvider({ children }: { children: ReactNode }) {
         className="border-foreground/25 mt-8 space-y-5 rounded-3xl border bg-white/25 p-5 sm:p-8"
       >
         <h2 className="text-2xl font-medium">{t("board")}</h2>
-        <p className="max-w-3xl text-sm leading-6">{t("boardNote")}</p>
         <p role="status">{message}</p>
         {!entries.length ? (
           <p>{t("boardEmpty")}</p>
         ) : (
-          <>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {entries.map((entry) => (
-                <article
-                  key={boardKey(entry)}
-                  className="min-w-0 space-y-3 rounded-2xl border border-current/20 p-4"
-                >
-                  <p className="text-muted-foreground text-sm font-medium">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {entries.map((entry) => (
+              <article
+                key={boardKey(entry)}
+                className="border-foreground/15 bg-card flex min-w-0 flex-col overflow-hidden rounded-2xl border"
+              >
+                <div className="bg-muted relative grid aspect-[4/3] place-items-center">
+                  <Package
+                    className="text-muted-foreground size-9"
+                    aria-hidden="true"
+                  />
+                  {entry.imageUrl && (
+                    <Image
+                      key={entry.imageUrl}
+                      src={entry.imageUrl}
+                      alt=""
+                      fill
+                      unoptimized
+                      referrerPolicy="no-referrer"
+                      className="bg-muted object-contain"
+                      onError={(event) => {
+                        event.currentTarget.style.visibility = "hidden";
+                      }}
+                    />
+                  )}
+                </div>
+                <div className="flex flex-1 flex-col gap-3 p-4">
+                  <p className="text-muted-foreground text-sm">
                     {entry.retailer ??
                       (entry.provider === "partner"
                         ? retail("retailer")
-                        : "eBay")}
+                        : "eBay")}{" "}
+                    · {entry.condition}
                   </p>
                   <h3 className="font-semibold break-words">{entry.title}</h3>
-                  <p className="text-sm">{entry.condition}</p>
-                  <p>
-                    {money(entry.price, entry.currency)} · {entry.input.market}{" "}
-                    → {entry.input.destination}
-                  </p>
-                  <p className="text-sm">
-                    {t("shipping")}:{" "}
-                    {entry.shipping === null
-                      ? t("unknown")
-                      : money(entry.shipping, entry.currency)}
-                  </p>
-                  {entry.shipping !== null && (
-                    <p className="text-sm font-medium">
-                      {retail("total")}{" "}
-                      {money(entry.price + entry.shipping, entry.currency)}
+                  <div>
+                    <p className="text-xl font-semibold">
+                      {money(
+                        entry.price + (entry.shipping ?? 0),
+                        entry.currency,
+                      )}
+                    </p>
+                    <p className="text-muted-foreground text-sm">
+                      {entry.shipping === null
+                        ? `${t("shipping")} · ${t("unknown")}`
+                        : retail("total")}
+                    </p>
+                  </div>
+                  {entry.affiliate && (
+                    <p className="text-muted-foreground text-xs">
+                      {t("affiliate")}
                     </p>
                   )}
-                  <p className="text-xs">
-                    {new Date(entry.checkedAt).toLocaleString(locale)}
-                  </p>
-                  <label className="block text-sm">
-                    {t("target")} ({entry.currency})
-                    <input
-                      type="number"
-                      min="0.01"
-                      max="1000000"
-                      step="0.01"
-                      className={fieldClass}
-                      value={entry.target ?? ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (
-                          value &&
-                          (!Number.isFinite(Number(value)) ||
-                            Number(value) <= 0 ||
-                            Number(value) > 1e6)
-                        )
-                          return;
-                        write(
-                          readBoard().map((item) =>
-                            boardKey(item) === boardKey(entry)
-                              ? {
-                                  ...item,
-                                  target: value ? Number(value) : null,
-                                }
-                              : item,
-                          ),
-                        );
-                      }}
-                    />
-                  </label>
-                  {entry.target !== null && entry.price <= entry.target && (
-                    <p
-                      role="status"
-                      className="bg-card text-foreground rounded-xl p-3 text-sm"
+                  <div className="mt-auto flex flex-wrap gap-2 pt-1">
+                    <a
+                      href={entry.url}
+                      target="_blank"
+                      rel={
+                        entry.affiliate
+                          ? "sponsored noopener noreferrer"
+                          : "noopener noreferrer"
+                      }
+                      className={`${actionClass} inline-flex items-center`}
                     >
-                      {t("targetReached")}
-                    </p>
-                  )}
-                  <details>
-                    <summary className="min-h-11 cursor-pointer py-2 text-sm">
-                      {t("history")}
-                    </summary>
-                    <ol className="space-y-2 text-xs">
-                      {entry.history.map((sample) => (
-                        <li key={sample.at}>
-                          {new Date(sample.at).toLocaleString(locale)} ·{" "}
-                          {money(sample.price, entry.currency)}
-                        </li>
-                      ))}
-                    </ol>
-                  </details>
-                  <button
-                    className={actionClass}
-                    onClick={() =>
-                      write(
-                        readBoard().filter(
-                          (item) => boardKey(item) !== boardKey(entry),
-                        ),
-                      )
-                    }
-                  >
-                    {t("remove")}
-                  </button>
-                </article>
-              ))}
-            </div>
-            <button
-              className={`${actionClass} bg-card text-foreground`}
-              onClick={() => {
-                setReview((value) => !value);
-                setConfirmed(false);
-              }}
-            >
-              {t("reviewPurchase")}
-            </button>
-            {review && (
-              <div className="space-y-4 rounded-2xl border border-current/20 p-5">
-                <h3 className="text-xl font-medium">{t("handoff")}</h3>
-                <p className="max-w-3xl text-sm leading-6">
-                  {t("handoffNote")}
-                </p>
-                {[...new Set(entries.map((item) => item.currency))].map(
-                  (currency) => {
-                    const group = entries.filter(
-                      (item) => item.currency === currency,
-                    );
-                    const subtotal =
-                      group.reduce(
-                        (sum, item) => sum + Math.round(item.price * 100),
-                        0,
-                      ) / 100;
-                    const shipping = group.some(
-                      (item) => item.shipping === null,
-                    )
-                      ? null
-                      : group.reduce(
-                          (sum, item) => sum + Math.round(item.shipping! * 100),
-                          0,
-                        ) / 100;
-                    return (
-                      <p key={currency}>
-                        {t("itemsSubtotal")}:{" "}
-                        <strong>{money(subtotal, currency)}</strong> ·{" "}
-                        {t("shipping")}:{" "}
-                        {shipping === null
-                          ? t("unknown")
-                          : money(shipping, currency)}
-                      </p>
-                    );
-                  },
-                )}
-                <label className="flex items-start gap-3 text-sm leading-6">
-                  <input
-                    type="checkbox"
-                    className="mt-1 size-5 shrink-0"
-                    checked={confirmed}
-                    onChange={(e) => setConfirmed(e.target.checked)}
-                  />
-                  {t("confirmMerchant")}
-                </label>
-                {confirmed && (
-                  <ul className="space-y-3">
-                    {entries.map((entry) => (
-                      <li key={boardKey(entry)}>
-                        <a
-                          href={entry.url}
-                          target="_blank"
-                          rel={
-                            entry.affiliate
-                              ? "sponsored noopener noreferrer"
-                              : "noopener noreferrer"
-                          }
-                          className="inline-flex min-h-11 items-center underline"
-                        >
-                          {retail("view")} · {entry.title}
-                        </a>
-                        <p className="text-xs">
-                          {entry.affiliate ? t("affiliate") : t("direct")}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
-          </>
+                      {retail("view")}
+                    </a>
+                    <button
+                      type="button"
+                      className="min-h-11 px-3 text-sm underline underline-offset-4"
+                      onClick={() =>
+                        write(
+                          readBoard().filter(
+                            (item) => boardKey(item) !== boardKey(entry),
+                          ),
+                        )
+                      }
+                    >
+                      {t("remove")}
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         )}
       </section>
     </Board.Provider>
