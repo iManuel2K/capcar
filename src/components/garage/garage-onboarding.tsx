@@ -37,6 +37,7 @@ import {
 import {
   garageCarCatalog,
   garageCarCoverage,
+  searchGarageCars,
 } from "@/features/vehicles/garage-car-catalog";
 import { getShowroomExamples } from "@/features/garage/showroom-examples";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
@@ -387,11 +388,7 @@ function OnboardingFlow({
         createdAt: new Date().toISOString(),
       })
     : undefined;
-  const matches = garageCarCatalog.filter((car) =>
-    `${car.make} ${car.model} ${car.platform}`
-      .toLowerCase()
-      .includes(query.toLowerCase()),
-  );
+  const matches = searchGarageCars(query);
   const review = draft.step === "save";
   const nextPath = `/garage/new?resume=${encodeURIComponent(draft.id)}${returnTo ? `&next=${encodeURIComponent(returnTo)}` : ""}`;
   return (
@@ -560,8 +557,15 @@ function OnboardingFlow({
                           type="search"
                         />
                       </label>
+                      <p
+                        role="status"
+                        className="text-muted-foreground text-sm"
+                      >
+                        {matches.length} / {garageCarCatalog.length}{" "}
+                        {c.catalogCount}
+                      </p>
                       <div
-                        className="grid max-h-64 gap-2 overflow-y-auto rounded-2xl border border-white/10 p-2 sm:grid-cols-2"
+                        className="grid max-h-96 gap-2 overflow-y-auto rounded-2xl border border-white/10 p-2 sm:grid-cols-2"
                         aria-label={c.search}
                       >
                         {matches.length === 0 && (
@@ -588,6 +592,7 @@ function OnboardingFlow({
                                 model: car.model,
                                 platform: car.platform,
                                 productionYear: "",
+                                engineCode: "",
                                 existingVehicleId: undefined,
                               })
                             }
@@ -975,14 +980,19 @@ function OnboardingFlow({
                     className="mt-4 space-y-2 text-xs text-white/65"
                   >
                     <p>
+                      {coverage.checks} {c.checks}
+                    </p>
+                    <p>
                       {coverage.problems} {c.problems}
                     </p>
                     <p>
                       {coverage.parts} {c.parts}
                     </p>
-                    {!coverage.problems && !coverage.parts && (
-                      <p className="leading-5">{c.noCoverage}</p>
-                    )}
+                    {!coverage.checks &&
+                      !coverage.problems &&
+                      !coverage.parts && (
+                        <p className="leading-5">{c.noCoverage}</p>
+                      )}
                   </div>
                 )}
               </div>

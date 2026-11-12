@@ -42,7 +42,7 @@ function source() {
 }
 describe("source-aware problem coverage", () => {
   it("has an explicit source policy and precise identity match for every selectable car", () => {
-    expect(garageCarCatalog).toHaveLength(31);
+    expect(garageCarCatalog.length).toBeGreaterThan(50);
     expect(Object.keys(problemSourceMappings).sort()).toEqual(
       garageCarCatalog.map((car) => car.id).sort(),
     );

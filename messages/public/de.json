@@ -422,7 +422,7 @@
       "invalid": "Prüfe dieses Feld und versuche es erneut."
     },
     "messages": {
-      "created": "Konto erstellt. Bestätige es über deine E-Mail.",
+      "confirmationInstructions": "Falls du deine E-Mail-Adresse noch bestätigen musst, prüfe deinen Posteingang und Spam-Ordner. Wenn du bereits ein Konto hast, melde dich an oder setze dein Passwort zurück.",
       "resetSent": "Link gesendet. Prüfe deine E-Mails.",
       "updated": "Passwort aktualisiert. Garage wird geöffnet…"
     }

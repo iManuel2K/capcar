@@ -42,7 +42,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const journalPages = locales.flatMap((locale) => [
     {
       url: new URL(journalPath(locale), PUBLIC_SITE_URL).toString(),
-      lastModified: "2026-10-21",
+      lastModified: getJournalArticles(locale).reduce(
+        (latest, article) =>
+          (article.updated ?? article.published) > latest
+            ? (article.updated ?? article.published)
+            : latest,
+        "2026-10-21",
+      ),
       alternates: { languages: journalLanguageAlternates() },
     },
     ...getJournalArticles(locale).map((article) => ({

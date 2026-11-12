@@ -138,4 +138,11 @@ it("keeps the Journal destination in account-switch links and the email confirma
   expect(
     new URL(options[0].options.emailRedirectTo).searchParams.get("next"),
   ).toBe(next);
+  expect(await screen.findByRole("status")).toHaveTextContent(
+    "If your email needs confirmation",
+  );
+  expect(screen.queryByText(/Account created/i)).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("link", { name: "Forgot password?" }),
+  ).toHaveAttribute("href", "/forgot-password");
 });

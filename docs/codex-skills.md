@@ -50,8 +50,16 @@ No settings in your personal `~/.codex/config.toml` need changing. Do not instal
 | Review UI without editing | `$impeccable critique the homepage; report only, do not edit files` |
 | Choose Matt's workflow | `$ask-matt which skill should I use for this bug?` |
 | Test-driven implementation | `$tdd implement this agreed change` |
+| Plan CapCar social content | `$capcar-social turn Sound Studio into a four-slide Instagram carousel` |
 
 CapCar's `AGENTS.md`, `design-system/capcar/MASTER.md` and page overrides remain authoritative. Generic skill preferences do not authorize replacing CapCar's approved visuals or changing the requested scope.
+
+[`$capcar-social`](../.agents/skills/capcar-social/SKILL.md) combines the
+existing research, social, editing and analytics skills for CapCar. It is a
+project workflow inspired by the nine-step social growth graphic, not an
+installation of the nine upstream Claude skills. Start with the
+[Sound Studio pilot](marketing/sound-studio-social-pilot.md), or give it a
+verified feature, a founder note, or post insights to review.
 
 Matt's `$setup-matt-pocock-skills` is installed for first-use setup of issue tracker, triage labels and domain-document conventions. Run it when you want those workflows configured; it asks for your preferences before writing. This installation does not run that separate interactive workflow or create GitHub labels. Ordinary skills such as `$tdd` and `$codebase-design` are discoverable immediately.
 

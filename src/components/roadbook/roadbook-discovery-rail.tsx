@@ -21,12 +21,18 @@ export type RoadbookDiscoveryPanel = "places" | "events";
 
 export function RoadbookDiscoveryRail({
   venues,
+  catalogCount,
+  loading = false,
+  loadError = false,
   events,
   open,
   onOpenChange,
   onSelectVenue,
 }: {
   venues: RoadbookVenue[];
+  catalogCount?: number;
+  loading?: boolean;
+  loadError?: boolean;
   events: RoadbookEvent[];
   open?: RoadbookDiscoveryPanel;
   onOpenChange: (panel?: RoadbookDiscoveryPanel) => void;
@@ -61,6 +67,24 @@ export function RoadbookDiscoveryRail({
 
   return (
     <div className="relative mt-2 sm:mt-3">
+      <p
+        className="text-muted-foreground mb-2 text-xs leading-5"
+        data-roadbook-place-count
+      >
+        {catalogCount !== undefined && (
+          <>
+            <span>{t("places.catalogTotal", { count: catalogCount })}</span>
+            <span aria-hidden="true"> · </span>
+          </>
+        )}
+        <span>
+          {loading
+            ? t("loading")
+            : loadError
+              ? t("errors.load")
+              : t("resultCount", { count: venues.length })}
+        </span>
+      </p>
       <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
@@ -69,7 +93,9 @@ export function RoadbookDiscoveryRail({
           className="hover:text-foreground inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-white/12 bg-white/[0.045] px-2.5 text-[11px] font-semibold text-white/72 transition hover:border-white/22 hover:bg-white/[0.08] sm:min-h-10 sm:gap-2 sm:px-3 sm:text-xs"
         >
           <Camera className="text-primary size-4" aria-hidden="true" />
-          {t("places.action", { count: venues.length })}
+          {loading || loadError
+            ? t("places.browse")
+            : t("places.action", { count: venues.length })}
           <span className="text-muted-foreground rounded-full bg-white/8 px-1.5 py-0.5 text-[9px] sm:text-[10px]">
             {t("places.images", { count: imageCount })}
           </span>

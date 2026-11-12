@@ -56,6 +56,45 @@ export function JournalContent({ text }: { text: string }) {
               {block.slice(3)}
             </h2>
           );
+        if (block.startsWith("```text\n") && block.endsWith("\n```")) {
+          return (
+            <pre
+              key={index}
+              className="border-foreground/15 rounded-2xl border p-5 whitespace-pre-wrap"
+            >
+              {block.slice(8, -4)}
+            </pre>
+          );
+        }
+        if (block.startsWith("> ")) {
+          return (
+            <blockquote
+              key={index}
+              className="border-primary/60 border-s-2 ps-5"
+            >
+              {inline(block.slice(2))}
+            </blockquote>
+          );
+        }
+        const lines = block.split("\n");
+        if (lines.every((line) => /^\d+\. /.test(line))) {
+          return (
+            <ol key={index} className="list-decimal space-y-2 ps-6">
+              {lines.map((line, itemIndex) => (
+                <li key={itemIndex}>{inline(line.replace(/^\d+\. /, ""))}</li>
+              ))}
+            </ol>
+          );
+        }
+        if (lines.every((line) => /^[-*] /.test(line))) {
+          return (
+            <ul key={index} className="list-disc space-y-2 ps-6">
+              {lines.map((line, itemIndex) => (
+                <li key={itemIndex}>{inline(line.slice(2))}</li>
+              ))}
+            </ul>
+          );
+        }
         if (block.startsWith("|")) {
           const rows = block
             .split("\n")

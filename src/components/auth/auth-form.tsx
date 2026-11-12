@@ -145,7 +145,7 @@ export function AuthForm({
         if (data.session) {
           window.location.replace(safeNext(nextPath));
         } else {
-          setMessage(t("messages.created"));
+          setMessage(t("messages.confirmationInstructions"));
         }
       }
 
@@ -397,8 +397,21 @@ export function AuthForm({
             </form>
 
             {message && (
-              <p className="mt-5 flex gap-2 rounded-xl border border-emerald-800/15 bg-emerald-100/70 p-4 text-xs leading-5 text-emerald-950">
-                <CheckCircle2 className="mt-0.5 size-4 shrink-0" /> {message}
+              <p
+                role="status"
+                className={
+                  mode === "register"
+                    ? "border-foreground/15 bg-card mt-5 rounded-xl border p-4 text-sm leading-6"
+                    : "mt-5 flex gap-2 rounded-xl border border-emerald-800/15 bg-emerald-100/70 p-4 text-xs leading-5 text-emerald-950"
+                }
+              >
+                {mode !== "register" && (
+                  <CheckCircle2
+                    aria-hidden="true"
+                    className="mt-0.5 size-4 shrink-0"
+                  />
+                )}
+                {message}
               </p>
             )}
             {error && (
@@ -411,15 +424,23 @@ export function AuthForm({
             )}
 
             {mode === "register" && (
-              <p className="text-muted-foreground mt-7 text-center text-xs">
-                {t("haveAccount")}{" "}
-                <Link
-                  href={`/login?next=${encodeURIComponent(safeAuthNext(nextPath))}`}
-                  className="text-foreground hover:text-primary font-medium"
-                >
-                  {t("signIn")}
-                </Link>
-              </p>
+              <div className="text-muted-foreground mt-5 text-center text-sm">
+                <p>{t("haveAccount")}</p>
+                <div className="flex flex-wrap items-center justify-center gap-x-4">
+                  <Link
+                    href={`/login?next=${encodeURIComponent(safeAuthNext(nextPath))}`}
+                    className="text-foreground hover:text-primary focus-visible:outline-primary inline-flex min-h-11 items-center font-medium focus-visible:outline-2"
+                  >
+                    {t("signIn")}
+                  </Link>
+                  <Link
+                    href="/forgot-password"
+                    className="text-foreground hover:text-primary focus-visible:outline-primary inline-flex min-h-11 items-center font-medium focus-visible:outline-2"
+                  >
+                    {t("forgotLink")}
+                  </Link>
+                </div>
+              </div>
             )}
             {(mode === "forgot" || mode === "reset") && (
               <p className="text-muted-foreground mt-7 text-center text-xs">

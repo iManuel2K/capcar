@@ -25,6 +25,7 @@ describe("database-owned API quotas", () => {
     for (const file of [
       "20260908140000_add_beta_api_rate_limits.sql",
       "20261022202851_security_review_hardening.sql",
+      "20261111102549_allow_driving_review_rate_limit.sql",
     ])
       await db.exec(readFileSync(`supabase/migrations/${file}`, "utf8"));
   }, 30_000);
@@ -58,6 +59,18 @@ describe("database-owned API quotas", () => {
     expect((await call("specialist-profile", 10, 60)).rows[0].allowed).toBe(
       false,
     );
+    await db.exec("reset role");
+  });
+  it("gives Driving Review a dedicated five-request quota", async () => {
+    await as();
+    for (let remaining = 4; remaining >= 0; remaining--) {
+      expect((await call("driving-review")).rows[0]).toMatchObject({
+        allowed: true,
+        remaining,
+      });
+    }
+    expect((await call("driving-review")).rows[0].allowed).toBe(false);
+    expect((await call("ai-connection")).rows[0].remaining).toBe(4);
     await db.exec("reset role");
   });
   it("blocks arbitrary route names, null configuration, anonymous calls and counter writes", async () => {

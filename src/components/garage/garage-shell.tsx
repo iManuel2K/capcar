@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, PanelLeft } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
@@ -21,12 +21,13 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
   const notifications = useNotifications();
   const { vehicles } = useVehicles();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarOn, setSidebarOn] = useState(true);
   const mobileDrawer = useRef<HTMLDialogElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const unread = notifications.filter((item) => !item.readAt).length;
   const vehicleMatch = pathname.match(/^\/garage\/([^/]+)/);
   const vehicleId =
-    vehicleMatch?.[1] && vehicleMatch[1] !== "new"
+    vehicleMatch?.[1] && !["new", "driving-review"].includes(vehicleMatch[1])
       ? vehicleMatch[1]
       : undefined;
   const vehicle = vehicles.find((item) => item.id === vehicleId);
@@ -67,18 +68,27 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
     );
 
   return (
-    <div className="capcar-editorial-grid bg-background text-foreground min-h-dvh lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]">
+    <div
+      className={`capcar-editorial-grid bg-background text-foreground min-h-dvh lg:grid ${sidebarOn ? "lg:grid-cols-[272px_minmax(0,1fr)]" : "lg:grid-cols-1"}`}
+    >
       <PriceWatchMonitor />
 
-      <aside className="sticky top-0 hidden h-dvh border-r border-white/7 lg:block">
-        <GarageSidebar
-          pathname={pathname}
-          vehicleId={vehicleId}
-          vehicleLabel={vehicleLabel}
-          vehicleMeta={vehicleMeta}
-          unread={unread}
-        />
-      </aside>
+      {sidebarOn && (
+        <aside
+          id="desktop-garage-navigation"
+          className="sticky top-0 hidden h-dvh min-h-0 border-r border-white/7 lg:flex lg:flex-col"
+        >
+          <div className="min-h-0 flex-1">
+            <GarageSidebar
+              pathname={pathname}
+              vehicleId={vehicleId}
+              vehicleLabel={vehicleLabel}
+              vehicleMeta={vehicleMeta}
+              unread={unread}
+            />
+          </div>
+        </aside>
+      )}
 
       <div className="min-w-0">
         <header className="bg-background/90 sticky top-0 z-40 border-b border-white/8 shadow-[0_12px_40px_rgba(0,0,0,.12)] backdrop-blur-2xl">
@@ -97,6 +107,21 @@ export function GarageShell({ children }: { children: React.ReactNode }) {
               </button>
               <CapcarWordmark />
             </div>
+
+            <button
+              type="button"
+              role="switch"
+              aria-checked={sidebarOn}
+              aria-label={t("sidebarToggle")}
+              title={t("sidebarToggle")}
+              aria-controls={
+                sidebarOn ? "desktop-garage-navigation" : undefined
+              }
+              onClick={() => setSidebarOn((on) => !on)}
+              className={`hover:text-foreground focus-visible:outline-primary hidden size-11 shrink-0 items-center justify-center rounded-xl border focus-visible:outline-2 focus-visible:outline-offset-2 lg:inline-flex ${sidebarOn ? "text-primary border-primary/30 bg-primary/10" : "text-muted-foreground border-white/15"}`}
+            >
+              <PanelLeft aria-hidden="true" className="size-4" />
+            </button>
 
             <div className="hidden min-w-0 lg:block">
               <p className="text-muted-foreground text-xs font-semibold tracking-[0.15em] uppercase">

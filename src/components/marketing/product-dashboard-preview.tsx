@@ -48,7 +48,10 @@ type PlannedItem = {
   shipping: number | null;
 };
 
-export function ProductDashboardPreview() {
+export function ProductDashboardPreview({
+  embedded = false,
+}: { embedded?: boolean } = {}) {
+  const Heading = embedded ? "h4" : "h2";
   const t = useTranslations("Launch");
   const locale = useLocale();
   const home = homepageCopy[locale as AppLocale] ?? homepageCopy.en;
@@ -135,16 +138,24 @@ export function ProductDashboardPreview() {
       className="bg-background text-foreground scroll-mt-24"
       aria-labelledby="demo-title"
     >
-      <div className={styles.section}>
-        <div className="mt-3 grid gap-5 lg:grid-cols-[1.1fr_1fr] lg:items-end">
-          <h2 id="demo-title" className={styles.title}>
+      <div className={embedded ? undefined : styles.section}>
+        <div
+          className={
+            embedded
+              ? "sr-only"
+              : "mt-3 grid gap-5 lg:grid-cols-[1.1fr_1fr] lg:items-end"
+          }
+        >
+          <Heading id="demo-title" className={styles.title}>
             {home.demoTitle}
-          </h2>
+          </Heading>
           <p className="text-muted-foreground max-w-xl text-base leading-7">
             {home.demoText}
           </p>
         </div>
-        <div className="border-foreground/20 bg-background text-foreground relative mt-8 overflow-hidden rounded-2xl border">
+        <div
+          className={`border-foreground/20 bg-background text-foreground relative overflow-hidden rounded-2xl border ${embedded ? "" : "mt-8"}`}
+        >
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 px-5 py-4 sm:px-7">
             <div>
               <p className="text-lg font-medium">{home.project}</p>
@@ -186,7 +197,11 @@ export function ProductDashboardPreview() {
             <div
               role="tablist"
               aria-label={t("demo.tabs")}
-              className="flex overflow-x-auto border-b border-white/15 px-2 sm:px-5"
+              className={
+                embedded
+                  ? "grid grid-cols-2 border-b border-white/15 px-2 sm:grid-cols-4 sm:px-5"
+                  : "flex overflow-x-auto border-b border-white/15 px-2 sm:px-5"
+              }
             >
               {views.map((key, index) => (
                 <button

@@ -1,40 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import {
-  AlertTriangle,
-  ArrowLeft,
-  Check,
-  CircleGauge,
-  GraduationCap,
-  ShieldCheck,
-  Sparkles,
-  WalletCards,
-} from "lucide-react";
-import { useState, useSyncExternalStore } from "react";
-
+import { ArrowLeft, CheckCircle2, Copy, Route } from "lucide-react";
+import { useRef, useState, useSyncExternalStore } from "react";
+import { useLocale } from "next-intl";
+import { resolveJournalLocale } from "@/features/journal/routes";
+import type { AppLocale } from "@/i18n/config";
+import type { Vehicle } from "@/features/vehicles/vehicle-schema";
 import {
   generateTuningPlan,
+  isStageComplete,
+  tuningAiBrief,
+  tuningCheckKey,
   tuningExperience,
   tuningGoals,
+  tuningPlanInputSchema,
+  tuningUsage,
+  type TuningPlan,
   type TuningPlanInput,
 } from "@/features/tuning/tuning-roadmap";
+import { goalCopy, tuningCopy } from "@/features/tuning/tuning-copy";
 import {
   announceTuningChange,
   saveTuningPlan,
+  updateTuningCheck,
 } from "@/features/tuning/tuning-storage";
 import { useTuningPlans } from "@/features/tuning/use-tuning-plans";
 import { useVehicles } from "@/features/vehicles/use-vehicles";
+import { TuningAiAssistant } from "./tuning-ai-assistant";
+import { tuningAiCopy } from "@/features/tuning/tuning-ai-copy";
 
-const goalLabels: Record<TuningPlanInput["goal"], string> = {
-  oem_plus: "OEM+ daily",
-  appearance: "Better appearance",
-  handling: "Better handling",
-  sound: "Better sound",
-  power: "More power",
-};
+const control =
+  "min-h-11 rounded-xl border px-3 py-2 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+const button =
+  "min-h-11 rounded-xl border border-primary/40 px-4 py-3 font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
 export function TuningAcademy({ vehicleId }: { vehicleId: string }) {
+  const locale = resolveJournalLocale(useLocale());
   const hydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -44,207 +46,502 @@ export function TuningAcademy({ vehicleId }: { vehicleId: string }) {
   const plans = useTuningPlans();
   const vehicle = vehicles.find((candidate) => candidate.id === vehicleId);
   const plan = plans.find((candidate) => candidate.vehicleId === vehicleId);
-  const [input, setInput] = useState<TuningPlanInput>({
-    goal: "oem_plus",
-    experience: "beginner",
-    budget: 5000,
-  });
-
   if (!hydrated)
     return (
-      <div className="min-h-[720px] animate-pulse rounded-[2rem] bg-white/[0.04]" />
+      <div
+        aria-busy="true"
+        className="bg-card min-h-[720px] animate-pulse rounded-3xl"
+      />
     );
   if (!vehicle)
     return (
-      <div className="text-muted-foreground py-32 text-center">
-        Vehicle not found.
-      </div>
+      <p className="text-muted-foreground py-24 text-center">
+        {tuningCopy.missing[locale]}
+      </p>
     );
+  return (
+    <TuningEditor
+      key={vehicleId}
+      vehicle={vehicle}
+      savedPlan={plan}
+      locale={locale}
+    />
+  );
+}
 
-  function generate() {
-    if (!vehicle) return;
-    saveTuningPlan(generateTuningPlan(vehicle, input), window.localStorage);
-    announceTuningChange();
+function TuningEditor({
+  vehicle,
+  savedPlan,
+  locale,
+}: {
+  vehicle: Vehicle;
+  savedPlan?: TuningPlan;
+  locale: AppLocale;
+}) {
+  const c = (key: keyof typeof tuningCopy) => tuningCopy[key][locale];
+  const [input, setInput] = useState<TuningPlanInput>(() => ({
+    goal: savedPlan?.goal ?? "oem_plus",
+    experience: savedPlan?.experience ?? "beginner",
+    budget: savedPlan?.budget ?? 5000,
+    usage: savedPlan?.usage ?? "daily",
+    reservePercent: savedPlan?.reservePercent ?? 10,
+  }));
+  const [budget, setBudget] = useState(String(input.budget));
+  const [preview, setPreview] = useState<TuningPlan>();
+  const [error, setError] = useState("");
+  const [budgetError, setBudgetError] = useState(false);
+  const [status, setStatus] = useState("");
+  const [brief, setBrief] = useState("");
+  const budgetRef = useRef<HTMLInputElement>(null);
+  const roadmapRef = useRef<HTMLElement>(null);
+  const sourcePlan = preview ?? savedPlan;
+  // Versioned templates keep saved progress stable when the interface language changes.
+  const plan =
+    sourcePlan?.version === 2
+      ? {
+          ...generateTuningPlan(
+            vehicle,
+            sourcePlan,
+            sourcePlan.generatedAt,
+            locale,
+          ),
+          completedChecks: sourcePlan.completedChecks ?? [],
+        }
+      : sourcePlan;
+  const completed = plan?.completedChecks ?? [];
+  const total =
+    plan?.stages.reduce((sum, stage) => sum + stage.checks.length, 0) ?? 0;
+  const completedCount =
+    plan?.stages.reduce(
+      (sum, stage) =>
+        sum +
+        stage.checks.filter((_, i) =>
+          completed.includes(tuningCheckKey(stage, i)),
+        ).length,
+      0,
+    ) ?? 0;
+  const nextStage = plan?.stages.find(
+    (stage) => !isStageComplete(stage, completed),
+  );
+  const euro = (value: number) =>
+    new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: "EUR",
+      maximumFractionDigits: 0,
+    }).format(value);
+
+  function createPreview(event: React.FormEvent) {
+    event.preventDefault();
+    const parsed = tuningPlanInputSchema.safeParse({
+      ...input,
+      budget: budget.trim() ? Number(budget) : NaN,
+    });
+    setStatus("");
+    setBrief("");
+    if (!parsed.success) {
+      setBudgetError(true);
+      setError(c("invalidBudget"));
+      budgetRef.current?.focus();
+      return;
+    }
+    setBudgetError(false);
+    setError("");
+    setPreview(generateTuningPlan(vehicle, parsed.data, undefined, locale));
+    requestAnimationFrame(() => {
+      roadmapRef.current?.focus();
+      roadmapRef.current?.scrollIntoView?.({ block: "start" });
+    });
+  }
+
+  function savePreview() {
+    if (!preview) return;
+    try {
+      saveTuningPlan(preview, window.localStorage);
+      announceTuningChange();
+      setPreview(undefined);
+      setError("");
+      setStatus(c("saved"));
+    } catch {
+      setError(c("saveError"));
+      setStatus("");
+    }
+  }
+
+  function toggle(stageId: string, index: number, checked: boolean) {
+    if (!savedPlan || preview) return;
+    try {
+      updateTuningCheck(
+        vehicle.id,
+        savedPlan.generatedAt,
+        stageId,
+        index,
+        checked,
+        window.localStorage,
+      );
+      announceTuningChange();
+      setError("");
+      setStatus(c("saved"));
+      setBrief("");
+    } catch {
+      setError(c("saveError"));
+      setStatus("");
+    }
+  }
+
+  async function copyBrief() {
+    if (!plan) return;
+    const value = tuningAiBrief(vehicle, plan, locale);
+    try {
+      await navigator.clipboard.writeText(value);
+      setStatus(c("copied"));
+      setBrief("");
+    } catch {
+      setBrief(value);
+      setStatus(c("copyError"));
+    }
   }
 
   return (
     <div className="pb-24 sm:pb-0">
       <Link
-        href={`/garage/${vehicleId}`}
-        className="text-muted-foreground hover:text-foreground mb-7 inline-flex items-center gap-2 text-sm"
+        href={`/garage/${vehicle.id}`}
+        className="text-muted-foreground mb-6 inline-flex min-h-11 items-center gap-2"
       >
-        <ArrowLeft className="size-4" /> Vehicle overview
+        <ArrowLeft aria-hidden="true" className="size-4" />
+        {c("back")}
       </Link>
-      <header className="rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_84%_15%,rgba(184,199,217,0.2),transparent_30%),#111111] p-6 sm:p-10">
-        <p className="text-primary text-xs font-semibold tracking-[0.15em] uppercase">
-          Epic 17 · Beginner tuning academy
-        </p>
-        <h1 className="mt-4 max-w-4xl text-4xl font-medium tracking-[-0.05em] sm:text-6xl">
-          Start with the goal. Build in the right order.
+      <header className="bg-card rounded-3xl border border-white/10 p-6 sm:p-8">
+        <p className="text-primary font-medium">CapCar · Tuning</p>
+        <h1 className="mt-3 text-3xl font-medium tracking-tight sm:text-5xl">
+          {c("title")}
         </h1>
-        <p className="text-muted-foreground mt-5 max-w-2xl leading-7">
-          CapCar creates a conservative roadmap for your{" "}
-          {vehicle.productionYear} {vehicle.make} {vehicle.model} without
-          inventing gains, fitment or legal approval.
+        <p className="text-muted-foreground mt-4 max-w-2xl leading-7">
+          {c("intro")}
         </p>
+        <p className="mt-3">
+          {vehicle.productionYear} {vehicle.make} {vehicle.model} ·{" "}
+          {vehicle.engineCode}
+        </p>
+        {plan && (
+          <a
+            href="#tuning-ai-title"
+            className={`${button} text-primary mt-5 inline-flex`}
+          >
+            {tuningAiCopy.title[locale]}
+          </a>
+        )}
       </header>
-
-      <section className="mt-5 grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
-        <aside className="bg-card rounded-[2rem] border border-white/10 p-6 sm:p-8">
-          <div className="flex items-center gap-3">
-            <GraduationCap className="text-primary size-5" />
-            <h2 className="text-xl font-medium">Your direction</h2>
-          </div>
-          <fieldset className="mt-7">
-            <legend className="text-muted-foreground text-xs tracking-[0.12em] uppercase">
-              Primary goal
-            </legend>
-            <div className="mt-3 grid gap-2">
+      <p role="status" className="text-primary mt-4 empty:hidden">
+        {status}
+      </p>
+      {error && (
+        <p role="alert" className="text-destructive mt-4">
+          {error}
+        </p>
+      )}
+      <div className="mt-5 grid items-start gap-5 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+        <form
+          onSubmit={createPreview}
+          noValidate
+          className="bg-card min-w-0 space-y-6 rounded-3xl border border-white/10 p-5 sm:p-7"
+        >
+          <fieldset>
+            <legend className="text-lg font-medium">{c("direction")}</legend>
+            <div className="mt-3 grid grid-cols-2 gap-2">
               {tuningGoals.map((goal) => (
                 <button
-                  key={goal}
                   type="button"
+                  key={goal}
+                  aria-pressed={input.goal === goal}
                   onClick={() => setInput({ ...input, goal })}
-                  className={`rounded-xl border px-4 py-3 text-left text-sm ${input.goal === goal ? "border-primary/45 bg-primary/10 text-primary" : "text-muted-foreground border-white/10"}`}
+                  className={`${control} ${input.goal === goal ? "border-primary bg-primary/10 text-primary" : "text-muted-foreground border-white/15"}`}
                 >
-                  {goalLabels[goal]}
+                  {goalCopy[goal][locale]}
                 </button>
               ))}
             </div>
           </fieldset>
-          <fieldset className="mt-7">
-            <legend className="text-muted-foreground text-xs tracking-[0.12em] uppercase">
-              Experience
-            </legend>
-            <div className="mt-3 flex gap-2">
+          <fieldset>
+            <legend className="font-medium">{c("usage")}</legend>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {tuningUsage.map((usage) => (
+                <button
+                  key={usage}
+                  type="button"
+                  aria-pressed={input.usage === usage}
+                  onClick={() => setInput({ ...input, usage })}
+                  className={`${control} ${input.usage === usage ? "border-primary bg-primary/10 text-primary" : "text-muted-foreground border-white/15"}`}
+                >
+                  {c(usage)}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend className="font-medium">{c("experience")}</legend>
+            <div className="mt-3 flex flex-wrap gap-2">
               {tuningExperience.map((experience) => (
                 <button
                   key={experience}
                   type="button"
+                  aria-pressed={input.experience === experience}
                   onClick={() => setInput({ ...input, experience })}
-                  className={`rounded-xl border px-4 py-2.5 text-sm capitalize ${input.experience === experience ? "border-primary/45 bg-primary/10 text-primary" : "text-muted-foreground border-white/10"}`}
+                  className={`${control} ${input.experience === experience ? "border-primary bg-primary/10 text-primary" : "text-muted-foreground border-white/15"}`}
                 >
-                  {experience}
+                  {c(experience)}
                 </button>
               ))}
             </div>
           </fieldset>
-          <label className="text-muted-foreground mt-7 block text-xs tracking-[0.12em] uppercase">
-            Total budget
+          <div>
+            <label htmlFor="tuning-budget" className="font-medium">
+              {c("budget")} (EUR)
+            </label>
             <input
+              ref={budgetRef}
+              id="tuning-budget"
               type="number"
-              min="500"
-              step="250"
-              value={input.budget}
-              onChange={(event) =>
-                setInput({ ...input, budget: Number(event.target.value) })
-              }
-              className="bg-card mt-3 min-h-12 w-full rounded-xl border border-white/10 px-4 text-base text-white/70 outline-none"
+              inputMode="numeric"
+              min={500}
+              max={100000}
+              step={1}
+              value={budget}
+              onChange={(event) => setBudget(event.target.value)}
+              aria-invalid={budgetError}
+              aria-describedby={budgetError ? "tuning-budget-error" : undefined}
+              className="bg-background focus-visible:outline-primary mt-3 min-h-12 w-full rounded-xl border border-white/20 px-4 focus-visible:outline-2"
             />
-          </label>
+            {budgetError && (
+              <p id="tuning-budget-error" className="text-destructive mt-2">
+                {c("invalidBudget")}
+              </p>
+            )}
+          </div>
+          <fieldset>
+            <legend className="font-medium">{c("reserve")}</legend>
+            <div className="mt-3 flex gap-2">
+              {([0, 10, 20] as const).map((reservePercent) => (
+                <button
+                  key={reservePercent}
+                  type="button"
+                  aria-pressed={input.reservePercent === reservePercent}
+                  onClick={() => setInput({ ...input, reservePercent })}
+                  className={`${control} ${input.reservePercent === reservePercent ? "border-primary bg-primary/10 text-primary" : "text-muted-foreground border-white/15"}`}
+                >
+                  {reservePercent}%
+                </button>
+              ))}
+            </div>
+            <p className="text-muted-foreground mt-2 text-sm leading-6">
+              {c("reserveHelp")}
+            </p>
+          </fieldset>
           <button
-            type="button"
-            onClick={generate}
-            className="bg-primary text-primary-foreground mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold"
+            type="submit"
+            className={`${button} bg-primary text-primary-foreground w-full`}
           >
-            <Sparkles className="size-4" />{" "}
-            {plan ? "Regenerate roadmap" : "Create roadmap"}
+            {c("create")}
           </button>
-        </aside>
-
-        <article className="bg-card rounded-[2rem] border border-white/10 p-6 sm:p-8">
+          <p className="text-muted-foreground text-sm leading-6">
+            {c("local")}
+          </p>
+        </form>
+        <section
+          ref={roadmapRef}
+          tabIndex={-1}
+          aria-label={c("create")}
+          className="bg-card min-w-0 scroll-mt-24 rounded-3xl border border-white/10 p-5 focus:outline-none sm:p-7"
+        >
           {plan ? (
             <>
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <p className="text-muted-foreground text-xs tracking-[0.12em] uppercase">
-                    Your roadmap
-                  </p>
-                  <h2 className="mt-2 text-2xl font-medium">
-                    {goalLabels[plan.goal]}
-                  </h2>
-                </div>
-                <span className="text-muted-foreground inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-xs">
-                  <WalletCards className="size-3.5" /> {formatEuro(plan.budget)}
-                </span>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 className="text-2xl font-medium">
+                  {goalCopy[plan.goal][locale]}
+                </h2>
+                <span className="text-primary">{euro(plan.budget)}</span>
               </div>
-              <div className="mt-8 space-y-4">
-                {plan.stages.map((stage) => (
-                  <div
-                    key={stage.id}
-                    className="rounded-2xl border border-white/8 bg-black/10 p-5"
-                  >
-                    <div className="flex items-start gap-4">
-                      <span className="bg-primary/10 text-primary grid size-9 shrink-0 place-items-center rounded-lg text-xs">
-                        {String(stage.order).padStart(2, "0")}
-                      </span>
-                      <div className="flex-1">
-                        <div className="flex flex-wrap items-start justify-between gap-3">
-                          <h3 className="font-medium text-white/80">
-                            {stage.title}
-                          </h3>
-                          <span className="text-muted-foreground text-sm">
-                            {formatEuro(stage.budget)}
-                          </span>
-                        </div>
-                        <p className="text-muted-foreground mt-2 text-sm leading-6">
-                          {stage.reason}
-                        </p>
-                        <ul className="mt-4 space-y-2">
-                          {stage.checks.map((check) => (
-                            <li
-                              key={check}
-                              className="text-muted-foreground flex gap-2 text-xs leading-5"
-                            >
-                              <Check className="text-muted-foreground mt-0.5 size-3.5 shrink-0" />
-                              {check}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
+              <p className="text-muted-foreground mt-2">
+                {c(plan.usage ?? "daily")} · {c(plan.experience)}
+              </p>
+              <p className="text-primary mt-3">
+                {c("reserve")}: {euro(plan.reserveBudget ?? 0)}
+              </p>
+              <p className="text-muted-foreground mt-2 text-sm leading-6">
+                {c("allocation")}
+              </p>
+              {preview ? (
+                <div className="bg-primary/10 mt-5 rounded-xl p-4">
+                  <p className="font-medium">{c("preview")}</p>
+                  {savedPlan && (
+                    <p className="mt-2 text-sm leading-6">{c("replace")}</p>
+                  )}
+                  <div className="mt-3 flex flex-wrap gap-3">
+                    <button
+                      type="button"
+                      onClick={savePreview}
+                      className={`${button} bg-primary text-primary-foreground`}
+                    >
+                      {c("save")}
+                    </button>
+                    {savedPlan && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPreview(undefined);
+                          setBrief("");
+                          setError("");
+                          setStatus("");
+                          setInput({
+                            ...savedPlan,
+                            usage: savedPlan.usage ?? "daily",
+                            reservePercent: savedPlan.reservePercent ?? 10,
+                          });
+                          setBudget(String(savedPlan.budget));
+                        }}
+                        className={button}
+                      >
+                        {c("discard")}
+                      </button>
+                    )}
                   </div>
-                ))}
+                </div>
+              ) : (
+                <div className="mt-5">
+                  <label htmlFor="tuning-progress">
+                    {c("progress")}: {completedCount}/{total}
+                  </label>
+                  <progress
+                    id="tuning-progress"
+                    max={total}
+                    value={completedCount}
+                    className="accent-primary mt-2 h-2 w-full"
+                  />
+                  <p className="text-muted-foreground mt-2 text-sm leading-6">
+                    {c("completeHelp")} {c("reopen")}
+                  </p>
+                </div>
+              )}
+              <ol className="mt-6 space-y-5">
+                {plan.stages.map((stage, stageIndex) => {
+                  const done = isStageComplete(stage, completed);
+                  const blocked = plan.stages
+                    .slice(0, stageIndex)
+                    .some((previous) => !isStageComplete(previous, completed));
+                  return (
+                    <li
+                      key={stage.id}
+                      className={`rounded-2xl border p-4 sm:p-5 ${nextStage?.id === stage.id ? "border-primary/50 bg-primary/5" : "border-white/15"}`}
+                    >
+                      <div className="flex flex-wrap items-start justify-between gap-2">
+                        <h3 className="font-medium">
+                          {stage.order}. {stage.title}
+                        </h3>
+                        <span className="text-muted-foreground">
+                          {euro(stage.budget)}
+                        </span>
+                      </div>
+                      <p className="text-primary mt-2 text-sm">
+                        {done ? (
+                          <>
+                            <CheckCircle2
+                              aria-hidden="true"
+                              className="mr-1 inline size-4"
+                            />
+                            {c("complete")}
+                          </>
+                        ) : blocked ? (
+                          `${c("after")} ${stage.order - 1}`
+                        ) : (
+                          c("next")
+                        )}
+                      </p>
+                      <p className="text-muted-foreground mt-3 leading-7">
+                        {stage.reason}
+                      </p>
+                      <ul className="mt-3 space-y-2">
+                        {stage.checks.map((check, index) => (
+                          <li key={index}>
+                            <label className="flex min-h-11 items-start gap-3 py-2 leading-7">
+                              <input
+                                type="checkbox"
+                                checked={completed.includes(
+                                  tuningCheckKey(stage, index),
+                                )}
+                                disabled={Boolean(preview) || blocked}
+                                onChange={(event) =>
+                                  toggle(stage.id, index, event.target.checked)
+                                }
+                                className="accent-primary focus-visible:outline-primary mt-1.5 size-5 shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2"
+                              />
+                              <span>{check}</span>
+                            </label>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  );
+                })}
+              </ol>
+              <div className="mt-6 border-t border-white/15 pt-5">
+                <button
+                  type="button"
+                  onClick={copyBrief}
+                  className={`${button} flex items-center gap-2`}
+                >
+                  <Copy aria-hidden="true" className="size-4 shrink-0" />
+                  {c("ai")}
+                </button>
+                <p className="text-muted-foreground mt-3 text-sm leading-6">
+                  {c("aiHelp")}
+                </p>
+                {brief && (
+                  <textarea
+                    readOnly
+                    aria-label={c("ai")}
+                    value={brief}
+                    onFocus={(event) => event.target.select()}
+                    rows={10}
+                    className="bg-background mt-3 w-full rounded-xl border border-white/20 p-3"
+                  />
+                )}
               </div>
             </>
           ) : (
-            <div className="flex min-h-[520px] flex-col items-center justify-center text-center">
-              <CircleGauge className="text-muted-foreground size-10" />
-              <h2 className="mt-6 text-2xl font-medium">Choose a direction</h2>
-              <p className="text-muted-foreground mt-3 max-w-md text-sm leading-6">
-                Your first roadmap will always begin with maintenance and safety
-                before cosmetic or performance changes.
+            <div className="flex min-h-72 flex-col items-center justify-center gap-5 text-center">
+              <Route aria-hidden="true" className="text-primary size-10" />
+              <p className="text-muted-foreground max-w-sm leading-7">
+                {c("empty")}
               </p>
             </div>
           )}
-        </article>
-      </section>
+        </section>
+      </div>
       {plan && (
-        <aside className="mt-5 rounded-2xl border border-amber-300/15 bg-amber-300/6 p-5">
-          <p className="flex items-center gap-2 text-sm text-amber-100/70">
-            <ShieldCheck className="size-4" /> Guardrails
-          </p>
-          <ul className="mt-4 space-y-2">
+        <TuningAiAssistant
+          key={JSON.stringify([
+            plan.generatedAt,
+            plan.goal,
+            plan.budget,
+            plan.usage,
+            plan.experience,
+            plan.reserveBudget,
+            plan.completedChecks,
+            locale,
+          ])}
+          vehicle={vehicle}
+          plan={plan}
+          locale={locale}
+        />
+      )}
+      {plan && (
+        <aside className="bg-card mt-5 rounded-2xl border border-white/15 p-5">
+          <ul className="text-muted-foreground space-y-3 text-sm leading-6">
             {plan.warnings.map((warning) => (
-              <li
-                key={warning}
-                className="text-muted-foreground flex gap-2 text-sm leading-6"
-              >
-                <AlertTriangle className="mt-1 size-3.5 shrink-0 text-amber-200" />
-                {warning}
-              </li>
+              <li key={warning}>{warning}</li>
             ))}
           </ul>
         </aside>
       )}
     </div>
   );
-}
-
-function formatEuro(value: number) {
-  return new Intl.NumberFormat("de-DE", {
-    style: "currency",
-    currency: "EUR",
-    maximumFractionDigits: 0,
-  }).format(value);
 }

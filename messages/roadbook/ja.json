@@ -64,6 +64,8 @@
       "credit": "写真 · {photographer}"
     },
     "places": {
+      "browse": "スポットを見る",
+      "catalogTotal": "カタログ内のスポット：{count}件",
       "action": "スポット · {count}",
       "images": "写真 {count}枚",
       "eyebrow": "ビジュアルRoadbook",
@@ -89,7 +91,7 @@
       "label": "互換マップ",
       "description": "軽量フォールバックマップを使用しています。場所の詳細と保存した訪問記録は引き続き利用できます。"
     },
-    "resultCount": "表示中のスポット：{count}件",
+    "resultCount": "この周辺のスポット：{count}件",
     "retry": "再試行",
     "categories": {
       "drift_circuit": "ドリフトサーキット",
@@ -101,7 +103,7 @@
       "autobahn_context": "アウトバーン情報"
     },
     "modes": {
-      "label": "シティマップスタイル",
+      "label": "地図スタイル",
       "headline": "9つのRoadbookスタイル。",
       "description": "明るいガレージの日差しから東京の夜まで、走る道の雰囲気を選ぼう。",
       "konstanz": "Konstanz",

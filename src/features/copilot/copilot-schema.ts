@@ -1,7 +1,55 @@
 import { z } from "zod";
 import { safeAuthNext } from "@/features/auth/next-path";
+import {
+  tuningGoals,
+  tuningExperience,
+  tuningUsage,
+} from "@/features/tuning/tuning-roadmap";
 
 export const copilotRequestSchema = z.object({
+  clarifications: z
+    .array(
+      z.object({ question: z.string().max(400), answer: z.string().max(1000) }),
+    )
+    .max(12)
+    .optional(),
+  research: z.boolean().optional(),
+  rulesOnly: z.boolean().optional(),
+  intent: z.enum(["tuning_review", "tuning_prompt"]).optional(),
+  tuningContext: z
+    .object({
+      goal: z.enum(tuningGoals),
+      experience: z.enum(tuningExperience),
+      usage: z.enum(tuningUsage),
+      budget: z.number().int().min(500).max(100_000),
+      reserveBudget: z.number().int().min(0).max(100_000),
+      selectedStage: z.string().max(80).optional(),
+      stages: z
+        .array(
+          z.object({
+            id: z.string().max(80),
+            title: z.string().max(200),
+            budget: z.number().int().min(0).max(100_000),
+            checks: z
+              .array(
+                z.object({ text: z.string().max(1000), done: z.boolean() }),
+              )
+              .max(10),
+          }),
+        )
+        .max(6),
+    })
+    .optional(),
+  locale: z.enum(["en", "de", "el", "sq", "ja"]).optional(),
+  history: z
+    .array(
+      z.object({
+        question: z.string().max(1000),
+        answer: z.string().max(6000),
+      }),
+    )
+    .max(8)
+    .optional(),
   message: z.string().trim().min(2).max(1000),
   vehicle: z.object({
     id: z.string(),
@@ -24,7 +72,26 @@ export const copilotRequestSchema = z.object({
     .max(100),
 });
 
+export const copilotFollowUpSchema = z.object({
+  question: z.string().trim().min(1).max(400),
+  reason: z.string().trim().min(1).max(400),
+  choices: z.array(z.string().trim().min(1).max(150)).min(2).max(3),
+});
 export const copilotResponseSchema = z.object({
+  followUp: copilotFollowUpSchema.optional(),
+  sources: z
+    .array(
+      z.object({
+        title: z.string().max(500),
+        url: z
+          .string()
+          .url()
+          .refine((value) => /^https:\/\//i.test(value)),
+      }),
+    )
+    .max(12)
+    .optional(),
+  searchSuggestions: z.string().max(100_000).optional(),
   provider: z.string(),
   source: z.enum(["deterministic", "external"]),
   answer: z.string(),

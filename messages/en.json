@@ -93,6 +93,9 @@
     "demo": "Live demo"
   },
   "GarageNav": {
+    "sidebarToggle": "Sidebar",
+    "sidebarOn": "On",
+    "sidebarOff": "Off",
     "label": "Garage navigation",
     "garage": "Garage",
     "maintenance": "Maintenance",
@@ -127,7 +130,7 @@
     "closeBackdrop": "Close navigation",
     "allVehicles": "All vehicles",
     "guides": "Guides",
-    "knownProblems": "Known problems",
+    "knownProblems": "Common problems",
     "tuning": "Tuning",
     "copilot": "Build Copilot",
     "dataSources": "Data sources"

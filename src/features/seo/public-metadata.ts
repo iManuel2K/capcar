@@ -1,4 +1,7 @@
-import { isJournalRoute } from "@/features/journal/routes";
+import {
+  isJournalArticleAvailable,
+  isJournalRoute,
+} from "@/features/journal/routes";
 import type { Metadata } from "next";
 
 import { isAppLocale, type AppLocale, locales } from "@/i18n/config";
@@ -11,6 +14,7 @@ export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-10-16";
 export const PUBLIC_INDEXABLE_ROUTES = [
   "",
   "/ai",
+  "/driving-review",
   "/project-car-planner",
   "/car-maintenance-tracker",
   "/connected-parts",
@@ -70,7 +74,14 @@ export function localizePublicPathname(
   const routeSegments = isAppLocale(segments[0]) ? segments.slice(1) : segments;
   const route = routeSegments.length ? `/${routeSegments.join("/")}` : "";
 
-  if (isJournalRoute(route)) return `/${locale}${route}`;
+  if (isJournalRoute(route)) {
+    if (
+      route !== "/journal" &&
+      !isJournalArticleAvailable(route.slice(9), locale)
+    )
+      return `/${locale}/journal`;
+    return `/${locale}${route}`;
+  }
   return isPublicIndexableRoute(route)
     ? localizedPublicPath(route, locale)
     : null;

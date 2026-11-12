@@ -59,6 +59,8 @@
       "credit": "Foto · {photographer}"
     },
     "places": {
+      "browse": "Orte ansehen",
+      "catalogTotal": "{count, plural, =1 {# Ort im Katalog} other {# Orte im Katalog}}",
       "action": "Orte · {count}",
       "images": "{count} Fotos",
       "eyebrow": "Visuelles Roadbook",
@@ -84,7 +86,7 @@
       "label": "Kompatibilitätskarte",
       "description": "Roadbook nutzt die leichte Ersatzkarte. Ortsdetails und gespeicherte Besuche funktionieren weiterhin."
     },
-    "resultCount": "{count, plural, =1 {Ein Ort im Ausschnitt} other {# Orte im Ausschnitt}}",
+    "resultCount": "{count, plural, =1 {Ein Ort in diesem Bereich} other {# Orte in diesem Bereich}}",
     "retry": "Erneut versuchen",
     "categories": {
       "drift_circuit": "Driftstrecken",
@@ -96,7 +98,7 @@
       "autobahn_context": "Autobahn-Kontext"
     },
     "modes": {
-      "label": "Stil der Stadtkarte",
+      "label": "Kartenstil",
       "headline": "Neun Roadbook-Stile.",
       "description": "Von klarem Werkstatt-Tageslicht bis zur Tokio-Nacht: Wähle, wie sich deine Straßen anfühlen sollen.",
       "konstanz": "Konstanz",

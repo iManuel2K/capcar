@@ -93,6 +93,9 @@
     "demo": "ライブデモ"
   },
   "GarageNav": {
+    "sidebarToggle": "サイドバー",
+    "sidebarOn": "オン",
+    "sidebarOff": "オフ",
     "label": "ガレージナビゲーション",
     "garage": "ガレージ",
     "maintenance": "メンテナンス",
@@ -127,7 +130,7 @@
     "closeBackdrop": "ナビゲーションを閉じる",
     "allVehicles": "すべての車両",
     "guides": "ガイド",
-    "knownProblems": "既知の問題",
+    "knownProblems": "よくある問題",
     "tuning": "チューニング",
     "copilot": "ビルドCopilot",
     "dataSources": "データソース"

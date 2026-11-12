@@ -2,6 +2,10 @@ import { carModels } from "@/features/visualizer/car-model-catalog";
 import { problemsForVehicle } from "@/features/problems/problem-catalog";
 import { dailyProblemsForVehicle } from "@/features/problems/daily-car-coverage";
 import { partCatalog } from "@/features/parts/part-catalog";
+import { everydayGarageCars } from "./everyday-garage-cars";
+import { additionalGarageCars } from "./additional-garage-cars";
+import { modelProblemProfileForVehicle } from "@/features/problems/model-problem-profiles";
+import { commonChecksForVehicle } from "@/features/problems/common-checks";
 import type { Vehicle } from "./vehicle-schema";
 
 export type GarageCarChoice = {
@@ -11,6 +15,7 @@ export type GarageCarChoice = {
   platform: string;
   years: [number, number];
   visual: boolean;
+  catalogSource?: string;
 };
 // Reuse the actual visual catalog, not a second list claiming models we don't
 // have. Missing chassis information stays unknown until the owner confirms it.
@@ -63,6 +68,8 @@ export const garageCarCatalog: GarageCarChoice[] = [
     years: [2016, 2019],
     visual: false,
   },
+  ...everydayGarageCars,
+  ...additionalGarageCars,
   ...carModels.map((car) => ({
     id: car.id,
     make: car.make,
@@ -75,10 +82,10 @@ export const garageCarCatalog: GarageCarChoice[] = [
 
 export function garageCarCoverage(vehicle: Vehicle) {
   return {
-    problems: [
-      ...problemsForVehicle(vehicle),
-      ...dailyProblemsForVehicle(vehicle),
-    ].length,
+    checks: commonChecksForVehicle(vehicle).length,
+    problems:
+      [...problemsForVehicle(vehicle), ...dailyProblemsForVehicle(vehicle)]
+        .length + (modelProblemProfileForVehicle(vehicle)?.issues.length ?? 0),
     // These are catalog planning references, not a promise of exact fitment.
     parts: partCatalog.filter((part) =>
       part.fitmentRules.some((rule) =>
@@ -86,4 +93,27 @@ export function garageCarCoverage(vehicle: Vehicle) {
       ),
     ).length,
   };
+}
+
+// Match tokens in any order, including accents, VW and a year inside a range.
+const searchText = (value: string) =>
+  value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+export function searchGarageCars(query: string) {
+  const tokens = searchText(query)
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((token) => (token === "vw" ? "volkswagen" : token));
+  return garageCarCatalog.filter((car) => {
+    const text = searchText(`${car.make} ${car.model} ${car.platform}`);
+    return tokens.every((token) =>
+      /^\d{4}$/.test(token)
+        ? Number(token) >= car.years[0] && Number(token) <= car.years[1]
+        : text.includes(token),
+    );
+  });
 }

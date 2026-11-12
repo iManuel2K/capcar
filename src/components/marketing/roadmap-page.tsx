@@ -74,12 +74,22 @@ const stages = [
     tone: "var(--primary)",
     surface: "bg-background",
     icon: Sparkles,
-    items: ["ai", "tripPlanning", "dashcam", "drivingStyle", "carFlipping", "calendarMail", "twowheels", "more"],
+    items: [
+      "ai",
+      "tripPlanning",
+      "dashcam",
+      "drivingStyle",
+      "carFlipping",
+      "calendarMail",
+      "twowheels",
+      "more",
+    ],
   },
 ] as const;
 
 export function RoadmapPage() {
   const t = useTranslations("Roadmap");
+  const driving = useTranslations("DrivingReview");
   const totalMilestones = stages.reduce(
     (total, stage) => total + stage.items.length,
     0,
@@ -267,6 +277,18 @@ export function RoadmapPage() {
                                 modelCount: carModels.length,
                               })}
                             </p>
+                            {item === "drivingStyle" && (
+                              <Link
+                                href="/driving-review"
+                                className="text-primary mt-4 inline-flex min-h-11 items-center gap-2 text-sm underline underline-offset-4"
+                              >
+                                {driving("open")}{" "}
+                                <ArrowRight
+                                  className="size-4"
+                                  aria-hidden="true"
+                                />
+                              </Link>
+                            )}
                           </li>
                         );
                       })}

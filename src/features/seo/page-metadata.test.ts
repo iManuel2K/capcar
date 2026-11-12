@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
-import { journalArticles } from "@/features/journal/articles";
+import { isEnglishOnlyJournalPost } from "@/features/journal/routes";
+import { getJournalArticles } from "@/features/journal/articles";
 import { locales } from "@/i18n/config";
 
 import { pageMetadata, PUBLIC_INDEXABLE_ROUTES } from "./public-metadata";
@@ -18,7 +19,10 @@ describe("route metadata", () => {
     const urls = entries.map((route) => route.url);
     expect(entries).toHaveLength(
       PUBLIC_INDEXABLE_ROUTES.length * locales.length +
-        (journalArticles.length + 1) * locales.length,
+        locales.reduce(
+          (count, locale) => count + getJournalArticles(locale).length + 1,
+          0,
+        ),
     );
     expect(urls).toContain("https://capcar.dev/roadbook");
     expect(urls).toContain("https://capcar.dev/de/roadbook");
@@ -43,6 +47,8 @@ describe("route metadata", () => {
       const isJournal = entry.url.includes("/journal");
       if (new URL(entry.url).pathname.endsWith("/pricing")) {
         expect(entry.lastModified).toBe("2026-10-26");
+      } else if (isJournal) {
+        expect(entry.lastModified).toMatch(/^2026-(10|11)-\d{2}$/);
       } else {
         expect(entry.lastModified).toMatch(/^2026-10-(16|17|21)$/);
       }
@@ -53,12 +59,23 @@ describe("route metadata", () => {
           /^https:\/\/capcar\.dev\/(en|de|el|sq|ja)\/journal/,
         );
       }
+      if (isEnglishOnlyJournalPost(entry.url.split("/").at(-1) ?? "")) {
+        expect(entry.alternates?.languages).toEqual({
+          en: entry.url,
+          "x-default": entry.url,
+        });
+        continue;
+      }
       expect(entry.alternates?.languages?.de).toMatch(
         /^https:\/\/capcar\.dev\/de/,
       );
-      expect(entry.alternates?.languages?.["x-default"]).toMatch(
-        /^https:\/\/capcar\.dev\//,
-      );
+      if (Object.keys(entry.alternates?.languages ?? {}).length > 1) {
+        expect(entry.alternates?.languages?.["x-default"]).toMatch(
+          /^https:\/\/capcar\.dev\//,
+        );
+      } else {
+        expect(entry.alternates?.languages).toEqual({ de: entry.url });
+      }
     }
   });
 

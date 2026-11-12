@@ -45,7 +45,7 @@ const nextConfig: NextConfig = {
       "img-src 'self' data: blob: https://www.google.com/s2/favicons https://*.gstatic.com/faviconV2 https://i.ytimg.com https://images.contentstack.io https://images.unsplash.com https://*.sketchfab.com https://*.supabase.co https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://tiles.openfreemap.org",
       "font-src 'self' data:",
       "connect-src 'self' blob: https://*.supabase.co https://*.sketchfab.com https://tiles.openfreemap.org https://us.i.posthog.com",
-      "frame-src https://sketchfab.com https://*.sketchfab.com https://www.youtube-nocookie.com",
+      "frame-src 'self' https://sketchfab.com https://*.sketchfab.com https://www.youtube-nocookie.com",
       "media-src 'self' blob: https://*.sketchfab.com",
       "worker-src 'self' blob:",
       "child-src blob:",

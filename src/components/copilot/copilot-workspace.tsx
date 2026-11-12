@@ -2,6 +2,16 @@
 
 import Link from "next/link";
 import {
+  CopilotResponseError,
+  readCopilotResponse,
+} from "@/features/copilot/chat-transport";
+import { CopilotFollowUp } from "./copilot-follow-up";
+import {
+  clarificationContext,
+  conversationAnswer,
+} from "@/features/copilot/conversation-follow-up";
+import { CopilotResearchSources, researchCopy } from "./copilot-research";
+import {
   AlertTriangle,
   ArrowLeft,
   ArrowRight,
@@ -19,6 +29,7 @@ import {
 } from "@/components/ui/ai-conversation";
 import { useLocale } from "next-intl";
 import { resolveJournalLocale } from "@/features/journal/routes";
+import { copilotCopy } from "@/features/copilot/copilot-copy";
 import { interactionCopy } from "@/features/ui/interaction-copy";
 
 import { useBuildState } from "@/features/builds/use-builds";
@@ -31,12 +42,32 @@ const starters = [
   "What should I check before buying wheels?",
 ] as const;
 
-export function CopilotWorkspace({ vehicleId }: { vehicleId: string }) {
-  return <CopilotSession key={vehicleId} vehicleId={vehicleId} />;
+type Status = {
+  mode: "deterministic" | "external" | "unavailable";
+  providerName: string;
+};
+export function CopilotWorkspace({
+  vehicleId,
+  status = { mode: "deterministic", providerName: "CapCar rules copilot" },
+}: {
+  vehicleId: string;
+  status?: Status;
+}) {
+  return (
+    <CopilotSession key={vehicleId} vehicleId={vehicleId} status={status} />
+  );
 }
 
-function CopilotSession({ vehicleId }: { vehicleId: string }) {
-  const c = interactionCopy[resolveJournalLocale(useLocale())];
+function CopilotSession({
+  vehicleId,
+  status,
+}: {
+  vehicleId: string;
+  status: Status;
+}) {
+  const locale = resolveJournalLocale(useLocale());
+  const c = interactionCopy[locale];
+  const copy = (key: keyof typeof copilotCopy) => copilotCopy[key][locale];
   const hydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -53,13 +84,25 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
   const buildItems = builds.items.filter((item) =>
     vehicleBuildIds.has(item.buildId),
   );
+  const [clarifications, setClarifications] = useState<
+    { question: string; answer: string }[]
+  >([]);
+  const [research, setResearch] = useState(false);
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState<CopilotResponse>();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [turns, setTurns] = useState<{ question: string; answer: string }[]>(
-    [],
-  );
+  const [error, setError] = useState<{
+    message: string;
+    fallbackQuestion?: string;
+  }>();
+  const [turns, setTurns] = useState<
+    {
+      question: string;
+      answer: string;
+      contextAnswer?: string;
+      followUp?: CopilotResponse["followUp"];
+    }[]
+  >([]);
   const [pending, setPending] = useState("");
   const request = useRef<AbortController | null>(null);
   useEffect(() => () => request.current?.abort(), []);
@@ -75,20 +118,39 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
       </div>
     );
 
-  async function submit(question = message) {
+  async function submit(question = message, rulesOnly = false) {
     if (!vehicle || question.trim().length < 2 || request.current) return;
     const controller = new AbortController();
     request.current = controller;
+    const nextClarifications = clarificationContext(
+      clarifications,
+      response,
+      question,
+    );
     setPending(question);
     setLoading(true);
-    setError("");
+    setError(undefined);
     try {
       const apiResponse = await fetch("/api/copilot/chat", {
-        signal: controller.signal,
+        signal: AbortSignal.any([
+          controller.signal,
+          AbortSignal.timeout(65_000),
+        ]),
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          accept: "application/x-ndjson",
+        },
         body: JSON.stringify({
           message: question,
+          research: !rulesOnly && research,
+          ...(rulesOnly ? { rulesOnly: true } : {}),
+          clarifications: nextClarifications,
+          locale,
+          history: turns.slice(-8).map((turn) => ({
+            question: turn.question,
+            answer: (turn.contextAnswer ?? turn.answer).slice(0, 6000),
+          })),
           vehicle: {
             id: vehicle.id,
             make: vehicle.make,
@@ -106,23 +168,33 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
           })),
         }),
       });
-      const body = (await apiResponse.json()) as
-        CopilotResponse | { error?: string };
-      if (!apiResponse.ok || !("answer" in body))
-        throw new Error(
-          "error" in body && body.error
-            ? body.error
-            : "Copilot request failed.",
-        );
+      const body = await readCopilotResponse(apiResponse);
       if (controller.signal.aborted) return;
       setResponse(body);
-      setTurns((current) => [...current, { question, answer: body.answer }]);
+      setTurns((current) => [
+        ...current,
+        {
+          question,
+          answer: body.answer,
+          contextAnswer: conversationAnswer(body),
+          followUp: body.followUp,
+        },
+      ]);
+      setClarifications(nextClarifications);
       setMessage((draft) => (draft === question ? "" : draft));
     } catch (caught) {
       if (controller.signal.aborted) return;
-      setError(
-        caught instanceof Error ? caught.message : "Copilot request failed.",
-      );
+      setMessage((draft) => (draft.trim() ? draft : question));
+      setError({
+        message:
+          caught instanceof Error ? caught.message : "Copilot request failed.",
+        fallbackQuestion:
+          !rulesOnly &&
+          caught instanceof CopilotResponseError &&
+          caught.code === "provider_unavailable"
+            ? question
+            : undefined,
+      });
     } finally {
       request.current = null;
       setPending("");
@@ -141,19 +213,46 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
       <header className="bg-card rounded-[2rem] border border-white/10 p-5 sm:p-7">
         <div className="flex flex-wrap items-center gap-2">
           <span className="border-primary/25 bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] uppercase">
-            <Bot className="size-3" /> CapCar rules copilot
+            <Bot className="size-3" />{" "}
+            {response?.provider ?? status.providerName}
           </span>
           <span className="rounded-full border border-amber-300/20 bg-amber-300/8 px-3 py-1.5 text-[10px] text-amber-100/65 uppercase">
-            No external AI active
+            {response
+              ? copy(response.source === "external" ? "connected" : "rules")
+              : copy(
+                  status.mode === "external"
+                    ? "connected"
+                    : status.mode === "unavailable"
+                      ? "unavailable"
+                      : "rules",
+                )}
           </span>
         </div>
         <h1 className="mt-5 max-w-4xl text-2xl font-medium tracking-[-0.04em] sm:text-4xl">
           {c.overview}
         </h1>
         <p className="text-muted-foreground mt-3 max-w-2xl text-sm leading-6">
-          The current copilot uses conservative rules and your saved
-          vehicle/build context. An external AI adapter can be activated later.
+          {copy(
+            (
+              response
+                ? response.source === "external"
+                : status.mode === "external"
+            )
+              ? "active"
+              : status.mode === "unavailable"
+                ? "unavailable"
+                : status.mode === "external"
+                  ? "checksReply"
+                  : "limited",
+          )}
         </p>
+        <Link
+          href="/account/connections"
+          className="text-primary border-primary/30 mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl border px-4 py-2 focus-visible:outline-2"
+        >
+          {copy("connect")}
+          <ArrowRight aria-hidden="true" className="size-4" />
+        </Link>
       </header>
 
       <section className="mt-5">
@@ -165,6 +264,35 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
               </AIMessage>,
               <AIMessage key={`${index}-assistant`} role="assistant">
                 <AIResponse text={turn.answer} />
+                {index !== turns.length - 1 && turn.followUp && (
+                  <p className="text-muted-foreground mt-3 leading-7">
+                    {turn.followUp.question}
+                  </p>
+                )}
+                {index === turns.length - 1 && (
+                  <CopilotFollowUp
+                    followUp={response?.followUp}
+                    locale={locale}
+                    busy={loading}
+                    onReply={(reply) => void submit(reply)}
+                  />
+                )}
+                {index === turns.length - 1 && response && (
+                  <CopilotResearchSources response={response} locale={locale} />
+                )}
+                {index === turns.length - 1 && response && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {response.nextActions.map((action) => (
+                      <Link
+                        key={action.href}
+                        href={action.href}
+                        className="text-primary border-primary/30 inline-flex min-h-11 items-center rounded-xl border px-3 py-2"
+                      >
+                        {action.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </AIMessage>,
             ])}
             {pending && (
@@ -186,6 +314,36 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
           </AIConversation>
           <div className="mt-4 border-t border-white/10 pt-4">
             <div className="mt-4">
+              <label className="text-muted-foreground mb-3 flex min-h-11 items-center gap-3 text-sm">
+                <input
+                  type="checkbox"
+                  checked={research}
+                  disabled={loading}
+                  onChange={(event) => setResearch(event.target.checked)}
+                  className="accent-primary size-5"
+                />
+                {researchCopy[locale].option}
+              </label>
+              {error && (
+                <div className="mb-3 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-sm text-red-100">
+                  <p role="alert" className="flex gap-2">
+                    <AlertTriangle
+                      aria-hidden="true"
+                      className="mt-0.5 size-4 shrink-0"
+                    />
+                    {error.message}
+                  </p>
+                  {error.fallbackQuestion && (
+                    <button
+                      type="button"
+                      className="border-primary/30 text-foreground focus-visible:outline-primary mt-3 min-h-11 rounded-xl border px-3 py-2 text-left focus-visible:outline-2"
+                      onClick={() => void submit(error.fallbackQuestion, true)}
+                    >
+                      {copy("useChecks")}
+                    </button>
+                  )}
+                </div>
+              )}
               <AIInput
                 value={message}
                 onValueChange={setMessage}
@@ -256,26 +414,8 @@ function CopilotSession({ vehicleId }: { vehicleId: string }) {
                   </ul>
                 </div>
               </div>
-              <div className="mt-6 flex flex-wrap gap-3">
-                {response.nextActions.map((action) => (
-                  <Link
-                    key={action.href}
-                    href={action.href}
-                    className="hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 text-sm text-white/60"
-                  >
-                    {action.label}
-                    <ArrowRight className="size-3.5" />
-                  </Link>
-                ))}
-              </div>
             </>
           ) : null}
-          {error && (
-            <p className="mt-5 flex gap-2 rounded-xl border border-red-300/15 bg-red-300/6 p-4 text-sm text-red-100/70">
-              <AlertTriangle className="mt-0.5 size-4 shrink-0" />
-              {error}
-            </p>
-          )}
         </article>
       </section>
     </div>

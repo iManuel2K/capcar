@@ -354,7 +354,11 @@ export const checklistUI: Record<AppLocale, Copy> = {
 
 export function checklistKind(slug: string): keyof Copy["checks"] {
   if (slug === "bmw-wartung-ohne-garage") return "workspace";
-  if (slug === "bmw-diy-wartung-dokumentieren") return "history";
+  if (
+    slug === "bmw-diy-wartung-dokumentieren" ||
+    slug === "bmw-318i-e90-kosten"
+  )
+    return "history";
   if (slug === "ruesselsheim-rheingau-tagesausflug") return "trip";
   if (slug === "guide-to-vehicle-history") return "guide";
   return "plan";

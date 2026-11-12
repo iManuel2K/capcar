@@ -8,18 +8,21 @@ export default getRequestConfig(async () => {
   const [cookieStore, headerStore] = await Promise.all([cookies(), headers()]);
   const saved = cookieStore.get(localeCookie)?.value;
   const requested = headerStore.get("x-capcar-locale") ?? saved;
-  const locale = resolveLocale(
-    requested,
-    headerStore.get("accept-language"),
-  );
+  const locale = resolveLocale(requested, headerStore.get("accept-language"));
 
-  const [baseMessages, publicMessages, hardeningMessages, roadbookMessages] =
-    await Promise.all([
-      import(`../../messages/${locale}.json`),
-      import(`../../messages/public/${locale}.json`),
-      import(`../../messages/hardening/${locale}.json`),
-      import(`../../messages/roadbook/${locale}.json`),
-    ]);
+  const [
+    baseMessages,
+    publicMessages,
+    hardeningMessages,
+    roadbookMessages,
+    drivingMessages,
+  ] = await Promise.all([
+    import(`../../messages/${locale}.json`),
+    import(`../../messages/public/${locale}.json`),
+    import(`../../messages/hardening/${locale}.json`),
+    import(`../../messages/roadbook/${locale}.json`),
+    import(`../../messages/driving-review/${locale}.json`),
+  ]);
 
   return {
     locale,
@@ -28,6 +31,7 @@ export default getRequestConfig(async () => {
       ...publicMessages.default,
       ...hardeningMessages.default,
       ...roadbookMessages.default,
+      ...drivingMessages.default,
     },
   };
 });

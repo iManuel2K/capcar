@@ -51,6 +51,66 @@ afterEach(() => {
 });
 
 describe("Copilot conversation integration", () => {
+  it("offers quick replies and sends the actual clarification and prior question back", async () => {
+    const followUp = {
+      question: "Where is the car registered?",
+      reason: "This changes road-use requirements.",
+      choices: ["Germany", "Another country"],
+    };
+    const fetch = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        headers: new Headers({ "content-type": "application/json" }),
+        json: async () => ({ ...reply, followUp }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        headers: new Headers({ "content-type": "application/json" }),
+        json: async () => ({
+          ...reply,
+          answer: "I will compare the options using that country.",
+        }),
+      });
+    vi.stubGlobal("fetch", fetch);
+    render(<CopilotWorkspace vehicleId="test-car" />);
+    fireEvent.change(screen.getByRole("textbox"), {
+      target: { value: "More power, software only" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Send message" }));
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: "Germany" })).toBeEnabled(),
+    );
+    expect(screen.getByText(followUp.reason)).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: "I don’t know — help me decide" }),
+    ).toBeEnabled();
+    fireEvent.click(screen.getByRole("button", { name: "Germany" }));
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
+    const body = JSON.parse(fetch.mock.calls[1][1].body);
+    expect(body.message).toBe("Germany");
+    expect(body.clarifications).toEqual([
+      { question: followUp.question, answer: "Germany" },
+    ]);
+    expect(body.history[0].answer).toContain(followUp.question);
+    await waitFor(() =>
+      expect(screen.queryByRole("button", { name: "Germany" })).toBeNull(),
+    );
+  });
+  it("shows a saved provider and a direct connection path", () => {
+    render(
+      <CopilotWorkspace
+        vehicleId="test-car"
+        status={{ mode: "external", providerName: "Your Gemini" }}
+      />,
+    );
+    expect(screen.getByText("Your Gemini")).toBeVisible();
+    expect(screen.getByText("Connected AI")).toBeVisible();
+    expect(
+      screen.getByRole("link", { name: "Connect or manage your AI" }),
+    ).toHaveAttribute("href", "/account/connections");
+    expect(screen.queryByText("No external AI active")).toBeNull();
+  });
   it("keeps previous answers, prevents parallel requests and preserves a draft typed during a response", async () => {
     let finish: (value: unknown) => void = () => {};
     const fetch = vi.fn().mockImplementation(
@@ -72,7 +132,11 @@ describe("Copilot conversation integration", () => {
     fireEvent.change(field, { target: { value: "My next question" } });
     fireEvent.keyDown(field, { key: "Enter" });
     expect(fetch).toHaveBeenCalledOnce();
-    finish({ ok: true, json: async () => reply });
+    finish({
+      ok: true,
+      headers: new Headers({ "content-type": "application/json" }),
+      json: async () => reply,
+    });
     await waitFor(() => expect(screen.getByText(reply.answer)).toBeVisible());
     expect(field).toHaveValue("My next question");
     expect(
@@ -80,6 +144,7 @@ describe("Copilot conversation integration", () => {
     ).toHaveAttribute("href", "/garage/test-car/maintenance");
     fetch.mockResolvedValue({
       ok: true,
+      headers: new Headers({ "content-type": "application/json" }),
       json: async () => ({ ...reply, answer: "A second real response." }),
     });
     fireEvent.click(screen.getByRole("button", { name: "Send message" }));
@@ -89,6 +154,9 @@ describe("Copilot conversation integration", () => {
     expect(screen.getByText(reply.answer)).toBeVisible();
     expect(field).toHaveValue("");
     expect(JSON.parse(fetch.mock.calls[0][1].body)).not.toHaveProperty("vin");
+    expect(JSON.parse(fetch.mock.calls[1][1].body).history).toEqual([
+      { question: "What should I check first?", answer: reply.answer },
+    ]);
   });
   it("aborts the real request without erasing the question or showing a failure", async () => {
     vi.stubGlobal(
