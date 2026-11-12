@@ -321,3 +321,38 @@ function parseRetryAfter(value: string | null) {
   if (!Number.isFinite(date)) return 60;
   return Math.min(3_600, Math.max(60, Math.ceil((date - Date.now()) / 1_000)));
 }
+
+export async function getEbayListingPhoto(
+  itemId: string,
+  market: string,
+  signal: AbortSignal,
+) {
+  const clientId = process.env.CAPCAR_EBAY_CLIENT_ID?.trim();
+  const clientSecret = process.env.CAPCAR_EBAY_CLIENT_SECRET?.trim();
+  const token =
+    clientId && clientSecret
+      ? await requestApplicationToken(clientId, clientSecret, fetch, signal)
+      : process.env.CAPCAR_EBAY_ACCESS_TOKEN?.trim();
+  if (!token) return undefined;
+  const response = await fetch(
+    `https://api.ebay.com/buy/browse/v1/item/${encodeURIComponent(itemId)}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "X-EBAY-C-MARKETPLACE-ID": `EBAY_${market}`,
+      },
+      cache: "no-store",
+      redirect: "error",
+      signal,
+    },
+  );
+  if (!response.ok) return undefined;
+  const item = z
+    .object({
+      image: z.object({
+        imageUrl: z.string().max(2048).refine(safeRetailImageUrl),
+      }),
+    })
+    .safeParse(await response.json());
+  return item.success ? item.data.image.imageUrl : undefined;
+}
