@@ -213,3 +213,57 @@ it("sends the exact project vehicle profile with live searches", async () => {
   await act(() => vi.advanceTimersByTimeAsync(500));
   expect(request.mock.calls[0][0].vehicle).toEqual(vehicle);
 });
+
+it("shows German marketplace links and displays offers before all retailers finish", async () => {
+  const first = {
+    id: "partner-lamp",
+    title: "Kleinanzeigen rear lamp",
+    price: 100,
+    currency: "EUR",
+    shipping: null,
+    country: "DE",
+    condition: "Used",
+    affiliate: false,
+    url: "https://www.kleinanzeigen.de/s-anzeige/rear-lamp/1",
+  };
+  const later = {
+    ...first,
+    id: "ebay-lamp",
+    title: "eBay rear lamp",
+    url: "https://www.ebay.de/itm/1",
+  };
+  const partial = { ...empty, source: "partner", items: [first] };
+  const complete = { ...empty, source: "multi", items: [first, later] };
+  let finish: (value: typeof complete) => void = () => undefined;
+  request.mockImplementation((_input, _signal, onPartial) => {
+    onPartial(partial);
+    return new Promise<typeof complete>((resolve) => {
+      finish = resolve;
+    });
+  });
+
+  render(<ResilientPartSearch marketplaceLinks initialQuery="E90 rear lamp" />);
+
+  expect(
+    screen.getByRole("link", { name: /Continue this search on eBay/ }),
+  ).toHaveAttribute(
+    "href",
+    "https://www.ebay.de/sch/i.html?_nkw=E90+rear+lamp",
+  );
+  expect(
+    screen.getByRole("link", { name: /Search on Kleinanzeigen/ }),
+  ).toHaveAttribute(
+    "href",
+    "https://www.kleinanzeigen.de/s-suchanfrage.html?keywords=E90+rear+lamp",
+  );
+
+  await act(() => vi.advanceTimersByTimeAsync(500));
+  expect(screen.getByText(first.title)).toBeInTheDocument();
+  expect(screen.queryByText(later.title)).not.toBeInTheDocument();
+  expect(screen.getByRole("searchbox")).toHaveValue("E90 rear lamp");
+
+  await act(async () => finish(complete));
+  expect(screen.getByText(first.title)).toBeInTheDocument();
+  expect(screen.getByText(later.title)).toBeInTheDocument();
+  expect(screen.getByRole("searchbox")).toHaveValue("E90 rear lamp");
+});
