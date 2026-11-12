@@ -40,6 +40,7 @@ const Board = createContext<{
 } | null>(null);
 export function PartsBoardProvider({ children }: { children: ReactNode }) {
   const t = useTranslations("Expansion");
+  const retail = useTranslations("Retail");
   const locale = useLocale();
   const raw = useBrowserValue(KEY);
   const entries = useMemo(() => {
@@ -127,7 +128,14 @@ export function PartsBoardProvider({ children }: { children: ReactNode }) {
                   key={boardKey(entry)}
                   className="min-w-0 space-y-3 rounded-2xl border border-current/20 p-4"
                 >
+                  <p className="text-muted-foreground text-sm font-medium">
+                    {entry.retailer ??
+                      (entry.provider === "partner"
+                        ? retail("retailer")
+                        : "eBay")}
+                  </p>
                   <h3 className="font-semibold break-words">{entry.title}</h3>
+                  <p className="text-sm">{entry.condition}</p>
                   <p>
                     {money(entry.price, entry.currency)} · {entry.input.market}{" "}
                     → {entry.input.destination}
@@ -138,6 +146,12 @@ export function PartsBoardProvider({ children }: { children: ReactNode }) {
                       ? t("unknown")
                       : money(entry.shipping, entry.currency)}
                   </p>
+                  {entry.shipping !== null && (
+                    <p className="text-sm font-medium">
+                      {retail("total")}{" "}
+                      {money(entry.price + entry.shipping, entry.currency)}
+                    </p>
+                  )}
                   <p className="text-xs">
                     {new Date(entry.checkedAt).toLocaleString(locale)}
                   </p>
@@ -276,7 +290,7 @@ export function PartsBoardProvider({ children }: { children: ReactNode }) {
                           }
                           className="inline-flex min-h-11 items-center underline"
                         >
-                          {t("continueEbay")} · {entry.title}
+                          {retail("view")} · {entry.title}
                         </a>
                         <p className="text-xs">
                           {entry.affiliate ? t("affiliate") : t("direct")}

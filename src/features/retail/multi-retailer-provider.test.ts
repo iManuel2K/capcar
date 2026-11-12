@@ -43,6 +43,42 @@ describe("multi-retailer search", () => {
     });
   });
 
+  it("publishes the faster retailer before the other search finishes", async () => {
+    let finishEbay!: (response: ReturnType<typeof result>) => void;
+    let showPartial!: () => void;
+    const ebay = new Promise<ReturnType<typeof result>>((resolve) => {
+      finishEbay = resolve;
+    });
+    const early = new Promise<void>((resolve) => {
+      showPartial = resolve;
+    });
+    const partner = result("partner", "Partner", 210);
+    mocks.ebay.mockReturnValue(ebay);
+    mocks.partner.mockResolvedValue(partner);
+    const onPartial = vi.fn(showPartial);
+
+    const search = searchRetailers(
+      input,
+      { CAPCAR_RETAIL_PARTNER_NAME: "Partner" },
+      onPartial,
+    );
+    await early;
+    expect(onPartial).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ source: "partner", items: partner.items }),
+    );
+
+    const ebayResult = result("ebay", "eBay", 240);
+    finishEbay(ebayResult);
+    await expect(search).resolves.toMatchObject({
+      source: "multi",
+      items: [...partner.items, ...ebayResult.items],
+      providers: [
+        { id: "ebay", status: "available" },
+        { id: "partner", status: "available" },
+      ],
+    });
+  });
+
   it("normalizes known totals across providers without currency conversion", async () => {
     mocks.ebay.mockResolvedValue(result("ebay", "eBay", 240));
     mocks.partner.mockResolvedValue(result("partner", "Partner", 210));

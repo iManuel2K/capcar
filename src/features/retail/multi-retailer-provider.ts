@@ -40,12 +40,51 @@ function unavailableProvider(
 export async function searchRetailers(
   input: RetailRequest,
   environment: Record<string, string | undefined> = process.env,
+  onPartial?: (result: RetailResponse) => void,
 ): Promise<RetailResponse> {
   const cacheKey = JSON.stringify(input);
-  const attempts = await Promise.allSettled([
+  const requests = [
     searchEbay(input, environment),
     searchPartnerRetailer(input, environment),
-  ]);
+  ];
+  let settled = 0;
+  const attempts = await Promise.allSettled(
+    requests.map(async (request, index) => {
+      let result: RetailResponse | undefined;
+      try {
+        result = await request;
+      } finally {
+        settled += 1;
+      }
+      if (
+        onPartial &&
+        settled < requests.length &&
+        result?.items.length &&
+        environment.CAPCAR_RETAIL_PARTNER_NAME
+      ) {
+        onPartial(
+          liveResponse(
+            input.sort,
+            [result],
+            [
+              {
+                id: index === 0 ? "ebay" : "partner",
+                label:
+                  index === 0
+                    ? "eBay"
+                    : environment.CAPCAR_RETAIL_PARTNER_NAME.trim().slice(
+                        0,
+                        80,
+                      ),
+                status: "available",
+              },
+            ],
+          ),
+        );
+      }
+      return result;
+    }),
+  );
   const results = attempts.flatMap((attempt) =>
     attempt.status === "fulfilled" && attempt.value ? [attempt.value] : [],
   );
@@ -71,33 +110,59 @@ export async function searchRetailers(
         : "No retailer provider is available.",
     );
   }
-  const providers = providerStatuses(attempts, environment);
-  const items = results
-    .flatMap((result) => result.items)
-    .toSorted((left, right) => {
-      const leftTotal =
-        left.shipping === null ? Infinity : left.price + left.shipping;
-      const rightTotal =
-        right.shipping === null ? Infinity : right.price + right.shipping;
-      return leftTotal - rightTotal;
-    })
-    .slice(0, 60);
-  const response: RetailResponse = {
-    source: results.length > 1 ? "multi" : results[0].source,
-    checkedAt: new Date().toISOString(),
-    items,
-    hasMore: results.some((result) => result.hasMore),
-    freshness: "live",
-    providers,
-    warning:
-      "Results are normalized but currencies are not converted. Unknown delivery, tax and import charges remain unknown. Confirm fitment and the retailer checkout total.",
-  };
+  const response = liveResponse(
+    input.sort,
+    results,
+    providerStatuses(attempts, environment),
+  );
   if (successfulSearches.size >= MAX_CACHE_ENTRIES) {
     const oldest = successfulSearches.keys().next().value;
     if (oldest) successfulSearches.delete(oldest);
   }
   successfulSearches.set(cacheKey, { response, storedAt: Date.now() });
   return response;
+}
+
+function liveResponse(
+  sort: RetailRequest["sort"],
+  results: RetailResponse[],
+  providers: NonNullable<RetailResponse["providers"]>,
+): RetailResponse {
+  const combined = results.flatMap((result) => result.items);
+  // Providers can sort their own listings by age. The normalized response
+  // does not carry dates that could establish an order across retailers.
+  const items =
+    results.length === 1 || sort === "newest"
+      ? combined
+      : sortByPrice(combined, sort === "priceDesc");
+  return {
+    source: results.length > 1 ? "multi" : results[0].source,
+    checkedAt: new Date().toISOString(),
+    items: items.slice(0, 60),
+    hasMore: results.some((result) => result.hasMore),
+    freshness: "live",
+    providers,
+    warning:
+      "Results are normalized but currencies are not converted. Unknown delivery, tax and import charges remain unknown. Confirm fitment and the retailer checkout total.",
+  };
+}
+
+function sortByPrice(items: RetailResponse["items"], descending: boolean) {
+  const currencies = new Map<string, RetailResponse["items"]>();
+  for (const item of items) {
+    const group = currencies.get(item.currency);
+    if (group) group.push(item);
+    else currencies.set(item.currency, [item]);
+  }
+  return [...currencies.values()].flatMap((group) =>
+    group.sort((left, right) => {
+      if (left.shipping === null) return right.shipping === null ? 0 : 1;
+      if (right.shipping === null) return -1;
+      const difference =
+        left.price + left.shipping - right.price - right.shipping;
+      return descending ? -difference : difference;
+    }),
+  );
 }
 
 function providerStatuses(

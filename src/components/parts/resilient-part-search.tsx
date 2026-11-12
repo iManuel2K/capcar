@@ -23,10 +23,12 @@ type Props = {
   appearance?: "light" | "garage";
   initialQuery?: string;
   vehicle?: RetailRequest["vehicle"];
+  marketplaceLinks?: boolean;
   children?: (
     result: RetailResponse,
     input: RetailRequest,
     navigate: (input: RetailRequest) => void,
+    pending: boolean,
   ) => ReactNode;
 };
 const field =
@@ -44,8 +46,10 @@ export function ResilientPartSearch({
   appearance = "light",
   initialQuery = "",
   vehicle,
+  marketplaceLinks = false,
 }: Props) {
   const t = useTranslations("PartsSearch");
+  const retail = useTranslations("Retail");
   const search = useTranslations("GlobalSearch");
   const errors = useTranslations("Hardening.Search");
   const locale = useLocale();
@@ -91,6 +95,10 @@ export function ResilientPartSearch({
   const pending =
     valid && !composing && !current?.data && (!current || loading);
   const refreshing = valid && !composing && Boolean(current?.data) && loading;
+  const kleinanzeigen = new URL(
+    "https://www.kleinanzeigen.de/s-suchanfrage.html",
+  );
+  kleinanzeigen.searchParams.set("keywords", input.query.trim());
 
   function change(next: RetailRequest) {
     if (JSON.stringify({ ...next, query: next.query.trim() }) !== requestKey)
@@ -102,6 +110,7 @@ export function ResilientPartSearch({
     if (!valid || composing) return;
     const controller = new AbortController();
     active.current = controller;
+    let disposed = false;
     let timedOut = false;
     let timeout: ReturnType<typeof setTimeout> | undefined;
     const debounce = setTimeout(async () => {
@@ -120,13 +129,19 @@ export function ResilientPartSearch({
         const data = await requestRetail(
           JSON.parse(requestKey) as RetailRequest,
           controller.signal,
+          (partial) => {
+            if (!controller.signal.aborted)
+              setState({ key: requestKey, data: partial });
+          },
         );
         if (controller.signal.aborted) return;
-        if (cache.current.size >= 10) cache.current.clear();
-        cache.current.set(requestKey, { at: Date.now(), data });
+        if (data.freshness !== "stale") {
+          if (cache.current.size >= 10) cache.current.clear();
+          cache.current.set(requestKey, { at: Date.now(), data });
+        }
         setState({ key: requestKey, data });
       } catch (error) {
-        if (controller.signal.aborted && !timedOut) return;
+        if (disposed || (controller.signal.aborted && !timedOut)) return;
         const failure = timedOut
           ? new SearchFailure(timeoutMessage, true, "timeout")
           : error instanceof SearchFailure
@@ -139,10 +154,14 @@ export function ResilientPartSearch({
         }));
       } finally {
         clearTimeout(timeout);
-        setInFlight((currentKey) => (currentKey === loadKey ? "" : currentKey));
+        if (!disposed)
+          setInFlight((currentKey) =>
+            currentKey === loadKey ? "" : currentKey,
+          );
       }
     }, 500);
     return () => {
+      disposed = true;
       clearTimeout(debounce);
       clearTimeout(timeout);
       controller.abort();
@@ -384,6 +403,28 @@ export function ResilientPartSearch({
           {pending || refreshing ? t("searching") : t("search")}
         </button>
       </form>
+      {marketplaceLinks && valid && (
+        <div className="flex flex-wrap gap-3">
+          <a
+            href={ebaySearchUrl(input)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${action} inline-flex items-center`}
+          >
+            {t("continueEbay")}
+          </a>
+          {input.market === "DE" && (
+            <a
+              href={kleinanzeigen.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${action} inline-flex items-center`}
+            >
+              {retail("searchKleinanzeigen")}
+            </a>
+          )}
+        </div>
+      )}
       <p role="status" aria-live="polite" className="text-sm">
         {pending || refreshing
           ? t("searchStatus")
@@ -412,14 +453,16 @@ export function ResilientPartSearch({
               <button type="button" onClick={retry} className={action}>
                 {t("retry")}
               </button>
-              <a
-                href={ebaySearchUrl(input)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${action} inline-flex items-center`}
-              >
-                {t("continueEbay")}
-              </a>
+              {!marketplaceLinks && (
+                <a
+                  href={ebaySearchUrl(input)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${action} inline-flex items-center`}
+                >
+                  {t("continueEbay")}
+                </a>
+              )}
             </div>
           )}
         </div>
@@ -478,7 +521,7 @@ export function ResilientPartSearch({
       )}
       {current?.data &&
         (children ? (
-          children(current.data, input, (next) => setInput(next))
+          children(current.data, input, setInput, refreshing)
         ) : (
           <>
             <p className="text-sm leading-6">{errors("warning")}</p>
@@ -530,7 +573,7 @@ export function ResilientPartSearch({
                   {t("previous")}
                 </button>
               )}
-              {current.data.hasMore && input.page < 9 && (
+              {!refreshing && current.data.hasMore && input.page < 9 && (
                 <button
                   className={action}
                   onClick={() => change({ ...input, page: input.page + 1 })}

@@ -1,5 +1,6 @@
 import { afterEach, expect, it, vi } from "vitest";
 import { requestRetail } from "./search-client";
+import { RETAIL_STREAM_TYPE } from "./retail-contracts";
 const input = {
   query: "E90",
   market: "DE",
@@ -84,4 +85,48 @@ it("preserves a valid empty result", async () => {
   expect(
     (await requestRetail(input, new AbortController().signal)).items,
   ).toEqual([]);
+});
+
+it("decodes partial results across chunk boundaries and returns the final response", async () => {
+  const partial = {
+    source: "partner",
+    checkedAt: "2026-09-10T12:00:00Z",
+    hasMore: false,
+    warning: "Stück prüfen",
+    items: [],
+  };
+  const complete = { ...partial, source: "multi" };
+  const first = new TextEncoder().encode(
+    JSON.stringify({ type: "partial", data: partial }) + "\n",
+  );
+  const response = new Response(
+    new ReadableStream({
+      start(controller) {
+        const split = first.indexOf(0xc3) + 1;
+        controller.enqueue(first.subarray(0, split));
+        controller.enqueue(first.subarray(split));
+        controller.enqueue(
+          new TextEncoder().encode(
+            JSON.stringify({ type: "complete", data: complete }) + "\n",
+          ),
+        );
+        controller.close();
+      },
+    }),
+    { headers: { "Content-Type": `${RETAIL_STREAM_TYPE}; charset=utf-8` } },
+  );
+  const fetch = vi.fn().mockResolvedValue(response);
+  vi.stubGlobal("fetch", fetch);
+  const onPartial = vi.fn();
+
+  await expect(
+    requestRetail(input, new AbortController().signal, onPartial),
+  ).resolves.toEqual(complete);
+  expect(onPartial).toHaveBeenCalledExactlyOnceWith(partial);
+  expect(fetch).toHaveBeenCalledWith(
+    "/api/retail/search",
+    expect.objectContaining({
+      headers: expect.objectContaining({ Accept: RETAIL_STREAM_TYPE }),
+    }),
+  );
 });

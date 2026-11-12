@@ -10,6 +10,7 @@ vi.mock("@/features/retail/multi-retailer-provider", () => ({
 }));
 
 import { POST } from "./route";
+import { RETAIL_STREAM_TYPE } from "@/features/retail/retail-contracts";
 import { RetailUnavailable } from "@/features/retail/ebay-provider";
 
 const payload = {
@@ -93,12 +94,52 @@ it("preserves the provider retry window when the request allowance is reached", 
   expect(response.headers.get("Retry-After")).toBe("180");
 });
 
-function request() {
+it("streams partial results before the complete response for opted-in clients", async () => {
+  vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://capcar-im.netlify.app");
+  const partial = {
+    source: "partner",
+    checkedAt: "2026-09-11T12:00:00Z",
+    hasMore: false,
+    warning: "Check fitment",
+    items: [],
+  };
+  const complete = { ...partial, source: "multi" };
+  let finishSearch!: (response: typeof complete) => void;
+  const remaining = new Promise<typeof complete>((resolve) => {
+    finishSearch = resolve;
+  });
+  mocks.search.mockImplementation((_input, _env, sendPartial) => {
+    sendPartial(partial);
+    return remaining;
+  });
+
+  const response = await POST(request(RETAIL_STREAM_TYPE));
+  expect(response.status).toBe(200);
+  expect(response.headers.get("Content-Type")).toContain(RETAIL_STREAM_TYPE);
+  const reader = response.body!.getReader();
+  const decoder = new TextDecoder();
+  const first = await reader.read();
+  expect(JSON.parse(decoder.decode(first.value))).toEqual({
+    type: "partial",
+    data: partial,
+  });
+
+  finishSearch(complete);
+  const last = await reader.read();
+  expect(JSON.parse(decoder.decode(last.value))).toEqual({
+    type: "complete",
+    data: complete,
+  });
+  await expect(reader.read()).resolves.toMatchObject({ done: true });
+});
+
+function request(accept?: string) {
   return new Request("https://internal-runtime.test/api/retail/search", {
     method: "POST",
     headers: {
       origin: "https://capcar-im.netlify.app",
       "Content-Type": "application/json",
+      ...(accept ? { Accept: accept } : {}),
     },
     body: JSON.stringify(payload),
   });

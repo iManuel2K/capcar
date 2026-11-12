@@ -240,7 +240,7 @@
     "next": "Weiter"
   },
   "Retail": {
-    "intro": "Durchsuche aktuelle eBay-Angebote nach exakter Teilenummer oder Beschreibung. Wähle Markt und Lieferland. Der Kauf wird beim Händler abgeschlossen; CapCar nimmt keine Zahlung entgegen.",
+    "intro": "Suche nach Autoteilen per Teilenummer oder Beschreibung. Vergleiche Angebote nach Zustand, Preis und Versand. Du kaufst auf der Website des Anbieters.",
     "saveOptional": "Ergebnisse optional einem Fahrzeug zuordnen",
     "chooseVehicle": "Fahrzeug wählen",
     "savingNote": "Suche und Händler-Checkout funktionieren ohne Fahrzeug. Speichern bestätigt weder Passgenauigkeit noch Bestellung.",
@@ -251,12 +251,76 @@
     "notSupplied": "nicht angegeben",
     "affiliate": "Affiliate-Link: CapCar kann bei einem Kauf eine Provision erhalten.",
     "direct": "Direkter Händlerlink. Keine CapCar-Affiliate-Kampagne aktiv.",
-    "view": "Bei eBay ansehen ↗",
+    "view": "Zum Angebot ↗",
     "saved": "In der Wunschliste dieses Fahrzeugs gespeichert. Vorhandene Duplikate wurden nicht verändert.",
     "saveError": "Angebot konnte nicht gespeichert werden. Prüfe Fahrzeugauswahl und Browserspeicher.",
     "save": "Beim Fahrzeug speichern",
     "previous": "Vorherige Seite",
-    "next": "Nächste Seite"
+    "next": "Nächste Seite",
+    "openComparison": "Gespeicherte Vergleiche ansehen",
+    "itemPrice": "Artikelpreis",
+    "total": "Preis mit Versand",
+    "retailer": "Anbieter",
+    "searchKleinanzeigen": "Auf Kleinanzeigen suchen"
+  },
+  "RetailSave": {
+    "title": "Für ein Fahrzeug speichern",
+    "description": "Wähle ein Auto aus deiner Garage oder füge eins hinzu, um das Angebot auf seiner Merkliste zu speichern.",
+    "vehicle": "Fahrzeug",
+    "chooseVehicle": "Fahrzeug auswählen",
+    "empty": "Deine Garage ist leer. Füge ein Auto hinzu, um dieses Angebot zu speichern.",
+    "addVehicle": "Fahrzeug hinzufügen",
+    "save": "Auf Merkliste speichern",
+    "saveError": "Das Angebot konnte nicht gespeichert werden. Prüfe das Fahrzeug und versuche es erneut.",
+    "savedTitle": "Angebot gespeichert",
+    "savedDescription": "Das Angebot steht auf der Merkliste für {vehicle}.",
+    "savedStatus": "In deiner Garage gespeichert",
+    "done": "Fertig",
+    "viewWishlist": "Merkliste öffnen",
+    "cancel": "Abbrechen",
+    "back": "Zurück",
+    "createVehicle": "Zur Garage hinzufügen",
+    "make": "Marke",
+    "model": "Modell",
+    "productionYear": "Baujahr",
+    "optionalDetails": "Weitere Fahrzeugdaten (optional)",
+    "platform": "Baureihencode",
+    "engineCode": "Motorcode",
+    "bodyStyle": "Karosserieform",
+    "invalidVehicle": "Prüfe Marke, Modell und Baujahr und versuche es erneut.",
+    "createError": "Das Fahrzeug konnte nicht hinzugefügt werden. Prüfe den Browserspeicher und versuche es erneut.",
+    "mismatchDetails": "Abweichende Angaben: {fields}.",
+    "fitment": {
+      "exact": {
+        "title": "Fahrzeugdaten stimmen überein",
+        "description": "Die Angaben zur Teilekompatibilität stimmen mit den Fahrzeugdaten überein. Lass dir die Teilenummer vor dem Kauf vom Anbieter bestätigen."
+      },
+      "mismatch": {
+        "title": "Fahrzeugdaten weichen ab",
+        "description": "Die Angaben zur Teilekompatibilität weichen von den Fahrzeugdaten ab. Kläre die Kompatibilität vor dem Kauf mit dem Anbieter."
+      },
+      "unverified": {
+        "title": "Kompatibilität nicht geprüft",
+        "description": "Prüfe vor dem Kauf die Teilenummer und Fahrzeugkompatibilität beim Anbieter."
+      }
+    },
+    "axes": {
+      "make": "Marke",
+      "platform": "Baureihencode",
+      "engine": "Motorcode",
+      "production year": "Baujahr",
+      "body style": "Karosserieform"
+    },
+    "bodyStyles": {
+      "Sedan": "Limousine",
+      "Touring": "Kombi",
+      "Coupe": "Coupé",
+      "Convertible": "Cabrio",
+      "Hatchback": "Schrägheck",
+      "Pickup": "Pick-up",
+      "SUV": "SUV",
+      "Unknown": "Unbekannt"
+    }
   },
   "Expansion": {
     "open3d": "Interaktives Modell öffnen",

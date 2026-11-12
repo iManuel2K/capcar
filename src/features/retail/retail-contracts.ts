@@ -147,6 +147,13 @@ export type RetailResponse = {
     retryable?: boolean;
   }>;
 };
+
+export const RETAIL_STREAM_TYPE = "application/x-ndjson";
+
+export type RetailSearchEvent =
+  | { type: "partial" | "complete"; data: RetailResponse }
+  | { type: "error"; status: 429 | 503 | 504; retryAfterSeconds?: number };
+
 export function safeRetailUrl(value: string): boolean {
   try {
     const url = new URL(value);

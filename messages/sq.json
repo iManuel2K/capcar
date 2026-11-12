@@ -240,7 +240,7 @@
     "next": "Përpara"
   },
   "Retail": {
-    "intro": "Kërko listimet aktuale në eBay me numrin e saktë të pjesës ose përshkrimin. Zgjidh tregun dhe vendin e dorëzimit. Blerja kryhet te shitësi; CapCar nuk merr pagesa.",
+    "intro": "Kërko pjesë makinash sipas numrit ose përshkrimit. Krahaso ofertat sipas gjendjes, çmimit dhe transportit. Blerja kryhet në faqen e shitësit.",
     "saveOptional": "Ruaj rezultatet te një makinë (opsionale)",
     "chooseVehicle": "Zgjidh makinën",
     "savingNote": "Kërkimi dhe pagesa te shitësi nuk kërkojnë makinë. Ruajtja nuk konfirmon përshtatshmërinë ose porosinë.",
@@ -251,12 +251,76 @@
     "notSupplied": "nuk është dhënë",
     "affiliate": "Lidhje partneri: CapCar mund të marrë komision nga blerja.",
     "direct": "Lidhje direkte e shitësit. Nuk u aplikua fushatë partneri CapCar.",
-    "view": "Shiko në eBay ↗",
+    "view": "Shiko ofertën ↗",
     "saved": "U ruajt në listën e dëshirave të makinës. Dublikatat ekzistuese nuk u ndryshuan.",
     "saveError": "Listimi nuk u ruajt. Kontrollo makinën dhe ruajtjen e shfletuesit.",
     "save": "Ruaj te makina",
     "previous": "Faqja e mëparshme",
-    "next": "Faqja tjetër"
+    "next": "Faqja tjetër",
+    "openComparison": "Shiko krahasimet e ruajtura",
+    "itemPrice": "Çmimi i artikullit",
+    "total": "Çmimi me transport",
+    "retailer": "Shitësi",
+    "searchKleinanzeigen": "Kërko në Kleinanzeigen"
+  },
+  "RetailSave": {
+    "title": "Ruaje për një automjet",
+    "description": "Zgjidh një makinë nga garazhi yt ose shto një të re për ta ruajtur njoftimin në listën e saj të dëshirave.",
+    "vehicle": "Automjeti",
+    "chooseVehicle": "Zgjidh një automjet",
+    "empty": "Garazhi yt është bosh. Shto një makinë për ta ruajtur këtë njoftim.",
+    "addVehicle": "Shto automjet",
+    "save": "Ruaje në listën e dëshirave",
+    "saveError": "Njoftimi nuk u ruajt. Kontrollo automjetin dhe provo sërish.",
+    "savedTitle": "Njoftimi u ruajt",
+    "savedDescription": "Njoftimi është në listën e dëshirave për automjetin {vehicle}.",
+    "savedStatus": "U ruajt në garazhin tënd",
+    "done": "Mbarova",
+    "viewWishlist": "Hap listën e dëshirave",
+    "cancel": "Anulo",
+    "back": "Kthehu",
+    "createVehicle": "Shtoje në garazh",
+    "make": "Marka",
+    "model": "Modeli",
+    "productionYear": "Viti i prodhimit",
+    "optionalDetails": "Më shumë të dhëna për automjetin (opsionale)",
+    "platform": "Kodi i shasisë",
+    "engineCode": "Kodi i motorit",
+    "bodyStyle": "Lloji i karrocerisë",
+    "invalidVehicle": "Kontrollo markën, modelin dhe vitin e prodhimit, pastaj provo sërish.",
+    "createError": "Automjeti nuk u shtua. Kontrollo hapësirën e ruajtjes së shfletuesit dhe provo sërish.",
+    "mismatchDetails": "Të dhënat që ndryshojnë: {fields}.",
+    "fitment": {
+      "exact": {
+        "title": "Të dhënat e automjetit përputhen",
+        "description": "Të dhënat e përputhshmërisë përkojnë me të dhënat e makinës. Konfirmo numrin e pjesës me shitësin para blerjes."
+      },
+      "mismatch": {
+        "title": "Disa të dhëna të automjetit ndryshojnë",
+        "description": "Të dhënat e përputhshmërisë ndryshojnë nga ato të makinës. Pyet shitësin para blerjes."
+      },
+      "unverified": {
+        "title": "Përputhshmëria nuk është verifikuar",
+        "description": "Kontrollo numrin e pjesës dhe përputhshmërinë me shitësin para blerjes."
+      }
+    },
+    "axes": {
+      "make": "marka",
+      "platform": "kodi i shasisë",
+      "engine": "kodi i motorit",
+      "production year": "viti i prodhimit",
+      "body style": "lloji i karrocerisë"
+    },
+    "bodyStyles": {
+      "Sedan": "Sedan",
+      "Touring": "Familjar",
+      "Coupe": "Kupe",
+      "Convertible": "Kabriolet",
+      "Hatchback": "Hatchback",
+      "Pickup": "Pikap",
+      "SUV": "SUV",
+      "Unknown": "I panjohur"
+    }
   },
   "Expansion": {
     "open3d": "Hap modelin interaktiv",
