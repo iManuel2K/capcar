@@ -235,3 +235,15 @@ export function safeRetailImageUrl(value: string) {
     return false;
   }
 }
+
+export const savedPhotoItemSchema = z.object({
+  itemId: z.string().regex(/^v1[|][0-9]{1,20}[|][0-9]{1,20}$/),
+  market: z.enum(["DE", "GB", "FR", "IT", "ES", "US"]),
+});
+export const savedPhotoResponseSchema = z
+  .array(
+    savedPhotoItemSchema.extend({
+      imageUrl: z.string().max(2048).refine(safeRetailImageUrl),
+    }),
+  )
+  .max(12);

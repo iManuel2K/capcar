@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -19,6 +20,8 @@ import {
   type BoardEntry,
 } from "@/features/retail/parts-board";
 import {
+  savedPhotoItemSchema,
+  savedPhotoResponseSchema,
   type RetailItem,
   type RetailRequest,
   type RetailResponse,
@@ -54,6 +57,51 @@ export function PartsBoardProvider({ children }: { children: ReactNode }) {
     );
     return parsed.success ? parsed.data : [];
   }, [raw]);
+  const requestedPhotos = useRef(new Set<string>());
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const missing = new Map<string, { itemId: string; market: string }>();
+      for (const entry of entries) {
+        if (entry.imageUrl || entry.provider === "partner") continue;
+        const candidate = savedPhotoItemSchema.safeParse({
+          itemId: entry.providerItemId ?? entry.id,
+          market: entry.input.market,
+        });
+        if (!candidate.success) continue;
+        const key = `${candidate.data.market}:${candidate.data.itemId}`;
+        if (!requestedPhotos.current.has(key)) missing.set(key, candidate.data);
+      }
+      if (!missing.size) return;
+      for (const key of missing.keys()) requestedPhotos.current.add(key);
+      void (async () => {
+        try {
+          const response = await fetch("/api/retail/saved-photos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify([...missing.values()]),
+          });
+          if (!response.ok) return;
+          const photos = savedPhotoResponseSchema.parse(await response.json());
+          if (!photos.length) return;
+          const latest = readBoard();
+          const next = latest.map((entry) => {
+            if (entry.imageUrl || entry.provider === "partner") return entry;
+            const photo = photos.find(
+              (photo) =>
+                photo.itemId === (entry.providerItemId ?? entry.id) &&
+                photo.market === entry.input.market,
+            );
+            return photo ? { ...entry, imageUrl: photo.imageUrl } : entry;
+          });
+          if (next.some((entry, index) => entry !== latest[index]))
+            writeBrowserValue(KEY, JSON.stringify(boardSchema.parse(next)));
+        } catch {
+          // Keep the original offer when photo enrichment fails.
+        }
+      })();
+    }, 200);
+    return () => window.clearTimeout(timer);
+  }, [entries]);
   const [message, setMessage] = useState("");
   const write = useCallback(
     (next: BoardEntry[]) => {
