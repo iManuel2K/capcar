@@ -562,6 +562,8 @@ type TripPlannerErrorCode =
   | "gemini_rate_limit"
   | "gemini_timeout"
   | "gemini_unavailable"
+  | "gemini_upstream"
+  | "gemini_transport"
   | "openai_auth"
   | "openai_model"
   | "openai_permission"
@@ -845,7 +847,7 @@ function toGeminiTripPlannerServiceError(error: unknown) {
   )
     return new TripPlannerServiceError(
       "Gemini is temporarily unavailable. Please retry the same route in a moment.",
-      "gemini_unavailable",
+      error instanceof TypeError ? "gemini_transport" : "gemini_upstream",
       503,
     );
   return new TripPlannerServiceError(
@@ -1266,9 +1268,11 @@ async function requestGeminiPlan(
           origin: request.origin,
         };
 
+  const primaryModel = status.model!;
+  let model = primaryModel;
   async function generate(repair?: string) {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model!)}:generateContent`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
       {
         method: "POST",
         headers: {
@@ -1416,6 +1420,8 @@ async function requestGeminiPlan(
       ) {
         await new Promise((resolve) => setTimeout(resolve, 350));
         generationSignal.throwIfAborted();
+        if (primaryModel === "gemini-3.5-flash-lite")
+          model = "gemini-3.1-flash-lite";
         generated = await generate(
           "The previous request did not complete. Return a compact itinerary with only the stops needed for this trip.",
         );
@@ -1436,6 +1442,7 @@ async function requestGeminiPlan(
     const failure = toGeminiTripPlannerServiceError(error);
     console.warn("Gemini trip planning failed", {
       code: failure.code,
+      usedFallbackModel: model !== primaryModel,
       upstreamStatus:
         error instanceof GeminiResponseError ? error.status : undefined,
       failureKind: error instanceof TypeError ? "transport" : undefined,
@@ -1457,6 +1464,13 @@ async function requestGeminiPlan(
     ...generated,
     provider: status.providerName,
     source: "gemini",
+    contextNotes:
+      model === primaryModel
+        ? generated.contextNotes
+        : [
+            ...generated.contextNotes,
+            "Gemini Flash-Lite 3.1 composed this route after the primary model was unavailable.",
+          ].slice(-8),
     researchSources: [],
     mapLinks: createMapLinks(request.region, generated.stops),
   });

@@ -189,7 +189,7 @@ describe("trip planner", () => {
     expect(retry.contents[0].parts[0].text).toContain("cut short");
   });
 
-  it("recovers from a non-JSON Gemini gateway failure", async () => {
+  it("uses a second Gemini model after a non-JSON gateway failure", async () => {
     const generated = { ...(await planScenicTrip(request, undefined, {})) };
     for (const key of ["provider", "source", "researchSources", "mapLinks"])
       Reflect.deleteProperty(generated, key);
@@ -213,6 +213,16 @@ describe("trip planner", () => {
     });
     expect(plan.source).toBe("gemini");
     expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(String(fetchMock.mock.calls[0]?.[0])).toContain(
+      "/gemini-3.5-flash-lite:",
+    );
+    expect(String(fetchMock.mock.calls[1]?.[0])).toContain(
+      "/gemini-3.1-flash-lite:",
+    );
+    expect(
+      new Headers(fetchMock.mock.calls[1]?.[1]?.headers).get("x-goog-api-key"),
+    ).toBe("test-key");
+    expect(plan.contextNotes.join(" ")).toContain("Flash-Lite 3.1");
     expect(fetchMock.mock.calls[0]?.[1]?.signal).toBe(
       fetchMock.mock.calls[1]?.[1]?.signal,
     );
