@@ -1194,11 +1194,22 @@ async function requestAnthropicPlan(
 }
 
 type GeminiResponse = {
+  promptFeedback?: { blockReason?: string };
   candidates?: Array<{
-    content?: { parts?: Array<{ text?: string }> };
+    finishReason?: string;
+    content?: { parts?: Array<{ text?: string; thought?: boolean }> };
   }>;
   error?: { message?: string };
 };
+
+class GeminiIncompletePlan extends Error {
+  constructor(
+    readonly repair: string,
+    readonly unresolvedLocation = false,
+  ) {
+    super("Gemini returned an incomplete trip plan.");
+  }
+}
 
 async function requestGeminiPlan(
   request: TripPlannerRequest,
@@ -1246,7 +1257,7 @@ async function requestGeminiPlan(
           origin: request.origin,
         };
 
-  async function generate(repairUnresolvedLocations = false) {
+  async function generate(repair?: string) {
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model!)}:generateContent`,
       {
@@ -1274,7 +1285,7 @@ async function requestGeminiPlan(
                     },
                     requirements: {
                       conciseOutput:
-                        "Keep descriptions short. Avoid repeating the same advice across stops, days and checklist.",
+                        "Use brief titles and timing (100 characters maximum each), one sentence per stop reason (300 maximum), and short day highlights and evening notes (240 maximum each). Avoid repeating advice.",
                       exactDayCount: request.duration,
                       exactFirstDate: request.startDate,
                       includeAtLeast:
@@ -1290,9 +1301,7 @@ async function requestGeminiPlan(
                             ],
                       language:
                         "Match the natural language used in the user's prompt when clear; otherwise use English.",
-                      repair: repairUnresolvedLocations
-                        ? "The previous draft contained unresolved destination placeholders. Resolve every stop to a real named place and produce geocoder-ready mapQuery values."
-                        : undefined,
+                      repair,
                     },
                   }),
                 },
@@ -1301,7 +1310,7 @@ async function requestGeminiPlan(
           ],
           generationConfig: {
             temperature: 0.3,
-            maxOutputTokens: 5000,
+            maxOutputTokens: repair ? 8192 : 5000,
             responseMimeType: "application/json",
             responseJsonSchema: openAiTripPlanJsonSchema,
           },
@@ -1314,27 +1323,76 @@ async function requestGeminiPlan(
         response.status,
         body.error?.message || "Gemini trip planning failed.",
       );
-    const text = body.candidates?.[0]?.content?.parts
-      ?.map((part) => part.text ?? "")
+    const candidate = body.candidates?.[0];
+    if (
+      candidate?.finishReason === "MAX_TOKENS" ||
+      candidate?.finishReason === "MALFORMED_RESPONSE"
+    )
+      throw new GeminiIncompletePlan(
+        "The previous response was cut short or malformed. Return one complete JSON itinerary. Keep descriptions concise and include only useful stops.",
+      );
+    if (
+      (body.promptFeedback?.blockReason &&
+        body.promptFeedback.blockReason !== "BLOCK_REASON_UNSPECIFIED") ||
+      (candidate?.finishReason &&
+        !["STOP", "FINISH_REASON_UNSPECIFIED"].includes(candidate.finishReason))
+    )
+      throw new Error("Gemini stopped before completing the trip plan.");
+    const text = candidate?.content?.parts
+      ?.filter((part) => !part.thought)
+      .map((part) => part.text ?? "")
       .join("")
       .trim();
-    if (!text) throw new Error("Gemini returned no trip plan.");
-    return generatedTripPlanSchema.parse(JSON.parse(text));
+
+    let json: unknown;
+    try {
+      json = JSON.parse(text ?? "");
+    } catch {
+      throw new GeminiIncompletePlan(
+        "The previous response was not complete JSON. Return a single complete JSON itinerary without extra text.",
+      );
+    }
+    const parsed = generatedTripPlanSchema.safeParse(json);
+    if (!parsed.success) {
+      const fields = [
+        ...new Set(parsed.error.issues.map((issue) => issue.path.join("."))),
+      ].slice(0, 8);
+      throw new GeminiIncompletePlan(
+        `Correct these itinerary fields: ${fields.join(", ")}. Follow the schema and keep all text fields concise.`,
+      );
+    }
+    if (parsed.data.days.length !== request.duration)
+      throw new GeminiIncompletePlan(
+        `Return exactly ${request.duration} itinerary day(s), beginning on the requested date.`,
+      );
+    if (hasUnresolvedLocations(parsed.data))
+      throw new GeminiIncompletePlan(
+        "Resolve every stop to a real named place and use geocoder-ready mapQuery values.",
+        true,
+      );
+    return parsed.data;
   }
 
   let generated: z.infer<typeof generatedTripPlanSchema>;
   try {
-    generated = await generate();
-    if (hasUnresolvedLocations(generated)) generated = await generate(true);
+    try {
+      generated = await generate();
+    } catch (error) {
+      if (!(error instanceof GeminiIncompletePlan) || generationSignal.aborted)
+        throw error;
+      generated = await generate(error.repair);
+    }
   } catch (error) {
+    if (error instanceof GeminiIncompletePlan)
+      throw new TripPlannerServiceError(
+        error.unresolvedLocation
+          ? "CapCar AI could not resolve every destination. Add city or country names, or choose exact places."
+          : "Gemini returned an incomplete itinerary. Try a shorter prompt or ask for fewer stops.",
+        "gemini_unavailable",
+        error.unresolvedLocation ? 422 : 503,
+      );
     throw toGeminiTripPlannerServiceError(error);
   }
-  if (hasUnresolvedLocations(generated))
-    throw new TripPlannerServiceError(
-      "CapCar AI could not resolve every destination. Add city or country names, or choose exact places.",
-      "gemini_unavailable",
-      422,
-    );
   generated = {
     ...generated,
     days: generated.days.map((day, index) => ({
@@ -1346,12 +1404,6 @@ async function requestGeminiPlan(
       day: Math.min(request.duration, Math.max(1, stop.day)),
     })),
   };
-  if (generated.days.length !== request.duration)
-    throw new TripPlannerServiceError(
-      "CapCar AI returned an incomplete itinerary. Try again or choose exact places.",
-      "gemini_unavailable",
-      503,
-    );
   return tripPlanSchema.parse({
     ...generated,
     provider: status.providerName,

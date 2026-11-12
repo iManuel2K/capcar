@@ -131,6 +131,64 @@ describe("trip planner", () => {
     expect(plan.researchSources).toEqual([]);
   });
 
+  it("repairs a truncated Gemini itinerary in scenic prompt mode", async () => {
+    const fixture = await planScenicTrip(request, undefined, {});
+    const { provider, source, researchSources, mapLinks, ...generated } =
+      fixture;
+    expect([provider, source, researchSources, mapLinks]).toHaveLength(4);
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(
+        Response.json({
+          candidates: [
+            {
+              finishReason: "MAX_TOKENS",
+              content: { parts: [{ text: '{"title":' }] },
+            },
+          ],
+        }),
+      )
+      .mockResolvedValueOnce(
+        Response.json({
+          candidates: [
+            {
+              finishReason: "STOP",
+              content: {
+                parts: [
+                  { thought: true, text: "Planning notes" },
+                  { text: JSON.stringify(generated) },
+                ],
+              },
+            },
+          ],
+        }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await planScenicTrip(
+      {
+        ...request,
+        inputMode: "prompt",
+        origin: "Freiburg, Germany",
+        hoursPerDay: 4,
+        style: "scenic",
+        returnToStart: true,
+        prompt: "Plan a four-hour scenic loop through the Black Forest.",
+      },
+      undefined,
+      {
+        CAPCAR_TRIP_PLANNER_MODE: "gemini",
+        GEMINI_API_KEY: "test-key",
+      },
+    );
+
+    expect(result.source).toBe("gemini");
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    const retry = JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body));
+    expect(retry.generationConfig.maxOutputTokens).toBe(8192);
+    expect(retry.contents[0].parts[0].text).toContain("cut short");
+  });
+
   it("shares one timeout and cancellation signal across Gemini location repair", async () => {
     const plan = await planScenicTrip(request, undefined, {});
     const generated = JSON.parse(JSON.stringify(plan)) as typeof plan;
