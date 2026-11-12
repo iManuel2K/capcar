@@ -839,6 +839,15 @@ function toGeminiTripPlannerServiceError(error: unknown) {
       "gemini_timeout",
       504,
     );
+  if (
+    (providerStatus !== undefined && providerStatus >= 500) ||
+    error instanceof TypeError
+  )
+    return new TripPlannerServiceError(
+      "Gemini is temporarily unavailable. Please retry the same route in a moment.",
+      "gemini_unavailable",
+      503,
+    );
   return new TripPlannerServiceError(
     "CapCar AI could not compose this route with Gemini. Try again or choose exact places.",
     "gemini_unavailable",
@@ -1317,16 +1326,31 @@ async function requestGeminiPlan(
         }),
       },
     );
-    const body = (await response.json()) as GeminiResponse;
-    if (!response.ok)
+    if (!response.ok) {
+      const body: GeminiResponse | undefined = await response
+        .json()
+        .catch(() => undefined);
       throw new GeminiResponseError(
         response.status,
-        body.error?.message || "Gemini trip planning failed.",
+        body?.error?.message || "Gemini trip planning failed.",
+      );
+    }
+    const body: GeminiResponse | undefined = await response
+      .json()
+      .catch(() => undefined);
+    if (!body)
+      throw new GeminiIncompletePlan(
+        "Return one complete JSON itinerary without extra text.",
       );
     const candidate = body.candidates?.[0];
     if (
       candidate?.finishReason === "MAX_TOKENS" ||
-      candidate?.finishReason === "MALFORMED_RESPONSE"
+      [
+        "MALFORMED_RESPONSE",
+        "OTHER",
+        "UNEXPECTED_TOOL_CALL",
+        "MALFORMED_FUNCTION_CALL",
+      ].includes(candidate?.finishReason ?? "")
     )
       throw new GeminiIncompletePlan(
         "The previous response was cut short or malformed. Return one complete JSON itinerary. Keep descriptions concise and include only useful stops.",
@@ -1337,7 +1361,11 @@ async function requestGeminiPlan(
       (candidate?.finishReason &&
         !["STOP", "FINISH_REASON_UNSPECIFIED"].includes(candidate.finishReason))
     )
-      throw new Error("Gemini stopped before completing the trip plan.");
+      throw new TripPlannerServiceError(
+        "Gemini declined to complete the itinerary. Try a simpler scenic driving request.",
+        "gemini_unavailable",
+        422,
+      );
     const text = candidate?.content?.parts
       ?.filter((part) => !part.thought)
       .map((part) => part.text ?? "")
@@ -1378,9 +1406,22 @@ async function requestGeminiPlan(
     try {
       generated = await generate();
     } catch (error) {
-      if (!(error instanceof GeminiIncompletePlan) || generationSignal.aborted)
+      if (generationSignal.aborted) throw error;
+      if (error instanceof GeminiIncompletePlan) {
+        generated = await generate(error.repair);
+      } else if (
+        (error instanceof GeminiResponseError &&
+          [500, 502, 503, 504].includes(error.status)) ||
+        error instanceof TypeError
+      ) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+        generationSignal.throwIfAborted();
+        generated = await generate(
+          "The previous request did not complete. Return a compact itinerary with only the stops needed for this trip.",
+        );
+      } else {
         throw error;
-      generated = await generate(error.repair);
+      }
     }
   } catch (error) {
     if (error instanceof GeminiIncompletePlan)
@@ -1391,7 +1432,15 @@ async function requestGeminiPlan(
         "gemini_unavailable",
         error.unresolvedLocation ? 422 : 503,
       );
-    throw toGeminiTripPlannerServiceError(error);
+    if (error instanceof TripPlannerServiceError) throw error;
+    const failure = toGeminiTripPlannerServiceError(error);
+    console.warn("Gemini trip planning failed", {
+      code: failure.code,
+      upstreamStatus:
+        error instanceof GeminiResponseError ? error.status : undefined,
+      failureKind: error instanceof TypeError ? "transport" : undefined,
+    });
+    throw failure;
   }
   generated = {
     ...generated,

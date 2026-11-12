@@ -150,6 +150,7 @@ export default async function tripPlanBackground(request: Request) {
   console.info("Trip planning job finalized", {
     jobId: job.id,
     status: saved ? outcome.status : "already_terminal_or_expired",
+    ...(outcome.status === "failed" ? { errorCode: outcome.error_code } : {}),
   });
   return new Response(null, { status: 202 });
 }

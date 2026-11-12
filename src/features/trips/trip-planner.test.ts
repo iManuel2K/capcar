@@ -189,6 +189,35 @@ describe("trip planner", () => {
     expect(retry.contents[0].parts[0].text).toContain("cut short");
   });
 
+  it("recovers from a non-JSON Gemini gateway failure", async () => {
+    const generated = { ...(await planScenicTrip(request, undefined, {})) };
+    for (const key of ["provider", "source", "researchSources", "mapLinks"])
+      Reflect.deleteProperty(generated, key);
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(new Response("Unavailable", { status: 503 }))
+      .mockResolvedValueOnce(
+        Response.json({
+          candidates: [
+            {
+              finishReason: "STOP",
+              content: { parts: [{ text: JSON.stringify(generated) }] },
+            },
+          ],
+        }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+    const plan = await planScenicTrip(request, undefined, {
+      CAPCAR_TRIP_PLANNER_MODE: "gemini",
+      GEMINI_API_KEY: "test-key",
+    });
+    expect(plan.source).toBe("gemini");
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock.mock.calls[0]?.[1]?.signal).toBe(
+      fetchMock.mock.calls[1]?.[1]?.signal,
+    );
+  });
+
   it("shares one timeout and cancellation signal across Gemini location repair", async () => {
     const plan = await planScenicTrip(request, undefined, {});
     const generated = JSON.parse(JSON.stringify(plan)) as typeof plan;
