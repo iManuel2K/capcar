@@ -93,6 +93,7 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
   const [completedMileage, setCompletedMileage] = useState("");
   const [formError, setFormError] = useState("");
   const [savedTask, setSavedTask] = useState<string>();
+  const [reviewingImport, setReviewingImport] = useState(false);
 
   const withStatus = useMemo(
     () =>
@@ -136,6 +137,7 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
   const currentMileage = vehicle.mileage;
 
   function openRecord(task: MaintenanceTask) {
+    setReviewingImport(false);
     setActiveTaskKey(task.key);
     setCompletedDate(
       task.record?.lastCompletedDate ?? new Date().toISOString().slice(0, 10),
@@ -165,6 +167,16 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
     }
     if (!Number.isInteger(mileage) || mileage < 0 || mileage > 2_000_000) {
       setFormError("Enter a valid vehicle mileage.");
+      return;
+    }
+    if (
+      reviewingImport &&
+      (!completedMileage.trim() ||
+        (task.record &&
+          (completedDate < task.record.lastCompletedDate ||
+            mileage < task.record.lastCompletedMileage)))
+    ) {
+      setFormError("Enter a mileage and keep any newer Garage record.");
       return;
     }
 
@@ -262,7 +274,25 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
       </section>
 
       {!vehicle.demoProject && (
-        <ServiceReviewPanel key={vehicleId} vehicle={vehicle} tasks={tasks} />
+        <ServiceReviewPanel
+          key={vehicleId}
+          vehicle={vehicle}
+          tasks={tasks}
+          onReviewEntry={(entry) => {
+            const task = tasks.find((item) => item.key === entry.taskKey);
+            if (!task) return;
+            openRecord(task);
+            setReviewingImport(true);
+            setFilter("all");
+            setCompletedDate(entry.date ?? "");
+            setCompletedMileage(
+              entry.mileage === null ? "" : String(entry.mileage),
+            );
+            requestAnimationFrame(() =>
+              document.getElementById("maintenance-record-editor")?.focus(),
+            );
+          }}
+        />
       )}
 
       <section className="bg-card mt-5 overflow-hidden rounded-[2rem] border border-white/10">
@@ -437,6 +467,8 @@ function MaintenanceTaskRow({
 
       {active && (
         <form
+          id="maintenance-record-editor"
+          tabIndex={-1}
           onSubmit={onSubmit}
           className="border-primary/20 bg-primary/6 mt-6 rounded-2xl border p-4 sm:p-5"
         >

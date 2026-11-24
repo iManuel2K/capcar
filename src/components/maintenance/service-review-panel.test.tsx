@@ -9,6 +9,7 @@ import {
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { serviceReviewCopy } from "@/features/service-review/service-review-copy";
+import { getMaintenanceTasks } from "@/features/maintenance/maintenance-storage";
 import { vehicleSchema } from "@/features/vehicles/vehicle-schema";
 
 import { ServiceReviewPanel } from "./service-review-panel";
@@ -82,7 +83,14 @@ describe("service record review panel", () => {
       }),
     );
     vi.stubGlobal("fetch", fetchMock);
-    render(<ServiceReviewPanel vehicle={vehicle} tasks={[]} />);
+    const onReviewEntry = vi.fn();
+    render(
+      <ServiceReviewPanel
+        vehicle={vehicle}
+        tasks={getMaintenanceTasks(vehicle.id, localStorage)}
+        onReviewEntry={onReviewEntry}
+      />,
+    );
 
     const fileInput = screen.getByLabelText(c.fileLabel);
     fireEvent.change(fileInput, {
@@ -120,6 +128,19 @@ describe("service record review panel", () => {
     expect(body.vehicle).not.toHaveProperty("mileage");
     expect(body.history).toEqual({ date: "2019-01-01", mileage: 51_000 });
     expect(body.photos).toEqual([{ data: "/9j/prepared" }]);
+    expect(onReviewEntry).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByText(/What the AI found in the photos/));
+    fireEvent.change(screen.getByLabelText("Maintenance task"), {
+      target: { value: "cabin-filter" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Review for Garage" }));
+    expect(onReviewEntry).toHaveBeenCalledWith(
+      expect.objectContaining({
+        taskKey: "cabin-filter",
+        date: "2020-01-01",
+        mileage: 50_000,
+      }),
+    );
     fireEvent.click(screen.getByRole("button", { name: c.clear }));
     await waitFor(() =>
       expect(screen.queryByText(/service\.jpg/)).not.toBeInTheDocument(),

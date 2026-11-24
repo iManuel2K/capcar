@@ -24,6 +24,7 @@ import {
   SERVICE_REVIEW_MAX_PHOTOS,
   type ServiceReviewRequest,
   type ServiceReviewResult,
+  type ServiceEvidence,
   serviceReviewResultSchema,
 } from "@/features/service-review/service-review-schema";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
@@ -50,9 +51,11 @@ const secondaryStyle =
 export function ServiceReviewPanel({
   vehicle,
   tasks,
+  onReviewEntry,
 }: {
   vehicle: Vehicle;
   tasks: MaintenanceTask[];
+  onReviewEntry?: (entry: ServiceEvidence) => void;
 }) {
   const locale = useLocale() as AppLocale;
   const c = serviceReviewCopy[locale] ?? serviceReviewCopy.en;
@@ -400,7 +403,14 @@ export function ServiceReviewPanel({
         </div>
       )}
       {result && (
-        <ReviewOverview result={result} c={c} locale={locale} id={id} />
+        <ReviewOverview
+          result={result}
+          c={c}
+          locale={locale}
+          id={id}
+          tasks={tasks}
+          onReviewEntry={onReviewEntry}
+        />
       )}
     </section>
   );
@@ -411,11 +421,15 @@ function ReviewOverview({
   c,
   locale,
   id,
+  tasks,
+  onReviewEntry,
 }: {
   result: ServiceReviewResult;
   c: PanelCopy;
   locale: AppLocale;
   id: string;
+  tasks: MaintenanceTask[];
+  onReviewEntry?: (entry: ServiceEvidence) => void;
 }) {
   const km = (n: number) => `${new Intl.NumberFormat(locale).format(n)} km`;
   const groups = [
@@ -506,6 +520,43 @@ function ReviewOverview({
             {result.evidence.map((entry, i) => (
               <li key={i} className="py-3 text-sm leading-6">
                 <p className="font-medium">{entry.work}</p>
+                {onReviewEntry && (
+                  <form
+                    className="my-2 flex flex-wrap items-end gap-2"
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      const taskKey = new FormData(event.currentTarget).get(
+                        "taskKey",
+                      );
+                      if (
+                        typeof taskKey === "string" &&
+                        tasks.some((task) => task.key === taskKey)
+                      ) {
+                        onReviewEntry({ ...entry, taskKey });
+                      }
+                    }}
+                  >
+                    <label className="grow">
+                      <span>Maintenance task</span>
+                      <select
+                        name="taskKey"
+                        defaultValue={entry.taskKey ?? ""}
+                        required
+                        className={inputStyle}
+                      >
+                        <option value="">Choose the work performed</option>
+                        {tasks.map((task) => (
+                          <option key={task.key} value={task.key}>
+                            {task.title}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <button type="submit" className={secondaryStyle}>
+                      Review for Garage
+                    </button>
+                  </form>
+                )}
                 <p className="text-muted-foreground">
                   {c.photo} {entry.photoIndex + 1} · {entry.date ?? c.noDate} ·{" "}
                   {entry.mileage !== null ? km(entry.mileage) : c.noMileage}

@@ -10,7 +10,7 @@ const en = {
   remove: "Remove photo",
   historyHeading: "Vehicle history cross-check",
   historyHelp:
-    "If you have a vehicle history report, enter a dated odometer reading to compare. CapCar does not retrieve the report for you.",
+    "Enter a dated odometer reading from a vehicle history report to compare it with the service records.",
   mileage: "Odometer reading in the report (km)",
   date: "Date of the reading",
   recallLink: "Find official recall references",
@@ -62,7 +62,7 @@ const en = {
     "Your connected AI could not review the photos. Check that its model supports images, then try again.",
   retry: "Try again",
   notSaved:
-    "Nothing was added to your maintenance records. Check the results against the originals first.",
+    "Check each result against the original document before saving it to Garage.",
 };
 
 export const serviceReviewCopy = {
@@ -77,7 +77,7 @@ export const serviceReviewCopy = {
     remove: "Foto entfernen",
     historyHeading: "Fahrzeughistorie abgleichen",
     historyHelp:
-      "Wenn du einen Bericht zur Fahrzeughistorie hast, gib einen datierten Kilometerstand zum Abgleich ein. CapCar ruft den Bericht nicht für dich ab.",
+      "Wenn du einen Bericht zur Fahrzeughistorie hast, gib einen datierten Kilometerstand zum Abgleich ein.",
     mileage: "Kilometerstand laut Bericht (km)",
     date: "Datum der Ablesung",
     recallLink: "Offizielle Rückrufinformationen finden",
@@ -132,8 +132,7 @@ export const serviceReviewCopy = {
     providerUnavailable:
       "Deine verbundene KI konnte die Fotos nicht prüfen. Prüfe, ob das Modell Bilder unterstützt, und versuche es erneut.",
     retry: "Erneut versuchen",
-    notSaved:
-      "Deine Wartungseinträge wurden nicht geändert. Vergleiche die Ergebnisse zuerst mit den Originalen.",
+    notSaved: "Vergleiche die Ergebnisse vor dem Speichern mit den Originalen.",
   },
   el: {
     heading: "Έλεγχος αρχείου σέρβις",
@@ -145,7 +144,7 @@ export const serviceReviewCopy = {
     remove: "Αφαίρεση φωτογραφίας",
     historyHeading: "Διασταύρωση ιστορικού οχήματος",
     historyHelp:
-      "Αν έχεις αναφορά ιστορικού οχήματος, πρόσθεσε μια ένδειξη χιλιομετρητή μαζί με την ημερομηνία της για σύγκριση. Το CapCar δεν ανακτά την αναφορά.",
+      "Αν έχεις αναφορά ιστορικού οχήματος, πρόσθεσε μια ένδειξη χιλιομετρητή μαζί με την ημερομηνία της για σύγκριση.",
     mileage: "Ένδειξη χιλιομετρητή στην αναφορά (χλμ.)",
     date: "Ημερομηνία καταγραφής",
     recallLink: "Επίσημες πληροφορίες ανακλήσεων",
@@ -199,8 +198,7 @@ export const serviceReviewCopy = {
     providerUnavailable:
       "Η συνδεδεμένη ΤΝ δεν μπόρεσε να ελέγξει τις φωτογραφίες. Βεβαιώσου ότι το μοντέλο υποστηρίζει εικόνες και δοκίμασε ξανά.",
     retry: "Δοκίμασε ξανά",
-    notSaved:
-      "Δεν άλλαξαν οι καταχωρίσεις συντήρησης. Έλεγξε πρώτα τα αποτελέσματα με τα πρωτότυπα.",
+    notSaved: "Έλεγξε τα αποτελέσματα με τα πρωτότυπα πριν από την αποθήκευση.",
   },
   sq: {
     heading: "Kontrolli i dokumenteve të servisit",
@@ -212,7 +210,7 @@ export const serviceReviewCopy = {
     remove: "Hiq fotografinë",
     historyHeading: "Krahasimi me historikun e makinës",
     historyHelp:
-      "Nëse ke raport të historikut të makinës, shkruaj leximin e kilometrazhit dhe datën për krahasim. CapCar nuk e merr raportin për ty.",
+      "Nëse ke raport të historikut të makinës, shkruaj leximin e kilometrazhit dhe datën për krahasim.",
     mileage: "Kilometrazhi në raport (km)",
     date: "Data e leximit",
     recallLink: "Gjej njoftimet zyrtare për tërheqje",
@@ -266,7 +264,7 @@ export const serviceReviewCopy = {
       "IA-ja e lidhur nuk mundi t'i kontrollonte fotografitë. Kontrollo nëse modeli mbështet imazhet dhe provo përsëri.",
     retry: "Provo përsëri",
     notSaved:
-      "Nuk ndryshoi asgjë në historikun e mirëmbajtjes. Krahaso fillimisht rezultatet me dokumentet origjinale.",
+      "Krahaso rezultatet me dokumentet origjinale përpara se t’i ruash.",
   },
   ja: {
     heading: "整備記録のレビュー",
@@ -277,7 +275,7 @@ export const serviceReviewCopy = {
     remove: "写真を削除",
     historyHeading: "車両履歴との照合",
     historyHelp:
-      "車両履歴レポートがあれば、記載された走行距離とその日付を入力して照合できます。CapCarはレポートを取得しません。",
+      "車両履歴レポートがあれば、記載された走行距離とその日付を入力して照合できます。",
     mileage: "レポートに記載された走行距離（km）",
     date: "走行距離の記録日",
     recallLink: "公式のリコール情報を確認",
@@ -330,7 +328,6 @@ export const serviceReviewCopy = {
     providerUnavailable:
       "接続済みのAIで写真を確認できませんでした。モデルが画像に対応しているか確認して、再度お試しください。",
     retry: "もう一度試す",
-    notSaved:
-      "整備記録には何も追加していません。まず結果を原本と照合してください。",
+    notSaved: "保存する前に、結果を原本と照合してください。",
   },
 } satisfies Record<AppLocale, typeof en>;

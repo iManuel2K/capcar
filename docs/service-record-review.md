@@ -16,13 +16,13 @@ handoff and run the review.
   planning intervals, not the manufacturer’s service schedule. **Not
   confirmed** means the submitted evidence does not establish completion.
   Review the source photo before making or recording maintenance decisions.
-- The history cross-check compares the supplied dated reading in kilometres
-  against compatible readings. It does not download history reports,
-  determine accident/title status, certify odometer accuracy or confirm a
-  completed service. The app links to the existing official recall references.
-- The upload and results are not stored by CapCar, and a review cannot mark
-  maintenance complete. Confirmed work may be recorded separately through the
-  existing checklist. There is no new database table or deployment secret.
+- The history cross-check compares a dated reading in kilometres against
+  compatible readings. Users can enter a reading from a report they already have.
+  The app also links to official recall references.
+- The upload and AI results are temporary. Choose **Review for Garage** on
+  an extracted entry, select the matching maintenance task, and correct the
+  date and mileage in the existing checklist form. Saving records the
+  confirmed work and keeps any newer record for that task.
 
 The API uses the existing account/session and request rate-limit guard, and
 has no shared-provider fallback. Focused tests cover request validation and
