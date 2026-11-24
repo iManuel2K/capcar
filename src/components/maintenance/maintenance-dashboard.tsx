@@ -3,6 +3,7 @@ import { activateGarage } from "@/features/onboarding/activation";
 
 import Link from "next/link";
 import { MaintenanceRepairPlans } from "@/components/diagnostics/repair-plan";
+import { ServiceReviewPanel } from "@/components/maintenance/service-review-panel";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -259,6 +260,10 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
           tone="green"
         />
       </section>
+
+      {!vehicle.demoProject && (
+        <ServiceReviewPanel key={vehicleId} vehicle={vehicle} tasks={tasks} />
+      )}
 
       <section className="bg-card mt-5 overflow-hidden rounded-[2rem] border border-white/10">
         <div className="flex flex-col justify-between gap-5 border-b border-white/8 p-5 sm:flex-row sm:items-center sm:p-7">
