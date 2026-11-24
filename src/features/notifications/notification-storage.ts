@@ -75,6 +75,7 @@ export function syncMaintenanceNotifications(
           getMaintenanceTasks(vehicle.id, storage),
           now,
           preferences.daysBeforeDue,
+          preferences,
         ),
       )
       .map((item) => ({

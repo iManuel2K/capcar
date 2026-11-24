@@ -99,9 +99,17 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
     () =>
       tasks.map((task) => ({
         task,
-        status: getMaintenanceStatus(task, vehicle?.mileage ?? 0),
+        status:
+          vehicle?.mileageKnown === false && !task.record?.nextDueDate
+            ? ("unknown" as const)
+            : getMaintenanceStatus(
+                task,
+                vehicle?.mileageKnown === false
+                  ? -Infinity
+                  : (vehicle?.mileage ?? 0),
+              ),
       })),
-    [tasks, vehicle?.mileage],
+    [tasks, vehicle?.mileage, vehicle?.mileageKnown],
   );
   const counts = useMemo(
     () => ({
@@ -135,6 +143,22 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
   }
 
   const currentMileage = vehicle.mileage;
+  const priority = { overdue: 0, soon: 1, good: 2, unknown: 3 };
+  const nextServices = withStatus
+    .filter(
+      ({ task }) =>
+        task.record?.nextDueDate || task.record?.nextDueMileage !== undefined,
+    )
+    .toSorted(
+      (a, b) =>
+        priority[a.status] - priority[b.status] ||
+        (a.task.record?.nextDueDate ?? "9999").localeCompare(
+          b.task.record?.nextDueDate ?? "9999",
+        ) ||
+        (a.task.record?.nextDueMileage ?? Infinity) -
+          (b.task.record?.nextDueMileage ?? Infinity),
+    )
+    .slice(0, 3);
 
   function openRecord(task: MaintenanceTask) {
     setReviewingImport(false);
@@ -242,6 +266,71 @@ export function MaintenanceDashboard({ vehicleId }: { vehicleId: string }) {
           </button>
         )}
       </header>
+
+      <section
+        aria-labelledby="next-service-heading"
+        className="bg-card mt-5 space-y-3 rounded-[2rem] border border-white/10 p-5 sm:p-7"
+      >
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 id="next-service-heading" className="text-xl font-medium">
+            Next service
+          </h2>
+          <Link
+            href="/notifications"
+            className="text-primary inline-flex min-h-11 items-center text-sm underline underline-offset-4"
+          >
+            Set service reminders
+          </Link>
+        </div>
+        {nextServices.length === 0 ? (
+          <p className="text-muted-foreground text-sm">
+            Save a confirmed service from an invoice or add a checklist record
+            to see its next planning target.
+          </p>
+        ) : (
+          <ul className="divide-y divide-white/10">
+            {nextServices.map(({ task, status }) => {
+              const record = task.record;
+              if (!record) return null;
+              return (
+                <li
+                  key={task.key}
+                  className="flex flex-wrap justify-between gap-2 py-3"
+                >
+                  <div>
+                    <p className="font-medium">{task.title}</p>
+                    <p className="text-muted-foreground text-sm">
+                      Last recorded {record.lastCompletedDate} ·{" "}
+                      {record.lastCompletedMileage.toLocaleString()} km
+                    </p>
+                    <p className="text-sm">
+                      Due{" "}
+                      {[
+                        record.nextDueDate,
+                        record.nextDueMileage === undefined
+                          ? null
+                          : `${record.nextDueMileage.toLocaleString()} km`,
+                      ]
+                        .filter(Boolean)
+                        .join(" or ")}
+                    </p>
+                  </div>
+                  <span
+                    className={`self-start rounded-full border px-3 py-1 text-sm ${statusContent[status].className}`}
+                  >
+                    {statusContent[status].label}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        <p className="text-muted-foreground text-sm">
+          Dates and distances are planning estimates.{" "}
+          {vehicle.mileageKnown === false &&
+            "Add an odometer reading to assess mileage targets."}
+        </p>
+      </section>
 
       <section
         aria-label="Maintenance summary"
