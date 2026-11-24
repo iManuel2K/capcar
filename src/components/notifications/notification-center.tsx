@@ -204,6 +204,10 @@ export function NotificationCenter() {
           <aside className="space-y-5">
             <div className="bg-card rounded-[2rem] border border-white/10 p-6">
               <h2 className="text-xl font-medium">Reminder settings</h2>
+              <p className="text-muted-foreground mt-2 text-sm">
+                Service reminders appear in your CapCar inbox. Mileage reminders
+                use the odometer reading saved in Garage.
+              </p>
               <label className="text-muted-foreground mt-6 flex items-center justify-between gap-4 text-sm">
                 <span>Maintenance reminders</span>
                 <input
@@ -212,12 +216,64 @@ export function NotificationCenter() {
                   onChange={(e) =>
                     update({
                       maintenanceReminders: e.target.checked,
-                      enabled: e.target.checked,
+                      ...(e.target.checked ? { enabled: true } : {}),
                     })
                   }
                   className="accent-primary size-4"
                 />
               </label>
+              <fieldset
+                disabled={!preferences.maintenanceReminders}
+                className="mt-3 space-y-2"
+              >
+                <legend className="text-sm font-medium">
+                  Remind me based on
+                </legend>
+                <label className="flex min-h-11 items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={preferences.serviceByDate}
+                    onChange={(event) =>
+                      update({ serviceByDate: event.target.checked })
+                    }
+                  />
+                  Service date
+                </label>
+                <label className="flex min-h-11 items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={preferences.serviceByMileage}
+                    onChange={(event) =>
+                      update({ serviceByMileage: event.target.checked })
+                    }
+                  />
+                  Saved mileage
+                </label>
+                <label className="text-muted-foreground block text-sm">
+                  Kilometres before due
+                  <input
+                    type="number"
+                    min={1}
+                    max={20000}
+                    defaultValue={preferences.kmBeforeDue}
+                    disabled={!preferences.serviceByMileage}
+                    className="text-foreground ml-3 min-h-11 w-24 rounded-xl border border-white/10 bg-black/15 px-2"
+                    onBlur={(event) => {
+                      if (
+                        event.currentTarget.value &&
+                        event.currentTarget.validity.valid
+                      )
+                        update({
+                          kmBeforeDue: event.currentTarget.valueAsNumber,
+                        });
+                      else
+                        event.currentTarget.value = String(
+                          preferences.kmBeforeDue,
+                        );
+                    }}
+                  />
+                </label>
+              </fieldset>
               <label className="flex min-h-11 items-center gap-3">
                 <input
                   type="checkbox"
@@ -234,10 +290,24 @@ export function NotificationCenter() {
                   type="number"
                   min="1"
                   max="180"
-                  value={preferences.daysBeforeDue}
-                  onChange={(e) =>
-                    update({ daysBeforeDue: Number(e.target.value) })
+                  defaultValue={preferences.daysBeforeDue}
+                  disabled={
+                    !preferences.maintenanceReminders ||
+                    !preferences.serviceByDate
                   }
+                  onBlur={(event) => {
+                    if (
+                      event.currentTarget.value &&
+                      event.currentTarget.validity.valid
+                    )
+                      update({
+                        daysBeforeDue: event.currentTarget.valueAsNumber,
+                      });
+                    else
+                      event.currentTarget.value = String(
+                        preferences.daysBeforeDue,
+                      );
+                  }}
                   className="text-foreground mt-2 min-h-11 w-full rounded-xl border border-white/10 bg-black/15 px-3"
                 />
               </label>

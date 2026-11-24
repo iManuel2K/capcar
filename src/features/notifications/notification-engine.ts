@@ -1,5 +1,4 @@
 import type { MaintenanceTask } from "@/features/maintenance/maintenance-schema";
-import { getMaintenanceStatus } from "@/features/maintenance/maintenance-status";
 import { addDaysToDate } from "@/features/maintenance/maintenance-status";
 import type { NotificationItem } from "@/features/notifications/notification-schema";
 import type { Vehicle } from "@/features/vehicles/vehicle-schema";
@@ -9,27 +8,33 @@ export function createMaintenanceNotifications(
   tasks: MaintenanceTask[],
   now = new Date(),
   daysBeforeDue = 30,
+  triggers = {
+    serviceByDate: true,
+    serviceByMileage: true,
+    kmBeforeDue: 1_500,
+  },
 ): NotificationItem[] {
   const today = now.toISOString().slice(0, 10);
   return tasks.flatMap((task) => {
-    const urgency = getMaintenanceStatus(task, vehicle.mileage, today);
-    if (urgency !== "overdue" && urgency !== "soon") return [];
-    if (urgency === "soon") {
-      const dateIsWithinLead = Boolean(
-        task.record?.nextDueDate &&
-        task.record.nextDueDate <= addDaysToDate(today, daysBeforeDue),
-      );
-      const mileageIsWithinLead = Boolean(
-        task.record?.nextDueMileage &&
-        task.record.nextDueMileage <= vehicle.mileage + 1_500,
-      );
-      if (!dateIsWithinLead && !mileageIsWithinLead) return [];
-    }
+    const date = triggers.serviceByDate ? task.record?.nextDueDate : undefined;
+    const mileage =
+      triggers.serviceByMileage && vehicle.mileageKnown !== false
+        ? task.record?.nextDueMileage
+        : undefined;
+    const dateNear =
+      date !== undefined && date <= addDaysToDate(today, daysBeforeDue);
+    const mileageNear =
+      mileage !== undefined &&
+      mileage <= vehicle.mileage + triggers.kmBeforeDue;
+    if (!dateNear && !mileageNear) return [];
+    const urgency =
+      (date !== undefined && date <= today) ||
+      (mileage !== undefined && mileage <= vehicle.mileage)
+        ? "overdue"
+        : "soon";
     const targets = [
-      task.record?.nextDueDate ? `date ${task.record.nextDueDate}` : undefined,
-      task.record?.nextDueMileage
-        ? `${task.record.nextDueMileage.toLocaleString("en-US")} km`
-        : undefined,
+      dateNear ? date : undefined,
+      mileageNear ? `${mileage.toLocaleString("en-US")} km` : undefined,
     ].filter(Boolean);
     const target = targets.join(" or ") || "the current planning interval";
     return [
