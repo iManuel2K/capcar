@@ -7,7 +7,9 @@ import {
   generateStaticParams,
 } from "@/app/[locale]/journal/[articleSlug]/page";
 import { JournalContent } from "@/components/journal/journal-content";
+import { JournalComingSoon } from "@/components/journal/journal-coming-soon";
 import { getJournalArticles, journalArticlePath } from "./articles";
+import covers from "./cover-credits.json";
 import { locales } from "@/i18n/config";
 import { localizePublicPathname } from "@/features/seo/public-metadata";
 import { isBilingualJournalGuide, isEnglishOnlyJournalPost } from "./routes";
@@ -18,8 +20,8 @@ afterEach(cleanup);
 describe("the multilingual ownership journal", () => {
   it("publishes every translated article and in-app checklist with matching canonicals and language alternates", async () => {
     const entries = sitemap().filter((item) => item.url.includes("/journal"));
-    expect(entries).toHaveLength(75);
-    expect(generateStaticParams()).toHaveLength(70);
+    expect(entries).toHaveLength(95);
+    expect(generateStaticParams()).toHaveLength(90);
     for (const locale of locales) {
       const articles = getJournalArticles(locale).filter(
         (article) =>
@@ -85,11 +87,11 @@ describe("the multilingual ownership journal", () => {
     expect(localizePublicPathname("/journal/missing", "de")).toBeNull();
   });
 
-  it("publishes the ten German guides without advertising untranslated pages", async () => {
+  it("publishes the twenty bilingual guides without advertising untranslated pages", async () => {
     const guides = getJournalArticles("de").filter(({ slug }) =>
       isBilingualJournalGuide(slug),
     );
-    expect(guides).toHaveLength(10);
+    expect(guides).toHaveLength(20);
     for (const guide of guides) {
       const canonical = `https://capcar.dev${journalArticlePath(guide.slug, "de")}`;
       const english = `https://capcar.dev${journalArticlePath(guide.slug, "en")}`;
@@ -133,6 +135,27 @@ describe("the multilingual ownership journal", () => {
       expect(existsSync("public" + article.image)).toBe(true);
       expect(article.body).not.toMatch(/^# /);
     }
+  });
+
+  it("serves and credits each new cover without publishing a placeholder article", () => {
+    for (const locale of locales) {
+      for (const { image } of getJournalArticles(locale)) {
+        expect(existsSync(`public${image}`)).toBe(true);
+        if (image.startsWith("/journal/covers/")) {
+          const credit = covers[image as keyof typeof covers];
+          expect(credit?.source).toMatch(/^https:\/\/unsplash\.com\/photos\//);
+          expect(credit?.photographer).toBeTruthy();
+        }
+      }
+    }
+    render(<JournalComingSoon locale="en" />);
+    const title = "The Hunger Games: Sunrise on the Reaping";
+    expect(screen.getByRole("heading", { name: title })).toBeInTheDocument();
+    expect(screen.getByText("Coming soon")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: title })).not.toBeInTheDocument();
+    expect(sitemap().some(({ url }) => url.includes("hunger-games"))).toBe(
+      false,
+    );
   });
 
   it("renders reusable prompts, worksheets and numbered steps as readable content", () => {

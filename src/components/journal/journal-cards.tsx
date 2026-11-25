@@ -6,7 +6,10 @@ import {
   type JournalArticle,
 } from "@/features/journal/articles";
 
-import { isEnglishOnlyJournalPost } from "@/features/journal/routes";
+import {
+  isBilingualJournalGuide,
+  isEnglishOnlyJournalPost,
+} from "@/features/journal/routes";
 import type { AppLocale } from "@/i18n/config";
 import { journalUI, journalReadingTime } from "@/features/journal/ui";
 
@@ -26,7 +29,7 @@ export function JournalCards({
           className={`group border-foreground/20 hover:border-primary border-b pb-8 transition focus-visible:outline-2 focus-visible:outline-offset-4 ${index === 0 ? "md:col-span-2 md:grid md:grid-cols-[1.2fr_1fr] md:items-center md:gap-10" : "grid grid-cols-[80px_minmax(0,1fr)] items-start gap-5 sm:grid-cols-[160px_1fr]"}`}
         >
           <div
-            className={`relative bg-transparent ${index === 0 ? "aspect-[16/9]" : "aspect-square"}`}
+            className={`bg-card relative overflow-hidden rounded-xl ${index === 0 ? "aspect-[16/9]" : "aspect-square"}`}
           >
             <Image
               src={article.image}
@@ -37,7 +40,11 @@ export function JournalCards({
                   ? "(max-width: 768px) 100vw, 60vw"
                   : "(max-width: 640px) 80px, 160px"
               }
-              className="object-contain"
+              className={
+                article.image.startsWith("/journal/covers/")
+                  ? "object-cover"
+                  : "object-contain"
+              }
             />
           </div>
           <div className={index === 0 ? "min-w-0 pt-5 md:pt-0" : "min-w-0"}>
@@ -57,8 +64,9 @@ export function JournalCards({
               {article.description}
             </p>
             <p className="mt-6 text-sm font-semibold">
-              {isEnglishOnlyJournalPost(article.slug)
-                ? "Read the article"
+              {isEnglishOnlyJournalPost(article.slug) ||
+              isBilingualJournalGuide(article.slug)
+                ? journalUI[locale].readGuide
                 : journalUI[locale].readArticle}{" "}
               →
             </p>
