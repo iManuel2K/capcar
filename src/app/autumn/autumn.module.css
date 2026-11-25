@@ -373,9 +373,6 @@
 .closingCopy .primary {
   margin-top: 1.4rem;
 }
-.film {
-  opacity: 0;
-}
 .filmControl {
   z-index: 3;
   position: absolute;
@@ -416,9 +413,6 @@
   }
 }
 
-.hero:has(.film[data-active="true"]) > img {
-  visibility: hidden;
-}
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .about > * {

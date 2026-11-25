@@ -4,8 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
 import styles from "./autumn.module.css";
 
-export function ForestFilm({ source }: { source: string }) {
+export function ForestFilm({
+  source,
+  mobileSource,
+}: {
+  source: string;
+  mobileSource: string;
+}) {
   const ref = useRef<HTMLVideoElement>(null);
+  const pausedByUser = useRef(false);
   const [paused, setPaused] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -13,66 +20,25 @@ export function ForestFilm({ source }: { source: string }) {
     const video = ref.current;
     if (!video || failed) return;
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
-    let inView = typeof IntersectionObserver === "undefined";
-    let frame = 0;
-    let restart = 0;
-    let fadingOut = false;
+    const bounds = video.getBoundingClientRect();
+    let inView = bounds.bottom > 0 && bounds.top < window.innerHeight;
 
-    function fade(target: HTMLVideoElement, to: number) {
-      cancelAnimationFrame(frame);
-      const from = Number(target.style.opacity || 0);
-      const start = performance.now();
-      const step = (now: number) => {
-        const fraction = Math.min(1, (now - start) / 500);
-        target.style.opacity = String(from + (to - from) * fraction);
-        if (fraction < 1) frame = requestAnimationFrame(step);
-      };
-      frame = requestAnimationFrame(step);
-    }
-
-    const play = () => {
-      if (!inView || motion.matches || paused || document.hidden) return;
-      void video.play().catch(() => {
-        if (!video.paused) return;
-        video.style.opacity = "0";
-        delete video.dataset.active;
-      });
-    };
     const sync = () => {
-      if (!inView || motion.matches || paused || document.hidden) {
+      if (
+        !inView ||
+        motion.matches ||
+        pausedByUser.current ||
+        document.hidden
+      ) {
         video.pause();
-        cancelAnimationFrame(frame);
-        clearTimeout(restart);
-        if (motion.matches) {
-          video.style.opacity = "0";
-          delete video.dataset.active;
-        }
-      } else {
-        fadingOut = false;
-        if (video.ended) video.currentTime = 0;
-        play();
+      } else if (video.paused) {
+        void video.play().catch(() => setPaused(video.paused));
       }
     };
-    const onPlaying = () => {
-      video.dataset.active = "true";
-      fade(video, 1);
+    const onMotionChange = () => {
+      if (!motion.matches && !video.currentSrc) video.load();
+      sync();
     };
-    const onTime = () => {
-      if (!fadingOut && video.duration - video.currentTime <= 0.55) {
-        fadingOut = true;
-        fade(video, 0);
-      }
-    };
-    const onEnded = () => {
-      cancelAnimationFrame(frame);
-      video.style.opacity = "0";
-      restart = window.setTimeout(() => {
-        video.currentTime = 0;
-        fadingOut = false;
-        play();
-      }, 100);
-    };
-
     const observer =
       typeof IntersectionObserver === "undefined"
         ? null
@@ -84,24 +50,15 @@ export function ForestFilm({ source }: { source: string }) {
             { threshold: 0.05 },
           );
     observer?.observe(video);
-    video.addEventListener("playing", onPlaying);
-    video.addEventListener("timeupdate", onTime);
-    video.addEventListener("ended", onEnded);
     document.addEventListener("visibilitychange", sync);
-    motion.addEventListener("change", sync);
+    motion.addEventListener("change", onMotionChange);
     sync();
     return () => {
       observer?.disconnect();
-      video.pause();
-      video.removeEventListener("playing", onPlaying);
-      video.removeEventListener("timeupdate", onTime);
-      video.removeEventListener("ended", onEnded);
       document.removeEventListener("visibilitychange", sync);
-      motion.removeEventListener("change", sync);
-      cancelAnimationFrame(frame);
-      clearTimeout(restart);
+      motion.removeEventListener("change", onMotionChange);
     };
-  }, [failed, paused, source]);
+  }, [failed, source, mobileSource]);
 
   if (failed) return null;
 
@@ -109,19 +66,47 @@ export function ForestFilm({ source }: { source: string }) {
     <>
       <video
         ref={ref}
-        src={source}
+        autoPlay
+        loop
         muted
         playsInline
-        preload="none"
+        preload="auto"
         aria-hidden
         className={styles.film}
-        onError={() => setFailed(true)}
-      />
+        onPlaying={() => setPaused(false)}
+        onError={(event) => {
+          if (event.target === event.currentTarget) setFailed(true);
+        }}
+      >
+        <source
+          src={source}
+          type="video/mp4"
+          media="(prefers-reduced-motion: no-preference) and (min-width: 768px)"
+        />
+        <source
+          src={mobileSource}
+          type="video/mp4"
+          media="(prefers-reduced-motion: no-preference)"
+          onError={(event) => {
+            if (matchMedia(event.currentTarget.media).matches) setFailed(true);
+          }}
+        />
+      </video>
       <button
         className={`${styles.glass} ${styles.filmControl}`}
         type="button"
         aria-label={paused ? "Play background video" : "Pause background video"}
-        onClick={() => setPaused(!paused)}
+        onClick={() => {
+          const video = ref.current;
+          if (!video) return;
+          pausedByUser.current = !paused;
+          if (paused) {
+            void video.play().catch(() => setPaused(video.paused));
+          } else {
+            video.pause();
+            setPaused(true);
+          }
+        }}
       >
         {paused ? (
           <Play size={18} aria-hidden />

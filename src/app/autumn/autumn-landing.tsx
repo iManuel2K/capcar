@@ -24,7 +24,7 @@ export default function AutumnLanding() {
             sizes="100vw"
             className={styles.backdrop}
           />
-          <ForestFilm source={heroFilm} />
+          <ForestFilm source={heroFilm} mobileSource="/autumn/road-drive.mp4" />
           <div className={styles.shade} />
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>Built for the long way home</p>
