@@ -9,6 +9,8 @@ type JournalUI = {
   intro: string;
   allArticles: string;
   readArticle: string;
+  readGuide: string;
+  coverCredit: string;
   readTime: string;
   editorial: string;
   related: string;
@@ -28,6 +30,8 @@ export const journalUI: Record<AppLocale, JournalUI> = {
       "A weekend job, a clear maintenance record or a day by the Rhine. Read the guides and take the next step inside CapCar.",
     allArticles: "All articles",
     readArticle: "Read the article and use the checklist",
+    readGuide: "Read the article",
+    coverCredit: "Cover photo",
     readTime: "{minutes} min read",
     editorial: "CapCar Editorial",
     related: "Your next article",
@@ -45,6 +49,8 @@ export const journalUI: Record<AppLocale, JournalUI> = {
       "Ein Wochenendjob, ein klarer Wartungseintrag oder ein freier Tag am Rhein. Lies die Artikel und setze deinen nächsten Schritt direkt in CapCar um.",
     allArticles: "Alle Artikel",
     readArticle: "Artikel und Checkliste öffnen",
+    readGuide: "Artikel lesen",
+    coverCredit: "Titelbild",
     readTime: "{minutes} Min. Lesezeit",
     editorial: "CapCar Redaktion",
     related: "Dein nächster Artikel",
@@ -62,6 +68,8 @@ export const journalUI: Record<AppLocale, JournalUI> = {
       "Μια εργασία, μια σαφής καταγραφή συντήρησης ή μια μέρα στον Ρήνο. Διάβασε τους οδηγούς και συνέχισε μέσα στο CapCar.",
     allArticles: "Όλα τα άρθρα",
     readArticle: "Άρθρο και διαδραστική λίστα",
+    readGuide: "Διάβασε το άρθρο",
+    coverCredit: "Φωτογραφία εξωφύλλου",
     readTime: "Ανάγνωση {minutes} λεπτών",
     editorial: "Συντακτική ομάδα CapCar",
     related: "Το επόμενο άρθρο σου",
@@ -79,6 +87,8 @@ export const journalUI: Record<AppLocale, JournalUI> = {
       "Një punë fundjave, një regjistrim mirëmbajtjeje ose një ditë pranë Rinit. Lexo udhëzuesit dhe vazhdo drejtpërdrejt në CapCar.",
     allArticles: "Të gjithë artikujt",
     readArticle: "Lexo artikullin dhe përdor listën",
+    readGuide: "Lexo artikullin",
+    coverCredit: "Foto e kopertinës",
     readTime: "{minutes} min lexim",
     editorial: "Redaksia CapCar",
     related: "Artikulli yt i ardhshëm",
@@ -96,6 +106,8 @@ export const journalUI: Record<AppLocale, JournalUI> = {
       "週末の作業、分かりやすい整備記録、ライン川への日帰り旅行。記事を読み、CapCarで次の行動につなげましょう。",
     allArticles: "すべての記事",
     readArticle: "記事とチェックリストを開く",
+    readGuide: "記事を読む",
+    coverCredit: "カバー写真",
     readTime: "読了まで約{minutes}分",
     editorial: "CapCar編集部",
     related: "次に読む記事",

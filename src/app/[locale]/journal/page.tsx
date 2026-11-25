@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { JournalCards } from "@/components/journal/journal-cards";
+import { JournalComingSoon } from "@/components/journal/journal-coming-soon";
 import { getJournalArticles } from "@/features/journal/articles";
 import { journalUI } from "@/features/journal/ui";
 import { journalMetadata } from "@/features/journal/metadata";
@@ -40,6 +41,7 @@ export default async function JournalPage({ params }: Props) {
             </p>
           </header>
           <div className={editorial.index}>
+            <JournalComingSoon locale={locale} />
             <JournalCards
               articles={[...getJournalArticles(locale)].sort((a, b) =>
                 b.published.localeCompare(a.published),
