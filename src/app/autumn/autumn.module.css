@@ -80,6 +80,12 @@
 .film {
   object-position: 65% 63%;
 }
+.film {
+  opacity: 0;
+}
+.film[data-frame-ready] {
+  opacity: 1;
+}
 .shade {
   position: absolute;
   inset: 0;
