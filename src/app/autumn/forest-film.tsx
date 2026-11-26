@@ -4,6 +4,25 @@ import { useEffect, useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
 import styles from "./autumn.module.css";
 
+// Install the first-frame handoff as soon as the browser parses the hero.
+// The component takes over playback and subsequent recovery after hydration.
+const revealInitialFrame = `(() => {
+  const video = document.currentScript?.previousElementSibling;
+  if (!(video instanceof HTMLVideoElement)) return;
+  const reveal = () => {
+    if (!video.paused && !video.seeking && video.readyState >= video.HAVE_CURRENT_DATA) {
+      video.dataset.frameReady = "true";
+    }
+  };
+  if (typeof video.requestVideoFrameCallback === "function") {
+    video.requestVideoFrameCallback(reveal);
+  } else if (video.paused) {
+    video.addEventListener("playing", reveal, { once: true });
+  } else {
+    reveal();
+  }
+})();`;
+
 export function ForestFilm({
   source,
   mobileSource,
@@ -114,6 +133,7 @@ export function ForestFilm({
         poster={poster}
         preload="auto"
         aria-hidden
+        suppressHydrationWarning
         className={styles.film}
         onPlaying={() => setPaused(false)}
         onError={(event) => {
@@ -134,6 +154,7 @@ export function ForestFilm({
           }}
         />
       </video>
+      <script dangerouslySetInnerHTML={{ __html: revealInitialFrame }} />
       <button
         className={`${styles.glass} ${styles.filmControl}`}
         type="button"

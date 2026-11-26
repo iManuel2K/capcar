@@ -19,6 +19,8 @@ it("makes the hero playable from the initial HTML", () => {
   expect(video).toMatch(/loop=""/);
   expect(video).toContain('poster="/first-frame.webp"');
   expect(video).not.toContain("data-frame-ready");
+  expect(html).toContain("</video><script>");
+  expect(html).toContain("video.requestVideoFrameCallback(reveal)");
   expect(html).toContain(
     'src="/desktop.mp4" type="video/mp4" media="(prefers-reduced-motion: no-preference) and (min-width: 768px)"',
   );
