@@ -8,6 +8,7 @@ import { SiteFooter } from "@/components/marketing/site-footer";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { JournalContent } from "@/components/journal/journal-content";
 import { JournalCards } from "@/components/journal/journal-cards";
+import { JournalCoverCredit } from "@/components/journal/journal-cover-credit";
 import {
   findJournalArticle,
   getJournalArticles,
@@ -116,16 +117,19 @@ export default async function JournalArticlePage({ params }: Props) {
               </time>
             </p>
           </header>
-          <div className="bg-card relative mb-12 aspect-[16/8] overflow-hidden rounded-3xl">
-            <Image
-              src={article.image}
-              alt=""
-              fill
-              sizes="(max-width: 1152px) 100vw, 1152px"
-              className="object-cover"
-              priority
-            />
-          </div>
+          <figure className="mb-12">
+            <div className="bg-card relative aspect-video overflow-hidden rounded-3xl">
+              <Image
+                src={article.image}
+                alt=""
+                fill
+                sizes="(max-width: 1152px) 100vw, 1152px"
+                className="object-cover"
+                priority
+              />
+            </div>
+            <JournalCoverCredit image={article.image} locale={locale} />
+          </figure>
           <div className="mx-auto max-w-3xl">
             <JournalContent text={article.body} />
             {article.slug === "bmw-318i-e90-kosten" && (
