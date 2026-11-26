@@ -47,8 +47,9 @@ next-env.d.ts
 .capcar-backups/
 supabase/.temp/
 
-# Local Netlify folder
+# Local and generated Netlify files
 .netlify
+/netlify/edge-functions/homepage-document.mjs
 
 # Local patch and installer artifacts
 /.capcar-installer-backups/
