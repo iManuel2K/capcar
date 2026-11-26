@@ -191,6 +191,19 @@ describe("proxy public Passport guard", () => {
     }
   });
 
+  it("keeps the canonical homepage English without writing a language cookie", async () => {
+    const response = await proxy(
+      new NextRequest("https://capcar.example/?utm_source=instagram", {
+        headers: { cookie: "capcar_locale=de", "accept-language": "de" },
+      }),
+    );
+    expect(response.headers.get("x-middleware-request-x-capcar-locale")).toBe(
+      "en",
+    );
+    expect(response.headers.get("set-cookie")).toBeNull();
+    expect(supabaseMocks.createServerClient).not.toHaveBeenCalled();
+  });
+
   it("renders the canonical English public route independently of an old locale cookie", async () => {
     const response = await proxy(
       new NextRequest("https://capcar.example/platform", {
