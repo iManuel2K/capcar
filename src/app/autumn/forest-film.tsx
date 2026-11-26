@@ -26,6 +26,10 @@ const revealInitialFrame = `(() => {
   } else {
     onPlaying();
   }
+  if (video.paused && !document.hidden &&
+      matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+    void video.play().catch(() => {});
+  }
 })();`;
 
 export function ForestFilm({
