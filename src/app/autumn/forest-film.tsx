@@ -14,12 +14,17 @@ const revealInitialFrame = `(() => {
       video.dataset.frameReady = "true";
     }
   };
-  if (typeof video.requestVideoFrameCallback === "function") {
-    video.requestVideoFrameCallback(reveal);
-  } else if (video.paused) {
-    video.addEventListener("playing", reveal, { once: true });
+  const onPlaying = () => {
+    if (typeof video.requestVideoFrameCallback === "function") {
+      video.requestVideoFrameCallback(reveal);
+    } else {
+      reveal();
+    }
+  };
+  if (video.paused || video.readyState < video.HAVE_FUTURE_DATA) {
+    video.addEventListener("playing", onPlaying, { once: true });
   } else {
-    reveal();
+    onPlaying();
   }
 })();`;
 
