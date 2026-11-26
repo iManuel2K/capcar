@@ -50,6 +50,7 @@ supabase/.temp/
 # Local and generated Netlify files
 .netlify
 /netlify/edge-functions/homepage-document.js
+/netlify/edge-functions/hero-road-drive*.js
 
 # Local patch and installer artifacts
 /.capcar-installer-backups/
