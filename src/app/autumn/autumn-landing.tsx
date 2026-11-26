@@ -21,10 +21,14 @@ export default function AutumnLanding() {
             alt=""
             fill
             preload
-            sizes="100vw"
+            unoptimized
             className={styles.backdrop}
           />
-          <ForestFilm source={heroFilm} mobileSource="/autumn/road-drive.mp4" />
+          <ForestFilm
+            source={heroFilm}
+            mobileSource="/autumn/road-drive.mp4"
+            poster={roadPoster}
+          />
           <div className={styles.shade} />
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>Built for the long way home</p>

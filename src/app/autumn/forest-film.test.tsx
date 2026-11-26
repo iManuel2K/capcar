@@ -5,7 +5,11 @@ import { ForestFilm } from "./forest-film";
 
 it("makes the hero playable from the initial HTML", () => {
   const html = renderToStaticMarkup(
-    <ForestFilm source="/desktop.mp4" mobileSource="/mobile.mp4" />,
+    <ForestFilm
+      source="/desktop.mp4"
+      mobileSource="/mobile.mp4"
+      poster="/first-frame.webp"
+    />,
   );
   const video = html.match(/<video[^>]*>/)?.[0];
   expect(video).toMatch(/autoplay=""/i);
@@ -13,6 +17,8 @@ it("makes the hero playable from the initial HTML", () => {
   expect(video).toMatch(/playsinline=""/i);
   expect(video).toMatch(/preload="auto"/);
   expect(video).toMatch(/loop=""/);
+  expect(video).toContain('poster="/first-frame.webp"');
+  expect(video).not.toContain("data-frame-ready");
   expect(html).toContain(
     'src="/desktop.mp4" type="video/mp4" media="(prefers-reduced-motion: no-preference) and (min-width: 768px)"',
   );

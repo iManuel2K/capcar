@@ -7,9 +7,11 @@ import styles from "./autumn.module.css";
 export function ForestFilm({
   source,
   mobileSource,
+  poster,
 }: {
   source: string;
   mobileSource: string;
+  poster: string;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const pausedByUser = useRef(false);
@@ -22,6 +24,32 @@ export function ForestFilm({
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     const bounds = video.getBoundingClientRect();
     let inView = bounds.bottom > 0 && bounds.top < window.innerHeight;
+    let pendingFrame: number | undefined;
+
+    const cancelFrame = () => {
+      if (pendingFrame === undefined) return;
+      video.cancelVideoFrameCallback(pendingFrame);
+      pendingFrame = undefined;
+    };
+    const hideFrame = () => {
+      cancelFrame();
+      delete video.dataset.frameReady;
+    };
+    const revealFrame = () => {
+      if (video.seeking || video.readyState < video.HAVE_CURRENT_DATA) return;
+      cancelFrame();
+      if (
+        typeof video.requestVideoFrameCallback === "function" &&
+        !video.paused
+      ) {
+        pendingFrame = video.requestVideoFrameCallback(() => {
+          pendingFrame = undefined;
+          video.dataset.frameReady = "true";
+        });
+      } else {
+        video.dataset.frameReady = "true";
+      }
+    };
 
     const sync = () => {
       if (
@@ -52,11 +80,24 @@ export function ForestFilm({
     observer?.observe(video);
     document.addEventListener("visibilitychange", sync);
     motion.addEventListener("change", onMotionChange);
+    video.addEventListener("playing", revealFrame);
+    video.addEventListener("seeked", revealFrame);
+    video.addEventListener("seeking", hideFrame);
+    video.addEventListener("waiting", hideFrame);
+    video.addEventListener("emptied", hideFrame);
+    // Native autoplay may have started before the page hydrated.
+    if (!video.paused) revealFrame();
     sync();
     return () => {
       observer?.disconnect();
       document.removeEventListener("visibilitychange", sync);
       motion.removeEventListener("change", onMotionChange);
+      video.removeEventListener("playing", revealFrame);
+      video.removeEventListener("seeked", revealFrame);
+      video.removeEventListener("seeking", hideFrame);
+      video.removeEventListener("waiting", hideFrame);
+      video.removeEventListener("emptied", hideFrame);
+      hideFrame();
     };
   }, [failed, source, mobileSource]);
 
@@ -70,6 +111,7 @@ export function ForestFilm({
         loop
         muted
         playsInline
+        poster={poster}
         preload="auto"
         aria-hidden
         className={styles.film}
