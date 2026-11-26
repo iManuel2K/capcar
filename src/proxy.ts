@@ -95,6 +95,10 @@ function passportUnavailableResponse(
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  // The canonical homepage is shared public HTML. Save language preferences
+  // on explicit selections and localized routes, not on this cacheable entry.
+  if (pathname === "/") return passThroughResponse(request, "en");
+
   const englishAlias =
     pathname === "/en"
       ? ""
@@ -160,9 +164,7 @@ export async function proxy(request: NextRequest) {
       ? passportUnavailableResponse(request, 503)
       : persistPathLocale(passThroughResponse(request, pathLocale), pathLocale);
 
-  const publicHomepage =
-    request.nextUrl.pathname === "/" ||
-    /^\/(en|de|el|sq|ja)\/?$/.test(request.nextUrl.pathname);
+  const publicHomepage = /^\/(en|de|el|sq|ja)\/?$/.test(pathname);
   if (publicHomepage)
     return persistPathLocale(
       passThroughResponse(request, pathLocale),

@@ -73,6 +73,16 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        source: "/",
+        headers: [
+          {
+            key: "Netlify-CDN-Cache-Control",
+            value:
+              "public, durable, s-maxage=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
+      {
         source: "/sw.js",
         headers: [
           {
