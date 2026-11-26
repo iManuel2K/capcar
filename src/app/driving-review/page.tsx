@@ -2,10 +2,11 @@ import Link from "next/link";
 import { ArrowUpRight, Film, ScanEye, Sparkles } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { pageMetadata } from "@/features/seo/public-metadata";
+import { DrivingReviewSample } from "@/components/driving-review/driving-review-sample";
 import styles from "@/components/driving-review/driving-review.module.css";
 export async function generateMetadata() {
   const t = await getTranslations("DrivingReview");
-  return pageMetadata("/driving-review", t("nav"), t("intro"));
+  return pageMetadata("/driving-review", t("sample.title"), t("intro"));
 }
 export default async function DrivingReviewIntro() {
   const t = await getTranslations("DrivingReview");
@@ -18,12 +19,15 @@ export default async function DrivingReviewIntro() {
         <p className={styles.eyebrow}>
           {t("eyebrow")} / {t("beta")}
         </p>
-        <h1>{t("title")}</h1>
+        <h1>{t("sample.title")}</h1>
         <p className={styles.lead}>{t("intro")}</p>
         <div className={styles.actions}>
           <Link href="/garage/driving-review" className={styles.primary}>
             {t("open")}
             <ArrowUpRight aria-hidden="true" size={18} />
+          </Link>
+          <Link href="#sample-report" className={styles.quiet}>
+            {t("sample.link")}
           </Link>
         </div>
         <p className={styles.note}>{t("free")}</p>
@@ -40,9 +44,7 @@ export default async function DrivingReviewIntro() {
             </div>
           ))}
         </section>
-        <h2>{t("previewTitle")}</h2>
-        <p className={styles.lead}>{t("previewBody")}</p>
-        <p className={styles.note}>{t("fixedLimit")}</p>
+        <DrivingReviewSample />
         <p className={styles.safety}>{t("parked")}</p>
       </div>
     </main>

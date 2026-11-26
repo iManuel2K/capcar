@@ -9,6 +9,7 @@ type FeatureCopy = {
 type Copy = {
   create: string;
   demo: string;
+  downloadSheet: string;
   example: string;
   related: string;
   read: string;
@@ -22,7 +23,8 @@ type Copy = {
 export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
   en: {
     create: "Create your garage",
-    demo: "Try the example garage",
+    demo: "See the worked example",
+    downloadSheet: "Download the build sheet (CSV)",
     example: "Illustrative example · BMW 318i E90",
     related: "Keep going",
     read: "Read the practical guide",
@@ -31,7 +33,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
     plannerLabel: "Project car planner",
     maintenanceLabel: "Maintenance tracker",
     planner: {
-      title: "Plan the upgrade. Keep the whole cost in view.",
+      title: "Project Car Planner for Parts, Budget & Progress",
       description:
         "Give each part and workshop task a place in your build. Set a budget, separate estimates from actual spending, and keep progress with the right car.",
       steps: [
@@ -55,7 +57,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
       ],
     },
     maintenance: {
-      title: "Remember what was done. Know what comes next.",
+      title: "Car Maintenance Tracker & Service History",
       description:
         "Keep maintenance tasks, costs and owner-recorded service history with your car. A clear entry helps when you return to a job or explain the work to a workshop.",
       steps: [
@@ -73,6 +75,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
         ],
       ],
       example: [
+        ["Date and mileage", "Illustrative entry · 12 Oct 2026 · 140,000 km"],
         ["Completed task", "Replace the cabin filter"],
         ["Work recorded by", "Vehicle owner"],
         ["Actual cost", "€28"],
@@ -81,7 +84,8 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
   },
   de: {
     create: "Garage anlegen",
-    demo: "Beispielgarage ausprobieren",
+    demo: "Rechenbeispiel ansehen",
+    downloadSheet: "Umbau-Budgetvorlage herunterladen (CSV)",
     example: "Illustratives Beispiel · BMW 318i E90",
     related: "Dein nächster Schritt",
     read: "Praktischen Leitfaden lesen",
@@ -90,7 +94,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
     plannerLabel: "Projektwagen-Planer",
     maintenanceLabel: "Wartung dokumentieren",
     planner: {
-      title: "Den Umbau planen. Die gesamten Kosten im Blick.",
+      title: "Projektwagen planen: Teile, Budget und Fortschritt",
       description:
         "Gib jedem Teil und jeder Arbeit einen Platz im Umbauplan. Lege ein Budget fest, trenne Schätzungen von tatsächlichen Ausgaben und halte den Fortschritt beim richtigen Auto fest.",
       steps: [
@@ -114,7 +118,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
       ],
     },
     maintenance: {
-      title: "Wissen, was gemacht wurde. Den nächsten Schritt finden.",
+      title: "Autowartung und Servicehistorie dokumentieren",
       description:
         "Bewahre Wartungsaufgaben, Kosten und selbst dokumentierte Servicehistorie bei deinem Auto auf. Ein klarer Eintrag hilft bei der nächsten Arbeit und beim Gespräch mit der Werkstatt.",
       steps: [
@@ -132,6 +136,10 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
         ],
       ],
       example: [
+        [
+          "Datum und Kilometerstand",
+          "Beispieleintrag · 12.10.2026 · 140.000 km",
+        ],
         ["Abgeschlossene Aufgabe", "Innenraumfilter ersetzen"],
         ["Dokumentiert durch", "Fahrzeughalter"],
         ["Tatsächliche Kosten", "28 €"],
@@ -140,7 +148,8 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
   },
   el: {
     create: "Δημιούργησε γκαράζ",
-    demo: "Δοκίμασε το γκαράζ παραδείγματος",
+    demo: "Δες το παράδειγμα",
+    downloadSheet: "Λήψη φύλλου έργου (CSV)",
     example: "Ενδεικτικό παράδειγμα · BMW 318i E90",
     related: "Το επόμενο βήμα",
     read: "Διάβασε τον πρακτικό οδηγό",
@@ -149,7 +158,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
     plannerLabel: "Σχεδιασμός μετατροπών",
     maintenanceLabel: "Καταγραφή συντήρησης",
     planner: {
-      title: "Σχεδίασε τη μετατροπή. Δες ολόκληρο το κόστος.",
+      title: "Σχεδιασμός μετατροπών: ανταλλακτικά, κόστος και πρόοδος",
       description:
         "Οργάνωσε κάθε ανταλλακτικό και εργασία στο σχέδιό σου. Όρισε προϋπολογισμό, ξεχώρισε εκτιμήσεις από πραγματικά έξοδα και κράτησε την πρόοδο στο σωστό αυτοκίνητο.",
       steps: [
@@ -173,7 +182,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
       ],
     },
     maintenance: {
-      title: "Θυμήσου τι έγινε. Δες τι ακολουθεί.",
+      title: "Καταγραφή συντήρησης και ιστορικού αυτοκινήτου",
       description:
         "Κράτησε εργασίες συντήρησης, κόστος και ιστορικό ιδιοκτήτη μαζί με το αυτοκίνητο. Μια σαφής εγγραφή βοηθά στην επόμενη εργασία και στην επικοινωνία με συνεργείο.",
       steps: [
@@ -191,6 +200,10 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
         ],
       ],
       example: [
+        [
+          "Ημερομηνία και χιλιόμετρα",
+          "Ενδεικτική εγγραφή · 12 Οκτ 2026 · 140.000 χλμ.",
+        ],
         ["Ολοκληρωμένη εργασία", "Αλλαγή φίλτρου καμπίνας"],
         ["Καταγραφή από", "Ιδιοκτήτη οχήματος"],
         ["Πραγματικό κόστος", "28 €"],
@@ -199,7 +212,8 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
   },
   sq: {
     create: "Krijo garazhin",
-    demo: "Provo garazhin shembull",
+    demo: "Shiko shembullin",
+    downloadSheet: "Shkarko fletën e projektit (CSV)",
     example: "Shembull ilustrues · BMW 318i E90",
     related: "Hapi tjetër",
     read: "Lexo udhëzuesin praktik",
@@ -208,7 +222,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
     plannerLabel: "Planifikues projekti për makinën",
     maintenanceLabel: "Regjistri i mirëmbajtjes",
     planner: {
-      title: "Planifiko modifikimin. Shiko koston e plotë.",
+      title: "Planifikues për projektin e makinës: pjesë, buxhet dhe progres",
       description:
         "Organizo çdo pjesë dhe punë në planin e makinës. Cakto buxhetin, ndaj vlerësimet nga shpenzimet reale dhe mbaje progresin me makinën e duhur.",
       steps: [
@@ -232,7 +246,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
       ],
     },
     maintenance: {
-      title: "Kujto çfarë u bë. Dije çfarë vjen më pas.",
+      title: "Regjistri i mirëmbajtjes dhe historiku i servisit",
       description:
         "Mbaj detyrat e mirëmbajtjes, kostot dhe historikun e dokumentuar nga pronari me makinën. Një shënim i qartë ndihmon për punën e ardhshme dhe bisedën me servisin.",
       steps: [
@@ -250,6 +264,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
         ],
       ],
       example: [
+        ["Data dhe kilometrazhi", "Shembull · 12 tetor 2026 · 140 000 km"],
         ["Detyra e përfunduar", "Ndërrimi i filtrit të kabinës"],
         ["Regjistruar nga", "Pronari i makinës"],
         ["Kostoja reale", "28 €"],
@@ -258,7 +273,8 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
   },
   ja: {
     create: "ガレージを作成",
-    demo: "サンプルガレージを試す",
+    demo: "記入例を見る",
+    downloadSheet: "作業・予算シートをダウンロード（CSV）",
     example: "参考例 · BMW 318i E90",
     related: "次のステップ",
     read: "実用ガイドを読む",
@@ -267,7 +283,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
     plannerLabel: "プロジェクトカー計画",
     maintenanceLabel: "整備記録",
     planner: {
-      title: "カスタムを計画し、総費用を把握する。",
+      title: "プロジェクトカー計画：パーツ・予算・進捗",
       description:
         "パーツと作業をビルド計画にまとめましょう。予算を設定し、見積額と実際の支出を分け、車ごとに進捗を残せます。",
       steps: [
@@ -291,7 +307,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
       ],
     },
     maintenance: {
-      title: "行った整備を記録し、次の作業につなげる。",
+      title: "車の整備記録とサービス履歴を管理",
       description:
         "整備タスク、費用、オーナーが記録した履歴を車と一緒に管理します。明確な記録は、次の作業や整備工場への説明に役立ちます。",
       steps: [
@@ -309,6 +325,7 @@ export const featureDiscoveryCopy: Record<AppLocale, Copy> = {
         ],
       ],
       example: [
+        ["日付と走行距離", "記入例 · 2026年10月12日 · 140,000 km"],
         ["完了した作業", "キャビンフィルターの交換"],
         ["記録した人", "車両オーナー"],
         ["実費", "€28"],

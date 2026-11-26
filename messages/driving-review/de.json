@@ -128,6 +128,18 @@
       "unassessed": "Diese Stelle wurde nicht beurteilt. Prüfe die Einzelbilder rund um die Markierung, bevor du Schlüsse ziehst.",
       "crashTime": "Unfallzeit im Clip (Sekunden)",
       "applyTime": "Unfallzeit festlegen"
+    },
+    "sample": {
+      "title": "Dashcam-Video auswerten: Fahrfeedback aus ausgewählten Bildern",
+      "link": "Beispielbericht ansehen",
+      "heading": "Beispiel für eine Fahranalyse",
+      "disclosure": "Fiktives Beispiel · ohne Aufnahme oder Fahrerdaten",
+      "summary": "Ein 12-Sekunden-Clip vor einer Einmündung. Vier ausgewählte Standbilder wurden betrachtet.",
+      "strength": "Bei 00:08 scheint das Kamerafahrzeug innerhalb seiner Spur zu sein. Beide Markierungen sind sichtbar.",
+      "practiceStrength": "Schau bei der nächsten Fahrt weiter voraus und halte dabei deine Spur.",
+      "improvement": "Bei 00:05 und 00:08 verdeckt ein geparktes Fahrzeug einen Teil der Sicht in die Seitenstraße.",
+      "practiceImprovement": "Ist die Sicht in eine Einmündung verdeckt, nimm frühzeitig Tempo raus und lass dir Raum zum Reagieren.",
+      "supplied": "Der Fahrer gibt an, dass die Straße trocken war. Die ausgewählten Bilder bestätigen diese Angabe nicht."
     }
   }
 }

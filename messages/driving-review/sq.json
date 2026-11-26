@@ -128,6 +128,18 @@
       "unassessed": "Ky çast nuk u vlerësua në rishikim. Shiko pamjet përreth përpara se të nxjerrësh përfundim.",
       "crashTime": "Koha e përplasjes në klip (sekonda)",
       "applyTime": "Cakto kohën e përplasjes"
+    },
+    "sample": {
+      "title": "Analizë e videos dashcam: këshilla nga pamjet e përzgjedhura",
+      "link": "Shiko një raport shembull",
+      "heading": "Shembull i raportit të drejtimit",
+      "disclosure": "Shembull ilustrues · pa regjistrim apo të dhëna të shoferit",
+      "summary": "Një klip 12-sekondësh para një kryqëzimi, i shqyrtuar nga katër pamje të zgjedhura.",
+      "strength": "Te 00:08 makina me kamerë duket se është brenda korsisë së saj. Duken të dyja vijat.",
+      "practiceStrength": "Herën tjetër shiko më larg përpara duke ruajtur pozicionin në korsi.",
+      "improvement": "Te 00:05 dhe 00:08, një makinë e parkuar pengon pjesërisht pamjen e rrugës anësore.",
+      "practiceImprovement": "Kur pamja në kryqëzim është e penguar, ngadalëso herët dhe lër hapësirë për të reaguar.",
+      "supplied": "Shoferi tha se rruga ishte e thatë. Pamjet e zgjedhura nuk e konfirmojnë këtë."
     }
   }
 }
