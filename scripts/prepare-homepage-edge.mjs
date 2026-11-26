@@ -24,6 +24,7 @@ for (const rule of routes.headers) {
   for (const { key, value } of rule.headers) headers.set(key, value);
 }
 headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+headers.set("Server-Timing", "capcar-home-edge");
 headers.set(
   "Vary",
   "Accept, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url",
@@ -33,7 +34,7 @@ if (!headers.has("Content-Security-Policy")) {
 }
 
 const output = new URL(
-  "../netlify/edge-functions/homepage-document.mjs",
+  "../netlify/edge-functions/homepage-document.js",
   import.meta.url,
 );
 await mkdir(new URL(".", output), { recursive: true });

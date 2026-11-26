@@ -49,7 +49,7 @@ supabase/.temp/
 
 # Local and generated Netlify files
 .netlify
-/netlify/edge-functions/homepage-document.mjs
+/netlify/edge-functions/homepage-document.js
 
 # Local patch and installer artifacts
 /.capcar-installer-backups/
