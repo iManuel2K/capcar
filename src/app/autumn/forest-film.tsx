@@ -10,7 +10,7 @@ const revealInitialFrame = `(() => {
   const video = document.currentScript?.previousElementSibling;
   if (!(video instanceof HTMLVideoElement)) return;
   const reveal = () => {
-    if (!video.paused && !video.seeking && video.readyState >= video.HAVE_CURRENT_DATA) {
+    if (!video.seeking && video.readyState >= video.HAVE_CURRENT_DATA) {
       video.dataset.frameReady = "true";
     }
   };
@@ -21,6 +21,7 @@ const revealInitialFrame = `(() => {
       reveal();
     }
   };
+  if (typeof video.requestVideoFrameCallback === "function") onPlaying();
   if (video.paused || video.readyState < video.HAVE_FUTURE_DATA) {
     video.addEventListener("playing", onPlaying, { once: true });
   } else {

@@ -25,6 +25,7 @@ for (const rule of routes.headers) {
 }
 headers.set("Cache-Control", "public, max-age=0, must-revalidate");
 headers.set("Server-Timing", "capcar-home-static");
+headers.set("Vary", "RSC");
 if (!headers.has("Content-Security-Policy")) {
   throw new Error("The static homepage must retain the site security policy.");
 }
