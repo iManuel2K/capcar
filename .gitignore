@@ -52,7 +52,6 @@ supabase/.temp/
 /netlify/edge-functions/homepage-navigation.js
 /public/__capcar-home.html
 /public/_headers
-/netlify/edge-functions/hero-road-drive*.js
 
 # Local patch and installer artifacts
 /.capcar-installer-backups/
