@@ -24,51 +24,34 @@ for (const rule of routes.headers) {
   for (const { key, value } of rule.headers) headers.set(key, value);
 }
 headers.set("Cache-Control", "public, max-age=0, must-revalidate");
-headers.set(
-  "Netlify-CDN-Cache-Control",
-  "public, s-maxage=604800, stale-while-revalidate=86400",
-);
-headers.set(
-  "Netlify-Vary",
-  "query=_rsc, cookie=__prerender_bypass|__next_preview_data",
-);
-headers.set("Server-Timing", "capcar-home-edge");
-headers.set(
-  "Vary",
-  "Accept, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url",
-);
+headers.set("Server-Timing", "capcar-home-static");
 if (!headers.has("Content-Security-Policy")) {
-  throw new Error("The edge homepage must retain the site security policy.");
+  throw new Error("The static homepage must retain the site security policy.");
 }
 
+const documentPath = "/__capcar-home.html";
+const publicDir = new URL("../public/", import.meta.url);
+await writeFile(new URL(documentPath.slice(1), publicDir), html);
+const staticHeaders = [...headers].map(([key, value]) => `  ${key}: ${value}`);
+await writeFile(
+  new URL("_headers", publicDir),
+  ["/", ...staticHeaders, documentPath, ...staticHeaders, ""].join("\n"),
+);
+
 const output = new URL(
-  "../netlify/edge-functions/homepage-document.js",
+  "../netlify/edge-functions/homepage-navigation.js",
   import.meta.url,
 );
 await mkdir(new URL(".", output), { recursive: true });
 await writeFile(
   output,
-  `// Generated from the current Next.js build.
-const html = ${JSON.stringify(html)};
-const headers = ${JSON.stringify(Object.fromEntries(headers))};
+  `// Only Next client navigation uses the framework handler for the homepage.
+export const config = { path: "/", header: { rsc: "1" } };
 
-export const config = { path: "/", cache: "manual", onError: "bypass" };
-
-export default function homepageDocument(request) {
-  const { method, headers: incoming } = request;
+export default function homepageNavigation(request) {
   const url = new URL(request.url);
-  if (
-    url.pathname !== "/" ||
-    (method !== "GET" && method !== "HEAD") ||
-    !incoming.get("accept")?.includes("text/html") ||
-    incoming.has("rsc") ||
-    incoming.has("next-router-prefetch") ||
-    incoming.has("next-router-segment-prefetch") ||
-    url.searchParams.has("_rsc") ||
-    /(?:^|;\\s*)(?:__prerender_bypass|__next_preview_data)=/.test(incoming.get("cookie") ?? "")
-  ) return;
-
-  return new Response(method === "HEAD" ? null : html, { headers });
+  url.pathname = "/__capcar-next-home";
+  return url;
 }
 `,
 );

@@ -227,6 +227,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!$|autumn/road-drive(?:-1080p)?\\.mp4$|_next/static|_next/image|sounds/|social/|favicon.ico|icon.svg|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!$|__capcar-next-home$|autumn/road-drive(?:-1080p)?\\.mp4$|_next/static|_next/image|sounds/|social/|favicon.ico|icon.svg|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
