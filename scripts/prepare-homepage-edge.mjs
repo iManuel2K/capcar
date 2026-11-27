@@ -24,6 +24,14 @@ for (const rule of routes.headers) {
   for (const { key, value } of rule.headers) headers.set(key, value);
 }
 headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+headers.set(
+  "Netlify-CDN-Cache-Control",
+  "public, s-maxage=604800, stale-while-revalidate=86400",
+);
+headers.set(
+  "Netlify-Vary",
+  "query=_rsc, cookie=__prerender_bypass|__next_preview_data",
+);
 headers.set("Server-Timing", "capcar-home-edge");
 headers.set(
   "Vary",
@@ -44,7 +52,7 @@ await writeFile(
 const html = ${JSON.stringify(html)};
 const headers = ${JSON.stringify(Object.fromEntries(headers))};
 
-export const config = { path: "/" };
+export const config = { path: "/", cache: "manual", onError: "bypass" };
 
 export default function homepageDocument(request) {
   const { method, headers: incoming } = request;
