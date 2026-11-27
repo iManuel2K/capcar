@@ -32,6 +32,10 @@ import { config } from "@/proxy";
 
 it("serves public sound and social assets without session middleware while protecting workspace routes", () => {
   for (const url of [
+    "/",
+    "/?utm_source=instagram",
+    "/autumn/road-drive.mp4",
+    "/autumn/road-drive-1080p.mp4",
     "/sounds/honda-f20c.mp3",
     "/sounds/example.ogg",
     "/social/capcar-sound-studio-share.png",

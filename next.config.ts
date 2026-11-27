@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  async rewrites() {
+    return [{ source: "/__capcar-next-home", destination: "/" }];
+  },
   async redirects() {
     const slugs = [
       "bmw-wochenendprojekt-planen",
