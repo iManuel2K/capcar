@@ -16,27 +16,29 @@ import {
 } from "@/features/journal/articles";
 import { locales } from "@/i18n/config";
 
+const pageUpdates: Partial<
+  Record<(typeof PUBLIC_INDEXABLE_ROUTES)[number], string>
+> = {
+  "/ai": "2026-10-21",
+  "/driving-review": "2026-11-26",
+  "/project-car-planner": "2026-11-26",
+  "/car-maintenance-tracker": "2026-11-26",
+  "/pricing": "2026-10-26",
+  "": HOMEPAGE_LAST_MODIFIED,
+  "/platform": HOMEPAGE_LAST_MODIFIED,
+};
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const publicPages = PUBLIC_INDEXABLE_ROUTES.flatMap((route) => {
     const alternates = { languages: publicLanguageAlternates(route) };
     const shared = {
-      lastModified:
-        route === "/pricing"
-          ? "2026-10-26"
-          : route === "" || route === "/platform"
-            ? HOMEPAGE_LAST_MODIFIED
-            : PUBLIC_CONTENT_LAST_MODIFIED,
+      lastModified: pageUpdates[route] ?? PUBLIC_CONTENT_LAST_MODIFIED,
       alternates,
     };
 
     return locales.map((locale) => ({
       url: localizedPublicUrl(route, locale),
       ...shared,
-      ...(["/ai", "/project-car-planner", "/car-maintenance-tracker"].includes(
-        route,
-      )
-        ? { lastModified: "2026-10-21" }
-        : {}),
     }));
   });
   const journalPages = locales.flatMap((locale) => [

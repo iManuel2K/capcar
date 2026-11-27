@@ -45,8 +45,15 @@ describe("route metadata", () => {
 
     for (const entry of entries) {
       const isJournal = entry.url.includes("/journal");
-      if (new URL(entry.url).pathname.endsWith("/pricing")) {
+      const pathname = new URL(entry.url).pathname;
+      if (pathname.endsWith("/pricing")) {
         expect(entry.lastModified).toBe("2026-10-26");
+      } else if (
+        /\/(car-maintenance-tracker|driving-review|project-car-planner)$/.test(
+          pathname,
+        )
+      ) {
+        expect(entry.lastModified).toBe("2026-11-26");
       } else if (isJournal) {
         expect(entry.lastModified).toMatch(/^2026-(10|11)-\d{2}$/);
       } else {

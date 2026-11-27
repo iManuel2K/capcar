@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { cleanup, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { FeatureDiscovery } from "./feature-discovery";
@@ -32,10 +33,15 @@ describe("public feature discovery", () => {
         );
         expect(
           within(main).getByRole("link", { name: copy.demo }),
-        ).toHaveAttribute(
-          "href",
-          `${locale === "en" ? "/" : `/${locale}`}#live-demo`,
-        );
+        ).toHaveAttribute("href", "#feature-example");
+        expect(document.getElementById("feature-example")).toBeVisible();
+        if (feature === "planner") {
+          const sheet = `/journal/templates/capcar-build-sheet-${locale}.csv`;
+          expect(
+            within(main).getByRole("link", { name: copy.downloadSheet }),
+          ).toHaveAttribute("href", sheet);
+          expect(existsSync(`public${sheet}`)).toBe(true);
+        }
         expect(
           within(main).getByRole("link", { name: copy.read }),
         ).toHaveAttribute(

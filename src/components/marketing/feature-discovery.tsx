@@ -2,7 +2,10 @@ import Link from "@/components/i18n/public-link";
 import { ArrowRight } from "lucide-react";
 import type { AppLocale } from "@/i18n/config";
 import { featureDiscoveryCopy } from "@/features/marketing/feature-discovery-copy";
-import { journalArticlePath } from "@/features/journal/routes";
+import {
+  findJournalArticle,
+  journalArticlePath,
+} from "@/features/journal/articles";
 import { SiteFooter } from "./site-footer";
 import shared from "./homepage.module.css";
 import styles from "./feature-discovery.module.css";
@@ -17,6 +20,20 @@ export function FeatureDiscovery({
   const c = featureDiscoveryCopy[locale];
   const f = c[feature];
   const planner = feature === "planner";
+  const relatedArticles = (
+    planner
+      ? [
+          "umbaukosten-auto-gesamtbudget",
+          "werkstattangebote-vergleichen-vorlage",
+        ]
+      : [
+          "wartungseintrag-auto-vorlage",
+          "warnleuchte-fuer-werkstatt-dokumentieren",
+        ]
+  ).flatMap((slug) => {
+    const article = findJournalArticle(slug, locale);
+    return article ? [article] : [];
+  });
   return (
     <div className={shared.page}>
       <main id="main-content">
@@ -37,14 +54,20 @@ export function FeatureDiscovery({
                 {c.create}
                 <ArrowRight size={16} aria-hidden="true" />
               </Link>
-              <Link href="/#live-demo" className={shared.secondary}>
+              <Link href="#feature-example" className={shared.secondary}>
                 {c.demo}
               </Link>
             </div>
             <p className={styles.access}>{c.account}</p>
           </div>
-          <aside className={styles.example} aria-label={c.example}>
-            <p className={shared.eyebrow}>{c.example}</p>
+          <section
+            id="feature-example"
+            className={`${styles.example} scroll-mt-28`}
+            aria-labelledby="feature-example-title"
+          >
+            <h2 id="feature-example-title" className="text-lg font-medium">
+              {c.example}
+            </h2>
             <dl>
               {f.example.map(([label, value]) => (
                 <div key={label}>
@@ -53,7 +76,16 @@ export function FeatureDiscovery({
                 </div>
               ))}
             </dl>
-          </aside>
+            {planner && (
+              <a
+                href={`/journal/templates/capcar-build-sheet-${locale}.csv`}
+                download
+                className={shared.secondary}
+              >
+                {c.downloadSheet}
+              </a>
+            )}
+          </section>
         </section>
         <section
           className={shared.section}
@@ -87,6 +119,12 @@ export function FeatureDiscovery({
               {c.read}
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            {relatedArticles.map(({ slug, title }) => (
+              <Link key={slug} href={journalArticlePath(slug, locale)}>
+                {title}
+                <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+            ))}
             <Link
               href={
                 planner ? "/car-maintenance-tracker" : "/project-car-planner"
